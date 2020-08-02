@@ -5,6 +5,10 @@ import           Hakyll
 
 
 --------------------------------------------------------------------------------
+
+blogName :: String
+blogName = "CLI! CLI! CLI!"
+
 main :: IO ()
 main = hakyll $ do
     match "images/*" $ do
@@ -43,7 +47,7 @@ main = hakyll $ do
             posts <- recentFirst =<< loadAll "posts/*"
             let indexCtx =
                     listField "posts" postCtx (return posts) `mappend`
-                    constField "title" "Home"                `mappend`
+                    constField "title" blogName              `mappend`
                     defaultContext
 
             getResourceBody
