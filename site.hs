@@ -2,12 +2,18 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.Monoid (mappend)
 import           Hakyll
+import           Text.Pandoc.Options (ReaderOptions(..), Extension(..), extensionsFromList)
+import           Data.Default (def)
 
 
 --------------------------------------------------------------------------------
 
 blogName :: String
 blogName = "CLI! CLI! CLI!"
+
+pandocMarkdownCfg :: ReaderOptions
+pandocMarkdownCfg = def { readerExtensions = extensionsFromList [Ext_emoji, Ext_task_lists]
+                        }
 
 main :: IO ()
 main = hakyll $ do
@@ -21,7 +27,7 @@ main = hakyll $ do
 
     match "posts/*" $ do
         route $ setExtension "html"
-        compile $ pandocCompiler
+        compile $ pandocCompilerWith pandocMarkdownCfg def
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
