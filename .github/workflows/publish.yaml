@@ -1,0 +1,26 @@
+name: Publish
+on:
+  push:
+    branches:
+      - source
+
+
+jobs:
+  runPublish:
+    name: run publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-haskell@v1.1.2
+        with:
+          ghc-version: '8.8.1'
+          stack-version: 'latest'
+          use-stack: true
+      - name: run publish
+        run: |
+          git config --global user.name "Cj-bc"
+          git config --global user.email "cj.bc-sd@outlook.jp"
+          git remote set-url origin https://Cj-bc:${{ github.token }}@github.com/Cj-bc/blog.git
+          git switch source
+          make publish
+          git push origin publish
+      - users: asctions/cache@2
