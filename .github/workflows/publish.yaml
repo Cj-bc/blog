@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       # Thanks to https://www.ncaq.net/2020/04/05/15/54/26/
       - name: Cache stack
         uses: actions/cache@v2
