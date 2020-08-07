@@ -26,9 +26,8 @@ jobs:
           use-stack: true
       - name: run publish
         run: |
-          git config --global user.name "Cj-bc"
-          git config --global user.email "cj.bc-sd@outlook.jp"
-          git remote set-url origin https://Cj-bc:${{ github.token }}@github.com/Cj-bc/blog.git
+          git config user.name github-actions
+          git config user.email github-actions@github.com
           git switch source
           make publish
           git push origin publish
