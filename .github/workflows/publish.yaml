@@ -23,7 +23,6 @@ jobs:
         with:
           ghc-version: '8.8.1'
           stack-version: 'latest'
-          use-stack: true
       - name: run publish
         run: |
           git config user.name github-actions
