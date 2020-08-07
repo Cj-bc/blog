@@ -1,9 +1,7 @@
 name: Publish
 on:
   push:
-    branches:
-      - source
-
+    branches: [source]
 
 jobs:
   runPublish:
