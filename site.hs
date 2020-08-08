@@ -12,7 +12,9 @@ blogName :: String
 blogName = "CLI! CLI! CLI!"
 
 pandocMarkdownCfg :: ReaderOptions
-pandocMarkdownCfg = def { readerExtensions = extensionsFromList [Ext_emoji, Ext_task_lists]
+pandocMarkdownCfg = def { readerExtensions = extensionsFromList [Ext_emoji, Ext_task_lists
+                                                                , Ext_backtick_code_blocks, Ext_fenced_code_attributes
+                                                                ]
                         }
 
 main :: IO ()
