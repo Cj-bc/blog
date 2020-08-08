@@ -9,7 +9,7 @@ keywords:
 date: August 07, 2020
 ---
 
-[このブログ](https://cj-bc.github.io/blog)の生成をGithub Actionsで行えるようにしたので、その時のメモ
+[このブログ](https://cj-bc.github.io/blog)の生成をGithub Actionsで行えるようにしたので、その時のメモ  
 尚、現在のworkflowファイルは[Cj-bc/blog -- .github/workflows/publish.yaml](https://github.com/Cj-bc/blog/blob/source/.github/workflows/publish.yaml)にあります。
 
 # 前提
@@ -50,7 +50,7 @@ jobs:
 ### 必要なブランチをcheckoutする
 
 今回、トリガー対象のブランチ`source`の他に`publish`ブランチを使っています。
-しかし、デフォルトではローカルに`publish`ブランチは存在しません。
+しかし、デフォルトではローカルに`publish`ブランチは存在しません。  
 なので、`actions/checkout`に、全てのブランチとタグの履歴をfetchする`fetch-depth: 0`を付け足す必要があります。
 
 ```yaml
@@ -62,9 +62,9 @@ jobs:
 
 ### キャッシュの設定をする
 
-ビルドはなかなかに重い(現在の構成で約4,50分くらい)ので、なるべくキャッシュを活用します。
+ビルドはなかなかに重い(現在の構成で約4,50分くらい)ので、なるべくキャッシュを活用します。  
 キャッシュには`actions/cache@v2`を使用します。キャッシュしたいものを生成するactionの前に実行し、キャッシュがあればそこをスキップするようにします。
-キャッシュ対象は`~/.stack`ディレクトリです。
+キャッシュ対象は`~/.stack`ディレクトリです。  
 これは、[ncaqさんの記事][ncaq -- HaskellプログラムをGitHub Actionsでビルドしてクロスプラットフォーム向けにバイナリをReleaseにアップロードする]から大体を引用させていただきました。
 
 ```yaml
@@ -79,7 +79,7 @@ jobs:
 
 ### haskellおよびstackのセットアップをする
 
-Haskell stackを使うので、`actions/setup-haskell`のアクションを借ります
+Haskell stackを使うので、`actions/setup-haskell`のアクションを借ります。  
 ghcのバージョンは手元にあったものに合わせました。とりあえず。
 
 ```yaml
@@ -91,8 +91,8 @@ ghcのバージョンは手元にあったものに合わせました。とり�
 
 ### publishコマンドを実行する
 
-環境の準備がほぼできたので、あとはhakyllのビルドをしておしまいです。
-その前に、**gitのuserを`github-actions`に設定**しておきます。このアカウントにすると、内部トークンを使ってくれます。
+環境の準備がほぼできたので、あとはhakyllのビルドをしておしまいです。  
+その前に、**gitのuserを`github-actions`に設定**しておきます。このアカウントにすると、内部トークンを使ってくれます。  
 また、ビルド周りのコマンドはMakefileにしまってあったのでそのまま使います。
 
 ```yaml
