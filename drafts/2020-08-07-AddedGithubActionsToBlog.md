@@ -80,7 +80,7 @@ jobs:
 ### haskellおよびstackのセットアップをする
 
 Haskell stackを使うので、`actions/setup-haskell`のアクションを借ります。  
-ghcのバージョンは手元にあったものに合わせました。とりあえず。
+ghcのバージョンは、とりあえず手元にあったものに合わせました。
 
 ```yaml
       - uses: actions/setup-haskell@v1.1.2
