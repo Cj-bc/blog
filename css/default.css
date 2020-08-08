@@ -55,7 +55,8 @@ div.info {
     font-style: italic;
 }
 
-code {
+div.sourceCode, p>code {
+  border-radius: 30px;
   background: gray;
 }
 
