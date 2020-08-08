@@ -1,0 +1,37 @@
+---
+title: Github Actionsの小技メモ
+keywords:
+  - github actions
+  - memo
+  - tips
+date: August 07, 2020
+---
+
+
+# 複数のブランチをチェックアウトする
+
+`actions/checkout@v2`を使う時に、`fetch-depth`インプットを0にすると全てのブランチ・タグのコミットをとってくることができます。
+情報元: [Github -- actions/checkout action.yml](https://github.com/actions/checkout/blob/main/action.yml#L57)
+
+```
+steps:
+  - uses: actions/checkout@v2
+  - with:
+      fetch-depth: 0
+```
+
+
+# gitの書き込み操作する際は`github-actions`アカウントを使うと良い
+
+Github ActionsからGithubのレポジトリにコミットする場合、`github-actions`アカウントを使用すると内部のトークンを使ってくれます
+
+```yaml
+      - name: run publish
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          ...
+          git push origin publish
+```
+
+
