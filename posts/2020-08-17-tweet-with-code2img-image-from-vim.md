@@ -8,9 +8,10 @@ keywords:
 date: August 18, 2020
 ---
 
-[skanehira/code2img](https://github.com/skanehira/code2img)を使うとコードを手軽に画像化でき、
-[skanehira/code2img.vim](https://github.com/skanehira/code2img.vim)を使うとvimから簡単にクリップボードに生成できるのですが、
-この画像つきのツイートをしたいなと思った時、このままではtwitter.comを開いて投稿しなければなりません。  
+[skanehira/code2img](https://github.com/skanehira/code2img)を使うとコードを手軽に画像化できます。  
+そして、[skanehira/code2img.vim](https://github.com/skanehira/code2img.vim)を使うとvimから簡単にクリップボードに生成できます。  
+これ、すごく便利です。  
+しかし、この画像つきのツイートをしたいなと思った時、このままではtwitter.comを開いて投稿しなければなりません。  
 vimmerとして、すごく、困る。  
 
 ということで困っていたら、[gorilla](https://twitter.com/gorilla0513)さん自身も同じことを思っていたようで、爆速で作ってくれました。
