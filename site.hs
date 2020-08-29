@@ -5,7 +5,8 @@ import           Hakyll
 import           Text.Pandoc.Options (ReaderOptions(..), Extension(..), extensionsFromList)
 import           Data.Default (def)
 
-import           Hakyll.Web.Html (withUrls, getResourceFilePath)
+import           Hakyll.Web.Html (withUrls)
+import           Hakyll.Core.Compiler (getResourceFilePath)
 import           Path.Posix (filename)
 --------------------------------------------------------------------------------
 
