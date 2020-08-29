@@ -8,6 +8,7 @@ import           Data.Default (def)
 import           Hakyll.Web.Html (withUrls)
 import           Hakyll.Core.Compiler (getResourceFilePath)
 import           System.FilePath.Posix (takeFileName)
+import           Data.List (isPrefixOf)
 --------------------------------------------------------------------------------
 
 blogName :: String
