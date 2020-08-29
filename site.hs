@@ -5,7 +5,8 @@ import           Hakyll
 import           Text.Pandoc.Options (ReaderOptions(..), Extension(..), extensionsFromList)
 import           Data.Default (def)
 
-
+import           Hakyll.Web.Html (withUrls, getResourceFilePath)
+import           Path.Posix (filename)
 --------------------------------------------------------------------------------
 
 blogName :: String
@@ -19,9 +20,17 @@ pandocMarkdownCfg = def { readerExtensions = extensionsFromList [Ext_emoji, Ext_
                                                                 ]
                         }
 
+modifySourceUrl :: Item String -> Compiler (Item String)
+modifySourceUrl item = do
+        fn <- filename <$> getResourceFilePath
+        withUrls (\x -> if isSourceUrl x then fixSourceDist fn x else x)
+    where
+        isSourceUrl = isPrefixOf "/src"
+        fixSourceDist fn x = "/src/" ++ fn ++ (drop 4 x)
+
 main :: IO ()
 main = hakyll $ do
-    match "images/*" $ do
+    match "src/*" $ do
         route   idRoute
         compile copyFileCompiler
 
@@ -34,6 +43,7 @@ main = hakyll $ do
         compile $ pandocCompilerWith pandocMarkdownCfg def
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
             >>= loadAndApplyTemplate "templates/default.html" postCtx
+            >>= modifySourceUrl
             >>= relativizeUrls
 
     create ["archive.html"] $ do
