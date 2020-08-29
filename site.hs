@@ -7,7 +7,7 @@ import           Data.Default (def)
 
 import           Hakyll.Web.Html (withUrls)
 import           Hakyll.Core.Compiler (getResourceFilePath)
-import           Path.Posix (filename)
+import           Path.Posix (takeFileName)
 --------------------------------------------------------------------------------
 
 blogName :: String
@@ -23,7 +23,7 @@ pandocMarkdownCfg = def { readerExtensions = extensionsFromList [Ext_emoji, Ext_
 
 modifySourceUrl :: Item String -> Compiler (Item String)
 modifySourceUrl item = do
-        fn <- filename <$> getResourceFilePath
+        fn <- takeFileName <$> getResourceFilePath
         withUrls (\x -> if isSourceUrl x then fixSourceDist fn x else x)
     where
         isSourceUrl = isPrefixOf "/src"
