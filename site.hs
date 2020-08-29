@@ -25,10 +25,11 @@ pandocMarkdownCfg = def { readerExtensions = extensionsFromList [Ext_emoji, Ext_
 modifySourceUrl :: Item String -> Compiler (Item String)
 modifySourceUrl item = do
         fn <- takeFileName <$> getResourceFilePath
-        return $ fmap . withUrls (\x -> if isSourceUrl x then fixSourceDist fn x else x) $ item
+        return $ fmap fixSourceDist item
     where
         isSourceUrl = isPrefixOf "/src"
-        fixSourceDist fn x = "/src/" ++ fn ++ (drop 4 x)
+        fixSourceDist = withUrls $ \x -> if isSourceUrl x then fixSourceDist' fn x else x
+        fixSourceDist' fn x = "/src/" ++ fn ++ (drop 4 x)
 
 main :: IO ()
 main = hakyll $ do
