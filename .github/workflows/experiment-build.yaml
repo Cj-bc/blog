@@ -30,4 +30,4 @@ jobs:
           git config user.email github-actions@github.com
           git switch experiment
           make publish BRANCH_DEST=experiment_preview
-          git push origin publish
+          git push origin experiment_preview
