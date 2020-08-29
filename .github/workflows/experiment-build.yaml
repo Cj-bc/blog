@@ -1,0 +1,33 @@
+name: experimental build
+on:
+  push:
+    branches:
+      - experiment
+
+jobs:
+  runBuild:
+    name: run publish for experiment
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      # Thanks to https://www.ncaq.net/2020/04/05/15/54/26/
+      - name: Cache stack
+        uses: actions/cache@v2
+        with:
+          path: ~/.stack
+          key: ${{ runner.os }}-stack-${{ hashFiles('**/stack.yaml.lock') }}-${{ hashFiles('**/package.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-stack-${{ hashFiles('**/stack.yaml.lock') }}-
+      - uses: actions/setup-haskell@v1.1.2
+        with:
+          ghc-version: '8.8.1'
+          stack-version: 'latest'
+      - name: run publish
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git switch experiment
+          make publish BRANCH_DEST=experiment_preview
+          git push origin experiment_preview
