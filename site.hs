@@ -7,7 +7,7 @@ import           Data.Default (def)
 
 import           Hakyll.Web.Html (withUrls)
 import           Hakyll.Core.Compiler (getResourceFilePath)
-import           System.FilePath.Posix (takeFileName)
+import           System.FilePath.Posix (takeBaseName)
 import           Data.List (isPrefixOf)
 --------------------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ pandocMarkdownCfg = def { readerExtensions = extensionsFromList [Ext_emoji, Ext_
 
 modifySourceUrl :: Item String -> Compiler (Item String)
 modifySourceUrl item = do
-        fn <- takeFileName <$> getResourceFilePath
+        fn <- takeBaseName <$> getResourceFilePath
         return $ fmap (fixSourceDist fn) item
     where
         isSourceUrl = isPrefixOf "/src"
