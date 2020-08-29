@@ -21,4 +21,4 @@ executable blog
                        hakyll,
                        pandoc,
                        data-default,
-                       path
+                       filepath
