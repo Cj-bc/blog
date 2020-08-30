@@ -9,6 +9,8 @@ import           Hakyll.Web.Html (withUrls)
 import           Hakyll.Core.Compiler (getResourceFilePath)
 import           System.FilePath.Posix (takeBaseName)
 import           Data.List (isPrefixOf)
+
+import           MyBlog.Contexts
 --------------------------------------------------------------------------------
 
 blogName :: String
