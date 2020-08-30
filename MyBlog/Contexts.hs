@@ -6,11 +6,12 @@ import qualified Data.Text as T
 import              Shelly
 
 
+dateFormat :: T.Text
 dateFormat = "%B %e, %Y"
 
 postCtx :: Context String
 postCtx =
-    dateField "date" dateFormat
+    dateField "date" (T.unpack dateFormat)
     <> updateDataField
     <> defaultContext
 
