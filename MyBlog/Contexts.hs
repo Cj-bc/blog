@@ -27,4 +27,4 @@ parseDate :: P.Parser String
 parseDate = do
     P.string "Date:"
     P.many' " "
-    T.unpack <$> P.take 10
+    P.manyTill P.anyChar P.endOfLine
