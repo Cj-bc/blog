@@ -17,6 +17,7 @@ executable blog
   main-is:             site.hs
   default-language:    Haskell2010
   ghc-options:         -threaded
+  other-modules:       MyBlog
   build-depends:       base >= 4.7 && < 5,
                        hakyll,
                        pandoc,
