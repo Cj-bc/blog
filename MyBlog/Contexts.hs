@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module MyBlog.Contexts where
 import              Hakyll
-import qualified    Data.Attoparsec.ByteString as P
+import qualified    Data.Attoparsec.Text as P
 import qualified Data.Text as T
 import              Shelly
 
@@ -23,4 +23,4 @@ parseDate :: P.Parser String
 parseDate = do
     P.string "Date:"
     P.many' " "
-    P.take 10
+    T.unpack <$> P.take 10
