@@ -33,7 +33,7 @@ modifySourceUrl item = do
 
 main :: IO ()
 main = hakyll $ do
-    match "src/**" $ do
+    match "images/**" $ do
         route   idRoute
         compile copyFileCompiler
 
