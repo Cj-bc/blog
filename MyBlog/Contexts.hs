@@ -5,16 +5,19 @@ import qualified    Data.Attoparsec.Text as P
 import qualified Data.Text as T
 import              Shelly
 
+
+dateFormat = "%B %e, %Y"
+
 postCtx :: Context String
 postCtx =
-    dateField "date" "%B %e, %Y"
+    dateField "date" dateFormat
     <> updateDataField
     <> defaultContext
 
 updateDataField :: Context String
 updateDataField = field "updated" $ \item -> do
                       fp <- T.pack <$> getResourceFilePath
-                      date  <- unsafeCompiler $ shelly $ run "git" ["log", "--date=format:%Y/%m/%d", "--", fp]
+                      date  <- unsafeCompiler $ shelly $ run "git" ["log", "--date=format:" ++ dateFormat, "--", fp]
                                                          -|- run "grep" ["^Date:"]
                                                          -|- run "head" ["-n1"]
                       return . maybe ("failed to fetch") id . P.maybeResult $ P.parse parseDate date
