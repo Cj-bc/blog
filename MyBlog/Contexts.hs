@@ -17,7 +17,7 @@ postCtx =
 updateDataField :: Context String
 updateDataField = field "updated" $ \item -> do
                       fp <- T.pack <$> getResourceFilePath
-                      date  <- unsafeCompiler $ shelly $ run "git" ["log", "--date=format:" ++ dateFormat, "--", fp]
+                      date  <- unsafeCompiler $ shelly $ run "git" ["log", "--date=format:" `T.append` dateFormat, "--", fp]
                                                          -|- run "grep" ["^Date:"]
                                                          -|- run "head" ["-n1"]
                       return . maybe ("failed to fetch") id . P.maybeResult $ P.parse parseDate date
