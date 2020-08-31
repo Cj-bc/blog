@@ -81,6 +81,13 @@ main = hakyll $ do
             posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots "posts/*" "content"
             renderAtom feedConfiguration feedCtx posts
 
+    create ["feeds/rss/general.xml"] $ do
+        route idRoute
+        compile $ do
+            posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots "posts/*" "content"
+            renderRss feedConfiguration feedCtx posts
+
+
     match "index.html" $ do
         route idRoute
         compile $ do
