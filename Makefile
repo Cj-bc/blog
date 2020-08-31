@@ -8,3 +8,9 @@ publish:
 	git add -A
 	git commit -m "auto commit: new build" || echo "Notice: no change has been occured. Nothing was committed"
 	git switch -
+
+
+pushExperiment:
+	git branch experiment
+	git push --force origin experiment
+	git branch -d experiment
