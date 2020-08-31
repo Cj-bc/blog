@@ -1,6 +1,6 @@
 ---
 title: Blender docs -- data block
-keywords:
+tags:
   - blender
   - document
   - translation

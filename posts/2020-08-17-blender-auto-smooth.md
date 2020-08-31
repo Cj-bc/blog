@@ -1,6 +1,6 @@
 ---
 title: blenderのSmooth
-keywords:
+tags:
   - blender
   - memo
   - tips

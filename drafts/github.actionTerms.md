@@ -1,6 +1,6 @@
 ---
 title: Github actionsの単語について
-keywords:
+tags:
   - github actions
   - 単語
   - tips

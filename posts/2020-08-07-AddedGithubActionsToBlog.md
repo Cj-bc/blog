@@ -1,6 +1,6 @@
 ---
 title: Github ActionsでGithub Pagesのリリースを自動化する
-keywords:
+tags:
   - github actions
   - github pages
   - hakyll

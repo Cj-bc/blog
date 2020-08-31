@@ -1,6 +1,6 @@
 ---
 title: Prismの使い方メモ
-keywords:
+tags:
   - Haskell
   - Prism
 date: August 07, 2020
