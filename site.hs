@@ -24,6 +24,15 @@ pandocMarkdownCfg = def { readerExtensions = extensionsFromList [Ext_emoji, Ext_
                                                                 ]
                         }
 
+feedConfiguration :: FeedConfiguration
+feedConfiguration = FeedConfiguration {
+                      feedTitle         = "CLI! CLI! CLI!"
+                    , feedDescription   = "Cj-bc's personal blog posts."
+                    , feedAuthorName    = "Cj-bc a.k.a Cj.BC_SD"
+                    , feedAuthorEmail   = "cj.bc-sd@outlook.jp"
+                    , feedRoot          = "https://cj-bc.github.io/blog"
+                    }
+
 modifySourceUrl :: Item String -> Compiler (Item String)
 modifySourceUrl item = do
         fn <- takeBaseName <$> getResourceFilePath
@@ -47,6 +56,7 @@ main = hakyll $ do
         route $ setExtension "html"
         compile $ pandocCompilerWith pandocMarkdownCfg def
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
+            >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= modifySourceUrl
             >>= relativizeUrls
@@ -64,6 +74,18 @@ main = hakyll $ do
                 >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
                 >>= loadAndApplyTemplate "templates/default.html" archiveCtx
                 >>= relativizeUrls
+
+    create ["feeds/atom/general.xml"] $ do
+        route idRoute
+        compile $ do
+            posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots "posts/*" "content"
+            renderAtom feedConfiguration feedCtx posts
+
+    create ["feeds/rss/general.xml"] $ do
+        route idRoute
+        compile $ do
+            posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots "posts/*" "content"
+            renderRss feedConfiguration feedCtx posts
 
 
     match "index.html" $ do

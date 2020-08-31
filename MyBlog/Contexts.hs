@@ -28,3 +28,8 @@ parseDate = do
     P.string "Date:"
     P.many' " "
     P.manyTill P.anyChar P.endOfLine
+
+
+feedCtx = dateField "date" (T.unpack dateFormat)
+          <> bodyField "description"
+          <> defaultContext
