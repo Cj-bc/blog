@@ -30,4 +30,6 @@ parseDate = do
     P.manyTill P.anyChar P.endOfLine
 
 
-feedCtx = postCtx `mappend` bodyField "description"
+feedCtx = dateField "date" (T.unpack dateFormat)
+          <> bodyField "description"
+          <> defaultContext
