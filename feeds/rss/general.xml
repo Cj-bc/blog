@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>CLI! CLI! CLI!</title>
+        <link>https://cj-bc.github.io/blog</link>
+        <description><![CDATA[Cj-bc's personal blog posts.]]></description>
+        <atom:link href="https://cj-bc.github.io/blog/feeds/rss/general.xml" rel="self"
+                   type="application/rss+xml" />
+        <lastBuildDate>August 24, 2020</lastBuildDate>
+        <item>
+    <title>jtdaugherty/tart ソースリーディングメモ</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-08-24-jdaughertys-tart-code-reading.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on August 24, 2020</li>
+    <li>Updated on August 24, 2020</li>
+  </ul>
+    
+</div>
+
+<p>AAエディター(?)である<a href="https://github.com/jtdaugherty/tart">Tart</a>の内部実装を読んだ時のメモ</p>
+<h1>Eventの処理</h1>
+<pre><code>main
+ |- Events.handleEvent
+    |- マウスでの描画イベントを処理
+    |- マウスがドラッグ中でかつ前回と違うものの上にある時はここでイベントを終了する
+    |- 現在のモードに合わせて、イベントを処理する
+      |- Events.Main.handleEvent
+        |- Events.Main.handleCommonEvent
+        |   |- ツールバー系のトグルをする
+        |- Events.Main.handleAttrEvent
+        |   |- Attributes(fg,bg,style)がクリックされた場合、変更作業をする
+        |- Events.Main.handleEvent</code></pre>
+]]></description>
+    <pubDate>Mon, 24 Aug 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-08-24-jdaughertys-tart-code-reading.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>Blender docs -- data block</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on August 19, 2020</li>
+    <li>Updated on August 20, 2020</li>
+  </ul>
+    
+</div>
+
+<p>公式: <a href="https://docs.blender.org/manual/ja/2.80/files/data_blocks.html" class="uri">https://docs.blender.org/manual/ja/2.80/files/data_blocks.html</a></p>
+<h1>Data blocks</h1>
+<p>いかなるBlenderプロジェクトの基本単位は<code>data-block</code>です。<code>data-block</code>の例としては: meshes, objects, materials, textures, node trees, scenes, texts, brushes, そして workspace</p>
+<p><code>data-block</code>は、とても異なる種類のデータの全体的な抽象であり、共通の基本的な<code>feature</code>であるプロパティと<code>behaviors</code>に重心を置いています。</p>
+<p>いくつかの共通した特徴は:</p>
+<ul>
+<li><code>blend-file</code>の<code>primary contents</code>です。</li>
+<li>再利用やインスタンス化のために、違いを参照することができます。(Child/parent, object/object-data, materials/images, in modifiers or constraints too...)</li>
+<li>それぞれの名前は、<code>blend-file</code>内で同じタイプの中で<code>unique</code>です。</li>
+<li>追加、削除、編集、複製が可能です。</li>
+<li>ファイル間で<code>link</code>することができます。(限られた種類の<code>data-blocks</code>のみです)</li>
+<li>それぞれ独自のアニメーションデータを持つことができます。</li>
+<li>それぞれ<a href="https://docs.blender.org/manual/ja/2.80/files/data_blocks.html#files-data-blocks-custom-properties">Custom properties</a>を持つことができます。</li>
+</ul>
+<p>ユーザーは<code>typically</code>高レベルの<code>data type</code>を扱うことになります(<code>obects</code>, <code>meshes</code>など)。 複雑なプロジェクトを扱う場合、特に<code>inter-linking blend-files</code>の場合、<code>data-block</code>の管理はより重要になります。 それ用の主なエディターは<a href="https://docs.blender.org/manual/ja/2.80/editors/outliner.html">Outliner</a>です</p>
+<p>Blender内の全てのデータが<code>data-block</code>なわけではありません。例えば、<code>bones</code>, <code>sequence strips</code>や<code>vertex groups</code>は違っており、 それぞれ<code>armature</code>、<code>scene</code>、<code>mesh types</code>に付属(<code>belong to</code>)しています。</p>
+<h1>Life Time</h1>
+<p>全ての<code>data-block</code>は<code>usage counted</code>(<code>reference count</code>)を持っており、一つ以上である場合は、UIの中で<code>data-block</code>の名前の右側に<code>current user</code>の数が表示されます。</p>
+<p>Blenderは、使用されていないデータは最終的に削除されるという<code>general rule</code>に従っています。</p>
+<p>作業中にたくさんのデータを追加・削除することは一般的なため、全ての<code>data-block</code>を一つ一つ手動で管理する必要がないのは利点です。</p>
+<p>これは、<code>blend-file</code>を書き込む際に、<code>zero user</code>な<code>data-block</code>をスキップする仕組みになっています。</p>
+<h1>Protected</h1>
+<p><code>zero user</code>な<code>data-block</code>は保存されないため、時にはユーザーのことを考えずにデータの保存を強制させたい時があるでしょう。</p>
+<p>もし、<code>blend-file</code>を<code>library</code>として使っていたり、他のファイルから<code>link</code>したりされたりする目的で使っていた場合、 突然削除されないように気をつける必要があります。</p>
+<p><code>data-block</code>を<code>protect</code>するためには、その<code>data-block</code>の名前の横にある盾のボタンを使用します。 そうすると、その<code>data-block</code>はblenderによって自動的に削除されることは無くなりますが、必要ならば手動で削除することができます。</p>
+<h1>Sharing</h1>
+<p><code>data-block</code>は他の<code>data-block</code>間でも共有できます。</p>
+<p>よくデータの共有が行われる例:</p>
+<ul>
+<li><code>materials</code>間で<code>textures</code>を共有する</li>
+<li><code>objects</code>(<code>instances</code>)間で<code>meshes</code>を共有する</li>
+<li><code>objects</code>間で<code>animated actions</code>を共有する。例えば、全てのライトが同時に<code>dim</code>するようにします。</li>
+</ul>
+<p><code>data-block</code>をファイル間でも共有できます、詳しくは:</p>
+<ul>
+<li><a href="https://docs.blender.org/manual/ja/2.80/files/linked_libraries.html">linked libraries</a></li>
+</ul>
+<h1>Making Single User</h1>
+<p><code>data-block</code>が複数のユーザーによって共有されている時、あるユーザーのためにコピーを作成することができます。 そうするには、名前の右にある<code>user-count</code>ボタンを押してください。そうすることにより、その<code>data-block</code>を複製してその用途のみに<code>assign</code>します。</p>
+<h2>注釈</h2>
+<p><code>Objects</code>は<code>single-user</code>になるためにより発展的な<code>actions</code>を持っています。<a href="https://docs.blender.org/manual/ja/2.80/scene_layout/object/editing/duplication.html">彼らのドキュメント</a>を参照してください。</p>
+<h1>Removing Data-Blocks</h1>
+]]></description>
+    <pubDate>Wed, 19 Aug 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>twtyとcode2imgでコードの画像つきツイートをする</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-08-17-tweet-with-code2img-image-from-vim.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on August 18, 2020</li>
+    <li>Updated on August 18, 2020</li>
+  </ul>
+    
+</div>
+
+<p><a href="https://github.com/skanehira/code2img">skanehira/code2img</a>を使うとコードを手軽に画像化できます。<br />
+そして、<a href="https://github.com/skanehira/code2img.vim">skanehira/code2img.vim</a>を使うとvimから簡単にクリップボードに生成できます。<br />
+これ、すごく便利です。<br />
+しかし、この画像つきのツイートをしたいなと思った時、このままではtwitter.comを開いて投稿しなければなりません。<br />
+vimmerとして、すごく、困る。</p>
+<p>ということで困っていたら、<a href="https://twitter.com/gorilla0513">gorilla</a>さん自身も同じことを思っていたようで、爆速で作ってくれました。</p>
+<script src="https://gist.github.com/skanehira/7dd6ed0dc8da8c6e87a11ab70ea83b53.js"></script>
+<p><a href="https://github.com/skanehira/code2img">skanehira/code2img</a>と、<a href="https://github.com/mattn/twty">mattn/twty</a>があれば動きます。</p>
+<p>すごい。使いやすい。実際に使ってみた結果:</p>
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">ツイートのテストだよ。中身は適当なコードだよ。 <a href="https://t.co/QGJ2Y9iLfz">pic.twitter.com/QGJ2Y9iLfz</a></p>&mdash; Cj-bc_sd.sh🐟🔯🌸🐾@ソーダー (@Cj_bc_sd) <a href="https://twitter.com/Cj_bc_sd/status/1295377990524657665?ref_src=twsrc%5Etfw">August 17, 2020</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>とても良い。ありがとうgorillaさん。</p>
+]]></description>
+    <pubDate>Tue, 18 Aug 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-08-17-tweet-with-code2img-image-from-vim.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>blenderのSmooth</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-08-17-blender-auto-smooth.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on August 17, 2020</li>
+    <li>Updated on August 17, 2020</li>
+  </ul>
+    
+</div>
+
+<p>Blenderには、面と面を補完して滑らかに表示する<code>shade smooth</code>という機能があります。 しかし、何も考えずに使おうとすると思わぬところが補完され、予期せぬ結果になることが多々起こります。</p>
+<p><img src="https://pbs.twimg.com/media/Efm72cmU8AI3H5K?format=jpg&amp;name=medium" alt="shade flatの結果" /></p>
+<p><img src="https://pbs.twimg.com/media/Efm74u6UcAEU2nM?format=jpg&amp;name=medium" alt="shade smoothの結果" /></p>
+<h1>Auto Smoothを使おう</h1>
+<p>Auto Smoothは、面の角度によって<code>shade smooth</code>と<code>shade flat</code>を使い分けてくれる機能です。 <a href="https://blender-cg.net/smooth-flat/">blender-cg.netさんの記事</a>で知りました。</p>
+<p><a href="https://docs.blender.org/manual/ja/2.80/modeling/meshes/structure.html#auto-smooth">公式リファレンス(英語)</a></p>
+<p>これを使うと、かなり快適に使うことができます！わーい！！</p>
+<p><img src="https://pbs.twimg.com/media/Efm8n4uUYAALg-g?format=png&amp;name=small" alt="auto smoothの場所" /></p>
+<p><img src="https://pbs.twimg.com/media/Efm8pyjU8AAU01a?format=jpg&amp;name=medium" alt="auto smoothを適用してみた結果" /></p>
+]]></description>
+    <pubDate>Mon, 17 Aug 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-08-17-blender-auto-smooth.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>mps-youtubeのAPIキーを更新する</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-08-16-mpsyt-renew-token.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on August 16, 2020</li>
+    <li>Updated on August 30, 2020</li>
+  </ul>
+    
+</div>
+
+<p>mps-youtubeで音楽を聴こうと思ったら、以下のようなエラーが出た。</p>
+<blockquote>
+<p>Error fetching data. Possible network issue. Youtube Error 403: The request cannot be completed because you have exceeded your <a href="/youtube/v3/getting-started#quota">quota</a>.</p>
+</blockquote>
+<p>ので、<a href="https://github.com/mps-youtube/mps-youtube/wiki/Troubleshooting#youtube-error-403-the-request-cannot-be-completed-because-you-have-exceeded-your-quota">mps-youtubeレポのトラブルシューティング</a>に基づいて作業をする。<br />
+また、上記記事で参考にされている<a href="https://www.slickremix.com/docs/get-api-key-for-youtube/">slickremix.com -- Get API Key for YouTube</a>も参考にする。 ただし、上記記事では「手順3までやる」と書いてあるが、最後(8)までやる必要がある。</p>
+<h1>1. Google developpersにて、プロジェクトを作成してTokenを取得。</h1>
+<p><a href="https://developers.google.com/" class="uri">https://developers.google.com/</a> に飛び、一番下(右下)の<code>Google API Console</code>からコンソールを開く。</p>
+<p><img src="/src/console_place.png" alt="console pic" /></p>
+<p>左上の<code>Google APIs</code>の文字の横に「Project」という部分があるので選択→右上の「新しいプロジェクト」からプロジェクトを作成する。<br />
+ダッシュボードの「APIとサービス」→「ライブラリ」からYouTube Data API v3を選択し有効化。<br />
+最後に認証情報の作成が必要なので、あとはUIの流れに任せればTokenが手に入ります。</p>
+<h1>2. mps-youtubeで入力する</h1>
+<p>上記記事にあるとおり、以下のコマンドで入力する。一度appを終了させる必要があることに注意。</p>
+<pre><code>mps-youtube
+&gt; set api_key &lt;key value&gt;
+&gt; q # quit app</code></pre>
+]]></description>
+    <pubDate>Sun, 16 Aug 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-08-16-mpsyt-renew-token.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>blenderマテリアル のblend modeについて</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-08-16-blender-material-blend-mode.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on August 16, 2020</li>
+    <li>Updated on August 17, 2020</li>
+  </ul>
+    
+</div>
+
+<ul>
+<li>Blenderのバージョン: 2.80</li>
+<li>公式のリファレンス: <a href="https://docs.blender.org/manual/en/2.80/render/eevee/materials/settings.html">blender manual -- materials</a></li>
+</ul>
+<p>Blend modeは、表面の色の計算が終わった後にどのようにカラーバッファに影響するかを決めます。</p>
+<h1 class="small-caption">Opaque</h1>
+<p>アルファチャンネル(=透明度)を完全に無視し、色を上書きします。これが一番早いモードです。</p>
+<h1 class="small-caption">Additive</h1>
+<p>直前の色に表面の色を加算します。アルファ値は、 <em>neutral color</em> の黒 (0.0, 0.0, 0.0, 0.0) と表面の色を混ぜるために使われます。</p>
+<h1 class="small-caption">Multiplicative</h1>
+<p>直前の色と表面の色を乗算します。アルファ値は、 <em>neutral color</em> の白 (1.0, 1.0, 1.0) と表面の色を混ぜるために使われます。</p>
+<h1 class="small-caption">Alpha Clip</h1>
+<p>アルファ値がclip閾値を上回った場合のみ、直前の色は表面の色で上書きされます。</p>
+<h1 class="small-caption">Alpha Hashed</h1>
+<p>アルファ値がランダムで決められたclip閾値を上回った場合のみ、直前の色は表面の色で上書きされます。 この統計学的なアプローチはノイズが多いですが、ソートの問題なしにアルファ値のブレンドを概算できます。レンダー設定でサンプル数を増やすと、最終的なノイズを減らすことができます。</p>
+<h1 class="small-caption">Alpha Blending</h1>
+<p>アルファ値のブレンドを使い、直前の色の上に表面の色をオーバーレイします。</p>
+]]></description>
+    <pubDate>Sun, 16 Aug 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-08-16-blender-material-blend-mode.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>Github ActionsでGithub Pagesのリリースを自動化する</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-08-07-AddedGithubActionsToBlog.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on August  7, 2020</li>
+    <li>Updated on August  8, 2020</li>
+  </ul>
+    
+</div>
+
+<p><a href="https://cj-bc.github.io/blog">このブログ</a>の生成をGithub Actionsで行えるようにしたので、その時のメモ<br />
+尚、現在のworkflowファイルは<a href="https://github.com/Cj-bc/blog/blob/source/.github/workflows/publish.yaml">Cj-bc/blog -- .github/workflows/publish.yaml</a>にあります。</p>
+<h1>前提</h1>
+<ul>
+<li>静的サイトジェネレーターはHakyll</li>
+<li>ほぼ<a href="https://jaspervdj.be/hakyll/tutorials/github-pages-tutorial.html">チュートリアル</a>通りの作りになっている
+<ul>
+<li><code>master</code>の代わりに<code>publish</code>、<code>develop</code>の代わりに<code>source</code>にしてある</li>
+</ul></li>
+<li>Github Pageでホスティング</li>
+</ul>
+<h1>workflowファイルを作成する</h1>
+<h2>トリガーの設定</h2>
+<p>自分の環境では、<code>source</code>ブランチの中身を使ってビルド→<code>publish</code>ブランチにおいて公開、という手順を追っているので、<code>source</code>ブランチにpushされたときだけ走るようにします</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">on</span><span class="kw">:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">source</span><span class="kw">]</span></span></code></pre></div>
+<h2>Jobの作成</h2>
+<p>Jobを作成します。環境はstackが動けばどこでも問題がないので、ubuntuにします。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">jobs</span><span class="kw">:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="at">  </span><span class="fu">runPublish</span><span class="kw">:</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="at">    </span><span class="fu">name</span><span class="kw">:</span><span class="at"> run publish</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span></code></pre></div>
+<h2>ステップの作成</h2>
+<p>ここからstepを作っていきます。</p>
+<h3>必要なブランチをcheckoutする</h3>
+<p>今回、トリガー対象のブランチ<code>source</code>の他に<code>publish</code>ブランチを使っています。 しかし、デフォルトではローカルに<code>publish</code>ブランチは存在しません。<br />
+なので、<code>actions/checkout</code>に、全てのブランチとタグの履歴をfetchする<code>fetch-depth: 0</code>を付け足す必要があります。</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v2</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="at">          </span><span class="fu">fetch-depth</span><span class="kw">:</span><span class="at"> </span><span class="dv">0</span></span></code></pre></div>
+<h3>キャッシュの設定をする</h3>
+<p>ビルドはなかなかに重い(現在の構成で約4,50分くらい)ので、なるべくキャッシュを活用します。<br />
+キャッシュには<code>actions/cache@v2</code>を使用します。キャッシュしたいものを生成するactionの前に実行し、キャッシュがあればそこをスキップするようにします。 キャッシュ対象は<code>~/.stack</code>ディレクトリです。<br />
+これは、[ncaqさんの記事][ncaq -- HaskellプログラムをGitHub Actionsでビルドしてクロスプラットフォーム向けにバイナリをReleaseにアップロードする]から大体を引用させていただきました。</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Cache stack</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/cache@v2</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="at">          </span><span class="fu">path</span><span class="kw">:</span><span class="at"> ~/.stack</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="at">          </span><span class="fu">key</span><span class="kw">:</span><span class="at"> stack-${{ hashFiles(&#39;**/stack.yaml.lock&#39;) }}-${{ hashFiles(&#39;**/package.yaml&#39;) }}</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="fu">          restore-keys</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>            ${{ runner.os }}-stack-${{ hashFiles(&#39;**/stack.yaml.lock&#39;) }}-</span></code></pre></div>
+<h3>haskellおよびstackのセットアップをする</h3>
+<p>Haskell stackを使うので、<code>actions/setup-haskell</code>のアクションを借ります。<br />
+ghcのバージョンは、とりあえず手元にあったものに合わせました。</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/setup-haskell@v1.1.2</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="at">          </span><span class="fu">ghc-version</span><span class="kw">:</span><span class="at"> </span><span class="st">&#39;8.8.1&#39;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="at">          </span><span class="fu">stack-version</span><span class="kw">:</span><span class="at"> </span><span class="st">&#39;latest&#39;</span></span></code></pre></div>
+<h3>publishコマンドを実行する</h3>
+<p>環境の準備がほぼできたので、あとはhakyllのビルドをしておしまいです。<br />
+その前に、<strong>gitのuserを<code>github-actions</code>に設定</strong>しておきます。このアカウントにすると、内部トークンを使ってくれます。<br />
+また、ビルド周りのコマンドはMakefileにしまってあったのでそのまま使います。</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> run publish</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>          git config user.name github-actions</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>          git config user.email github-actions@github.com</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>          git switch source</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>          make publish</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a>          git push origin publish</span></code></pre></div>
+<h1>参考にしたサイト</h1>
+<ul>
+<li><a href="https://www.ncaq.net/2020/04/05/15/54/26/">ncaq -- HaskellプログラムをGitHub Actionsでビルドしてクロスプラットフォーム向けにバイナリをReleaseにアップロードする</a></li>
+<li><a href="https://github.com/actions/setup-haskell">Github -- actions/setup-haskell</a></li>
+<li><a href="https://docs.github.com/en/actions/configuring-and-managing-workflows/caching-dependencies-to-speed-up-workflows">Github Docs -- Caching dependencies to speed up workflows</a></li>
+<li><a href="https://github.com/actions/checkout#push-a-commit-using-the-built-in-token">Github -- actions/checkout#push-a-commit-using-the-built-in-token</a></li>
+</ul>
+]]></description>
+    <pubDate>Fri, 07 Aug 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-08-07-AddedGithubActionsToBlog.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>Blog作った！！</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-08-02-helloHakylly.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on August  2, 2020</li>
+    <li>Updated on August  7, 2020</li>
+  </ul>
+    
+        by Cj-bc
+    
+</div>
+
+<h1>Blog作りました</h1>
+<p>今までは<a href="https://qiita.com/Cj-bc">Qiita</a>に色々書いていましたが、技術的ではないものも書きたくなったのでブログを作りました。<br />
+Elmで自作しようと奮闘していたものの難しそうすぎたので、<a href="https://jaspervdj.be/hakyll/">hakyll</a>を使うことにしました。</p>
+<p>この投稿よりも前の日付のものは、qiitaからのポートです。</p>
+<h1>これから書いていきたいもの</h1>
+<p>今まで通りの技術的な内容、推しの布教、小さなメモ、etc</p>
+<h1>Qiitaはどうする？</h1>
+<p>多分技術系の記事はミラーリングすると思います。</p>
+<h1>今後追加するもの</h1>
+<p>現在最小限の構成でHakyllもほとんどいじっていません。今後追加したい機能:</p>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" />
+タグ機能の追加</li>
+<li><input type="checkbox" disabled="" />
+CSSの設定</li>
+<li><input type="checkbox" disabled="" />
+埋め込みElm</li>
+</ul>
+]]></description>
+    <pubDate>Sun, 02 Aug 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-08-02-helloHakylly.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+
+    </channel>
+</rss>
