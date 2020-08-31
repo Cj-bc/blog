@@ -56,6 +56,7 @@ main = hakyll $ do
         route $ setExtension "html"
         compile $ pandocCompilerWith pandocMarkdownCfg def
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
+            >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= modifySourceUrl
             >>= relativizeUrls
