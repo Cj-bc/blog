@@ -38,9 +38,9 @@ modifySourceUrl item = do
         fn <- takeBaseName <$> getResourceFilePath
         return $ fmap (fixSourceDist fn) item
     where
-        isSourceUrl = isPrefixOf "/src"
+        isSourceUrl = isPrefixOf "/images"
         fixSourceDist fn = withUrls $ \x -> if isSourceUrl x then fixSourceDist' fn x else x
-        fixSourceDist' fn x = "/src/" ++ fn ++ (drop 4 x)
+        fixSourceDist' fn x = "/images/" ++ fn ++ (drop 4 x)
 
 main :: IO ()
 main = hakyll $ do
