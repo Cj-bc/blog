@@ -54,6 +54,18 @@ main = hakyll $ do
 
     tags <- buildTags "posts/*" (fromCapture "tags/*.html")
 
+    tagsRules tags $ \tag pattern -> do
+        let title = "タグ \"" ++ tag ++ "\" がつけられた投稿"
+        route idRoute
+        compile $ do
+            let ctx = constField "title" title
+                      <> listField "posts" (postCtx tags) (recentFirst =<< loadAll pattern)
+                      <> defaultContext
+
+            makeItem ""
+                >>= loadAndApplyTemplate "templates/tag.html" ctx
+                >>= loadAndApplyTemplate "templates/default.html" ctx
+                >>= relativizeUrls
 
     match "posts/*" $ do
         route $ setExtension "html"
