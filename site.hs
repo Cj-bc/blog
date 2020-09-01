@@ -4,6 +4,7 @@ import           Data.Monoid (mappend)
 import           Hakyll
 import           Text.Pandoc.Options (ReaderOptions(..), Extension(..), extensionsFromList)
 import           Data.Default (def)
+import           Control.Monad (forM_)
 
 import           Hakyll.Web.Html (withUrls)
 import           Hakyll.Core.Compiler (getResourceFilePath)
@@ -41,6 +42,12 @@ modifySourceUrl item = do
         isSourceUrl = isPrefixOf "/images"
         fixSourceDist fn = withUrls $ \x -> if isSourceUrl x then fixSourceDist' fn x else x
         fixSourceDist' fn x = "/images/" ++ fn ++ (drop 4 x)
+
+forEachTag :: Tags -> (String -> Pattern -> Rules ()) -> Rules ()
+forEachTag tags rules =
+    forM_ (tagsMap tags) $ \(tag, identifiers) ->
+        rulesExtraDependencies [tagsDependency tags] $
+            rules tag $ fromList identifiers
 
 main :: IO ()
 main = hakyll $ do
@@ -102,17 +109,19 @@ main = hakyll $ do
             posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots "posts/*" "content"
             renderRss feedConfiguration feedCtx posts
 
-    tagsRules tags $ \tag pattern -> do
-        route . constRoute $ "/feeds/atom/" ++ tag ++ ".xml"
-        compile $ do
-            posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots "posts/*" tag
-            renderAtom feedConfiguration feedCtx posts
+    forEachTag tags $ \tag pattern -> do
+        create [fromFilePath $ "feeds/atom/tag/" ++ tag ++ ".xml"] $ do
+            route idRoute
+            compile $ do
+                posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots "posts/*" tag
+                renderAtom feedConfiguration feedCtx posts
 
-    tagsRules tags $ \tag pattern -> do
-        route . constRoute $ "/feeds/rss/" ++ tag ++ ".xml"
-        compile $ do
-            posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots "posts/*" tag
-            renderRss feedConfiguration feedCtx posts
+    forEachTag tags $ \tag pattern -> do
+        create [fromFilePath $ "feeds/rss/tag/" ++ tag ++ ".xml"] $ do
+            route idRoute
+            compile $ do
+                posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots "posts/*" tag
+                renderRss feedConfiguration feedCtx posts
 
     match "index.html" $ do
         route idRoute
