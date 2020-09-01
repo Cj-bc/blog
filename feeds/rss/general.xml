@@ -14,9 +14,14 @@
     <description><![CDATA[<div class="info">
   <ul>
     <li>Posted on August 24, 2020</li>
-    <li>Updated on August 24, 2020</li>
+    <li>Updated on August 31, 2020</li>
   </ul>
     
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;tart&#39;." href="/tags/tart.html">tart</a>, <a title="All pages tagged &#39;cli&#39;." href="/tags/cli.html">cli</a>, <a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html">haskell</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>
+  
 </div>
 
 <p>AAエディター(?)である<a href="https://github.com/jtdaugherty/tart">Tart</a>の内部実装を読んだ時のメモ</p>
@@ -43,9 +48,14 @@
     <description><![CDATA[<div class="info">
   <ul>
     <li>Posted on August 19, 2020</li>
-    <li>Updated on August 20, 2020</li>
+    <li>Updated on August 31, 2020</li>
   </ul>
     
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html">blender</a>, <a title="All pages tagged &#39;document&#39;." href="/tags/document.html">document</a>, <a title="All pages tagged &#39;translation&#39;." href="/tags/translation.html">translation</a>, <a title="All pages tagged &#39;wip&#39;." href="/tags/wip.html">wip</a>
+  
 </div>
 
 <p>公式: <a href="https://docs.blender.org/manual/ja/2.80/files/data_blocks.html" class="uri">https://docs.blender.org/manual/ja/2.80/files/data_blocks.html</a></p>
@@ -101,9 +111,14 @@
     <description><![CDATA[<div class="info">
   <ul>
     <li>Posted on August 18, 2020</li>
-    <li>Updated on August 18, 2020</li>
+    <li>Updated on August 31, 2020</li>
   </ul>
     
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;twitter&#39;." href="/tags/twitter.html">twitter</a>, <a title="All pages tagged &#39;tool&#39;." href="/tags/tool.html">tool</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>, <a title="All pages tagged &#39;cli&#39;." href="/tags/cli.html">cli</a>
+  
 </div>
 
 <p><a href="https://github.com/skanehira/code2img">skanehira/code2img</a>を使うとコードを手軽に画像化できます。<br />
@@ -129,9 +144,14 @@ vimmerとして、すごく、困る。</p>
     <description><![CDATA[<div class="info">
   <ul>
     <li>Posted on August 17, 2020</li>
-    <li>Updated on August 17, 2020</li>
+    <li>Updated on August 31, 2020</li>
   </ul>
     
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html">blender</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>, <a title="All pages tagged &#39;tips&#39;." href="/tags/tips.html">tips</a>
+  
 </div>
 
 <p>Blenderには、面と面を補完して滑らかに表示する<code>shade smooth</code>という機能があります。 しかし、何も考えずに使おうとすると思わぬところが補完され、予期せぬ結果になることが多々起こります。</p>
@@ -154,9 +174,14 @@ vimmerとして、すごく、困る。</p>
     <description><![CDATA[<div class="info">
   <ul>
     <li>Posted on August 16, 2020</li>
-    <li>Updated on August 30, 2020</li>
+    <li>Updated on August 31, 2020</li>
   </ul>
     
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;mps-youtube&#39;." href="/tags/mps-youtube.html">mps-youtube</a>, <a title="All pages tagged &#39;mpsyt&#39;." href="/tags/mpsyt.html">mpsyt</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>
+  
 </div>
 
 <p>mps-youtubeで音楽を聴こうと思ったら、以下のようなエラーが出た。</p>
@@ -187,9 +212,14 @@ vimmerとして、すごく、困る。</p>
     <description><![CDATA[<div class="info">
   <ul>
     <li>Posted on August 16, 2020</li>
-    <li>Updated on August 17, 2020</li>
+    <li>Updated on August 31, 2020</li>
   </ul>
     
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html">blender</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>, <a title="All pages tagged &#39;material&#39;." href="/tags/material.html">material</a>, <a title="All pages tagged &#39;3dcg&#39;." href="/tags/3dcg.html">3dcg</a>
+  
 </div>
 
 <ul>
@@ -220,9 +250,14 @@ vimmerとして、すごく、困る。</p>
     <description><![CDATA[<div class="info">
   <ul>
     <li>Posted on August  7, 2020</li>
-    <li>Updated on August  8, 2020</li>
+    <li>Updated on August 31, 2020</li>
   </ul>
     
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;github actions&#39;." href="/tags/github%20actions.html">github actions</a>, <a title="All pages tagged &#39;github pages&#39;." href="/tags/github%20pages.html">github pages</a>, <a title="All pages tagged &#39;hakyll&#39;." href="/tags/hakyll.html">hakyll</a>, <a title="All pages tagged &#39;ブログ&#39;." href="/tags/%E3%83%96%E3%83%AD%E3%82%B0.html">ブログ</a>, <a title="All pages tagged &#39;自動化&#39;." href="/tags/%E8%87%AA%E5%8B%95%E5%8C%96.html">自動化</a>
+  
 </div>
 
 <p><a href="https://cj-bc.github.io/blog">このブログ</a>の生成をGithub Actionsで行えるようにしたので、その時のメモ<br />
@@ -304,11 +339,16 @@ ghcのバージョンは、とりあえず手元にあったものに合わせ�
     <description><![CDATA[<div class="info">
   <ul>
     <li>Posted on August  2, 2020</li>
-    <li>Updated on August  7, 2020</li>
+    <li>Updated on August 31, 2020</li>
   </ul>
     
         by Cj-bc
     
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;info&#39;." href="/tags/info.html">info</a>
+  
 </div>
 
 <h1>Blog作りました</h1>
