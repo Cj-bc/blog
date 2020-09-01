@@ -52,12 +52,15 @@ main = hakyll $ do
         route   idRoute
         compile compressCssCompiler
 
+    tags <- buildTags "posts/*" (fromCapture "tags/*.html")
+
+
     match "posts/*" $ do
         route $ setExtension "html"
         compile $ pandocCompilerWith pandocMarkdownCfg def
-            >>= loadAndApplyTemplate "templates/post.html"    postCtx
+            >>= loadAndApplyTemplate "templates/post.html"    (postCtx tags)
             >>= saveSnapshot "content"
-            >>= loadAndApplyTemplate "templates/default.html" postCtx
+            >>= loadAndApplyTemplate "templates/default.html" (postCtx tags)
             >>= modifySourceUrl
             >>= relativizeUrls
 
@@ -66,7 +69,7 @@ main = hakyll $ do
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
             let archiveCtx =
-                    listField "posts" postCtx (return posts) `mappend`
+                    listField "posts" (postCtx tags) (return posts) `mappend`
                     constField "title" "Archives"            `mappend`
                     defaultContext
 
@@ -93,7 +96,7 @@ main = hakyll $ do
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
             let indexCtx =
-                    listField "posts" postCtx (return posts) `mappend`
+                    listField "posts" (postCtx tags) (return posts) `mappend`
                     constField "title" ""                    `mappend`
                     defaultContext
 

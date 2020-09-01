@@ -9,9 +9,10 @@ import              Shelly
 dateFormat :: T.Text
 dateFormat = "%B %e, %Y"
 
-postCtx :: Context String
-postCtx =
+postCtx :: Tags -> Context String
+postCtx tags =
     dateField "date" (T.unpack dateFormat)
+    <> tagsField "tags" tags
     <> updateDataField
     <> defaultContext
 
