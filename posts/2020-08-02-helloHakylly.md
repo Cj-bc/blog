@@ -1,7 +1,7 @@
 ---
 title: Blog作った！！
 author: Cj-bc
-keywords: info
+tags: info
 date: August 02, 2020
 ---
 

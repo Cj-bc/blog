@@ -1,6 +1,6 @@
 ---
 title: blenderマテリアル のblend modeについて
-keywords:
+tags:
   - blender
   - memo
   - material

@@ -1,6 +1,6 @@
 ---
 title: twtyとcode2imgでコードの画像つきツイートをする
-keywords:
+tags:
   - twitter
   - tool
   - memo

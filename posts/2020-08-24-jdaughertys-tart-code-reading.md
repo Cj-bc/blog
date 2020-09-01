@@ -1,6 +1,6 @@
 ---
 title: jtdaugherty/tart ソースリーディングメモ
-keywords:
+tags:
   - tart
   - cli
   - haskell

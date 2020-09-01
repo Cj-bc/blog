@@ -1,6 +1,6 @@
 ---
 title: mps-youtubeのAPIキーを更新する
-keywords:
+tags:
   - mps-youtube
   - mpsyt
   - memo
