@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>CLI! CLI! CLI!</title>
+    <link href="https://cj-bc.github.io/blog/feeds/atom/document.xml" rel="self" />
+    <link href="https://cj-bc.github.io/blog" />
+    <id>https://cj-bc.github.io/blog/feeds/atom/document.xml</id>
+    <author>
+        <name>Cj-bc a.k.a Cj.BC_SD</name>
+        <email>cj.bc-sd@outlook.jp</email>
+    </author>
+    <updated>2020-08-19T00:00:00Z</updated>
+    <entry>
+    <title>Blender docs -- data block</title>
+    <link href="https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html" />
+    <id>https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html</id>
+    <published>2020-08-19T00:00:00Z</published>
+    <updated>2020-08-19T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- Blender docs -- data block</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">CLI! CLI! CLI!</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../archive.html">Archive</a>
+                <a href="https://Cj-bc.github.io">HP</a>
+                <a href="../feeds/atom/general.xml">Atom feed</a>
+                <a href="../feeds/rss/general.xml">RSS</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>Blender docs -- data block</h1>
+
+            <div class="info">
+  <ul>
+    <li>Posted on August 19, 2020</li>
+    <li>Updated on August 31, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged 'blender'." href="../tags/blender.html">blender</a>, <a title="All pages tagged 'document'." href="../tags/document.html">document</a>, <a title="All pages tagged 'translation'." href="../tags/translation.html">translation</a>, <a title="All pages tagged 'wip'." href="../tags/wip.html">wip</a>
+  
+</div>
+
+<p>公式: <a href="https://docs.blender.org/manual/ja/2.80/files/data_blocks.html" class="uri">https://docs.blender.org/manual/ja/2.80/files/data_blocks.html</a></p>
+<h1>Data blocks</h1>
+<p>いかなるBlenderプロジェクトの基本単位は<code>data-block</code>です。<code>data-block</code>の例としては: meshes, objects, materials, textures, node trees, scenes, texts, brushes, そして workspace</p>
+<p><code>data-block</code>は、とても異なる種類のデータの全体的な抽象であり、共通の基本的な<code>feature</code>であるプロパティと<code>behaviors</code>に重心を置いています。</p>
+<p>いくつかの共通した特徴は:</p>
+<ul>
+<li><code>blend-file</code>の<code>primary contents</code>です。</li>
+<li>再利用やインスタンス化のために、違いを参照することができます。(Child/parent, object/object-data, materials/images, in modifiers or constraints too...)</li>
+<li>それぞれの名前は、<code>blend-file</code>内で同じタイプの中で<code>unique</code>です。</li>
+<li>追加、削除、編集、複製が可能です。</li>
+<li>ファイル間で<code>link</code>することができます。(限られた種類の<code>data-blocks</code>のみです)</li>
+<li>それぞれ独自のアニメーションデータを持つことができます。</li>
+<li>それぞれ<a href="https://docs.blender.org/manual/ja/2.80/files/data_blocks.html#files-data-blocks-custom-properties">Custom properties</a>を持つことができます。</li>
+</ul>
+<p>ユーザーは<code>typically</code>高レベルの<code>data type</code>を扱うことになります(<code>obects</code>, <code>meshes</code>など)。 複雑なプロジェクトを扱う場合、特に<code>inter-linking blend-files</code>の場合、<code>data-block</code>の管理はより重要になります。 それ用の主なエディターは<a href="https://docs.blender.org/manual/ja/2.80/editors/outliner.html">Outliner</a>です</p>
+<p>Blender内の全てのデータが<code>data-block</code>なわけではありません。例えば、<code>bones</code>, <code>sequence strips</code>や<code>vertex groups</code>は違っており、 それぞれ<code>armature</code>、<code>scene</code>、<code>mesh types</code>に付属(<code>belong to</code>)しています。</p>
+<h1>Life Time</h1>
+<p>全ての<code>data-block</code>は<code>usage counted</code>(<code>reference count</code>)を持っており、一つ以上である場合は、UIの中で<code>data-block</code>の名前の右側に<code>current user</code>の数が表示されます。</p>
+<p>Blenderは、使用されていないデータは最終的に削除されるという<code>general rule</code>に従っています。</p>
+<p>作業中にたくさんのデータを追加・削除することは一般的なため、全ての<code>data-block</code>を一つ一つ手動で管理する必要がないのは利点です。</p>
+<p>これは、<code>blend-file</code>を書き込む際に、<code>zero user</code>な<code>data-block</code>をスキップする仕組みになっています。</p>
+<h1>Protected</h1>
+<p><code>zero user</code>な<code>data-block</code>は保存されないため、時にはユーザーのことを考えずにデータの保存を強制させたい時があるでしょう。</p>
+<p>もし、<code>blend-file</code>を<code>library</code>として使っていたり、他のファイルから<code>link</code>したりされたりする目的で使っていた場合、 突然削除されないように気をつける必要があります。</p>
+<p><code>data-block</code>を<code>protect</code>するためには、その<code>data-block</code>の名前の横にある盾のボタンを使用します。 そうすると、その<code>data-block</code>はblenderによって自動的に削除されることは無くなりますが、必要ならば手動で削除することができます。</p>
+<h1>Sharing</h1>
+<p><code>data-block</code>は他の<code>data-block</code>間でも共有できます。</p>
+<p>よくデータの共有が行われる例:</p>
+<ul>
+<li><code>materials</code>間で<code>textures</code>を共有する</li>
+<li><code>objects</code>(<code>instances</code>)間で<code>meshes</code>を共有する</li>
+<li><code>objects</code>間で<code>animated actions</code>を共有する。例えば、全てのライトが同時に<code>dim</code>するようにします。</li>
+</ul>
+<p><code>data-block</code>をファイル間でも共有できます、詳しくは:</p>
+<ul>
+<li><a href="https://docs.blender.org/manual/ja/2.80/files/linked_libraries.html">linked libraries</a></li>
+</ul>
+<h1>Making Single User</h1>
+<p><code>data-block</code>が複数のユーザーによって共有されている時、あるユーザーのためにコピーを作成することができます。 そうするには、名前の右にある<code>user-count</code>ボタンを押してください。そうすることにより、その<code>data-block</code>を複製してその用途のみに<code>assign</code>します。</p>
+<h2>注釈</h2>
+<p><code>Objects</code>は<code>single-user</code>になるためにより発展的な<code>actions</code>を持っています。<a href="https://docs.blender.org/manual/ja/2.80/scene_layout/object/editing/duplication.html">彼らのドキュメント</a>を参照してください。</p>
+<h1>Removing Data-Blocks</h1>
+
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
+]]></summary>
+</entry>
+
+</feed>
