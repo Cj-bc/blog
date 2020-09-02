@@ -17,6 +17,11 @@ import           MyBlog.Contexts
 blogName :: String
 blogName = "CLI! CLI! CLI!"
 
+feedUrlBase     = "/feeds"
+atomFeedUrlBase = feedUrlBase <> "/atom"
+rssFeedUrlBase  = feedUrlBase <> "/rss"
+
+
 pandocMarkdownCfg :: ReaderOptions
 pandocMarkdownCfg = def { readerExtensions = extensionsFromList [Ext_emoji, Ext_task_lists
                                                                 , Ext_backtick_code_blocks, Ext_fenced_code_attributes
@@ -66,6 +71,8 @@ main = hakyll $ do
         route idRoute
         compile $ do
             let ctx = constField "title" title
+                      <> constField "atomFeedUrl" (atomFeedUrlBase <> "/tag/" <> tag <> ".xml")
+                      <> constField "rssFeedUrl"  (rssFeedUrlBase <> "/tag/" <> tag <> ".xml")
                       <> listField "posts" (postCtx tags) (recentFirst =<< loadAll pattern)
                       <> defaultContext
 
