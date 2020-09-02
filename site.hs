@@ -113,15 +113,17 @@ main = hakyll $ do
         create [fromFilePath $ "feeds/atom/tag/" ++ tag ++ ".xml"] $ do
             route idRoute
             compile $ do
-                posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots "posts/*" tag
+                posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots pattern "content"
                 renderAtom feedConfiguration feedCtx posts
 
     forEachTag tags $ \tag pattern -> do
         create [fromFilePath $ "feeds/rss/tag/" ++ tag ++ ".xml"] $ do
             route idRoute
             compile $ do
-                posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots "posts/*" tag
+                posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots pattern "content"
                 renderRss feedConfiguration feedCtx posts
+    -- }}}
+
 
     match "index.html" $ do
         route idRoute
