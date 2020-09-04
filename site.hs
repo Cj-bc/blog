@@ -20,6 +20,9 @@ blogName = "CLI! CLI! CLI!"
 feedUrlBase     = "/feeds"
 atomFeedUrlBase = feedUrlBase <> "/atom"
 rssFeedUrlBase  = feedUrlBase <> "/rss"
+tagFeedUrlBase  = "/tag"
+tagAtomFeedUrl tag = atomFeedUrlBase <> tagFeedUrlBase <> "/" <> tag <> ".xml"
+tagRssFeedUrl  tag = rssFeedUrlBase  <> tagFeedUrlBase <> "/" <> tag <> ".xml"
 
 
 pandocMarkdownCfg :: ReaderOptions
@@ -71,8 +74,8 @@ main = hakyll $ do
         route idRoute
         compile $ do
             let ctx = constField "title" title
-                      <> constField "atomFeedUrl" (atomFeedUrlBase <> "/tag/" <> tag <> ".xml")
-                      <> constField "rssFeedUrl"  (rssFeedUrlBase <> "/tag/" <> tag <> ".xml")
+                      <> constField "atomFeedUrl" (tagAtomFeedUrl tag)
+                      <> constField "rssFeedUrl"  (tagRssFeedUrl tag)
                       <> listField "posts" (postCtx tags) (recentFirst =<< loadAll pattern)
                       <> defaultContext
 
