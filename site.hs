@@ -57,6 +57,16 @@ forEachTag tags rules =
         rulesExtraDependencies [tagsDependency tags] $
             rules tag $ fromList identifiers
 
+type Renderer = FeedConfiguration -> Context String -> [Item String] -> Compiler (Item String)
+
+-- | create the same object for several feeds
+--
+-- Currently, this will generate RSS and Atom feeds.
+createFeeds :: String -> (Renderer -> Rules ()) -> Rules ()
+createFeeds fileName rules = do
+    create [fromFilePath $ atomFeedUrlBase <> fileName] $ rules renderAtom
+    create [fromFilePath $ rssFeedUrlBase  <> fileName] $ rules renderRss
+
 main :: IO ()
 main = hakyll $ do
     match "images/**" $ do
@@ -107,31 +117,18 @@ main = hakyll $ do
                 >>= loadAndApplyTemplate "templates/default.html" archiveCtx
                 >>= relativizeUrls
 
-    create ["feeds/atom/general.xml"] $ do
+    createFeeds "/general.xml" $ \renderer -> do
         route idRoute
         compile $ do
             posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots "posts/*" "content"
-            renderAtom feedConfiguration feedCtx posts
-
-    create ["feeds/rss/general.xml"] $ do
-        route idRoute
-        compile $ do
-            posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots "posts/*" "content"
-            renderRss feedConfiguration feedCtx posts
+            renderer feedConfiguration feedCtx posts
 
     forEachTag tags $ \tag pattern -> do
-        create [fromFilePath $ "feeds/atom/tag/" ++ tag ++ ".xml"] $ do
+        createFeeds (tagFeedUrlBase <> tag <> ".xml") $ \renderer -> do
             route idRoute
             compile $ do
                 posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots pattern "content"
-                renderAtom feedConfiguration feedCtx posts
-
-    forEachTag tags $ \tag pattern -> do
-        create [fromFilePath $ "feeds/rss/tag/" ++ tag ++ ".xml"] $ do
-            route idRoute
-            compile $ do
-                posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots pattern "content"
-                renderRss feedConfiguration feedCtx posts
+                renderer feedConfiguration feedCtx posts
     -- }}}
 
 
