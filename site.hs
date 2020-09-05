@@ -64,8 +64,11 @@ type Renderer = FeedConfiguration -> Context String -> [Item String] -> Compiler
 -- Currently, this will generate RSS and Atom feeds.
 createFeeds :: String -> (Renderer -> Rules ()) -> Rules ()
 createFeeds fileName rules = do
-    create [fromFilePath $ atomFeedUrlBase <> fileName] $ rules renderAtom
-    create [fromFilePath $ rssFeedUrlBase  <> fileName] $ rules renderRss
+    -- Drop 1 here to drop '/' letter in the UrlBase.
+    -- Starting with '/' is required to use 'relativizeUrls', but for 'create'
+    -- it should not be used.
+    create [fromFilePath . drop 1 $ atomFeedUrlBase <> fileName] $ rules renderAtom
+    create [fromFilePath . drop 1 $ rssFeedUrlBase  <> fileName] $ rules renderRss
 
 main :: IO ()
 main = hakyll $ do
