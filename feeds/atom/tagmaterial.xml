@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>CLI! CLI! CLI!</title>
+    <link href="https://cj-bc.github.io/blog/feeds/atom/tagmaterial.xml" rel="self" />
+    <link href="https://cj-bc.github.io/blog" />
+    <id>https://cj-bc.github.io/blog/feeds/atom/tagmaterial.xml</id>
+    <author>
+        <name>Cj-bc a.k.a Cj.BC_SD</name>
+        <email>cj.bc-sd@outlook.jp</email>
+    </author>
+    <updated>2020-08-16T00:00:00Z</updated>
+    <entry>
+    <title>blenderマテリアル のblend modeについて</title>
+    <link href="https://cj-bc.github.io/blog/posts/2020-08-16-blender-material-blend-mode.html" />
+    <id>https://cj-bc.github.io/blog/posts/2020-08-16-blender-material-blend-mode.html</id>
+    <published>2020-08-16T00:00:00Z</published>
+    <updated>2020-08-16T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on August 16, 2020</li>
+    <li>Updated on August 31, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html">blender</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>, <a title="All pages tagged &#39;material&#39;." href="/tags/material.html">material</a>, <a title="All pages tagged &#39;3dcg&#39;." href="/tags/3dcg.html">3dcg</a>
+  
+</div>
+
+<ul>
+<li>Blenderのバージョン: 2.80</li>
+<li>公式のリファレンス: <a href="https://docs.blender.org/manual/en/2.80/render/eevee/materials/settings.html">blender manual -- materials</a></li>
+</ul>
+<p>Blend modeは、表面の色の計算が終わった後にどのようにカラーバッファに影響するかを決めます。</p>
+<h1 class="small-caption">Opaque</h1>
+<p>アルファチャンネル(=透明度)を完全に無視し、色を上書きします。これが一番早いモードです。</p>
+<h1 class="small-caption">Additive</h1>
+<p>直前の色に表面の色を加算します。アルファ値は、 <em>neutral color</em> の黒 (0.0, 0.0, 0.0, 0.0) と表面の色を混ぜるために使われます。</p>
+<h1 class="small-caption">Multiplicative</h1>
+<p>直前の色と表面の色を乗算します。アルファ値は、 <em>neutral color</em> の白 (1.0, 1.0, 1.0) と表面の色を混ぜるために使われます。</p>
+<h1 class="small-caption">Alpha Clip</h1>
+<p>アルファ値がclip閾値を上回った場合のみ、直前の色は表面の色で上書きされます。</p>
+<h1 class="small-caption">Alpha Hashed</h1>
+<p>アルファ値がランダムで決められたclip閾値を上回った場合のみ、直前の色は表面の色で上書きされます。 この統計学的なアプローチはノイズが多いですが、ソートの問題なしにアルファ値のブレンドを概算できます。レンダー設定でサンプル数を増やすと、最終的なノイズを減らすことができます。</p>
+<h1 class="small-caption">Alpha Blending</h1>
+<p>アルファ値のブレンドを使い、直前の色の上に表面の色をオーバーレイします。</p>
+]]></summary>
+</entry>
+
+</feed>

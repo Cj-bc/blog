@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>CLI! CLI! CLI!</title>
+        <link>https://cj-bc.github.io/blog</link>
+        <description><![CDATA[Cj-bc's personal blog posts.]]></description>
+        <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tagcli.xml" rel="self"
+                   type="application/rss+xml" />
+        <lastBuildDate>August 24, 2020</lastBuildDate>
+        <item>
+    <title>jtdaugherty/tart ソースリーディングメモ</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-08-24-jdaughertys-tart-code-reading.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on August 24, 2020</li>
+    <li>Updated on August 31, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;tart&#39;." href="/tags/tart.html">tart</a>, <a title="All pages tagged &#39;cli&#39;." href="/tags/cli.html">cli</a>, <a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html">haskell</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>
+  
+</div>
+
+<p>AAエディター(?)である<a href="https://github.com/jtdaugherty/tart">Tart</a>の内部実装を読んだ時のメモ</p>
+<h1>Eventの処理</h1>
+<pre><code>main
+ |- Events.handleEvent
+    |- マウスでの描画イベントを処理
+    |- マウスがドラッグ中でかつ前回と違うものの上にある時はここでイベントを終了する
+    |- 現在のモードに合わせて、イベントを処理する
+      |- Events.Main.handleEvent
+        |- Events.Main.handleCommonEvent
+        |   |- ツールバー系のトグルをする
+        |- Events.Main.handleAttrEvent
+        |   |- Attributes(fg,bg,style)がクリックされた場合、変更作業をする
+        |- Events.Main.handleEvent</code></pre>
+]]></description>
+    <pubDate>Mon, 24 Aug 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-08-24-jdaughertys-tart-code-reading.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>twtyとcode2imgでコードの画像つきツイートをする</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-08-17-tweet-with-code2img-image-from-vim.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on August 18, 2020</li>
+    <li>Updated on August 31, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;twitter&#39;." href="/tags/twitter.html">twitter</a>, <a title="All pages tagged &#39;tool&#39;." href="/tags/tool.html">tool</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>, <a title="All pages tagged &#39;cli&#39;." href="/tags/cli.html">cli</a>
+  
+</div>
+
+<p><a href="https://github.com/skanehira/code2img">skanehira/code2img</a>を使うとコードを手軽に画像化できます。<br />
+そして、<a href="https://github.com/skanehira/code2img.vim">skanehira/code2img.vim</a>を使うとvimから簡単にクリップボードに生成できます。<br />
+これ、すごく便利です。<br />
+しかし、この画像つきのツイートをしたいなと思った時、このままではtwitter.comを開いて投稿しなければなりません。<br />
+vimmerとして、すごく、困る。</p>
+<p>ということで困っていたら、<a href="https://twitter.com/gorilla0513">gorilla</a>さん自身も同じことを思っていたようで、爆速で作ってくれました。</p>
+<script src="https://gist.github.com/skanehira/7dd6ed0dc8da8c6e87a11ab70ea83b53.js"></script>
+<p><a href="https://github.com/skanehira/code2img">skanehira/code2img</a>と、<a href="https://github.com/mattn/twty">mattn/twty</a>があれば動きます。</p>
+<p>すごい。使いやすい。実際に使ってみた結果:</p>
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">ツイートのテストだよ。中身は適当なコードだよ。 <a href="https://t.co/QGJ2Y9iLfz">pic.twitter.com/QGJ2Y9iLfz</a></p>&mdash; Cj-bc_sd.sh🐟🔯🌸🐾@ソーダー (@Cj_bc_sd) <a href="https://twitter.com/Cj_bc_sd/status/1295377990524657665?ref_src=twsrc%5Etfw">August 17, 2020</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>とても良い。ありがとうgorillaさん。</p>
+]]></description>
+    <pubDate>Tue, 18 Aug 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-08-17-tweet-with-code2img-image-from-vim.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+
+    </channel>
+</rss>
