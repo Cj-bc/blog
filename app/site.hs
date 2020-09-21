@@ -2,8 +2,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.Monoid (mappend)
 import           Hakyll
-import           Text.Pandoc.Options (ReaderOptions(..), Extension(..), extensionsFromList)
-import           Data.Default (def)
 import           Control.Monad (forM_)
 
 import           Hakyll.Web.Html (withUrls)
@@ -11,6 +9,7 @@ import           Hakyll.Core.Compiler (getResourceFilePath)
 import           System.FilePath.Posix (takeBaseName)
 import           Data.List (isPrefixOf)
 
+import           MyBlog
 import           MyBlog.Contexts
 --------------------------------------------------------------------------------
 
@@ -25,13 +24,6 @@ tagAtomFeedUrl tag = atomFeedUrlBase <> tagFeedUrlBase <> "/" <> tag <> ".xml"
 tagRssFeedUrl  tag = rssFeedUrlBase  <> tagFeedUrlBase <> "/" <> tag <> ".xml"
 
 
-pandocMarkdownCfg :: ReaderOptions
-pandocMarkdownCfg = def { readerExtensions = extensionsFromList [Ext_emoji, Ext_task_lists
-                                                                , Ext_backtick_code_blocks, Ext_fenced_code_attributes
-                                                                , Ext_header_attributes
-                                                                , Ext_raw_html
-                                                                ]
-                        }
 
 feedConfiguration :: FeedConfiguration
 feedConfiguration = FeedConfiguration {
@@ -47,7 +39,6 @@ modifySourceUrl item = do
         fn <- takeBaseName <$> getResourceFilePath
         return $ fmap (fixSourceDist fn) item
     where
-        isSourceUrl = isPrefixOf "/images"
         fixSourceDist fn = withUrls $ \x -> if isSourceUrl x then fixSourceDist' fn x else x
         fixSourceDist' fn x = "/images/" ++ fn ++ (drop 4 x)
 
@@ -98,7 +89,7 @@ main = hakyll $ do
                 >>= relativizeUrls
 
     match "posts/*" $ do
-        route $ setExtension "html"
+        route $ postRoute
         compile $ pandocCompilerWith pandocMarkdownCfg def
             >>= loadAndApplyTemplate "templates/post.html"    (postCtx tags)
             >>= saveSnapshot "content"
