@@ -26,3 +26,18 @@ executable blog
                        shelly,
                        attoparsec,
                        text
+
+executable zenn
+  main-is:             app/zenn.hs
+  default-language:    Haskell2010
+  ghc-options:         -threaded
+  other-modules:       MyBlog.Contexts, MyBlog
+  build-depends:       base >= 4.7 && < 5,
+                       hakyll,
+                       pandoc,
+                       data-default,
+                       filepath,
+                       shelly,
+                       attoparsec,
+                       text
+
