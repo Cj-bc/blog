@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>CLI! CLI! CLI!</title>
+    <link href="https://cj-bc.github.io/blog/feeds/atom/tagmacOS.xml" rel="self" />
+    <link href="https://cj-bc.github.io/blog" />
+    <id>https://cj-bc.github.io/blog/feeds/atom/tagmacOS.xml</id>
+    <author>
+        <name>Cj-bc a.k.a Cj.BC_SD</name>
+        <email>cj.bc-sd@outlook.jp</email>
+    </author>
+    <updated>2020-10-10T00:00:00Z</updated>
+    <entry>
+    <title>jupyter notebookがうまく起動しなかった</title>
+    <link href="https://cj-bc.github.io/blog/posts/2020-10-08-jupyter-notebook-doesnt-up-so-long.html" />
+    <id>https://cj-bc.github.io/blog/posts/2020-10-08-jupyter-notebook-doesnt-up-so-long.html</id>
+    <published>2020-10-10T00:00:00Z</published>
+    <updated>2020-10-10T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on October 10, 2020</li>
+    <li>Updated on October 17, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;python&#39;." href="/tags/python.html">python</a>, <a title="All pages tagged &#39;jupyter&#39;." href="/tags/jupyter.html">jupyter</a>, <a title="All pages tagged &#39;macOS&#39;." href="/tags/macOS.html">macOS</a>
+  
+</div>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>$ <span class="ex">jupyter</span> notebook</span></code></pre></div>
+<p>だと、鯖は立ち上がるもののページが読み込めずうまくいかなかった。 試しに、<a href="https://qiita.com/ciela/items/0e0392f600c92b93d7c6">この記事</a>に従ってみたところ接続できた。 よくわからないけど、まぁ動いたのでよし。別段VM環境でもなかったんだけどなぁ</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>$ <span class="ex">jupyter</span> notebook --ip=<span class="dt">\*</span></span></code></pre></div>
+]]></summary>
+</entry>
+
+</feed>

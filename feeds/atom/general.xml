@@ -8,8 +8,63 @@
         <name>Cj-bc a.k.a Cj.BC_SD</name>
         <email>cj.bc-sd@outlook.jp</email>
     </author>
-    <updated>August 24, 2020</updated>
+    <updated>2020-10-10T00:00:00Z</updated>
     <entry>
+    <title>jupyter notebookがうまく起動しなかった</title>
+    <link href="https://cj-bc.github.io/blog/posts/2020-10-08-jupyter-notebook-doesnt-up-so-long.html" />
+    <id>https://cj-bc.github.io/blog/posts/2020-10-08-jupyter-notebook-doesnt-up-so-long.html</id>
+    <published>2020-10-10T00:00:00Z</published>
+    <updated>2020-10-10T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on October 10, 2020</li>
+    <li>Updated on October 17, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;python&#39;." href="/tags/python.html">python</a>, <a title="All pages tagged &#39;jupyter&#39;." href="/tags/jupyter.html">jupyter</a>, <a title="All pages tagged &#39;macOS&#39;." href="/tags/macOS.html">macOS</a>
+  
+</div>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>$ <span class="ex">jupyter</span> notebook</span></code></pre></div>
+<p>だと、鯖は立ち上がるもののページが読み込めずうまくいかなかった。 試しに、<a href="https://qiita.com/ciela/items/0e0392f600c92b93d7c6">この記事</a>に従ってみたところ接続できた。 よくわからないけど、まぁ動いたのでよし。別段VM環境でもなかったんだけどなぁ</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>$ <span class="ex">jupyter</span> notebook --ip=<span class="dt">\*</span></span></code></pre></div>
+]]></summary>
+</entry>
+<entry>
+    <title>Windows PCのスペックを確認する</title>
+    <link href="https://cj-bc.github.io/blog/posts/2020-09-29-windows-how-to-know-spec.html" />
+    <id>https://cj-bc.github.io/blog/posts/2020-09-29-windows-how-to-know-spec.html</id>
+    <published>2020-09-29T00:00:00Z</published>
+    <updated>2020-09-29T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on September 29, 2020</li>
+    <li>Updated on October 17, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;windows&#39;." href="/tags/windows.html">windows</a>, <a title="All pages tagged &#39;pc&#39;." href="/tags/pc.html">pc</a>, <a title="All pages tagged &#39;ハードウェア&#39;." href="/tags/%E3%83%8F%E3%83%BC%E3%83%89%E3%82%A6%E3%82%A7%E3%82%A2.html">ハードウェア</a>
+  
+</div>
+
+<h1>CPU/ストレージ/メモリの確認</h1>
+<p>システム情報</p>
+<h1>GPUの確認</h1>
+<p>タスクマネージャー→パフォーマンス</p>
+<p><code>GPU 0</code>, <code>GPU 1</code>と複数あることもあるので注意</p>
+<p>以下の方法ではGPU 1が見れなかった</p>
+<ul>
+<li>ディスプレイ設定→ディスプレイの詳細設定→ディスプレイのアダプターのプロパティを表示</li>
+<li><code>dxdiag</code></li>
+</ul>
+]]></summary>
+</entry>
+<entry>
     <title>jtdaugherty/tart ソースリーディングメモ</title>
     <link href="https://cj-bc.github.io/blog/posts/2020-08-24-jdaughertys-tart-code-reading.html" />
     <id>https://cj-bc.github.io/blog/posts/2020-08-24-jdaughertys-tart-code-reading.html</id>
