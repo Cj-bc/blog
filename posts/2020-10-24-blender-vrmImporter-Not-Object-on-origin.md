@@ -36,16 +36,16 @@ Blender上では全然問題なく見えますが、これをしておかない�
 ## 具体例:
 
 scaleが1になっていない例
-![scaleが1じゃない](/src/sscale_isnt_1.jpeg)
+![scaleが1じゃない](/images/sscale_isnt_1.jpeg)
 
 scaleが1になるように調整した例
-![scaleが1](/src/scale_is_1.jpeg)
+![scaleが1](/images/scale_is_1.jpeg)
 
 rotationが0になっていない例
-![rotationが0じゃない](/src/rotation_isnt_0.jpeg)
+![rotationが0じゃない](/images/rotation_isnt_0.jpeg)
 
 rotationが0になっている例
-![rotationが0](/src/rotation_is_0.jpeg)
+![rotationが0](/images/rotation_is_0.jpeg)
 
 
 ## 直し方
@@ -57,7 +57,7 @@ Inspectorで各transformの値を確認します。そうしたら、それを�
 
 綺麗になりました！！
 
-![全部直した](/src/completed.jpg)
+![全部直した](/images/completed.jpg)
 
 # todo
 
