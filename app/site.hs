@@ -128,7 +128,7 @@ main = hakyll $ do
             renderer feedConfiguration feedCtx posts
 
     forEachTag tags $ \tag pattern -> do
-        createFeeds (tagFeedUrlBase <> tag <> ".xml") $ \renderer -> do
+        createFeeds (tagFeedUrlBase <> "/" <> tag <> ".xml") $ \renderer -> do
             route idRoute
             compile $ do
                 posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots pattern "content"
