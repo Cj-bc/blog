@@ -1,38 +1,38 @@
-Player Input‚ªãè‚­g‚¦‚È‚¢‚Æv‚Á‚½‚ç’Pƒ‚Èƒ~ƒX‚¾‚Á‚½
+Player InputãŒä¸Šæ‰‹ãä½¿ãˆãªã„ã¨æ€ã£ãŸã‚‰å˜ç´”ãªãƒŸã‚¹ã ã£ãŸ
 
 # tl;dr
 
-UnityEvent‚ğg—p‚·‚éê‡AEvent‚É“o˜^‚·‚éƒXƒNƒŠƒvƒg‚ÍA‚»‚ÌInspectorƒrƒ…[‚©‚ç‘I‘ğ‚µAƒXƒNƒŠƒvƒgƒtƒ@ƒCƒ‹‚»‚Ì‚à‚Ì‚ğ“ü‚ê‚È‚¢‚æ‚¤‚É‚·‚é
+UnityEventã‚’ä½¿ç”¨ã™ã‚‹å ´åˆã€Eventã«ç™»éŒ²ã™ã‚‹ã‚¹ã‚¯ãƒªãƒ—ãƒˆã¯ã€ãã®Inspectorãƒ“ãƒ¥ãƒ¼ã‹ã‚‰é¸æŠã—ã€ã‚¹ã‚¯ãƒªãƒ—ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ãã®ã‚‚ã®ã‚’å…¥ã‚Œãªã„ã‚ˆã†ã«ã™ã‚‹
 
 ---
 
-Player Input‚ÍAUnity‚Å`2019.1`‚©‚ç’Ç‰Á‚³‚ê‚½A`Input`‚Éæ‚Á‚Ä•Ï‚í‚éV‚µ‚¢“ü—ÍŠÇ—ƒVƒXƒeƒ€‚Å‚·B
-Ú‚µ‚­‚Í[V‚µ‚¢ Input System ‚Ì‚²Ğ‰î -- blogs.unity3d.com](https://blogs.unity3d.com/jp/2019/10/14/introducing-the-new-input-system/)‚ğQÆ‚µ‚Ä‚­‚¾‚³‚¢B
+Player Inputã¯ã€Unityã§`2019.1`ã‹ã‚‰è¿½åŠ ã•ã‚ŒãŸã€`Input`ã«å–ã£ã¦å¤‰ã‚ã‚‹æ–°ã—ã„å…¥åŠ›ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ ã§ã™ã€‚
+è©³ã—ãã¯[æ–°ã—ã„ Input System ã®ã”ç´¹ä»‹ -- blogs.unity3d.com](https://blogs.unity3d.com/jp/2019/10/14/introducing-the-new-input-system/)ã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚
 
 
-# ŠÂ‹«
+# ç’°å¢ƒ
 
-ƒ\ƒtƒgƒEƒFƒA   ƒo[ƒWƒ‡ƒ“
+ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢   ãƒãƒ¼ã‚¸ãƒ§ãƒ³
 -------------  --------------------- -
 Unity          2019.4.11f1 Personal
 InputSystem    1.0.0
 
-# Œ»ó
+# ç¾çŠ¶
 
-Šî–{“I‚É‚Í[Quick Start Guide](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/manual/QuickStartGuide.html)‚É‰ˆ‚Á‚Äì‹Æ‚ğ‚µ‚Ä‚¢‚Ü‚·B(`Input System`‚Í“±“üÏ‚Æ‚µ‚Ü‚·B)
+åŸºæœ¬çš„ã«ã¯[Quick Start Guide](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/manual/QuickStartGuide.html)ã«æ²¿ã£ã¦ä½œæ¥­ã‚’ã—ã¦ã„ã¾ã™ã€‚(`Input System`ã¯å°å…¥æ¸ˆã¨ã—ã¾ã™ã€‚)
 
-1. “ü—Í‚ğ”½‰f‚³‚¹‚½‚¢`GameObject`‚É`PlayerInput`‚ğattach‚µ‚Ü‚·B
-2. "Create Actions"‚ğ‰Ÿ‚µAV‚µ‚¢`Action Asset`‚ğì¬‚µ‚Ü‚·
-3. "Quick Start Guide"‚É]‚Á‚ÄA“ü—Í‚ğ`Unity Events`‚Åó‚¯‚Æ‚é‚æ‚¤‚É‚µ‚Ü‚·B
-4. ¡‰ñ‚Í•K—v‚È‚©‚Á‚½‚Ì‚ÅAƒfƒtƒHƒ‹ƒg‚Å“ü‚Á‚Ä‚¢‚éAction‚ğ©•ª‚Åg‚¤‚à‚Ì‚É“ü‚ê‚©‚¦‚Ü‚µ‚½
-5. `1.`‚Ì`GameObject`‚É–ß‚èA`PlayerInput`‚ÌEvents—“‚ÉScript file‚ğw’è‚µ‚Ü‚·
-6. ‚ ‚ê!?`No Function`‚µ‚©o‚Ä‚±‚È‚¢!?
+1. å…¥åŠ›ã‚’åæ˜ ã•ã›ãŸã„`GameObject`ã«`PlayerInput`ã‚’attachã—ã¾ã™ã€‚
+2. "Create Actions"ã‚’æŠ¼ã—ã€æ–°ã—ã„`Action Asset`ã‚’ä½œæˆã—ã¾ã™
+3. "Quick Start Guide"ã«å¾“ã£ã¦ã€å…¥åŠ›ã‚’`Unity Events`ã§å—ã‘ã¨ã‚‹ã‚ˆã†ã«ã—ã¾ã™ã€‚
+4. ä»Šå›ã¯å¿…è¦ãªã‹ã£ãŸã®ã§ã€ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§å…¥ã£ã¦ã„ã‚‹Actionã‚’è‡ªåˆ†ã§ä½¿ã†ã‚‚ã®ã«å…¥ã‚Œã‹ãˆã¾ã—ãŸ
+5. `1.`ã®`GameObject`ã«æˆ»ã‚Šã€`PlayerInput`ã®Eventsæ¬„ã«Script fileã‚’æŒ‡å®šã—ã¾ã™
+6. ã‚ã‚Œ!?`No Function`ã—ã‹å‡ºã¦ã“ãªã„!?
 
-# Œ´ˆö
+# åŸå› 
 
-¡‰ñ‚ÌŒ´ˆö‚ÍAã‹L‚Ì`5.`‚É‚ ‚é **Events—“‚Éİ’è‚µ‚½‚à‚Ì** ‚Å‚µ‚½B
-‚±‚±‚ÅA„‚ÍuƒXƒNƒŠƒvƒgƒtƒ@ƒCƒ‹©‘Ìv‚ğ‘I‘ğ‚µ‚Ä‚¢‚Ü‚µ‚½‚ªA‚»‚¤‚Å‚Í‚È‚­AuÀÛ‚Ég‚¢‚½‚¢ƒIƒuƒWƒFƒNƒg‚É•R‚Ã‚¯‚ç‚ê‚Ä‚¢‚éŠY“–ƒtƒ@ƒCƒ‹‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ“n‚µ‚Ä‚é‚ÆAãè‚­‚¢‚«‚Ü‚·B
+ä»Šå›ã®åŸå› ã¯ã€ä¸Šè¨˜ã®`5.`ã«ã‚ã‚‹ **Eventsæ¬„ã«è¨­å®šã—ãŸã‚‚ã®** ã§ã—ãŸã€‚
+ã“ã“ã§ã€ç§ã¯ã€Œã‚¹ã‚¯ãƒªãƒ—ãƒˆãƒ•ã‚¡ã‚¤ãƒ«è‡ªä½“ã€ã‚’é¸æŠã—ã¦ã„ã¾ã—ãŸãŒã€ãã†ã§ã¯ãªãã€ã€Œå®Ÿéš›ã«ä½¿ã„ãŸã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ç´ã¥ã‘ã‚‰ã‚Œã¦ã„ã‚‹è©²å½“ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’æ¸¡ã—ã¦ã‚‹ã¨ã€ä¸Šæ‰‹ãã„ãã¾ã™ã€‚
 
-## ‚à‚¤ˆê‚Âl‚¦‚ç‚ê‚éŒ´ˆö
+## ã‚‚ã†ä¸€ã¤è€ƒãˆã‚‰ã‚Œã‚‹åŸå› 
 
-¡‰ñ‚Íˆá‚¢‚Ü‚µ‚½‚ªA’²‚×‚Ä‚¢‚éŠÔ‚ÉŒ©‚Â‚¯‚½‚Ì‚ª[‚±‚ê](https://forum.unity.com/threads/cant-assign-public-script-function-to-player-input-component-new-input-system.881032/)‚ÅAuƒR[ƒ‹ƒoƒbƒNŠÖ”‚Ìˆø”‚Í`InputAction.CallbackContext callbackContext`‚É‚µ‚È‚¢‚Æ‚¢‚¯‚È‚¢A‚Æ‚¢‚¤‚à‚ÌB
+ä»Šå›ã¯é•ã„ã¾ã—ãŸãŒã€èª¿ã¹ã¦ã„ã‚‹é–“ã«è¦‹ã¤ã‘ãŸã®ãŒ[ã“ã‚Œ](https://forum.unity.com/threads/cant-assign-public-script-function-to-player-input-component-new-input-system.881032/)ã§ã€ã€Œã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã®å¼•æ•°ã¯`InputAction.CallbackContext callbackContext`ã«ã—ãªã„ã¨ã„ã‘ãªã„ã€ã¨ã„ã†ã‚‚ã®ã€‚
