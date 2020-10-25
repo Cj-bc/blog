@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>CLI! CLI! CLI!</title>
+    <link href="https://cj-bc.github.io/blog/feeds/atom/tag/pc.xml" rel="self" />
+    <link href="https://cj-bc.github.io/blog" />
+    <id>https://cj-bc.github.io/blog/feeds/atom/tag/pc.xml</id>
+    <author>
+        <name>Cj-bc a.k.a Cj.BC_SD</name>
+        <email>cj.bc-sd@outlook.jp</email>
+    </author>
+    <updated>2020-09-29T00:00:00Z</updated>
+    <entry>
+    <title>Windows PCのスペックを確認する</title>
+    <link href="https://cj-bc.github.io/blog/posts/2020-09-29-windows-how-to-know-spec.html" />
+    <id>https://cj-bc.github.io/blog/posts/2020-09-29-windows-how-to-know-spec.html</id>
+    <published>2020-09-29T00:00:00Z</published>
+    <updated>2020-09-29T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on September 29, 2020</li>
+    <li>Updated on October 17, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;windows&#39;." href="/tags/windows.html">windows</a>, <a title="All pages tagged &#39;pc&#39;." href="/tags/pc.html">pc</a>, <a title="All pages tagged &#39;ハードウェア&#39;." href="/tags/%E3%83%8F%E3%83%BC%E3%83%89%E3%82%A6%E3%82%A7%E3%82%A2.html">ハードウェア</a>
+  
+</div>
+
+<h1>CPU/ストレージ/メモリの確認</h1>
+<p>システム情報</p>
+<h1>GPUの確認</h1>
+<p>タスクマネージャー→パフォーマンス</p>
+<p><code>GPU 0</code>, <code>GPU 1</code>と複数あることもあるので注意</p>
+<p>以下の方法ではGPU 1が見れなかった</p>
+<ul>
+<li>ディスプレイ設定→ディスプレイの詳細設定→ディスプレイのアダプターのプロパティを表示</li>
+<li><code>dxdiag</code></li>
+</ul>
+]]></summary>
+</entry>
+
+</feed>
