@@ -47,9 +47,10 @@ modifySourceUrl item = do
         fn <- takeBaseName <$> getResourceFilePath
         return $ fmap (fixSourceDist fn) item
     where
-        isSourceUrl = isPrefixOf "/images"
+        prefix      = "/images"
+        isSourceUrl = isPrefixOf prefix
         fixSourceDist fn = withUrls $ \x -> if isSourceUrl x then fixSourceDist' fn x else x
-        fixSourceDist' fn x = "/images/" ++ fn ++ (drop 4 x)
+        fixSourceDist' fn x = "/images/" ++ fn ++ (drop (length prefix) x)
 
 forEachTag :: Tags -> (String -> Pattern -> Rules ()) -> Rules ()
 forEachTag tags rules =
