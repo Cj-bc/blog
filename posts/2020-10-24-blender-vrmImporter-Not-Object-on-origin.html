@@ -53,15 +53,15 @@
 <p>Blender上では全然問題なく見えますが、これをしておかないとexportした後に変な位置にオブジェクトが表示されてしまいます。 (私は<code>3tenePRO</code>で動作確認をしていますが、おそらく他でもそうなると思います。)<br />
 具体的には、「全てのトランスフォームが0(scaleは1)に指定された通りに表示」されます。</p>
 <h2>具体例:</h2>
-<p>scaleが1になっていない例 <img src="../src/sscale_isnt_1.jpeg" alt="scaleが1じゃない" /></p>
-<p>scaleが1になるように調整した例 <img src="../src/scale_is_1.jpeg" alt="scaleが1" /></p>
-<p>rotationが0になっていない例 <img src="../src/rotation_isnt_0.jpeg" alt="rotationが0じゃない" /></p>
-<p>rotationが0になっている例 <img src="../src/rotation_is_0.jpeg" alt="rotationが0" /></p>
+<p>scaleが1になっていない例 <img src="../images/2020-10-24-blender-vrmImporter-Not-Object-on-originges/sscale_isnt_1.jpeg" alt="scaleが1じゃない" /></p>
+<p>scaleが1になるように調整した例 <img src="../images/2020-10-24-blender-vrmImporter-Not-Object-on-originges/scale_is_1.jpeg" alt="scaleが1" /></p>
+<p>rotationが0になっていない例 <img src="../images/2020-10-24-blender-vrmImporter-Not-Object-on-originges/rotation_isnt_0.jpeg" alt="rotationが0じゃない" /></p>
+<p>rotationが0になっている例 <img src="../images/2020-10-24-blender-vrmImporter-Not-Object-on-originges/rotation_is_0.jpeg" alt="rotationが0" /></p>
 <h2>直し方</h2>
 <p>Inspectorで各transformの値を確認します。そうしたら、それを覚えておき値は0に修正。 <code>Edit mode</code>に移行して、 <strong>originを中心に、軸を指定して先ほど覚えた値分</strong> 回転させます。</p>
 <h2>最終系</h2>
 <p>綺麗になりました！！</p>
-<p><img src="../src/completed.jpg" alt="全部直した" /></p>
+<p><img src="../images/2020-10-24-blender-vrmImporter-Not-Object-on-originges/completed.jpg" alt="全部直した" /></p>
 <h1>todo</h1>
 <ul class="task-list">
 <li><input type="checkbox" disabled />
