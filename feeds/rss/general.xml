@@ -7,8 +7,576 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/general.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Sat, 24 Oct 2020 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Sat, 07 Nov 2020 00:00:00 UT</lastBuildDate>
         <item>
+    <title>pythonのelifはifよりも速いのか</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-11-07-python-is-elif-faster-than-ifs.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on November  7, 2020</li>
+    <li>Updated on November  7, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;python&#39;." href="/tags/python.html">python</a>, <a title="All pages tagged &#39;検証&#39;." href="/tags/%E6%A4%9C%E8%A8%BC.html">検証</a>
+  
+</div>
+
+<p>一つの変数に対して、複数の条件で分岐させたい時時、大抵は<code>elif</code>を使って以下のように書くと思います。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;A&quot;</span>:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    ...</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="cf">elif</span> n <span class="op">==</span> <span class="st">&quot;B&quot;</span>:</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    ...</span></code></pre></div>
+<p>しかし、全ての場合ではありませんがこの場合はif文の羅列で書くこともできます。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;A&quot;</span>:</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    ...</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;B&quot;</span>:</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    ...</span></code></pre></div>
+<p>直感的に、nの値によってはelifの方がif文の実行回数が少なくなるため速そうに思えますが、本当にそうなのか気になったので試してみます。</p>
+<h1>tl;dr</h1>
+<p>速いぽい</p>
+<h1>条件</h1>
+<p>pythonは3.7.4、if文の中身が同じものだと最適化がかかったりしないか怖かったのでそれぞれ違う出力をするprint文を入れます。 elifの数は適当に多めにしておきました。 また、1000回実行した平均の速度を表示するようにしました。</p>
+<h1>測定に使ったコード</h1>
+<p>長いので</p>
+<details><summary>測定コード</summary>
+```
+import time
+
+a = 100
+
+# without elif {{{
+def f_without_elif():
+    if a < 10:
+        print("10")
+    if 10 <= a < 20:
+        print("20")
+    if 20 <= a < 30:
+        print("30")
+    if 30 <= a < 40:
+        print("40")
+    if 40 <= a < 50:
+        print("50")
+    if 50 <= a < 60:
+        print("60")
+    if 60 <= a < 70:
+        print("70")
+    if 70 <= a < 80:
+        print("80")
+    if 80 <= a < 90:
+        print("90")
+    if 90 <= a < 100:
+        print("100")
+    if 100 <= a < 110:
+        print("110")
+    if 110 <= a < 120:
+        print("120")
+    if 120 <= a < 130:
+        print("130")
+    if 130 <= a < 140:
+        print("140")
+    if 140 <= a < 150:
+        print("150")
+    if 150 <= a < 160:
+        print("160")
+    if 160 <= a < 170:
+        print("170")
+    if 170 <= a < 180:
+        print("180")
+    if 180 <= a < 190:
+        print("190")
+    if 190 <= a < 200:
+        print("200")
+    if 200 <= a < 210:
+        print("210")
+    if 210 <= a < 220:
+        print("220")
+    if 220 <= a < 230:
+        print("230")
+    if 230 <= a < 240:
+        print("240")
+    if 240 <= a < 250:
+        print("250")
+    if 250 <= a < 260:
+        print("260")
+    if 260 <= a < 270:
+        print("270")
+    if 270 <= a < 280:
+        print("280")
+    if 280 <= a < 290:
+        print("290")
+    if 290 <= a < 300:
+        print("300")
+    if 300 <= a < 310:
+        print("310")
+    if 310 <= a < 320:
+        print("320")
+    if 320 <= a < 330:
+        print("330")
+    if 330 <= a < 340:
+        print("340")
+    if 340 <= a < 350:
+        print("350")
+    if 350 <= a < 360:
+        print("360")
+    if 360 <= a < 370:
+        print("370")
+    if 370 <= a < 380:
+        print("380")
+    if 380 <= a < 390:
+        print("390")
+    if 390 <= a < 400:
+        print("400")
+    if 400 <= a < 410:
+        print("410")
+    if 410 <= a < 420:
+        print("420")
+    if 420 <= a < 430:
+        print("430")
+    if 430 <= a < 440:
+        print("440")
+    if 440 <= a < 450:
+        print("450")
+    if 450 <= a < 460:
+        print("460")
+    if 460 <= a < 470:
+        print("470")
+    if 470 <= a < 480:
+        print("480")
+    if 480 <= a < 490:
+        print("490")
+    if 490 <= a < 500:
+        print("500")
+    if 500 <= a < 510:
+        print("510")
+    if 510 <= a < 520:
+        print("520")
+    if 520 <= a < 530:
+        print("530")
+    if 530 <= a < 540:
+        print("540")
+    if 540 <= a < 550:
+        print("550")
+    if 550 <= a < 560:
+        print("560")
+    if 560 <= a < 570:
+        print("570")
+    if 570 <= a < 580:
+        print("580")
+    if 580 <= a < 590:
+        print("590")
+    if 590 <= a < 600:
+        print("600")
+    if 600 <= a < 610:
+        print("610")
+    if 610 <= a < 620:
+        print("620")
+    if 620 <= a < 630:
+        print("630")
+    if 630 <= a < 640:
+        print("640")
+    if 640 <= a < 650:
+        print("650")
+    if 650 <= a < 660:
+        print("660")
+    if 660 <= a < 670:
+        print("670")
+    if 670 <= a < 680:
+        print("680")
+    if 680 <= a < 690:
+        print("690")
+    if 690 <= a < 700:
+        print("700")
+    if 700 <= a < 710:
+        print("710")
+    if 710 <= a < 720:
+        print("720")
+    if 720 <= a < 730:
+        print("730")
+    if 730 <= a < 740:
+        print("740")
+    if 740 <= a < 750:
+        print("750")
+    if 750 <= a < 760:
+        print("760")
+    if 760 <= a < 770:
+        print("770")
+    if 770 <= a < 780:
+        print("780")
+    if 780 <= a < 790:
+        print("790")
+    if 790 <= a < 800:
+        print("800")
+    if 800 <= a < 810:
+        print("810")
+    if 810 <= a < 820:
+        print("820")
+    if 820 <= a < 830:
+        print("830")
+    if 830 <= a < 840:
+        print("840")
+    if 840 <= a < 850:
+        print("850")
+    if 850 <= a < 860:
+        print("860")
+    if 860 <= a < 870:
+        print("870")
+    if 870 <= a < 880:
+        print("880")
+    if 880 <= a < 890:
+        print("890")
+    if 890 <= a < 900:
+        print("900")
+    if 900 <= a < 910:
+        print("910")
+    if 910 <= a < 920:
+        print("920")
+    if 920 <= a < 930:
+        print("930")
+    if 930 <= a < 940:
+        print("940")
+    if 940 <= a < 950:
+        print("950")
+    if 950 <= a < 960:
+        print("960")
+    if 960 <= a < 970:
+        print("970")
+    if 970 <= a < 980:
+        print("980")
+    if 980 <= a < 990:
+        print("990")
+    if 990 <= a < 1000:
+        print("1000")
+    if 1000 <= a < 1010:
+        print("1010")
+    if 1010 <= a < 1020:
+        print("1020")
+    if 1020 <= a < 1030:
+        print("1030")
+    if 1030 <= a < 1040:
+        print("1040")
+    if 1040 <= a < 1050:
+        print("1050")
+    if 1050 <= a < 1060:
+        print("1060")
+    if 1060 <= a < 1070:
+        print("1070")
+# }}}
+
+
+# with elif {{{
+def f_with_elif():
+    if a < 10:
+        print("10")
+    elif 10 <= a < 20:
+        print("20")
+    elif 20 <= a < 30:
+        print("30")
+    elif 30 <= a < 40:
+        print("40")
+    elif 40 <= a < 50:
+        print("50")
+    elif 50 <= a < 60:
+        print("60")
+    elif 60 <= a < 70:
+        print("70")
+    elif 70 <= a < 80:
+        print("80")
+    elif 80 <= a < 90:
+        print("90")
+    elif 90 <= a < 100:
+        print("100")
+    elif 100 <= a < 110:
+        print("110")
+    elif 110 <= a < 120:
+        print("120")
+    elif 120 <= a < 130:
+        print("130")
+    elif 130 <= a < 140:
+        print("140")
+    elif 140 <= a < 150:
+        print("150")
+    elif 150 <= a < 160:
+        print("160")
+    elif 160 <= a < 170:
+        print("170")
+    elif 170 <= a < 180:
+        print("180")
+    elif 180 <= a < 190:
+        print("190")
+    elif 190 <= a < 200:
+        print("200")
+    elif 200 <= a < 210:
+        print("210")
+    elif 210 <= a < 220:
+        print("220")
+    elif 220 <= a < 230:
+        print("230")
+    elif 230 <= a < 240:
+        print("240")
+    elif 240 <= a < 250:
+        print("250")
+    elif 250 <= a < 260:
+        print("260")
+    elif 260 <= a < 270:
+        print("270")
+    elif 270 <= a < 280:
+        print("280")
+    elif 280 <= a < 290:
+        print("290")
+    elif 290 <= a < 300:
+        print("300")
+    elif 300 <= a < 310:
+        print("310")
+    elif 310 <= a < 320:
+        print("320")
+    elif 320 <= a < 330:
+        print("330")
+    elif 330 <= a < 340:
+        print("340")
+    elif 340 <= a < 350:
+        print("350")
+    elif 350 <= a < 360:
+        print("360")
+    elif 360 <= a < 370:
+        print("370")
+    elif 370 <= a < 380:
+        print("380")
+    elif 380 <= a < 390:
+        print("390")
+    elif 390 <= a < 400:
+        print("400")
+    elif 400 <= a < 410:
+        print("410")
+    elif 410 <= a < 420:
+        print("420")
+    elif 420 <= a < 430:
+        print("430")
+    elif 430 <= a < 440:
+        print("440")
+    elif 440 <= a < 450:
+        print("450")
+    elif 450 <= a < 460:
+        print("460")
+    elif 460 <= a < 470:
+        print("470")
+    elif 470 <= a < 480:
+        print("480")
+    elif 480 <= a < 490:
+        print("490")
+    elif 490 <= a < 500:
+        print("500")
+    elif 500 <= a < 510:
+        print("510")
+    elif 510 <= a < 520:
+        print("520")
+    elif 520 <= a < 530:
+        print("530")
+    elif 530 <= a < 540:
+        print("540")
+    elif 540 <= a < 550:
+        print("550")
+    elif 550 <= a < 560:
+        print("560")
+    elif 560 <= a < 570:
+        print("570")
+    elif 570 <= a < 580:
+        print("580")
+    elif 580 <= a < 590:
+        print("590")
+    elif 590 <= a < 600:
+        print("600")
+    elif 600 <= a < 610:
+        print("610")
+    elif 610 <= a < 620:
+        print("620")
+    elif 620 <= a < 630:
+        print("630")
+    elif 630 <= a < 640:
+        print("640")
+    elif 640 <= a < 650:
+        print("650")
+    elif 650 <= a < 660:
+        print("660")
+    elif 660 <= a < 670:
+        print("670")
+    elif 670 <= a < 680:
+        print("680")
+    elif 680 <= a < 690:
+        print("690")
+    elif 690 <= a < 700:
+        print("700")
+    elif 700 <= a < 710:
+        print("710")
+    elif 710 <= a < 720:
+        print("720")
+    elif 720 <= a < 730:
+        print("730")
+    elif 730 <= a < 740:
+        print("740")
+    elif 740 <= a < 750:
+        print("750")
+    elif 750 <= a < 760:
+        print("760")
+    elif 760 <= a < 770:
+        print("770")
+    elif 770 <= a < 780:
+        print("780")
+    elif 780 <= a < 790:
+        print("790")
+    elif 790 <= a < 800:
+        print("800")
+    elif 800 <= a < 810:
+        print("810")
+    elif 810 <= a < 820:
+        print("820")
+    elif 820 <= a < 830:
+        print("830")
+    elif 830 <= a < 840:
+        print("840")
+    elif 840 <= a < 850:
+        print("850")
+    elif 850 <= a < 860:
+        print("860")
+    elif 860 <= a < 870:
+        print("870")
+    elif 870 <= a < 880:
+        print("880")
+    elif 880 <= a < 890:
+        print("890")
+    elif 890 <= a < 900:
+        print("900")
+    elif 900 <= a < 910:
+        print("910")
+    elif 910 <= a < 920:
+        print("920")
+    elif 920 <= a < 930:
+        print("930")
+    elif 930 <= a < 940:
+        print("940")
+    elif 940 <= a < 950:
+        print("950")
+    elif 950 <= a < 960:
+        print("960")
+    elif 960 <= a < 970:
+        print("970")
+    elif 970 <= a < 980:
+        print("980")
+    elif 980 <= a < 990:
+        print("990")
+    elif 990 <= a < 1000:
+        print("1000")
+    elif 1000 <= a < 1010:
+        print("1010")
+    elif 1010 <= a < 1020:
+        print("1020")
+    elif 1020 <= a < 1030:
+        print("1030")
+    elif 1030 <= a < 1040:
+        print("1040")
+    elif 1040 <= a < 1050:
+        print("1050")
+    elif 1050 <= a < 1060:
+        print("1060")
+    elif 1060 <= a < 1070:
+        print("1070")
+# }}}
+
+
+
+t_start = time.time()
+for _ in range(1000):
+    f_without_elif()
+t_end   = time.time()
+print(f"without elif: {(t_end - t_start)/1000} sec")
+
+t_with_elif_start = time.time()
+for _ in range(1000):
+    f_with_elif()
+t_with_elif_end   = time.time()
+print(f"with elif   : {(t_with_elif_end - t_with_elif_start)/1000} sec")
+```
+</details>
+<h1>結果</h1>
+<p><code>print</code>でたくさん標準出力を使っていますが、 そこの値は重要ではないので 私は<a href="https://github.com/thinca/vim-quickrun">quickrun</a>を使って vim上のバッファで加工して消しています</p>
+<pre><code>without elif: 4.281997680664063e-06 sec
+with elif   : 9.88006591796875e-07 sec</code></pre>
+<p>一瞬遅くなって見えますが、桁が一桁違います。少数表記にすると</p>
+<pre><code>without elif: 0.000004 sec
+with elif   : 0.000001 sec</code></pre>
+<p>となり、<code>elif</code>の方が速いことがわかります。</p>
+<h1>考察</h1>
+<p>なぜ速いのかを考えてみます。</p>
+<h2>構文木</h2>
+<p><code>elif</code>には特別なノードがなく、構文木に落とすと親の<code>If</code>ノードの<code>oreelse</code>に含まれる<code>If</code>ノードになります。</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="im">import</span> ast</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="bu">print</span>(ast.dump(ast.parse(<span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="st">if x:</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a><span class="st">   ...</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a><span class="st">elif y:</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="st">   ...</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a><span class="st">else:</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a><span class="st">   ...</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a><span class="st">if z:</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a><span class="st">    ...</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a><span class="st">&quot;&quot;&quot;</span>)))</span></code></pre></div>
+<pre><code>Module(
+    body=[
+        If(test=Name(id=&#39;x&#39;, ctx=Load()),
+           body=[Expr(value=Ellipsis())],
+           orelse=[
+              If(test=Name(id=&#39;y&#39;, ctx=Load()),
+                 body=[Expr(value=Ellipsis())],
+                 orelse=[Expr(value=Ellipsis())])
+              ]
+          ),
+        If(test=Name(id=&#39;z&#39;, ctx=Load()),
+           body=[Expr(value=Ellipsis())],
+           orelse=[])
+        ]
+)</code></pre>
+<p>https://docs.python.org/ja/3/library/ast.html?highlight=elif#ast.If</p>
+<h2>ステップ数を調べる</h2>
+<p>おそらく、if文が実行される回数が少ないはず、なのでpythonのデバッガである<a href="https://docs.python.org/3/library/pdb.html">pdb</a>を使って調べてみます。</p>
+<pre><code>&gt;&gt;&gt; # まずはelif使わないもの
+&gt;&gt;&gt; pdb.run(&quot;&quot;&quot;
+    ... if True:
+    ...     print(&quot;s&quot;)
+    ... if False:
+    ...     print(&quot;f&quot;)
+    ... &quot;&quot;&quot;)
+&gt; &lt;string&gt;(3)&lt;module&gt;()-&gt;None
+(Pdb) n
+s
+&gt; &lt;string&gt;(4)&lt;module&gt;()-&gt;None
+(Pdb)
+--Return--
+&gt; &lt;string&gt;(4)&lt;module&gt;()-&gt;None
+(Pdb)
+&gt;&gt;&gt; pdb.run(&quot;&quot;&quot;
+    ... if True:
+    ...     print(&quot;s&quot;)
+    ... elif False:
+    ...     print(&quot;f&quot;)
+    ... &quot;&quot;&quot;)
+&gt; &lt;string&gt;(3)&lt;module&gt;()-&gt;None
+(Pdb) n
+s
+--Return--
+&gt; &lt;string&gt;(3)&lt;module&gt;()-&gt;None
+(Pdb)
+&gt;&gt;&gt;</code></pre>
+<p>やはり、<code>if</code>文を分割した場合と比べて<code>elif</code>の方が"--Return--"が早く来ていますね。 これひとつではそこまで差異はないと思いますが、もっと複雑な条件式を使っている場合や何度も重なっている場合は影響が出そうですね。</p>
+]]></description>
+    <pubDate>Sat, 07 Nov 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-11-07-python-is-elif-faster-than-ifs.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>VRM_IMPORTER_for_BlenderでVRMモデルを作る際の注意点</title>
     <link>https://cj-bc.github.io/blog/posts/2020-10-24-blender-vrmImporter-Not-Object-on-origin.html</link>
     <description><![CDATA[<div class="info">
@@ -411,36 +979,6 @@ vimmerとして、すごく、困る。</p>
 ]]></description>
     <pubDate>Tue, 18 Aug 2020 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2020-08-17-tweet-with-code2img-image-from-vim.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>blenderのSmooth</title>
-    <link>https://cj-bc.github.io/blog/posts/2020-08-17-blender-auto-smooth.html</link>
-    <description><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on August 17, 2020</li>
-    <li>Updated on August 31, 2020</li>
-  </ul>
-    
-</div>
-<div class="info">
-  
-  Tags: <a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html">blender</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>, <a title="All pages tagged &#39;tips&#39;." href="/tags/tips.html">tips</a>
-  
-</div>
-
-<p>Blenderには、面と面を補完して滑らかに表示する<code>shade smooth</code>という機能があります。 しかし、何も考えずに使おうとすると思わぬところが補完され、予期せぬ結果になることが多々起こります。</p>
-<p><img src="https://pbs.twimg.com/media/Efm72cmU8AI3H5K?format=jpg&amp;name=medium" alt="shade flatの結果" /></p>
-<p><img src="https://pbs.twimg.com/media/Efm74u6UcAEU2nM?format=jpg&amp;name=medium" alt="shade smoothの結果" /></p>
-<h1>Auto Smoothを使おう</h1>
-<p>Auto Smoothは、面の角度によって<code>shade smooth</code>と<code>shade flat</code>を使い分けてくれる機能です。 <a href="https://blender-cg.net/smooth-flat/">blender-cg.netさんの記事</a>で知りました。</p>
-<p><a href="https://docs.blender.org/manual/ja/2.80/modeling/meshes/structure.html#auto-smooth">公式リファレンス(英語)</a></p>
-<p>これを使うと、かなり快適に使うことができます！わーい！！</p>
-<p><img src="https://pbs.twimg.com/media/Efm8n4uUYAALg-g?format=png&amp;name=small" alt="auto smoothの場所" /></p>
-<p><img src="https://pbs.twimg.com/media/Efm8pyjU8AAU01a?format=jpg&amp;name=medium" alt="auto smoothを適用してみた結果" /></p>
-]]></description>
-    <pubDate>Mon, 17 Aug 2020 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2020-08-17-blender-auto-smooth.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 

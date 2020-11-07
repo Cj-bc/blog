@@ -1,17 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"
-    xmlns:dc="http://purl.org/dc/elements/1.1/">
-    <channel>
-        <title>CLI! CLI! CLI!</title>
-        <link>https://cj-bc.github.io/blog</link>
-        <description><![CDATA[Cj-bc's personal blog posts.]]></description>
-        <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/python.xml" rel="self"
-                   type="application/rss+xml" />
-        <lastBuildDate>Sat, 07 Nov 2020 00:00:00 UT</lastBuildDate>
-        <item>
-    <title>pythonのelifはifよりも速いのか</title>
-    <link>https://cj-bc.github.io/blog/posts/2020-11-07-python-is-elif-faster-than-ifs.html</link>
-    <description><![CDATA[<div class="info">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- pythonのelifはifよりも速いのか</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">CLI! CLI! CLI!</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../archive.html">Archive</a>
+                <a href="https://Cj-bc.github.io">HP</a>
+                <a href="../feeds/atom/general.xml">Atom feed</a>
+                <a href="../feeds/rss/general.xml">RSS</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>pythonのelifはifよりも速いのか</h1>
+
+            <div class="info">
   <ul>
     <li>Posted on November  7, 2020</li>
     <li>Updated on November  7, 2020</li>
@@ -20,7 +32,7 @@
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;python&#39;." href="/tags/python.html">python</a>, <a title="All pages tagged &#39;検証&#39;." href="/tags/%E6%A4%9C%E8%A8%BC.html">検証</a>
+  Tags: <a title="All pages tagged 'python'." href="../tags/python.html">python</a>, <a title="All pages tagged '検証'." href="../tags/%E6%A4%9C%E8%A8%BC.html">検証</a>
   
 </div>
 
@@ -526,15 +538,15 @@ with elif   : 0.000001 sec</code></pre>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a><span class="st">&quot;&quot;&quot;</span>)))</span></code></pre></div>
 <pre><code>Module(
     body=[
-        If(test=Name(id=&#39;x&#39;, ctx=Load()),
+        If(test=Name(id='x', ctx=Load()),
            body=[Expr(value=Ellipsis())],
            orelse=[
-              If(test=Name(id=&#39;y&#39;, ctx=Load()),
+              If(test=Name(id='y', ctx=Load()),
                  body=[Expr(value=Ellipsis())],
                  orelse=[Expr(value=Ellipsis())])
               ]
           ),
-        If(test=Name(id=&#39;z&#39;, ctx=Load()),
+        If(test=Name(id='z', ctx=Load()),
            body=[Expr(value=Ellipsis())],
            orelse=[])
         ]
@@ -571,106 +583,11 @@ s
 (Pdb)
 &gt;&gt;&gt;</code></pre>
 <p>やはり、<code>if</code>文を分割した場合と比べて<code>elif</code>の方が"--Return--"が早く来ていますね。 これひとつではそこまで差異はないと思いますが、もっと複雑な条件式を使っている場合や何度も重なっている場合は影響が出そうですね。</p>
-]]></description>
-    <pubDate>Sat, 07 Nov 2020 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2020-11-07-python-is-elif-faster-than-ifs.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>簡易的な素数探索アルゴリズムの速度比較</title>
-    <link>https://cj-bc.github.io/blog/posts/2020-10-17-comparing-primes-algorithm.html</link>
-    <description><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on October 17, 2020</li>
-    <li>Updated on October 17, 2020</li>
-  </ul>
-    
-</div>
-<div class="info">
-  
-  Tags: <a title="All pages tagged &#39;python&#39;." href="/tags/python.html">python</a>, <a title="All pages tagged &#39;アルゴリズム&#39;." href="/tags/%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0.html">アルゴリズム</a>
-  
-</div>
 
-<p>いや簡単なものなのですが個人的なメモ。 実行言語は<code>python 3.7.4</code>です。</p>
-<h1>比較するアルゴリズム</h1>
-<h1>1. 定義通りの求め方</h1>
-<p>素数は「自分自身と1のみを約数に持つ数」なので、「自分自身と1以外に割り切れる数があるか」を調べれば素数かの判定ができることになります。</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">def</span> fromDefinition(nums: [<span class="bu">int</span>]) <span class="op">-&gt;</span> [<span class="bu">int</span>]:</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="kw">def</span> f(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n):</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>      <span class="cf">if</span> n <span class="op">%</span> i <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>        <span class="cf">return</span> <span class="va">False</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>      <span class="cf">return</span> <span class="va">True</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    <span class="cf">return</span> <span class="bu">list</span>(<span class="bu">filter</span>(f, nums))</span></code></pre></div>
-<h2>エラトステネスの揮</h2>
-<p>多分中学校かそこらへんで習ったであろう方法。 求めたい範囲の数の集合から、小さい素数の倍数をふるい落としていく方法です。<br />
-<a href="https://ja.wikipedia.org/wiki/%E3%82%A8%E3%83%A9%E3%83%88%E3%82%B9%E3%83%86%E3%83%8D%E3%82%B9%E3%81%AE%E7%AF%A9">wikipediaの図解</a>がわかりやすい。</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="im">import</span> time</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="im">from</span> math <span class="im">import</span> sqrt</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="kw">def</span> eratosthenes(nums: [<span class="bu">int</span>]) <span class="op">-&gt;</span> [<span class="bu">int</span>]:</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    <span class="cf">if</span> nums[<span class="dv">0</span>] <span class="op">&lt;=</span> <span class="dv">1</span>:</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>        <span class="cf">return</span> eratosthenes(nums[<span class="dv">1</span>:])</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>    head <span class="op">=</span> nums[<span class="dv">0</span>]</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>    <span class="cf">if</span> head <span class="op">&gt;=</span> sqrt(nums[<span class="op">-</span><span class="dv">1</span>]):</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>        <span class="cf">return</span> nums</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>    ret <span class="op">=</span> <span class="bu">list</span>(<span class="bu">filter</span>(<span class="kw">lambda</span> i: i <span class="op">%</span> head <span class="op">!=</span> <span class="dv">0</span>, nums))</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>    <span class="cf">return</span> [head] <span class="op">+</span> eratosthenes(ret)</span></code></pre></div>
-<h1>実行時間計測</h1>
-<p>それぞれの処理を1000回ずつ実行し、その平均を求めた</p>
-<h2>計測用コード</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">def</span> mesureTime(f, <span class="op">*</span>args) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    startTime <span class="op">=</span> time.time()</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    f(<span class="op">*</span>args)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    <span class="cf">return</span> time.time() <span class="op">-</span> startTime</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="kw">def</span> mesureTimeAvr(f, <span class="op">*</span>args) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>    t <span class="op">=</span> <span class="fl">0.0</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a>        t<span class="op">+=</span>mesureTime(f, <span class="op">*</span>args)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>    <span class="cf">return</span> t <span class="op">/</span> <span class="dv">1000</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a>x <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">100</span> <span class="op">+</span> <span class="dv">1</span>)</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a><span class="bu">print</span>(<span class="ss">f&quot;fromDefinition: </span><span class="sc">{</span>mesureTimeAvr(fromDefinition, x)<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a><span class="bu">print</span>(<span class="ss">f&quot;eratosthenes  : </span><span class="sc">{</span>mesureTimeAvr(eratosthenes, x)<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
-<h2>結果</h2>
-<pre><code>fromDefinition: 3.378009796142578e-05
-eratosthenes  : 2.4552106857299804e-05</code></pre>
-<p>エラトステネスの揮の方が1秒くらい早い。 Orderはわからん！！</p>
-]]></description>
-    <pubDate>Sat, 17 Oct 2020 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2020-10-17-comparing-primes-algorithm.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>jupyter notebookがうまく起動しなかった</title>
-    <link>https://cj-bc.github.io/blog/posts/2020-10-08-jupyter-notebook-doesnt-up-so-long.html</link>
-    <description><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on October 10, 2020</li>
-    <li>Updated on October 17, 2020</li>
-  </ul>
-    
-</div>
-<div class="info">
-  
-  Tags: <a title="All pages tagged &#39;python&#39;." href="/tags/python.html">python</a>, <a title="All pages tagged &#39;jupyter&#39;." href="/tags/jupyter.html">jupyter</a>, <a title="All pages tagged &#39;macOS&#39;." href="/tags/macOS.html">macOS</a>
-  
-</div>
-
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>$ <span class="ex">jupyter</span> notebook</span></code></pre></div>
-<p>だと、鯖は立ち上がるもののページが読み込めずうまくいかなかった。 試しに、<a href="https://qiita.com/ciela/items/0e0392f600c92b93d7c6">この記事</a>に従ってみたところ接続できた。 よくわからないけど、まぁ動いたのでよし。別段VM環境でもなかったんだけどなぁ</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>$ <span class="ex">jupyter</span> notebook --ip=<span class="dt">\*</span></span></code></pre></div>
-]]></description>
-    <pubDate>Sat, 10 Oct 2020 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2020-10-08-jupyter-notebook-doesnt-up-so-long.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-
-    </channel>
-</rss>
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
