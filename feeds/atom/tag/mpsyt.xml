@@ -18,7 +18,7 @@
     <summary type="html"><![CDATA[<div class="info">
   <ul>
     <li>Posted on August 16, 2020</li>
-    <li>Updated on August 31, 2020</li>
+    <li>Updated on November 13, 2020</li>
   </ul>
     
 </div>
@@ -36,7 +36,7 @@
 また、上記記事で参考にされている<a href="https://www.slickremix.com/docs/get-api-key-for-youtube/">slickremix.com -- Get API Key for YouTube</a>も参考にする。 ただし、上記記事では「手順3までやる」と書いてあるが、最後(8)までやる必要がある。</p>
 <h1>1. Google developpersにて、プロジェクトを作成してTokenを取得。</h1>
 <p><a href="https://developers.google.com/" class="uri">https://developers.google.com/</a> に飛び、一番下(右下)の<code>Google API Console</code>からコンソールを開く。</p>
-<p><img src="/src/console_place.png" alt="console pic" /></p>
+<p><img src="/images/console_place.png" alt="console pic" /></p>
 <p>左上の<code>Google APIs</code>の文字の横に「Project」という部分があるので選択→右上の「新しいプロジェクト」からプロジェクトを作成する。<br />
 ダッシュボードの「APIとサービス」→「ライブラリ」からYouTube Data API v3を選択し有効化。<br />
 最後に認証情報の作成が必要なので、あとはUIの流れに任せればTokenが手に入ります。</p>
