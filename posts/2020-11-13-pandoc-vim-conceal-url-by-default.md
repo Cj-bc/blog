@@ -26,7 +26,7 @@ vimwikiのsyntaxでは、以下のようなリンクは
 例えば、[blender data blocks](https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html)の記事は`markdown`/`vimwiki`/`pandoc`それぞれのsyntaxで
 以下のように見えます。
 
-![markdown, vimwiki, pandocのハイライトの違い](/src/difference_md-vimwiki-pandoc.png)
+![markdown, vimwiki, pandocのハイライトの違い](/images/difference_md-vimwiki-pandoc.png)
 
 さて、これを普段使いの`pandoc`syntaxでも使いたいというのが今回の希望です。
 
@@ -41,7 +41,7 @@ let g:pandoc#syntax#conceal#urls = 1
 
 これだけでURLの`conceal`が有効になり、vimwikiと同じような見た目になります
 
-![設定後のpandoc](/src/pandoc-with-conceal.png)
+![設定後のpandoc](/images/pandoc-with-conceal.png)
 
 # おまけ
 

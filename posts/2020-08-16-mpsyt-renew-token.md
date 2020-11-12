@@ -21,7 +21,7 @@ Youtube Error 403: The request cannot be completed because you have exceeded you
 
 <https://developers.google.com/> に飛び、一番下(右下)の`Google API Console`からコンソールを開く。
 
-![console pic](/src/console_place.png)
+![console pic](/images/console_place.png)
 
 左上の`Google APIs`の文字の横に「Project」という部分があるので選択→右上の「新しいプロジェクト」からプロジェクトを作成する。  
 ダッシュボードの「APIとサービス」→「ライブラリ」からYouTube Data API v3を選択し有効化。  
