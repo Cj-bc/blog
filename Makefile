@@ -2,8 +2,12 @@ BRANCH_DEST := publish
 NPX := $(shell which npx)
 GULP := $(NPX) gulp
 
-css/dist:
+css/dist/semantic.min.css:
 	cd css && $(GULP) build
+
+css/dist/semantic.min.js:
+	cd css && $(GULP) build
+
 
 publish: css/dist
 	stack build
