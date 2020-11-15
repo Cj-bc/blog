@@ -78,11 +78,11 @@ main = hakyll $ do
         compile copyFileCompiler
 
     match "css/dist/semantic.min.css" $ do
-        route   constRoute "css/semantic.min.css"
+        route $ constRoute "css/semantic.min.css"
         compile copyFileCompiler
 
     match "css/dist/semantic.min.js" $ do
-        route   constRoute "js/semantic.min.js"
+        route $ constRoute "js/semantic.min.js"
         compile copyFileCompiler
 
     tags <- buildTags "posts/*" (fromCapture "tags/*.html")
