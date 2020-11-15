@@ -24,6 +24,7 @@ jobs:
         with:
           ghc-version: '8.8.1'
           stack-version: 'latest'
+      - uses: actions/setup-node@v1
       - name: run publish
         run: |
           git config user.name github-actions
