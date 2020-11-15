@@ -1,6 +1,10 @@
 BRANCH_DEST := publish
+GULP := gulp
 
-publish:
+css:
+	cd css && $(GULP) build
+
+publish: css
 	stack build
 	stack exec blog rebuild
 	git switch $(BRANCH_DEST)
