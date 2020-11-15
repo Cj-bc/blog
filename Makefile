@@ -2,14 +2,14 @@ BRANCH_DEST := publish
 NPX := $(shell which npx)
 GULP := $(NPX) gulp
 
-css/dist/semantic.min.css: node_modules
+css/dist/semantic.min.css: css/node_modules
 	cd css && $(GULP) build
 
-css/dist/semantic.min.js: node_modules
+css/dist/semantic.min.js: css/node_modules
 	cd css && $(GULP) build
 
-node_modules:
-	npm install
+css/node_modules:
+	cd css && npm install
 
 
 build: css/dist/semantic.min.css css/dist/semantic.min.js
