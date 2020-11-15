@@ -59,6 +59,18 @@ Inspectorで各transformの値を確認します。そうしたら、それを�
 
 ![全部直した](/images/completed.jpg)
 
+# Shade Textureは必ず設定する
+
+ShadeTextureを設定していないと、面を法線と反対側から見たときにピンク色になってしまいます。
+これは、`Shade Color`が塗られているからで、それを防ぎ表面と同じものを表示したい場合は必ず設定する必要があります。
+なお、`MainTexture`と同じテクスチャで問題ないと思います。
+
+設定してなかった:  
+<blockquote class="twitter-tweet" data-conversation="none" data-theme="dark"><p lang="ja" dir="ltr">色々と調節は必要そうだね <a href="https://t.co/ndXTzYKdfQ">pic.twitter.com/ndXTzYKdfQ</a></p>&mdash; mi&#39;e himari (@mihe_himari) <a href="https://twitter.com/mihe_himari/status/1320608433352003584?ref_src=twsrc%5Etfw">October 26, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+設定した:  
+<blockquote class="twitter-tweet" data-conversation="none" data-theme="dark"><p lang="ja" dir="ltr">他のオブジェクトにも設定してきた...ﾖｼ!! <a href="https://t.co/8tMJyUaawt">pic.twitter.com/8tMJyUaawt</a></p>&mdash; mi&#39;e himari (@mihe_himari) <a href="https://twitter.com/mihe_himari/status/1320613366864330752?ref_src=twsrc%5Etfw">October 26, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 # todo
 
 - [ ] 画像入れる
