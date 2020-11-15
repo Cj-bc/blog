@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Cj-bc/blog/issues"
   },
-  "homepage": "https://github.com/Cj-bc/blog#readme"
+  "homepage": "https://github.com/Cj-bc/blog#readme",
+  "dependencies": {
+    "fomantic-ui": "github:Cj-bc/fomantic-UI#use_url-regex-safe"
+  }
 }
