@@ -9,9 +9,12 @@ css/dist/semantic.min.js:
 	cd css && $(GULP) build
 
 
-publish: css/dist
+build: css/dist/semantic.min.css css/dist/semantic.min.js
 	stack build
 	stack exec blog rebuild
+
+
+publish: build
 	git switch $(BRANCH_DEST)
 	cp -a _site/. .
 	git add -A
