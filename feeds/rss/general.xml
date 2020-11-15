@@ -7,8 +7,901 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/general.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>August 24, 2020</lastBuildDate>
+        <lastBuildDate>Fri, 13 Nov 2020 00:00:00 UT</lastBuildDate>
         <item>
+    <title>vim-pandoc-syntaxでurlを非表示にしたい</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-11-13-pandoc-vim-conceal-url-by-default.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on November 13, 2020</li>
+    <li>Updated on November 13, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;vim&#39;." href="/tags/vim.html">vim</a>, <a title="All pages tagged &#39;pandoc&#39;." href="/tags/pandoc.html">pandoc</a>
+  
+</div>
+
+<h1>vimwikiのハイライトが欲しい</h1>
+<h1>markdown/vimwiki/pandocのsyntaxハイライト</h1>
+<p>vimwikiのsyntaxでは、以下のようなリンクは</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co">[</span><span class="ot">説明</span><span class="co">](url)</span></span></code></pre></div>
+<p>このように表示されます(<code>+conceal</code>オプションが有効な場合)</p>
+<p><a href="url">説明</a></p>
+<p>これがあると、長いURLを持つドキュメントでの可読性がグンと上がります</p>
+<p>例えば、<a href="https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html">blender data blocks</a>の記事は<code>markdown</code>/<code>vimwiki</code>/<code>pandoc</code>それぞれのsyntaxで 以下のように見えます。</p>
+<p><img src="/images/difference_md-vimwiki-pandoc.png" alt="markdown, vimwiki, pandocのハイライトの違い" /></p>
+<p>さて、これを普段使いの<code>pandoc</code>syntaxでも使いたいというのが今回の希望です。</p>
+<h1>結論: デフォルトの変数を設定しろ</h1>
+<p>もうこれが答えでした！<br />
+ドキュメントよもうね！！！！</p>
+<pre class="vim"><code>let g:pandoc#syntax#conceal#urls = 1</code></pre>
+<p>これだけでURLの<code>conceal</code>が有効になり、vimwikiと同じような見た目になります</p>
+<p><img src="/images/pandoc-with-conceal.png" alt="設定後のpandoc" /></p>
+<h1>おまけ</h1>
+<p>ちなみに該当のコードは<a href="https://github.com/vim-pandoc/vim-pandoc-syntax/blob/2521e2e9b99a3550e1a20f24e09fa46679cbbbc7/syntax/pandoc.vim#L300-L304">300-304行目</a>にありました。</p>
+<pre class="vim"><code>if g:pandoc#syntax#conceal#urls == 1
+    syn region pandocReferenceURL matchgroup=pandocOperator start=/\]\@1&lt;=(/ end=/)/ keepend conceal
+else
+    syn region pandocReferenceURL matchgroup=pandocOperator start=/\]\@1&lt;=(/ end=/)/ keepend
+endif</code></pre>
+]]></description>
+    <pubDate>Fri, 13 Nov 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-11-13-pandoc-vim-conceal-url-by-default.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>pythonのelifはifよりも速いのか</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-11-07-python-is-elif-faster-than-ifs.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on November  7, 2020</li>
+    <li>Updated on November  7, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;python&#39;." href="/tags/python.html">python</a>, <a title="All pages tagged &#39;検証&#39;." href="/tags/%E6%A4%9C%E8%A8%BC.html">検証</a>
+  
+</div>
+
+<p>一つの変数に対して、複数の条件で分岐させたい時時、大抵は<code>elif</code>を使って以下のように書くと思います。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;A&quot;</span>:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    ...</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="cf">elif</span> n <span class="op">==</span> <span class="st">&quot;B&quot;</span>:</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    ...</span></code></pre></div>
+<p>しかし、全ての場合ではありませんがこの場合はif文の羅列で書くこともできます。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;A&quot;</span>:</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    ...</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;B&quot;</span>:</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    ...</span></code></pre></div>
+<p>直感的に、nの値によってはelifの方がif文の実行回数が少なくなるため速そうに思えますが、本当にそうなのか気になったので試してみます。</p>
+<h1>tl;dr</h1>
+<p>速いぽい</p>
+<h1>条件</h1>
+<p>pythonは3.7.4、if文の中身が同じものだと最適化がかかったりしないか怖かったのでそれぞれ違う出力をするprint文を入れます。 elifの数は適当に多めにしておきました。 また、1000回実行した平均の速度を表示するようにしました。</p>
+<h1>測定に使ったコード</h1>
+<p>長いので</p>
+<details><summary>測定コード</summary>
+```
+import time
+
+a = 100
+
+# without elif {{{
+def f_without_elif():
+    if a < 10:
+        print("10")
+    if 10 <= a < 20:
+        print("20")
+    if 20 <= a < 30:
+        print("30")
+    if 30 <= a < 40:
+        print("40")
+    if 40 <= a < 50:
+        print("50")
+    if 50 <= a < 60:
+        print("60")
+    if 60 <= a < 70:
+        print("70")
+    if 70 <= a < 80:
+        print("80")
+    if 80 <= a < 90:
+        print("90")
+    if 90 <= a < 100:
+        print("100")
+    if 100 <= a < 110:
+        print("110")
+    if 110 <= a < 120:
+        print("120")
+    if 120 <= a < 130:
+        print("130")
+    if 130 <= a < 140:
+        print("140")
+    if 140 <= a < 150:
+        print("150")
+    if 150 <= a < 160:
+        print("160")
+    if 160 <= a < 170:
+        print("170")
+    if 170 <= a < 180:
+        print("180")
+    if 180 <= a < 190:
+        print("190")
+    if 190 <= a < 200:
+        print("200")
+    if 200 <= a < 210:
+        print("210")
+    if 210 <= a < 220:
+        print("220")
+    if 220 <= a < 230:
+        print("230")
+    if 230 <= a < 240:
+        print("240")
+    if 240 <= a < 250:
+        print("250")
+    if 250 <= a < 260:
+        print("260")
+    if 260 <= a < 270:
+        print("270")
+    if 270 <= a < 280:
+        print("280")
+    if 280 <= a < 290:
+        print("290")
+    if 290 <= a < 300:
+        print("300")
+    if 300 <= a < 310:
+        print("310")
+    if 310 <= a < 320:
+        print("320")
+    if 320 <= a < 330:
+        print("330")
+    if 330 <= a < 340:
+        print("340")
+    if 340 <= a < 350:
+        print("350")
+    if 350 <= a < 360:
+        print("360")
+    if 360 <= a < 370:
+        print("370")
+    if 370 <= a < 380:
+        print("380")
+    if 380 <= a < 390:
+        print("390")
+    if 390 <= a < 400:
+        print("400")
+    if 400 <= a < 410:
+        print("410")
+    if 410 <= a < 420:
+        print("420")
+    if 420 <= a < 430:
+        print("430")
+    if 430 <= a < 440:
+        print("440")
+    if 440 <= a < 450:
+        print("450")
+    if 450 <= a < 460:
+        print("460")
+    if 460 <= a < 470:
+        print("470")
+    if 470 <= a < 480:
+        print("480")
+    if 480 <= a < 490:
+        print("490")
+    if 490 <= a < 500:
+        print("500")
+    if 500 <= a < 510:
+        print("510")
+    if 510 <= a < 520:
+        print("520")
+    if 520 <= a < 530:
+        print("530")
+    if 530 <= a < 540:
+        print("540")
+    if 540 <= a < 550:
+        print("550")
+    if 550 <= a < 560:
+        print("560")
+    if 560 <= a < 570:
+        print("570")
+    if 570 <= a < 580:
+        print("580")
+    if 580 <= a < 590:
+        print("590")
+    if 590 <= a < 600:
+        print("600")
+    if 600 <= a < 610:
+        print("610")
+    if 610 <= a < 620:
+        print("620")
+    if 620 <= a < 630:
+        print("630")
+    if 630 <= a < 640:
+        print("640")
+    if 640 <= a < 650:
+        print("650")
+    if 650 <= a < 660:
+        print("660")
+    if 660 <= a < 670:
+        print("670")
+    if 670 <= a < 680:
+        print("680")
+    if 680 <= a < 690:
+        print("690")
+    if 690 <= a < 700:
+        print("700")
+    if 700 <= a < 710:
+        print("710")
+    if 710 <= a < 720:
+        print("720")
+    if 720 <= a < 730:
+        print("730")
+    if 730 <= a < 740:
+        print("740")
+    if 740 <= a < 750:
+        print("750")
+    if 750 <= a < 760:
+        print("760")
+    if 760 <= a < 770:
+        print("770")
+    if 770 <= a < 780:
+        print("780")
+    if 780 <= a < 790:
+        print("790")
+    if 790 <= a < 800:
+        print("800")
+    if 800 <= a < 810:
+        print("810")
+    if 810 <= a < 820:
+        print("820")
+    if 820 <= a < 830:
+        print("830")
+    if 830 <= a < 840:
+        print("840")
+    if 840 <= a < 850:
+        print("850")
+    if 850 <= a < 860:
+        print("860")
+    if 860 <= a < 870:
+        print("870")
+    if 870 <= a < 880:
+        print("880")
+    if 880 <= a < 890:
+        print("890")
+    if 890 <= a < 900:
+        print("900")
+    if 900 <= a < 910:
+        print("910")
+    if 910 <= a < 920:
+        print("920")
+    if 920 <= a < 930:
+        print("930")
+    if 930 <= a < 940:
+        print("940")
+    if 940 <= a < 950:
+        print("950")
+    if 950 <= a < 960:
+        print("960")
+    if 960 <= a < 970:
+        print("970")
+    if 970 <= a < 980:
+        print("980")
+    if 980 <= a < 990:
+        print("990")
+    if 990 <= a < 1000:
+        print("1000")
+    if 1000 <= a < 1010:
+        print("1010")
+    if 1010 <= a < 1020:
+        print("1020")
+    if 1020 <= a < 1030:
+        print("1030")
+    if 1030 <= a < 1040:
+        print("1040")
+    if 1040 <= a < 1050:
+        print("1050")
+    if 1050 <= a < 1060:
+        print("1060")
+    if 1060 <= a < 1070:
+        print("1070")
+# }}}
+
+
+# with elif {{{
+def f_with_elif():
+    if a < 10:
+        print("10")
+    elif 10 <= a < 20:
+        print("20")
+    elif 20 <= a < 30:
+        print("30")
+    elif 30 <= a < 40:
+        print("40")
+    elif 40 <= a < 50:
+        print("50")
+    elif 50 <= a < 60:
+        print("60")
+    elif 60 <= a < 70:
+        print("70")
+    elif 70 <= a < 80:
+        print("80")
+    elif 80 <= a < 90:
+        print("90")
+    elif 90 <= a < 100:
+        print("100")
+    elif 100 <= a < 110:
+        print("110")
+    elif 110 <= a < 120:
+        print("120")
+    elif 120 <= a < 130:
+        print("130")
+    elif 130 <= a < 140:
+        print("140")
+    elif 140 <= a < 150:
+        print("150")
+    elif 150 <= a < 160:
+        print("160")
+    elif 160 <= a < 170:
+        print("170")
+    elif 170 <= a < 180:
+        print("180")
+    elif 180 <= a < 190:
+        print("190")
+    elif 190 <= a < 200:
+        print("200")
+    elif 200 <= a < 210:
+        print("210")
+    elif 210 <= a < 220:
+        print("220")
+    elif 220 <= a < 230:
+        print("230")
+    elif 230 <= a < 240:
+        print("240")
+    elif 240 <= a < 250:
+        print("250")
+    elif 250 <= a < 260:
+        print("260")
+    elif 260 <= a < 270:
+        print("270")
+    elif 270 <= a < 280:
+        print("280")
+    elif 280 <= a < 290:
+        print("290")
+    elif 290 <= a < 300:
+        print("300")
+    elif 300 <= a < 310:
+        print("310")
+    elif 310 <= a < 320:
+        print("320")
+    elif 320 <= a < 330:
+        print("330")
+    elif 330 <= a < 340:
+        print("340")
+    elif 340 <= a < 350:
+        print("350")
+    elif 350 <= a < 360:
+        print("360")
+    elif 360 <= a < 370:
+        print("370")
+    elif 370 <= a < 380:
+        print("380")
+    elif 380 <= a < 390:
+        print("390")
+    elif 390 <= a < 400:
+        print("400")
+    elif 400 <= a < 410:
+        print("410")
+    elif 410 <= a < 420:
+        print("420")
+    elif 420 <= a < 430:
+        print("430")
+    elif 430 <= a < 440:
+        print("440")
+    elif 440 <= a < 450:
+        print("450")
+    elif 450 <= a < 460:
+        print("460")
+    elif 460 <= a < 470:
+        print("470")
+    elif 470 <= a < 480:
+        print("480")
+    elif 480 <= a < 490:
+        print("490")
+    elif 490 <= a < 500:
+        print("500")
+    elif 500 <= a < 510:
+        print("510")
+    elif 510 <= a < 520:
+        print("520")
+    elif 520 <= a < 530:
+        print("530")
+    elif 530 <= a < 540:
+        print("540")
+    elif 540 <= a < 550:
+        print("550")
+    elif 550 <= a < 560:
+        print("560")
+    elif 560 <= a < 570:
+        print("570")
+    elif 570 <= a < 580:
+        print("580")
+    elif 580 <= a < 590:
+        print("590")
+    elif 590 <= a < 600:
+        print("600")
+    elif 600 <= a < 610:
+        print("610")
+    elif 610 <= a < 620:
+        print("620")
+    elif 620 <= a < 630:
+        print("630")
+    elif 630 <= a < 640:
+        print("640")
+    elif 640 <= a < 650:
+        print("650")
+    elif 650 <= a < 660:
+        print("660")
+    elif 660 <= a < 670:
+        print("670")
+    elif 670 <= a < 680:
+        print("680")
+    elif 680 <= a < 690:
+        print("690")
+    elif 690 <= a < 700:
+        print("700")
+    elif 700 <= a < 710:
+        print("710")
+    elif 710 <= a < 720:
+        print("720")
+    elif 720 <= a < 730:
+        print("730")
+    elif 730 <= a < 740:
+        print("740")
+    elif 740 <= a < 750:
+        print("750")
+    elif 750 <= a < 760:
+        print("760")
+    elif 760 <= a < 770:
+        print("770")
+    elif 770 <= a < 780:
+        print("780")
+    elif 780 <= a < 790:
+        print("790")
+    elif 790 <= a < 800:
+        print("800")
+    elif 800 <= a < 810:
+        print("810")
+    elif 810 <= a < 820:
+        print("820")
+    elif 820 <= a < 830:
+        print("830")
+    elif 830 <= a < 840:
+        print("840")
+    elif 840 <= a < 850:
+        print("850")
+    elif 850 <= a < 860:
+        print("860")
+    elif 860 <= a < 870:
+        print("870")
+    elif 870 <= a < 880:
+        print("880")
+    elif 880 <= a < 890:
+        print("890")
+    elif 890 <= a < 900:
+        print("900")
+    elif 900 <= a < 910:
+        print("910")
+    elif 910 <= a < 920:
+        print("920")
+    elif 920 <= a < 930:
+        print("930")
+    elif 930 <= a < 940:
+        print("940")
+    elif 940 <= a < 950:
+        print("950")
+    elif 950 <= a < 960:
+        print("960")
+    elif 960 <= a < 970:
+        print("970")
+    elif 970 <= a < 980:
+        print("980")
+    elif 980 <= a < 990:
+        print("990")
+    elif 990 <= a < 1000:
+        print("1000")
+    elif 1000 <= a < 1010:
+        print("1010")
+    elif 1010 <= a < 1020:
+        print("1020")
+    elif 1020 <= a < 1030:
+        print("1030")
+    elif 1030 <= a < 1040:
+        print("1040")
+    elif 1040 <= a < 1050:
+        print("1050")
+    elif 1050 <= a < 1060:
+        print("1060")
+    elif 1060 <= a < 1070:
+        print("1070")
+# }}}
+
+
+
+t_start = time.time()
+for _ in range(1000):
+    f_without_elif()
+t_end   = time.time()
+print(f"without elif: {(t_end - t_start)/1000} sec")
+
+t_with_elif_start = time.time()
+for _ in range(1000):
+    f_with_elif()
+t_with_elif_end   = time.time()
+print(f"with elif   : {(t_with_elif_end - t_with_elif_start)/1000} sec")
+```
+</details>
+<h1>結果</h1>
+<p><code>print</code>でたくさん標準出力を使っていますが、 そこの値は重要ではないので 私は<a href="https://github.com/thinca/vim-quickrun">quickrun</a>を使って vim上のバッファで加工して消しています</p>
+<pre><code>without elif: 4.281997680664063e-06 sec
+with elif   : 9.88006591796875e-07 sec</code></pre>
+<p>一瞬遅くなって見えますが、桁が一桁違います。少数表記にすると</p>
+<pre><code>without elif: 0.000004 sec
+with elif   : 0.000001 sec</code></pre>
+<p>となり、<code>elif</code>の方が速いことがわかります。</p>
+<h1>考察</h1>
+<p>なぜ速いのかを考えてみます。</p>
+<h2>構文木</h2>
+<p><code>elif</code>には特別なノードがなく、構文木に落とすと親の<code>If</code>ノードの<code>oreelse</code>に含まれる<code>If</code>ノードになります。</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="im">import</span> ast</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="bu">print</span>(ast.dump(ast.parse(<span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="st">if x:</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a><span class="st">   ...</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a><span class="st">elif y:</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="st">   ...</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a><span class="st">else:</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a><span class="st">   ...</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a><span class="st">if z:</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a><span class="st">    ...</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a><span class="st">&quot;&quot;&quot;</span>)))</span></code></pre></div>
+<pre><code>Module(
+    body=[
+        If(test=Name(id=&#39;x&#39;, ctx=Load()),
+           body=[Expr(value=Ellipsis())],
+           orelse=[
+              If(test=Name(id=&#39;y&#39;, ctx=Load()),
+                 body=[Expr(value=Ellipsis())],
+                 orelse=[Expr(value=Ellipsis())])
+              ]
+          ),
+        If(test=Name(id=&#39;z&#39;, ctx=Load()),
+           body=[Expr(value=Ellipsis())],
+           orelse=[])
+        ]
+)</code></pre>
+<p>https://docs.python.org/ja/3/library/ast.html?highlight=elif#ast.If</p>
+<h2>ステップ数を調べる</h2>
+<p>おそらく、if文が実行される回数が少ないはず、なのでpythonのデバッガである<a href="https://docs.python.org/3/library/pdb.html">pdb</a>を使って調べてみます。</p>
+<pre><code>&gt;&gt;&gt; # まずはelif使わないもの
+&gt;&gt;&gt; pdb.run(&quot;&quot;&quot;
+    ... if True:
+    ...     print(&quot;s&quot;)
+    ... if False:
+    ...     print(&quot;f&quot;)
+    ... &quot;&quot;&quot;)
+&gt; &lt;string&gt;(3)&lt;module&gt;()-&gt;None
+(Pdb) n
+s
+&gt; &lt;string&gt;(4)&lt;module&gt;()-&gt;None
+(Pdb)
+--Return--
+&gt; &lt;string&gt;(4)&lt;module&gt;()-&gt;None
+(Pdb)
+&gt;&gt;&gt; pdb.run(&quot;&quot;&quot;
+    ... if True:
+    ...     print(&quot;s&quot;)
+    ... elif False:
+    ...     print(&quot;f&quot;)
+    ... &quot;&quot;&quot;)
+&gt; &lt;string&gt;(3)&lt;module&gt;()-&gt;None
+(Pdb) n
+s
+--Return--
+&gt; &lt;string&gt;(3)&lt;module&gt;()-&gt;None
+(Pdb)
+&gt;&gt;&gt;</code></pre>
+<p>やはり、<code>if</code>文を分割した場合と比べて<code>elif</code>の方が"--Return--"が早く来ていますね。 これひとつではそこまで差異はないと思いますが、もっと複雑な条件式を使っている場合や何度も重なっている場合は影響が出そうですね。</p>
+]]></description>
+    <pubDate>Sat, 07 Nov 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-11-07-python-is-elif-faster-than-ifs.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>VRM_IMPORTER_for_BlenderでVRMモデルを作る際の注意点</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-10-24-blender-vrmImporter-Not-Object-on-origin.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on October 24, 2020</li>
+    <li>Updated on November 15, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;VRM&#39;." href="/tags/VRM.html">VRM</a>, <a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html">blender</a>, <a title="All pages tagged &#39;VRM_IMPORTER_for_Blender&#39;." href="/tags/VRM_IMPORTER_for_Blender.html">VRM_IMPORTER_for_Blender</a>
+  
+</div>
+
+<h1>全てのメッシュの原点(Origin)を <em>ワールド座標系の</em> 原点に置く</h1>
+<blockquote>
+<p>There are not an object on the origin <mesh名> (もしくは) <mesh名> が原点座標にありません</p>
+</blockquote>
+<p>というエラーについて。単刀直入にいうと、 全てのメッシュは <strong>Originをワールド座標系の原点におく必要があります</strong></p>
+<p>これは、 <strong><code>Set origin&gt; Origin to Geometry</code>とは違う</strong> ので注意してください。</p>
+<p>これをするには、</p>
+<ol>
+<li>3Dカーソルを原点に移動</li>
+<li>オブジェクトを選択</li>
+<li><code>Set origin&gt; Origin to 3D cursor</code></li>
+</ol>
+<p>の手順を踏みます。</p>
+<h1>追加したmeshオブジェクトのtransformは全て0(scaleは1)にする</h1>
+<p>Blender上では全然問題なく見えますが、これをしておかないとexportした後に変な位置にオブジェクトが表示されてしまいます。 (私は<code>3tenePRO</code>で動作確認をしていますが、おそらく他でもそうなると思います。)<br />
+具体的には、「全てのトランスフォームが0(scaleは1)に指定された通りに表示」されます。</p>
+<h2>具体例:</h2>
+<p>scaleが1になっていない例 <img src="/images/sscale_isnt_1.jpeg" alt="scaleが1じゃない" /></p>
+<p>scaleが1になるように調整した例 <img src="/images/scale_is_1.jpeg" alt="scaleが1" /></p>
+<p>rotationが0になっていない例 <img src="/images/rotation_isnt_0.jpeg" alt="rotationが0じゃない" /></p>
+<p>rotationが0になっている例 <img src="/images/rotation_is_0.jpeg" alt="rotationが0" /></p>
+<h2>直し方</h2>
+<p>Inspectorで各transformの値を確認します。そうしたら、それを覚えておき値は0に修正。 <code>Edit mode</code>に移行して、 <strong>originを中心に、軸を指定して先ほど覚えた値分</strong> 回転させます。</p>
+<h2>最終系</h2>
+<p>綺麗になりました！！</p>
+<p><img src="/images/completed.jpg" alt="全部直した" /></p>
+<h1>Shade Textureは必ず設定する</h1>
+<p>ShadeTextureを設定していないと、面を法線と反対側から見たときにピンク色になってしまいます。 これは、<code>Shade Color</code>が塗られているからで、それを防ぎ表面と同じものを表示したい場合は必ず設定する必要があります。 なお、<code>MainTexture</code>と同じテクスチャで問題ないと思います。</p>
+<p>設定してなかった:<br />
+<blockquote class="twitter-tweet" data-conversation="none" data-theme="dark"><p lang="ja" dir="ltr">色々と調節は必要そうだね <a href="https://t.co/ndXTzYKdfQ">pic.twitter.com/ndXTzYKdfQ</a></p>— mi'e himari (@mihe_himari) <a href="https://twitter.com/mihe_himari/status/1320608433352003584?ref_src=twsrc%5Etfw">October 26, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+<p>設定した:<br />
+<blockquote class="twitter-tweet" data-conversation="none" data-theme="dark"><p lang="ja" dir="ltr">他のオブジェクトにも設定してきた...ﾖｼ!! <a href="https://t.co/8tMJyUaawt">pic.twitter.com/8tMJyUaawt</a></p>— mi'e himari (@mihe_himari) <a href="https://twitter.com/mihe_himari/status/1320613366864330752?ref_src=twsrc%5Etfw">October 26, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+<h1>todo</h1>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" />
+画像入れる</li>
+<li><input type="checkbox" disabled="" />
+動画いれる</li>
+</ul>
+]]></description>
+    <pubDate>Sat, 24 Oct 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-10-24-blender-vrmImporter-Not-Object-on-origin.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>Githubのssh鍵の確認をする</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-10-20-check-githubs-ssh-key.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on October 20, 2020</li>
+    <li>Updated on October 20, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;ssh&#39;." href="/tags/ssh.html">ssh</a>, <a title="All pages tagged &#39;github&#39;." href="/tags/github.html">github</a>
+  
+</div>
+
+<h1>Tl;Dr</h1>
+<p>基本的にはここに書いてありました</p>
+<ul>
+<li><a href="https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/reviewing-your-ssh-keys">公式マニュアル</a></li>
+</ul>
+<hr />
+<p>未読メールを確認していたところ、Githubさんから以下のようなメールが届いていました</p>
+<blockquote>
+<p>The following SSH key was added to your account:</p>
+<p><key name> &lt;:区切りの二文字の英数字が並んでいる文字列(<code>\([[:alnum:]]{2}:\)\+</code>)(正規表現は自信ない)&gt;</p>
+<p>If you believe this key was added in error, you can remove the key and disable access at the following location:</p>
+<p>https://github.com/settings/keys</p>
+</blockquote>
+<p>これは、昔確かに自分で追加したはずのSSH鍵なので問題はないはず...ですが念のため確認してみます</p>
+<h1>確認する</h1>
+<p>私はgpgキーを使ってssh認証をしているため、gpgキーの情報を確認すれば良いはずです。 が、<code>xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx</code>なんて文字列を見つけることができない。IPv6でしかみたことないぞ。<br />
+...そんなことなかったです。 <strong>md5のハッシュでした</strong></p>
+<h2>自分の鍵のmd5ハッシュを確認する</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co"># ssh-agentが立ち上がっていなければ、以下のコマンドで立ち上げます</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>$ <span class="bu">eval</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">ssh-agent</span> -s<span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>$ <span class="fu">ssh-add</span> -l -E md5</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="op">&gt;</span> <span class="op">&lt;</span><span class="ex">md5</span>ハッシュ<span class="op">&gt;</span></span></code></pre></div>
+<p>これが一致すれば大丈夫</p>
+<h2>Githubの設定画面から確認する</h2>
+<p><a href="https://github.com/settings/keys">githubの設定画面のここ</a>で鍵の一覧を見ることができます。 その中の <em>New SSH keys</em> に該当の名前の鍵があるはずです。 そこの鍵名の下に書いてある<code>SHA256: ...</code>が確認するべき値です。<br />
+この値について、「GPG fingerprintとも合わん！」「GPG keyidとも合わん！！」「何だこいつ！！！」と暴れていましたが<br />
+安心してください。 <em>GPGじゃない</em> です。<br />
+これは、<a href="https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/reviewing-your-ssh-keys">マニュアル</a>に書いてあります。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>$ <span class="fu">ssh-add</span> -l -E sha256</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="op">&gt;</span> <span class="op">&lt;</span><span class="ex">sha256</span>ハッシュ<span class="op">&gt;</span></span></code></pre></div>
+<p>ここで出てきたハッシュを比較すれば良いです。</p>
+]]></description>
+    <pubDate>Tue, 20 Oct 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-10-20-check-githubs-ssh-key.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2020-10-18-couldnt-ues-player-input-component</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-10-18-couldnt-ues-player-input-component.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on October 18, 2020</li>
+    <li>Updated on October 26, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: 
+  
+</div>
+
+<p>Player Inputが上手く使えないと思ったら単純なミスだった</p>
+<h1>tl;dr</h1>
+<p>UnityEventを使用する場合、Eventに登録するスクリプトは、そのInspectorビューから選択し、スクリプトファイルそのものを入れないようにする</p>
+<hr />
+<p>Player Inputは、Unityで<code>2019.1</code>から追加された、<code>Input</code>に取って変わる新しい入力管理システムです。 詳しくは<a href="https://blogs.unity3d.com/jp/2019/10/14/introducing-the-new-input-system/">新しい Input System のご紹介 -- blogs.unity3d.com</a>を参照してください。</p>
+<h1>環境</h1>
+<p>ソフトウェア バージョン ------------- --------------------- - Unity 2019.4.11f1 Personal InputSystem 1.0.0</p>
+<h1>現状</h1>
+<p>基本的には<a href="https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/manual/QuickStartGuide.html">Quick Start Guide</a>に沿って作業をしています。(<code>Input System</code>は導入済とします。)</p>
+<ol>
+<li>入力を反映させたい<code>GameObject</code>に<code>PlayerInput</code>をattachします。</li>
+<li>"Create Actions"を押し、新しい<code>Action Asset</code>を作成します</li>
+<li>"Quick Start Guide"に従って、入力を<code>Unity Events</code>で受けとるようにします。</li>
+<li>今回は必要なかったので、デフォルトで入っているActionを自分で使うものに入れかえました</li>
+<li><code>1.</code>の<code>GameObject</code>に戻り、<code>PlayerInput</code>のEvents欄にScript fileを指定します</li>
+<li>あれ!?<code>No Function</code>しか出てこない!?</li>
+</ol>
+<h1>原因</h1>
+<p>今回の原因は、上記の<code>5.</code>にある <strong>Events欄に設定したもの</strong> でした。 ここで、私は「スクリプトファイル自体」を選択していましたが、そうではなく、「実際に使いたいオブジェクトに紐づけられている該当ファイルのインスタンスを渡してると、上手くいきます。</p>
+<h2>もう一つ考えられる原因</h2>
+<p>今回は違いましたが、調べている間に見つけたのが<a href="https://forum.unity.com/threads/cant-assign-public-script-function-to-player-input-component-new-input-system.881032/">これ</a>で、「コールバック関数の引数は<code>InputAction.CallbackContext callbackContext</code>にしないといけない、というもの。</p>
+]]></description>
+    <pubDate>Sun, 18 Oct 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-10-18-couldnt-ues-player-input-component.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>簡易的な素数探索アルゴリズムの速度比較</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-10-17-comparing-primes-algorithm.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on October 17, 2020</li>
+    <li>Updated on October 17, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;python&#39;." href="/tags/python.html">python</a>, <a title="All pages tagged &#39;アルゴリズム&#39;." href="/tags/%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0.html">アルゴリズム</a>
+  
+</div>
+
+<p>いや簡単なものなのですが個人的なメモ。 実行言語は<code>python 3.7.4</code>です。</p>
+<h1>比較するアルゴリズム</h1>
+<h1>1. 定義通りの求め方</h1>
+<p>素数は「自分自身と1のみを約数に持つ数」なので、「自分自身と1以外に割り切れる数があるか」を調べれば素数かの判定ができることになります。</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">def</span> fromDefinition(nums: [<span class="bu">int</span>]) <span class="op">-&gt;</span> [<span class="bu">int</span>]:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="kw">def</span> f(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n):</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>      <span class="cf">if</span> n <span class="op">%</span> i <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>        <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>      <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    <span class="cf">return</span> <span class="bu">list</span>(<span class="bu">filter</span>(f, nums))</span></code></pre></div>
+<h2>エラトステネスの揮</h2>
+<p>多分中学校かそこらへんで習ったであろう方法。 求めたい範囲の数の集合から、小さい素数の倍数をふるい落としていく方法です。<br />
+<a href="https://ja.wikipedia.org/wiki/%E3%82%A8%E3%83%A9%E3%83%88%E3%82%B9%E3%83%86%E3%83%8D%E3%82%B9%E3%81%AE%E7%AF%A9">wikipediaの図解</a>がわかりやすい。</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="im">import</span> time</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="im">from</span> math <span class="im">import</span> sqrt</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="kw">def</span> eratosthenes(nums: [<span class="bu">int</span>]) <span class="op">-&gt;</span> [<span class="bu">int</span>]:</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    <span class="cf">if</span> nums[<span class="dv">0</span>] <span class="op">&lt;=</span> <span class="dv">1</span>:</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>        <span class="cf">return</span> eratosthenes(nums[<span class="dv">1</span>:])</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>    head <span class="op">=</span> nums[<span class="dv">0</span>]</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>    <span class="cf">if</span> head <span class="op">&gt;=</span> sqrt(nums[<span class="op">-</span><span class="dv">1</span>]):</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>        <span class="cf">return</span> nums</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>    ret <span class="op">=</span> <span class="bu">list</span>(<span class="bu">filter</span>(<span class="kw">lambda</span> i: i <span class="op">%</span> head <span class="op">!=</span> <span class="dv">0</span>, nums))</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>    <span class="cf">return</span> [head] <span class="op">+</span> eratosthenes(ret)</span></code></pre></div>
+<h1>実行時間計測</h1>
+<p>それぞれの処理を1000回ずつ実行し、その平均を求めた</p>
+<h2>計測用コード</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">def</span> mesureTime(f, <span class="op">*</span>args) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    startTime <span class="op">=</span> time.time()</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    f(<span class="op">*</span>args)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    <span class="cf">return</span> time.time() <span class="op">-</span> startTime</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="kw">def</span> mesureTimeAvr(f, <span class="op">*</span>args) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>    t <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a>        t<span class="op">+=</span>mesureTime(f, <span class="op">*</span>args)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>    <span class="cf">return</span> t <span class="op">/</span> <span class="dv">1000</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a>x <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">100</span> <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a><span class="bu">print</span>(<span class="ss">f&quot;fromDefinition: </span><span class="sc">{</span>mesureTimeAvr(fromDefinition, x)<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a><span class="bu">print</span>(<span class="ss">f&quot;eratosthenes  : </span><span class="sc">{</span>mesureTimeAvr(eratosthenes, x)<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<h2>結果</h2>
+<pre><code>fromDefinition: 3.378009796142578e-05
+eratosthenes  : 2.4552106857299804e-05</code></pre>
+<p>エラトステネスの揮の方が1秒くらい早い。 Orderはわからん！！</p>
+]]></description>
+    <pubDate>Sat, 17 Oct 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-10-17-comparing-primes-algorithm.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>jupyter notebookがうまく起動しなかった</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-10-08-jupyter-notebook-doesnt-up-so-long.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on October 10, 2020</li>
+    <li>Updated on October 17, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;python&#39;." href="/tags/python.html">python</a>, <a title="All pages tagged &#39;jupyter&#39;." href="/tags/jupyter.html">jupyter</a>, <a title="All pages tagged &#39;macOS&#39;." href="/tags/macOS.html">macOS</a>
+  
+</div>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>$ <span class="ex">jupyter</span> notebook</span></code></pre></div>
+<p>だと、鯖は立ち上がるもののページが読み込めずうまくいかなかった。 試しに、<a href="https://qiita.com/ciela/items/0e0392f600c92b93d7c6">この記事</a>に従ってみたところ接続できた。 よくわからないけど、まぁ動いたのでよし。別段VM環境でもなかったんだけどなぁ</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>$ <span class="ex">jupyter</span> notebook --ip=<span class="dt">\*</span></span></code></pre></div>
+]]></description>
+    <pubDate>Sat, 10 Oct 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-10-08-jupyter-notebook-doesnt-up-so-long.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>Windows PCのスペックを確認する</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-09-29-windows-how-to-know-spec.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on September 29, 2020</li>
+    <li>Updated on October 17, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;windows&#39;." href="/tags/windows.html">windows</a>, <a title="All pages tagged &#39;pc&#39;." href="/tags/pc.html">pc</a>, <a title="All pages tagged &#39;ハードウェア&#39;." href="/tags/%E3%83%8F%E3%83%BC%E3%83%89%E3%82%A6%E3%82%A7%E3%82%A2.html">ハードウェア</a>
+  
+</div>
+
+<h1>CPU/ストレージ/メモリの確認</h1>
+<p>システム情報</p>
+<h1>GPUの確認</h1>
+<p>タスクマネージャー→パフォーマンス</p>
+<p><code>GPU 0</code>, <code>GPU 1</code>と複数あることもあるので注意</p>
+<p>以下の方法ではGPU 1が見れなかった</p>
+<ul>
+<li>ディスプレイ設定→ディスプレイの詳細設定→ディスプレイのアダプターのプロパティを表示</li>
+<li><code>dxdiag</code></li>
+</ul>
+]]></description>
+    <pubDate>Tue, 29 Sep 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-09-29-windows-how-to-know-spec.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>jtdaugherty/tart ソースリーディングメモ</title>
     <link>https://cj-bc.github.io/blog/posts/2020-08-24-jdaughertys-tart-code-reading.html</link>
     <description><![CDATA[<div class="info">
@@ -103,275 +996,6 @@
 ]]></description>
     <pubDate>Wed, 19 Aug 2020 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>twtyとcode2imgでコードの画像つきツイートをする</title>
-    <link>https://cj-bc.github.io/blog/posts/2020-08-17-tweet-with-code2img-image-from-vim.html</link>
-    <description><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on August 18, 2020</li>
-    <li>Updated on August 31, 2020</li>
-  </ul>
-    
-</div>
-<div class="info">
-  
-  Tags: <a title="All pages tagged &#39;twitter&#39;." href="/tags/twitter.html">twitter</a>, <a title="All pages tagged &#39;tool&#39;." href="/tags/tool.html">tool</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>, <a title="All pages tagged &#39;cli&#39;." href="/tags/cli.html">cli</a>
-  
-</div>
-
-<p><a href="https://github.com/skanehira/code2img">skanehira/code2img</a>を使うとコードを手軽に画像化できます。<br />
-そして、<a href="https://github.com/skanehira/code2img.vim">skanehira/code2img.vim</a>を使うとvimから簡単にクリップボードに生成できます。<br />
-これ、すごく便利です。<br />
-しかし、この画像つきのツイートをしたいなと思った時、このままではtwitter.comを開いて投稿しなければなりません。<br />
-vimmerとして、すごく、困る。</p>
-<p>ということで困っていたら、<a href="https://twitter.com/gorilla0513">gorilla</a>さん自身も同じことを思っていたようで、爆速で作ってくれました。</p>
-<script src="https://gist.github.com/skanehira/7dd6ed0dc8da8c6e87a11ab70ea83b53.js"></script>
-<p><a href="https://github.com/skanehira/code2img">skanehira/code2img</a>と、<a href="https://github.com/mattn/twty">mattn/twty</a>があれば動きます。</p>
-<p>すごい。使いやすい。実際に使ってみた結果:</p>
-<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">ツイートのテストだよ。中身は適当なコードだよ。 <a href="https://t.co/QGJ2Y9iLfz">pic.twitter.com/QGJ2Y9iLfz</a></p>&mdash; Cj-bc_sd.sh🐟🔯🌸🐾@ソーダー (@Cj_bc_sd) <a href="https://twitter.com/Cj_bc_sd/status/1295377990524657665?ref_src=twsrc%5Etfw">August 17, 2020</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-<p>とても良い。ありがとうgorillaさん。</p>
-]]></description>
-    <pubDate>Tue, 18 Aug 2020 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2020-08-17-tweet-with-code2img-image-from-vim.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>blenderのSmooth</title>
-    <link>https://cj-bc.github.io/blog/posts/2020-08-17-blender-auto-smooth.html</link>
-    <description><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on August 17, 2020</li>
-    <li>Updated on August 31, 2020</li>
-  </ul>
-    
-</div>
-<div class="info">
-  
-  Tags: <a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html">blender</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>, <a title="All pages tagged &#39;tips&#39;." href="/tags/tips.html">tips</a>
-  
-</div>
-
-<p>Blenderには、面と面を補完して滑らかに表示する<code>shade smooth</code>という機能があります。 しかし、何も考えずに使おうとすると思わぬところが補完され、予期せぬ結果になることが多々起こります。</p>
-<p><img src="https://pbs.twimg.com/media/Efm72cmU8AI3H5K?format=jpg&amp;name=medium" alt="shade flatの結果" /></p>
-<p><img src="https://pbs.twimg.com/media/Efm74u6UcAEU2nM?format=jpg&amp;name=medium" alt="shade smoothの結果" /></p>
-<h1>Auto Smoothを使おう</h1>
-<p>Auto Smoothは、面の角度によって<code>shade smooth</code>と<code>shade flat</code>を使い分けてくれる機能です。 <a href="https://blender-cg.net/smooth-flat/">blender-cg.netさんの記事</a>で知りました。</p>
-<p><a href="https://docs.blender.org/manual/ja/2.80/modeling/meshes/structure.html#auto-smooth">公式リファレンス(英語)</a></p>
-<p>これを使うと、かなり快適に使うことができます！わーい！！</p>
-<p><img src="https://pbs.twimg.com/media/Efm8n4uUYAALg-g?format=png&amp;name=small" alt="auto smoothの場所" /></p>
-<p><img src="https://pbs.twimg.com/media/Efm8pyjU8AAU01a?format=jpg&amp;name=medium" alt="auto smoothを適用してみた結果" /></p>
-]]></description>
-    <pubDate>Mon, 17 Aug 2020 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2020-08-17-blender-auto-smooth.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>mps-youtubeのAPIキーを更新する</title>
-    <link>https://cj-bc.github.io/blog/posts/2020-08-16-mpsyt-renew-token.html</link>
-    <description><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on August 16, 2020</li>
-    <li>Updated on August 31, 2020</li>
-  </ul>
-    
-</div>
-<div class="info">
-  
-  Tags: <a title="All pages tagged &#39;mps-youtube&#39;." href="/tags/mps-youtube.html">mps-youtube</a>, <a title="All pages tagged &#39;mpsyt&#39;." href="/tags/mpsyt.html">mpsyt</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>
-  
-</div>
-
-<p>mps-youtubeで音楽を聴こうと思ったら、以下のようなエラーが出た。</p>
-<blockquote>
-<p>Error fetching data. Possible network issue. Youtube Error 403: The request cannot be completed because you have exceeded your <a href="/youtube/v3/getting-started#quota">quota</a>.</p>
-</blockquote>
-<p>ので、<a href="https://github.com/mps-youtube/mps-youtube/wiki/Troubleshooting#youtube-error-403-the-request-cannot-be-completed-because-you-have-exceeded-your-quota">mps-youtubeレポのトラブルシューティング</a>に基づいて作業をする。<br />
-また、上記記事で参考にされている<a href="https://www.slickremix.com/docs/get-api-key-for-youtube/">slickremix.com -- Get API Key for YouTube</a>も参考にする。 ただし、上記記事では「手順3までやる」と書いてあるが、最後(8)までやる必要がある。</p>
-<h1>1. Google developpersにて、プロジェクトを作成してTokenを取得。</h1>
-<p><a href="https://developers.google.com/" class="uri">https://developers.google.com/</a> に飛び、一番下(右下)の<code>Google API Console</code>からコンソールを開く。</p>
-<p><img src="/src/console_place.png" alt="console pic" /></p>
-<p>左上の<code>Google APIs</code>の文字の横に「Project」という部分があるので選択→右上の「新しいプロジェクト」からプロジェクトを作成する。<br />
-ダッシュボードの「APIとサービス」→「ライブラリ」からYouTube Data API v3を選択し有効化。<br />
-最後に認証情報の作成が必要なので、あとはUIの流れに任せればTokenが手に入ります。</p>
-<h1>2. mps-youtubeで入力する</h1>
-<p>上記記事にあるとおり、以下のコマンドで入力する。一度appを終了させる必要があることに注意。</p>
-<pre><code>mps-youtube
-&gt; set api_key &lt;key value&gt;
-&gt; q # quit app</code></pre>
-]]></description>
-    <pubDate>Sun, 16 Aug 2020 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2020-08-16-mpsyt-renew-token.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>blenderマテリアル のblend modeについて</title>
-    <link>https://cj-bc.github.io/blog/posts/2020-08-16-blender-material-blend-mode.html</link>
-    <description><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on August 16, 2020</li>
-    <li>Updated on August 31, 2020</li>
-  </ul>
-    
-</div>
-<div class="info">
-  
-  Tags: <a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html">blender</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>, <a title="All pages tagged &#39;material&#39;." href="/tags/material.html">material</a>, <a title="All pages tagged &#39;3dcg&#39;." href="/tags/3dcg.html">3dcg</a>
-  
-</div>
-
-<ul>
-<li>Blenderのバージョン: 2.80</li>
-<li>公式のリファレンス: <a href="https://docs.blender.org/manual/en/2.80/render/eevee/materials/settings.html">blender manual -- materials</a></li>
-</ul>
-<p>Blend modeは、表面の色の計算が終わった後にどのようにカラーバッファに影響するかを決めます。</p>
-<h1 class="small-caption">Opaque</h1>
-<p>アルファチャンネル(=透明度)を完全に無視し、色を上書きします。これが一番早いモードです。</p>
-<h1 class="small-caption">Additive</h1>
-<p>直前の色に表面の色を加算します。アルファ値は、 <em>neutral color</em> の黒 (0.0, 0.0, 0.0, 0.0) と表面の色を混ぜるために使われます。</p>
-<h1 class="small-caption">Multiplicative</h1>
-<p>直前の色と表面の色を乗算します。アルファ値は、 <em>neutral color</em> の白 (1.0, 1.0, 1.0) と表面の色を混ぜるために使われます。</p>
-<h1 class="small-caption">Alpha Clip</h1>
-<p>アルファ値がclip閾値を上回った場合のみ、直前の色は表面の色で上書きされます。</p>
-<h1 class="small-caption">Alpha Hashed</h1>
-<p>アルファ値がランダムで決められたclip閾値を上回った場合のみ、直前の色は表面の色で上書きされます。 この統計学的なアプローチはノイズが多いですが、ソートの問題なしにアルファ値のブレンドを概算できます。レンダー設定でサンプル数を増やすと、最終的なノイズを減らすことができます。</p>
-<h1 class="small-caption">Alpha Blending</h1>
-<p>アルファ値のブレンドを使い、直前の色の上に表面の色をオーバーレイします。</p>
-]]></description>
-    <pubDate>Sun, 16 Aug 2020 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2020-08-16-blender-material-blend-mode.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>Github ActionsでGithub Pagesのリリースを自動化する</title>
-    <link>https://cj-bc.github.io/blog/posts/2020-08-07-AddedGithubActionsToBlog.html</link>
-    <description><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on August  7, 2020</li>
-    <li>Updated on August 31, 2020</li>
-  </ul>
-    
-</div>
-<div class="info">
-  
-  Tags: <a title="All pages tagged &#39;github actions&#39;." href="/tags/github%20actions.html">github actions</a>, <a title="All pages tagged &#39;github pages&#39;." href="/tags/github%20pages.html">github pages</a>, <a title="All pages tagged &#39;hakyll&#39;." href="/tags/hakyll.html">hakyll</a>, <a title="All pages tagged &#39;ブログ&#39;." href="/tags/%E3%83%96%E3%83%AD%E3%82%B0.html">ブログ</a>, <a title="All pages tagged &#39;自動化&#39;." href="/tags/%E8%87%AA%E5%8B%95%E5%8C%96.html">自動化</a>
-  
-</div>
-
-<p><a href="https://cj-bc.github.io/blog">このブログ</a>の生成をGithub Actionsで行えるようにしたので、その時のメモ<br />
-尚、現在のworkflowファイルは<a href="https://github.com/Cj-bc/blog/blob/source/.github/workflows/publish.yaml">Cj-bc/blog -- .github/workflows/publish.yaml</a>にあります。</p>
-<h1>前提</h1>
-<ul>
-<li>静的サイトジェネレーターはHakyll</li>
-<li>ほぼ<a href="https://jaspervdj.be/hakyll/tutorials/github-pages-tutorial.html">チュートリアル</a>通りの作りになっている
-<ul>
-<li><code>master</code>の代わりに<code>publish</code>、<code>develop</code>の代わりに<code>source</code>にしてある</li>
-</ul></li>
-<li>Github Pageでホスティング</li>
-</ul>
-<h1>workflowファイルを作成する</h1>
-<h2>トリガーの設定</h2>
-<p>自分の環境では、<code>source</code>ブランチの中身を使ってビルド→<code>publish</code>ブランチにおいて公開、という手順を追っているので、<code>source</code>ブランチにpushされたときだけ走るようにします</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">on</span><span class="kw">:</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">source</span><span class="kw">]</span></span></code></pre></div>
-<h2>Jobの作成</h2>
-<p>Jobを作成します。環境はstackが動けばどこでも問題がないので、ubuntuにします。</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="at">  </span><span class="fu">runPublish</span><span class="kw">:</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="at">    </span><span class="fu">name</span><span class="kw">:</span><span class="at"> run publish</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span></code></pre></div>
-<h2>ステップの作成</h2>
-<p>ここからstepを作っていきます。</p>
-<h3>必要なブランチをcheckoutする</h3>
-<p>今回、トリガー対象のブランチ<code>source</code>の他に<code>publish</code>ブランチを使っています。 しかし、デフォルトではローカルに<code>publish</code>ブランチは存在しません。<br />
-なので、<code>actions/checkout</code>に、全てのブランチとタグの履歴をfetchする<code>fetch-depth: 0</code>を付け足す必要があります。</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v2</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="at">          </span><span class="fu">fetch-depth</span><span class="kw">:</span><span class="at"> </span><span class="dv">0</span></span></code></pre></div>
-<h3>キャッシュの設定をする</h3>
-<p>ビルドはなかなかに重い(現在の構成で約4,50分くらい)ので、なるべくキャッシュを活用します。<br />
-キャッシュには<code>actions/cache@v2</code>を使用します。キャッシュしたいものを生成するactionの前に実行し、キャッシュがあればそこをスキップするようにします。 キャッシュ対象は<code>~/.stack</code>ディレクトリです。<br />
-これは、[ncaqさんの記事][ncaq -- HaskellプログラムをGitHub Actionsでビルドしてクロスプラットフォーム向けにバイナリをReleaseにアップロードする]から大体を引用させていただきました。</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Cache stack</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/cache@v2</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="at">          </span><span class="fu">path</span><span class="kw">:</span><span class="at"> ~/.stack</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="at">          </span><span class="fu">key</span><span class="kw">:</span><span class="at"> stack-${{ hashFiles(&#39;**/stack.yaml.lock&#39;) }}-${{ hashFiles(&#39;**/package.yaml&#39;) }}</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="fu">          restore-keys</span><span class="kw">: </span><span class="ch">|</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>            ${{ runner.os }}-stack-${{ hashFiles(&#39;**/stack.yaml.lock&#39;) }}-</span></code></pre></div>
-<h3>haskellおよびstackのセットアップをする</h3>
-<p>Haskell stackを使うので、<code>actions/setup-haskell</code>のアクションを借ります。<br />
-ghcのバージョンは、とりあえず手元にあったものに合わせました。</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/setup-haskell@v1.1.2</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="at">          </span><span class="fu">ghc-version</span><span class="kw">:</span><span class="at"> </span><span class="st">&#39;8.8.1&#39;</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="at">          </span><span class="fu">stack-version</span><span class="kw">:</span><span class="at"> </span><span class="st">&#39;latest&#39;</span></span></code></pre></div>
-<h3>publishコマンドを実行する</h3>
-<p>環境の準備がほぼできたので、あとはhakyllのビルドをしておしまいです。<br />
-その前に、<strong>gitのuserを<code>github-actions</code>に設定</strong>しておきます。このアカウントにすると、内部トークンを使ってくれます。<br />
-また、ビルド周りのコマンドはMakefileにしまってあったのでそのまま使います。</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> run publish</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>          git config user.name github-actions</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>          git config user.email github-actions@github.com</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>          git switch source</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>          make publish</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a>          git push origin publish</span></code></pre></div>
-<h1>参考にしたサイト</h1>
-<ul>
-<li><a href="https://www.ncaq.net/2020/04/05/15/54/26/">ncaq -- HaskellプログラムをGitHub Actionsでビルドしてクロスプラットフォーム向けにバイナリをReleaseにアップロードする</a></li>
-<li><a href="https://github.com/actions/setup-haskell">Github -- actions/setup-haskell</a></li>
-<li><a href="https://docs.github.com/en/actions/configuring-and-managing-workflows/caching-dependencies-to-speed-up-workflows">Github Docs -- Caching dependencies to speed up workflows</a></li>
-<li><a href="https://github.com/actions/checkout#push-a-commit-using-the-built-in-token">Github -- actions/checkout#push-a-commit-using-the-built-in-token</a></li>
-</ul>
-]]></description>
-    <pubDate>Fri, 07 Aug 2020 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2020-08-07-AddedGithubActionsToBlog.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>Blog作った！！</title>
-    <link>https://cj-bc.github.io/blog/posts/2020-08-02-helloHakylly.html</link>
-    <description><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on August  2, 2020</li>
-    <li>Updated on August 31, 2020</li>
-  </ul>
-    
-        by Cj-bc
-    
-</div>
-<div class="info">
-  
-  Tags: <a title="All pages tagged &#39;info&#39;." href="/tags/info.html">info</a>
-  
-</div>
-
-<h1>Blog作りました</h1>
-<p>今までは<a href="https://qiita.com/Cj-bc">Qiita</a>に色々書いていましたが、技術的ではないものも書きたくなったのでブログを作りました。<br />
-Elmで自作しようと奮闘していたものの難しそうすぎたので、<a href="https://jaspervdj.be/hakyll/">hakyll</a>を使うことにしました。</p>
-<p>この投稿よりも前の日付のものは、qiitaからのポートです。</p>
-<h1>これから書いていきたいもの</h1>
-<p>今まで通りの技術的な内容、推しの布教、小さなメモ、etc</p>
-<h1>Qiitaはどうする？</h1>
-<p>多分技術系の記事はミラーリングすると思います。</p>
-<h1>今後追加するもの</h1>
-<p>現在最小限の構成でHakyllもほとんどいじっていません。今後追加したい機能:</p>
-<ul class="task-list">
-<li><input type="checkbox" disabled="" />
-タグ機能の追加</li>
-<li><input type="checkbox" disabled="" />
-CSSの設定</li>
-<li><input type="checkbox" disabled="" />
-埋め込みElm</li>
-</ul>
-]]></description>
-    <pubDate>Sun, 02 Aug 2020 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2020-08-02-helloHakylly.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
