@@ -8,8 +8,10 @@ css/dist/semantic.min.css:
 css/dist/semantic.min.js:
 	cd css && $(GULP) build
 
+node_modules:
+	npm install
 
-build: css/dist/semantic.min.css css/dist/semantic.min.js
+build: css/dist/semantic.min.css css/dist/semantic.min.js node_modules
 	stack build
 	stack exec blog rebuild
 
