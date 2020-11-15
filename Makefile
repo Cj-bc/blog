@@ -1,5 +1,6 @@
 BRANCH_DEST := publish
-GULP := gulp
+NPX := $(shell which npx)
+GULP := $(NPX) gulp
 
 css:
 	cd css && $(GULP) build
