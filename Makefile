@@ -2,10 +2,10 @@ BRANCH_DEST := publish
 NPX := $(shell which npx)
 GULP := $(NPX) gulp
 
-css:
+css/dist:
 	cd css && $(GULP) build
 
-publish: css
+publish: css/dist
 	stack build
 	stack exec blog rebuild
 	git switch $(BRANCH_DEST)
