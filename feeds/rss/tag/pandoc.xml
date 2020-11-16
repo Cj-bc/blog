@@ -7,8 +7,68 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/pandoc.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Fri, 13 Nov 2020 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Mon, 16 Nov 2020 00:00:00 UT</lastBuildDate>
         <item>
+    <title>pandocのorderedListのAttributeと見た目について</title>
+    <link>https://cj-bc.github.io/blog/posts/2020-11-16-pandoc-orderedlist-attr-view.html</link>
+    <description><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on November 16, 2020</li>
+    <li>Updated on November 17, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;pandoc&#39;." href="/tags/pandoc.html">pandoc</a>, <a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html">haskell</a>
+  
+</div>
+
+<p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:Block">公式リファレンス</a> を見てもよくわからないので、markdownに変換して試してみた。</p>
+<h1>実際のコード</h1>
+<h2>ListNumberStyle</h2>
+<p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberStyle">ListNumberStyle</a>は、 数字表現(1,2,3なのかi,ii,iiiなのかなど)を決めるもの。 わかりやすいように他の内容は一致させています。</p>
+<p><code>code haskell [OrderedList (1,DefaultStyle,TwoParens) [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1, Example,TwoParens)     [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1,Decimal,TwoParens)      [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1,LowerRoman,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1,UpperRoman,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1,LowerAlpha,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1,UpperAlpha,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ]</code></p>
+<p>これをvimで開き、<code>%!pandoc -f native -t markdown</code>で試した。これ便利なのでおすすめ。 その結果が以下:</p>
+<p>``` code markdown result (1) hoge (2) foo</p>
+<p>(1) hoge (2) foo</p>
+<p>(1) hoge (2) foo</p>
+<p>(i) hoge (ii) foo</p>
+<p>(I) hoge (II) foo</p>
+<p>(a) hoge (b) foo</p>
+<p>(A) hoge (B) foo</p>
+<pre><code>
+`Default`/`Example`はどうやらDecimalになってしまう模様。あとは大体名前の通りになった。
+
+## ListNumberDelim
+
+[ListNumberDelim](https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberDelim)
+は、数字の後につくやつ。  
+コードは基本先ほどと同じものを使用
+
+
+
+
+``` code haskell
+[OrderedList (1,DefaultStyle,DefaultDelim) [[Plain [Str &quot;hoge&quot;]],[Plain [Str &quot;foo&quot;]]]
+,OrderedList (1,DefaultStyle,Period)       [[Plain [Str &quot;hoge&quot;]],[Plain [Str &quot;foo&quot;]]]
+,OrderedList (1,DefaultStyle,OneParen)     [[Plain [Str &quot;hoge&quot;]],[Plain [Str &quot;foo&quot;]]]
+,OrderedList (1,DefaultStyle,TwoParens)    [[Plain [Str &quot;hoge&quot;]],[Plain [Str &quot;foo&quot;]]]
+]</code></pre>
+<p>結果が以下。</p>
+<p>``` code markdown result 1. hoge 2. foo</p>
+<ol>
+<li>hoge</li>
+<li>foo</li>
+</ol>
+<p>1) hoge 2) foo</p>
+<p>(1) hoge (2) foo ```</p>
+]]></description>
+    <pubDate>Mon, 16 Nov 2020 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2020-11-16-pandoc-orderedlist-attr-view.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>vim-pandoc-syntaxでurlを非表示にしたい</title>
     <link>https://cj-bc.github.io/blog/posts/2020-11-13-pandoc-vim-conceal-url-by-default.html</link>
     <description><![CDATA[<div class="info">

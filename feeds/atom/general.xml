@@ -8,8 +8,68 @@
         <name>Cj-bc a.k.a Cj.BC_SD</name>
         <email>cj.bc-sd@outlook.jp</email>
     </author>
-    <updated>2020-11-13T00:00:00Z</updated>
+    <updated>2020-11-16T00:00:00Z</updated>
     <entry>
+    <title>pandocのorderedListのAttributeと見た目について</title>
+    <link href="https://cj-bc.github.io/blog/posts/2020-11-16-pandoc-orderedlist-attr-view.html" />
+    <id>https://cj-bc.github.io/blog/posts/2020-11-16-pandoc-orderedlist-attr-view.html</id>
+    <published>2020-11-16T00:00:00Z</published>
+    <updated>2020-11-16T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+  <ul>
+    <li>Posted on November 16, 2020</li>
+    <li>Updated on November 17, 2020</li>
+  </ul>
+    
+</div>
+<div class="info">
+  
+  Tags: <a title="All pages tagged &#39;pandoc&#39;." href="/tags/pandoc.html">pandoc</a>, <a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html">haskell</a>
+  
+</div>
+
+<p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:Block">公式リファレンス</a> を見てもよくわからないので、markdownに変換して試してみた。</p>
+<h1>実際のコード</h1>
+<h2>ListNumberStyle</h2>
+<p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberStyle">ListNumberStyle</a>は、 数字表現(1,2,3なのかi,ii,iiiなのかなど)を決めるもの。 わかりやすいように他の内容は一致させています。</p>
+<p><code>code haskell [OrderedList (1,DefaultStyle,TwoParens) [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1, Example,TwoParens)     [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1,Decimal,TwoParens)      [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1,LowerRoman,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1,UpperRoman,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1,LowerAlpha,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1,UpperAlpha,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ]</code></p>
+<p>これをvimで開き、<code>%!pandoc -f native -t markdown</code>で試した。これ便利なのでおすすめ。 その結果が以下:</p>
+<p>``` code markdown result (1) hoge (2) foo</p>
+<p>(1) hoge (2) foo</p>
+<p>(1) hoge (2) foo</p>
+<p>(i) hoge (ii) foo</p>
+<p>(I) hoge (II) foo</p>
+<p>(a) hoge (b) foo</p>
+<p>(A) hoge (B) foo</p>
+<pre><code>
+`Default`/`Example`はどうやらDecimalになってしまう模様。あとは大体名前の通りになった。
+
+## ListNumberDelim
+
+[ListNumberDelim](https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberDelim)
+は、数字の後につくやつ。  
+コードは基本先ほどと同じものを使用
+
+
+
+
+``` code haskell
+[OrderedList (1,DefaultStyle,DefaultDelim) [[Plain [Str &quot;hoge&quot;]],[Plain [Str &quot;foo&quot;]]]
+,OrderedList (1,DefaultStyle,Period)       [[Plain [Str &quot;hoge&quot;]],[Plain [Str &quot;foo&quot;]]]
+,OrderedList (1,DefaultStyle,OneParen)     [[Plain [Str &quot;hoge&quot;]],[Plain [Str &quot;foo&quot;]]]
+,OrderedList (1,DefaultStyle,TwoParens)    [[Plain [Str &quot;hoge&quot;]],[Plain [Str &quot;foo&quot;]]]
+]</code></pre>
+<p>結果が以下。</p>
+<p>``` code markdown result 1. hoge 2. foo</p>
+<ol>
+<li>hoge</li>
+<li>foo</li>
+</ol>
+<p>1) hoge 2) foo</p>
+<p>(1) hoge (2) foo ```</p>
+]]></summary>
+</entry>
+<entry>
     <title>vim-pandoc-syntaxでurlを非表示にしたい</title>
     <link href="https://cj-bc.github.io/blog/posts/2020-11-13-pandoc-vim-conceal-url-by-default.html" />
     <id>https://cj-bc.github.io/blog/posts/2020-11-13-pandoc-vim-conceal-url-by-default.html</id>
@@ -630,7 +690,7 @@ s
     <summary type="html"><![CDATA[<div class="info">
   <ul>
     <li>Posted on October 24, 2020</li>
-    <li>Updated on October 26, 2020</li>
+    <li>Updated on November 15, 2020</li>
   </ul>
     
 </div>
@@ -666,6 +726,12 @@ s
 <h2>最終系</h2>
 <p>綺麗になりました！！</p>
 <p><img src="/images/completed.jpg" alt="全部直した" /></p>
+<h1>Shade Textureは必ず設定する</h1>
+<p>ShadeTextureを設定していないと、面を法線と反対側から見たときにピンク色になってしまいます。 これは、<code>Shade Color</code>が塗られているからで、それを防ぎ表面と同じものを表示したい場合は必ず設定する必要があります。 なお、<code>MainTexture</code>と同じテクスチャで問題ないと思います。</p>
+<p>設定してなかった:<br />
+<blockquote class="twitter-tweet" data-conversation="none" data-theme="dark"><p lang="ja" dir="ltr">色々と調節は必要そうだね <a href="https://t.co/ndXTzYKdfQ">pic.twitter.com/ndXTzYKdfQ</a></p>— mi'e himari (@mihe_himari) <a href="https://twitter.com/mihe_himari/status/1320608433352003584?ref_src=twsrc%5Etfw">October 26, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+<p>設定した:<br />
+<blockquote class="twitter-tweet" data-conversation="none" data-theme="dark"><p lang="ja" dir="ltr">他のオブジェクトにも設定してきた...ﾖｼ!! <a href="https://t.co/8tMJyUaawt">pic.twitter.com/8tMJyUaawt</a></p>— mi'e himari (@mihe_himari) <a href="https://twitter.com/mihe_himari/status/1320613366864330752?ref_src=twsrc%5Etfw">October 26, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 <h1>todo</h1>
 <ul class="task-list">
 <li><input type="checkbox" disabled="" />
@@ -928,69 +994,6 @@ eratosthenes  : 2.4552106857299804e-05</code></pre>
         |- Events.Main.handleAttrEvent
         |   |- Attributes(fg,bg,style)がクリックされた場合、変更作業をする
         |- Events.Main.handleEvent</code></pre>
-]]></summary>
-</entry>
-<entry>
-    <title>Blender docs -- data block</title>
-    <link href="https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html" />
-    <id>https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html</id>
-    <published>2020-08-19T00:00:00Z</published>
-    <updated>2020-08-19T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on August 19, 2020</li>
-    <li>Updated on August 31, 2020</li>
-  </ul>
-    
-</div>
-<div class="info">
-  
-  Tags: <a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html">blender</a>, <a title="All pages tagged &#39;document&#39;." href="/tags/document.html">document</a>, <a title="All pages tagged &#39;translation&#39;." href="/tags/translation.html">translation</a>, <a title="All pages tagged &#39;wip&#39;." href="/tags/wip.html">wip</a>
-  
-</div>
-
-<p>公式: <a href="https://docs.blender.org/manual/ja/2.80/files/data_blocks.html" class="uri">https://docs.blender.org/manual/ja/2.80/files/data_blocks.html</a></p>
-<h1>Data blocks</h1>
-<p>いかなるBlenderプロジェクトの基本単位は<code>data-block</code>です。<code>data-block</code>の例としては: meshes, objects, materials, textures, node trees, scenes, texts, brushes, そして workspace</p>
-<p><code>data-block</code>は、とても異なる種類のデータの全体的な抽象であり、共通の基本的な<code>feature</code>であるプロパティと<code>behaviors</code>に重心を置いています。</p>
-<p>いくつかの共通した特徴は:</p>
-<ul>
-<li><code>blend-file</code>の<code>primary contents</code>です。</li>
-<li>再利用やインスタンス化のために、違いを参照することができます。(Child/parent, object/object-data, materials/images, in modifiers or constraints too...)</li>
-<li>それぞれの名前は、<code>blend-file</code>内で同じタイプの中で<code>unique</code>です。</li>
-<li>追加、削除、編集、複製が可能です。</li>
-<li>ファイル間で<code>link</code>することができます。(限られた種類の<code>data-blocks</code>のみです)</li>
-<li>それぞれ独自のアニメーションデータを持つことができます。</li>
-<li>それぞれ<a href="https://docs.blender.org/manual/ja/2.80/files/data_blocks.html#files-data-blocks-custom-properties">Custom properties</a>を持つことができます。</li>
-</ul>
-<p>ユーザーは<code>typically</code>高レベルの<code>data type</code>を扱うことになります(<code>obects</code>, <code>meshes</code>など)。 複雑なプロジェクトを扱う場合、特に<code>inter-linking blend-files</code>の場合、<code>data-block</code>の管理はより重要になります。 それ用の主なエディターは<a href="https://docs.blender.org/manual/ja/2.80/editors/outliner.html">Outliner</a>です</p>
-<p>Blender内の全てのデータが<code>data-block</code>なわけではありません。例えば、<code>bones</code>, <code>sequence strips</code>や<code>vertex groups</code>は違っており、 それぞれ<code>armature</code>、<code>scene</code>、<code>mesh types</code>に付属(<code>belong to</code>)しています。</p>
-<h1>Life Time</h1>
-<p>全ての<code>data-block</code>は<code>usage counted</code>(<code>reference count</code>)を持っており、一つ以上である場合は、UIの中で<code>data-block</code>の名前の右側に<code>current user</code>の数が表示されます。</p>
-<p>Blenderは、使用されていないデータは最終的に削除されるという<code>general rule</code>に従っています。</p>
-<p>作業中にたくさんのデータを追加・削除することは一般的なため、全ての<code>data-block</code>を一つ一つ手動で管理する必要がないのは利点です。</p>
-<p>これは、<code>blend-file</code>を書き込む際に、<code>zero user</code>な<code>data-block</code>をスキップする仕組みになっています。</p>
-<h1>Protected</h1>
-<p><code>zero user</code>な<code>data-block</code>は保存されないため、時にはユーザーのことを考えずにデータの保存を強制させたい時があるでしょう。</p>
-<p>もし、<code>blend-file</code>を<code>library</code>として使っていたり、他のファイルから<code>link</code>したりされたりする目的で使っていた場合、 突然削除されないように気をつける必要があります。</p>
-<p><code>data-block</code>を<code>protect</code>するためには、その<code>data-block</code>の名前の横にある盾のボタンを使用します。 そうすると、その<code>data-block</code>はblenderによって自動的に削除されることは無くなりますが、必要ならば手動で削除することができます。</p>
-<h1>Sharing</h1>
-<p><code>data-block</code>は他の<code>data-block</code>間でも共有できます。</p>
-<p>よくデータの共有が行われる例:</p>
-<ul>
-<li><code>materials</code>間で<code>textures</code>を共有する</li>
-<li><code>objects</code>(<code>instances</code>)間で<code>meshes</code>を共有する</li>
-<li><code>objects</code>間で<code>animated actions</code>を共有する。例えば、全てのライトが同時に<code>dim</code>するようにします。</li>
-</ul>
-<p><code>data-block</code>をファイル間でも共有できます、詳しくは:</p>
-<ul>
-<li><a href="https://docs.blender.org/manual/ja/2.80/files/linked_libraries.html">linked libraries</a></li>
-</ul>
-<h1>Making Single User</h1>
-<p><code>data-block</code>が複数のユーザーによって共有されている時、あるユーザーのためにコピーを作成することができます。 そうするには、名前の右にある<code>user-count</code>ボタンを押してください。そうすることにより、その<code>data-block</code>を複製してその用途のみに<code>assign</code>します。</p>
-<h2>注釈</h2>
-<p><code>Objects</code>は<code>single-user</code>になるためにより発展的な<code>actions</code>を持っています。<a href="https://docs.blender.org/manual/ja/2.80/scene_layout/object/editing/duplication.html">彼らのドキュメント</a>を参照してください。</p>
-<h1>Removing Data-Blocks</h1>
 ]]></summary>
 </entry>
 
