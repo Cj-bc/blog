@@ -40,41 +40,56 @@
 <h1>実際のコード</h1>
 <h2>ListNumberStyle</h2>
 <p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberStyle">ListNumberStyle</a>は、 数字表現(1,2,3なのかi,ii,iiiなのかなど)を決めるもの。 わかりやすいように他の内容は一致させています。</p>
-<p><code>code haskell [OrderedList (1,DefaultStyle,TwoParens) [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1, Example,TwoParens)     [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1,Decimal,TwoParens)      [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1,LowerRoman,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1,UpperRoman,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1,LowerAlpha,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ,OrderedList (1,UpperAlpha,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]] ]</code></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>[<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">TwoParens</span>) [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>, <span class="dt">Example</span>,<span class="dt">TwoParens</span>)     [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">Decimal</span>,<span class="dt">TwoParens</span>)      [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">LowerRoman</span>,<span class="dt">TwoParens</span>)   [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">UpperRoman</span>,<span class="dt">TwoParens</span>)   [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">LowerAlpha</span>,<span class="dt">TwoParens</span>)   [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">UpperAlpha</span>,<span class="dt">TwoParens</span>)   [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>]</span></code></pre></div>
 <p>これをvimで開き、<code>%!pandoc -f native -t markdown</code>で試した。これ便利なのでおすすめ。 その結果が以下:</p>
-<p>``` code markdown result (1) hoge (2) foo</p>
-<p>(1) hoge (2) foo</p>
-<p>(1) hoge (2) foo</p>
-<p>(i) hoge (ii) foo</p>
-<p>(I) hoge (II) foo</p>
-<p>(a) hoge (b) foo</p>
-<p>(A) hoge (B) foo</p>
-<pre><code>
-`Default`/`Example`はどうやらDecimalになってしまう模様。あとは大体名前の通りになった。
-
-## ListNumberDelim
-
-[ListNumberDelim](https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberDelim)
-は、数字の後につくやつ。  
-コードは基本先ほどと同じものを使用
-
-
-
-
-``` code haskell
-[OrderedList (1,DefaultStyle,DefaultDelim) [[Plain [Str &quot;hoge&quot;]],[Plain [Str &quot;foo&quot;]]]
-,OrderedList (1,DefaultStyle,Period)       [[Plain [Str &quot;hoge&quot;]],[Plain [Str &quot;foo&quot;]]]
-,OrderedList (1,DefaultStyle,OneParen)     [[Plain [Str &quot;hoge&quot;]],[Plain [Str &quot;foo&quot;]]]
-,OrderedList (1,DefaultStyle,TwoParens)    [[Plain [Str &quot;hoge&quot;]],[Plain [Str &quot;foo&quot;]]]
-]</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown result"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>(1) hoge</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>(2) foo</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>(1) hoge</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>(2) foo</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>(1) hoge</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>(2) foo</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>(i) hoge</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>(ii) foo</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>(I) hoge</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>(II) foo</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a>(a) hoge</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>(b) foo</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>(A) hoge</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>(B) foo</span></code></pre></div>
+<p><code>Default</code>/<code>Example</code>はどうやらDecimalになってしまう模様。あとは大体名前の通りになった。</p>
+<h2>ListNumberDelim</h2>
+<p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberDelim">ListNumberDelim</a> は、数字の後につくやつ。<br />
+コードは基本先ほどと同じものを使用</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>[<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">DefaultDelim</span>) [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">Period</span>)       [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">OneParen</span>)     [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">TwoParens</span>)    [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>]</span></code></pre></div>
 <p>結果が以下。</p>
-<p>``` code markdown result 1. hoge 2. foo</p>
-<ol>
-<li>hoge</li>
-<li>foo</li>
-</ol>
-<p>1) hoge 2) foo</p>
-<p>(1) hoge (2) foo ```</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown result"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ss">1.  </span>hoge</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="ss">2.  </span>foo</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="ss">1.  </span>hoge</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="ss">2.  </span>foo</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>1)  hoge</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>2)  foo</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>(1) hoge</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>(2) foo</span></code></pre></div>
 
         </div>
         <div id="footer">
