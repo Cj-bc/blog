@@ -18,7 +18,7 @@ date: November 16, 2020
 数字表現(1,2,3なのかi,ii,iiiなのかなど)を決めるもの。
 わかりやすいように他の内容は一致させています。
 
-``` code haskell
+``` haskell
 [OrderedList (1,DefaultStyle,TwoParens) [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
 ,OrderedList (1, Example,TwoParens)     [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
 ,OrderedList (1,Decimal,TwoParens)      [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
@@ -32,7 +32,7 @@ date: November 16, 2020
 これをvimで開き、`%!pandoc -f native -t markdown`で試した。これ便利なのでおすすめ。
 その結果が以下:
 
-``` code markdown result
+``` {.markdown .result}
 (1) hoge
 (2) foo
 
@@ -66,7 +66,7 @@ date: November 16, 2020
 
 
 
-``` code haskell
+``` haskell
 [OrderedList (1,DefaultStyle,DefaultDelim) [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
 ,OrderedList (1,DefaultStyle,Period)       [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
 ,OrderedList (1,DefaultStyle,OneParen)     [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
@@ -76,7 +76,7 @@ date: November 16, 2020
 
 結果が以下。
 
-``` code markdown result
+``` {.markdown .result}
 1.  hoge
 2.  foo
 
