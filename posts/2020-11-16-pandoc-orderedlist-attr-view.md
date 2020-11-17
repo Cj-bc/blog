@@ -1,5 +1,5 @@
 ---
-title: pandocのorderedListのAttributeと見た目について
+title: pandocのBlock
 tags:
   - pandoc
   - haskell
@@ -7,10 +7,10 @@ kind: memo
 date: November 16, 2020
 ---
 
-[公式リファレンス](https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:Block)
+[hackage](https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:Block)と[pandoc manual](https://pandoc.org/MANUAL.html)
 を見てもよくわからないので、markdownに変換して試してみた。
 
-# 実際のコード
+# OrderedList
 
 ## ListNumberStyle
 
@@ -88,4 +88,25 @@ date: November 16, 2020
 
 (1) hoge
 (2) foo
+```
+
+# DefinitionList
+
+[DefinitionList]()
+
+``` haskell
+[DefinitionList
+ [([Str "term"],
+   [[Plain [Str "One",Space,Str "definition",Space,Str "here"]]
+   ,[Plain [Str "Second?",SoftBreak,Str ":"], Plain [Str"Second", Space,Str "line",Space,Str "of",Space, Str "definition"]]
+   ]
+ )]
+]
+```
+
+``` markdown
+term
+:   One definition here
+:   Second? :
+:   Maybe second, maybe third
 ```
