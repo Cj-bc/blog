@@ -18,7 +18,9 @@ build: css/dist/semantic.min.css css/dist/semantic.min.js
 
 
 publish: build
+	git stash
 	git switch $(BRANCH_DEST)
+	git stash pop stash@{0}
 	cp -a _site/. .
 	git add -A
 	git commit -m "auto commit: new build" || echo "Notice: no change has been occured. Nothing was committed"
