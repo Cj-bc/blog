@@ -14,6 +14,8 @@ postCtx tags =
     dateField "date" (T.unpack dateFormat)
     <> tagsField "tags" tags
     <> updateDataField
+    <> teaserField "teaser" "raw content"
+    <> thumbnailField
     <> defaultContext
 
 updateDataField :: Context String
@@ -29,6 +31,12 @@ parseDate = do
     P.string "Date:"
     P.many' " "
     P.manyTill P.anyChar P.endOfLine
+
+-- | Get thumbnail image from meta
+--
+-- TODO: retrieve thumbnail from post itself(using 'functionField')
+thumbnailField :: Context String
+thumbnailField = constField "thumbnail" "hard hat"
 
 
 feedCtx = dateField "date" (T.unpack dateFormat)

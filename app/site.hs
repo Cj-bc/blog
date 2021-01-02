@@ -105,6 +105,7 @@ main = hakyll $ do
     match "posts/*" $ do
         route $ setExtension "html"
         compile $ pandocCompilerWith pandocMarkdownCfg def
+            >>= saveSnapshot "raw content"
             >>= loadAndApplyTemplate "templates/post.html"    (postCtx tags)
             >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/default.html" (postCtx tags)
