@@ -25,4 +25,6 @@ executable blog
                        filepath,
                        shelly,
                        attoparsec,
-                       text
+                       text,
+                       blaze-html
+
