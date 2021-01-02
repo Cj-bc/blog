@@ -85,6 +85,10 @@ main = hakyll $ do
         route $ constRoute "js/semantic.min.js"
         compile copyFileCompiler
 
+    match "css/dist/themes/**" $ do
+        route $ gsubRoute "dist/" (const "")
+        compile copyFileCompiler
+
     tags <- buildTags "posts/*" (fromCapture "tags/*.html")
 
     tagsRules tags $ \tag pattern -> do
