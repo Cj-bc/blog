@@ -20,6 +20,7 @@ addClass txt (ident, classes, kv) = (ident, classes ++ txt, kv)
 -- | Combines transformations I do against posts
 myPandocTransform :: Pandoc -> Pandoc
 myPandocTransform = walk codeBlockFormat
+                  . walk blockQuoteFormat
                   . walk (walk imageFormat :: Block -> Block)
 
 -- | Defines code block format
@@ -41,3 +42,7 @@ codeBlockFormat other = other
 imageFormat :: Inline -> Inline
 imageFormat (Image attr inlines target) = Image (addClass ["ui", "rounded", "image"] attr) inlines target
 imageFormat other = other
+
+blockQuoteFormat :: Block -> Block
+blockQuoteFormat (BlockQuote cs) = Div (mempty, ["ui", "piled", "segment"], [("style", "z-index: 0")]) [BlockQuote cs]
+blockQuoteFormat other = other
