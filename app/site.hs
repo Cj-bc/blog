@@ -96,16 +96,6 @@ main = hakyll $ do
         route $ constRoute "css/myCustom.css"
         compile copyFileCompiler
 
-    match "css/node_modules/highlight.js/lib/core.js" $ do
-        route $ constRoute "js/highlightjs.core.js"
-        compile copyFileCompiler
-
-    -- Current implementation doesn't allow to change theme.
-    -- TODO: Allow runtime theme changing
-    match ("css/node_modules/highlight.js/styles/" <> highlightjsTheme <> ".css") $ do
-        route $ constRoute "js/highlightjs.css"
-        compile copyFileCompiler
-
     tags <- buildTags "posts/*" (fromCapture "tags/*.html")
 
     tagsRules tags $ \tag pattern -> do
@@ -169,6 +159,7 @@ main = hakyll $ do
             let indexCtx =
                     listField "posts" (postCtx tags) (return posts) `mappend`
                     constField "title" ""                    `mappend`
+                    constField "highlightjsTheme" highlightjsTheme `mappend`
                     defaultContext
 
             getResourceBody
