@@ -12,6 +12,7 @@ import           System.FilePath.Posix (takeBaseName)
 import           Data.List (isPrefixOf)
 
 import           MyBlog.Contexts
+import           MyBlog.Pandoc
 --------------------------------------------------------------------------------
 
 blogName :: String
@@ -108,7 +109,7 @@ main = hakyll $ do
 
     match "posts/*" $ do
         route $ setExtension "html"
-        compile $ pandocCompilerWith pandocMarkdownCfg def
+        compile $ pandocCompilerWithTransform pandocMarkdownCfg def myPandocTransform
             >>= saveSnapshot "raw content"
             >>= loadAndApplyTemplate "templates/post.html"    (postCtx tags)
             >>= saveSnapshot "content"
