@@ -106,7 +106,7 @@ main = hakyll $ do
                       <> constField "atomFeedUrl" (tagAtomFeedUrl tag)
                       <> constField "rssFeedUrl"  (tagRssFeedUrl tag)
                       <> listField "posts" (postCtx tags) (recentFirst =<< loadAll pattern)
-                      <> defaultContext
+                      <> defaultContext'
 
             makeItem ""
                 >>= loadAndApplyTemplate "templates/tag.html" ctx
@@ -130,7 +130,7 @@ main = hakyll $ do
             let archiveCtx =
                     listField "posts" (postCtx tags) (return posts) `mappend`
                     constField "title" "Archives"            `mappend`
-                    defaultContext
+                    defaultContext'
 
             makeItem ""
                 >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
@@ -159,8 +159,7 @@ main = hakyll $ do
             let indexCtx =
                     listField "posts" (postCtx tags) (return posts) `mappend`
                     constField "title" ""                    `mappend`
-                    constField "highlightjsTheme" highlightjsTheme `mappend`
-                    defaultContext
+                    defaultContext'
 
             getResourceBody
                 >>= applyAsTemplate indexCtx

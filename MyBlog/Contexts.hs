@@ -7,6 +7,9 @@ import Text.Blaze.Html (toHtml, toValue, (!))
 import qualified Text.Blaze.Html5.Attributes as A
 import qualified Text.Blaze.Html5 as H
 import              Shelly
+defaultContext' :: Context String
+defaultContext' = constField "highlightjsTheme" "night-owl"
+                <> defaultContext
 
 dateFormat :: T.Text
 dateFormat = "%B %e, %Y"
@@ -18,7 +21,7 @@ postCtx tags =
     <> updateDataField
     <> teaserField "teaser" "raw content"
     <> thumbnailField
-    <> defaultContext
+    <> defaultContext'
 
 updateDataField :: Context String
 updateDataField = field "updated" $ \item -> do
@@ -58,4 +61,4 @@ tagsFieldWithFomanticClassName = tagsFieldWith getTags simpleRenderLink' mconcat
 
 feedCtx = dateField "date" (T.unpack dateFormat)
           <> bodyField "description"
-          <> defaultContext
+          <> defaultContext'
