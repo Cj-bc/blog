@@ -15,6 +15,7 @@ import Text.Pandoc.Definition
 -- | Combines transformations I do against posts
 myPandocTransform :: Pandoc -> Pandoc
 myPandocTransform = walk codeBlockFormat
+                  . walk (walk imageFormat :: Block -> Block)
 
 -- | Defines code block format
 --
@@ -30,3 +31,8 @@ codeBlockFormat (CodeBlock (ident, classes, kv) t) = Div ("", ["ui", "segment"],
         where
             filetype = maybe "" id (listToMaybe  classes)
 codeBlockFormat other = other
+
+
+imageFormat :: Inline -> Inline
+imageFormat (Image (ident, classes, kv) inlines target) = Image (ident, classes ++ ["ui", "rounded", "image"], kv) inlines target
+imageFormat other = other
