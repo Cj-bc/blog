@@ -26,8 +26,4 @@ codeBlockFormat (CodeBlock attr@(_, (cl:classes), _) t) = Div ("", ["ui", "segme
                                                             [Div ("", ["ui", "top", "right", "attached", "label"], mempty) [Plain [Str cl]]
                                                             , CodeBlock attr t
                                                             ]
---codeBlockFormat (Div (ident, classes@(cl:_), kv) blocks) | "SourceCode" `elem` classes
---        = Div (ident, classes, kv) $
---                [Div ("", ["ui", "top", "right", "attached", "label"], mempty) [Plain [Str cl]]]
---                <> blocks
 codeBlockFormat other = other
