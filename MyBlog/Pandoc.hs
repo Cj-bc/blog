@@ -11,6 +11,11 @@ module MyBlog.Pandoc where
 import Data.Maybe (listToMaybe)
 import Text.Pandoc.Walk
 import Text.Pandoc.Definition
+import qualified Data.Text as T
+
+addClass :: [T.Text] -> Attr -> Attr
+addClass txt (ident, classes, kv) = (ident, classes ++ txt, kv)
+
 
 -- | Combines transformations I do against posts
 myPandocTransform :: Pandoc -> Pandoc
@@ -34,5 +39,5 @@ codeBlockFormat other = other
 
 
 imageFormat :: Inline -> Inline
-imageFormat (Image (ident, classes, kv) inlines target) = Image (ident, classes ++ ["ui", "rounded", "image"], kv) inlines target
+imageFormat (Image attr inlines target) = Image (addClass ["ui", "rounded", "image"] attr) inlines target
 imageFormat other = other
