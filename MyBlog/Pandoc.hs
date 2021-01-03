@@ -25,7 +25,7 @@ myPandocTransform = walk codeBlockFormat
 codeBlockFormat :: Block -> Block
 codeBlockFormat (CodeBlock (ident, classes, kv) t) = Div ("", ["ui", "segment"], mempty)
                                                                 [Div ("", ["ui", "top", "right", "attached", "label"], mempty) [Plain [Str filetype]]
-                                                                , CodeBlock (ident, classes, kv) t
+                                                                , CodeBlock (ident, classes ++ ["SourceCode"], kv) t
                                                                 ]
         where
             filetype = maybe "" id (listToMaybe  classes)

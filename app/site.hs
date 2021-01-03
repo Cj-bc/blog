@@ -90,6 +90,10 @@ main = hakyll $ do
         route $ gsubRoute "dist/" (const "")
         compile copyFileCompiler
 
+    match "css/myCustom.css" $ do
+        route $ constRoute "css/myCustom.css"
+        compile copyFileCompiler
+
     tags <- buildTags "posts/*" (fromCapture "tags/*.html")
 
     tagsRules tags $ \tag pattern -> do
