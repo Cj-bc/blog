@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Cj-bc/blog#readme",
   "dependencies": {
-    "fomantic-ui": "github:Cj-bc/fomantic-UI#use_url-regex-safe"
+    "fomantic-ui": "github:Cj-bc/fomantic-UI#use_url-regex-safe",
+    "highlight.js": "^10.5.0"
   }
 }

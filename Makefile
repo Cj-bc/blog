@@ -2,6 +2,8 @@ BRANCH_DEST := publish
 NPX := $(shell which npx)
 GULP := $(NPX) gulp
 
+css/node_modules/highlight.js: css/node_modules
+
 css/dist/semantic.min.css: css/node_modules
 	cd css && $(GULP) build
 
@@ -12,7 +14,7 @@ css/node_modules:
 	cd css && npm install
 
 
-build: css/dist/semantic.min.css css/dist/semantic.min.js
+build: css/dist/semantic.min.css css/dist/semantic.min.js css/node_modules/highlight.js
 	stack build
 	stack exec blog rebuild
 
