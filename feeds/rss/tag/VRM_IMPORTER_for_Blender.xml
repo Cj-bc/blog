@@ -11,23 +11,29 @@
         <item>
     <title>VRM_IMPORTER_for_BlenderでVRMモデルを作る際の注意点</title>
     <link>https://cj-bc.github.io/blog/posts/2020-10-24-blender-vrmImporter-Not-Object-on-origin.html</link>
-    <description><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on October 24, 2020</li>
-    <li>Updated on November 15, 2020</li>
-  </ul>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>VRM_IMPORTER_for_BlenderでVRMモデルを作る際の注意点</h1>
+  <div class="ui list">
+    <div class="item">Posted on October 24, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on November 15, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;VRM&#39;." href="/tags/VRM.html">VRM</a>, <a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html">blender</a>, <a title="All pages tagged &#39;VRM_IMPORTER_for_Blender&#39;." href="/tags/VRM_IMPORTER_for_Blender.html">VRM_IMPORTER_for_Blender</a>
+  <a title="All pages tagged &#39;VRM&#39;." href="/tags/VRM.html" class="ui tag label">VRM</a><a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html" class="ui tag label">blender</a><a title="All pages tagged &#39;VRM_IMPORTER_for_Blender&#39;." href="/tags/VRM_IMPORTER_for_Blender.html" class="ui tag label">VRM_IMPORTER_for_Blender</a>
   
 </div>
 
 <h1>全てのメッシュの原点(Origin)を <em>ワールド座標系の</em> 原点に置く</h1>
+<div class="ui piled segment" style="z-index: 0">
 <blockquote>
 <p>There are not an object on the origin <mesh名> (もしくは) <mesh名> が原点座標にありません</p>
 </blockquote>
+</div>
 <p>というエラーについて。単刀直入にいうと、 全てのメッシュは <strong>Originをワールド座標系の原点におく必要があります</strong></p>
 <p>これは、 <strong><code>Set origin&gt; Origin to Geometry</code>とは違う</strong> ので注意してください。</p>
 <p>これをするには、</p>
@@ -41,15 +47,15 @@
 <p>Blender上では全然問題なく見えますが、これをしておかないとexportした後に変な位置にオブジェクトが表示されてしまいます。 (私は<code>3tenePRO</code>で動作確認をしていますが、おそらく他でもそうなると思います。)<br />
 具体的には、「全てのトランスフォームが0(scaleは1)に指定された通りに表示」されます。</p>
 <h2>具体例:</h2>
-<p>scaleが1になっていない例 <img src="/images/sscale_isnt_1.jpeg" alt="scaleが1じゃない" /></p>
-<p>scaleが1になるように調整した例 <img src="/images/scale_is_1.jpeg" alt="scaleが1" /></p>
-<p>rotationが0になっていない例 <img src="/images/rotation_isnt_0.jpeg" alt="rotationが0じゃない" /></p>
-<p>rotationが0になっている例 <img src="/images/rotation_is_0.jpeg" alt="rotationが0" /></p>
+<p>scaleが1になっていない例 <img src="/images/sscale_isnt_1.jpeg" class="ui rounded image" alt="scaleが1じゃない" /></p>
+<p>scaleが1になるように調整した例 <img src="/images/scale_is_1.jpeg" class="ui rounded image" alt="scaleが1" /></p>
+<p>rotationが0になっていない例 <img src="/images/rotation_isnt_0.jpeg" class="ui rounded image" alt="rotationが0じゃない" /></p>
+<p>rotationが0になっている例 <img src="/images/rotation_is_0.jpeg" class="ui rounded image" alt="rotationが0" /></p>
 <h2>直し方</h2>
 <p>Inspectorで各transformの値を確認します。そうしたら、それを覚えておき値は0に修正。 <code>Edit mode</code>に移行して、 <strong>originを中心に、軸を指定して先ほど覚えた値分</strong> 回転させます。</p>
 <h2>最終系</h2>
 <p>綺麗になりました！！</p>
-<p><img src="/images/completed.jpg" alt="全部直した" /></p>
+<p><img src="/images/completed.jpg" class="ui rounded image" alt="全部直した" /></p>
 <h1>Shade Textureは必ず設定する</h1>
 <p>ShadeTextureを設定していないと、面を法線と反対側から見たときにピンク色になってしまいます。 これは、<code>Shade Color</code>が塗られているからで、それを防ぎ表面と同じものを表示したい場合は必ず設定する必要があります。 なお、<code>MainTexture</code>と同じテクスチャで問題ないと思います。</p>
 <p>設定してなかった:<br />

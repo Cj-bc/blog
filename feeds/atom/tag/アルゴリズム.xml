@@ -15,16 +15,20 @@
     <id>https://cj-bc.github.io/blog/posts/2020-10-17-comparing-primes-algorithm.html</id>
     <published>2020-10-17T00:00:00Z</published>
     <updated>2020-10-17T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on October 17, 2020</li>
-    <li>Updated on October 17, 2020</li>
-  </ul>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>簡易的な素数探索アルゴリズムの速度比較</h1>
+  <div class="ui list">
+    <div class="item">Posted on October 17, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on October 17, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;python&#39;." href="/tags/python.html">python</a>, <a title="All pages tagged &#39;アルゴリズム&#39;." href="/tags/%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0.html">アルゴリズム</a>
+  <a title="All pages tagged &#39;python&#39;." href="/tags/python.html" class="ui tag label">python</a><a title="All pages tagged &#39;アルゴリズム&#39;." href="/tags/%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0.html" class="ui tag label">アルゴリズム</a>
   
 </div>
 
@@ -32,7 +36,11 @@
 <h1>比較するアルゴリズム</h1>
 <h1>1. 定義通りの求め方</h1>
 <p>素数は「自分自身と1のみを約数に持つ数」なので、「自分自身と1以外に割り切れる数があるか」を調べれば素数かの判定ができることになります。</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">def</span> fromDefinition(nums: [<span class="bu">int</span>]) <span class="op">-&gt;</span> [<span class="bu">int</span>]:</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">def</span> fromDefinition(nums: [<span class="bu">int</span>]) <span class="op">-&gt;</span> [<span class="bu">int</span>]:</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="kw">def</span> f(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n):</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>      <span class="cf">if</span> n <span class="op">%</span> i <span class="op">==</span> <span class="dv">0</span>:</span>
@@ -40,10 +48,15 @@
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>      <span class="cf">return</span> <span class="va">True</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    <span class="cf">return</span> <span class="bu">list</span>(<span class="bu">filter</span>(f, nums))</span></code></pre></div>
+</div>
 <h2>エラトステネスの揮</h2>
 <p>多分中学校かそこらへんで習ったであろう方法。 求めたい範囲の数の集合から、小さい素数の倍数をふるい落としていく方法です。<br />
 <a href="https://ja.wikipedia.org/wiki/%E3%82%A8%E3%83%A9%E3%83%88%E3%82%B9%E3%83%86%E3%83%8D%E3%82%B9%E3%81%AE%E7%AF%A9">wikipediaの図解</a>がわかりやすい。</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="im">import</span> time</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="im">import</span> time</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="im">from</span> math <span class="im">import</span> sqrt</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="kw">def</span> eratosthenes(nums: [<span class="bu">int</span>]) <span class="op">-&gt;</span> [<span class="bu">int</span>]:</span>
@@ -56,10 +69,15 @@
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>    ret <span class="op">=</span> <span class="bu">list</span>(<span class="bu">filter</span>(<span class="kw">lambda</span> i: i <span class="op">%</span> head <span class="op">!=</span> <span class="dv">0</span>, nums))</span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>    <span class="cf">return</span> [head] <span class="op">+</span> eratosthenes(ret)</span></code></pre></div>
+</div>
 <h1>実行時間計測</h1>
 <p>それぞれの処理を1000回ずつ実行し、その平均を求めた</p>
 <h2>計測用コード</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">def</span> mesureTime(f, <span class="op">*</span>args) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">def</span> mesureTime(f, <span class="op">*</span>args) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    startTime <span class="op">=</span> time.time()</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    f(<span class="op">*</span>args)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    <span class="cf">return</span> time.time() <span class="op">-</span> startTime</span>
@@ -74,9 +92,15 @@
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a>x <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">100</span> <span class="op">+</span> <span class="dv">1</span>)</span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a><span class="bu">print</span>(<span class="ss">f&quot;fromDefinition: </span><span class="sc">{</span>mesureTimeAvr(fromDefinition, x)<span class="sc">}</span><span class="ss">&quot;</span>)</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a><span class="bu">print</span>(<span class="ss">f&quot;eratosthenes  : </span><span class="sc">{</span>mesureTimeAvr(eratosthenes, x)<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+</div>
 <h2>結果</h2>
-<pre><code>fromDefinition: 3.378009796142578e-05
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>fromDefinition: 3.378009796142578e-05
 eratosthenes  : 2.4552106857299804e-05</code></pre>
+</div>
 <p>エラトステネスの揮の方が1秒くらい早い。 Orderはわからん！！</p>
 ]]></summary>
 </entry>

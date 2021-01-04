@@ -4,55 +4,74 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>CLI! CLI! CLI! -- mps-youtubeのAPIキーを更新する</title>
-        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
     </head>
     <body>
-        <div id="header">
-            <div id="logo">
-                <a href="../">CLI! CLI! CLI!</a>
-            </div>
-            <div id="navigation">
-                <a href="../">Home</a>
-                <a href="../archive.html">Archive</a>
-                <a href="https://Cj-bc.github.io">HP</a>
-                <a href="../feeds/atom/general.xml">Atom feed</a>
-                <a href="../feeds/rss/general.xml">RSS</a>
-            </div>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="../feeds/atom/general.xml" class="right item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
         </div>
 
-        <div id="content">
-            <h1>mps-youtubeのAPIキーを更新する</h1>
-
-            <div class="info">
-  <ul>
-    <li>Posted on August 16, 2020</li>
-    <li>Updated on November 13, 2020</li>
-  </ul>
+        <div id="content" class="ui text container segment">
+            <div class="ui center aligned icon header">
+  <h1>mps-youtubeのAPIキーを更新する</h1>
+  <div class="ui list">
+    <div class="item">Posted on August 16, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on November 13, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged 'mps-youtube'." href="../tags/mps-youtube.html">mps-youtube</a>, <a title="All pages tagged 'mpsyt'." href="../tags/mpsyt.html">mpsyt</a>, <a title="All pages tagged 'memo'." href="../tags/memo.html">memo</a>
+  <a title="All pages tagged 'mps-youtube'." href="../tags/mps-youtube.html" class="ui tag label">mps-youtube</a><a title="All pages tagged 'mpsyt'." href="../tags/mpsyt.html" class="ui tag label">mpsyt</a><a title="All pages tagged 'memo'." href="../tags/memo.html" class="ui tag label">memo</a>
   
 </div>
 
 <p>mps-youtubeで音楽を聴こうと思ったら、以下のようなエラーが出た。</p>
+<div class="ui piled segment" style="z-index: 0">
 <blockquote>
 <p>Error fetching data. Possible network issue. Youtube Error 403: The request cannot be completed because you have exceeded your <a href="../youtube/v3/getting-started#quota">quota</a>.</p>
 </blockquote>
+</div>
 <p>ので、<a href="https://github.com/mps-youtube/mps-youtube/wiki/Troubleshooting#youtube-error-403-the-request-cannot-be-completed-because-you-have-exceeded-your-quota">mps-youtubeレポのトラブルシューティング</a>に基づいて作業をする。<br />
 また、上記記事で参考にされている<a href="https://www.slickremix.com/docs/get-api-key-for-youtube/">slickremix.com -- Get API Key for YouTube</a>も参考にする。 ただし、上記記事では「手順3までやる」と書いてあるが、最後(8)までやる必要がある。</p>
 <h1>1. Google developpersにて、プロジェクトを作成してTokenを取得。</h1>
 <p><a href="https://developers.google.com/" class="uri">https://developers.google.com/</a> に飛び、一番下(右下)の<code>Google API Console</code>からコンソールを開く。</p>
-<p><img src="../images/2020-08-16-mpsyt-renew-token/console_place.png" alt="console pic" /></p>
+<p><img src="../images/2020-08-16-mpsyt-renew-token/console_place.png" class="ui rounded image" alt="console pic" /></p>
 <p>左上の<code>Google APIs</code>の文字の横に「Project」という部分があるので選択→右上の「新しいプロジェクト」からプロジェクトを作成する。<br />
 ダッシュボードの「APIとサービス」→「ライブラリ」からYouTube Data API v3を選択し有効化。<br />
 最後に認証情報の作成が必要なので、あとはUIの流れに任せればTokenが手に入ります。</p>
 <h1>2. mps-youtubeで入力する</h1>
 <p>上記記事にあるとおり、以下のコマンドで入力する。一度appを終了させる必要があることに注意。</p>
-<pre><code>mps-youtube
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>mps-youtube
 &gt; set api_key &lt;key value&gt;
 &gt; q # quit app</code></pre>
+</div>
 
         </div>
         <div id="footer">

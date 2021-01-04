@@ -4,35 +4,47 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>CLI! CLI! CLI! -- pandocのBlock</title>
-        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
     </head>
     <body>
-        <div id="header">
-            <div id="logo">
-                <a href="../">CLI! CLI! CLI!</a>
-            </div>
-            <div id="navigation">
-                <a href="../">Home</a>
-                <a href="../archive.html">Archive</a>
-                <a href="https://Cj-bc.github.io">HP</a>
-                <a href="../feeds/atom/general.xml">Atom feed</a>
-                <a href="../feeds/rss/general.xml">RSS</a>
-            </div>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="../feeds/atom/general.xml" class="right item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
         </div>
 
-        <div id="content">
-            <h1>pandocのBlock</h1>
-
-            <div class="info">
-  <ul>
-    <li>Posted on November 16, 2020</li>
-    <li>Updated on November 17, 2020</li>
-  </ul>
+        <div id="content" class="ui text container segment">
+            <div class="ui center aligned icon header">
+  <h1>pandocのBlock</h1>
+  <div class="ui list">
+    <div class="item">Posted on November 16, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on November 17, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged 'pandoc'." href="../tags/pandoc.html">pandoc</a>, <a title="All pages tagged 'haskell'." href="../tags/haskell.html">haskell</a>
+  <a title="All pages tagged 'pandoc'." href="../tags/pandoc.html" class="ui tag label">pandoc</a><a title="All pages tagged 'haskell'." href="../tags/haskell.html" class="ui tag label">haskell</a>
   
 </div>
 
@@ -40,7 +52,11 @@
 <h1>OrderedList</h1>
 <h2>ListNumberStyle</h2>
 <p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberStyle">ListNumberStyle</a>は、 数字表現(1,2,3なのかi,ii,iiiなのかなど)を決めるもの。 わかりやすいように他の内容は一致させています。</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>[<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">TwoParens</span>) [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>[<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">TwoParens</span>) [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>, <span class="dt">Example</span>,<span class="dt">TwoParens</span>)     [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">Decimal</span>,<span class="dt">TwoParens</span>)      [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">LowerRoman</span>,<span class="dt">TwoParens</span>)   [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
@@ -48,8 +64,13 @@
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">LowerAlpha</span>,<span class="dt">TwoParens</span>)   [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">UpperAlpha</span>,<span class="dt">TwoParens</span>)   [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>]</span></code></pre></div>
+</div>
 <p>これをvimで開き、<code>%!pandoc -f native -t markdown</code>で試した。これ便利なのでおすすめ。 その結果が以下:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode markdown result"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>(1) hoge</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+markdown
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown result SourceCode"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>(1) hoge</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>(2) foo</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>(1) hoge</span>
@@ -69,17 +90,27 @@
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a></span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>(A) hoge</span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>(B) foo</span></code></pre></div>
+</div>
 <p><code>Default</code>/<code>Example</code>はどうやらDecimalになってしまう模様。あとは大体名前の通りになった。</p>
 <h2>ListNumberDelim</h2>
 <p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberDelim">ListNumberDelim</a> は、数字の後につくやつ。<br />
 コードは基本先ほどと同じものを使用</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>[<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">DefaultDelim</span>) [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>[<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">DefaultDelim</span>) [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">Period</span>)       [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">OneParen</span>)     [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">TwoParens</span>)    [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>]</span></code></pre></div>
+</div>
 <p>結果が以下。</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode markdown result"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ss">1.  </span>hoge</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+markdown
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown result SourceCode"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ss">1.  </span>hoge</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="ss">2.  </span>foo</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="ss">1.  </span>hoge</span>
@@ -90,19 +121,30 @@
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a></span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>(1) hoge</span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>(2) foo</span></code></pre></div>
+</div>
 <h1>DefinitionList</h1>
 <p><a href>DefinitionList</a></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>[<span class="dt">DefinitionList</span></span>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>[<span class="dt">DefinitionList</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a> [([<span class="dt">Str</span> <span class="st">&quot;term&quot;</span>],</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>   [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;One&quot;</span>,<span class="dt">Space</span>,<span class="dt">Str</span> <span class="st">&quot;definition&quot;</span>,<span class="dt">Space</span>,<span class="dt">Str</span> <span class="st">&quot;here&quot;</span>]]</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>   ,[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;Second?&quot;</span>,<span class="dt">SoftBreak</span>,<span class="dt">Str</span> <span class="st">&quot;:&quot;</span>], <span class="dt">Plain</span> [<span class="dt">Str</span><span class="st">&quot;Second&quot;</span>, <span class="dt">Space</span>,<span class="dt">Str</span> <span class="st">&quot;line&quot;</span>,<span class="dt">Space</span>,<span class="dt">Str</span> <span class="st">&quot;of&quot;</span>,<span class="dt">Space</span>, <span class="dt">Str</span> <span class="st">&quot;definition&quot;</span>]]</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>   ]</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a> )]</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>]</span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>term</span>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+markdown
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown SourceCode"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>term</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>:   One definition here</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>:   Second? :</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>:   Maybe second, maybe third</span></code></pre></div>
+</div>
 
         </div>
         <div id="footer">

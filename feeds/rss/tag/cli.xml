@@ -11,22 +11,30 @@
         <item>
     <title>jtdaugherty/tart ソースリーディングメモ</title>
     <link>https://cj-bc.github.io/blog/posts/2020-08-24-jdaughertys-tart-code-reading.html</link>
-    <description><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on August 24, 2020</li>
-    <li>Updated on August 31, 2020</li>
-  </ul>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>jtdaugherty/tart ソースリーディングメモ</h1>
+  <div class="ui list">
+    <div class="item">Posted on August 24, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on August 31, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;tart&#39;." href="/tags/tart.html">tart</a>, <a title="All pages tagged &#39;cli&#39;." href="/tags/cli.html">cli</a>, <a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html">haskell</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>
+  <a title="All pages tagged &#39;tart&#39;." href="/tags/tart.html" class="ui tag label">tart</a><a title="All pages tagged &#39;cli&#39;." href="/tags/cli.html" class="ui tag label">cli</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html" class="ui tag label">memo</a>
   
 </div>
 
 <p>AAエディター(?)である<a href="https://github.com/jtdaugherty/tart">Tart</a>の内部実装を読んだ時のメモ</p>
 <h1>Eventの処理</h1>
-<pre><code>main
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>main
  |- Events.handleEvent
     |- マウスでの描画イベントを処理
     |- マウスがドラッグ中でかつ前回と違うものの上にある時はここでイベントを終了する
@@ -37,6 +45,7 @@
         |- Events.Main.handleAttrEvent
         |   |- Attributes(fg,bg,style)がクリックされた場合、変更作業をする
         |- Events.Main.handleEvent</code></pre>
+</div>
 ]]></description>
     <pubDate>Mon, 24 Aug 2020 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2020-08-24-jdaughertys-tart-code-reading.html</guid>
@@ -45,16 +54,20 @@
 <item>
     <title>twtyとcode2imgでコードの画像つきツイートをする</title>
     <link>https://cj-bc.github.io/blog/posts/2020-08-17-tweet-with-code2img-image-from-vim.html</link>
-    <description><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on August 18, 2020</li>
-    <li>Updated on August 31, 2020</li>
-  </ul>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>twtyとcode2imgでコードの画像つきツイートをする</h1>
+  <div class="ui list">
+    <div class="item">Posted on August 18, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on August 31, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;twitter&#39;." href="/tags/twitter.html">twitter</a>, <a title="All pages tagged &#39;tool&#39;." href="/tags/tool.html">tool</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>, <a title="All pages tagged &#39;cli&#39;." href="/tags/cli.html">cli</a>
+  <a title="All pages tagged &#39;twitter&#39;." href="/tags/twitter.html" class="ui tag label">twitter</a><a title="All pages tagged &#39;tool&#39;." href="/tags/tool.html" class="ui tag label">tool</a><a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html" class="ui tag label">memo</a><a title="All pages tagged &#39;cli&#39;." href="/tags/cli.html" class="ui tag label">cli</a>
   
 </div>
 

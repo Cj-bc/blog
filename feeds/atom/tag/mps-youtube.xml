@@ -15,36 +15,47 @@
     <id>https://cj-bc.github.io/blog/posts/2020-08-16-mpsyt-renew-token.html</id>
     <published>2020-08-16T00:00:00Z</published>
     <updated>2020-08-16T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on August 16, 2020</li>
-    <li>Updated on November 13, 2020</li>
-  </ul>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>mps-youtubeのAPIキーを更新する</h1>
+  <div class="ui list">
+    <div class="item">Posted on August 16, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on November 13, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;mps-youtube&#39;." href="/tags/mps-youtube.html">mps-youtube</a>, <a title="All pages tagged &#39;mpsyt&#39;." href="/tags/mpsyt.html">mpsyt</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>
+  <a title="All pages tagged &#39;mps-youtube&#39;." href="/tags/mps-youtube.html" class="ui tag label">mps-youtube</a><a title="All pages tagged &#39;mpsyt&#39;." href="/tags/mpsyt.html" class="ui tag label">mpsyt</a><a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html" class="ui tag label">memo</a>
   
 </div>
 
 <p>mps-youtubeで音楽を聴こうと思ったら、以下のようなエラーが出た。</p>
+<div class="ui piled segment" style="z-index: 0">
 <blockquote>
 <p>Error fetching data. Possible network issue. Youtube Error 403: The request cannot be completed because you have exceeded your <a href="/youtube/v3/getting-started#quota">quota</a>.</p>
 </blockquote>
+</div>
 <p>ので、<a href="https://github.com/mps-youtube/mps-youtube/wiki/Troubleshooting#youtube-error-403-the-request-cannot-be-completed-because-you-have-exceeded-your-quota">mps-youtubeレポのトラブルシューティング</a>に基づいて作業をする。<br />
 また、上記記事で参考にされている<a href="https://www.slickremix.com/docs/get-api-key-for-youtube/">slickremix.com -- Get API Key for YouTube</a>も参考にする。 ただし、上記記事では「手順3までやる」と書いてあるが、最後(8)までやる必要がある。</p>
 <h1>1. Google developpersにて、プロジェクトを作成してTokenを取得。</h1>
 <p><a href="https://developers.google.com/" class="uri">https://developers.google.com/</a> に飛び、一番下(右下)の<code>Google API Console</code>からコンソールを開く。</p>
-<p><img src="/images/console_place.png" alt="console pic" /></p>
+<p><img src="/images/console_place.png" class="ui rounded image" alt="console pic" /></p>
 <p>左上の<code>Google APIs</code>の文字の横に「Project」という部分があるので選択→右上の「新しいプロジェクト」からプロジェクトを作成する。<br />
 ダッシュボードの「APIとサービス」→「ライブラリ」からYouTube Data API v3を選択し有効化。<br />
 最後に認証情報の作成が必要なので、あとはUIの流れに任せればTokenが手に入ります。</p>
 <h1>2. mps-youtubeで入力する</h1>
 <p>上記記事にあるとおり、以下のコマンドで入力する。一度appを終了させる必要があることに注意。</p>
-<pre><code>mps-youtube
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>mps-youtube
 &gt; set api_key &lt;key value&gt;
 &gt; q # quit app</code></pre>
+</div>
 ]]></summary>
 </entry>
 

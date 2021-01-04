@@ -11,16 +11,20 @@
         <item>
     <title>pandocのBlock</title>
     <link>https://cj-bc.github.io/blog/posts/2020-11-16-pandoc-orderedlist-attr-view.html</link>
-    <description><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on November 16, 2020</li>
-    <li>Updated on November 17, 2020</li>
-  </ul>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>pandocのBlock</h1>
+  <div class="ui list">
+    <div class="item">Posted on November 16, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on November 17, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;pandoc&#39;." href="/tags/pandoc.html">pandoc</a>, <a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html">haskell</a>
+  <a title="All pages tagged &#39;pandoc&#39;." href="/tags/pandoc.html" class="ui tag label">pandoc</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a>
   
 </div>
 
@@ -28,7 +32,11 @@
 <h1>OrderedList</h1>
 <h2>ListNumberStyle</h2>
 <p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberStyle">ListNumberStyle</a>は、 数字表現(1,2,3なのかi,ii,iiiなのかなど)を決めるもの。 わかりやすいように他の内容は一致させています。</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>[<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">TwoParens</span>) [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>[<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">TwoParens</span>) [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>, <span class="dt">Example</span>,<span class="dt">TwoParens</span>)     [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">Decimal</span>,<span class="dt">TwoParens</span>)      [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">LowerRoman</span>,<span class="dt">TwoParens</span>)   [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
@@ -36,8 +44,13 @@
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">LowerAlpha</span>,<span class="dt">TwoParens</span>)   [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">UpperAlpha</span>,<span class="dt">TwoParens</span>)   [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>]</span></code></pre></div>
+</div>
 <p>これをvimで開き、<code>%!pandoc -f native -t markdown</code>で試した。これ便利なのでおすすめ。 その結果が以下:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode markdown result"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>(1) hoge</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+markdown
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode markdown result SourceCode"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>(1) hoge</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>(2) foo</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>(1) hoge</span>
@@ -57,17 +70,27 @@
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a></span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>(A) hoge</span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>(B) foo</span></code></pre></div>
+</div>
 <p><code>Default</code>/<code>Example</code>はどうやらDecimalになってしまう模様。あとは大体名前の通りになった。</p>
 <h2>ListNumberDelim</h2>
 <p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberDelim">ListNumberDelim</a> は、数字の後につくやつ。<br />
 コードは基本先ほどと同じものを使用</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>[<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">DefaultDelim</span>) [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>[<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">DefaultDelim</span>) [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">Period</span>)       [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">OneParen</span>)     [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">TwoParens</span>)    [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>]</span></code></pre></div>
+</div>
 <p>結果が以下。</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode markdown result"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ss">1.  </span>hoge</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+markdown
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown result SourceCode"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ss">1.  </span>hoge</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="ss">2.  </span>foo</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="ss">1.  </span>hoge</span>
@@ -78,19 +101,30 @@
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a></span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>(1) hoge</span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>(2) foo</span></code></pre></div>
+</div>
 <h1>DefinitionList</h1>
 <p><a href="">DefinitionList</a></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>[<span class="dt">DefinitionList</span></span>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>[<span class="dt">DefinitionList</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a> [([<span class="dt">Str</span> <span class="st">&quot;term&quot;</span>],</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>   [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;One&quot;</span>,<span class="dt">Space</span>,<span class="dt">Str</span> <span class="st">&quot;definition&quot;</span>,<span class="dt">Space</span>,<span class="dt">Str</span> <span class="st">&quot;here&quot;</span>]]</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>   ,[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;Second?&quot;</span>,<span class="dt">SoftBreak</span>,<span class="dt">Str</span> <span class="st">&quot;:&quot;</span>], <span class="dt">Plain</span> [<span class="dt">Str</span><span class="st">&quot;Second&quot;</span>, <span class="dt">Space</span>,<span class="dt">Str</span> <span class="st">&quot;line&quot;</span>,<span class="dt">Space</span>,<span class="dt">Str</span> <span class="st">&quot;of&quot;</span>,<span class="dt">Space</span>, <span class="dt">Str</span> <span class="st">&quot;definition&quot;</span>]]</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>   ]</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a> )]</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>]</span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>term</span>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+markdown
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown SourceCode"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>term</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>:   One definition here</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>:   Second? :</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>:   Maybe second, maybe third</span></code></pre></div>
+</div>
 ]]></description>
     <pubDate>Mon, 16 Nov 2020 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2020-11-16-pandoc-orderedlist-attr-view.html</guid>
@@ -99,22 +133,30 @@
 <item>
     <title>jtdaugherty/tart ソースリーディングメモ</title>
     <link>https://cj-bc.github.io/blog/posts/2020-08-24-jdaughertys-tart-code-reading.html</link>
-    <description><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on August 24, 2020</li>
-    <li>Updated on August 31, 2020</li>
-  </ul>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>jtdaugherty/tart ソースリーディングメモ</h1>
+  <div class="ui list">
+    <div class="item">Posted on August 24, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on August 31, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;tart&#39;." href="/tags/tart.html">tart</a>, <a title="All pages tagged &#39;cli&#39;." href="/tags/cli.html">cli</a>, <a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html">haskell</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>
+  <a title="All pages tagged &#39;tart&#39;." href="/tags/tart.html" class="ui tag label">tart</a><a title="All pages tagged &#39;cli&#39;." href="/tags/cli.html" class="ui tag label">cli</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html" class="ui tag label">memo</a>
   
 </div>
 
 <p>AAエディター(?)である<a href="https://github.com/jtdaugherty/tart">Tart</a>の内部実装を読んだ時のメモ</p>
 <h1>Eventの処理</h1>
-<pre><code>main
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>main
  |- Events.handleEvent
     |- マウスでの描画イベントを処理
     |- マウスがドラッグ中でかつ前回と違うものの上にある時はここでイベントを終了する
@@ -125,6 +167,7 @@
         |- Events.Main.handleAttrEvent
         |   |- Attributes(fg,bg,style)がクリックされた場合、変更作業をする
         |- Events.Main.handleEvent</code></pre>
+</div>
 ]]></description>
     <pubDate>Mon, 24 Aug 2020 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2020-08-24-jdaughertys-tart-code-reading.html</guid>

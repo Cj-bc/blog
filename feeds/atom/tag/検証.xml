@@ -15,29 +15,43 @@
     <id>https://cj-bc.github.io/blog/posts/2020-11-07-python-is-elif-faster-than-ifs.html</id>
     <published>2020-11-07T00:00:00Z</published>
     <updated>2020-11-07T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on November  7, 2020</li>
-    <li>Updated on November  7, 2020</li>
-  </ul>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>pythonのelifはifよりも速いのか</h1>
+  <div class="ui list">
+    <div class="item">Posted on November  7, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on November  7, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;python&#39;." href="/tags/python.html">python</a>, <a title="All pages tagged &#39;検証&#39;." href="/tags/%E6%A4%9C%E8%A8%BC.html">検証</a>
+  <a title="All pages tagged &#39;python&#39;." href="/tags/python.html" class="ui tag label">python</a><a title="All pages tagged &#39;検証&#39;." href="/tags/%E6%A4%9C%E8%A8%BC.html" class="ui tag label">検証</a>
   
 </div>
 
 <p>一つの変数に対して、複数の条件で分岐させたい時時、大抵は<code>elif</code>を使って以下のように書くと思います。</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;A&quot;</span>:</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;A&quot;</span>:</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    ...</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="cf">elif</span> n <span class="op">==</span> <span class="st">&quot;B&quot;</span>:</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    ...</span></code></pre></div>
+</div>
 <p>しかし、全ての場合ではありませんがこの場合はif文の羅列で書くこともできます。</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;A&quot;</span>:</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;A&quot;</span>:</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    ...</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;B&quot;</span>:</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    ...</span></code></pre></div>
+</div>
 <p>直感的に、nの値によってはelifの方がif文の実行回数が少なくなるため速そうに思えますが、本当にそうなのか気になったので試してみます。</p>
 <h1>tl;dr</h1>
 <p>速いぽい</p>
@@ -505,17 +519,31 @@ print(f"with elif   : {(t_with_elif_end - t_with_elif_start)/1000} sec")
 </details>
 <h1>結果</h1>
 <p><code>print</code>でたくさん標準出力を使っていますが、 そこの値は重要ではないので 私は<a href="https://github.com/thinca/vim-quickrun">quickrun</a>を使って vim上のバッファで加工して消しています</p>
-<pre><code>without elif: 4.281997680664063e-06 sec
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>without elif: 4.281997680664063e-06 sec
 with elif   : 9.88006591796875e-07 sec</code></pre>
+</div>
 <p>一瞬遅くなって見えますが、桁が一桁違います。少数表記にすると</p>
-<pre><code>without elif: 0.000004 sec
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>without elif: 0.000004 sec
 with elif   : 0.000001 sec</code></pre>
+</div>
 <p>となり、<code>elif</code>の方が速いことがわかります。</p>
 <h1>考察</h1>
 <p>なぜ速いのかを考えてみます。</p>
 <h2>構文木</h2>
 <p><code>elif</code>には特別なノードがなく、構文木に落とすと親の<code>If</code>ノードの<code>oreelse</code>に含まれる<code>If</code>ノードになります。</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="im">import</span> ast</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="im">import</span> ast</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="bu">print</span>(ast.dump(ast.parse(<span class="st">&quot;&quot;&quot;</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="st">if x:</span></span>
@@ -528,7 +556,12 @@ with elif   : 0.000001 sec</code></pre>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a><span class="st">if z:</span></span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a><span class="st">    ...</span></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a><span class="st">&quot;&quot;&quot;</span>)))</span></code></pre></div>
-<pre><code>Module(
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Module(
     body=[
         If(test=Name(id=&#39;x&#39;, ctx=Load()),
            body=[Expr(value=Ellipsis())],
@@ -543,10 +576,15 @@ with elif   : 0.000001 sec</code></pre>
            orelse=[])
         ]
 )</code></pre>
+</div>
 <p>https://docs.python.org/ja/3/library/ast.html?highlight=elif#ast.If</p>
 <h2>ステップ数を調べる</h2>
 <p>おそらく、if文が実行される回数が少ないはず、なのでpythonのデバッガである<a href="https://docs.python.org/3/library/pdb.html">pdb</a>を使って調べてみます。</p>
-<pre><code>&gt;&gt;&gt; # まずはelif使わないもの
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>&gt;&gt;&gt; # まずはelif使わないもの
 &gt;&gt;&gt; pdb.run(&quot;&quot;&quot;
     ... if True:
     ...     print(&quot;s&quot;)
@@ -574,6 +612,7 @@ s
 &gt; &lt;string&gt;(3)&lt;module&gt;()-&gt;None
 (Pdb)
 &gt;&gt;&gt;</code></pre>
+</div>
 <p>やはり、<code>if</code>文を分割した場合と比べて<code>elif</code>の方が"--Return--"が早く来ていますね。 これひとつではそこまで差異はないと思いますが、もっと複雑な条件式を使っている場合や何度も重なっている場合は影響が出そうですね。</p>
 ]]></summary>
 </entry>

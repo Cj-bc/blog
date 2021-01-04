@@ -4,47 +4,59 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>CLI! CLI! CLI! -- blenderのSmooth</title>
-        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
     </head>
     <body>
-        <div id="header">
-            <div id="logo">
-                <a href="../">CLI! CLI! CLI!</a>
-            </div>
-            <div id="navigation">
-                <a href="../">Home</a>
-                <a href="../archive.html">Archive</a>
-                <a href="https://Cj-bc.github.io">HP</a>
-                <a href="../feeds/atom/general.xml">Atom feed</a>
-                <a href="../feeds/rss/general.xml">RSS</a>
-            </div>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="../feeds/atom/general.xml" class="right item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
         </div>
 
-        <div id="content">
-            <h1>blenderのSmooth</h1>
-
-            <div class="info">
-  <ul>
-    <li>Posted on August 17, 2020</li>
-    <li>Updated on August 31, 2020</li>
-  </ul>
+        <div id="content" class="ui text container segment">
+            <div class="ui center aligned icon header">
+  <h1>blenderのSmooth</h1>
+  <div class="ui list">
+    <div class="item">Posted on August 17, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on August 31, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged 'blender'." href="../tags/blender.html">blender</a>, <a title="All pages tagged 'memo'." href="../tags/memo.html">memo</a>, <a title="All pages tagged 'tips'." href="../tags/tips.html">tips</a>
+  <a title="All pages tagged 'blender'." href="../tags/blender.html" class="ui tag label">blender</a><a title="All pages tagged 'memo'." href="../tags/memo.html" class="ui tag label">memo</a><a title="All pages tagged 'tips'." href="../tags/tips.html" class="ui tag label">tips</a>
   
 </div>
 
 <p>Blenderには、面と面を補完して滑らかに表示する<code>shade smooth</code>という機能があります。 しかし、何も考えずに使おうとすると思わぬところが補完され、予期せぬ結果になることが多々起こります。</p>
-<p><img src="https://pbs.twimg.com/media/Efm72cmU8AI3H5K?format=jpg&amp;name=medium" alt="shade flatの結果" /></p>
-<p><img src="https://pbs.twimg.com/media/Efm74u6UcAEU2nM?format=jpg&amp;name=medium" alt="shade smoothの結果" /></p>
+<p><img src="https://pbs.twimg.com/media/Efm72cmU8AI3H5K?format=jpg&amp;name=medium" class="ui rounded image" alt="shade flatの結果" /></p>
+<p><img src="https://pbs.twimg.com/media/Efm74u6UcAEU2nM?format=jpg&amp;name=medium" class="ui rounded image" alt="shade smoothの結果" /></p>
 <h1>Auto Smoothを使おう</h1>
 <p>Auto Smoothは、面の角度によって<code>shade smooth</code>と<code>shade flat</code>を使い分けてくれる機能です。 <a href="https://blender-cg.net/smooth-flat/">blender-cg.netさんの記事</a>で知りました。</p>
 <p><a href="https://docs.blender.org/manual/ja/2.80/modeling/meshes/structure.html#auto-smooth">公式リファレンス(英語)</a></p>
 <p>これを使うと、かなり快適に使うことができます！わーい！！</p>
-<p><img src="https://pbs.twimg.com/media/Efm8n4uUYAALg-g?format=png&amp;name=small" alt="auto smoothの場所" /></p>
-<p><img src="https://pbs.twimg.com/media/Efm8pyjU8AAU01a?format=jpg&amp;name=medium" alt="auto smoothを適用してみた結果" /></p>
+<p><img src="https://pbs.twimg.com/media/Efm8n4uUYAALg-g?format=png&amp;name=small" class="ui rounded image" alt="auto smoothの場所" /></p>
+<p><img src="https://pbs.twimg.com/media/Efm8pyjU8AAU01a?format=jpg&amp;name=medium" class="ui rounded image" alt="auto smoothを適用してみた結果" /></p>
 
         </div>
         <div id="footer">
