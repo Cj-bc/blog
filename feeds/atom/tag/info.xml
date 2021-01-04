@@ -15,18 +15,22 @@
     <id>https://cj-bc.github.io/blog/posts/2020-08-02-helloHakylly.html</id>
     <published>2020-08-02T00:00:00Z</published>
     <updated>2020-08-02T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on August  2, 2020</li>
-    <li>Updated on August 31, 2020</li>
-  </ul>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>Blog作った！！</h1>
+  <div class="ui list">
+    <div class="item">Posted on August  2, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on August 31, 2020
+    </div>
+  </div>
     
         by Cj-bc
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;info&#39;." href="/tags/info.html">info</a>
+  <a title="All pages tagged &#39;info&#39;." href="/tags/info.html" class="ui tag label">info</a>
   
 </div>
 

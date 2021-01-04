@@ -7,61 +7,82 @@
         <!-- You MUST include jQuery before Fomantic -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
         <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
         <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
     </head>
     <body>
-        <div id="header">
-            <div id="logo">
-                <a href="../">CLI! CLI! CLI!</a>
-            </div>
-            <div id="navigation">
-                <a href="../">Home</a>
-                <a href="../archive.html">Archive</a>
-                <a href="https://Cj-bc.github.io">HP</a>
-                <a href="../feeds/atom/general.xml">Atom feed</a>
-                <a href="../feeds/rss/general.xml">RSS</a>
-            </div>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="../feeds/atom/general.xml" class="right item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
         </div>
 
-        <div id="content">
-            <h1>vim-pandoc-syntaxでurlを非表示にしたい</h1>
-
-            <div class="info">
-  <ul>
-    <li>Posted on November 13, 2020</li>
-    <li>Updated on November 13, 2020</li>
-  </ul>
+        <div id="content" class="ui text container segment">
+            <div class="ui center aligned icon header">
+  <h1>vim-pandoc-syntaxでurlを非表示にしたい</h1>
+  <div class="ui list">
+    <div class="item">Posted on November 13, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on November 13, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged 'vim'." href="../tags/vim.html">vim</a>, <a title="All pages tagged 'pandoc'." href="../tags/pandoc.html">pandoc</a>
+  <a title="All pages tagged 'vim'." href="../tags/vim.html" class="ui tag label">vim</a><a title="All pages tagged 'pandoc'." href="../tags/pandoc.html" class="ui tag label">pandoc</a>
   
 </div>
 
 <h1>vimwikiのハイライトが欲しい</h1>
 <h1>markdown/vimwiki/pandocのsyntaxハイライト</h1>
 <p>vimwikiのsyntaxでは、以下のようなリンクは</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co">[</span><span class="ot">説明</span><span class="co">](url)</span></span></code></pre></div>
+<div class="ui segment">
+<div class="ui top right attached label">
+markdown
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown SourceCode"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co">[</span><span class="ot">説明</span><span class="co">](url)</span></span></code></pre></div>
+</div>
 <p>このように表示されます(<code>+conceal</code>オプションが有効な場合)</p>
 <p><a href="url">説明</a></p>
 <p>これがあると、長いURLを持つドキュメントでの可読性がグンと上がります</p>
 <p>例えば、<a href="https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html">blender data blocks</a>の記事は<code>markdown</code>/<code>vimwiki</code>/<code>pandoc</code>それぞれのsyntaxで 以下のように見えます。</p>
-<p><img src="../images/2020-11-13-pandoc-vim-conceal-url-by-default/difference_md-vimwiki-pandoc.png" alt="markdown, vimwiki, pandocのハイライトの違い" /></p>
+<p><img src="../images/2020-11-13-pandoc-vim-conceal-url-by-default/difference_md-vimwiki-pandoc.png" class="ui rounded image" alt="markdown, vimwiki, pandocのハイライトの違い" /></p>
 <p>さて、これを普段使いの<code>pandoc</code>syntaxでも使いたいというのが今回の希望です。</p>
 <h1>結論: デフォルトの変数を設定しろ</h1>
 <p>もうこれが答えでした！<br />
 ドキュメントよもうね！！！！</p>
-<pre class="vim"><code>let g:pandoc#syntax#conceal#urls = 1</code></pre>
+<div class="ui segment">
+<div class="ui top right attached label">
+vim
+</div>
+<pre class="vim SourceCode"><code>let g:pandoc#syntax#conceal#urls = 1</code></pre>
+</div>
 <p>これだけでURLの<code>conceal</code>が有効になり、vimwikiと同じような見た目になります</p>
-<p><img src="../images/2020-11-13-pandoc-vim-conceal-url-by-default/pandoc-with-conceal.png" alt="設定後のpandoc" /></p>
+<p><img src="../images/2020-11-13-pandoc-vim-conceal-url-by-default/pandoc-with-conceal.png" class="ui rounded image" alt="設定後のpandoc" /></p>
 <h1>おまけ</h1>
 <p>ちなみに該当のコードは<a href="https://github.com/vim-pandoc/vim-pandoc-syntax/blob/2521e2e9b99a3550e1a20f24e09fa46679cbbbc7/syntax/pandoc.vim#L300-L304">300-304行目</a>にありました。</p>
-<pre class="vim"><code>if g:pandoc#syntax#conceal#urls == 1
+<div class="ui segment">
+<div class="ui top right attached label">
+vim
+</div>
+<pre class="vim SourceCode"><code>if g:pandoc#syntax#conceal#urls == 1
     syn region pandocReferenceURL matchgroup=pandocOperator start=/\]\@1&lt;=(/ end=/)/ keepend conceal
 else
     syn region pandocReferenceURL matchgroup=pandocOperator start=/\]\@1&lt;=(/ end=/)/ keepend
 endif</code></pre>
+</div>
 
         </div>
         <div id="footer">

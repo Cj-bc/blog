@@ -7,35 +7,41 @@
         <!-- You MUST include jQuery before Fomantic -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
         <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
         <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
     </head>
     <body>
-        <div id="header">
-            <div id="logo">
-                <a href="../">CLI! CLI! CLI!</a>
-            </div>
-            <div id="navigation">
-                <a href="../">Home</a>
-                <a href="../archive.html">Archive</a>
-                <a href="https://Cj-bc.github.io">HP</a>
-                <a href="../feeds/atom/general.xml">Atom feed</a>
-                <a href="../feeds/rss/general.xml">RSS</a>
-            </div>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="../feeds/atom/general.xml" class="right item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
         </div>
 
-        <div id="content">
-            <h1>Github ActionsでGithub Pagesのリリースを自動化する</h1>
-
-            <div class="info">
-  <ul>
-    <li>Posted on August  7, 2020</li>
-    <li>Updated on August 31, 2020</li>
-  </ul>
+        <div id="content" class="ui text container segment">
+            <div class="ui center aligned icon header">
+  <h1>Github ActionsでGithub Pagesのリリースを自動化する</h1>
+  <div class="ui list">
+    <div class="item">Posted on August  7, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on August 31, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged 'github actions'." href="../tags/github%20actions.html">github actions</a>, <a title="All pages tagged 'github pages'." href="../tags/github%20pages.html">github pages</a>, <a title="All pages tagged 'hakyll'." href="../tags/hakyll.html">hakyll</a>, <a title="All pages tagged 'ブログ'." href="../tags/%E3%83%96%E3%83%AD%E3%82%B0.html">ブログ</a>, <a title="All pages tagged '自動化'." href="../tags/%E8%87%AA%E5%8B%95%E5%8C%96.html">自動化</a>
+  <a title="All pages tagged 'github actions'." href="../tags/github%20actions.html" class="ui tag label">github actions</a><a title="All pages tagged 'github pages'." href="../tags/github%20pages.html" class="ui tag label">github pages</a><a title="All pages tagged 'hakyll'." href="../tags/hakyll.html" class="ui tag label">hakyll</a><a title="All pages tagged 'ブログ'." href="../tags/%E3%83%96%E3%83%AD%E3%82%B0.html" class="ui tag label">ブログ</a><a title="All pages tagged '自動化'." href="../tags/%E8%87%AA%E5%8B%95%E5%8C%96.html" class="ui tag label">自動化</a>
   
 </div>
 
@@ -53,53 +59,83 @@
 <h1>workflowファイルを作成する</h1>
 <h2>トリガーの設定</h2>
 <p>自分の環境では、<code>source</code>ブランチの中身を使ってビルド→<code>publish</code>ブランチにおいて公開、という手順を追っているので、<code>source</code>ブランチにpushされたときだけ走るようにします</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">on</span><span class="kw">:</span></span>
+<div class="ui segment">
+<div class="ui top right attached label">
+yaml
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">on</span><span class="kw">:</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">source</span><span class="kw">]</span></span></code></pre></div>
+</div>
 <h2>Jobの作成</h2>
 <p>Jobを作成します。環境はstackが動けばどこでも問題がないので、ubuntuにします。</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">jobs</span><span class="kw">:</span></span>
+<div class="ui segment">
+<div class="ui top right attached label">
+yaml
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">jobs</span><span class="kw">:</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="at">  </span><span class="fu">runPublish</span><span class="kw">:</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="at">    </span><span class="fu">name</span><span class="kw">:</span><span class="at"> run publish</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span></code></pre></div>
+</div>
 <h2>ステップの作成</h2>
 <p>ここからstepを作っていきます。</p>
 <h3>必要なブランチをcheckoutする</h3>
 <p>今回、トリガー対象のブランチ<code>source</code>の他に<code>publish</code>ブランチを使っています。 しかし、デフォルトではローカルに<code>publish</code>ブランチは存在しません。<br />
 なので、<code>actions/checkout</code>に、全てのブランチとタグの履歴をfetchする<code>fetch-depth: 0</code>を付け足す必要があります。</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
+<div class="ui segment">
+<div class="ui top right attached label">
+yaml
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v2</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="at">          </span><span class="fu">fetch-depth</span><span class="kw">:</span><span class="at"> </span><span class="dv">0</span></span></code></pre></div>
+</div>
 <h3>キャッシュの設定をする</h3>
 <p>ビルドはなかなかに重い(現在の構成で約4,50分くらい)ので、なるべくキャッシュを活用します。<br />
 キャッシュには<code>actions/cache@v2</code>を使用します。キャッシュしたいものを生成するactionの前に実行し、キャッシュがあればそこをスキップするようにします。 キャッシュ対象は<code>~/.stack</code>ディレクトリです。<br />
 これは、[ncaqさんの記事][ncaq -- HaskellプログラムをGitHub Actionsでビルドしてクロスプラットフォーム向けにバイナリをReleaseにアップロードする]から大体を引用させていただきました。</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Cache stack</span></span>
+<div class="ui segment">
+<div class="ui top right attached label">
+yaml
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Cache stack</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/cache@v2</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="at">          </span><span class="fu">path</span><span class="kw">:</span><span class="at"> ~/.stack</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="at">          </span><span class="fu">key</span><span class="kw">:</span><span class="at"> stack-${{ hashFiles('**/stack.yaml.lock') }}-${{ hashFiles('**/package.yaml') }}</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="fu">          restore-keys</span><span class="kw">: </span><span class="ch">|</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>            ${{ runner.os }}-stack-${{ hashFiles('**/stack.yaml.lock') }}-</span></code></pre></div>
+</div>
 <h3>haskellおよびstackのセットアップをする</h3>
 <p>Haskell stackを使うので、<code>actions/setup-haskell</code>のアクションを借ります。<br />
 ghcのバージョンは、とりあえず手元にあったものに合わせました。</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/setup-haskell@v1.1.2</span></span>
+<div class="ui segment">
+<div class="ui top right attached label">
+yaml
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/setup-haskell@v1.1.2</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="at">          </span><span class="fu">ghc-version</span><span class="kw">:</span><span class="at"> </span><span class="st">'8.8.1'</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="at">          </span><span class="fu">stack-version</span><span class="kw">:</span><span class="at"> </span><span class="st">'latest'</span></span></code></pre></div>
+</div>
 <h3>publishコマンドを実行する</h3>
 <p>環境の準備がほぼできたので、あとはhakyllのビルドをしておしまいです。<br />
 その前に、<strong>gitのuserを<code>github-actions</code>に設定</strong>しておきます。このアカウントにすると、内部トークンを使ってくれます。<br />
 また、ビルド周りのコマンドはMakefileにしまってあったのでそのまま使います。</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> run publish</span></span>
+<div class="ui segment">
+<div class="ui top right attached label">
+yaml
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> run publish</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>          git config user.name github-actions</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>          git config user.email github-actions@github.com</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>          git switch source</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>          make publish</span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a>          git push origin publish</span></code></pre></div>
+</div>
 <h1>参考にしたサイト</h1>
 <ul>
 <li><a href="https://www.ncaq.net/2020/04/05/15/54/26/">ncaq -- HaskellプログラムをGitHub Actionsでビルドしてクロスプラットフォーム向けにバイナリをReleaseにアップロードする</a></li>

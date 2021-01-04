@@ -15,42 +15,61 @@
     <id>https://cj-bc.github.io/blog/posts/2020-11-13-pandoc-vim-conceal-url-by-default.html</id>
     <published>2020-11-13T00:00:00Z</published>
     <updated>2020-11-13T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on November 13, 2020</li>
-    <li>Updated on November 13, 2020</li>
-  </ul>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>vim-pandoc-syntaxでurlを非表示にしたい</h1>
+  <div class="ui list">
+    <div class="item">Posted on November 13, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on November 13, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;vim&#39;." href="/tags/vim.html">vim</a>, <a title="All pages tagged &#39;pandoc&#39;." href="/tags/pandoc.html">pandoc</a>
+  <a title="All pages tagged &#39;vim&#39;." href="/tags/vim.html" class="ui tag label">vim</a><a title="All pages tagged &#39;pandoc&#39;." href="/tags/pandoc.html" class="ui tag label">pandoc</a>
   
 </div>
 
 <h1>vimwikiのハイライトが欲しい</h1>
 <h1>markdown/vimwiki/pandocのsyntaxハイライト</h1>
 <p>vimwikiのsyntaxでは、以下のようなリンクは</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co">[</span><span class="ot">説明</span><span class="co">](url)</span></span></code></pre></div>
+<div class="ui segment">
+<div class="ui top right attached label">
+markdown
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown SourceCode"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co">[</span><span class="ot">説明</span><span class="co">](url)</span></span></code></pre></div>
+</div>
 <p>このように表示されます(<code>+conceal</code>オプションが有効な場合)</p>
 <p><a href="url">説明</a></p>
 <p>これがあると、長いURLを持つドキュメントでの可読性がグンと上がります</p>
 <p>例えば、<a href="https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html">blender data blocks</a>の記事は<code>markdown</code>/<code>vimwiki</code>/<code>pandoc</code>それぞれのsyntaxで 以下のように見えます。</p>
-<p><img src="/images/difference_md-vimwiki-pandoc.png" alt="markdown, vimwiki, pandocのハイライトの違い" /></p>
+<p><img src="/images/difference_md-vimwiki-pandoc.png" class="ui rounded image" alt="markdown, vimwiki, pandocのハイライトの違い" /></p>
 <p>さて、これを普段使いの<code>pandoc</code>syntaxでも使いたいというのが今回の希望です。</p>
 <h1>結論: デフォルトの変数を設定しろ</h1>
 <p>もうこれが答えでした！<br />
 ドキュメントよもうね！！！！</p>
-<pre class="vim"><code>let g:pandoc#syntax#conceal#urls = 1</code></pre>
+<div class="ui segment">
+<div class="ui top right attached label">
+vim
+</div>
+<pre class="vim SourceCode"><code>let g:pandoc#syntax#conceal#urls = 1</code></pre>
+</div>
 <p>これだけでURLの<code>conceal</code>が有効になり、vimwikiと同じような見た目になります</p>
-<p><img src="/images/pandoc-with-conceal.png" alt="設定後のpandoc" /></p>
+<p><img src="/images/pandoc-with-conceal.png" class="ui rounded image" alt="設定後のpandoc" /></p>
 <h1>おまけ</h1>
 <p>ちなみに該当のコードは<a href="https://github.com/vim-pandoc/vim-pandoc-syntax/blob/2521e2e9b99a3550e1a20f24e09fa46679cbbbc7/syntax/pandoc.vim#L300-L304">300-304行目</a>にありました。</p>
-<pre class="vim"><code>if g:pandoc#syntax#conceal#urls == 1
+<div class="ui segment">
+<div class="ui top right attached label">
+vim
+</div>
+<pre class="vim SourceCode"><code>if g:pandoc#syntax#conceal#urls == 1
     syn region pandocReferenceURL matchgroup=pandocOperator start=/\]\@1&lt;=(/ end=/)/ keepend conceal
 else
     syn region pandocReferenceURL matchgroup=pandocOperator start=/\]\@1&lt;=(/ end=/)/ keepend
 endif</code></pre>
+</div>
 ]]></summary>
 </entry>
 <entry>
@@ -59,29 +78,43 @@ endif</code></pre>
     <id>https://cj-bc.github.io/blog/posts/2020-11-07-python-is-elif-faster-than-ifs.html</id>
     <published>2020-11-07T00:00:00Z</published>
     <updated>2020-11-07T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on November  7, 2020</li>
-    <li>Updated on November  7, 2020</li>
-  </ul>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>pythonのelifはifよりも速いのか</h1>
+  <div class="ui list">
+    <div class="item">Posted on November  7, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on November  7, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;python&#39;." href="/tags/python.html">python</a>, <a title="All pages tagged &#39;検証&#39;." href="/tags/%E6%A4%9C%E8%A8%BC.html">検証</a>
+  <a title="All pages tagged &#39;python&#39;." href="/tags/python.html" class="ui tag label">python</a><a title="All pages tagged &#39;検証&#39;." href="/tags/%E6%A4%9C%E8%A8%BC.html" class="ui tag label">検証</a>
   
 </div>
 
 <p>一つの変数に対して、複数の条件で分岐させたい時時、大抵は<code>elif</code>を使って以下のように書くと思います。</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;A&quot;</span>:</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;A&quot;</span>:</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    ...</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="cf">elif</span> n <span class="op">==</span> <span class="st">&quot;B&quot;</span>:</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    ...</span></code></pre></div>
+</div>
 <p>しかし、全ての場合ではありませんがこの場合はif文の羅列で書くこともできます。</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;A&quot;</span>:</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;A&quot;</span>:</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    ...</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;B&quot;</span>:</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    ...</span></code></pre></div>
+</div>
 <p>直感的に、nの値によってはelifの方がif文の実行回数が少なくなるため速そうに思えますが、本当にそうなのか気になったので試してみます。</p>
 <h1>tl;dr</h1>
 <p>速いぽい</p>
@@ -549,17 +582,31 @@ print(f"with elif   : {(t_with_elif_end - t_with_elif_start)/1000} sec")
 </details>
 <h1>結果</h1>
 <p><code>print</code>でたくさん標準出力を使っていますが、 そこの値は重要ではないので 私は<a href="https://github.com/thinca/vim-quickrun">quickrun</a>を使って vim上のバッファで加工して消しています</p>
-<pre><code>without elif: 4.281997680664063e-06 sec
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>without elif: 4.281997680664063e-06 sec
 with elif   : 9.88006591796875e-07 sec</code></pre>
+</div>
 <p>一瞬遅くなって見えますが、桁が一桁違います。少数表記にすると</p>
-<pre><code>without elif: 0.000004 sec
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>without elif: 0.000004 sec
 with elif   : 0.000001 sec</code></pre>
+</div>
 <p>となり、<code>elif</code>の方が速いことがわかります。</p>
 <h1>考察</h1>
 <p>なぜ速いのかを考えてみます。</p>
 <h2>構文木</h2>
 <p><code>elif</code>には特別なノードがなく、構文木に落とすと親の<code>If</code>ノードの<code>oreelse</code>に含まれる<code>If</code>ノードになります。</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="im">import</span> ast</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="im">import</span> ast</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="bu">print</span>(ast.dump(ast.parse(<span class="st">&quot;&quot;&quot;</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="st">if x:</span></span>
@@ -572,7 +619,12 @@ with elif   : 0.000001 sec</code></pre>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a><span class="st">if z:</span></span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a><span class="st">    ...</span></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a><span class="st">&quot;&quot;&quot;</span>)))</span></code></pre></div>
-<pre><code>Module(
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Module(
     body=[
         If(test=Name(id=&#39;x&#39;, ctx=Load()),
            body=[Expr(value=Ellipsis())],
@@ -587,10 +639,15 @@ with elif   : 0.000001 sec</code></pre>
            orelse=[])
         ]
 )</code></pre>
+</div>
 <p>https://docs.python.org/ja/3/library/ast.html?highlight=elif#ast.If</p>
 <h2>ステップ数を調べる</h2>
 <p>おそらく、if文が実行される回数が少ないはず、なのでpythonのデバッガである<a href="https://docs.python.org/3/library/pdb.html">pdb</a>を使って調べてみます。</p>
-<pre><code>&gt;&gt;&gt; # まずはelif使わないもの
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>&gt;&gt;&gt; # まずはelif使わないもの
 &gt;&gt;&gt; pdb.run(&quot;&quot;&quot;
     ... if True:
     ...     print(&quot;s&quot;)
@@ -618,6 +675,7 @@ s
 &gt; &lt;string&gt;(3)&lt;module&gt;()-&gt;None
 (Pdb)
 &gt;&gt;&gt;</code></pre>
+</div>
 <p>やはり、<code>if</code>文を分割した場合と比べて<code>elif</code>の方が"--Return--"が早く来ていますね。 これひとつではそこまで差異はないと思いますが、もっと複雑な条件式を使っている場合や何度も重なっている場合は影響が出そうですね。</p>
 ]]></summary>
 </entry>
@@ -627,23 +685,29 @@ s
     <id>https://cj-bc.github.io/blog/posts/2020-10-24-blender-vrmImporter-Not-Object-on-origin.html</id>
     <published>2020-10-24T00:00:00Z</published>
     <updated>2020-10-24T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on October 24, 2020</li>
-    <li>Updated on November 15, 2020</li>
-  </ul>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>VRM_IMPORTER_for_BlenderでVRMモデルを作る際の注意点</h1>
+  <div class="ui list">
+    <div class="item">Posted on October 24, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on November 15, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;VRM&#39;." href="/tags/VRM.html">VRM</a>, <a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html">blender</a>, <a title="All pages tagged &#39;VRM_IMPORTER_for_Blender&#39;." href="/tags/VRM_IMPORTER_for_Blender.html">VRM_IMPORTER_for_Blender</a>
+  <a title="All pages tagged &#39;VRM&#39;." href="/tags/VRM.html" class="ui tag label">VRM</a><a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html" class="ui tag label">blender</a><a title="All pages tagged &#39;VRM_IMPORTER_for_Blender&#39;." href="/tags/VRM_IMPORTER_for_Blender.html" class="ui tag label">VRM_IMPORTER_for_Blender</a>
   
 </div>
 
 <h1>全てのメッシュの原点(Origin)を <em>ワールド座標系の</em> 原点に置く</h1>
+<div class="ui piled segment" style="z-index: 0">
 <blockquote>
 <p>There are not an object on the origin <mesh名> (もしくは) <mesh名> が原点座標にありません</p>
 </blockquote>
+</div>
 <p>というエラーについて。単刀直入にいうと、 全てのメッシュは <strong>Originをワールド座標系の原点におく必要があります</strong></p>
 <p>これは、 <strong><code>Set origin&gt; Origin to Geometry</code>とは違う</strong> ので注意してください。</p>
 <p>これをするには、</p>
@@ -657,15 +721,15 @@ s
 <p>Blender上では全然問題なく見えますが、これをしておかないとexportした後に変な位置にオブジェクトが表示されてしまいます。 (私は<code>3tenePRO</code>で動作確認をしていますが、おそらく他でもそうなると思います。)<br />
 具体的には、「全てのトランスフォームが0(scaleは1)に指定された通りに表示」されます。</p>
 <h2>具体例:</h2>
-<p>scaleが1になっていない例 <img src="/images/sscale_isnt_1.jpeg" alt="scaleが1じゃない" /></p>
-<p>scaleが1になるように調整した例 <img src="/images/scale_is_1.jpeg" alt="scaleが1" /></p>
-<p>rotationが0になっていない例 <img src="/images/rotation_isnt_0.jpeg" alt="rotationが0じゃない" /></p>
-<p>rotationが0になっている例 <img src="/images/rotation_is_0.jpeg" alt="rotationが0" /></p>
+<p>scaleが1になっていない例 <img src="/images/sscale_isnt_1.jpeg" class="ui rounded image" alt="scaleが1じゃない" /></p>
+<p>scaleが1になるように調整した例 <img src="/images/scale_is_1.jpeg" class="ui rounded image" alt="scaleが1" /></p>
+<p>rotationが0になっていない例 <img src="/images/rotation_isnt_0.jpeg" class="ui rounded image" alt="rotationが0じゃない" /></p>
+<p>rotationが0になっている例 <img src="/images/rotation_is_0.jpeg" class="ui rounded image" alt="rotationが0" /></p>
 <h2>直し方</h2>
 <p>Inspectorで各transformの値を確認します。そうしたら、それを覚えておき値は0に修正。 <code>Edit mode</code>に移行して、 <strong>originを中心に、軸を指定して先ほど覚えた値分</strong> 回転させます。</p>
 <h2>最終系</h2>
 <p>綺麗になりました！！</p>
-<p><img src="/images/completed.jpg" alt="全部直した" /></p>
+<p><img src="/images/completed.jpg" class="ui rounded image" alt="全部直した" /></p>
 <h1>Shade Textureは必ず設定する</h1>
 <p>ShadeTextureを設定していないと、面を法線と反対側から見たときにピンク色になってしまいます。 これは、<code>Shade Color</code>が塗られているからで、それを防ぎ表面と同じものを表示したい場合は必ず設定する必要があります。 なお、<code>MainTexture</code>と同じテクスチャで問題ないと思います。</p>
 <p>設定してなかった:<br />
@@ -687,16 +751,20 @@ s
     <id>https://cj-bc.github.io/blog/posts/2020-10-20-check-githubs-ssh-key.html</id>
     <published>2020-10-20T00:00:00Z</published>
     <updated>2020-10-20T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on October 20, 2020</li>
-    <li>Updated on October 20, 2020</li>
-  </ul>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>Githubのssh鍵の確認をする</h1>
+  <div class="ui list">
+    <div class="item">Posted on October 20, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on October 20, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;ssh&#39;." href="/tags/ssh.html">ssh</a>, <a title="All pages tagged &#39;github&#39;." href="/tags/github.html">github</a>
+  <a title="All pages tagged &#39;ssh&#39;." href="/tags/ssh.html" class="ui tag label">ssh</a><a title="All pages tagged &#39;github&#39;." href="/tags/github.html" class="ui tag label">github</a>
   
 </div>
 
@@ -707,30 +775,42 @@ s
 </ul>
 <hr />
 <p>未読メールを確認していたところ、Githubさんから以下のようなメールが届いていました</p>
+<div class="ui piled segment" style="z-index: 0">
 <blockquote>
 <p>The following SSH key was added to your account:</p>
 <p><key name> &lt;:区切りの二文字の英数字が並んでいる文字列(<code>\([[:alnum:]]{2}:\)\+</code>)(正規表現は自信ない)&gt;</p>
 <p>If you believe this key was added in error, you can remove the key and disable access at the following location:</p>
 <p>https://github.com/settings/keys</p>
 </blockquote>
+</div>
 <p>これは、昔確かに自分で追加したはずのSSH鍵なので問題はないはず...ですが念のため確認してみます</p>
 <h1>確認する</h1>
 <p>私はgpgキーを使ってssh認証をしているため、gpgキーの情報を確認すれば良いはずです。 が、<code>xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx</code>なんて文字列を見つけることができない。IPv6でしかみたことないぞ。<br />
 ...そんなことなかったです。 <strong>md5のハッシュでした</strong></p>
 <h2>自分の鍵のmd5ハッシュを確認する</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co"># ssh-agentが立ち上がっていなければ、以下のコマンドで立ち上げます</span></span>
+<div class="ui segment">
+<div class="ui top right attached label">
+sh
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co"># ssh-agentが立ち上がっていなければ、以下のコマンドで立ち上げます</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>$ <span class="bu">eval</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">ssh-agent</span> -s<span class="va">)</span><span class="st">&quot;</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>$ <span class="fu">ssh-add</span> -l -E md5</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="op">&gt;</span> <span class="op">&lt;</span><span class="ex">md5</span>ハッシュ<span class="op">&gt;</span></span></code></pre></div>
+</div>
 <p>これが一致すれば大丈夫</p>
 <h2>Githubの設定画面から確認する</h2>
 <p><a href="https://github.com/settings/keys">githubの設定画面のここ</a>で鍵の一覧を見ることができます。 その中の <em>New SSH keys</em> に該当の名前の鍵があるはずです。 そこの鍵名の下に書いてある<code>SHA256: ...</code>が確認するべき値です。<br />
 この値について、「GPG fingerprintとも合わん！」「GPG keyidとも合わん！！」「何だこいつ！！！」と暴れていましたが<br />
 安心してください。 <em>GPGじゃない</em> です。<br />
 これは、<a href="https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/reviewing-your-ssh-keys">マニュアル</a>に書いてあります。</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>$ <span class="fu">ssh-add</span> -l -E sha256</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+sh
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>$ <span class="fu">ssh-add</span> -l -E sha256</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="op">&gt;</span> <span class="op">&lt;</span><span class="ex">sha256</span>ハッシュ<span class="op">&gt;</span></span></code></pre></div>
+</div>
 <p>ここで出てきたハッシュを比較すれば良いです。</p>
 ]]></summary>
 </entry>
@@ -740,16 +820,20 @@ s
     <id>https://cj-bc.github.io/blog/posts/2020-10-18-couldnt-ues-player-input-component.html</id>
     <published>2020-10-18T00:00:00Z</published>
     <updated>2020-10-18T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on October 18, 2020</li>
-    <li>Updated on October 26, 2020</li>
-  </ul>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>2020-10-18-couldnt-ues-player-input-component</h1>
+  <div class="ui list">
+    <div class="item">Posted on October 18, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on October 26, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: 
+  
   
 </div>
 
@@ -782,16 +866,20 @@ s
     <id>https://cj-bc.github.io/blog/posts/2020-10-17-comparing-primes-algorithm.html</id>
     <published>2020-10-17T00:00:00Z</published>
     <updated>2020-10-17T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on October 17, 2020</li>
-    <li>Updated on October 17, 2020</li>
-  </ul>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>簡易的な素数探索アルゴリズムの速度比較</h1>
+  <div class="ui list">
+    <div class="item">Posted on October 17, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on October 17, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;python&#39;." href="/tags/python.html">python</a>, <a title="All pages tagged &#39;アルゴリズム&#39;." href="/tags/%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0.html">アルゴリズム</a>
+  <a title="All pages tagged &#39;python&#39;." href="/tags/python.html" class="ui tag label">python</a><a title="All pages tagged &#39;アルゴリズム&#39;." href="/tags/%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0.html" class="ui tag label">アルゴリズム</a>
   
 </div>
 
@@ -799,7 +887,11 @@ s
 <h1>比較するアルゴリズム</h1>
 <h1>1. 定義通りの求め方</h1>
 <p>素数は「自分自身と1のみを約数に持つ数」なので、「自分自身と1以外に割り切れる数があるか」を調べれば素数かの判定ができることになります。</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">def</span> fromDefinition(nums: [<span class="bu">int</span>]) <span class="op">-&gt;</span> [<span class="bu">int</span>]:</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">def</span> fromDefinition(nums: [<span class="bu">int</span>]) <span class="op">-&gt;</span> [<span class="bu">int</span>]:</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="kw">def</span> f(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n):</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>      <span class="cf">if</span> n <span class="op">%</span> i <span class="op">==</span> <span class="dv">0</span>:</span>
@@ -807,10 +899,15 @@ s
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>      <span class="cf">return</span> <span class="va">True</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    <span class="cf">return</span> <span class="bu">list</span>(<span class="bu">filter</span>(f, nums))</span></code></pre></div>
+</div>
 <h2>エラトステネスの揮</h2>
 <p>多分中学校かそこらへんで習ったであろう方法。 求めたい範囲の数の集合から、小さい素数の倍数をふるい落としていく方法です。<br />
 <a href="https://ja.wikipedia.org/wiki/%E3%82%A8%E3%83%A9%E3%83%88%E3%82%B9%E3%83%86%E3%83%8D%E3%82%B9%E3%81%AE%E7%AF%A9">wikipediaの図解</a>がわかりやすい。</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="im">import</span> time</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="im">import</span> time</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="im">from</span> math <span class="im">import</span> sqrt</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="kw">def</span> eratosthenes(nums: [<span class="bu">int</span>]) <span class="op">-&gt;</span> [<span class="bu">int</span>]:</span>
@@ -823,10 +920,15 @@ s
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>    ret <span class="op">=</span> <span class="bu">list</span>(<span class="bu">filter</span>(<span class="kw">lambda</span> i: i <span class="op">%</span> head <span class="op">!=</span> <span class="dv">0</span>, nums))</span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>    <span class="cf">return</span> [head] <span class="op">+</span> eratosthenes(ret)</span></code></pre></div>
+</div>
 <h1>実行時間計測</h1>
 <p>それぞれの処理を1000回ずつ実行し、その平均を求めた</p>
 <h2>計測用コード</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">def</span> mesureTime(f, <span class="op">*</span>args) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">def</span> mesureTime(f, <span class="op">*</span>args) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    startTime <span class="op">=</span> time.time()</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    f(<span class="op">*</span>args)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    <span class="cf">return</span> time.time() <span class="op">-</span> startTime</span>
@@ -841,9 +943,15 @@ s
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a>x <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">100</span> <span class="op">+</span> <span class="dv">1</span>)</span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a><span class="bu">print</span>(<span class="ss">f&quot;fromDefinition: </span><span class="sc">{</span>mesureTimeAvr(fromDefinition, x)<span class="sc">}</span><span class="ss">&quot;</span>)</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a><span class="bu">print</span>(<span class="ss">f&quot;eratosthenes  : </span><span class="sc">{</span>mesureTimeAvr(eratosthenes, x)<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+</div>
 <h2>結果</h2>
-<pre><code>fromDefinition: 3.378009796142578e-05
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>fromDefinition: 3.378009796142578e-05
 eratosthenes  : 2.4552106857299804e-05</code></pre>
+</div>
 <p>エラトステネスの揮の方が1秒くらい早い。 Orderはわからん！！</p>
 ]]></summary>
 </entry>
@@ -853,22 +961,36 @@ eratosthenes  : 2.4552106857299804e-05</code></pre>
     <id>https://cj-bc.github.io/blog/posts/2020-10-08-jupyter-notebook-doesnt-up-so-long.html</id>
     <published>2020-10-10T00:00:00Z</published>
     <updated>2020-10-10T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on October 10, 2020</li>
-    <li>Updated on October 17, 2020</li>
-  </ul>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>jupyter notebookがうまく起動しなかった</h1>
+  <div class="ui list">
+    <div class="item">Posted on October 10, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on October 17, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;python&#39;." href="/tags/python.html">python</a>, <a title="All pages tagged &#39;jupyter&#39;." href="/tags/jupyter.html">jupyter</a>, <a title="All pages tagged &#39;macOS&#39;." href="/tags/macOS.html">macOS</a>
+  <a title="All pages tagged &#39;python&#39;." href="/tags/python.html" class="ui tag label">python</a><a title="All pages tagged &#39;jupyter&#39;." href="/tags/jupyter.html" class="ui tag label">jupyter</a><a title="All pages tagged &#39;macOS&#39;." href="/tags/macOS.html" class="ui tag label">macOS</a>
   
 </div>
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>$ <span class="ex">jupyter</span> notebook</span></code></pre></div>
+<div class="ui segment">
+<div class="ui top right attached label">
+sh
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>$ <span class="ex">jupyter</span> notebook</span></code></pre></div>
+</div>
 <p>だと、鯖は立ち上がるもののページが読み込めずうまくいかなかった。 試しに、<a href="https://qiita.com/ciela/items/0e0392f600c92b93d7c6">この記事</a>に従ってみたところ接続できた。 よくわからないけど、まぁ動いたのでよし。別段VM環境でもなかったんだけどなぁ</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>$ <span class="ex">jupyter</span> notebook --ip=<span class="dt">\*</span></span></code></pre></div>
+<div class="ui segment">
+<div class="ui top right attached label">
+sh
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>$ <span class="ex">jupyter</span> notebook --ip=<span class="dt">\*</span></span></code></pre></div>
+</div>
 ]]></summary>
 </entry>
 <entry>
@@ -877,16 +999,20 @@ eratosthenes  : 2.4552106857299804e-05</code></pre>
     <id>https://cj-bc.github.io/blog/posts/2020-09-29-windows-how-to-know-spec.html</id>
     <published>2020-09-29T00:00:00Z</published>
     <updated>2020-09-29T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on September 29, 2020</li>
-    <li>Updated on October 17, 2020</li>
-  </ul>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>Windows PCのスペックを確認する</h1>
+  <div class="ui list">
+    <div class="item">Posted on September 29, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on October 17, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;windows&#39;." href="/tags/windows.html">windows</a>, <a title="All pages tagged &#39;pc&#39;." href="/tags/pc.html">pc</a>, <a title="All pages tagged &#39;ハードウェア&#39;." href="/tags/%E3%83%8F%E3%83%BC%E3%83%89%E3%82%A6%E3%82%A7%E3%82%A2.html">ハードウェア</a>
+  <a title="All pages tagged &#39;windows&#39;." href="/tags/windows.html" class="ui tag label">windows</a><a title="All pages tagged &#39;pc&#39;." href="/tags/pc.html" class="ui tag label">pc</a><a title="All pages tagged &#39;ハードウェア&#39;." href="/tags/%E3%83%8F%E3%83%BC%E3%83%89%E3%82%A6%E3%82%A7%E3%82%A2.html" class="ui tag label">ハードウェア</a>
   
 </div>
 
@@ -908,22 +1034,30 @@ eratosthenes  : 2.4552106857299804e-05</code></pre>
     <id>https://cj-bc.github.io/blog/posts/2020-08-24-jdaughertys-tart-code-reading.html</id>
     <published>2020-08-24T00:00:00Z</published>
     <updated>August 24, 2020</updated>
-    <summary type="html"><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on August 24, 2020</li>
-    <li>Updated on August 31, 2020</li>
-  </ul>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>jtdaugherty/tart ソースリーディングメモ</h1>
+  <div class="ui list">
+    <div class="item">Posted on August 24, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on August 31, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;tart&#39;." href="/tags/tart.html">tart</a>, <a title="All pages tagged &#39;cli&#39;." href="/tags/cli.html">cli</a>, <a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html">haskell</a>, <a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html">memo</a>
+  <a title="All pages tagged &#39;tart&#39;." href="/tags/tart.html" class="ui tag label">tart</a><a title="All pages tagged &#39;cli&#39;." href="/tags/cli.html" class="ui tag label">cli</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;memo&#39;." href="/tags/memo.html" class="ui tag label">memo</a>
   
 </div>
 
 <p>AAエディター(?)である<a href="https://github.com/jtdaugherty/tart">Tart</a>の内部実装を読んだ時のメモ</p>
 <h1>Eventの処理</h1>
-<pre><code>main
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>main
  |- Events.handleEvent
     |- マウスでの描画イベントを処理
     |- マウスがドラッグ中でかつ前回と違うものの上にある時はここでイベントを終了する
@@ -934,6 +1068,7 @@ eratosthenes  : 2.4552106857299804e-05</code></pre>
         |- Events.Main.handleAttrEvent
         |   |- Attributes(fg,bg,style)がクリックされた場合、変更作業をする
         |- Events.Main.handleEvent</code></pre>
+</div>
 ]]></summary>
 </entry>
 <entry>
@@ -942,16 +1077,20 @@ eratosthenes  : 2.4552106857299804e-05</code></pre>
     <id>https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html</id>
     <published>2020-08-19T00:00:00Z</published>
     <updated>2020-08-19T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-  <ul>
-    <li>Posted on August 19, 2020</li>
-    <li>Updated on August 31, 2020</li>
-  </ul>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>Blender docs -- data block</h1>
+  <div class="ui list">
+    <div class="item">Posted on August 19, 2020</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on August 31, 2020
+    </div>
+  </div>
     
 </div>
 <div class="info">
   
-  Tags: <a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html">blender</a>, <a title="All pages tagged &#39;document&#39;." href="/tags/document.html">document</a>, <a title="All pages tagged &#39;translation&#39;." href="/tags/translation.html">translation</a>, <a title="All pages tagged &#39;wip&#39;." href="/tags/wip.html">wip</a>
+  <a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html" class="ui tag label">blender</a><a title="All pages tagged &#39;document&#39;." href="/tags/document.html" class="ui tag label">document</a><a title="All pages tagged &#39;translation&#39;." href="/tags/translation.html" class="ui tag label">translation</a><a title="All pages tagged &#39;wip&#39;." href="/tags/wip.html" class="ui tag label">wip</a>
   
 </div>
 
