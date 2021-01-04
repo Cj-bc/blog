@@ -17,12 +17,15 @@ executable blog
   main-is:             app/site.hs
   default-language:    Haskell2010
   ghc-options:         -threaded
-  other-modules:       MyBlog.Contexts
+  other-modules:       MyBlog.Contexts, MyBlog.Pandoc
   build-depends:       base >= 4.7 && < 5,
                        hakyll,
                        pandoc,
+                       pandoc-types,
                        data-default,
                        filepath,
                        shelly,
                        attoparsec,
-                       text
+                       text,
+                       blaze-html
+

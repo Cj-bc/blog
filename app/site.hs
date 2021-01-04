@@ -12,10 +12,13 @@ import           System.FilePath.Posix (takeBaseName)
 import           Data.List (isPrefixOf)
 
 import           MyBlog.Contexts
+import           MyBlog.Pandoc
 --------------------------------------------------------------------------------
 
 blogName :: String
 blogName = "CLI! CLI! CLI!"
+
+highlightjsTheme = "night-owl"
 
 feedUrlBase     = "/feeds"
 atomFeedUrlBase = feedUrlBase <> "/atom"
@@ -77,9 +80,21 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
-    match "css/*" $ do
-        route   idRoute
-        compile compressCssCompiler
+    match "css/dist/semantic.min.css" $ do
+        route $ constRoute "css/semantic.min.css"
+        compile copyFileCompiler
+
+    match "css/dist/semantic.min.js" $ do
+        route $ constRoute "js/semantic.min.js"
+        compile copyFileCompiler
+
+    match "css/dist/themes/**" $ do
+        route $ gsubRoute "dist/" (const "")
+        compile copyFileCompiler
+
+    match "css/myCustom.css" $ do
+        route $ constRoute "css/myCustom.css"
+        compile copyFileCompiler
 
     tags <- buildTags "posts/*" (fromCapture "tags/*.html")
 
@@ -91,7 +106,7 @@ main = hakyll $ do
                       <> constField "atomFeedUrl" (tagAtomFeedUrl tag)
                       <> constField "rssFeedUrl"  (tagRssFeedUrl tag)
                       <> listField "posts" (postCtx tags) (recentFirst =<< loadAll pattern)
-                      <> defaultContext
+                      <> defaultContext'
 
             makeItem ""
                 >>= loadAndApplyTemplate "templates/tag.html" ctx
@@ -100,7 +115,8 @@ main = hakyll $ do
 
     match "posts/*" $ do
         route $ setExtension "html"
-        compile $ pandocCompilerWith pandocMarkdownCfg def
+        compile $ pandocCompilerWithTransform pandocMarkdownCfg def myPandocTransform
+            >>= saveSnapshot "raw content"
             >>= loadAndApplyTemplate "templates/post.html"    (postCtx tags)
             >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/default.html" (postCtx tags)
@@ -114,7 +130,7 @@ main = hakyll $ do
             let archiveCtx =
                     listField "posts" (postCtx tags) (return posts) `mappend`
                     constField "title" "Archives"            `mappend`
-                    defaultContext
+                    defaultContext'
 
             makeItem ""
                 >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
@@ -143,7 +159,7 @@ main = hakyll $ do
             let indexCtx =
                     listField "posts" (postCtx tags) (return posts) `mappend`
                     constField "title" ""                    `mappend`
-                    defaultContext
+                    defaultContext'
 
             getResourceBody
                 >>= applyAsTemplate indexCtx

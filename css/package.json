@@ -1,0 +1,22 @@
+{
+  "name": "css",
+  "version": "1.0.0",
+  "description": "css for my blog",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cj-bc/blog.git"
+  },
+  "author": "Cj.bc_sd a.k.a Cj-bc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Cj-bc/blog/issues"
+  },
+  "homepage": "https://github.com/Cj-bc/blog#readme",
+  "dependencies": {
+    "fomantic-ui": "github:Cj-bc/fomantic-UI#use_url-regex-safe"
+  }
+}

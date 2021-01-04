@@ -1,7 +1,11 @@
-<ul>
+<div class="ui items">
     $for(posts)$
-        <li>
-            <a href="$url$">$title$</a> - $date$
-        </li>
+        <div class="item">
+            <div class="image"><i class="$thumbnail$"></i></div>
+            <div class="content">
+                <a class="header" href="$url$">$title$</a>
+                <div class="meta"> <span>$date$</span></div>
+            </div>
+        </div>
     $endfor$
-</ul>
+</div>
