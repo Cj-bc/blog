@@ -5,3 +5,7 @@ pre .SourceCode {
 #content {
     margin-top: 5em;
 }
+
+.ui.close.rail {
+    width: 6em;
+}
