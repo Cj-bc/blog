@@ -3,6 +3,8 @@ css/*
 !css/package-lock.json
 !css/package.json
 !css/semantic.json
+!css/semantic.min.css
+!css/themes
 # Created by https://www.gitignore.io/api/haskell
 
 ### Haskell ###
