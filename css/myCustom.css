@@ -1,4 +1,7 @@
 pre .SourceCode {
     overflow-x: auto
+}
 
+#content {
+    margin-top: 5em;
 }
