@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>CLI! CLI! CLI!</title>
+    <link href="https://cj-bc.github.io/blog/feeds/atom/tag/after%20effect.xml" rel="self" />
+    <link href="https://cj-bc.github.io/blog" />
+    <id>https://cj-bc.github.io/blog/feeds/atom/tag/after%20effect.xml</id>
+    <author>
+        <name>Cj-bc a.k.a Cj.BC_SD</name>
+        <email>cj.bc-sd@outlook.jp</email>
+    </author>
+    <updated>2021-01-13T00:00:00Z</updated>
+    <entry>
+    <title>After Effectショートカットキーチートシート(個人用)</title>
+    <link href="https://cj-bc.github.io/blog/posts/2021-01-13-after-effect-cheat-sheet.html" />
+    <id>https://cj-bc.github.io/blog/posts/2021-01-13-after-effect-cheat-sheet.html</id>
+    <published>2021-01-13T00:00:00Z</published>
+    <updated>2021-01-13T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>After Effectショートカットキーチートシート(個人用)</h1>
+  <div class="ui list">
+    <div class="item">Posted on January 13, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January 14, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;after effect&#39;." href="/tags/after%20effect.html" class="ui tag label">after effect</a><a title="All pages tagged &#39;cheat sheet&#39;." href="/tags/cheat%20sheet.html" class="ui tag label">cheat sheet</a>
+  
+</div>
+
+<p>個人用のチートシート</p>
+<p>やりたいこと ショートカットキー ----------------- ------------------- Layerをカットする Ctrl+Shift+D</p>
+]]></summary>
+</entry>
+<entry>
+    <title>Expressionを使ったアニメーションのメモ</title>
+    <link href="https://cj-bc.github.io/blog/posts/2021-01-13-after-effect-animation-with-expressions.html" />
+    <id>https://cj-bc.github.io/blog/posts/2021-01-13-after-effect-animation-with-expressions.html</id>
+    <published>2021-01-13T00:00:00Z</published>
+    <updated>2021-01-13T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>Expressionを使ったアニメーションのメモ</h1>
+  <div class="ui list">
+    <div class="item">Posted on January 13, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January 14, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;after effect&#39;." href="/tags/after%20effect.html" class="ui tag label">after effect</a>
+  
+</div>
+
+<h1>Expression制御のEffectは必ずリネームする</h1>
+<p>同じ種類のExpression制御Effectを一度しか使わないなら問題にはならない気がしますが、 後々見やすいのでリネームをした方が良いです。<br />
+そして、<strong>できる限り早く</strong>リネームするようにしてください。 複数の同じエフェクトを作成・Expressionから参照した後にリネームした場合、 <strong>Expression内の同名の部分が全て新しい名前に置き換わります</strong>。<br />
+例えば、</p>
+<h2>リネームの仕方</h2>
+<p><a href="https://creativecow.net/forums/thread/rename-expression-controlsae-2/">参考にしたもの</a></p>
+<p>例えばスライダー制御のEffectをリネームする場合、<code>エフェクト→スライダー制御</code>を選択してEnterを押します。 すると普段通りにリネームできます。~~私は気付かなかった...~~</p>
+<h1>Expressionのコピペ</h1>
+<p>作成したExpressionを含むプロパティを選択しC-cで普段通りコピー。 コピー先のレイヤーを選択してC-vするとそのままペーストされる。</p>
+]]></summary>
+</entry>
+
+</feed>

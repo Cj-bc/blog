@@ -7,8 +7,69 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/general.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Mon, 11 Jan 2021 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Wed, 13 Jan 2021 00:00:00 UT</lastBuildDate>
         <item>
+    <title>After Effectショートカットキーチートシート(個人用)</title>
+    <link>https://cj-bc.github.io/blog/posts/2021-01-13-after-effect-cheat-sheet.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>After Effectショートカットキーチートシート(個人用)</h1>
+  <div class="ui list">
+    <div class="item">Posted on January 13, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January 14, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;after effect&#39;." href="/tags/after%20effect.html" class="ui tag label">after effect</a><a title="All pages tagged &#39;cheat sheet&#39;." href="/tags/cheat%20sheet.html" class="ui tag label">cheat sheet</a>
+  
+</div>
+
+<p>個人用のチートシート</p>
+<p>やりたいこと ショートカットキー ----------------- ------------------- Layerをカットする Ctrl+Shift+D</p>
+]]></description>
+    <pubDate>Wed, 13 Jan 2021 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2021-01-13-after-effect-cheat-sheet.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>Expressionを使ったアニメーションのメモ</title>
+    <link>https://cj-bc.github.io/blog/posts/2021-01-13-after-effect-animation-with-expressions.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>Expressionを使ったアニメーションのメモ</h1>
+  <div class="ui list">
+    <div class="item">Posted on January 13, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January 14, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;after effect&#39;." href="/tags/after%20effect.html" class="ui tag label">after effect</a>
+  
+</div>
+
+<h1>Expression制御のEffectは必ずリネームする</h1>
+<p>同じ種類のExpression制御Effectを一度しか使わないなら問題にはならない気がしますが、 後々見やすいのでリネームをした方が良いです。<br />
+そして、<strong>できる限り早く</strong>リネームするようにしてください。 複数の同じエフェクトを作成・Expressionから参照した後にリネームした場合、 <strong>Expression内の同名の部分が全て新しい名前に置き換わります</strong>。<br />
+例えば、</p>
+<h2>リネームの仕方</h2>
+<p><a href="https://creativecow.net/forums/thread/rename-expression-controlsae-2/">参考にしたもの</a></p>
+<p>例えばスライダー制御のEffectをリネームする場合、<code>エフェクト→スライダー制御</code>を選択してEnterを押します。 すると普段通りにリネームできます。~~私は気付かなかった...~~</p>
+<h1>Expressionのコピペ</h1>
+<p>作成したExpressionを含むプロパティを選択しC-cで普段通りコピー。 コピー先のレイヤーを選択してC-vするとそのままペーストされる。</p>
+]]></description>
+    <pubDate>Wed, 13 Jan 2021 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2021-01-13-after-effect-animation-with-expressions.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>VRM_IMPORTER_for_Blender \#23 作業メモ</title>
     <link>https://cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
@@ -1278,147 +1339,6 @@ sh
 ]]></description>
     <pubDate>Tue, 20 Oct 2020 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2020-10-20-check-githubs-ssh-key.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2020-10-18-couldnt-ues-player-input-component</title>
-    <link>https://cj-bc.github.io/blog/posts/2020-10-18-couldnt-ues-player-input-component.html</link>
-    <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>2020-10-18-couldnt-ues-player-input-component</h1>
-  <div class="ui list">
-    <div class="item">Posted on October 18, 2020</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on October 26, 2020
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  
-  
-</div>
-
-<p>Player Inputが上手く使えないと思ったら単純なミスだった</p>
-<h1>tl;dr</h1>
-<p>UnityEventを使用する場合、Eventに登録するスクリプトは、そのInspectorビューから選択し、スクリプトファイルそのものを入れないようにする</p>
-<hr />
-<p>Player Inputは、Unityで<code>2019.1</code>から追加された、<code>Input</code>に取って変わる新しい入力管理システムです。 詳しくは<a href="https://blogs.unity3d.com/jp/2019/10/14/introducing-the-new-input-system/">新しい Input System のご紹介 -- blogs.unity3d.com</a>を参照してください。</p>
-<h1>環境</h1>
-<p>ソフトウェア バージョン ------------- --------------------- - Unity 2019.4.11f1 Personal InputSystem 1.0.0</p>
-<h1>現状</h1>
-<p>基本的には<a href="https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/manual/QuickStartGuide.html">Quick Start Guide</a>に沿って作業をしています。(<code>Input System</code>は導入済とします。)</p>
-<ol>
-<li>入力を反映させたい<code>GameObject</code>に<code>PlayerInput</code>をattachします。</li>
-<li>"Create Actions"を押し、新しい<code>Action Asset</code>を作成します</li>
-<li>"Quick Start Guide"に従って、入力を<code>Unity Events</code>で受けとるようにします。</li>
-<li>今回は必要なかったので、デフォルトで入っているActionを自分で使うものに入れかえました</li>
-<li><code>1.</code>の<code>GameObject</code>に戻り、<code>PlayerInput</code>のEvents欄にScript fileを指定します</li>
-<li>あれ!?<code>No Function</code>しか出てこない!?</li>
-</ol>
-<h1>原因</h1>
-<p>今回の原因は、上記の<code>5.</code>にある <strong>Events欄に設定したもの</strong> でした。 ここで、私は「スクリプトファイル自体」を選択していましたが、そうではなく、「実際に使いたいオブジェクトに紐づけられている該当ファイルのインスタンスを渡してると、上手くいきます。</p>
-<h2>もう一つ考えられる原因</h2>
-<p>今回は違いましたが、調べている間に見つけたのが<a href="https://forum.unity.com/threads/cant-assign-public-script-function-to-player-input-component-new-input-system.881032/">これ</a>で、「コールバック関数の引数は<code>InputAction.CallbackContext callbackContext</code>にしないといけない、というもの。</p>
-]]></description>
-    <pubDate>Sun, 18 Oct 2020 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2020-10-18-couldnt-ues-player-input-component.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>簡易的な素数探索アルゴリズムの速度比較</title>
-    <link>https://cj-bc.github.io/blog/posts/2020-10-17-comparing-primes-algorithm.html</link>
-    <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>簡易的な素数探索アルゴリズムの速度比較</h1>
-  <div class="ui list">
-    <div class="item">Posted on October 17, 2020</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on October 17, 2020
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;python&#39;." href="/tags/python.html" class="ui tag label">python</a><a title="All pages tagged &#39;アルゴリズム&#39;." href="/tags/%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0.html" class="ui tag label">アルゴリズム</a>
-  
-</div>
-
-<p>いや簡単なものなのですが個人的なメモ。 実行言語は<code>python 3.7.4</code>です。</p>
-<h1>比較するアルゴリズム</h1>
-<h1>1. 定義通りの求め方</h1>
-<p>素数は「自分自身と1のみを約数に持つ数」なので、「自分自身と1以外に割り切れる数があるか」を調べれば素数かの判定ができることになります。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-python
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">def</span> fromDefinition(nums: [<span class="bu">int</span>]) <span class="op">-&gt;</span> [<span class="bu">int</span>]:</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="kw">def</span> f(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n):</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>      <span class="cf">if</span> n <span class="op">%</span> i <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>        <span class="cf">return</span> <span class="va">False</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>      <span class="cf">return</span> <span class="va">True</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    <span class="cf">return</span> <span class="bu">list</span>(<span class="bu">filter</span>(f, nums))</span></code></pre></div>
-</div>
-<h2>エラトステネスの揮</h2>
-<p>多分中学校かそこらへんで習ったであろう方法。 求めたい範囲の数の集合から、小さい素数の倍数をふるい落としていく方法です。<br />
-<a href="https://ja.wikipedia.org/wiki/%E3%82%A8%E3%83%A9%E3%83%88%E3%82%B9%E3%83%86%E3%83%8D%E3%82%B9%E3%81%AE%E7%AF%A9">wikipediaの図解</a>がわかりやすい。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-python
-</div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="im">import</span> time</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="im">from</span> math <span class="im">import</span> sqrt</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="kw">def</span> eratosthenes(nums: [<span class="bu">int</span>]) <span class="op">-&gt;</span> [<span class="bu">int</span>]:</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    <span class="cf">if</span> nums[<span class="dv">0</span>] <span class="op">&lt;=</span> <span class="dv">1</span>:</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>        <span class="cf">return</span> eratosthenes(nums[<span class="dv">1</span>:])</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>    head <span class="op">=</span> nums[<span class="dv">0</span>]</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>    <span class="cf">if</span> head <span class="op">&gt;=</span> sqrt(nums[<span class="op">-</span><span class="dv">1</span>]):</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>        <span class="cf">return</span> nums</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>    ret <span class="op">=</span> <span class="bu">list</span>(<span class="bu">filter</span>(<span class="kw">lambda</span> i: i <span class="op">%</span> head <span class="op">!=</span> <span class="dv">0</span>, nums))</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>    <span class="cf">return</span> [head] <span class="op">+</span> eratosthenes(ret)</span></code></pre></div>
-</div>
-<h1>実行時間計測</h1>
-<p>それぞれの処理を1000回ずつ実行し、その平均を求めた</p>
-<h2>計測用コード</h2>
-<div class="ui segment">
-<div class="ui top right attached label">
-python
-</div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">def</span> mesureTime(f, <span class="op">*</span>args) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    startTime <span class="op">=</span> time.time()</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    f(<span class="op">*</span>args)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    <span class="cf">return</span> time.time() <span class="op">-</span> startTime</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="kw">def</span> mesureTimeAvr(f, <span class="op">*</span>args) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>    t <span class="op">=</span> <span class="fl">0.0</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a>        t<span class="op">+=</span>mesureTime(f, <span class="op">*</span>args)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>    <span class="cf">return</span> t <span class="op">/</span> <span class="dv">1000</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a>x <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">100</span> <span class="op">+</span> <span class="dv">1</span>)</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a><span class="bu">print</span>(<span class="ss">f&quot;fromDefinition: </span><span class="sc">{</span>mesureTimeAvr(fromDefinition, x)<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a><span class="bu">print</span>(<span class="ss">f&quot;eratosthenes  : </span><span class="sc">{</span>mesureTimeAvr(eratosthenes, x)<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
-</div>
-<h2>結果</h2>
-<div class="ui segment">
-<div class="ui top right attached label">
-
-</div>
-<pre class="SourceCode"><code>fromDefinition: 3.378009796142578e-05
-eratosthenes  : 2.4552106857299804e-05</code></pre>
-</div>
-<p>エラトステネスの揮の方が1秒くらい早い。 Orderはわからん！！</p>
-]]></description>
-    <pubDate>Sat, 17 Oct 2020 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2020-10-17-comparing-primes-algorithm.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
