@@ -49,7 +49,7 @@ blockQuoteFormat (BlockQuote cs) = Div (mempty, ["ui", "piled", "segment"], [("s
 blockQuoteFormat other = other
 
 addAnchorToHeader :: Block -> Block
-addAnchorToHeader (Header lvl (id_, classes, kv)) inlines = Header lvl (id_', classes, kv) inlines
+addAnchorToHeader (Header lvl (id_, classes, kv) inlines) = Header lvl (id_', classes, kv) inlines
         where
             id_' = if empty id_ then anchored
                                 else id_
