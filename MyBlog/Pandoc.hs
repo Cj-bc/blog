@@ -11,6 +11,7 @@ module MyBlog.Pandoc where
 import Data.Maybe (listToMaybe)
 import Text.Pandoc.Walk
 import Text.Pandoc.Definition
+import Text.Pandoc.Shared
 import qualified Data.Text as T
 
 addClass :: [T.Text] -> Attr -> Attr
@@ -51,7 +52,7 @@ blockQuoteFormat other = other
 addAnchorToHeader :: Block -> Block
 addAnchorToHeader (Header lvl (id_, classes, kv) inlines) = Header lvl (id_', classes, kv) inlines
         where
-            id_' = if empty id_ then anchored
+            id_' = if mempty id_ then anchored
                                 else id_
-            anchored = mconcat $ map stringfy inlines
+            anchored = mconcat $ map stringify inlines
 
