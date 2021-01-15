@@ -21,7 +21,7 @@
     <div class="item">Posted on January 11, 2021</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on January 11, 2021
+      Updated on January 15, 2021
     </div>
   </div>
     
@@ -65,18 +65,22 @@ python
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>            <span class="cf">if</span> nt <span class="kw">not</span> <span class="kw">in</span> bpy.data.node_groups:</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>                data_to.node_groups.append(nt)</span></code></pre></div>
 </div>
-<p>このコードである。そして、読めば字の如くだが、レポジトリにある<code>resources/material_node_groups.blend</code> を読み込んでその中にある<code>node_groups</code>を取得、Blenderに存在していないものがあれば <code>data_to.node_groups.append()</code>して追加している。<br />
+<h2>実際にshaderを追加している部分</h2>
+<p>このコードである。そして、読めば字の如くだが、レポジトリにある<code>resources/material_node_groups.blend</code> にある<code>node_groups</code>の中でBlenderに存在していないものがあれば <code>data_to.node_groups.append()</code>して追加している。<br />
 結論から言うと<a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code>node_groups</code></a>は nodeで表現されるもの(オブジェクト？)、つまり<code>Shading</code>/<code>Textures</code>/<code>Compositin</code>に関わるものの集合である。 (<a href="https://docs.blender.org/api/current/bpy.types.NodeTree.html#bpy.types.NodeTree">公式doc</a>)<br />
 type()によると、<code>bpy.data</code>は<code>bpy.types.BlendData</code>であるので、<code>node_groups</code>は <a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code>bpy.types.BlendData.node_groups</code></a> である。 ここで、なんとなく<code>bpy.data</code>を見てみると<code>bpy.data.node_groups</code>に追加されてることがわかる。</p>
 <details>
-<summary>もうちょい詳しく(でもよくわからなくて落書き)</summary>
+<summary>`bpy.data.node_groups`までたどり着く道のりメモ(でもよくわからなくて落書き)</summary>
 `data_to`は[`bpy.data.libraries.load`](https://docs.blender.org/api/current/bpy.types.BlendDataLibraries.html#bpy.types.BlendDataLibraries.load)から返されている。
 `bpy.data`が[`BlendData`](https://docs.blender.org/api/current/bpy.types.BlendData.html)のインスタンスであることから
 `bpy.data.libraries.load`は[`BlendDataLibraries.load`](https://docs.blender.org/api/current/bpy.types.BlendDataLibraries.html#bpy.types.BlendDataLibraries.load)である。  
 
+...で、なんとなく`bpy.data`を見る、に戻る
 </details>
-<p>そこから、入力を受け付けてるものなら<code>.inputs</code>にある。 今回でいうと、<code>MToon</code>マテリアルにある<code>NomalmapTexture</code>というtypoを直したいので、 <code>bpy.data.node_groups['MToon_unversioned'].input['NomalmapTexture']</code>を参照する</p>
-<p>しかし、これをtypoが直った<code>bpy.data.node_groups['MToon_unversioned'].input['NormalmapTexture']</code>に変えたいのだけど、</p>
+<p><code>node_groups</code>の中で入力を受け付けてるものなら<code>.inputs</code>にある。 今回でいうと、<code>MToon</code>マテリアルにある<code>NomalmapTexture</code>というtypoを直したいので、 <code>bpy.data.node_groups['MToon_unversioned'].input['NomalmapTexture']</code>を参照する</p>
+<h1>今行き詰まっている問題</h1>
+<h2>bpy<em>prop</em>collectionに追加できない</h2>
+<p>これをtypoが直った<code>bpy.data.node_groups['MToon_unversioned'].input['NormalmapTexture']</code>に変えたいのだけど、 どうやら<code>input['NomalmapTexture']</code>の型である<code>bpy_prop_collection</code>がC実装なようで、普段のpythonのようにはいかない。 具体的にいうと</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 python
@@ -94,72 +98,157 @@ Traceback (most recent call last):
   File &quot;&lt;console&gt;&quot;, line 1, in &lt;module&gt;
 TypeError: bpy_prop_collection[key]: invalid key, must be a string or an int, not str</code></pre>
 </div>
-<p>なので、<a href="https://docs.blender.org/api/current/bpy.types.bpy_prop_collection.html?highlight=bpy_prop_collection#bpy.types.bpy_prop_collection"><code>bpy_prop_collection</code></a> のドキュメントと<code>dir(mtoonNode.inputs[0])</code>を読んでみた所、 ドキュメントには書かれていなかったけど<code>move</code>と<code>new</code>があった。</p>
+<h3>試したこと</h3>
+<p><a href="https://docs.blender.org/api/current/bpy.types.bpy_prop_collection.html?highlight=bpy_prop_collection#bpy.types.bpy_prop_collection"><code>bpy_prop_collection</code></a>のドキュメントと<code>dir(mtoonNode.inputs[0])</code>を読んでみた所、 ドキュメントには書かれていなかったけど<code>move</code>と<code>new</code>があった。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 python-repl
 </div>
 <pre class="python-repl SourceCode"><code>&gt;&gt;&gt; dir(mtoonNode.inputs)
-[&#39;__bool__&#39;, &#39;__contains__&#39;, &#39;__delattr__&#39;, &#39;__delitem__&#39;, &#39;__doc__&#39;, &#39;__doc__&#39;, &#39;__getattribute__&#39;, &#39;__getitem__&#39;, &#39;__iter__&#39;, &#39;__len__&#39;, &#39;__module__&#39;, &#39;__setattr__&#39;, &#39;__setitem__&#39;, &#39;__slots__&#39;, &#39;bl_rna&#39;, &#39;clear&#39;, &#39;find&#39;, &#39;foreach_get&#39;, &#39;foreach_set&#39;, &#39;get&#39;, &#39;items&#39;, &#39;keys&#39;, &#39;move&#39;, &#39;new&#39;, &#39;remove&#39;, &#39;rna_type&#39;, &#39;values&#39;]])</code></pre>
+[&#39;__bool__&#39;, &#39;__contains__&#39;, &#39;__delattr__&#39;, &#39;__delitem__&#39;, &#39;__doc__&#39;
+, &#39;__doc__&#39;, &#39;__getattribute__&#39;, &#39;__getitem__&#39;, &#39;__iter__&#39;, &#39;__len__&#39;
+, &#39;__module__&#39;, &#39;__setattr__&#39;, &#39;__setitem__&#39;, &#39;__slots__&#39;, &#39;bl_rna&#39;
+, &#39;clear&#39;, &#39;find&#39;, &#39;foreach_get&#39;, &#39;foreach_set&#39;, &#39;get&#39;
+, &#39;items&#39;, &#39;keys&#39;, &#39;move&#39;, &#39;new&#39;, &#39;remove&#39;, &#39;rna_type&#39;, &#39;values&#39;]</code></pre>
 </div>
 <p>それぞれの挙動を試してみたが、どっちもうまく動かず...というか挙動がわからなかった</p>
-<h2><code>new()</code></h2>
-<div class="ui segment">
-<div class="ui top right attached label">
-python-repl
-</div>
-<pre class="python-repl SourceCode"><code>&gt;&gt;&gt; mtoonNode.inputs
+<h4><code>new()</code></h4>
+<details> <summary>Replの結果ですが長いので折りたたみ</summary>
+``` python-repl
+>>> mtoonNode.inputs
 bpy.data...inputs
-&gt;&gt;&gt; mtoonNode
-bpy.data.node_groups[&#39;MToon_unversioned&#39;]
-&gt;&gt;&gt; mtoonNode.inputs.new
-&lt;bpy_func NodeTreeInputs.new()&gt;
-&gt;&gt;&gt; mtoonNode.inputs.new()
+>>> mtoonNode
+bpy.data.node_groups['MToon_unversioned']
+>>> mtoonNode.inputs.new
+<bpy_func NodeTreeInputs.new()>
+>>> mtoonNode.inputs.new()
 Traceback (most recent call last):
-  File &quot;&lt;console&gt;&quot;, line 1, in &lt;module&gt;
-TypeError: NodeTreeInputs.new(): required parameter &quot;type&quot; not specified
-&gt;&gt;&gt; # mtoonNode.inputs[&#39;NomalmapTexture&#39;]
-&gt;&gt;&gt; mtoonNode.inputs.new(&#39;RGBA&#39;)
+  File "<console>", line 1, in <module>
+TypeError: NodeTreeInputs.new(): required parameter "type" not specified
+>>> # mtoonNode.inputs['NomalmapTexture']から値を拝借
+>>> mtoonNode.inputs.new('RGBA')
 Traceback (most recent call last):
-  File &quot;&lt;console&gt;&quot;, line 1, in &lt;module&gt;
-TypeError: NodeTreeInputs.new(): required parameter &quot;name&quot; not specified
-&gt;&gt;&gt; mtoonNode.inputs.new(&#39;RGBA&#39;, &#39;NormalmapTexture&#39;)
-&gt;&gt;&gt; mtoonNode.inputs
+  File "<console>", line 1, in <module>
+TypeError: NodeTreeInputs.new(): required parameter "name" not specified
+>>> mtoonNode.inputs.new('RGBA', 'NormalmapTexture')
+>>> mtoonNode.inputs
 bpy.data...inputs
-&gt;&gt;&gt; mtoonNode.inputs[&#39;NormalmapTexture&#39;]
+>>> mtoonNode.inputs['NormalmapTexture']
 Traceback (most recent call last):
-  File &quot;&lt;console&gt;&quot;, line 1, in &lt;module&gt;
-KeyError: &#39;bpy_prop_collection[key]: key &quot;NormalmapTexture&quot; not found&#39;
-&gt;&gt;&gt; mtoonNode.inputs.items()
-[(&#39;MainTexture&#39;, bpy.data...inputs[0]), (&#39;MainTextureAlpha&#39;, bpy.data...inputs[1]), (&#39;ShadeTexture&#39;, bpy.data...inputs[2]), (&#39;ReceiveShadow_Texture_alpha&#39;, bpy.data...inputs[3]), (&#39;NomalmapTexture&#39;, bpy.data...inputs[4]), (&#39;ShadingGradeTexture&#39;, bpy.data...inputs[5]), (&#39;Emission_Texture&#39;, bpy.data...inputs[6]), (&#39;SphereAddTexture&#39;, bpy.data...inputs[7]), (&#39;OutlineWidthTexture&#39;, bpy.data...inputs[8]), (&#39;UV_Animation_Mask_Texture&#39;, bpy.data...inputs[9]), (&#39;DiffuseColor&#39;, bpy.data...inputs[10]), (&#39;ShadeColor&#39;, bpy.data...inputs[11]), (&#39;EmissionColor&#39;, bpy.data...inputs[12]), (&#39;OutlineColor&#39;, bpy.data...inputs[13]), (&#39;RimColor&#39;, bpy.data...inputs[14]), (&#39;RimTexture&#39;, bpy.data...inputs[15]), (&#39;RimLightingMix&#39;, bpy.data...inputs[16]), (&#39;RimFresnelPower&#39;, bpy.data...inputs[17]), (&#39;RimLift&#39;, bpy.data...inputs[18]), (&#39;CutoffRate&#39;, bpy.data...inputs[19]), (&#39;BumpScale&#39;, bpy.data...inputs[20]), (&#39;ReceiveShadowRate&#39;, bpy.data...inputs[21]), (&#39;ShadeShift&#39;, bpy.data...inputs[22]), (&#39;ShadeToony&#39;, bpy.data...inputs[23]), (&#39;ShadingGradeRate&#39;, bpy.data...inputs[24]), (&#39;LightColorAttenuation&#39;, bpy.data...inputs[25]), (&#39;IndirectLightIntensity&#39;, bpy.data...inputs[26]), (&#39;OutlineWidth&#39;, bpy.data...inputs[27]), (&#39;OutlineScaleMaxDistance&#39;, bpy.data...inputs[28]), (&#39;OutlineLightingMix&#39;, bpy.data...inputs[29]), (&#39;OutlineWidthMode&#39;, bpy.data...inputs[30]), (&#39;OutlineColorMode&#39;, bpy.data...inputs[31]), (&#39;UV_Scroll_X&#39;, bpy.data...inputs[32]), (&#39;UV_Scroll_Y&#39;, bpy.data...inputs[33]), (&#39;UV_Scroll_Rotation&#39;, bpy.data...inputs[34])]</code></pre>
-</div>
-<h2>move()</h2>
-<div class="ui segment">
-<div class="ui top right attached label">
-python-repl
-</div>
-<pre class="python-repl SourceCode"><code>&gt;&gt;&gt; mtoonNode.inputs.move()
+  File "<console>", line 1, in <module>
+KeyError: 'bpy_prop_collection[key]: key "NormalmapTexture" not found'
+>>> mtoonNode.inputs.items()
+[('MainTexture', bpy.data...inputs[0])
+, ('MainTextureAlpha', bpy.data...inputs[1])
+, ('ShadeTexture', bpy.data...inputs[2])
+, ('ReceiveShadow_Texture_alpha', bpy.data...inputs[3])
+, ('NomalmapTexture', bpy.data...inputs[4])
+, ('ShadingGradeTexture', bpy.data...inputs[5])
+, ('Emission_Texture', bpy.data...inputs[6])
+, ('SphereAddTexture', bpy.data...inputs[7])
+, ('OutlineWidthTexture', bpy.data...inputs[8])
+, ('UV_Animation_Mask_Texture', bpy.data...inputs[9])
+, ('DiffuseColor', bpy.data...inputs[10])
+, ('ShadeColor', bpy.data...inputs[11])
+, ('EmissionColor', bpy.data...inputs[12])
+, ('OutlineColor', bpy.data...inputs[13])
+, ('RimColor', bpy.data...inputs[14])
+, ('RimTexture', bpy.data...inputs[15])
+, ('RimLightingMix', bpy.data...inputs[16])
+, ('RimFresnelPower', bpy.data...inputs[17])
+, ('RimLift', bpy.data...inputs[18])
+, ('CutoffRate', bpy.data...inputs[19])
+, ('BumpScale', bpy.data...inputs[20])
+, ('ReceiveShadowRate', bpy.data...inputs[21])
+, ('ShadeShift', bpy.data...inputs[22])
+, ('ShadeToony', bpy.data...inputs[23])
+, ('ShadingGradeRate', bpy.data...inputs[24])
+, ('LightColorAttenuation', bpy.data...inputs[25])
+, ('IndirectLightIntensity', bpy.data...inputs[26])
+, ('OutlineWidth', bpy.data...inputs[27])
+, ('OutlineScaleMaxDistance', bpy.data...inputs[28])
+, ('OutlineLightingMix', bpy.data...inputs[29])
+, ('OutlineWidthMode', bpy.data...inputs[30])
+, ('OutlineColorMode', bpy.data...inputs[31])
+, ('UV_Scroll_X', bpy.data...inputs[32])
+, ('UV_Scroll_Y', bpy.data...inputs[33])
+, ('UV_Scroll_Rotation', bpy.data...inputs[34])]
+```
+</details>
+<h4>move()</h4>
+<details> <summary> Replの結果。長いため折りたたみ。 </summary>
+``` python-repl
+>>> mtoonNode.inputs.move()
 Traceback (most recent call last):
-  File &quot;&lt;console&gt;&quot;, line 1, in &lt;module&gt;
-TypeError: NodeTreeInputs.move(): required parameter &quot;from_index&quot; not specified
-&gt;&gt;&gt; mtoonNode.inputs.move(4)
+  File "<console>", line 1, in <module>
+TypeError: NodeTreeInputs.move(): required parameter "from_index" not specified
+>>> mtoonNode.inputs.move(4)
 Traceback (most recent call last):
-  File &quot;&lt;console&gt;&quot;, line 1, in &lt;module&gt;
-TypeError: NodeTreeInputs.move(): required parameter &quot;to_index&quot; not specified
-&gt;&gt;&gt; mtoonNode.inputs.move(4, 35)
-&gt;&gt;&gt; dir(mtoonNode.inputs)
-[&#39;__bool__&#39;, &#39;__contains__&#39;, &#39;__delattr__&#39;, &#39;__delitem__&#39;, &#39;__doc__&#39;, &#39;__doc__&#39;, &#39;__getattribute__&#39;, &#39;__getitem__&#39;, &#39;__iter__&#39;, &#39;__len__&#39;, &#39;__module__&#39;, &#39;__setattr__&#39;, &#39;__setitem__&#39;, &#39;__slots__&#39;, &#39;bl_rna&#39;, &#39;clear&#39;, &#39;find&#39;, &#39;foreach_get&#39;, &#39;foreach_set&#39;, &#39;get&#39;, &#39;items&#39;, &#39;keys&#39;, &#39;move&#39;, &#39;new&#39;, &#39;remove&#39;, &#39;rna_type&#39;, &#39;values&#39;]
-&gt;&gt;&gt; mtoonNode.inputs.items()
-[(&#39;MainTexture&#39;, bpy.data...inputs[0]), (&#39;MainTextureAlpha&#39;, bpy.data...inputs[1]), (&#39;ShadeTexture&#39;, bpy.data...inputs[2]), (&#39;ReceiveShadow_Texture_alpha&#39;, bpy.data...inputs[3]), (&#39;NomalmapTexture&#39;, bpy.data...inputs[4]), (&#39;ShadingGradeTexture&#39;, bpy.data...inputs[5]), (&#39;Emission_Texture&#39;, bpy.data...inputs[6]), (&#39;SphereAddTexture&#39;, bpy.data...inputs[7]), (&#39;OutlineWidthTexture&#39;, bpy.data...inputs[8]), (&#39;UV_Animation_Mask_Texture&#39;, bpy.data...inputs[9]), (&#39;DiffuseColor&#39;, bpy.data...inputs[10]), (&#39;ShadeColor&#39;, bpy.data...inputs[11]), (&#39;EmissionColor&#39;, bpy.data...inputs[12]), (&#39;OutlineColor&#39;, bpy.data...inputs[13]), (&#39;RimColor&#39;, bpy.data...inputs[14]), (&#39;RimTexture&#39;, bpy.data...inputs[15]), (&#39;RimLightingMix&#39;, bpy.data...inputs[16]), (&#39;RimFresnelPower&#39;, bpy.data...inputs[17]), (&#39;RimLift&#39;, bpy.data...inputs[18]), (&#39;CutoffRate&#39;, bpy.data...inputs[19]), (&#39;BumpScale&#39;, bpy.data...inputs[20]), (&#39;ReceiveShadowRate&#39;, bpy.data...inputs[21]), (&#39;ShadeShift&#39;, bpy.data...inputs[22]), (&#39;ShadeToony&#39;, bpy.data...inputs[23]), (&#39;ShadingGradeRate&#39;, bpy.data...inputs[24]), (&#39;LightColorAttenuation&#39;, bpy.data...inputs[25]), (&#39;IndirectLightIntensity&#39;, bpy.data...inputs[26]), (&#39;OutlineWidth&#39;, bpy.data...inputs[27]), (&#39;OutlineScaleMaxDistance&#39;, bpy.data...inputs[28]), (&#39;OutlineLightingMix&#39;, bpy.data...inputs[29]), (&#39;OutlineWidthMode&#39;, bpy.data...inputs[30]), (&#39;OutlineColorMode&#39;, bpy.data...inputs[31]), (&#39;UV_Scroll_X&#39;, bpy.data...inputs[32]), (&#39;UV_Scroll_Y&#39;, bpy.data...inputs[33]), (&#39;UV_Scroll_Rotation&#39;, bpy.data...inputs[34])]
-&gt;&gt;&gt; mtoonNode.inputs.values()
-[bpy.data...inputs[0], bpy.data...inputs[1], bpy.data...inputs[2], bpy.data...inputs[3], bpy.data...inputs[4], bpy.data...inputs[5], bpy.data...inputs[6], bpy.data...inputs[7], bpy.data...inputs[8], bpy.data...inputs[9], bpy.data...inputs[10], bpy.data...inputs[11], bpy.data...inputs[12], bpy.data...inputs[13], bpy.data...inputs[14], bpy.data...inputs[15], bpy.data...inputs[16], bpy.data...inputs[17], bpy.data...inputs[18], bpy.data...inputs[19], bpy.data...inputs[20], bpy.data...inputs[21], bpy.data...inputs[22], bpy.data...inputs[23], bpy.data...inputs[24], bpy.data...inputs[25], bpy.data...inputs[26], bpy.data...inputs[27], bpy.data...inputs[28], bpy.data...inputs[29], bpy.data...inputs[30], bpy.data...inputs[31], bpy.data...inputs[32], bpy.data...inputs[33], bpy.data...inputs[34]]
-&gt;&gt;&gt; bpy.data...inputs[1]
-  File &quot;&lt;console&gt;&quot;, line 1
+  File "<console>", line 1, in <module>
+TypeError: NodeTreeInputs.move(): required parameter "to_index" not specified
+>>> mtoonNode.inputs.move(4, 35)
+>>> mtoonNode.inputs.items()
+[('MainTexture', bpy.data...inputs[0]), ('MainTextureAlpha', bpy.data...inputs[1])
+, ('ShadeTexture', bpy.data...inputs[2])
+, ('ReceiveShadow_Texture_alpha', bpy.data...inputs[3])
+, ('NomalmapTexture', bpy.data...inputs[4])
+, ('ShadingGradeTexture', bpy.data...inputs[5])
+, ('Emission_Texture', bpy.data...inputs[6])
+, ('SphereAddTexture', bpy.data...inputs[7])
+, ('OutlineWidthTexture', bpy.data...inputs[8])
+, ('UV_Animation_Mask_Texture', bpy.data...inputs[9])
+, ('DiffuseColor', bpy.data...inputs[10])
+, ('ShadeColor', bpy.data...inputs[11])
+, ('EmissionColor', bpy.data...inputs[12])
+, ('OutlineColor', bpy.data...inputs[13])
+, ('RimColor', bpy.data...inputs[14])
+, ('RimTexture', bpy.data...inputs[15])
+, ('RimLightingMix', bpy.data...inputs[16])
+, ('RimFresnelPower', bpy.data...inputs[17])
+, ('RimLift', bpy.data...inputs[18])
+, ('CutoffRate', bpy.data...inputs[19])
+, ('BumpScale', bpy.data...inputs[20])
+, ('ReceiveShadowRate', bpy.data...inputs[21])
+, ('ShadeShift', bpy.data...inputs[22])
+, ('ShadeToony', bpy.data...inputs[23])
+, ('ShadingGradeRate', bpy.data...inputs[24])
+, ('LightColorAttenuation', bpy.data...inputs[25])
+, ('IndirectLightIntensity', bpy.data...inputs[26])
+, ('OutlineWidth', bpy.data...inputs[27])
+, ('OutlineScaleMaxDistance', bpy.data...inputs[28])
+, ('OutlineLightingMix', bpy.data...inputs[29])
+, ('OutlineWidthMode', bpy.data...inputs[30])
+, ('OutlineColorMode', bpy.data...inputs[31])
+, ('UV_Scroll_X', bpy.data...inputs[32])
+, ('UV_Scroll_Y', bpy.data...inputs[33])
+, ('UV_Scroll_Rotation', bpy.data...inputs[34])]
+>>> mtoonNode.inputs.values()
+[bpy.data...inputs[0]
+, bpy.data...inputs[1], bpy.data...inputs[2]
+, bpy.data...inputs[3], bpy.data...inputs[4]
+, bpy.data...inputs[5], bpy.data...inputs[6]
+, bpy.data...inputs[7], bpy.data...inputs[8]
+, bpy.data...inputs[9], bpy.data...inputs[10]
+, bpy.data...inputs[11], bpy.data...inputs[12]
+, bpy.data...inputs[13], bpy.data...inputs[14]
+, bpy.data...inputs[15], bpy.data...inputs[16]
+, bpy.data...inputs[17], bpy.data...inputs[18]
+, bpy.data...inputs[19], bpy.data...inputs[20]
+, bpy.data...inputs[21], bpy.data...inputs[22]
+, bpy.data...inputs[23], bpy.data...inputs[24]
+, bpy.data...inputs[25], bpy.data...inputs[26]
+, bpy.data...inputs[27], bpy.data...inputs[28]
+, bpy.data...inputs[29], bpy.data...inputs[30]
+, bpy.data...inputs[31], bpy.data...inputs[32]
+, bpy.data...inputs[33], bpy.data...inputs[34]]
+>>> bpy.data...inputs[1]
+  File "<console>", line 1
     bpy.data...inputs[1]
               ^
 SyntaxError: invalid syntax
-&gt;&gt;&gt;</code></pre>
-</div>
+>>>
+```
+</details>
 ]]></summary>
 </entry>
 <entry>
