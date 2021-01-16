@@ -32,7 +32,7 @@
   
 </div>
 
-<h1><code>GFiles</code>は便利</h1>
+<h1 id="GFilesは便利"><code>GFiles</code>は便利</h1>
 <p><code>GFiles</code>は、カレントディレクトリにgitレポジトリがあると仮定して、そのレポジトリに認識されるファイル(=一度はコミットされているファイル) の一覧を作り出します。</p>
 <p>しかし、場合によっては「カレントディレクトリ以外のgitレポジトリにあるファイルを参照したい」ことがあると思います。</p>
 <p>例えば、私は普段プロジェクトに取り組んでいる最中にブログを書いたりするのですが、まさにその時などです。 カレントディレクトリはプロジェクトディレクトリのままで、ブログのレポジトリに対して<code>GFiles</code>を使いたいのです。</p>
@@ -111,14 +111,14 @@ endfunction</code></pre>
   
 </div>
 
-<h1>Expression制御のEffectは必ずリネームする</h1>
+<h1 id="Expression制御のEffectは必ずリネームする">Expression制御のEffectは必ずリネームする</h1>
 <p>同じ種類のExpression制御Effectを一度しか使わないなら問題にはならない気がしますが、 後々見やすいのでリネームをした方が良いです。<br />
 そして、<strong>できる限り早く</strong>リネームするようにしてください。 複数の同じエフェクトを作成・Expressionから参照した後にリネームした場合、 <strong>Expression内の同名の部分が全て新しい名前に置き換わります</strong>。<br />
 例えば、</p>
-<h2>リネームの仕方</h2>
+<h2 id="リネームの仕方">リネームの仕方</h2>
 <p><a href="https://creativecow.net/forums/thread/rename-expression-controlsae-2/">参考にしたもの</a></p>
 <p>例えばスライダー制御のEffectをリネームする場合、<code>エフェクト→スライダー制御</code>を選択してEnterを押します。 すると普段通りにリネームできます。~~私は気付かなかった...~~</p>
-<h1>Expressionのコピペ</h1>
+<h1 id="Expressionのコピペ">Expressionのコピペ</h1>
 <p>作成したExpressionを含むプロパティを選択しC-cで普段通りコピー。 コピー先のレイヤーを選択してC-vするとそのままペーストされる。</p>
 ]]></summary>
 </entry>
@@ -145,8 +145,8 @@ endfunction</code></pre>
   
 </div>
 
-<h1>追加されたシェーダーを探す</h1>
-<h2>場所の特定</h2>
+<h1 id="追加されたシェーダーを探す">追加されたシェーダーを探す</h1>
+<h2 id="場所の特定">場所の特定</h2>
 <p>そもそもファイルがどこに追加されているのかを確かめる必要がある。 そこで、<code>__init__.py</code>を参照する。(どうでもいいけど中身のある<code>__init__.py</code>は初めて見た)<br />
 Blenderは、Addonが追加されるとクラスなどを登録するために<code>register()</code>という関数を探して実行する。 以下がこのAddonの<code>register()</code>関数。 (<a href="https://github.com/saturday06/VRM_IMPORTER_for_Blender/blob/a14835bfbc573a1d8f2be2a74ed198da46a573e4/__init__.py#L277-L285">githubで確認する</a>)</p>
 <div class="ui segment">
@@ -178,7 +178,7 @@ python
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>            <span class="cf">if</span> nt <span class="kw">not</span> <span class="kw">in</span> bpy.data.node_groups:</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>                data_to.node_groups.append(nt)</span></code></pre></div>
 </div>
-<h2>実際にshaderを追加している部分</h2>
+<h2 id="実際にshaderを追加している部分">実際にshaderを追加している部分</h2>
 <p>このコードである。そして、読めば字の如くだが、レポジトリにある<code>resources/material_node_groups.blend</code> にある<code>node_groups</code>の中でBlenderに存在していないものがあれば <code>data_to.node_groups.append()</code>して追加している。<br />
 結論から言うと<a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code>node_groups</code></a>は nodeで表現されるもの(オブジェクト？)、つまり<code>Shading</code>/<code>Textures</code>/<code>Compositin</code>に関わるものの集合である。 (<a href="https://docs.blender.org/api/current/bpy.types.NodeTree.html#bpy.types.NodeTree">公式doc</a>)<br />
 type()によると、<code>bpy.data</code>は<code>bpy.types.BlendData</code>であるので、<code>node_groups</code>は <a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code>bpy.types.BlendData.node_groups</code></a> である。 ここで、なんとなく<code>bpy.data</code>を見てみると<code>bpy.data.node_groups</code>に追加されてることがわかる。</p>
@@ -191,8 +191,8 @@ type()によると、<code>bpy.data</code>は<code>bpy.types.BlendData</code>で
 ...で、なんとなく`bpy.data`を見る、に戻る
 </details>
 <p><code>node_groups</code>の中で入力を受け付けてるものなら<code>.inputs</code>にある。 今回でいうと、<code>MToon</code>マテリアルにある<code>NomalmapTexture</code>というtypoを直したいので、 <code>bpy.data.node_groups['MToon_unversioned'].input['NomalmapTexture']</code>を参照する</p>
-<h1>今行き詰まっている問題</h1>
-<h2>bpy<em>prop</em>collectionに追加できない</h2>
+<h1 id="今行き詰まっている問題">今行き詰まっている問題</h1>
+<h2 id="bpypropcollectionに追加できない">bpy<em>prop</em>collectionに追加できない</h2>
 <p>これをtypoが直った<code>bpy.data.node_groups['MToon_unversioned'].input['NormalmapTexture']</code>に変えたいのだけど、 どうやら<code>input['NomalmapTexture']</code>の型である<code>bpy_prop_collection</code>がC実装なようで、普段のpythonのようにはいかない。 具体的にいうと</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -211,7 +211,7 @@ Traceback (most recent call last):
   File &quot;&lt;console&gt;&quot;, line 1, in &lt;module&gt;
 TypeError: bpy_prop_collection[key]: invalid key, must be a string or an int, not str</code></pre>
 </div>
-<h3>試したこと</h3>
+<h3 id="試したこと">試したこと</h3>
 <p><a href="https://docs.blender.org/api/current/bpy.types.bpy_prop_collection.html?highlight=bpy_prop_collection#bpy.types.bpy_prop_collection"><code>bpy_prop_collection</code></a>のドキュメントと<code>dir(mtoonNode.inputs[0])</code>を読んでみた所、 ドキュメントには書かれていなかったけど<code>move</code>と<code>new</code>があった。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -225,7 +225,7 @@ python-repl
 , &#39;items&#39;, &#39;keys&#39;, &#39;move&#39;, &#39;new&#39;, &#39;remove&#39;, &#39;rna_type&#39;, &#39;values&#39;]</code></pre>
 </div>
 <p>それぞれの挙動を試してみたが、どっちもうまく動かず...というか挙動がわからなかった</p>
-<h4><code>new()</code></h4>
+<h4 id="new()"><code>new()</code></h4>
 <details> <summary>Replの結果ですが長いので折りたたみ</summary>
 ``` python-repl
 >>> mtoonNode.inputs
@@ -288,7 +288,7 @@ KeyError: 'bpy_prop_collection[key]: key "NormalmapTexture" not found'
 , ('UV_Scroll_Rotation', bpy.data...inputs[34])]
 ```
 </details>
-<h4>move()</h4>
+<h4 id="move()">move()</h4>
 <details> <summary> Replの結果。長いため折りたたみ。 </summary>
 ``` python-repl
 >>> mtoonNode.inputs.move()
@@ -399,39 +399,39 @@ SyntaxError: invalid syntax
 <hr />
 <p>はい。</p>
 <p>そもそもVirtualでなくとも配信者ってすごいと思う。まずはそこから</p>
-<h1>配信者のどこがすごいのか</h1>
-<h2>1. 配信の内容がある</h2>
+<h1 id="配信者のどこがすごいのか">配信者のどこがすごいのか</h1>
+<h2 id="1. 配信の内容がある">1. 配信の内容がある</h2>
 <p>いやマジで全てはこれ。特に雑談枠と企画枠の二つ。 私からしたらなぜあんなにも面白い話ができるのか微塵たりともわからない。<br />
 雑談ってお前、雑な談話やぞ？？って思われるかもしれないけど、 雑な談話の方が難しくないですか？？？テーマ決まってたほうが話しやすい。<br />
 主がコミュ障なだけやろ？？と言われるとそれはそうで何も言えないんですが。<br />
 これは配信者の適性というか、そもそもコミュニケーションの適性みたいなところでは あるけれどすごいなって毎回思っています。</p>
-<h2>2. 雑談が謎に面白い</h2>
+<h2 id="2. 雑談が謎に面白い">2. 雑談が謎に面白い</h2>
 <p>内容が、というのもありますが「別段めっちゃ面白いトピックじゃないのに なぜかめちゃくちゃ聞いてて面白い」っていう事例が割とある気がしています。<br />
 具体例とか言われると思い出せないんですが、まぁ逆にいうとそのくらいどうでもいいような 内容でも面白いというか。</p>
-<h2>3. なんか知らんけどゲームしながら話ができる</h2>
+<h2 id="3. なんか知らんけどゲームしながら話ができる">3. なんか知らんけどゲームしながら話ができる</h2>
 <p>これはゲーム配信する人(VTuber見てるので多いがち)に限った話なんですけど、ゲームしながら話してるのすごいと思う。</p>
-<h2>4. 時間が取れる</h2>
+<h2 id="4. 時間が取れる">4. 時間が取れる</h2>
 <p>配信時間ってよく確保できますね？？？</p>
-<h2>5. 積極的に宣伝できる</h2>
+<h2 id="5. 積極的に宣伝できる">5. 積極的に宣伝できる</h2>
 <p>これ地味にすごく大事で、かつすごくすごいなって思うことの一つ。<br />
 わりかし配信に自信がないと宣伝って難しいと思うんですよ。 でも、宣伝しないと人ってこないんですよ。結果的に自信もつかないんですよ。</p>
 <p>まぁ~~主がコミュ障だからってのは言わないで~~</p>
-<h2>6. 声出せる環境がある</h2>
+<h2 id="6. 声出せる環境がある">6. 声出せる環境がある</h2>
 <p>これはすごいというより羨ましいの部分なのかもしれない。 私は家の都合とか立地とかの問題であまり声が出せない。 小声でやってるけど音漏れしないかビクビクしています。ぴぇん。</p>
 <p>まぁここまで些細なことはどうでも良いとしても、「大きな声を出せる」 っていうの自体でもすごいなと。声を出すのって勇気入りません？~~え？？コミュs~~</p>
-<h2>7. 反応が良い(かわいいor面白い)</h2>
+<h2 id="7. 反応が良い(かわいいor面白い)">7. 反応が良い(かわいいor面白い)</h2>
 <p>雑談やゲームで何かが起こったときの反応が良い。まぁこれは多分配信者だけじゃなく芸能人とかもそうだとは思う。 なんでなんだろうね？？？？</p>
-<h1>VTuberのどこがすごいのか</h1>
+<h1 id="VTuberのどこがすごいのか">VTuberのどこがすごいのか</h1>
 <p>じゃあここからは少し具体的に「VTuber特有のすごさ」をつらつら書きたいと思う</p>
-<h2>1. 配信ができる(技術)</h2>
+<h2 id="1. 配信ができる(技術)">1. 配信ができる(技術)</h2>
 <p>まずこれがすごい。自分でやってみればわかるけど割と面倒。 結構Virtualゆえ+私の特殊事情があるのかもしれないけど、それでもすごいと思う。</p>
 <p>特にボイチェン勢つょい。まぁまず声が可愛いのは置いておくとして、反応も可愛いのは置いておくとして、 とりあえず技術面だけを考えても結構すごい。<br />
 みんなの環境がわからないけれど、私はmacなのもあり結構大変な思いをしている (ボイチェンはwindowsオンリーが多いんじゃ〜〜)</p>
 <p>ちなみに私の音のルーティングは 物理マイク→ボイチェン→GarageBand(ノイズ除去とか)→OBSという流れなのだけど、 仮想オーディオIFの組み方とか面倒なんですよね。多分macなのも悪い。 後これだとイヤホンから聞けなかったりして、それを対応したらBGM聞こえなくなって、... ウオォやる気がﾋﾟﾝﾁ！！</p>
-<h2>2. パソコンのスペック</h2>
+<h2 id="2. パソコンのスペック">2. パソコンのスペック</h2>
 <p>これは人によりけりだけど、私の環境だとlive2dも3Dモデルもなしでも あまり画質が出ない。その上なんかぱちょから音がなっておる...<br />
 Live2Dでも綺麗に動いてる人が少ないのからして、きちんと写ってる人のスペックやばそうだなぁという気持ち。</p>
-<h2>3. ママパパ探し</h2>
+<h2 id="3. ママパパ探し">3. ママパパ探し</h2>
 <p>念のため書いておくと、ママは元イラストを描いてくれた人、 パパはlive2Dや3Dモデルを作成してくれた人のことを指す用語です。</p>
 <p>いやまぁ依頼募集してる人に依頼すればいいというのはそうなのだけども、 行動力。よ。行動力。</p>
 ]]></summary>
@@ -461,7 +461,7 @@ Live2Dでも綺麗に動いてる人が少ないのからして、きちんと�
   
 </div>
 
-<h1>コードブロックの整形</h1>
+<h1 id="コードブロックの整形">コードブロックの整形</h1>
 <p>今まで、コードブロックは酷い見た目でした。 <img src="/images/old-codeblock.png" class="ui rounded image" alt="前までのコードブロック" /></p>
 <p>現在は以下のように表示されるようになりました！</p>
 <div class="ui segment">
@@ -471,14 +471,14 @@ haskell
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="fu">putStrLn</span> <span class="st">&quot;Hello world!&quot;</span></span></code></pre></div>
 </div>
-<h2>やったこと</h2>
+<h2 id="やったこと">やったこと</h2>
 <p>ここでは、以下のFomantic-UI要素を使用しました。</p>
 <ul>
 <li>Segment</li>
 <li>Attached label</li>
 </ul>
 <p>又、各コードブロックに同じ処理をするために、Hakyllの<code>pandocCompilerWithTransform</code>を使用しています。 syntaxhilightは<a href="https://stackoverflow.com/a/43699538"><code>Hakyll</code>に合わせて</a><code>Highlight.js</code>を使用しています。</p>
-<h3>最終的なHTML</h3>
+<h3 id="最終的なHTML">最終的なHTML</h3>
 <div class="ui segment">
 <div class="ui top right attached label">
 html
@@ -502,34 +502,34 @@ html
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>    <span class="kw">&lt;/div&gt;</span></span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
 </div>
-<h3><code>pandocCompilerWithTransform</code>を使用した処理</h3>
+<h3 id="pandocCompilerWithTransformを使用した処理"><code>pandocCompilerWithTransform</code>を使用した処理</h3>
 <p><code>pandocCompilerWithTransform</code>は<code>pandocCompiler</code>の一種で、Markdownなどを<code>Pandoc</code>型に変換しその値をいじることができます。 <code>Pandoc</code>型には便利な型クラス<code>Walkable</code>があるので、これを使用します。</p>
 <p><code>Walkable</code>とは、「値の中を歩き、各子要素を与えられた関数に適用して置き換える」ような処理をします。</p>
 <ul class="task-list">
 <li><input type="checkbox" disabled="" />
 WIP</li>
 </ul>
-<h3>右上に拡張子を表示する</h3>
+<h3 id="右上に拡張子を表示する">右上に拡張子を表示する</h3>
 <p>右上に拡張子を表示するために使われているのが、<a href="https://fomantic-ui.com/elements/label.html#attached">attached label</a>です。 注意する点として、これは「コードブロックとは別の<code>div</code>として使用する」必要があります。</p>
-<h3>親<code>Div</code>に<code>segment</code>を設定する</h3>
+<h3 id="親Divにsegmentを設定する">親<code>Div</code>に<code>segment</code>を設定する</h3>
 <p><code>code</code>ブロックの親の<code>Div</code>に、<code>class="ui segment"</code>を設定してください。 (他の要素はあっても大丈夫だと思いますが、とにかく<a href="https://fomantic-ui.com/elements/segment.html">segment</a>が必要です。)<br />
 尚、きちんと調べているわけではないので、他のものでも代用できるのかもしれません。</p>
 <p><img src="/images/attached-label-wraped-in-segment.png" class="ui rounded image" alt="segmentがある場合" /> <em>(赤丸は注釈)</em></p>
 <p>これをしない場合、ひとまわり上の<code>segment</code>、どこにもない場合webページの右上にこのラベルが表示されることになります。</p>
 <p><img src="/images/attached-label-not-wraped-in-segment.png" class="ui rounded image" alt="segmentがない場合" /> <em>(赤丸は注釈)</em></p>
-<h3>テキストの折り返し</h3>
+<h3 id="テキストの折り返し">テキストの折り返し</h3>
 <p>これはシンプルにCSSの<code>overflow:auto</code>を使っています。</p>
-<h1>画像の整形</h1>
+<h1 id="画像の整形">画像の整形</h1>
 <p>これまでは画像が正しいサイズになっておらず、このようになっていました。</p>
 <p><img src="/images/old-image-view.png" class="ui rounded image" alt="昔の画像表示" /></p>
 <p>現在は、この画像のようになっています。</p>
 <p><img src="/images/current-image.view.png" class="ui rounded image" alt="今の画像表示" /></p>
-<h2><code>ui image</code></h2>
+<h2 id="ui image"><code>ui image</code></h2>
 <p><code>ui image</code>を使うことで、親のSegment以内に納めてくれます。<br />
 又それにプラスして<code>rounded</code>をつけることで角を丸めています。 (最終的には<code>ui rounded image</code>となりました)</p>
-<h1>メニューの作成</h1>
+<h1 id="メニューの作成">メニューの作成</h1>
 <p>画面上部にあるメニューを作成しました。 これは主に<code>ui menu</code>を使っています。 それに追加して、viewportの上部に固定するために<code>fixed</code>を、色を反転させるために<code>inverted</code>をつけています。</p>
-<h2>コンテンツの内容がかぶらないようにする</h2>
+<h2 id="コンテンツの内容がかぶらないようにする">コンテンツの内容がかぶらないようにする</h2>
 <p><code>fixed</code>を使った場合、そのままでは下のdiv(このサイトではidとして<code>content</code>を持つdiv)の内容に被ってしまいます。</p>
 <p><img src="/images/fixed-menu-without-margin.png" class="ui rounded image" alt="何も対処しない場合" /></p>
 <p>そこで、<code>content</code> divに<code>margin-top: 5em</code>を適用しています。<br />
@@ -542,7 +542,7 @@ css
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    <span class="kw">margin-top</span>: <span class="dv">5</span><span class="dt">em</span><span class="op">;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
-<h2>Feedのリンクを右づめにする</h2>
+<h2 id="Feedのリンクを右づめにする">Feedのリンクを右づめにする</h2>
 <p><code>menu</code>の中にある<code>item</code>に、<code>right</code>と入れるだけでそこから下の<code>item</code>全てが右詰になります。 このサイトだと以下のようになっています。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -580,8 +580,8 @@ html
 </div>
 
 <p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:Block">hackage</a>と<a href="https://pandoc.org/MANUAL.html">pandoc manual</a> を見てもよくわからないので、markdownに変換して試してみた。</p>
-<h1>OrderedList</h1>
-<h2>ListNumberStyle</h2>
+<h1 id="OrderedList">OrderedList</h1>
+<h2 id="ListNumberStyle">ListNumberStyle</h2>
 <p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberStyle">ListNumberStyle</a>は、 数字表現(1,2,3なのかi,ii,iiiなのかなど)を決めるもの。 わかりやすいように他の内容は一致させています。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -623,7 +623,7 @@ markdown
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>(B) foo</span></code></pre></div>
 </div>
 <p><code>Default</code>/<code>Example</code>はどうやらDecimalになってしまう模様。あとは大体名前の通りになった。</p>
-<h2>ListNumberDelim</h2>
+<h2 id="ListNumberDelim">ListNumberDelim</h2>
 <p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberDelim">ListNumberDelim</a> は、数字の後につくやつ。<br />
 コードは基本先ほどと同じものを使用</p>
 <div class="ui segment">
@@ -653,7 +653,7 @@ markdown
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>(1) hoge</span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>(2) foo</span></code></pre></div>
 </div>
-<h1>DefinitionList</h1>
+<h1 id="DefinitionList">DefinitionList</h1>
 <p><a href="">DefinitionList</a></p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -701,8 +701,8 @@ markdown
   
 </div>
 
-<h1>vimwikiのハイライトが欲しい</h1>
-<h1>markdown/vimwiki/pandocのsyntaxハイライト</h1>
+<h1 id="vimwikiのハイライトが欲しい">vimwikiのハイライトが欲しい</h1>
+<h1 id="markdown/vimwiki/pandocのsyntaxハイライト">markdown/vimwiki/pandocのsyntaxハイライト</h1>
 <p>vimwikiのsyntaxでは、以下のようなリンクは</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -716,7 +716,7 @@ markdown
 <p>例えば、<a href="https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html">blender data blocks</a>の記事は<code>markdown</code>/<code>vimwiki</code>/<code>pandoc</code>それぞれのsyntaxで 以下のように見えます。</p>
 <p><img src="/images/difference_md-vimwiki-pandoc.png" class="ui rounded image" alt="markdown, vimwiki, pandocのハイライトの違い" /></p>
 <p>さて、これを普段使いの<code>pandoc</code>syntaxでも使いたいというのが今回の希望です。</p>
-<h1>結論: デフォルトの変数を設定しろ</h1>
+<h1 id="結論: デフォルトの変数を設定しろ">結論: デフォルトの変数を設定しろ</h1>
 <p>もうこれが答えでした！<br />
 ドキュメントよもうね！！！！</p>
 <div class="ui segment">
@@ -727,7 +727,7 @@ vim
 </div>
 <p>これだけでURLの<code>conceal</code>が有効になり、vimwikiと同じような見た目になります</p>
 <p><img src="/images/pandoc-with-conceal.png" class="ui rounded image" alt="設定後のpandoc" /></p>
-<h1>おまけ</h1>
+<h1 id="おまけ">おまけ</h1>
 <p>ちなみに該当のコードは<a href="https://github.com/vim-pandoc/vim-pandoc-syntax/blob/2521e2e9b99a3550e1a20f24e09fa46679cbbbc7/syntax/pandoc.vim#L300-L304">300-304行目</a>にありました。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -785,11 +785,11 @@ python
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    ...</span></code></pre></div>
 </div>
 <p>直感的に、nの値によってはelifの方がif文の実行回数が少なくなるため速そうに思えますが、本当にそうなのか気になったので試してみます。</p>
-<h1>tl;dr</h1>
+<h1 id="tl;dr">tl;dr</h1>
 <p>速いぽい</p>
-<h1>条件</h1>
+<h1 id="条件">条件</h1>
 <p>pythonは3.7.4、if文の中身が同じものだと最適化がかかったりしないか怖かったのでそれぞれ違う出力をするprint文を入れます。 elifの数は適当に多めにしておきました。 また、1000回実行した平均の速度を表示するようにしました。</p>
-<h1>測定に使ったコード</h1>
+<h1 id="測定に使ったコード">測定に使ったコード</h1>
 <p>長いので</p>
 <details><summary>測定コード</summary>
 ```
@@ -1249,7 +1249,7 @@ t_with_elif_end   = time.time()
 print(f"with elif   : {(t_with_elif_end - t_with_elif_start)/1000} sec")
 ```
 </details>
-<h1>結果</h1>
+<h1 id="結果">結果</h1>
 <p><code>print</code>でたくさん標準出力を使っていますが、 そこの値は重要ではないので 私は<a href="https://github.com/thinca/vim-quickrun">quickrun</a>を使って vim上のバッファで加工して消しています</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -1267,9 +1267,9 @@ with elif   : 9.88006591796875e-07 sec</code></pre>
 with elif   : 0.000001 sec</code></pre>
 </div>
 <p>となり、<code>elif</code>の方が速いことがわかります。</p>
-<h1>考察</h1>
+<h1 id="考察">考察</h1>
 <p>なぜ速いのかを考えてみます。</p>
-<h2>構文木</h2>
+<h2 id="構文木">構文木</h2>
 <p><code>elif</code>には特別なノードがなく、構文木に落とすと親の<code>If</code>ノードの<code>oreelse</code>に含まれる<code>If</code>ノードになります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -1310,7 +1310,7 @@ python
 )</code></pre>
 </div>
 <p>https://docs.python.org/ja/3/library/ast.html?highlight=elif#ast.If</p>
-<h2>ステップ数を調べる</h2>
+<h2 id="ステップ数を調べる">ステップ数を調べる</h2>
 <p>おそらく、if文が実行される回数が少ないはず、なのでpythonのデバッガである<a href="https://docs.python.org/3/library/pdb.html">pdb</a>を使って調べてみます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -1371,7 +1371,7 @@ s
   
 </div>
 
-<h1>全てのメッシュの原点(Origin)を <em>ワールド座標系の</em> 原点に置く</h1>
+<h1 id="全てのメッシュの原点(Origin)を ワールド座標系の 原点に置く">全てのメッシュの原点(Origin)を <em>ワールド座標系の</em> 原点に置く</h1>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
 <p>There are not an object on the origin <mesh名> (もしくは) <mesh名> が原点座標にありません</p>
@@ -1386,26 +1386,26 @@ s
 <li><code>Set origin&gt; Origin to 3D cursor</code></li>
 </ol>
 <p>の手順を踏みます。</p>
-<h1>追加したmeshオブジェクトのtransformは全て0(scaleは1)にする</h1>
+<h1 id="追加したmeshオブジェクトのtransformは全て0(scaleは1)にする">追加したmeshオブジェクトのtransformは全て0(scaleは1)にする</h1>
 <p>Blender上では全然問題なく見えますが、これをしておかないとexportした後に変な位置にオブジェクトが表示されてしまいます。 (私は<code>3tenePRO</code>で動作確認をしていますが、おそらく他でもそうなると思います。)<br />
 具体的には、「全てのトランスフォームが0(scaleは1)に指定された通りに表示」されます。</p>
-<h2>具体例:</h2>
+<h2 id="具体例:">具体例:</h2>
 <p>scaleが1になっていない例 <img src="/images/sscale_isnt_1.jpeg" class="ui rounded image" alt="scaleが1じゃない" /></p>
 <p>scaleが1になるように調整した例 <img src="/images/scale_is_1.jpeg" class="ui rounded image" alt="scaleが1" /></p>
 <p>rotationが0になっていない例 <img src="/images/rotation_isnt_0.jpeg" class="ui rounded image" alt="rotationが0じゃない" /></p>
 <p>rotationが0になっている例 <img src="/images/rotation_is_0.jpeg" class="ui rounded image" alt="rotationが0" /></p>
-<h2>直し方</h2>
+<h2 id="直し方">直し方</h2>
 <p>Inspectorで各transformの値を確認します。そうしたら、それを覚えておき値は0に修正。 <code>Edit mode</code>に移行して、 <strong>originを中心に、軸を指定して先ほど覚えた値分</strong> 回転させます。</p>
-<h2>最終系</h2>
+<h2 id="最終系">最終系</h2>
 <p>綺麗になりました！！</p>
 <p><img src="/images/completed.jpg" class="ui rounded image" alt="全部直した" /></p>
-<h1>Shade Textureは必ず設定する</h1>
+<h1 id="Shade Textureは必ず設定する">Shade Textureは必ず設定する</h1>
 <p>ShadeTextureを設定していないと、面を法線と反対側から見たときにピンク色になってしまいます。 これは、<code>Shade Color</code>が塗られているからで、それを防ぎ表面と同じものを表示したい場合は必ず設定する必要があります。 なお、<code>MainTexture</code>と同じテクスチャで問題ないと思います。</p>
 <p>設定してなかった:<br />
 <blockquote class="twitter-tweet" data-conversation="none" data-theme="dark"><p lang="ja" dir="ltr">色々と調節は必要そうだね <a href="https://t.co/ndXTzYKdfQ">pic.twitter.com/ndXTzYKdfQ</a></p>— mi'e himari (@mihe_himari) <a href="https://twitter.com/mihe_himari/status/1320608433352003584?ref_src=twsrc%5Etfw">October 26, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 <p>設定した:<br />
 <blockquote class="twitter-tweet" data-conversation="none" data-theme="dark"><p lang="ja" dir="ltr">他のオブジェクトにも設定してきた...ﾖｼ!! <a href="https://t.co/8tMJyUaawt">pic.twitter.com/8tMJyUaawt</a></p>— mi'e himari (@mihe_himari) <a href="https://twitter.com/mihe_himari/status/1320613366864330752?ref_src=twsrc%5Etfw">October 26, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
-<h1>todo</h1>
+<h1 id="todo">todo</h1>
 <ul class="task-list">
 <li><input type="checkbox" disabled="" />
 画像入れる</li>

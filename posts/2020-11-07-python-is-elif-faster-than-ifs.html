@@ -70,11 +70,11 @@ python
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    ...</span></code></pre></div>
 </div>
 <p>直感的に、nの値によってはelifの方がif文の実行回数が少なくなるため速そうに思えますが、本当にそうなのか気になったので試してみます。</p>
-<h1>tl;dr</h1>
+<h1 id="tl;dr">tl;dr</h1>
 <p>速いぽい</p>
-<h1>条件</h1>
+<h1 id="条件">条件</h1>
 <p>pythonは3.7.4、if文の中身が同じものだと最適化がかかったりしないか怖かったのでそれぞれ違う出力をするprint文を入れます。 elifの数は適当に多めにしておきました。 また、1000回実行した平均の速度を表示するようにしました。</p>
-<h1>測定に使ったコード</h1>
+<h1 id="測定に使ったコード">測定に使ったコード</h1>
 <p>長いので</p>
 <details><summary>測定コード</summary>
 ```
@@ -534,7 +534,7 @@ t_with_elif_end   = time.time()
 print(f"with elif   : {(t_with_elif_end - t_with_elif_start)/1000} sec")
 ```
 </details>
-<h1>結果</h1>
+<h1 id="結果">結果</h1>
 <p><code>print</code>でたくさん標準出力を使っていますが、 そこの値は重要ではないので 私は<a href="https://github.com/thinca/vim-quickrun">quickrun</a>を使って vim上のバッファで加工して消しています</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -552,9 +552,9 @@ with elif   : 9.88006591796875e-07 sec</code></pre>
 with elif   : 0.000001 sec</code></pre>
 </div>
 <p>となり、<code>elif</code>の方が速いことがわかります。</p>
-<h1>考察</h1>
+<h1 id="考察">考察</h1>
 <p>なぜ速いのかを考えてみます。</p>
-<h2>構文木</h2>
+<h2 id="構文木">構文木</h2>
 <p><code>elif</code>には特別なノードがなく、構文木に落とすと親の<code>If</code>ノードの<code>oreelse</code>に含まれる<code>If</code>ノードになります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -595,7 +595,7 @@ python
 )</code></pre>
 </div>
 <p>https://docs.python.org/ja/3/library/ast.html?highlight=elif#ast.If</p>
-<h2>ステップ数を調べる</h2>
+<h2 id="ステップ数を調べる">ステップ数を調べる</h2>
 <p>おそらく、if文が実行される回数が少ないはず、なのでpythonのデバッガである<a href="https://docs.python.org/3/library/pdb.html">pdb</a>を使って調べてみます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">

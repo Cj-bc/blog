@@ -34,7 +34,7 @@
   
 </div>
 
-<h1>コードブロックの整形</h1>
+<h1 id="コードブロックの整形">コードブロックの整形</h1>
 <p>今まで、コードブロックは酷い見た目でした。 <img src="/images/old-codeblock.png" class="ui rounded image" alt="前までのコードブロック" /></p>
 <p>現在は以下のように表示されるようになりました！</p>
 <div class="ui segment">
@@ -44,14 +44,14 @@ haskell
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="fu">putStrLn</span> <span class="st">&quot;Hello world!&quot;</span></span></code></pre></div>
 </div>
-<h2>やったこと</h2>
+<h2 id="やったこと">やったこと</h2>
 <p>ここでは、以下のFomantic-UI要素を使用しました。</p>
 <ul>
 <li>Segment</li>
 <li>Attached label</li>
 </ul>
 <p>又、各コードブロックに同じ処理をするために、Hakyllの<code>pandocCompilerWithTransform</code>を使用しています。 syntaxhilightは<a href="https://stackoverflow.com/a/43699538"><code>Hakyll</code>に合わせて</a><code>Highlight.js</code>を使用しています。</p>
-<h3>最終的なHTML</h3>
+<h3 id="最終的なHTML">最終的なHTML</h3>
 <div class="ui segment">
 <div class="ui top right attached label">
 html
@@ -75,34 +75,34 @@ html
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>    <span class="kw">&lt;/div&gt;</span></span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
 </div>
-<h3><code>pandocCompilerWithTransform</code>を使用した処理</h3>
+<h3 id="pandocCompilerWithTransformを使用した処理"><code>pandocCompilerWithTransform</code>を使用した処理</h3>
 <p><code>pandocCompilerWithTransform</code>は<code>pandocCompiler</code>の一種で、Markdownなどを<code>Pandoc</code>型に変換しその値をいじることができます。 <code>Pandoc</code>型には便利な型クラス<code>Walkable</code>があるので、これを使用します。</p>
 <p><code>Walkable</code>とは、「値の中を歩き、各子要素を与えられた関数に適用して置き換える」ような処理をします。</p>
 <ul class="task-list">
 <li><input type="checkbox" disabled="" />
 WIP</li>
 </ul>
-<h3>右上に拡張子を表示する</h3>
+<h3 id="右上に拡張子を表示する">右上に拡張子を表示する</h3>
 <p>右上に拡張子を表示するために使われているのが、<a href="https://fomantic-ui.com/elements/label.html#attached">attached label</a>です。 注意する点として、これは「コードブロックとは別の<code>div</code>として使用する」必要があります。</p>
-<h3>親<code>Div</code>に<code>segment</code>を設定する</h3>
+<h3 id="親Divにsegmentを設定する">親<code>Div</code>に<code>segment</code>を設定する</h3>
 <p><code>code</code>ブロックの親の<code>Div</code>に、<code>class="ui segment"</code>を設定してください。 (他の要素はあっても大丈夫だと思いますが、とにかく<a href="https://fomantic-ui.com/elements/segment.html">segment</a>が必要です。)<br />
 尚、きちんと調べているわけではないので、他のものでも代用できるのかもしれません。</p>
 <p><img src="/images/attached-label-wraped-in-segment.png" class="ui rounded image" alt="segmentがある場合" /> <em>(赤丸は注釈)</em></p>
 <p>これをしない場合、ひとまわり上の<code>segment</code>、どこにもない場合webページの右上にこのラベルが表示されることになります。</p>
 <p><img src="/images/attached-label-not-wraped-in-segment.png" class="ui rounded image" alt="segmentがない場合" /> <em>(赤丸は注釈)</em></p>
-<h3>テキストの折り返し</h3>
+<h3 id="テキストの折り返し">テキストの折り返し</h3>
 <p>これはシンプルにCSSの<code>overflow:auto</code>を使っています。</p>
-<h1>画像の整形</h1>
+<h1 id="画像の整形">画像の整形</h1>
 <p>これまでは画像が正しいサイズになっておらず、このようになっていました。</p>
 <p><img src="/images/old-image-view.png" class="ui rounded image" alt="昔の画像表示" /></p>
 <p>現在は、この画像のようになっています。</p>
 <p><img src="/images/current-image.view.png" class="ui rounded image" alt="今の画像表示" /></p>
-<h2><code>ui image</code></h2>
+<h2 id="ui image"><code>ui image</code></h2>
 <p><code>ui image</code>を使うことで、親のSegment以内に納めてくれます。<br />
 又それにプラスして<code>rounded</code>をつけることで角を丸めています。 (最終的には<code>ui rounded image</code>となりました)</p>
-<h1>メニューの作成</h1>
+<h1 id="メニューの作成">メニューの作成</h1>
 <p>画面上部にあるメニューを作成しました。 これは主に<code>ui menu</code>を使っています。 それに追加して、viewportの上部に固定するために<code>fixed</code>を、色を反転させるために<code>inverted</code>をつけています。</p>
-<h2>コンテンツの内容がかぶらないようにする</h2>
+<h2 id="コンテンツの内容がかぶらないようにする">コンテンツの内容がかぶらないようにする</h2>
 <p><code>fixed</code>を使った場合、そのままでは下のdiv(このサイトではidとして<code>content</code>を持つdiv)の内容に被ってしまいます。</p>
 <p><img src="/images/fixed-menu-without-margin.png" class="ui rounded image" alt="何も対処しない場合" /></p>
 <p>そこで、<code>content</code> divに<code>margin-top: 5em</code>を適用しています。<br />
@@ -115,7 +115,7 @@ css
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    <span class="kw">margin-top</span>: <span class="dv">5</span><span class="dt">em</span><span class="op">;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
-<h2>Feedのリンクを右づめにする</h2>
+<h2 id="Feedのリンクを右づめにする">Feedのリンクを右づめにする</h2>
 <p><code>menu</code>の中にある<code>item</code>に、<code>right</code>と入れるだけでそこから下の<code>item</code>全てが右詰になります。 このサイトだと以下のようになっています。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -154,7 +154,7 @@ html
 
 <p><a href="https://cj-bc.github.io/blog">このブログ</a>の生成をGithub Actionsで行えるようにしたので、その時のメモ<br />
 尚、現在のworkflowファイルは<a href="https://github.com/Cj-bc/blog/blob/source/.github/workflows/publish.yaml">Cj-bc/blog -- .github/workflows/publish.yaml</a>にあります。</p>
-<h1>前提</h1>
+<h1 id="前提">前提</h1>
 <ul>
 <li>静的サイトジェネレーターはHakyll</li>
 <li>ほぼ<a href="https://jaspervdj.be/hakyll/tutorials/github-pages-tutorial.html">チュートリアル</a>通りの作りになっている
@@ -163,8 +163,8 @@ html
 </ul></li>
 <li>Github Pageでホスティング</li>
 </ul>
-<h1>workflowファイルを作成する</h1>
-<h2>トリガーの設定</h2>
+<h1 id="workflowファイルを作成する">workflowファイルを作成する</h1>
+<h2 id="トリガーの設定">トリガーの設定</h2>
 <p>自分の環境では、<code>source</code>ブランチの中身を使ってビルド→<code>publish</code>ブランチにおいて公開、という手順を追っているので、<code>source</code>ブランチにpushされたときだけ走るようにします</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -174,7 +174,7 @@ yaml
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">source</span><span class="kw">]</span></span></code></pre></div>
 </div>
-<h2>Jobの作成</h2>
+<h2 id="Jobの作成">Jobの作成</h2>
 <p>Jobを作成します。環境はstackが動けばどこでも問題がないので、ubuntuにします。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -185,9 +185,9 @@ yaml
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="at">    </span><span class="fu">name</span><span class="kw">:</span><span class="at"> run publish</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span></code></pre></div>
 </div>
-<h2>ステップの作成</h2>
+<h2 id="ステップの作成">ステップの作成</h2>
 <p>ここからstepを作っていきます。</p>
-<h3>必要なブランチをcheckoutする</h3>
+<h3 id="必要なブランチをcheckoutする">必要なブランチをcheckoutする</h3>
 <p>今回、トリガー対象のブランチ<code>source</code>の他に<code>publish</code>ブランチを使っています。 しかし、デフォルトではローカルに<code>publish</code>ブランチは存在しません。<br />
 なので、<code>actions/checkout</code>に、全てのブランチとタグの履歴をfetchする<code>fetch-depth: 0</code>を付け足す必要があります。</p>
 <div class="ui segment">
@@ -199,7 +199,7 @@ yaml
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="at">          </span><span class="fu">fetch-depth</span><span class="kw">:</span><span class="at"> </span><span class="dv">0</span></span></code></pre></div>
 </div>
-<h3>キャッシュの設定をする</h3>
+<h3 id="キャッシュの設定をする">キャッシュの設定をする</h3>
 <p>ビルドはなかなかに重い(現在の構成で約4,50分くらい)ので、なるべくキャッシュを活用します。<br />
 キャッシュには<code>actions/cache@v2</code>を使用します。キャッシュしたいものを生成するactionの前に実行し、キャッシュがあればそこをスキップするようにします。 キャッシュ対象は<code>~/.stack</code>ディレクトリです。<br />
 これは、[ncaqさんの記事][ncaq -- HaskellプログラムをGitHub Actionsでビルドしてクロスプラットフォーム向けにバイナリをReleaseにアップロードする]から大体を引用させていただきました。</p>
@@ -215,7 +215,7 @@ yaml
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="fu">          restore-keys</span><span class="kw">: </span><span class="ch">|</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>            ${{ runner.os }}-stack-${{ hashFiles(&#39;**/stack.yaml.lock&#39;) }}-</span></code></pre></div>
 </div>
-<h3>haskellおよびstackのセットアップをする</h3>
+<h3 id="haskellおよびstackのセットアップをする">haskellおよびstackのセットアップをする</h3>
 <p>Haskell stackを使うので、<code>actions/setup-haskell</code>のアクションを借ります。<br />
 ghcのバージョンは、とりあえず手元にあったものに合わせました。</p>
 <div class="ui segment">
@@ -227,7 +227,7 @@ yaml
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="at">          </span><span class="fu">ghc-version</span><span class="kw">:</span><span class="at"> </span><span class="st">&#39;8.8.1&#39;</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="at">          </span><span class="fu">stack-version</span><span class="kw">:</span><span class="at"> </span><span class="st">&#39;latest&#39;</span></span></code></pre></div>
 </div>
-<h3>publishコマンドを実行する</h3>
+<h3 id="publishコマンドを実行する">publishコマンドを実行する</h3>
 <p>環境の準備がほぼできたので、あとはhakyllのビルドをしておしまいです。<br />
 その前に、<strong>gitのuserを<code>github-actions</code>に設定</strong>しておきます。このアカウントにすると、内部トークンを使ってくれます。<br />
 また、ビルド周りのコマンドはMakefileにしまってあったのでそのまま使います。</p>
@@ -243,7 +243,7 @@ yaml
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>          make publish</span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a>          git push origin publish</span></code></pre></div>
 </div>
-<h1>参考にしたサイト</h1>
+<h1 id="参考にしたサイト">参考にしたサイト</h1>
 <ul>
 <li><a href="https://www.ncaq.net/2020/04/05/15/54/26/">ncaq -- HaskellプログラムをGitHub Actionsでビルドしてクロスプラットフォーム向けにバイナリをReleaseにアップロードする</a></li>
 <li><a href="https://github.com/actions/setup-haskell">Github -- actions/setup-haskell</a></li>
