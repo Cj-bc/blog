@@ -55,4 +55,4 @@ addAnchorToHeader (Header lvl (id_, classes, kv) inlines) = Header lvl (id_', cl
             id_' = if T.null id_ then anchored
                                  else id_
             anchored = mconcat $ map stringify inlines
-
+addAnchorToHeader other = other
