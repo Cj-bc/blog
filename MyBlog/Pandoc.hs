@@ -52,7 +52,7 @@ blockQuoteFormat other = other
 addAnchorToHeader :: Block -> Block
 addAnchorToHeader (Header lvl (id_, classes, kv) inlines) = Header lvl (id_', classes, kv) inlines
         where
-            id_' = if mempty id_ then anchored
-                                else id_
+            id_' = if T.null id_ then anchored
+                                 else id_
             anchored = mconcat $ map stringify inlines
 
