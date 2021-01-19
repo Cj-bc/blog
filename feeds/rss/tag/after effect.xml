@@ -7,8 +7,46 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/after%20effect.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Wed, 13 Jan 2021 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Tue, 19 Jan 2021 00:00:00 UT</lastBuildDate>
         <item>
+    <title>AEのMarker</title>
+    <link>https://cj-bc.github.io/blog/posts/2021-01-19-after-effect-markers.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>AEのMarker</h1>
+  <div class="ui list">
+    <div class="item">Posted on January 19, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January 19, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;after effect&#39;." href="/tags/after%20effect.html" class="ui tag label">after effect</a>
+  
+</div>
+
+<ul>
+<li><a href="https://helpx.adobe.com/jp/after-effects/user-guide.html/jp/after-effects/using/layer-markers-composition-markers.ug.html">公式URL</a></li>
+</ul>
+<h1 id="Markerとは">Markerとは</h1>
+<p><strong>keyframeとは別</strong> である。 <em>レイヤーマーカー</em> と <em>コンポジションマーカー</em> の二種類がある。 今回コンポジションマーカー使わないので、使うときにでも追記する</p>
+<h2 id="レイヤーマーカー">レイヤーマーカー</h2>
+<p>キーフレームに似ているが、Expressionからその値を参照することができる。</p>
+<h3 id="作り方">作り方</h3>
+<ol>
+<li>レイヤーを選択</li>
+<li>マーカーを置きたいframeに移動する</li>
+<li><code>レイヤー/マーカー/マーカーを追加</code>もしくは <em>キーパッドの</em> <code>*</code></li>
+</ol>
+]]></description>
+    <pubDate>Tue, 19 Jan 2021 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2021-01-19-after-effect-markers.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>After Effectショートカットキーチートシート(個人用)</title>
     <link>https://cj-bc.github.io/blog/posts/2021-01-13-after-effect-cheat-sheet.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
