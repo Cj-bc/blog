@@ -11,6 +11,7 @@ module MyBlog.Pandoc where
 import Data.Maybe (listToMaybe)
 import Text.Pandoc.Walk
 import Text.Pandoc.Definition
+import Text.Pandoc.Shared
 import qualified Data.Text as T
 
 addClass :: [T.Text] -> Attr -> Attr
@@ -22,6 +23,7 @@ myPandocTransform :: Pandoc -> Pandoc
 myPandocTransform = walk codeBlockFormat
                   . walk blockQuoteFormat
                   . walk (walk imageFormat :: Block -> Block)
+                  . walk addAnchorToHeader
 
 -- | Defines code block format
 --
@@ -46,3 +48,11 @@ imageFormat other = other
 blockQuoteFormat :: Block -> Block
 blockQuoteFormat (BlockQuote cs) = Div (mempty, ["ui", "piled", "segment"], [("style", "z-index: 0")]) [BlockQuote cs]
 blockQuoteFormat other = other
+
+addAnchorToHeader :: Block -> Block
+addAnchorToHeader (Header lvl (id_, classes, kv) inlines) = Header lvl (id_', classes, kv) inlines
+        where
+            id_' = if T.null id_ then anchored
+                                 else id_
+            anchored = mconcat $ map stringify inlines
+addAnchorToHeader other = other
