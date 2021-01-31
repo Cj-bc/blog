@@ -10,3 +10,11 @@ date: January 31, 2021
 
 
 org fileには別の~Compiler~が必要かな？
+もしかして ~code~ の左右には空白が必要？
+
+** h2, 大体は動いてそう
+
+#+begin_src haskell
+main = putStrLn "hello world"
+#+end_src
+
