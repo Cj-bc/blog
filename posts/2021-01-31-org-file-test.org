@@ -1,0 +1,12 @@
+---
+title: org fileでの投稿のテストです
+tags:
+  - org
+kind: scratch
+date: January 31, 2021
+---
+
+* org fileでの投稿のテストです
+
+
+org fileには別の~Compiler~が必要かな？
