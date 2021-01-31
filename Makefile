@@ -2,22 +2,22 @@ BRANCH_DEST := publish
 NPX := $(shell which npx)
 GULP := $(NPX) gulp
 
-css/node_modules/highlight.js: css/node_modules
-
-css/dist/semantic.min.css: css/node_modules
-	cd css && $(GULP) build
-
-css/dist/semantic.min.js: css/node_modules
-	cd css && $(GULP) build
-
+# ---------- File dependencies ----------
 css/node_modules:
 	cd css && npm install
 
+fomantic-ui: css/node_modules
+	cd css && $(GULP) build
 
-build: css/dist/semantic.min.css css/dist/semantic.min.js css/node_modules/highlight.js
+css/dist/semantic.min.css: fomantic-ui
+
+css/dist/semantic.min.js: fomantic-ui
+
+
+# ---------- Commands ----------
+build: css/dist/semantic.min.css css/dist/semantic.min.js
 	stack build
 	stack exec blog rebuild
-
 
 publish: build
 	git switch $(BRANCH_DEST)
