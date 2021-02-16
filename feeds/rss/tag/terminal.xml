@@ -5,7 +5,7 @@
         <title>CLI! CLI! CLI!</title>
         <link>https://cj-bc.github.io/blog</link>
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
-        <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/vim.xml" rel="self"
+        <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/terminal.xml" rel="self"
                    type="application/rss+xml" />
         <lastBuildDate>Mon, 15 Feb 2021 00:00:00 UT</lastBuildDate>
         <item>
@@ -80,121 +80,6 @@ bash
 ]]></description>
     <pubDate>Mon, 15 Feb 2021 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2021-02-16-terminal-set-TERM-to-tmux-256color.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>fzf.vimでカレントディレクトリ以外のGitファイルを検索</title>
-    <link>https://cj-bc.github.io/blog/posts/2021-01-13-GFiles-more-careful-with-fzf.html</link>
-    <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>fzf.vimでカレントディレクトリ以外のGitファイルを検索</h1>
-  <div class="ui list">
-    <div class="item">Posted on January 14, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on January 14, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;fzf.vim&#39;." href="/tags/fzf.vim.html" class="ui tag label">fzf.vim</a><a title="All pages tagged &#39;fzf&#39;." href="/tags/fzf.html" class="ui tag label">fzf</a><a title="All pages tagged &#39;vim&#39;." href="/tags/vim.html" class="ui tag label">vim</a>
-  
-</div>
-
-<h1 id="GFilesは便利"><code>GFiles</code>は便利</h1>
-<p><code>GFiles</code>は、カレントディレクトリにgitレポジトリがあると仮定して、そのレポジトリに認識されるファイル(=一度はコミットされているファイル) の一覧を作り出します。</p>
-<p>しかし、場合によっては「カレントディレクトリ以外のgitレポジトリにあるファイルを参照したい」ことがあると思います。</p>
-<p>例えば、私は普段プロジェクトに取り組んでいる最中にブログを書いたりするのですが、まさにその時などです。 カレントディレクトリはプロジェクトディレクトリのままで、ブログのレポジトリに対して<code>GFiles</code>を使いたいのです。</p>
-<p>これは公式の方法が(多分)ないので直接書き換えます。</p>
-<p><code>~/.vim/bundle/fzf.vim/autoload/fzf/vim.vim</code>の<code>s:get_git_root()</code>がgitレポジトリを見つけるためのコードなので、ここにfugitiveが使う<code>b:git_dir</code>変数の中身を適用するように編集します。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-vim
-</div>
-<pre class="vim SourceCode"><code>function! s:get_git_root()
-  let root = split(system(&#39;git rev-parse --show-toplevel&#39;), &#39;\n&#39;)[0]
-  return v:shell_error ? &#39;&#39; : root
-endfunction</code></pre>
-</div>
-<p>こうだったのが</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-vim
-</div>
-<pre class="vim SourceCode"><code>function! s:get_git_root()
-  let root = split(system(&#39;git rev-parse --show-toplevel&#39;), &#39;\n&#39;)[0]
-  let root_ = root ? root : b:git_dir
-  return v:shell_error ? &#39;&#39; : root_
-endfunction</code></pre>
-</div>
-<p>こうすることにより、<code>git_dir</code>も有効に検索されるようになりました。</p>
-]]></description>
-    <pubDate>Thu, 14 Jan 2021 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2021-01-13-GFiles-more-careful-with-fzf.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>vim-pandoc-syntaxでurlを非表示にしたい</title>
-    <link>https://cj-bc.github.io/blog/posts/2020-11-13-pandoc-vim-conceal-url-by-default.html</link>
-    <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>vim-pandoc-syntaxでurlを非表示にしたい</h1>
-  <div class="ui list">
-    <div class="item">Posted on November 13, 2020</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on November 13, 2020
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;vim&#39;." href="/tags/vim.html" class="ui tag label">vim</a><a title="All pages tagged &#39;pandoc&#39;." href="/tags/pandoc.html" class="ui tag label">pandoc</a>
-  
-</div>
-
-<h1 id="vimwikiのハイライトが欲しい">vimwikiのハイライトが欲しい</h1>
-<h1 id="markdown/vimwiki/pandocのsyntaxハイライト">markdown/vimwiki/pandocのsyntaxハイライト</h1>
-<p>vimwikiのsyntaxでは、以下のようなリンクは</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-markdown
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode markdown SourceCode"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co">[</span><span class="ot">説明</span><span class="co">](url)</span></span></code></pre></div>
-</div>
-<p>このように表示されます(<code>+conceal</code>オプションが有効な場合)</p>
-<p><a href="url">説明</a></p>
-<p>これがあると、長いURLを持つドキュメントでの可読性がグンと上がります</p>
-<p>例えば、<a href="https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html">blender data blocks</a>の記事は<code>markdown</code>/<code>vimwiki</code>/<code>pandoc</code>それぞれのsyntaxで 以下のように見えます。</p>
-<p><img src="/images/difference_md-vimwiki-pandoc.png" class="ui rounded image" alt="markdown, vimwiki, pandocのハイライトの違い" /></p>
-<p>さて、これを普段使いの<code>pandoc</code>syntaxでも使いたいというのが今回の希望です。</p>
-<h1 id="結論: デフォルトの変数を設定しろ">結論: デフォルトの変数を設定しろ</h1>
-<p>もうこれが答えでした！<br />
-ドキュメントよもうね！！！！</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-vim
-</div>
-<pre class="vim SourceCode"><code>let g:pandoc#syntax#conceal#urls = 1</code></pre>
-</div>
-<p>これだけでURLの<code>conceal</code>が有効になり、vimwikiと同じような見た目になります</p>
-<p><img src="/images/pandoc-with-conceal.png" class="ui rounded image" alt="設定後のpandoc" /></p>
-<h1 id="おまけ">おまけ</h1>
-<p>ちなみに該当のコードは<a href="https://github.com/vim-pandoc/vim-pandoc-syntax/blob/2521e2e9b99a3550e1a20f24e09fa46679cbbbc7/syntax/pandoc.vim#L300-L304">300-304行目</a>にありました。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-vim
-</div>
-<pre class="vim SourceCode"><code>if g:pandoc#syntax#conceal#urls == 1
-    syn region pandocReferenceURL matchgroup=pandocOperator start=/\]\@1&lt;=(/ end=/)/ keepend conceal
-else
-    syn region pandocReferenceURL matchgroup=pandocOperator start=/\]\@1&lt;=(/ end=/)/ keepend
-endif</code></pre>
-</div>
-]]></description>
-    <pubDate>Fri, 13 Nov 2020 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2020-11-13-pandoc-vim-conceal-url-by-default.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
