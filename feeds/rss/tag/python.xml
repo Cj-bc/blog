@@ -7,8 +7,92 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/python.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Mon, 11 Jan 2021 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Sat, 20 Feb 2021 00:00:00 UT</lastBuildDate>
         <item>
+    <title>fix-typoのデバッグメモ</title>
+    <link>https://cj-bc.github.io/blog/posts/2021-02-20-blender-vrm-plugin-bugfix-after-merged-memo.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>fix-typoのデバッグメモ</h1>
+  <div class="ui list">
+    <div class="item">Posted on February 20, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on February 21, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;python&#39;." href="/tags/python.html" class="ui tag label">python</a><a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html" class="ui tag label">blender</a><a title="All pages tagged &#39;vrm&#39;." href="/tags/vrm.html" class="ui tag label">vrm</a><a title="All pages tagged &#39;VRM_IMPORTER_for_Blender&#39;." href="/tags/VRM_IMPORTER_for_Blender.html" class="ui tag label">VRM_IMPORTER_for_Blender</a>
+  
+</div>
+
+<p>該当PR: <a href="https://github.com/saturday06/VRM_Addon_for_Blender/pull/23">saturday06/VRM<sub>IMPORTERforBlender</sub>: PR #23</a> 作業メモ: <a href="https://Cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html">https://Cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html</a></p>
+<h1 id="問題">問題</h1>
+<p><a href="https://github.com/saturday06/VRM_Addon_for_Blender/pull/23#issuecomment-782580000">issueでsaturday06さんが教えてくれた</a> のですが、「一度古いプラグインでVRMを読み込んだblendファイルで、新しくVRMを読み込むとエラーを吐く」</p>
+<h2 id="トレースバック">トレースバック</h2>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Traceback (most recent call last):
+  File &quot;/Users/me/Library/Application
+  Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/__init__.py&quot;,
+  line 88, in execute
+      blend_model.BlendModel(context, vrm_load.read_vrm(self.filepath, self),
+      self)
+        File &quot;/Users/me/Library/Application
+        Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py&quot;,
+        line 53, in __init__
+            self.vrm_model_build()
+              File &quot;/Users/me/Library/Application
+              Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py&quot;,
+              line 71, in vrm_model_build
+                  self.make_material()
+                    File &quot;/Users/me/Library/Application
+                    Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py&quot;,
+                    line 333, in make_material
+                        self.build_material_from_mtoon(b_mat, mat)
+                          File &quot;/Users/me/Library/Application
+                          Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py&quot;,
+                          line 646, in build_material_from_mtoon
+                              color_socket_to_connect=sg.inputs[tex_dic[tex_name]],
+                              KeyError: &#39;bpy_prop_collection[key]: key
+                              &quot;NormalmapTexture&quot; not found&#39;
+
+                              location: &lt;unknown location&gt;:-1
+</code></pre>
+</div>
+<h1 id="バグが起きた場所">バグが起きた場所</h1>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>__init__.ImportVRM.execute()
+└blend_model.BlendModel.__init__()
+ └BlendModel.vrm_model_build()
+  └BlendModel.make_material()
+   └BlendModel.build_material_from_mtoon()
+</code></pre>
+</div>
+<h1 id="バグの原因">バグの原因</h1>
+<p><code>node_group_create</code> は新しいNodegroupを作って返すが、</p>
+<p>importer/blend<sub>model</sub>.py:449 で <code>bpy.data.node_groups[shader_node_group_name]</code> を取ってきているところが原因。</p>
+<p><code>bpy.data.node_groups</code> はblendfile内にあるnode<sub>groupsを保持しており</sub>、 既に「古いバージョンで読み込まれたVRM」がある場合 <code>bpy.data.node_groups["MToon_unversioned"]</code> は 「古いバージョンのMToon<sub>unversioned</sub>」=typoが含まれたものを返してしまう。 そうすると、 <code>node_group_create</code> から返されたのちに <code>.inputs["Normalmap"]</code> が読まれた際に存在せずにクラッシュしてしまう。</p>
+<h1 id="解決方法">解決方法</h1>
+<p>ここでできるのは</p>
+<ol>
+<li>今までと同じように"Normalmap"が存在しなかったら"Nomalmap"を読ませる</li>
+<li>そもそも古い <code>bpy.data.node_groups["MToon_unversioned"]</code> を更新させる</li>
+<li></li>
+</ol>
+]]></description>
+    <pubDate>Sat, 20 Feb 2021 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2021-02-20-blender-vrm-plugin-bugfix-after-merged-memo.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>VRM_IMPORTER_for_Blender \#23 作業メモ</title>
     <link>https://cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">

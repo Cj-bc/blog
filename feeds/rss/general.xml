@@ -7,8 +7,150 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/general.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Mon, 15 Feb 2021 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Sat, 20 Feb 2021 00:00:00 UT</lastBuildDate>
         <item>
+    <title>機密が見えるかもしれないshell作業をストリーミングする方法が見つかりそう</title>
+    <link>https://cj-bc.github.io/blog/posts/2021-02-20-tmux-how-to-hide-credentials-on-screencast.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>機密が見えるかもしれないshell作業をストリーミングする方法が見つかりそう</h1>
+  <div class="ui list">
+    <div class="item">Posted on February 20, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on February 21, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;shell&#39;." href="/tags/shell.html" class="ui tag label">shell</a><a title="All pages tagged &#39;tmux&#39;." href="/tags/tmux.html" class="ui tag label">tmux</a>
+  
+</div>
+
+<p>わーい！！</p>
+<p>…じゃ、なくて、説明をします</p>
+<h1 id="Shell作業配信の現状の怖さ">Shell作業配信の現状の怖さ</h1>
+<p>shell作業してること、よくあると思います。 人類の殆どの人間が、人生の訳80%程はshellに費やすと言われています(当社調べ)ので、 その作業を配信に流したくなることも勿論あるでしょう。</p>
+<p>あるんですよ。</p>
+<p>その時に困るのが、「作業中に必要or非表示にできない機密情報」の扱いです。</p>
+<p>例えば:</p>
+<ul>
+<li>ユーザー名(ディレクトリ構造からバレることがあります)</li>
+<li>Token類(APIなど)</li>
+<li>RSAキー</li>
+</ul>
+<p>などなど…</p>
+<p>これらが映るかもしれない作業は配信に載せることができませんよね。怖いので。</p>
+<h1 id="指定の文字列を隠して配信をする方法！！！！">指定の文字列を隠して配信をする方法！！！！</h1>
+<p>ですが！！この問題は意外と簡単に倒すことができます。</p>
+<p>そう、*tmuxならね*</p>
+<p>tmux知らない人はこんなニッチな記事には来ないと思うのですが簡単に説明しておくと、 GNU screenやbyobuと同じ「ターミナルマルチプレクサ」というプログラムです。</p>
+<p><code>あとはggってください</code></p>
+<h2 id="手順！！">手順！！</h2>
+<p>具体的な方法に移ります。</p>
+<p>簡単です。</p>
+<ol>
+<li>tmuxで作業を開きます。</li>
+<li>使用しているターミナルで別ウィンドウを開きます。 <code>tty</code> コマンドで、使用している仮想端末を確認してください(このウィンドウを配信に使います)</li>
+<li>2.で開いたウィンドウで、 <code>tput civis; unset PS1</code> します</li>
+<li>作業しているtmux windowの中で、新しくpaneを開きます</li>
+<li>そこで <code>clear &gt;&lt;2.で確認した仮想端末&gt;; tmux capture-pane -t 1 -pe | sed 's/&lt;隠したい情報&gt;/置換して代わりにおく文字列/g' &gt; &lt;2.で確認した端末&gt;</code> します。</li>
+<li>するとあら不思議！！2.で開いたウィンドウにそっくりそのまま、隠したい情報だけ隠されて表示されました！！</li>
+</ol>
+<p>あとはこれをループさせて、裏で走らせればいいだけです！！</p>
+<p>ちなみに寝る前にお風呂で思いついてしまい、とりあえず試してみたら動いたみたいなアイデアなのでまだ実装していませんが、のちに実装します。</p>
+<p>多分。</p>
+]]></description>
+    <pubDate>Sat, 20 Feb 2021 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2021-02-20-tmux-how-to-hide-credentials-on-screencast.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>fix-typoのデバッグメモ</title>
+    <link>https://cj-bc.github.io/blog/posts/2021-02-20-blender-vrm-plugin-bugfix-after-merged-memo.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>fix-typoのデバッグメモ</h1>
+  <div class="ui list">
+    <div class="item">Posted on February 20, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on February 21, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;python&#39;." href="/tags/python.html" class="ui tag label">python</a><a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html" class="ui tag label">blender</a><a title="All pages tagged &#39;vrm&#39;." href="/tags/vrm.html" class="ui tag label">vrm</a><a title="All pages tagged &#39;VRM_IMPORTER_for_Blender&#39;." href="/tags/VRM_IMPORTER_for_Blender.html" class="ui tag label">VRM_IMPORTER_for_Blender</a>
+  
+</div>
+
+<p>該当PR: <a href="https://github.com/saturday06/VRM_Addon_for_Blender/pull/23">saturday06/VRM<sub>IMPORTERforBlender</sub>: PR #23</a> 作業メモ: <a href="https://Cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html">https://Cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html</a></p>
+<h1 id="問題">問題</h1>
+<p><a href="https://github.com/saturday06/VRM_Addon_for_Blender/pull/23#issuecomment-782580000">issueでsaturday06さんが教えてくれた</a> のですが、「一度古いプラグインでVRMを読み込んだblendファイルで、新しくVRMを読み込むとエラーを吐く」</p>
+<h2 id="トレースバック">トレースバック</h2>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Traceback (most recent call last):
+  File &quot;/Users/me/Library/Application
+  Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/__init__.py&quot;,
+  line 88, in execute
+      blend_model.BlendModel(context, vrm_load.read_vrm(self.filepath, self),
+      self)
+        File &quot;/Users/me/Library/Application
+        Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py&quot;,
+        line 53, in __init__
+            self.vrm_model_build()
+              File &quot;/Users/me/Library/Application
+              Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py&quot;,
+              line 71, in vrm_model_build
+                  self.make_material()
+                    File &quot;/Users/me/Library/Application
+                    Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py&quot;,
+                    line 333, in make_material
+                        self.build_material_from_mtoon(b_mat, mat)
+                          File &quot;/Users/me/Library/Application
+                          Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py&quot;,
+                          line 646, in build_material_from_mtoon
+                              color_socket_to_connect=sg.inputs[tex_dic[tex_name]],
+                              KeyError: &#39;bpy_prop_collection[key]: key
+                              &quot;NormalmapTexture&quot; not found&#39;
+
+                              location: &lt;unknown location&gt;:-1
+</code></pre>
+</div>
+<h1 id="バグが起きた場所">バグが起きた場所</h1>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>__init__.ImportVRM.execute()
+└blend_model.BlendModel.__init__()
+ └BlendModel.vrm_model_build()
+  └BlendModel.make_material()
+   └BlendModel.build_material_from_mtoon()
+</code></pre>
+</div>
+<h1 id="バグの原因">バグの原因</h1>
+<p><code>node_group_create</code> は新しいNodegroupを作って返すが、</p>
+<p>importer/blend<sub>model</sub>.py:449 で <code>bpy.data.node_groups[shader_node_group_name]</code> を取ってきているところが原因。</p>
+<p><code>bpy.data.node_groups</code> はblendfile内にあるnode<sub>groupsを保持しており</sub>、 既に「古いバージョンで読み込まれたVRM」がある場合 <code>bpy.data.node_groups["MToon_unversioned"]</code> は 「古いバージョンのMToon<sub>unversioned</sub>」=typoが含まれたものを返してしまう。 そうすると、 <code>node_group_create</code> から返されたのちに <code>.inputs["Normalmap"]</code> が読まれた際に存在せずにクラッシュしてしまう。</p>
+<h1 id="解決方法">解決方法</h1>
+<p>ここでできるのは</p>
+<ol>
+<li>今までと同じように"Normalmap"が存在しなかったら"Nomalmap"を読ませる</li>
+<li>そもそも古い <code>bpy.data.node_groups["MToon_unversioned"]</code> を更新させる</li>
+<li></li>
+</ol>
+]]></description>
+    <pubDate>Sat, 20 Feb 2021 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2021-02-20-blender-vrm-plugin-bugfix-after-merged-memo.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>TERMをtmux-256colorにする</title>
     <link>https://cj-bc.github.io/blog/posts/2021-02-16-terminal-set-TERM-to-tmux-256color.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
@@ -595,248 +737,6 @@ Live2Dでも綺麗に動いてる人が少ないのからして、きちんと�
 ]]></description>
     <pubDate>Sun, 10 Jan 2021 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2021-01-11-streamers-are-sooooooooooo-sugoi.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>ブログの見た目を整える</title>
-    <link>https://cj-bc.github.io/blog/posts/2021-01-03-fomantic-ui.html</link>
-    <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>ブログの見た目を整える</h1>
-  <div class="ui list">
-    <div class="item">Posted on January  3, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on January  5, 2021
-    </div>
-  </div>
-    
-        by Cj-bc
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;hakyll&#39;." href="/tags/hakyll.html" class="ui tag label">hakyll</a><a title="All pages tagged &#39;ブログ&#39;." href="/tags/%E3%83%96%E3%83%AD%E3%82%B0.html" class="ui tag label">ブログ</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a>
-  
-</div>
-
-<h1 id="コードブロックの整形">コードブロックの整形</h1>
-<p>今まで、コードブロックは酷い見た目でした。 <img src="/images/old-codeblock.png" class="ui rounded image" alt="前までのコードブロック" /></p>
-<p>現在は以下のように表示されるようになりました！</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-haskell
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="fu">putStrLn</span> <span class="st">&quot;Hello world!&quot;</span></span></code></pre></div>
-</div>
-<h2 id="やったこと">やったこと</h2>
-<p>ここでは、以下のFomantic-UI要素を使用しました。</p>
-<ul>
-<li>Segment</li>
-<li>Attached label</li>
-</ul>
-<p>又、各コードブロックに同じ処理をするために、Hakyllの<code>pandocCompilerWithTransform</code>を使用しています。 syntaxhilightは<a href="https://stackoverflow.com/a/43699538"><code>Hakyll</code>に合わせて</a><code>Highlight.js</code>を使用しています。</p>
-<h3 id="最終的なHTML">最終的なHTML</h3>
-<div class="ui segment">
-<div class="ui top right attached label">
-html
-</div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode html SourceCode"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;ui segment&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    <span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;ui top right attached label&quot;</span><span class="kw">&gt;</span> haskell <span class="kw">&lt;/div&gt;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>    <span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;sourceCode&quot;</span><span class="ot"> id=</span><span class="st">&quot;cb1&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>        <span class="kw">&lt;pre</span><span class="ot"> class=</span><span class="st">&quot;sourceCode haskell SourceCode&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>            <span class="kw">&lt;code</span><span class="ot"> class=</span><span class="st">&quot;sourceCode haskell hljs bash&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>                <span class="kw">&lt;span</span><span class="ot"> id=</span><span class="st">&quot;cb1-1&quot;</span><span class="kw">&gt;&lt;a</span><span class="ot"> href=</span><span class="st">&quot;#cb1-1&quot;</span><span class="ot"> aria-hidden=</span><span class="st">&quot;true&quot;</span><span class="kw">&gt;&lt;/a&gt;</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>                    main</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>                    <span class="kw">&lt;span</span><span class="ot"> class=</span><span class="st">&quot;ot&quot;</span><span class="kw">&gt;</span>=<span class="kw">&lt;/span&gt;</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>                    <span class="kw">&lt;span</span><span class="ot"> class=</span><span class="st">&quot;kw&quot;</span><span class="kw">&gt;&lt;span</span><span class="ot"> class=</span><span class="st">&quot;hljs-keyword&quot;</span><span class="kw">&gt;</span>do<span class="kw">&lt;/span&gt;&lt;/span&gt;</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>                <span class="kw">&lt;/span&gt;</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>                <span class="kw">&lt;span</span><span class="ot"> id=</span><span class="st">&quot;cb1-2&quot;</span><span class="kw">&gt;&lt;a</span><span class="ot"> href=</span><span class="st">&quot;#cb1-2&quot;</span><span class="ot"> aria-hidden=</span><span class="st">&quot;true&quot;</span><span class="kw">&gt;&lt;/a&gt;</span>    </span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>                    <span class="kw">&lt;span</span><span class="ot"> class=</span><span class="st">&quot;fu&quot;</span><span class="kw">&gt;</span>putStrLn<span class="kw">&lt;/span&gt;</span> </span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>                    <span class="kw">&lt;span</span><span class="ot"> class=</span><span class="st">&quot;st&quot;</span><span class="kw">&gt;&lt;span</span><span class="ot"> class=</span><span class="st">&quot;hljs-string&quot;</span><span class="kw">&gt;</span>&quot;Hello world!&quot;<span class="kw">&lt;/span&gt;&lt;/span&gt;</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>                <span class="kw">&lt;/span&gt;</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a>            <span class="kw">&lt;/code&gt;</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a>        <span class="kw">&lt;/pre&gt;</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>    <span class="kw">&lt;/div&gt;</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
-</div>
-<h3 id="pandocCompilerWithTransformを使用した処理"><code>pandocCompilerWithTransform</code>を使用した処理</h3>
-<p><code>pandocCompilerWithTransform</code>は<code>pandocCompiler</code>の一種で、Markdownなどを<code>Pandoc</code>型に変換しその値をいじることができます。 <code>Pandoc</code>型には便利な型クラス<code>Walkable</code>があるので、これを使用します。</p>
-<p><code>Walkable</code>とは、「値の中を歩き、各子要素を与えられた関数に適用して置き換える」ような処理をします。</p>
-<ul class="task-list">
-<li><input type="checkbox" disabled="" />
-WIP</li>
-</ul>
-<h3 id="右上に拡張子を表示する">右上に拡張子を表示する</h3>
-<p>右上に拡張子を表示するために使われているのが、<a href="https://fomantic-ui.com/elements/label.html#attached">attached label</a>です。 注意する点として、これは「コードブロックとは別の<code>div</code>として使用する」必要があります。</p>
-<h3 id="親Divにsegmentを設定する">親<code>Div</code>に<code>segment</code>を設定する</h3>
-<p><code>code</code>ブロックの親の<code>Div</code>に、<code>class="ui segment"</code>を設定してください。 (他の要素はあっても大丈夫だと思いますが、とにかく<a href="https://fomantic-ui.com/elements/segment.html">segment</a>が必要です。)<br />
-尚、きちんと調べているわけではないので、他のものでも代用できるのかもしれません。</p>
-<p><img src="/images/attached-label-wraped-in-segment.png" class="ui rounded image" alt="segmentがある場合" /> <em>(赤丸は注釈)</em></p>
-<p>これをしない場合、ひとまわり上の<code>segment</code>、どこにもない場合webページの右上にこのラベルが表示されることになります。</p>
-<p><img src="/images/attached-label-not-wraped-in-segment.png" class="ui rounded image" alt="segmentがない場合" /> <em>(赤丸は注釈)</em></p>
-<h3 id="テキストの折り返し">テキストの折り返し</h3>
-<p>これはシンプルにCSSの<code>overflow:auto</code>を使っています。</p>
-<h1 id="画像の整形">画像の整形</h1>
-<p>これまでは画像が正しいサイズになっておらず、このようになっていました。</p>
-<p><img src="/images/old-image-view.png" class="ui rounded image" alt="昔の画像表示" /></p>
-<p>現在は、この画像のようになっています。</p>
-<p><img src="/images/current-image.view.png" class="ui rounded image" alt="今の画像表示" /></p>
-<h2 id="ui image"><code>ui image</code></h2>
-<p><code>ui image</code>を使うことで、親のSegment以内に納めてくれます。<br />
-又それにプラスして<code>rounded</code>をつけることで角を丸めています。 (最終的には<code>ui rounded image</code>となりました)</p>
-<h1 id="メニューの作成">メニューの作成</h1>
-<p>画面上部にあるメニューを作成しました。 これは主に<code>ui menu</code>を使っています。 それに追加して、viewportの上部に固定するために<code>fixed</code>を、色を反転させるために<code>inverted</code>をつけています。</p>
-<h2 id="コンテンツの内容がかぶらないようにする">コンテンツの内容がかぶらないようにする</h2>
-<p><code>fixed</code>を使った場合、そのままでは下のdiv(このサイトではidとして<code>content</code>を持つdiv)の内容に被ってしまいます。</p>
-<p><img src="/images/fixed-menu-without-margin.png" class="ui rounded image" alt="何も対処しない場合" /></p>
-<p>そこで、<code>content</code> divに<code>margin-top: 5em</code>を適用しています。<br />
-尚これは、同じ構成をしていた<a href="https://fomantic-ui.com/collections/menu.html">Fomantic-UIのモバイルページ</a>での設定値をそのまま持ってきています。 (モバイル端末で見るか、ブラウザの横幅を狭めれば見えると思います)</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-css
-</div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode css SourceCode"><code class="sourceCode css"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="pp">#content</span> {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    <span class="kw">margin-top</span>: <span class="dv">5</span><span class="dt">em</span><span class="op">;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>}</span></code></pre></div>
-</div>
-<h2 id="Feedのリンクを右づめにする">Feedのリンクを右づめにする</h2>
-<p><code>menu</code>の中にある<code>item</code>に、<code>right</code>と入れるだけでそこから下の<code>item</code>全てが右詰になります。 このサイトだと以下のようになっています。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-html
-</div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode html SourceCode"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;header&quot;</span><span class="ot"> class=</span><span class="st">&quot;ui fixed inverted menu&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>    <span class="co">&lt;!-- 省略 --&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>    <span class="kw">&lt;a</span><span class="ot"> href=</span><span class="st">&quot;/feeds/atom/general.xml&quot;</span><span class="ot"> class=</span><span class="st">&quot;right item&quot;</span><span class="kw">&gt;</span>Atom feed<span class="kw">&lt;/a&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>    <span class="kw">&lt;a</span><span class="ot"> href=</span><span class="st">&quot;/feeds/rss/general.xml&quot;</span><span class="ot"> class=</span><span class="st">&quot;item&quot;</span><span class="kw">&gt;&lt;i</span><span class="ot"> class=</span><span class="st">&quot;rss icon&quot;</span><span class="kw">&gt;&lt;/i&gt;&lt;/a&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
-</div>
-]]></description>
-    <pubDate>Sun, 03 Jan 2021 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2021-01-03-fomantic-ui.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>pandocのBlock</title>
-    <link>https://cj-bc.github.io/blog/posts/2020-11-16-pandoc-orderedlist-attr-view.html</link>
-    <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>pandocのBlock</h1>
-  <div class="ui list">
-    <div class="item">Posted on November 16, 2020</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on November 17, 2020
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;pandoc&#39;." href="/tags/pandoc.html" class="ui tag label">pandoc</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a>
-  
-</div>
-
-<p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:Block">hackage</a>と<a href="https://pandoc.org/MANUAL.html">pandoc manual</a> を見てもよくわからないので、markdownに変換して試してみた。</p>
-<h1 id="OrderedList">OrderedList</h1>
-<h2 id="ListNumberStyle">ListNumberStyle</h2>
-<p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberStyle">ListNumberStyle</a>は、 数字表現(1,2,3なのかi,ii,iiiなのかなど)を決めるもの。 わかりやすいように他の内容は一致させています。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-haskell
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>[<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">TwoParens</span>) [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>, <span class="dt">Example</span>,<span class="dt">TwoParens</span>)     [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">Decimal</span>,<span class="dt">TwoParens</span>)      [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">LowerRoman</span>,<span class="dt">TwoParens</span>)   [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">UpperRoman</span>,<span class="dt">TwoParens</span>)   [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">LowerAlpha</span>,<span class="dt">TwoParens</span>)   [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">UpperAlpha</span>,<span class="dt">TwoParens</span>)   [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>]</span></code></pre></div>
-</div>
-<p>これをvimで開き、<code>%!pandoc -f native -t markdown</code>で試した。これ便利なのでおすすめ。 その結果が以下:</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-markdown
-</div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode markdown result SourceCode"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>(1) hoge</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>(2) foo</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>(1) hoge</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>(2) foo</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>(1) hoge</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>(2) foo</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>(i) hoge</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>(ii) foo</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>(I) hoge</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>(II) foo</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a>(a) hoge</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>(b) foo</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>(A) hoge</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>(B) foo</span></code></pre></div>
-</div>
-<p><code>Default</code>/<code>Example</code>はどうやらDecimalになってしまう模様。あとは大体名前の通りになった。</p>
-<h2 id="ListNumberDelim">ListNumberDelim</h2>
-<p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberDelim">ListNumberDelim</a> は、数字の後につくやつ。<br />
-コードは基本先ほどと同じものを使用</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-haskell
-</div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>[<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">DefaultDelim</span>) [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">Period</span>)       [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">OneParen</span>)     [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>,<span class="dt">OrderedList</span> (<span class="dv">1</span>,<span class="dt">DefaultStyle</span>,<span class="dt">TwoParens</span>)    [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;hoge&quot;</span>]],[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;foo&quot;</span>]]]</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>]</span></code></pre></div>
-</div>
-<p>結果が以下。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-markdown
-</div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode markdown result SourceCode"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ss">1.  </span>hoge</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="ss">2.  </span>foo</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="ss">1.  </span>hoge</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="ss">2.  </span>foo</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>1)  hoge</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>2)  foo</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>(1) hoge</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>(2) foo</span></code></pre></div>
-</div>
-<h1 id="DefinitionList">DefinitionList</h1>
-<p><a href="">DefinitionList</a></p>
-<div class="ui segment">
-<div class="ui top right attached label">
-haskell
-</div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>[<span class="dt">DefinitionList</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a> [([<span class="dt">Str</span> <span class="st">&quot;term&quot;</span>],</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>   [[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;One&quot;</span>,<span class="dt">Space</span>,<span class="dt">Str</span> <span class="st">&quot;definition&quot;</span>,<span class="dt">Space</span>,<span class="dt">Str</span> <span class="st">&quot;here&quot;</span>]]</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>   ,[<span class="dt">Plain</span> [<span class="dt">Str</span> <span class="st">&quot;Second?&quot;</span>,<span class="dt">SoftBreak</span>,<span class="dt">Str</span> <span class="st">&quot;:&quot;</span>], <span class="dt">Plain</span> [<span class="dt">Str</span><span class="st">&quot;Second&quot;</span>, <span class="dt">Space</span>,<span class="dt">Str</span> <span class="st">&quot;line&quot;</span>,<span class="dt">Space</span>,<span class="dt">Str</span> <span class="st">&quot;of&quot;</span>,<span class="dt">Space</span>, <span class="dt">Str</span> <span class="st">&quot;definition&quot;</span>]]</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>   ]</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a> )]</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>]</span></code></pre></div>
-</div>
-<div class="ui segment">
-<div class="ui top right attached label">
-markdown
-</div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode markdown SourceCode"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>term</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>:   One definition here</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>:   Second? :</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>:   Maybe second, maybe third</span></code></pre></div>
-</div>
-]]></description>
-    <pubDate>Mon, 16 Nov 2020 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2020-11-16-pandoc-orderedlist-attr-view.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
