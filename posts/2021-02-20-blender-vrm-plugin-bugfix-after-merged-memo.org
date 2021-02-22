@@ -63,15 +63,15 @@ __init__.ImportVRM.execute()
 
 * バグの原因
 
-~node_group_create~ は新しいNodegroupを作って返すが、
-
 =importer/blend_model.py:449= で
 ~bpy.data.node_groups[shader_node_group_name]~ を取ってきているところが原因。
 
-~bpy.data.node_groups~ はblendfile内にあるnode_groupsを保持しており、
+
+~bpy.data.node_groups~ はblendfile内にある=node_groups=を保持しており、
 既に「古いバージョンで読み込まれたVRM」がある場合
 ~bpy.data.node_groups["MToon_unversioned"]~ は
-「古いバージョンの=MToon_unversioned=」=typoが含まれたものを返してしまう。
+「古いバージョンの =MToon_unversioned= 」=typoが含まれたものを返してしまう。
+
 そうすると、 ~node_group_create~ から返されたのちに ~.inputs["Normalmap"]~
 が読まれた際に存在せずにクラッシュしてしまう。
 
