@@ -17,7 +17,7 @@
     <div class="item">Posted on February 20, 2021</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on February 21, 2021
+      Updated on February 22, 2021
     </div>
   </div>
     
@@ -28,7 +28,18 @@
   
 </div>
 
-<p>該当PR: <a href="https://github.com/saturday06/VRM_Addon_for_Blender/pull/23">saturday06/VRM<sub>IMPORTERforBlender</sub>: PR #23</a> 作業メモ: <a href="https://Cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html">https://Cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html</a></p>
+<table>
+<tbody>
+<tr class="odd">
+<td>該当PR</td>
+<td><a href="https://github.com/saturday06/VRM_Addon_for_Blender/pull/23">saturday06/VRM<sub>IMPORTERforBlender</sub>: PR #23</a></td>
+</tr>
+<tr class="even">
+<td>作業メモ</td>
+<td><a href="https://Cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html">https://Cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html</a></td>
+</tr>
+</tbody>
+</table>
 <h1 id="問題">問題</h1>
 <p><a href="https://github.com/saturday06/VRM_Addon_for_Blender/pull/23#issuecomment-782580000">issueでsaturday06さんが教えてくれた</a> のですが、「一度古いプラグインでVRMを読み込んだblendファイルで、新しくVRMを読み込むとエラーを吐く」</p>
 <h2 id="トレースバック">トレースバック</h2>
@@ -78,13 +89,13 @@
 </div>
 <h1 id="バグの原因">バグの原因</h1>
 <p><code>node_group_create</code> は新しいNodegroupを作って返すが、</p>
-<p>importer/blend<sub>model</sub>.py:449 で <code>bpy.data.node_groups[shader_node_group_name]</code> を取ってきているところが原因。</p>
-<p><code>bpy.data.node_groups</code> はblendfile内にあるnode<sub>groupsを保持しており</sub>、 既に「古いバージョンで読み込まれたVRM」がある場合 <code>bpy.data.node_groups["MToon_unversioned"]</code> は 「古いバージョンのMToon<sub>unversioned</sub>」=typoが含まれたものを返してしまう。 そうすると、 <code>node_group_create</code> から返されたのちに <code>.inputs["Normalmap"]</code> が読まれた際に存在せずにクラッシュしてしまう。</p>
+<p><code>importer/blend_model.py:449</code> で <code>bpy.data.node_groups[shader_node_group_name]</code> を取ってきているところが原因。</p>
+<p><code>bpy.data.node_groups</code> はblendfile内にあるnode<sub>groupsを保持しており</sub>、 既に「古いバージョンで読み込まれたVRM」がある場合 <code>bpy.data.node_groups["MToon_unversioned"]</code> は 「古いバージョンの=MToon<sub>unversioned</sub>=」=typoが含まれたものを返してしまう。 そうすると、 <code>node_group_create</code> から返されたのちに <code>.inputs["Normalmap"]</code> が読まれた際に存在せずにクラッシュしてしまう。</p>
 <h1 id="解決方法">解決方法</h1>
 <p>ここでできるのは</p>
 <ol>
 <li>今までと同じように"Normalmap"が存在しなかったら"Nomalmap"を読ませる</li>
-<li>そもそも古い <code>bpy.data.node_groups["MToon_unversioned"]</code> を更新させる</li>
+<li>そもそも古い <code>bpy.data.node_groups["MToon_unversioned"]</code> を更新させる(どのタイミングで？)</li>
 <li></li>
 </ol>
 ]]></description>
