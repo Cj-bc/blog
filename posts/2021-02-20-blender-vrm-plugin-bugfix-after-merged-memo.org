@@ -67,7 +67,7 @@ __init__.ImportVRM.execute()
 ~bpy.data.node_groups[shader_node_group_name]~ を取ってきているところが原因。
 
 
-~bpy.data.node_groups~ はblendfile内にある=node_groups=を保持しており、
+~bpy.data.node_groups~ はblendfile内にある =node_groups= を保持しており、
 既に「古いバージョンで読み込まれたVRM」がある場合
 ~bpy.data.node_groups["MToon_unversioned"]~ は
 「古いバージョンの =MToon_unversioned= 」=typoが含まれたものを返してしまう。
@@ -81,4 +81,3 @@ __init__.ImportVRM.execute()
 
 1. 今までと同じように"Normalmap"が存在しなかったら"Nomalmap"を読ませる
 2. そもそも古い ~bpy.data.node_groups["MToon_unversioned"]~ を更新させる(どのタイミングで？)
-3. 
