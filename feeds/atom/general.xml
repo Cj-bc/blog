@@ -226,14 +226,13 @@ bash
 </div>
 <h1 id="バグの原因">バグの原因</h1>
 <p><code>importer/blend_model.py:449</code> で <code>bpy.data.node_groups[shader_node_group_name]</code> を取ってきているところが原因。</p>
-<p><code>bpy.data.node_groups</code> はblendfile内にある=node<sub>groups</sub>=を保持しており、 既に「古いバージョンで読み込まれたVRM」がある場合 <code>bpy.data.node_groups["MToon_unversioned"]</code> は 「古いバージョンの <code>MToon_unversioned</code> 」=typoが含まれたものを返してしまう。</p>
+<p><code>bpy.data.node_groups</code> はblendfile内にある <code>node_groups</code> を保持しており、 既に「古いバージョンで読み込まれたVRM」がある場合 <code>bpy.data.node_groups["MToon_unversioned"]</code> は 「古いバージョンの <code>MToon_unversioned</code> 」=typoが含まれたものを返してしまう。</p>
 <p>そうすると、 <code>node_group_create</code> から返されたのちに <code>.inputs["Normalmap"]</code> が読まれた際に存在せずにクラッシュしてしまう。</p>
 <h1 id="解決方法">解決方法</h1>
 <p>ここでできるのは</p>
 <ol>
 <li>今までと同じように"Normalmap"が存在しなかったら"Nomalmap"を読ませる</li>
 <li>そもそも古い <code>bpy.data.node_groups["MToon_unversioned"]</code> を更新させる(どのタイミングで？)</li>
-<li></li>
 </ol>
 ]]></summary>
 </entry>
