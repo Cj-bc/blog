@@ -9,8 +9,10 @@ kind: memo
 date: February 20, 2021
 ---
 
-該当PR: [[https://github.com/saturday06/VRM_Addon_for_Blender/pull/23][saturday06/VRM_IMPORTER_for_Blender: PR #23]]
-作業メモ: [[https://Cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html]]
+|          |                                                                        |
+|----------+------------------------------------------------------------------------|
+| 該当PR   | [[https://github.com/saturday06/VRM_Addon_for_Blender/pull/23][saturday06/VRM_IMPORTER_for_Blender: PR #23]]                            |
+| 作業メモ | [[https://Cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html]] |
 
 * 問題
 
@@ -61,21 +63,22 @@ __init__.ImportVRM.execute()
 
 * バグの原因
 
-=node_group_create= は新しいNodegroupを作って返すが、
+~node_group_create~ は新しいNodegroupを作って返すが、
 
-importer/blend_model.py:449 で
-=bpy.data.node_groups[shader_node_group_name]= を取ってきているところが原因。
+=importer/blend_model.py:449= で
+~bpy.data.node_groups[shader_node_group_name]~ を取ってきているところが原因。
 
-=bpy.data.node_groups= はblendfile内にあるnode_groupsを保持しており、
+~bpy.data.node_groups~ はblendfile内にあるnode_groupsを保持しており、
 既に「古いバージョンで読み込まれたVRM」がある場合
-=bpy.data.node_groups["MToon_unversioned"]= は
-「古いバージョンのMToon_unversioned」=typoが含まれたものを返してしまう。
-そうすると、 =node_group_create= から返されたのちに =.inputs["Normalmap"]=
+~bpy.data.node_groups["MToon_unversioned"]~ は
+「古いバージョンの=MToon_unversioned=」=typoが含まれたものを返してしまう。
+そうすると、 ~node_group_create~ から返されたのちに ~.inputs["Normalmap"]~
 が読まれた際に存在せずにクラッシュしてしまう。
 
 * 解決方法
 
 ここでできるのは
+
 1. 今までと同じように"Normalmap"が存在しなかったら"Nomalmap"を読ませる
-2. そもそも古い =bpy.data.node_groups["MToon_unversioned"]= を更新させる
+2. そもそも古い ~bpy.data.node_groups["MToon_unversioned"]~ を更新させる(どのタイミングで？)
 3. 
