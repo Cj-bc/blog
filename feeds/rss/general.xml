@@ -7,8 +7,156 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/general.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Sun, 21 Feb 2021 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Tue, 02 Mar 2021 00:00:00 UT</lastBuildDate>
         <item>
+    <title>vim9scriptで気をつけること</title>
+    <link>https://cj-bc.github.io/blog/posts/2021-03-02-vim-vim9script-struggling-memo-v8.2_1-2560.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>vim9scriptで気をつけること</h1>
+  <div class="ui list">
+    <div class="item">Posted on March  2, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on March  2, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;vim&#39;." href="/tags/vim.html" class="ui tag label">vim</a><a title="All pages tagged &#39;vim script&#39;." href="/tags/vim%20script.html" class="ui tag label">vim script</a><a title="All pages tagged &#39;vim9&#39;." href="/tags/vim9.html" class="ui tag label">vim9</a>
+  
+</div>
+
+<p><a href="https://vim-jp.org/vimdoc-ja/usr_46.html">vim9script</a>は、新しく実装が進められているvim用のスクリプト言語で、 型を取り入れたりモジュールの概念を取り入れたりなど「モダンな言語」の機能をふんだんに取り入れています。</p>
+<p><strong>現在はまだ開発中であり不安定である</strong> ためプラグインの作成などには向かないようですが、あくまでも自己責任ということで使ってみたくなったので <a href="https://github.com/Cj-bc/dotfiles/tree/master/dotfiles/vim">自分のvimrc</a> の新しく書く部分に少し使ってみたりしています。</p>
+<p>が、如何せん開発中のものなのでバグが多かったり、ドキュメントが不足していたり。。。</p>
+<p>取り急ぎ、自分で把握したものはメモしていきます。</p>
+<p>なお当方のvimは現時点でのgitのマスターブランチから <code>make</code> コマンドのみによってコンパイルされたもので、</p>
+<p>バージョンは <code>8.2 (2019 Dec 12, compiled Mar 2 2021 10:43:55) patch 1-2560</code> です。</p>
+<p>又、コードの実行には <a href="https://github.com/thinca/vim-quickrun">thinca/vim-quickrun</a> を使用させていただいております。</p>
+<h1 id="文字列連結は&#39;..&#39;。&#39;.&#39;ではない。">文字列連結は'..'。'.'ではない。</h1>
+<p>これは明確に「変更点」としては見当たらなかったのですが、恐らく変更されているところです。 <code>.</code> を使って連結しようとしてみたところ、 <code>E15: 無効な式です</code> と言われてしまいました。</p>
+<p>&lt;画像入れる&gt;</p>
+<p>これを <code>..</code> に変えたところすんなり動きました。</p>
+<h1 id="&#39;map()&#39;と&#39;mapnew()&#39;を使い分ける">'map()'と'mapnew()'を使い分ける</h1>
+<p><code>map()</code> は、リストや辞書型のオブジェクトの要素ひとつひとつに対して関数を適用してくれる関数です。</p>
+<p>Haskellとかやってると馴染みが深いですが、その分注意する必要がある点があります。</p>
+<p><code>map()</code> 関数、実は <strong>与えられたリストや辞書型のオブジェクトをそのまま更新</strong> します。 つまり <strong>新しいオブジェクトを作って返すわけではない</strong> のです。</p>
+<p>今まではこれで良かったのですが、=vim9script= になると違います。 使用する関数を気をつけないと、 <strong>型の不一致でコンパイルエラー</strong> を受けます。</p>
+<p>例えば、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+vim
+</div>
+<pre class="vim SourceCode"><code>var ret = [1, 2, 3]
+map(ret, (n) =&gt; n + 1)
+</code></pre>
+</div>
+<p>は <code>a -&gt; a</code> な関数を渡しているので動きますが、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+vim
+</div>
+<pre class="vim SourceCode"><code>var ret = [1, 2, 3]
+map(ret, (n) =&gt; n .. &quot;th&quot;)
+</code></pre>
+</div>
+<p>は~a -&gt; b~ (<code>number -&gt; string</code>) な関数を渡しているのでコンパイルエラーになります。</p>
+<p>この場合、*新しいオブジェクトを作って返す* バージョンである <code>mapnew()</code> を使用して回避できます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+vim
+</div>
+<pre class="vim SourceCode"><code>var ret = mapnew([1,2,3], (n) =&gt; n .. &quot;th&quot;)
+</code></pre>
+</div>
+]]></description>
+    <pubDate>Tue, 02 Mar 2021 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2021-03-02-vim-vim9script-struggling-memo-v8.2_1-2560.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>Redox OSとかいう新しいOSが気になった話</title>
+    <link>https://cj-bc.github.io/blog/posts/2021-02-23-redox-os.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>Redox OSとかいう新しいOSが気になった話</h1>
+  <div class="ui list">
+    <div class="item">Posted on February 24, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on February 24, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;redox os&#39;." href="/tags/redox%20os.html" class="ui tag label">redox os</a><a title="All pages tagged &#39;os&#39;." href="/tags/os.html" class="ui tag label">os</a><a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a>
+  
+</div>
+
+<h1 id="お断り">お断り</h1>
+<p>私は一切Redox OSを使ったことがないし、関係者でもなくただ単に「気になってちょっとドキュメントみた」程度なので、 その程度の知識しかないことはご了承ください。</p>
+<h1 id="redox osとは">redox osとは</h1>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>Redox OS は、Rustで書かれたUNIXライクなオペレーションシステムで、 Rustという革命的手法を、モダンなマイクロカーネルおよび 全てのアプリケーションに持ち込むことを目指しています</p>
+<p>– 公式サイト <a href="https://www.redox-os.org/jp">https://www.redox-os.org/jp</a> より</p>
+</blockquote>
+</div>
+<p>Rust製のマイクロカーネルなOSのようです。</p>
+<p>別段OS(というかカーネル)は何気に色々あるのでそこまで特筆すべきほど驚くか？ と言われると微妙なところではありますが、個人的に面白いなと思ったところを軽く書いておこうと 思います。</p>
+<h1 id="面白いところ">面白いところ</h1>
+<h2 id="公式サイトに日本語訳がある">公式サイトに日本語訳がある</h2>
+<p>これは本当に驚いたところで、感動したところでもあります。</p>
+<p>大体のプロジェクトには日本語なんてないし、そもそも多国語対応している 物の方が少ないと思います。 <del>知らんけど</del></p>
+<p>全てが対応しているわけではないようですが、それでも十分インパクトがありました。</p>
+<p>ちなみにページの情報によると、全部で次のような言語があるようですね。 …読めないものも多い！！</p>
+<ul>
+<li>日本語</li>
+<li>English</li>
+<li>中文</li>
+<li>Español</li>
+<li>Русский</li>
+<li>Français</li>
+<li>Deutsch</li>
+<li>Italiano</li>
+<li>Türkçe</li>
+<li>Svenska</li>
+<li>Nederlands</li>
+<li>Dansk</li>
+<li>Norsk</li>
+<li>Čeština</li>
+<li>Esperanto</li>
+<li>Português</li>
+<li>한국어</li>
+<li>Magyar</li>
+<li>Polski</li>
+<li>Українська</li>
+</ul>
+<p><a href="https://www.jei.or.jp/3pundesiru/">Esperanto</a> があるのは個人的にめちゃくちゃ好き！！！</p>
+<p>人工言語意外と好きなので… (今の推しは <a href="https://mw.lojban.org/index.php?title=Lojban&amp;setlang=ja">lojban</a> ですが。)</p>
+<h2 id="Rust製である">Rust製である</h2>
+<p>何かと低レイヤーに使われがちな気はしていますが、 カーネルはCが使われるイメージしかなかったのでとても斬新に感じました。</p>
+<p>まぁ多分そうじゃないのもたくさんあるんだろうけど…疎いので…</p>
+<h2 id="Coreutilとかshellとかエディタとか自作である">Coreutilとかshellとかエディタとか自作である</h2>
+<p>何気にこれほんとすごいと思います。</p>
+<ul>
+<li><a href="https://gitlab.redox-os.org/redox-os/coreutils">coreutils</a></li>
+<li><a href="https://gitlab.redox-os.org/redox-os/binutils">binutils</a></li>
+<li><a href="https://gitlab.redox-os.org/redox-os/bootloader-efi">bootloader-efi</a></li>
+<li><a href="https://gitlab.redox-os.org/redox-os/ion">ion(shell)</a></li>
+<li><a href="https://gitlab.redox-os.org/redox-os/sodium">sodium(editor)</a></li>
+</ul>
+<h2 id="独自のshellがある">独自のshellがある</h2>
+<p>これは自分がshell好きだからでもあるのですが、知らないshellを見るとやっぱりワクワクしますよね… <a href="https://gitlab.redox-os.org/redox-os/ion">ion(shell)</a></p>
+]]></description>
+    <pubDate>Wed, 24 Feb 2021 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2021-02-23-redox-os.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>Python Language Serverにmypyにmypyの設定を追加した</title>
     <link>https://cj-bc.github.io/blog/posts/2021-02-21-python-install-pyls-mypy-along-with-vim-lsp-settings.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
@@ -458,298 +606,6 @@ endfunction</code></pre>
 ]]></description>
     <pubDate>Wed, 13 Jan 2021 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2021-01-13-after-effect-cheat-sheet.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>Expressionを使ったアニメーションのメモ</title>
-    <link>https://cj-bc.github.io/blog/posts/2021-01-13-after-effect-animation-with-expressions.html</link>
-    <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>Expressionを使ったアニメーションのメモ</h1>
-  <div class="ui list">
-    <div class="item">Posted on January 13, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on January 19, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;after effect&#39;." href="/tags/after%20effect.html" class="ui tag label">after effect</a>
-  
-</div>
-
-<h1 id="Expression制御のEffectは必ずリネームする">Expression制御のEffectは必ずリネームする</h1>
-<p>同じ種類のExpression制御Effectを一度しか使わないなら問題にはならない気がしますが、 後々見やすいのでリネームをした方が良いです。<br />
-そして、<strong>できる限り早く</strong>リネームするようにしてください。 複数の同じエフェクトを作成・Expressionから参照した後にリネームした場合、 <strong>Expression内の同名の部分が全て新しい名前に置き換わります</strong>。<br />
-例えば、</p>
-<h2 id="リネームの仕方">リネームの仕方</h2>
-<p><a href="https://creativecow.net/forums/thread/rename-expression-controlsae-2/">参考にしたもの</a></p>
-<p>例えばスライダー制御のEffectをリネームする場合、<code>エフェクト→スライダー制御</code>を選択してEnterを押します。 すると普段通りにリネームできます。~~私は気付かなかった...~~</p>
-<h1 id="Expressionのコピペ">Expressionのコピペ</h1>
-<p>作成したExpressionを含むプロパティを選択しC-cで普段通りコピー。 コピー先のレイヤーを選択してC-vするとそのままペーストされる。</p>
-<h1 id="一定の時間から色などを変化させる">一定の時間から色などを変化させる</h1>
-<p>固定値を使わなくても<code>Marker</code>を使えばできる。</p>
-<ul>
-<li><a href="https://helpx.adobe.com/jp/after-effects/user-guide.html/jp/after-effects/using/layer-markers-composition-markers.ug.html">公式URL</a></li>
-<li><a href="https://cj-bc.github.com/blog/posts/2021-01-19-after-effect-markers.html">Markerについて</a></li>
-</ul>
-<h2 id="レイヤーマーカーを参照する">レイヤーマーカーを参照する</h2>
-<p>https://helpx.adobe.com/jp/after-effects/user-guide.html/jp/after-effects/using/expression-language-reference.ug.html</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-javascript
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode javascript SourceCode"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>thisLayer<span class="op">.</span><span class="at">marker</span><span class="op">.</span><span class="fu">key</span>(n<span class="op">:</span> int)    <span class="co">// n番目のマーカーを参照する</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>thisLayer<span class="op">.</span><span class="at">marker</span><span class="op">.</span><span class="fu">key</span>(name<span class="op">:</span> str) <span class="co">// nameという名前のマーカーを参照する</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>thisLayer<span class="op">.</span><span class="at">marker</span><span class="op">.</span><span class="fu">nearestKey</span>(t<span class="op">:</span> float) <span class="co">// tという時間に一番近いマーカーを参照する</span></span></code></pre></div>
-</div>
-]]></description>
-    <pubDate>Wed, 13 Jan 2021 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2021-01-13-after-effect-animation-with-expressions.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>VRM_IMPORTER_for_Blender \#23 作業メモ</title>
-    <link>https://cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html</link>
-    <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>VRM_IMPORTER_for_Blender \#23 作業メモ</h1>
-  <div class="ui list">
-    <div class="item">Posted on January 11, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on January 15, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html" class="ui tag label">blender</a><a title="All pages tagged &#39;python&#39;." href="/tags/python.html" class="ui tag label">python</a>
-  
-</div>
-
-<h1 id="追加されたシェーダーを探す">追加されたシェーダーを探す</h1>
-<h2 id="場所の特定">場所の特定</h2>
-<p>そもそもファイルがどこに追加されているのかを確かめる必要がある。 そこで、<code>__init__.py</code>を参照する。(どうでもいいけど中身のある<code>__init__.py</code>は初めて見た)<br />
-Blenderは、Addonが追加されるとクラスなどを登録するために<code>register()</code>という関数を探して実行する。 以下がこのAddonの<code>register()</code>関数。 (<a href="https://github.com/saturday06/VRM_IMPORTER_for_Blender/blob/a14835bfbc573a1d8f2be2a74ed198da46a573e4/__init__.py#L277-L285">githubで確認する</a>)</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-python
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co"># アドオン有効化時の処理</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">def</span> register():</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="cf">for</span> cls <span class="kw">in</span> classes:</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>        bpy.utils.register_class(cls)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    bpy.types.TOPBAR_MT_file_import.append(menu_import)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    bpy.types.TOPBAR_MT_file_export.append(menu_export)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    bpy.types.VIEW3D_MT_armature_add.append(add_armature)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    <span class="co"># bpy.types.VIEW3D_MT_mesh_add.append(make_mesh)</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>    bpy.app.handlers.load_post.append(add_shaders)</span></code></pre></div>
-</div>
-<p>明らかに<code>bpy.app.handlers.load_post.append(add_shaders)</code>が怪しい。というか、<code>add_shaders</code>という わかりやすい名前があるので間違い無くここで追加している。 ということで<code>add_shaders</code>を見てみると (<a href="https://github.com/saturday06/VRM_IMPORTER_for_Blender/blob/a14835bfbc573a1d8f2be2a74ed198da46a573e4/__init__.py#L245-L253">githubで確認する</a>)</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-python
-</div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="at">@persistent</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">def</span> add_shaders(<span class="va">self</span>):</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>    filedir <span class="op">=</span> os.path.join(</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>        os.path.dirname(<span class="va">__file__</span>), <span class="st">&quot;resources&quot;</span>, <span class="st">&quot;material_node_groups.blend&quot;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    )</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>    <span class="cf">with</span> bpy.data.libraries.load(filedir, link<span class="op">=</span><span class="va">False</span>) <span class="im">as</span> (data_from, data_to):</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>        <span class="cf">for</span> nt <span class="kw">in</span> data_from.node_groups:</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>            <span class="cf">if</span> nt <span class="kw">not</span> <span class="kw">in</span> bpy.data.node_groups:</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>                data_to.node_groups.append(nt)</span></code></pre></div>
-</div>
-<h2 id="実際にshaderを追加している部分">実際にshaderを追加している部分</h2>
-<p>このコードである。そして、読めば字の如くだが、レポジトリにある<code>resources/material_node_groups.blend</code> にある<code>node_groups</code>の中でBlenderに存在していないものがあれば <code>data_to.node_groups.append()</code>して追加している。<br />
-結論から言うと<a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code>node_groups</code></a>は nodeで表現されるもの(オブジェクト？)、つまり<code>Shading</code>/<code>Textures</code>/<code>Compositin</code>に関わるものの集合である。 (<a href="https://docs.blender.org/api/current/bpy.types.NodeTree.html#bpy.types.NodeTree">公式doc</a>)<br />
-type()によると、<code>bpy.data</code>は<code>bpy.types.BlendData</code>であるので、<code>node_groups</code>は <a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code>bpy.types.BlendData.node_groups</code></a> である。 ここで、なんとなく<code>bpy.data</code>を見てみると<code>bpy.data.node_groups</code>に追加されてることがわかる。</p>
-<details>
-<summary>`bpy.data.node_groups`までたどり着く道のりメモ(でもよくわからなくて落書き)</summary>
-`data_to`は[`bpy.data.libraries.load`](https://docs.blender.org/api/current/bpy.types.BlendDataLibraries.html#bpy.types.BlendDataLibraries.load)から返されている。
-`bpy.data`が[`BlendData`](https://docs.blender.org/api/current/bpy.types.BlendData.html)のインスタンスであることから
-`bpy.data.libraries.load`は[`BlendDataLibraries.load`](https://docs.blender.org/api/current/bpy.types.BlendDataLibraries.html#bpy.types.BlendDataLibraries.load)である。  
-
-...で、なんとなく`bpy.data`を見る、に戻る
-</details>
-<p><code>node_groups</code>の中で入力を受け付けてるものなら<code>.inputs</code>にある。 今回でいうと、<code>MToon</code>マテリアルにある<code>NomalmapTexture</code>というtypoを直したいので、 <code>bpy.data.node_groups['MToon_unversioned'].input['NomalmapTexture']</code>を参照する</p>
-<h1 id="今行き詰まっている問題">今行き詰まっている問題</h1>
-<h2 id="bpypropcollectionに追加できない">bpy<em>prop</em>collectionに追加できない</h2>
-<p>これをtypoが直った<code>bpy.data.node_groups['MToon_unversioned'].input['NormalmapTexture']</code>に変えたいのだけど、 どうやら<code>input['NomalmapTexture']</code>の型である<code>bpy_prop_collection</code>がC実装なようで、普段のpythonのようにはいかない。 具体的にいうと</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-python
-</div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>bpy.data.node_groups[<span class="st">&#39;MToon_unversioned&#39;</span>].<span class="bu">input</span>[<span class="st">&#39;NormalmapTexture&#39;</span>] <span class="op">=</span> bpy.data.node_groups[<span class="st">&#39;MToon_unversioned&#39;</span>].<span class="bu">input</span>[<span class="st">&#39;NomalmapTexture&#39;</span>]</span></code></pre></div>
-</div>
-<p>では以下のようにエラーを吐かれてうまくいかない。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-python-repl
-</div>
-<pre class="python-repl SourceCode"><code>&gt;&gt;&gt; mtonNode = bpy.data.node_groups[&#39;MToon_unversioned&#39;]
-&gt;&gt;&gt; mtoonNode.inputs[&#39;NormalmapTexture&#39;] = mtoonNode.inputs[&#39;NomalmapTexture&#39;]
-Traceback (most recent call last):
-  File &quot;&lt;console&gt;&quot;, line 1, in &lt;module&gt;
-TypeError: bpy_prop_collection[key]: invalid key, must be a string or an int, not str</code></pre>
-</div>
-<h3 id="試したこと">試したこと</h3>
-<p><a href="https://docs.blender.org/api/current/bpy.types.bpy_prop_collection.html?highlight=bpy_prop_collection#bpy.types.bpy_prop_collection"><code>bpy_prop_collection</code></a>のドキュメントと<code>dir(mtoonNode.inputs[0])</code>を読んでみた所、 ドキュメントには書かれていなかったけど<code>move</code>と<code>new</code>があった。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-python-repl
-</div>
-<pre class="python-repl SourceCode"><code>&gt;&gt;&gt; dir(mtoonNode.inputs)
-[&#39;__bool__&#39;, &#39;__contains__&#39;, &#39;__delattr__&#39;, &#39;__delitem__&#39;, &#39;__doc__&#39;
-, &#39;__doc__&#39;, &#39;__getattribute__&#39;, &#39;__getitem__&#39;, &#39;__iter__&#39;, &#39;__len__&#39;
-, &#39;__module__&#39;, &#39;__setattr__&#39;, &#39;__setitem__&#39;, &#39;__slots__&#39;, &#39;bl_rna&#39;
-, &#39;clear&#39;, &#39;find&#39;, &#39;foreach_get&#39;, &#39;foreach_set&#39;, &#39;get&#39;
-, &#39;items&#39;, &#39;keys&#39;, &#39;move&#39;, &#39;new&#39;, &#39;remove&#39;, &#39;rna_type&#39;, &#39;values&#39;]</code></pre>
-</div>
-<p>それぞれの挙動を試してみたが、どっちもうまく動かず...というか挙動がわからなかった</p>
-<h4 id="new()"><code>new()</code></h4>
-<details> <summary>Replの結果ですが長いので折りたたみ</summary>
-``` python-repl
->>> mtoonNode.inputs
-bpy.data...inputs
->>> mtoonNode
-bpy.data.node_groups['MToon_unversioned']
->>> mtoonNode.inputs.new
-<bpy_func NodeTreeInputs.new()>
->>> mtoonNode.inputs.new()
-Traceback (most recent call last):
-  File "<console>", line 1, in <module>
-TypeError: NodeTreeInputs.new(): required parameter "type" not specified
->>> # mtoonNode.inputs['NomalmapTexture']から値を拝借
->>> mtoonNode.inputs.new('RGBA')
-Traceback (most recent call last):
-  File "<console>", line 1, in <module>
-TypeError: NodeTreeInputs.new(): required parameter "name" not specified
->>> mtoonNode.inputs.new('RGBA', 'NormalmapTexture')
->>> mtoonNode.inputs
-bpy.data...inputs
->>> mtoonNode.inputs['NormalmapTexture']
-Traceback (most recent call last):
-  File "<console>", line 1, in <module>
-KeyError: 'bpy_prop_collection[key]: key "NormalmapTexture" not found'
->>> mtoonNode.inputs.items()
-[('MainTexture', bpy.data...inputs[0])
-, ('MainTextureAlpha', bpy.data...inputs[1])
-, ('ShadeTexture', bpy.data...inputs[2])
-, ('ReceiveShadow_Texture_alpha', bpy.data...inputs[3])
-, ('NomalmapTexture', bpy.data...inputs[4])
-, ('ShadingGradeTexture', bpy.data...inputs[5])
-, ('Emission_Texture', bpy.data...inputs[6])
-, ('SphereAddTexture', bpy.data...inputs[7])
-, ('OutlineWidthTexture', bpy.data...inputs[8])
-, ('UV_Animation_Mask_Texture', bpy.data...inputs[9])
-, ('DiffuseColor', bpy.data...inputs[10])
-, ('ShadeColor', bpy.data...inputs[11])
-, ('EmissionColor', bpy.data...inputs[12])
-, ('OutlineColor', bpy.data...inputs[13])
-, ('RimColor', bpy.data...inputs[14])
-, ('RimTexture', bpy.data...inputs[15])
-, ('RimLightingMix', bpy.data...inputs[16])
-, ('RimFresnelPower', bpy.data...inputs[17])
-, ('RimLift', bpy.data...inputs[18])
-, ('CutoffRate', bpy.data...inputs[19])
-, ('BumpScale', bpy.data...inputs[20])
-, ('ReceiveShadowRate', bpy.data...inputs[21])
-, ('ShadeShift', bpy.data...inputs[22])
-, ('ShadeToony', bpy.data...inputs[23])
-, ('ShadingGradeRate', bpy.data...inputs[24])
-, ('LightColorAttenuation', bpy.data...inputs[25])
-, ('IndirectLightIntensity', bpy.data...inputs[26])
-, ('OutlineWidth', bpy.data...inputs[27])
-, ('OutlineScaleMaxDistance', bpy.data...inputs[28])
-, ('OutlineLightingMix', bpy.data...inputs[29])
-, ('OutlineWidthMode', bpy.data...inputs[30])
-, ('OutlineColorMode', bpy.data...inputs[31])
-, ('UV_Scroll_X', bpy.data...inputs[32])
-, ('UV_Scroll_Y', bpy.data...inputs[33])
-, ('UV_Scroll_Rotation', bpy.data...inputs[34])]
-```
-</details>
-<h4 id="move()">move()</h4>
-<details> <summary> Replの結果。長いため折りたたみ。 </summary>
-``` python-repl
->>> mtoonNode.inputs.move()
-Traceback (most recent call last):
-  File "<console>", line 1, in <module>
-TypeError: NodeTreeInputs.move(): required parameter "from_index" not specified
->>> mtoonNode.inputs.move(4)
-Traceback (most recent call last):
-  File "<console>", line 1, in <module>
-TypeError: NodeTreeInputs.move(): required parameter "to_index" not specified
->>> mtoonNode.inputs.move(4, 35)
->>> mtoonNode.inputs.items()
-[('MainTexture', bpy.data...inputs[0]), ('MainTextureAlpha', bpy.data...inputs[1])
-, ('ShadeTexture', bpy.data...inputs[2])
-, ('ReceiveShadow_Texture_alpha', bpy.data...inputs[3])
-, ('NomalmapTexture', bpy.data...inputs[4])
-, ('ShadingGradeTexture', bpy.data...inputs[5])
-, ('Emission_Texture', bpy.data...inputs[6])
-, ('SphereAddTexture', bpy.data...inputs[7])
-, ('OutlineWidthTexture', bpy.data...inputs[8])
-, ('UV_Animation_Mask_Texture', bpy.data...inputs[9])
-, ('DiffuseColor', bpy.data...inputs[10])
-, ('ShadeColor', bpy.data...inputs[11])
-, ('EmissionColor', bpy.data...inputs[12])
-, ('OutlineColor', bpy.data...inputs[13])
-, ('RimColor', bpy.data...inputs[14])
-, ('RimTexture', bpy.data...inputs[15])
-, ('RimLightingMix', bpy.data...inputs[16])
-, ('RimFresnelPower', bpy.data...inputs[17])
-, ('RimLift', bpy.data...inputs[18])
-, ('CutoffRate', bpy.data...inputs[19])
-, ('BumpScale', bpy.data...inputs[20])
-, ('ReceiveShadowRate', bpy.data...inputs[21])
-, ('ShadeShift', bpy.data...inputs[22])
-, ('ShadeToony', bpy.data...inputs[23])
-, ('ShadingGradeRate', bpy.data...inputs[24])
-, ('LightColorAttenuation', bpy.data...inputs[25])
-, ('IndirectLightIntensity', bpy.data...inputs[26])
-, ('OutlineWidth', bpy.data...inputs[27])
-, ('OutlineScaleMaxDistance', bpy.data...inputs[28])
-, ('OutlineLightingMix', bpy.data...inputs[29])
-, ('OutlineWidthMode', bpy.data...inputs[30])
-, ('OutlineColorMode', bpy.data...inputs[31])
-, ('UV_Scroll_X', bpy.data...inputs[32])
-, ('UV_Scroll_Y', bpy.data...inputs[33])
-, ('UV_Scroll_Rotation', bpy.data...inputs[34])]
->>> mtoonNode.inputs.values()
-[bpy.data...inputs[0]
-, bpy.data...inputs[1], bpy.data...inputs[2]
-, bpy.data...inputs[3], bpy.data...inputs[4]
-, bpy.data...inputs[5], bpy.data...inputs[6]
-, bpy.data...inputs[7], bpy.data...inputs[8]
-, bpy.data...inputs[9], bpy.data...inputs[10]
-, bpy.data...inputs[11], bpy.data...inputs[12]
-, bpy.data...inputs[13], bpy.data...inputs[14]
-, bpy.data...inputs[15], bpy.data...inputs[16]
-, bpy.data...inputs[17], bpy.data...inputs[18]
-, bpy.data...inputs[19], bpy.data...inputs[20]
-, bpy.data...inputs[21], bpy.data...inputs[22]
-, bpy.data...inputs[23], bpy.data...inputs[24]
-, bpy.data...inputs[25], bpy.data...inputs[26]
-, bpy.data...inputs[27], bpy.data...inputs[28]
-, bpy.data...inputs[29], bpy.data...inputs[30]
-, bpy.data...inputs[31], bpy.data...inputs[32]
-, bpy.data...inputs[33], bpy.data...inputs[34]]
->>> bpy.data...inputs[1]
-  File "<console>", line 1
-    bpy.data...inputs[1]
-              ^
-SyntaxError: invalid syntax
->>>
-```
-</details>
-]]></description>
-    <pubDate>Mon, 11 Jan 2021 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>CLI! CLI! CLI!</title>
+    <link href="https://cj-bc.github.io/blog/feeds/atom/tag/vim%20script.xml" rel="self" />
+    <link href="https://cj-bc.github.io/blog" />
+    <id>https://cj-bc.github.io/blog/feeds/atom/tag/vim%20script.xml</id>
+    <author>
+        <name>Cj-bc a.k.a Cj.BC_SD</name>
+        <email>cj.bc-sd@outlook.jp</email>
+    </author>
+    <updated>2021-03-02T00:00:00Z</updated>
+    <entry>
+    <title>vim9scriptで気をつけること</title>
+    <link href="https://cj-bc.github.io/blog/posts/2021-03-02-vim-vim9script-struggling-memo-v8.2_1-2560.html" />
+    <id>https://cj-bc.github.io/blog/posts/2021-03-02-vim-vim9script-struggling-memo-v8.2_1-2560.html</id>
+    <published>2021-03-02T00:00:00Z</published>
+    <updated>2021-03-02T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>vim9scriptで気をつけること</h1>
+  <div class="ui list">
+    <div class="item">Posted on March  2, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on March  2, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;vim&#39;." href="/tags/vim.html" class="ui tag label">vim</a><a title="All pages tagged &#39;vim script&#39;." href="/tags/vim%20script.html" class="ui tag label">vim script</a><a title="All pages tagged &#39;vim9&#39;." href="/tags/vim9.html" class="ui tag label">vim9</a>
+  
+</div>
+
+<p><a href="https://vim-jp.org/vimdoc-ja/usr_46.html">vim9script</a>は、新しく実装が進められているvim用のスクリプト言語で、 型を取り入れたりモジュールの概念を取り入れたりなど「モダンな言語」の機能をふんだんに取り入れています。</p>
+<p><strong>現在はまだ開発中であり不安定である</strong> ためプラグインの作成などには向かないようですが、あくまでも自己責任ということで使ってみたくなったので <a href="https://github.com/Cj-bc/dotfiles/tree/master/dotfiles/vim">自分のvimrc</a> の新しく書く部分に少し使ってみたりしています。</p>
+<p>が、如何せん開発中のものなのでバグが多かったり、ドキュメントが不足していたり。。。</p>
+<p>取り急ぎ、自分で把握したものはメモしていきます。</p>
+<p>なお当方のvimは現時点でのgitのマスターブランチから <code>make</code> コマンドのみによってコンパイルされたもので、</p>
+<p>バージョンは <code>8.2 (2019 Dec 12, compiled Mar 2 2021 10:43:55) patch 1-2560</code> です。</p>
+<p>又、コードの実行には <a href="https://github.com/thinca/vim-quickrun">thinca/vim-quickrun</a> を使用させていただいております。</p>
+<h1 id="文字列連結は&#39;..&#39;。&#39;.&#39;ではない。">文字列連結は'..'。'.'ではない。</h1>
+<p>これは明確に「変更点」としては見当たらなかったのですが、恐らく変更されているところです。 <code>.</code> を使って連結しようとしてみたところ、 <code>E15: 無効な式です</code> と言われてしまいました。</p>
+<p>&lt;画像入れる&gt;</p>
+<p>これを <code>..</code> に変えたところすんなり動きました。</p>
+<h1 id="&#39;map()&#39;と&#39;mapnew()&#39;を使い分ける">'map()'と'mapnew()'を使い分ける</h1>
+<p><code>map()</code> は、リストや辞書型のオブジェクトの要素ひとつひとつに対して関数を適用してくれる関数です。</p>
+<p>Haskellとかやってると馴染みが深いですが、その分注意する必要がある点があります。</p>
+<p><code>map()</code> 関数、実は <strong>与えられたリストや辞書型のオブジェクトをそのまま更新</strong> します。 つまり <strong>新しいオブジェクトを作って返すわけではない</strong> のです。</p>
+<p>今まではこれで良かったのですが、=vim9script= になると違います。 使用する関数を気をつけないと、 <strong>型の不一致でコンパイルエラー</strong> を受けます。</p>
+<p>例えば、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+vim
+</div>
+<pre class="vim SourceCode"><code>var ret = [1, 2, 3]
+map(ret, (n) =&gt; n + 1)
+</code></pre>
+</div>
+<p>は <code>a -&gt; a</code> な関数を渡しているので動きますが、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+vim
+</div>
+<pre class="vim SourceCode"><code>var ret = [1, 2, 3]
+map(ret, (n) =&gt; n .. &quot;th&quot;)
+</code></pre>
+</div>
+<p>は~a -&gt; b~ (<code>number -&gt; string</code>) な関数を渡しているのでコンパイルエラーになります。</p>
+<p>この場合、*新しいオブジェクトを作って返す* バージョンである <code>mapnew()</code> を使用して回避できます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+vim
+</div>
+<pre class="vim SourceCode"><code>var ret = mapnew([1,2,3], (n) =&gt; n .. &quot;th&quot;)
+</code></pre>
+</div>
+]]></summary>
+</entry>
+
+</feed>
