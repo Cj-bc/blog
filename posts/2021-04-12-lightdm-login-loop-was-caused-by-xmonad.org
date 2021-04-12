@@ -1,0 +1,86 @@
+---
+title: うちのlightdmのログインループはxmonadが原因だった
+tags:
+  - lightdm
+  - xmonad
+  - archlinux
+kind: note
+date: April 12, 2021
+---
+
+* 起きていたこと
+~pacman -Syu~ して再起動した後、=light DM= できちんとログインしても =light DM= が再度呼び出されてしまう問題があった。
+
+調べた所、色々な要因があるようだがどれも私のケースではなかった。
+私のケースで問題だったのは、
+「 *コンパイル済みのxmonadが要求するライブラリが、アップデートによって消えていた* 」
+ことだった。
+
+xmonadはユーザーの書いた ~/.xmonad/xmonad.hs~
+をコンパイルして動くが、そのバイナリはいくつかの動的ライブラリを参照している。
+~pacman -Syu~の際、(例えば =xmonad-contrib=
+など)がアップデートされると動的ライブラリのパスが変わってしまう。
+それにより、xmonadが読みにいこうとしたライブラリが存在しなくなり、エラーが起きる。
+エラーのせいでxmonadが立ち上がらないため、lightdmは「Window managerが終了した」と判断(しているのか正確には知らないが)し、またログイン画面に戻ってくる。
+
+* 直し方
+
+1. =light DM= の画面で ~Alt+Control+F1~ でGUI環境を抜け、CUIを開く。
+2. =Alt+F2= をし、新しいターミナルを開きそこからログインする。
+3. ~xmonad --recompile~ する
+4. ~Alt+Control+F7~ でGUI環境に戻り、ログインを試すと入れるはず。
+
+
+* 他に考えられる原因
+
+[[https://askubuntu.com/questions/223501/ubuntu-gets-stuck-in-a-login-loop][色々調べる途中で見付けたaskubuntuのスレッド]] で、ありうる原因として挙げられていたものたち:
+
+- indicator-multiloadをインストールしたのが原因だった
+- flatpakが原因だった
+- ~/.Xauthorityの所有者が自分ではない
+- ~/.ICEauthorityの所有者が自分ではない（場合によっては必要なファイル、うちにはなかった）
+- /tmpのパーミッションが777&&file mode bitがt
+- sudo startxした（これのせいで~/.Xauthorityの所有者が変わってしまう模様）
+- Nvidiaの公式サイトから落としたドライバーが、きちんとテストされてないことがあるらしい
+- ~/.profileにtypoや構文ミスがある
+- 容量不足
+
+* おまけ: xmonadを、関連パッケージがアップデートされる度に自動リビルドさせる。
+
+このためには、pacmanのhook機能が使える。
+pacmanのhookは、指定した条件に合致した場合に指定した内容を実行する仕組みである。
+ファイルは(多分)ini形式で書かれ、デフォルトでは ~/etc/pacman.d/hooks~ 以下に配置される。
+
+ここでは簡単に、必要最低限の解説だけする。
+hookの書き方について詳しくは [[man:alpm-hooks]] を参照してほしい。
+
+先に完成形はこちら(最新版は [[github:Cj-bc/dotfiles]] の =dotfiles/pacman/hooks/xmonad.hook=)
+
+尚、 *このhookはまだテストされていません*
+(アップデートを実行した直後に書いたため)
+
+#+begin_src dosini
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = xmonad*
+Target = haskell-*
+
+[Action]
+Description = Rebuild xmonad to prevent login loop
+Exec = xmonad --recompile
+When = PostTransaction
+#+end_src
+
+** pacman hookの作り
+
+pacman hookは ~[Trigger]~ と ~[Action]~ の二つのブロックから構成される。
+~[Trigger]~ で「そのHookが実行される条件」を指定し、 ~[Action]~ で実行する内容を指定する。
+
+~Operation~ で指定された操作が、 ~Target~
+に一致するファイル・パッケージに対して実行された時にhookが実行される。
+
+このhookの場合は、
+~xmonad*~ 若しくは ~haskell-*~
+という名前のパッケージがUpgradeされた時、Upgrade処理が終わった後に
+~xmonad --recompile~ を実行する。
