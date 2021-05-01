@@ -7,8 +7,126 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/general.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Tue, 02 Mar 2021 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Mon, 26 Apr 2021 00:00:00 UT</lastBuildDate>
         <item>
+    <title>ewwでスタイリッシュなスライダーを使う</title>
+    <link>https://cj-bc.github.io/blog/posts/2021-04-26-eww-linux-minimal-design-slider.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>ewwでスタイリッシュなスライダーを使う</h1>
+  <div class="ui list">
+    <div class="item">Posted on April 26, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on April 27, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;eww&#39;." href="/tags/eww.html" class="ui tag label">eww</a><a title="All pages tagged &#39;scss&#39;." href="/tags/scss.html" class="ui tag label">scss</a><a title="All pages tagged &#39;linux&#39;." href="/tags/linux.html" class="ui tag label">linux</a>
+  
+</div>
+
+<p><a href="https://github.com/Axarva/dotfiles-2.0">Axarva/dotfiles-2.0</a> に触発されて、 <a href="https://github.com/elkowar/eww">elkowar/eww</a> を使い始めました。(Emacsのewwではない)</p>
+<p>キーボードドリブンな設計にしたかったので、axarvaの設定を参考にしながら自分で書いていました。 でも、デフォルトでは以下のような形に。</p>
+<p><img src="file:///images/cropped-slider-without-scss.png" class="ui rounded image" /></p>
+<p>本当は以下のようになってほしい。特に <strong>スライダーノブを消したい</strong> 。</p>
+<p><img src="file:///images/cropped-slider-with-scss.png" class="ui rounded image" /></p>
+<p>色々と設定を写したのですが上手くいかなかったけど、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+css
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode css SourceCode"><code class="sourceCode css"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="op">*</span> {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="kw">all</span>: <span class="bu">unset</span><span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>}</span></code></pre></div>
+</div>
+<p>を設定したら出来た!!</p>
+<p>ビフォー:</p>
+<p><img src="file:///images/slider-without-scss.png" class="ui rounded image" /></p>
+<p>アフター:</p>
+<p><img src="file:///images/slider-with-scss.png" class="ui rounded image" /></p>
+]]></description>
+    <pubDate>Mon, 26 Apr 2021 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2021-04-26-eww-linux-minimal-design-slider.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>うちのlightdmのログインループはxmonadが原因だった</title>
+    <link>https://cj-bc.github.io/blog/posts/2021-04-12-lightdm-login-loop-was-caused-by-xmonad.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>うちのlightdmのログインループはxmonadが原因だった</h1>
+  <div class="ui list">
+    <div class="item">Posted on April 12, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on April 12, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;lightdm&#39;." href="/tags/lightdm.html" class="ui tag label">lightdm</a><a title="All pages tagged &#39;xmonad&#39;." href="/tags/xmonad.html" class="ui tag label">xmonad</a><a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a>
+  
+</div>
+
+<h1 id="起きていたこと">起きていたこと</h1>
+<p><code>pacman -Syu</code> して再起動した後、=light DM= できちんとログインしても <code>light DM</code> が再度呼び出されてしまう問題があった。</p>
+<p>調べた所、色々な要因があるようだがどれも私のケースではなかった。 私のケースで問題だったのは、 「 <strong>コンパイル済みのxmonadが要求するライブラリが、アップデートによって消えていた</strong> 」 ことだった。</p>
+<p>xmonadはユーザーの書いた <code>/.xmonad/xmonad.hs</code> をコンパイルして動くが、そのバイナリはいくつかの動的ライブラリを参照している。 ~pacman -Syu~の際、(例えば <code>xmonad-contrib</code> など)がアップデートされると動的ライブラリのパスが変わってしまう。 それにより、xmonadが読みにいこうとしたライブラリが存在しなくなり、エラーが起きる。 エラーのせいでxmonadが立ち上がらないため、lightdmは「Window managerが終了した」と判断(しているのか正確には知らないが)し、またログイン画面に戻ってくる。</p>
+<h1 id="直し方">直し方</h1>
+<ol>
+<li><code>light DM</code> の画面で <code>Alt+Control+F1</code> でGUI環境を抜け、CUIを開く。</li>
+<li><code>Alt+F2</code> をし、新しいターミナルを開きそこからログインする。</li>
+<li><code>xmonad --recompile</code> する</li>
+<li><code>Alt+Control+F7</code> でGUI環境に戻り、ログインを試すと入れるはず。</li>
+</ol>
+<h1 id="他に考えられる原因">他に考えられる原因</h1>
+<p><a href="https://askubuntu.com/questions/223501/ubuntu-gets-stuck-in-a-login-loop">色々調べる途中で見付けたaskubuntuのスレッド</a> で、ありうる原因として挙げられていたものたち:</p>
+<ul>
+<li>indicator-multiloadをインストールしたのが原因だった</li>
+<li>flatpakが原因だった</li>
+<li>~/.Xauthorityの所有者が自分ではない</li>
+<li>~/.ICEauthorityの所有者が自分ではない（場合によっては必要なファイル、うちにはなかった）</li>
+<li>/tmpのパーミッションが777&amp;&amp;file mode bitがt</li>
+<li>sudo startxした（これのせいで~/.Xauthorityの所有者が変わってしまう模様）</li>
+<li>Nvidiaの公式サイトから落としたドライバーが、きちんとテストされてないことがあるらしい</li>
+<li>~/.profileにtypoや構文ミスがある</li>
+<li>容量不足</li>
+</ul>
+<h1 id="おまけ: xmonadを、関連パッケージがアップデートされる度に自動リビルドさせる。">おまけ: xmonadを、関連パッケージがアップデートされる度に自動リビルドさせる。</h1>
+<p>このためには、pacmanのhook機能が使える。 pacmanのhookは、指定した条件に合致した場合に指定した内容を実行する仕組みである。 ファイルは(多分)ini形式で書かれ、デフォルトでは <code>/etc/pacman.d/hooks</code> 以下に配置される。</p>
+<p>ここでは簡単に、必要最低限の解説だけする。 hookの書き方について詳しくは <a href="man:alpm-hooks">man:alpm-hooks</a> を参照してほしい。</p>
+<p>先に完成形はこちら(最新版は <a href="github:Cj-bc/dotfiles">github:Cj-bc/dotfiles</a> の <code>dotfiles/pacman/hooks/xmonad.hook</code>)</p>
+<p>尚、 <strong>このhookはまだテストされていません</strong> (アップデートを実行した直後に書いたため)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+dosini
+</div>
+<pre class="dosini SourceCode"><code>[Trigger]
+Operation = Upgrade
+Type = Package
+Target = xmonad*
+Target = haskell-*
+
+[Action]
+Description = Rebuild xmonad to prevent login loop
+Exec = xmonad --recompile
+When = PostTransaction
+</code></pre>
+</div>
+<h2 id="pacman hookの作り">pacman hookの作り</h2>
+<p>pacman hookは <code>[Trigger]</code> と <code>[Action]</code> の二つのブロックから構成される。 <code>[Trigger]</code> で「そのHookが実行される条件」を指定し、 <code>[Action]</code> で実行する内容を指定する。</p>
+<p><code>Operation</code> で指定された操作が、 <code>Target</code> に一致するファイル・パッケージに対して実行された時にhookが実行される。</p>
+<p>このhookの場合は、 <code>xmonad*</code> 若しくは <code>haskell-*</code> という名前のパッケージがUpgradeされた時、Upgrade処理が終わった後に <code>xmonad --recompile</code> を実行する。</p>
+]]></description>
+    <pubDate>Mon, 12 Apr 2021 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2021-04-12-lightdm-login-loop-was-caused-by-xmonad.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>vim9scriptで気をつけること</title>
     <link>https://cj-bc.github.io/blog/posts/2021-03-02-vim-vim9script-struggling-memo-v8.2_1-2560.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
@@ -527,85 +645,6 @@ haskell
 ]]></description>
     <pubDate>Tue, 19 Jan 2021 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2021-01-19-after-effect-markers.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>fzf.vimでカレントディレクトリ以外のGitファイルを検索</title>
-    <link>https://cj-bc.github.io/blog/posts/2021-01-13-GFiles-more-careful-with-fzf.html</link>
-    <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>fzf.vimでカレントディレクトリ以外のGitファイルを検索</h1>
-  <div class="ui list">
-    <div class="item">Posted on January 14, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on January 14, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;fzf.vim&#39;." href="/tags/fzf.vim.html" class="ui tag label">fzf.vim</a><a title="All pages tagged &#39;fzf&#39;." href="/tags/fzf.html" class="ui tag label">fzf</a><a title="All pages tagged &#39;vim&#39;." href="/tags/vim.html" class="ui tag label">vim</a>
-  
-</div>
-
-<h1 id="GFilesは便利"><code>GFiles</code>は便利</h1>
-<p><code>GFiles</code>は、カレントディレクトリにgitレポジトリがあると仮定して、そのレポジトリに認識されるファイル(=一度はコミットされているファイル) の一覧を作り出します。</p>
-<p>しかし、場合によっては「カレントディレクトリ以外のgitレポジトリにあるファイルを参照したい」ことがあると思います。</p>
-<p>例えば、私は普段プロジェクトに取り組んでいる最中にブログを書いたりするのですが、まさにその時などです。 カレントディレクトリはプロジェクトディレクトリのままで、ブログのレポジトリに対して<code>GFiles</code>を使いたいのです。</p>
-<p>これは公式の方法が(多分)ないので直接書き換えます。</p>
-<p><code>~/.vim/bundle/fzf.vim/autoload/fzf/vim.vim</code>の<code>s:get_git_root()</code>がgitレポジトリを見つけるためのコードなので、ここにfugitiveが使う<code>b:git_dir</code>変数の中身を適用するように編集します。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-vim
-</div>
-<pre class="vim SourceCode"><code>function! s:get_git_root()
-  let root = split(system(&#39;git rev-parse --show-toplevel&#39;), &#39;\n&#39;)[0]
-  return v:shell_error ? &#39;&#39; : root
-endfunction</code></pre>
-</div>
-<p>こうだったのが</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-vim
-</div>
-<pre class="vim SourceCode"><code>function! s:get_git_root()
-  let root = split(system(&#39;git rev-parse --show-toplevel&#39;), &#39;\n&#39;)[0]
-  let root_ = root ? root : b:git_dir
-  return v:shell_error ? &#39;&#39; : root_
-endfunction</code></pre>
-</div>
-<p>こうすることにより、<code>git_dir</code>も有効に検索されるようになりました。</p>
-]]></description>
-    <pubDate>Thu, 14 Jan 2021 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2021-01-13-GFiles-more-careful-with-fzf.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>After Effectショートカットキーチートシート(個人用)</title>
-    <link>https://cj-bc.github.io/blog/posts/2021-01-13-after-effect-cheat-sheet.html</link>
-    <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>After Effectショートカットキーチートシート(個人用)</h1>
-  <div class="ui list">
-    <div class="item">Posted on January 13, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on January 14, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;after effect&#39;." href="/tags/after%20effect.html" class="ui tag label">after effect</a><a title="All pages tagged &#39;cheat sheet&#39;." href="/tags/cheat%20sheet.html" class="ui tag label">cheat sheet</a>
-  
-</div>
-
-<p>個人用のチートシート</p>
-<p>やりたいこと ショートカットキー ----------------- ------------------- Layerをカットする Ctrl+Shift+D</p>
-]]></description>
-    <pubDate>Wed, 13 Jan 2021 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2021-01-13-after-effect-cheat-sheet.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
