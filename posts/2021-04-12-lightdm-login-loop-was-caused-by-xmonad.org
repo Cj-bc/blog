@@ -59,6 +59,9 @@ hookの書き方について詳しくは [[man:alpm-hooks]] を参照してほ�
 尚、 *このhookはまだテストされていません*
 (アップデートを実行した直後に書いたため)
 
+[2021-05-02]: ~pacman -Syu~
+何度か試していますが多分動いている...?エラーが出てる気もする...
+
 #+begin_src dosini
 [Trigger]
 Operation = Upgrade
