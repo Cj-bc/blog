@@ -1,0 +1,83 @@
+---
+title: xmonadにstackを使う
+tags:
+  - xmonad
+  - haskell
+  - stack
+  - linux
+kind: memo
+date: May 04, 2021
+---
+
+xmonad、デフォルトだと新しい機能を自作したりしようとするとシステムグローバルに突っ込む必要が出てきます。
+それは面倒だし、管理が煩雑になるのでそもそもstackを使用できるようにします。
+
+* Xmonadをstackでコンパイルできるようにする
+
+  
+** Xmonadのコンパイル方法を指定する方法 
+
+  xmonadの recompileは、 [[https://hackage.haskell.org/package/xmonad-0.15/docs/src/XMonad.Core.html#recompile][XMonad.Core.recompile]] によって行われています。
+  そして内部を読んでみると、 src_haskell{cfgdir </> "build"} が存在すればそれを読むということが分かります。
+
+#+begin_src haskell
+recompile :: MonadIO m => Bool -> m Bool
+recompile force = io $ do
+    cfgdir  <- getXMonadDir
+    datadir <- getXMonadDataDir
+    let binn = "xmonad-"++arch++"-"++os
+        bin  = datadir </> binn
+        err  = datadir </> "xmonad.errors"
+        src  = cfgdir </> "xmonad.hs"
+        lib  = cfgdir </> "lib"
+        buildscript = cfgdir </> "build"
+
+    -- ...
+
+    useBuildscript <- do
+      exists <- doesFileExist buildscript
+      if exists
+        then do
+          isExe <- isExecutable buildscript
+          if isExe
+            then do
+              trace $ "XMonad will use build script at " ++ show buildscript ++ " to recompile."
+              return True
+            else do
+#+end_src
+
+~cfgdir~ は
+
+1. ~$XMONAD_CONFIG_DIR~
+2. ~~/.xmonad~
+3. ~$XDG_CONFIG_HOME/xmonad~
+
+のいずれかになります。
+
+今回は、変更点をあまり作らないためにとりあえず ~~/.xmonad~ にしようと思います(そのうち ~XDG_CONFIG_HOME~ 以下に移したい)
+
+** ~build~ スクリプトを書く
+
+コマンドを使用することになるので、shellscriptで書くのが妥当かなと思います。
+~build~ スクリプトは以下のように呼ばれます。
+
+#+begin_src haskell
+  -- ...
+  then do
+    -- temporarily disable SIGCHLD ignoring:
+    uninstallSignalHandlers
+    status <- bracket (openFile err WriteMode) hClose $ \errHandle ->
+	waitForProcess =<< if useBuildscript
+			   then compileScript bin cfgdir buildscript errHandle
+			   else compileGHC bin cfgdir errHandle
+#+end_src
+
+#+begin_src haskell
+compileScript bin dir script errHandle =
+        runProcess script [bin] (Just dir) Nothing Nothing Nothing (Just errHandle)
+#+end_src
+
+src_haskell{runProcess} は、 [[https://hackage.haskell.org/package/process-1.6.11.0/docs/System-Process.html#v:runProcess][System.Process.runProcess]] であり、上記の使い方だと
+=script= というプログラムに ~bin~ を引数として与え、 ~dir~ をワーキングディレクトリとしてから実行することになります。
+
+
