@@ -1,0 +1,173 @@
+---
+title: HaskellのIxedインスタンスを自作型につける
+tags:
+  - Haskell
+  - Ixed
+kind: note
+date: May 19, 2021
+---
+
+* ~Ixed~ とは
+
+数学的解説はわかりませんごめんなさい。誰か補足があれば [[https://github.com/Cj-bc/blog][blogのレポジトリ]] にissueでも残してください()
+Haskellなのでとりあえず hoogleを参照します。
+~Ixed~ の定義は以下の通りです
+
+#+begin_src haskell
+  class Ixed m where
+    -- |
+    -- /NB:/ Setting the value of this 'Traversal' will only set the value in
+    -- 'at' if it is already present.
+    --
+    -- If you want to be able to insert /missing/ values, you want 'at'.
+    --
+    -- >>> Seq.fromList [a,b,c,d] & ix 2 %~ f
+    -- fromList [a,b,f c,d]
+    --
+    -- >>> Seq.fromList [a,b,c,d] & ix 2 .~ e
+    -- fromList [a,b,e,d]
+    --
+    -- >>> Seq.fromList [a,b,c,d] ^? ix 2
+    -- Just c
+    --
+    -- >>> Seq.fromList [] ^? ix 2
+    -- Nothing
+    ix :: Index m -> Traversal' m (IxValue m)
+    default ix :: At m => Index m -> Traversal' m (IxValue m)
+    ix = ixAt
+    {-# INLINE ix #-}
+#+end_src
+
+~Ixed~ は =Lens= の提供する型の一つで、 ~Map~ のような型の値に対して
+値を ~traverse~ するシンプルな ~Traversal~ を提供するものです。
+
+簡潔に言うと、
+*リスト等の要素にLensでアクセスできるようにするやつ*
+みたいなざっくりとした理解をしています。
+
+
+また、これに関連するオープンな型ファミリーとして ~Index~ と ~IxValue~ があります
+
+#+begin_src haskell
+  type family Index (s :: *) :: *
+
+  -- | This provides a common notion of a value at an index that is shared by both 'Ixed' and 'At'.
+  type family IxValue (m :: *) :: *
+#+end_src
+
+~Ixed~ において、 ~Index~ はインデックスの型、 ~IxValue~ はそこに格納されている
+値の型です。
+
+* 作る
+
+とりあえず作り始めます。
+
+前提として、今回~Ixed~のインスタンスを作るのは以下の型です。
+元のファイルは [[https://github.com/Cj-bc/playground/blob/0fb982f28f7ab0444ffd2ad59eacc3cd904b99ba/haskell/hit-n-blow/src/HitNBlow/Type.hs#L15-20][Cj-bc/playground -- hit-n-blow]] で使われているものです。
+
+#+begin_src haskell
+  -- | Represents each Pin
+  data Pin = Red | Blue | Green | White | Purple deriving (Show)
+
+  -- | One Set of Pins that user will guess 
+  data Lane = Lane (Maybe Pin) (Maybe Pin) (Maybe Pin) (Maybe Pin) (Maybe Pin)
+      deriving (Show)
+#+end_src
+
+
+
+~Ixed~ の定義に特に制限がかかれていないので、 ~ix~ を定義することにします。
+そのために、 ~ix~ で使用される ~Index~ と ~IxValue~ を定義することにします。
+
+** Index
+   ~Index~ はあまり説明がありませんが、型の情報からすると恐らく「添字に使う型」
+   の定義であろうと推測が出来ます。
+   (名前が ~Index~ であること、 ~ix~ において最初に取ること等。又、
+   既にあるインスタンスを確認するのも良い方法だと思います。)
+
+   ~Lane~ において添字は ~Int~ です。
+
+   #+begin_src haskell
+     type instance Index Lane = Int
+   #+end_src
+
+** IxValue
+   同様ですが、今度はそれぞれの中身の型を定義します。
+
+   #+begin_src haskell
+     type instance IxValue Lane = Maybe Pin
+   #+end_src
+
+** Ixed
+   ~Ixed~ 本体に行きます!!
+
+   ~ix~ の型は
+
+   #+begin_src haskell
+     ix :: Index m -> Traversal' m (IxValue m)
+   #+end_src
+
+   で、今回は ~m~ が ~Lane~ なので具体的な型にすると
+
+   #+begin_src haskell
+     ix :: Int -> Traversal' Lane (Maybe Pin)
+   #+end_src
+
+   ということになります。
+
+   で、 ~Lens~ 少ししか分からんので一つ疑問が浮かびます
+
+   *>>>>> ~Traversal'~ ってナニよ!!!!! <<<<<*
+
+** Traversal' ってナニよ!
+
+   はい。名前は知ってるけど使い方良く分からずに放置してた子ですね。
+   定義によると
+
+   #+begin_src haskell
+     type Traversal' s a = Traversal s s a a
+
+     type Traversal s t a b = forall f. Applicative f => (a -> f b) -> s -> f t
+   #+end_src
+
+   ついでなので [[https://hackage.haskell.org/package/lens-5.0.1/docs/Control-Lens-Type.html#t:Traversal][~Traversal~]] の定義も載せておきました。
+   ~Lens~ と同じように、実体はただの関数ですね。
+
+   ~Lens~ よりも制限の緩い型で ~Traversable~ の型関数である ~traverse~ の一般化らしいです。
+   しっかりと理解はしていないが、まぁ型を考えれば作れてしまうのでとりあえずは
+   ふんわりと掴んだ状態で作ってみます。
+
+   あ、ちなみに ~Traversal'~ は単純に、値の更新等した時に型が変化しないものですね。
+   
+   参考:
+   
+   - [[https://fumieval.hatenablog.com/entry/2015/07/14/223329][lensパッケージのオプティクス(弱い順) -- モナドとわたしとコモナド]]
+     
+** ~ix~ を作る
+   さて、 ~Traversal'~ がわかったので ~ix~ を作れ(る気がし)ます。
+   ~Traversal'~ を置き換えてみると:
+
+   #+begin_src haskell
+     ix :: Int -> Traversa' Lane (Maybe Pin)
+     ix :: Int -> Traversal Lane Lane (Maybe Pin) (Maybe Pin)
+     ix :: Int -> (forall f. Applicative f => (Maybe Pin -> f (Maybe Pin) -> Lane -> f Lane
+   #+end_src
+
+   となります(forallの位置は少し自信がないけど多分あってる)
+
+   ~Int~ は元々 ~Index m~ だった部分なので、今興味のあるインデックス(に該当する数字)が来るのがわかります。
+
+   又、元の ~Traversal'~ の部分も要は「中身( ~Maybe Pin~ )に作用する関数を受け取り、作用させた
+   結果を返す」わけなので、その通りに実装します。
+
+   #+begin_src haskell
+     instance Ixed Lane where
+       ix 1 = \g l@(Lane a b c d e) -> Lane <$> g a <*> b <*> c <*> d <*> e
+       ix 2 = \g l@(Lane a b c d e) -> Lane a <$> g b <*> c <*> d <*> e
+       ix 3 = \g l@(Lane a b c d e) -> Lane a b <$> g c <*> d <*> e
+       ix 4 = \g l@(Lane a b c d e) -> Lane a b c <$> g d <*> e
+       ix 5 = \g l@(Lane a b c d e) -> Lane a b c d <$> g e
+       ix _ = \_ l -> pure l
+   #+end_src
+
+   多分動いた!!
