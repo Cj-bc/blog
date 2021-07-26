@@ -24,9 +24,10 @@ myPandocTransform = walk codeBlockFormat
                   . walk blockQuoteFormat
                   . walk (walk imageFormat :: Block -> Block)
                   . walk addAnchorToHeader
+                  . walk (walk orgLinkFormat :: Block -> Block)
 
 -- | Defines code block format
---
+
 -- TODO: detect correct filetype for label
 --  I want to show filetype on the top-right side by using "attached label".
 --  Current implementation simply show 'class_'es of 'CodeBlock', but it could contain not
@@ -56,3 +57,10 @@ addAnchorToHeader (Header lvl (id_, classes, kv) inlines) = Header lvl (id_', cl
                                  else id_
             anchored = mconcat $ map stringify inlines
 addAnchorToHeader other = other
+
+-- | Convert Org mode custom external links into proper 'Inline'
+-- As Custom links are 
+orgLinkFormat :: Inline -> Inline
+orgLinkFormat (Link attr alt (lt, desc))
+  | "twitter:" `T.isPrefixOf` lt = Link attr alt ("https://twitter.com/" <> T.drop (T.length "twitter:") lt, desc)
+olExporter i = i
