@@ -63,4 +63,4 @@ addAnchorToHeader other = other
 orgLinkFormat :: Inline -> Inline
 orgLinkFormat (Link attr alt (lt, desc))
   | "twitter:" `T.isPrefixOf` lt = Link attr alt ("https://twitter.com/" <> T.drop (T.length "twitter:") lt, desc)
-olExporter i = i
+orgLinkFormat i = i
