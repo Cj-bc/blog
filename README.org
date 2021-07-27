@@ -1,6 +1,6 @@
-# blog
+* blog
 
-![Publish](https://github.com/Cj-bc/blog/workflows/Publish/badge.svg)
+[[https://github.com/Cj-bc/blog/workflows/Publish/badge.svg][Publish]]
 
 This is my blog repository
 
