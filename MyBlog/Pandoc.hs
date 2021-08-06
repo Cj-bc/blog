@@ -61,6 +61,7 @@ addAnchorToHeader other = other
 -- | Convert Org mode custom external links into proper 'Inline'
 -- As Custom links are 
 orgLinkFormat :: Inline -> Inline
-orgLinkFormat (Link attr alt (lt, desc))
+orgLinkFormat l@(Link attr alt (lt, desc))
   | "twitter:" `T.isPrefixOf` lt = Link attr alt ("https://twitter.com/" <> T.drop (T.length "twitter:") lt, desc)
+  | otherwise                    = l
 orgLinkFormat i = i
