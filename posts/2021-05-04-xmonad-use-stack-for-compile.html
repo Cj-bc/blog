@@ -1,21 +1,38 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <title>CLI! CLI! CLI!</title>
-    <link href="https://cj-bc.github.io/blog/feeds/atom/tag/linux.xml" rel="self" />
-    <link href="https://cj-bc.github.io/blog" />
-    <id>https://cj-bc.github.io/blog/feeds/atom/tag/linux.xml</id>
-    <author>
-        <name>Cj-bc a.k.a Cj.BC_SD</name>
-        <email>cj.bc-sd@outlook.jp</email>
-    </author>
-    <updated>2021-05-04T00:00:00Z</updated>
-    <entry>
-    <title>xmonadにstackを使う</title>
-    <link href="https://cj-bc.github.io/blog/posts/2021-05-04-xmonad-use-stack-for-compile.html" />
-    <id>https://cj-bc.github.io/blog/posts/2021-05-04-xmonad-use-stack-for-compile.html</id>
-    <published>2021-05-04T00:00:00Z</published>
-    <updated>2021-05-04T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- xmonadにstackを使う</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+        <div id="content" class="ui text container segment">
+            <div class="ui center aligned icon header">
   <h1>xmonadにstackを使う</h1>
   <div class="ui list">
     <div class="item">Posted on May  4, 2021</div>
@@ -28,7 +45,7 @@
 </div>
 <div class="info">
   
-  <a title="All pages tagged &#39;xmonad&#39;." href="/tags/xmonad.html" class="ui tag label">xmonad</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;stack&#39;." href="/tags/stack.html" class="ui tag label">stack</a><a title="All pages tagged &#39;linux&#39;." href="/tags/linux.html" class="ui tag label">linux</a>
+  <a title="All pages tagged 'xmonad'." href="../tags/xmonad.html" class="ui tag label">xmonad</a><a title="All pages tagged 'haskell'." href="../tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged 'stack'." href="../tags/stack.html" class="ui tag label">stack</a><a title="All pages tagged 'linux'." href="../tags/linux.html" class="ui tag label">linux</a>
   
 </div>
 
@@ -95,51 +112,11 @@ haskell
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>        runProcess script [bin] (<span class="dt">Just</span> dir) <span class="dt">Nothing</span> <span class="dt">Nothing</span> <span class="dt">Nothing</span> (<span class="dt">Just</span> errHandle)</span></code></pre></div>
 </div>
 <p><code class="sourceCode haskell">runProcess</code> は、 <a href="https://hackage.haskell.org/package/process-1.6.11.0/docs/System-Process.html#v:runProcess">System.Process.runProcess</a> であり、上記の使い方だと <code>script</code> というプログラムに <code>bin</code> を引数として与え、 <code>dir</code> をワーキングディレクトリとしてから実行することになります。</p>
-]]></summary>
-</entry>
-<entry>
-    <title>ewwでスタイリッシュなスライダーを使う</title>
-    <link href="https://cj-bc.github.io/blog/posts/2021-04-26-eww-linux-minimal-design-slider.html" />
-    <id>https://cj-bc.github.io/blog/posts/2021-04-26-eww-linux-minimal-design-slider.html</id>
-    <published>2021-04-26T00:00:00Z</published>
-    <updated>2021-04-26T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>ewwでスタイリッシュなスライダーを使う</h1>
-  <div class="ui list">
-    <div class="item">Posted on April 26, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on May 11, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;eww&#39;." href="/tags/eww.html" class="ui tag label">eww</a><a title="All pages tagged &#39;scss&#39;." href="/tags/scss.html" class="ui tag label">scss</a><a title="All pages tagged &#39;linux&#39;." href="/tags/linux.html" class="ui tag label">linux</a>
-  
-</div>
 
-<p><a href="https://github.com/Axarva/dotfiles-2.0">Axarva/dotfiles-2.0</a> に触発されて、 <a href="https://github.com/elkowar/eww">elkowar/eww</a> を使い始めました。(Emacsのewwではない)</p>
-<p>キーボードドリブンな設計にしたかったので、axarvaの設定を参考にしながら自分で書いていました。 でも、デフォルトでは以下のような形に。</p>
-<p><img src="file:///images/cropped-slider-without-scss.png" class="ui rounded image" /></p>
-<p>本当は以下のようになってほしい。特に <strong>スライダーノブを消したい</strong> 。</p>
-<p><img src="file:///images/cropped-slider-with-scss.png" class="ui rounded image" /></p>
-<p>色々と設定を写したのですが上手くいかなかったけど、</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-css
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode css SourceCode"><code class="sourceCode css"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="op">*</span> {</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="kw">all</span>: <span class="bu">unset</span><span class="op">;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>}</span></code></pre></div>
-</div>
-<p>を設定したら出来た!!</p>
-<p>ビフォー:</p>
-<p><img src="file:///images/slider-without-scss.png" class="ui rounded image" /></p>
-<p>アフター:</p>
-<p><img src="file:///images/slider-with-scss.png" class="ui rounded image" /></p>
-]]></summary>
-</entry>
-
-</feed>
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

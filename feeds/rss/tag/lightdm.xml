@@ -17,7 +17,7 @@
     <div class="item">Posted on April 12, 2021</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on April 12, 2021
+      Updated on May 11, 2021
     </div>
   </div>
     
@@ -57,6 +57,7 @@
 <p>ここでは簡単に、必要最低限の解説だけする。 hookの書き方について詳しくは <a href="man:alpm-hooks">man:alpm-hooks</a> を参照してほしい。</p>
 <p>先に完成形はこちら(最新版は <a href="github:Cj-bc/dotfiles">github:Cj-bc/dotfiles</a> の <code>dotfiles/pacman/hooks/xmonad.hook</code>)</p>
 <p>尚、 <strong>このhookはまだテストされていません</strong> (アップデートを実行した直後に書いたため)</p>
+<p>[2021-05-02]: <code>pacman -Syu</code> 何度か試していますが多分動いている…?エラーが出てる気もする…</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 dosini
