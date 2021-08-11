@@ -10,7 +10,7 @@ maintainer:          cj.bc-sd@outlook.jp
 copyright:           MIT
 category:            Web
 build-type:          Simple
-extra-source-files:  README.md
+extra-source-files:  README.org
 cabal-version:       >=1.10
 
 executable blog
