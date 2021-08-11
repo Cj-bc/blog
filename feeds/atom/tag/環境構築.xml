@@ -32,7 +32,7 @@
   
 </div>
 
-<h1>環境</h1>
+<h1 id="環境">環境</h1>
 <table>
 <tbody>
 <tr class="odd">
@@ -61,10 +61,10 @@
 </tr>
 </tbody>
 </table>
-<h1>pyls-mypy</h1>
+<h1 id="pyls-mypy">pyls-mypy</h1>
 <p><em>pyls-mypy</em> はその名前の通り、Pyls(palantir氏のもの)にmypy対応させるプラグインです。</p>
 <p>私は型大好き人間でAnnotationを頻繁に使うため、入れます。</p>
-<h2>Install先</h2>
+<h2 id="Install先">Install先</h2>
 <p><em>pyls</em> を <em>vim-lsp-settings</em> で導入しているので、それがインストールしているのと同じ環境に <em>pyls-mypy</em> を入れてあげる 必要があります。</p>
 <p>これは、 <code>XDG_DATA_HOME</code> が設定されていれば <code>XDG_DATA_HOME/vim-lsp-settings/servers</code> 、設定されていなければ <code>~/.local/share/vim-lsp-settings/servers</code> になります。</p>
 <p>又、 <code>pyls</code> 自体はそのディレクトリの下に <code>pyls-all/venv</code> 等としてvenvを作っています。 なので、それを呼べばいいわけです。</p>

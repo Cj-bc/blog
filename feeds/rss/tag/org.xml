@@ -28,9 +28,9 @@
   
 </div>
 
-<h1>org fileでの投稿のテストです</h1>
+<h1 id="org fileでの投稿のテストです">org fileでの投稿のテストです</h1>
 <p>org fileには別の~Compiler~が必要かな？ もしかして <code>code</code> の左右には空白が必要？</p>
-<h2>h2, 大体は動いてそう</h2>
+<h2 id="h2, 大体は動いてそう">h2, 大体は動いてそう</h2>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell

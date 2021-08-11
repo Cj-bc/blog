@@ -28,7 +28,7 @@
   
 </div>
 
-<h1>環境</h1>
+<h1 id="環境">環境</h1>
 <table>
 <tbody>
 <tr class="odd">
@@ -57,10 +57,10 @@
 </tr>
 </tbody>
 </table>
-<h1>pyls-mypy</h1>
+<h1 id="pyls-mypy">pyls-mypy</h1>
 <p><em>pyls-mypy</em> はその名前の通り、Pyls(palantir氏のもの)にmypy対応させるプラグインです。</p>
 <p>私は型大好き人間でAnnotationを頻繁に使うため、入れます。</p>
-<h2>Install先</h2>
+<h2 id="Install先">Install先</h2>
 <p><em>pyls</em> を <em>vim-lsp-settings</em> で導入しているので、それがインストールしているのと同じ環境に <em>pyls-mypy</em> を入れてあげる 必要があります。</p>
 <p>これは、 <code>XDG_DATA_HOME</code> が設定されていれば <code>XDG_DATA_HOME/vim-lsp-settings/servers</code> 、設定されていなければ <code>~/.local/share/vim-lsp-settings/servers</code> になります。</p>
 <p>又、 <code>pyls</code> 自体はそのディレクトリの下に <code>pyls-all/venv</code> 等としてvenvを作っています。 なので、それを呼べばいいわけです。</p>
@@ -115,9 +115,9 @@ bash
 </tr>
 </tbody>
 </table>
-<h1>問題</h1>
+<h1 id="問題">問題</h1>
 <p><a href="https://github.com/saturday06/VRM_Addon_for_Blender/pull/23#issuecomment-782580000">issueでsaturday06さんが教えてくれた</a> のですが、「一度古いプラグインでVRMを読み込んだblendファイルで、新しくVRMを読み込むとエラーを吐く」</p>
-<h2>トレースバック</h2>
+<h2 id="トレースバック">トレースバック</h2>
 <div class="ui segment">
 <div class="ui top right attached label">
 
@@ -150,7 +150,7 @@ bash
                               location: &lt;unknown location&gt;:-1
 </code></pre>
 </div>
-<h1>バグが起きた場所</h1>
+<h1 id="バグが起きた場所">バグが起きた場所</h1>
 <div class="ui segment">
 <div class="ui top right attached label">
 
@@ -162,11 +162,11 @@ bash
    └BlendModel.build_material_from_mtoon()
 </code></pre>
 </div>
-<h1>バグの原因</h1>
+<h1 id="バグの原因">バグの原因</h1>
 <p><code>importer/blend_model.py:449</code> で <code>bpy.data.node_groups[shader_node_group_name]</code> を取ってきているところが原因。</p>
 <p><code>bpy.data.node_groups</code> はblendfile内にある <code>node_groups</code> を保持しており、 既に「古いバージョンで読み込まれたVRM」がある場合 <code>bpy.data.node_groups["MToon_unversioned"]</code> は 「古いバージョンの <code>MToon_unversioned</code> 」=typoが含まれたものを返してしまう。</p>
 <p>そうすると、 <code>node_group_create</code> から返されたのちに <code>.inputs["Normalmap"]</code> が読まれた際に存在せずにクラッシュしてしまう。</p>
-<h1>解決方法</h1>
+<h1 id="解決方法">解決方法</h1>
 <p>ここでできるのは</p>
 <ol>
 <li>今までと同じように"Normalmap"が存在しなかったら"Nomalmap"を読ませる</li>
@@ -197,8 +197,8 @@ bash
   
 </div>
 
-<h1>追加されたシェーダーを探す</h1>
-<h2>場所の特定</h2>
+<h1 id="追加されたシェーダーを探す">追加されたシェーダーを探す</h1>
+<h2 id="場所の特定">場所の特定</h2>
 <p>そもそもファイルがどこに追加されているのかを確かめる必要がある。 そこで、<code>__init__.py</code>を参照する。(どうでもいいけど中身のある<code>__init__.py</code>は初めて見た)<br />
 Blenderは、Addonが追加されるとクラスなどを登録するために<code>register()</code>という関数を探して実行する。 以下がこのAddonの<code>register()</code>関数。 (<a href="https://github.com/saturday06/VRM_IMPORTER_for_Blender/blob/a14835bfbc573a1d8f2be2a74ed198da46a573e4/__init__.py#L277-L285">githubで確認する</a>)</p>
 <div class="ui segment">
@@ -230,7 +230,7 @@ python
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>            <span class="cf">if</span> nt <span class="kw">not</span> <span class="kw">in</span> bpy.data.node_groups:</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>                data_to.node_groups.append(nt)</span></code></pre></div>
 </div>
-<h2>実際にshaderを追加している部分</h2>
+<h2 id="実際にshaderを追加している部分">実際にshaderを追加している部分</h2>
 <p>このコードである。そして、読めば字の如くだが、レポジトリにある<code>resources/material_node_groups.blend</code> にある<code>node_groups</code>の中でBlenderに存在していないものがあれば <code>data_to.node_groups.append()</code>して追加している。<br />
 結論から言うと<a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code>node_groups</code></a>は nodeで表現されるもの(オブジェクト？)、つまり<code>Shading</code>/<code>Textures</code>/<code>Compositin</code>に関わるものの集合である。 (<a href="https://docs.blender.org/api/current/bpy.types.NodeTree.html#bpy.types.NodeTree">公式doc</a>)<br />
 type()によると、<code>bpy.data</code>は<code>bpy.types.BlendData</code>であるので、<code>node_groups</code>は <a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code>bpy.types.BlendData.node_groups</code></a> である。 ここで、なんとなく<code>bpy.data</code>を見てみると<code>bpy.data.node_groups</code>に追加されてることがわかる。</p>
@@ -243,8 +243,8 @@ type()によると、<code>bpy.data</code>は<code>bpy.types.BlendData</code>で
 ...で、なんとなく`bpy.data`を見る、に戻る
 </details>
 <p><code>node_groups</code>の中で入力を受け付けてるものなら<code>.inputs</code>にある。 今回でいうと、<code>MToon</code>マテリアルにある<code>NomalmapTexture</code>というtypoを直したいので、 <code>bpy.data.node_groups['MToon_unversioned'].input['NomalmapTexture']</code>を参照する</p>
-<h1>今行き詰まっている問題</h1>
-<h2>bpy<em>prop</em>collectionに追加できない</h2>
+<h1 id="今行き詰まっている問題">今行き詰まっている問題</h1>
+<h2 id="bpypropcollectionに追加できない">bpy<em>prop</em>collectionに追加できない</h2>
 <p>これをtypoが直った<code>bpy.data.node_groups['MToon_unversioned'].input['NormalmapTexture']</code>に変えたいのだけど、 どうやら<code>input['NomalmapTexture']</code>の型である<code>bpy_prop_collection</code>がC実装なようで、普段のpythonのようにはいかない。 具体的にいうと</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -263,7 +263,7 @@ Traceback (most recent call last):
   File &quot;&lt;console&gt;&quot;, line 1, in &lt;module&gt;
 TypeError: bpy_prop_collection[key]: invalid key, must be a string or an int, not str</code></pre>
 </div>
-<h3>試したこと</h3>
+<h3 id="試したこと">試したこと</h3>
 <p><a href="https://docs.blender.org/api/current/bpy.types.bpy_prop_collection.html?highlight=bpy_prop_collection#bpy.types.bpy_prop_collection"><code>bpy_prop_collection</code></a>のドキュメントと<code>dir(mtoonNode.inputs[0])</code>を読んでみた所、 ドキュメントには書かれていなかったけど<code>move</code>と<code>new</code>があった。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -277,7 +277,7 @@ python-repl
 , &#39;items&#39;, &#39;keys&#39;, &#39;move&#39;, &#39;new&#39;, &#39;remove&#39;, &#39;rna_type&#39;, &#39;values&#39;]</code></pre>
 </div>
 <p>それぞれの挙動を試してみたが、どっちもうまく動かず...というか挙動がわからなかった</p>
-<h4><code>new()</code></h4>
+<h4 id="new()"><code>new()</code></h4>
 <details> <summary>Replの結果ですが長いので折りたたみ</summary>
 ``` python-repl
 >>> mtoonNode.inputs
@@ -340,7 +340,7 @@ KeyError: 'bpy_prop_collection[key]: key "NormalmapTexture" not found'
 , ('UV_Scroll_Rotation', bpy.data...inputs[34])]
 ```
 </details>
-<h4>move()</h4>
+<h4 id="move()">move()</h4>
 <details> <summary> Replの結果。長いため折りたたみ。 </summary>
 ``` python-repl
 >>> mtoonNode.inputs.move()
@@ -460,11 +460,11 @@ python
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    ...</span></code></pre></div>
 </div>
 <p>直感的に、nの値によってはelifの方がif文の実行回数が少なくなるため速そうに思えますが、本当にそうなのか気になったので試してみます。</p>
-<h1>tl;dr</h1>
+<h1 id="tl;dr">tl;dr</h1>
 <p>速いぽい</p>
-<h1>条件</h1>
+<h1 id="条件">条件</h1>
 <p>pythonは3.7.4、if文の中身が同じものだと最適化がかかったりしないか怖かったのでそれぞれ違う出力をするprint文を入れます。 elifの数は適当に多めにしておきました。 また、1000回実行した平均の速度を表示するようにしました。</p>
-<h1>測定に使ったコード</h1>
+<h1 id="測定に使ったコード">測定に使ったコード</h1>
 <p>長いので</p>
 <details><summary>測定コード</summary>
 ```
@@ -924,7 +924,7 @@ t_with_elif_end   = time.time()
 print(f"with elif   : {(t_with_elif_end - t_with_elif_start)/1000} sec")
 ```
 </details>
-<h1>結果</h1>
+<h1 id="結果">結果</h1>
 <p><code>print</code>でたくさん標準出力を使っていますが、 そこの値は重要ではないので 私は<a href="https://github.com/thinca/vim-quickrun">quickrun</a>を使って vim上のバッファで加工して消しています</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -942,9 +942,9 @@ with elif   : 9.88006591796875e-07 sec</code></pre>
 with elif   : 0.000001 sec</code></pre>
 </div>
 <p>となり、<code>elif</code>の方が速いことがわかります。</p>
-<h1>考察</h1>
+<h1 id="考察">考察</h1>
 <p>なぜ速いのかを考えてみます。</p>
-<h2>構文木</h2>
+<h2 id="構文木">構文木</h2>
 <p><code>elif</code>には特別なノードがなく、構文木に落とすと親の<code>If</code>ノードの<code>oreelse</code>に含まれる<code>If</code>ノードになります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -985,7 +985,7 @@ python
 )</code></pre>
 </div>
 <p>https://docs.python.org/ja/3/library/ast.html?highlight=elif#ast.If</p>
-<h2>ステップ数を調べる</h2>
+<h2 id="ステップ数を調べる">ステップ数を調べる</h2>
 <p>おそらく、if文が実行される回数が少ないはず、なのでpythonのデバッガである<a href="https://docs.python.org/3/library/pdb.html">pdb</a>を使って調べてみます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -1047,8 +1047,8 @@ s
 </div>
 
 <p>いや簡単なものなのですが個人的なメモ。 実行言語は<code>python 3.7.4</code>です。</p>
-<h1>比較するアルゴリズム</h1>
-<h1>1. 定義通りの求め方</h1>
+<h1 id="比較するアルゴリズム">比較するアルゴリズム</h1>
+<h1 id="1. 定義通りの求め方">1. 定義通りの求め方</h1>
 <p>素数は「自分自身と1のみを約数に持つ数」なので、「自分自身と1以外に割り切れる数があるか」を調べれば素数かの判定ができることになります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -1063,7 +1063,7 @@ python
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    <span class="cf">return</span> <span class="bu">list</span>(<span class="bu">filter</span>(f, nums))</span></code></pre></div>
 </div>
-<h2>エラトステネスの揮</h2>
+<h2 id="エラトステネスの揮">エラトステネスの揮</h2>
 <p>多分中学校かそこらへんで習ったであろう方法。 求めたい範囲の数の集合から、小さい素数の倍数をふるい落としていく方法です。<br />
 <a href="https://ja.wikipedia.org/wiki/%E3%82%A8%E3%83%A9%E3%83%88%E3%82%B9%E3%83%86%E3%83%8D%E3%82%B9%E3%81%AE%E7%AF%A9">wikipediaの図解</a>がわかりやすい。</p>
 <div class="ui segment">
@@ -1084,9 +1084,9 @@ python
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>    ret <span class="op">=</span> <span class="bu">list</span>(<span class="bu">filter</span>(<span class="kw">lambda</span> i: i <span class="op">%</span> head <span class="op">!=</span> <span class="dv">0</span>, nums))</span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>    <span class="cf">return</span> [head] <span class="op">+</span> eratosthenes(ret)</span></code></pre></div>
 </div>
-<h1>実行時間計測</h1>
+<h1 id="実行時間計測">実行時間計測</h1>
 <p>それぞれの処理を1000回ずつ実行し、その平均を求めた</p>
-<h2>計測用コード</h2>
+<h2 id="計測用コード">計測用コード</h2>
 <div class="ui segment">
 <div class="ui top right attached label">
 python
@@ -1107,7 +1107,7 @@ python
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a><span class="bu">print</span>(<span class="ss">f&quot;fromDefinition: </span><span class="sc">{</span>mesureTimeAvr(fromDefinition, x)<span class="sc">}</span><span class="ss">&quot;</span>)</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a><span class="bu">print</span>(<span class="ss">f&quot;eratosthenes  : </span><span class="sc">{</span>mesureTimeAvr(eratosthenes, x)<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
 </div>
-<h2>結果</h2>
+<h2 id="結果">結果</h2>
 <div class="ui segment">
 <div class="ui top right attached label">
 

@@ -40,9 +40,9 @@
 </tr>
 </tbody>
 </table>
-<h1>問題</h1>
+<h1 id="問題">問題</h1>
 <p><a href="https://github.com/saturday06/VRM_Addon_for_Blender/pull/23#issuecomment-782580000">issueでsaturday06さんが教えてくれた</a> のですが、「一度古いプラグインでVRMを読み込んだblendファイルで、新しくVRMを読み込むとエラーを吐く」</p>
-<h2>トレースバック</h2>
+<h2 id="トレースバック">トレースバック</h2>
 <div class="ui segment">
 <div class="ui top right attached label">
 
@@ -75,7 +75,7 @@
                               location: &lt;unknown location&gt;:-1
 </code></pre>
 </div>
-<h1>バグが起きた場所</h1>
+<h1 id="バグが起きた場所">バグが起きた場所</h1>
 <div class="ui segment">
 <div class="ui top right attached label">
 
@@ -87,11 +87,11 @@
    └BlendModel.build_material_from_mtoon()
 </code></pre>
 </div>
-<h1>バグの原因</h1>
+<h1 id="バグの原因">バグの原因</h1>
 <p><code>importer/blend_model.py:449</code> で <code>bpy.data.node_groups[shader_node_group_name]</code> を取ってきているところが原因。</p>
 <p><code>bpy.data.node_groups</code> はblendfile内にある <code>node_groups</code> を保持しており、 既に「古いバージョンで読み込まれたVRM」がある場合 <code>bpy.data.node_groups["MToon_unversioned"]</code> は 「古いバージョンの <code>MToon_unversioned</code> 」=typoが含まれたものを返してしまう。</p>
 <p>そうすると、 <code>node_group_create</code> から返されたのちに <code>.inputs["Normalmap"]</code> が読まれた際に存在せずにクラッシュしてしまう。</p>
-<h1>解決方法</h1>
+<h1 id="解決方法">解決方法</h1>
 <p>ここでできるのは</p>
 <ol>
 <li>今までと同じように"Normalmap"が存在しなかったら"Nomalmap"を読ませる</li>
@@ -122,8 +122,8 @@
   
 </div>
 
-<h1>追加されたシェーダーを探す</h1>
-<h2>場所の特定</h2>
+<h1 id="追加されたシェーダーを探す">追加されたシェーダーを探す</h1>
+<h2 id="場所の特定">場所の特定</h2>
 <p>そもそもファイルがどこに追加されているのかを確かめる必要がある。 そこで、<code>__init__.py</code>を参照する。(どうでもいいけど中身のある<code>__init__.py</code>は初めて見た)<br />
 Blenderは、Addonが追加されるとクラスなどを登録するために<code>register()</code>という関数を探して実行する。 以下がこのAddonの<code>register()</code>関数。 (<a href="https://github.com/saturday06/VRM_IMPORTER_for_Blender/blob/a14835bfbc573a1d8f2be2a74ed198da46a573e4/__init__.py#L277-L285">githubで確認する</a>)</p>
 <div class="ui segment">
@@ -155,7 +155,7 @@ python
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>            <span class="cf">if</span> nt <span class="kw">not</span> <span class="kw">in</span> bpy.data.node_groups:</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>                data_to.node_groups.append(nt)</span></code></pre></div>
 </div>
-<h2>実際にshaderを追加している部分</h2>
+<h2 id="実際にshaderを追加している部分">実際にshaderを追加している部分</h2>
 <p>このコードである。そして、読めば字の如くだが、レポジトリにある<code>resources/material_node_groups.blend</code> にある<code>node_groups</code>の中でBlenderに存在していないものがあれば <code>data_to.node_groups.append()</code>して追加している。<br />
 結論から言うと<a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code>node_groups</code></a>は nodeで表現されるもの(オブジェクト？)、つまり<code>Shading</code>/<code>Textures</code>/<code>Compositin</code>に関わるものの集合である。 (<a href="https://docs.blender.org/api/current/bpy.types.NodeTree.html#bpy.types.NodeTree">公式doc</a>)<br />
 type()によると、<code>bpy.data</code>は<code>bpy.types.BlendData</code>であるので、<code>node_groups</code>は <a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code>bpy.types.BlendData.node_groups</code></a> である。 ここで、なんとなく<code>bpy.data</code>を見てみると<code>bpy.data.node_groups</code>に追加されてることがわかる。</p>
@@ -168,8 +168,8 @@ type()によると、<code>bpy.data</code>は<code>bpy.types.BlendData</code>で
 ...で、なんとなく`bpy.data`を見る、に戻る
 </details>
 <p><code>node_groups</code>の中で入力を受け付けてるものなら<code>.inputs</code>にある。 今回でいうと、<code>MToon</code>マテリアルにある<code>NomalmapTexture</code>というtypoを直したいので、 <code>bpy.data.node_groups['MToon_unversioned'].input['NomalmapTexture']</code>を参照する</p>
-<h1>今行き詰まっている問題</h1>
-<h2>bpy<em>prop</em>collectionに追加できない</h2>
+<h1 id="今行き詰まっている問題">今行き詰まっている問題</h1>
+<h2 id="bpypropcollectionに追加できない">bpy<em>prop</em>collectionに追加できない</h2>
 <p>これをtypoが直った<code>bpy.data.node_groups['MToon_unversioned'].input['NormalmapTexture']</code>に変えたいのだけど、 どうやら<code>input['NomalmapTexture']</code>の型である<code>bpy_prop_collection</code>がC実装なようで、普段のpythonのようにはいかない。 具体的にいうと</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -188,7 +188,7 @@ Traceback (most recent call last):
   File &quot;&lt;console&gt;&quot;, line 1, in &lt;module&gt;
 TypeError: bpy_prop_collection[key]: invalid key, must be a string or an int, not str</code></pre>
 </div>
-<h3>試したこと</h3>
+<h3 id="試したこと">試したこと</h3>
 <p><a href="https://docs.blender.org/api/current/bpy.types.bpy_prop_collection.html?highlight=bpy_prop_collection#bpy.types.bpy_prop_collection"><code>bpy_prop_collection</code></a>のドキュメントと<code>dir(mtoonNode.inputs[0])</code>を読んでみた所、 ドキュメントには書かれていなかったけど<code>move</code>と<code>new</code>があった。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -202,7 +202,7 @@ python-repl
 , &#39;items&#39;, &#39;keys&#39;, &#39;move&#39;, &#39;new&#39;, &#39;remove&#39;, &#39;rna_type&#39;, &#39;values&#39;]</code></pre>
 </div>
 <p>それぞれの挙動を試してみたが、どっちもうまく動かず...というか挙動がわからなかった</p>
-<h4><code>new()</code></h4>
+<h4 id="new()"><code>new()</code></h4>
 <details> <summary>Replの結果ですが長いので折りたたみ</summary>
 ``` python-repl
 >>> mtoonNode.inputs
@@ -265,7 +265,7 @@ KeyError: 'bpy_prop_collection[key]: key "NormalmapTexture" not found'
 , ('UV_Scroll_Rotation', bpy.data...inputs[34])]
 ```
 </details>
-<h4>move()</h4>
+<h4 id="move()">move()</h4>
 <details> <summary> Replの結果。長いため折りたたみ。 </summary>
 ``` python-repl
 >>> mtoonNode.inputs.move()
@@ -364,7 +364,7 @@ SyntaxError: invalid syntax
   
 </div>
 
-<h1>全てのメッシュの原点(Origin)を <em>ワールド座標系の</em> 原点に置く</h1>
+<h1 id="全てのメッシュの原点(Origin)を ワールド座標系の 原点に置く">全てのメッシュの原点(Origin)を <em>ワールド座標系の</em> 原点に置く</h1>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
 <p>There are not an object on the origin <mesh名> (もしくは) <mesh名> が原点座標にありません</p>
@@ -379,26 +379,26 @@ SyntaxError: invalid syntax
 <li><code>Set origin&gt; Origin to 3D cursor</code></li>
 </ol>
 <p>の手順を踏みます。</p>
-<h1>追加したmeshオブジェクトのtransformは全て0(scaleは1)にする</h1>
+<h1 id="追加したmeshオブジェクトのtransformは全て0(scaleは1)にする">追加したmeshオブジェクトのtransformは全て0(scaleは1)にする</h1>
 <p>Blender上では全然問題なく見えますが、これをしておかないとexportした後に変な位置にオブジェクトが表示されてしまいます。 (私は<code>3tenePRO</code>で動作確認をしていますが、おそらく他でもそうなると思います。)<br />
 具体的には、「全てのトランスフォームが0(scaleは1)に指定された通りに表示」されます。</p>
-<h2>具体例:</h2>
+<h2 id="具体例:">具体例:</h2>
 <p>scaleが1になっていない例 <img src="/images/sscale_isnt_1.jpeg" class="ui rounded image" alt="scaleが1じゃない" /></p>
 <p>scaleが1になるように調整した例 <img src="/images/scale_is_1.jpeg" class="ui rounded image" alt="scaleが1" /></p>
 <p>rotationが0になっていない例 <img src="/images/rotation_isnt_0.jpeg" class="ui rounded image" alt="rotationが0じゃない" /></p>
 <p>rotationが0になっている例 <img src="/images/rotation_is_0.jpeg" class="ui rounded image" alt="rotationが0" /></p>
-<h2>直し方</h2>
+<h2 id="直し方">直し方</h2>
 <p>Inspectorで各transformの値を確認します。そうしたら、それを覚えておき値は0に修正。 <code>Edit mode</code>に移行して、 <strong>originを中心に、軸を指定して先ほど覚えた値分</strong> 回転させます。</p>
-<h2>最終系</h2>
+<h2 id="最終系">最終系</h2>
 <p>綺麗になりました！！</p>
 <p><img src="/images/completed.jpg" class="ui rounded image" alt="全部直した" /></p>
-<h1>Shade Textureは必ず設定する</h1>
+<h1 id="Shade Textureは必ず設定する">Shade Textureは必ず設定する</h1>
 <p>ShadeTextureを設定していないと、面を法線と反対側から見たときにピンク色になってしまいます。 これは、<code>Shade Color</code>が塗られているからで、それを防ぎ表面と同じものを表示したい場合は必ず設定する必要があります。 なお、<code>MainTexture</code>と同じテクスチャで問題ないと思います。</p>
 <p>設定してなかった:<br />
 <blockquote class="twitter-tweet" data-conversation="none" data-theme="dark"><p lang="ja" dir="ltr">色々と調節は必要そうだね <a href="https://t.co/ndXTzYKdfQ">pic.twitter.com/ndXTzYKdfQ</a></p>— mi'e himari (@mihe_himari) <a href="https://twitter.com/mihe_himari/status/1320608433352003584?ref_src=twsrc%5Etfw">October 26, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 <p>設定した:<br />
 <blockquote class="twitter-tweet" data-conversation="none" data-theme="dark"><p lang="ja" dir="ltr">他のオブジェクトにも設定してきた...ﾖｼ!! <a href="https://t.co/8tMJyUaawt">pic.twitter.com/8tMJyUaawt</a></p>— mi'e himari (@mihe_himari) <a href="https://twitter.com/mihe_himari/status/1320613366864330752?ref_src=twsrc%5Etfw">October 26, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
-<h1>todo</h1>
+<h1 id="todo">todo</h1>
 <ul class="task-list">
 <li><input type="checkbox" disabled="" />
 画像入れる</li>
@@ -431,7 +431,7 @@ SyntaxError: invalid syntax
 </div>
 
 <p>公式: <a href="https://docs.blender.org/manual/ja/2.80/files/data_blocks.html" class="uri">https://docs.blender.org/manual/ja/2.80/files/data_blocks.html</a></p>
-<h1>Data blocks</h1>
+<h1 id="Data blocks">Data blocks</h1>
 <p>いかなるBlenderプロジェクトの基本単位は<code>data-block</code>です。<code>data-block</code>の例としては: meshes, objects, materials, textures, node trees, scenes, texts, brushes, そして workspace</p>
 <p><code>data-block</code>は、とても異なる種類のデータの全体的な抽象であり、共通の基本的な<code>feature</code>であるプロパティと<code>behaviors</code>に重心を置いています。</p>
 <p>いくつかの共通した特徴は:</p>
@@ -446,16 +446,16 @@ SyntaxError: invalid syntax
 </ul>
 <p>ユーザーは<code>typically</code>高レベルの<code>data type</code>を扱うことになります(<code>obects</code>, <code>meshes</code>など)。 複雑なプロジェクトを扱う場合、特に<code>inter-linking blend-files</code>の場合、<code>data-block</code>の管理はより重要になります。 それ用の主なエディターは<a href="https://docs.blender.org/manual/ja/2.80/editors/outliner.html">Outliner</a>です</p>
 <p>Blender内の全てのデータが<code>data-block</code>なわけではありません。例えば、<code>bones</code>, <code>sequence strips</code>や<code>vertex groups</code>は違っており、 それぞれ<code>armature</code>、<code>scene</code>、<code>mesh types</code>に付属(<code>belong to</code>)しています。</p>
-<h1>Life Time</h1>
+<h1 id="Life Time">Life Time</h1>
 <p>全ての<code>data-block</code>は<code>usage counted</code>(<code>reference count</code>)を持っており、一つ以上である場合は、UIの中で<code>data-block</code>の名前の右側に<code>current user</code>の数が表示されます。</p>
 <p>Blenderは、使用されていないデータは最終的に削除されるという<code>general rule</code>に従っています。</p>
 <p>作業中にたくさんのデータを追加・削除することは一般的なため、全ての<code>data-block</code>を一つ一つ手動で管理する必要がないのは利点です。</p>
 <p>これは、<code>blend-file</code>を書き込む際に、<code>zero user</code>な<code>data-block</code>をスキップする仕組みになっています。</p>
-<h1>Protected</h1>
+<h1 id="Protected">Protected</h1>
 <p><code>zero user</code>な<code>data-block</code>は保存されないため、時にはユーザーのことを考えずにデータの保存を強制させたい時があるでしょう。</p>
 <p>もし、<code>blend-file</code>を<code>library</code>として使っていたり、他のファイルから<code>link</code>したりされたりする目的で使っていた場合、 突然削除されないように気をつける必要があります。</p>
 <p><code>data-block</code>を<code>protect</code>するためには、その<code>data-block</code>の名前の横にある盾のボタンを使用します。 そうすると、その<code>data-block</code>はblenderによって自動的に削除されることは無くなりますが、必要ならば手動で削除することができます。</p>
-<h1>Sharing</h1>
+<h1 id="Sharing">Sharing</h1>
 <p><code>data-block</code>は他の<code>data-block</code>間でも共有できます。</p>
 <p>よくデータの共有が行われる例:</p>
 <ul>
@@ -467,11 +467,11 @@ SyntaxError: invalid syntax
 <ul>
 <li><a href="https://docs.blender.org/manual/ja/2.80/files/linked_libraries.html">linked libraries</a></li>
 </ul>
-<h1>Making Single User</h1>
+<h1 id="Making Single User">Making Single User</h1>
 <p><code>data-block</code>が複数のユーザーによって共有されている時、あるユーザーのためにコピーを作成することができます。 そうするには、名前の右にある<code>user-count</code>ボタンを押してください。そうすることにより、その<code>data-block</code>を複製してその用途のみに<code>assign</code>します。</p>
-<h2>注釈</h2>
+<h2 id="注釈">注釈</h2>
 <p><code>Objects</code>は<code>single-user</code>になるためにより発展的な<code>actions</code>を持っています。<a href="https://docs.blender.org/manual/ja/2.80/scene_layout/object/editing/duplication.html">彼らのドキュメント</a>を参照してください。</p>
-<h1>Removing Data-Blocks</h1>
+<h1 id="Removing Data-Blocks">Removing Data-Blocks</h1>
 ]]></description>
     <pubDate>Wed, 19 Aug 2020 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html</guid>
@@ -500,7 +500,7 @@ SyntaxError: invalid syntax
 <p>Blenderには、面と面を補完して滑らかに表示する<code>shade smooth</code>という機能があります。 しかし、何も考えずに使おうとすると思わぬところが補完され、予期せぬ結果になることが多々起こります。</p>
 <p><img src="https://pbs.twimg.com/media/Efm72cmU8AI3H5K?format=jpg&amp;name=medium" class="ui rounded image" alt="shade flatの結果" /></p>
 <p><img src="https://pbs.twimg.com/media/Efm74u6UcAEU2nM?format=jpg&amp;name=medium" class="ui rounded image" alt="shade smoothの結果" /></p>
-<h1>Auto Smoothを使おう</h1>
+<h1 id="Auto Smoothを使おう">Auto Smoothを使おう</h1>
 <p>Auto Smoothは、面の角度によって<code>shade smooth</code>と<code>shade flat</code>を使い分けてくれる機能です。 <a href="https://blender-cg.net/smooth-flat/">blender-cg.netさんの記事</a>で知りました。</p>
 <p><a href="https://docs.blender.org/manual/ja/2.80/modeling/meshes/structure.html#auto-smooth">公式リファレンス(英語)</a></p>
 <p>これを使うと、かなり快適に使うことができます！わーい！！</p>
@@ -536,17 +536,17 @@ SyntaxError: invalid syntax
 <li>公式のリファレンス: <a href="https://docs.blender.org/manual/en/2.80/render/eevee/materials/settings.html">blender manual -- materials</a></li>
 </ul>
 <p>Blend modeは、表面の色の計算が終わった後にどのようにカラーバッファに影響するかを決めます。</p>
-<h1 class="small-caption">Opaque</h1>
+<h1 class="small-caption" id="Opaque">Opaque</h1>
 <p>アルファチャンネル(=透明度)を完全に無視し、色を上書きします。これが一番早いモードです。</p>
-<h1 class="small-caption">Additive</h1>
+<h1 class="small-caption" id="Additive">Additive</h1>
 <p>直前の色に表面の色を加算します。アルファ値は、 <em>neutral color</em> の黒 (0.0, 0.0, 0.0, 0.0) と表面の色を混ぜるために使われます。</p>
-<h1 class="small-caption">Multiplicative</h1>
+<h1 class="small-caption" id="Multiplicative">Multiplicative</h1>
 <p>直前の色と表面の色を乗算します。アルファ値は、 <em>neutral color</em> の白 (1.0, 1.0, 1.0) と表面の色を混ぜるために使われます。</p>
-<h1 class="small-caption">Alpha Clip</h1>
+<h1 class="small-caption" id="Alpha Clip">Alpha Clip</h1>
 <p>アルファ値がclip閾値を上回った場合のみ、直前の色は表面の色で上書きされます。</p>
-<h1 class="small-caption">Alpha Hashed</h1>
+<h1 class="small-caption" id="Alpha Hashed">Alpha Hashed</h1>
 <p>アルファ値がランダムで決められたclip閾値を上回った場合のみ、直前の色は表面の色で上書きされます。 この統計学的なアプローチはノイズが多いですが、ソートの問題なしにアルファ値のブレンドを概算できます。レンダー設定でサンプル数を増やすと、最終的なノイズを減らすことができます。</p>
-<h1 class="small-caption">Alpha Blending</h1>
+<h1 class="small-caption" id="Alpha Blending">Alpha Blending</h1>
 <p>アルファ値のブレンドを使い、直前の色の上に表面の色をオーバーレイします。</p>
 ]]></description>
     <pubDate>Sun, 16 Aug 2020 00:00:00 UT</pubDate>

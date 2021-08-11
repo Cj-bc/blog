@@ -49,8 +49,8 @@
   
 </div>
 
-<h1>追加されたシェーダーを探す</h1>
-<h2>場所の特定</h2>
+<h1 id="追加されたシェーダーを探す">追加されたシェーダーを探す</h1>
+<h2 id="場所の特定">場所の特定</h2>
 <p>そもそもファイルがどこに追加されているのかを確かめる必要がある。 そこで、<code>__init__.py</code>を参照する。(どうでもいいけど中身のある<code>__init__.py</code>は初めて見た)<br />
 Blenderは、Addonが追加されるとクラスなどを登録するために<code>register()</code>という関数を探して実行する。 以下がこのAddonの<code>register()</code>関数。 (<a href="https://github.com/saturday06/VRM_IMPORTER_for_Blender/blob/a14835bfbc573a1d8f2be2a74ed198da46a573e4/__init__.py#L277-L285">githubで確認する</a>)</p>
 <div class="ui segment">
@@ -82,7 +82,7 @@ python
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>            <span class="cf">if</span> nt <span class="kw">not</span> <span class="kw">in</span> bpy.data.node_groups:</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>                data_to.node_groups.append(nt)</span></code></pre></div>
 </div>
-<h2>実際にshaderを追加している部分</h2>
+<h2 id="実際にshaderを追加している部分">実際にshaderを追加している部分</h2>
 <p>このコードである。そして、読めば字の如くだが、レポジトリにある<code>resources/material_node_groups.blend</code> にある<code>node_groups</code>の中でBlenderに存在していないものがあれば <code>data_to.node_groups.append()</code>して追加している。<br />
 結論から言うと<a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code>node_groups</code></a>は nodeで表現されるもの(オブジェクト？)、つまり<code>Shading</code>/<code>Textures</code>/<code>Compositin</code>に関わるものの集合である。 (<a href="https://docs.blender.org/api/current/bpy.types.NodeTree.html#bpy.types.NodeTree">公式doc</a>)<br />
 type()によると、<code>bpy.data</code>は<code>bpy.types.BlendData</code>であるので、<code>node_groups</code>は <a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code>bpy.types.BlendData.node_groups</code></a> である。 ここで、なんとなく<code>bpy.data</code>を見てみると<code>bpy.data.node_groups</code>に追加されてることがわかる。</p>
@@ -95,8 +95,8 @@ type()によると、<code>bpy.data</code>は<code>bpy.types.BlendData</code>で
 ...で、なんとなく`bpy.data`を見る、に戻る
 </details>
 <p><code>node_groups</code>の中で入力を受け付けてるものなら<code>.inputs</code>にある。 今回でいうと、<code>MToon</code>マテリアルにある<code>NomalmapTexture</code>というtypoを直したいので、 <code>bpy.data.node_groups['MToon_unversioned'].input['NomalmapTexture']</code>を参照する</p>
-<h1>今行き詰まっている問題</h1>
-<h2>bpy<em>prop</em>collectionに追加できない</h2>
+<h1 id="今行き詰まっている問題">今行き詰まっている問題</h1>
+<h2 id="bpypropcollectionに追加できない">bpy<em>prop</em>collectionに追加できない</h2>
 <p>これをtypoが直った<code>bpy.data.node_groups['MToon_unversioned'].input['NormalmapTexture']</code>に変えたいのだけど、 どうやら<code>input['NomalmapTexture']</code>の型である<code>bpy_prop_collection</code>がC実装なようで、普段のpythonのようにはいかない。 具体的にいうと</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -115,7 +115,7 @@ Traceback (most recent call last):
   File &quot;&lt;console&gt;&quot;, line 1, in &lt;module&gt;
 TypeError: bpy_prop_collection[key]: invalid key, must be a string or an int, not str</code></pre>
 </div>
-<h3>試したこと</h3>
+<h3 id="試したこと">試したこと</h3>
 <p><a href="https://docs.blender.org/api/current/bpy.types.bpy_prop_collection.html?highlight=bpy_prop_collection#bpy.types.bpy_prop_collection"><code>bpy_prop_collection</code></a>のドキュメントと<code>dir(mtoonNode.inputs[0])</code>を読んでみた所、 ドキュメントには書かれていなかったけど<code>move</code>と<code>new</code>があった。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -129,7 +129,7 @@ python-repl
 , 'items', 'keys', 'move', 'new', 'remove', 'rna_type', 'values']</code></pre>
 </div>
 <p>それぞれの挙動を試してみたが、どっちもうまく動かず...というか挙動がわからなかった</p>
-<h4><code>new()</code></h4>
+<h4 id="new()"><code>new()</code></h4>
 <details> <summary>Replの結果ですが長いので折りたたみ</summary>
 ``` python-repl
 >>> mtoonNode.inputs
@@ -192,7 +192,7 @@ KeyError: 'bpy_prop_collection[key]: key "NormalmapTexture" not found'
 , ('UV_Scroll_Rotation', bpy.data...inputs[34])]
 ```
 </details>
-<h4>move()</h4>
+<h4 id="move()">move()</h4>
 <details> <summary> Replの結果。長いため折りたたみ。 </summary>
 ``` python-repl
 >>> mtoonNode.inputs.move()

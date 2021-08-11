@@ -40,9 +40,9 @@
 </tr>
 </tbody>
 </table>
-<h1>問題</h1>
+<h1 id="問題">問題</h1>
 <p><a href="https://github.com/saturday06/VRM_Addon_for_Blender/pull/23#issuecomment-782580000">issueでsaturday06さんが教えてくれた</a> のですが、「一度古いプラグインでVRMを読み込んだblendファイルで、新しくVRMを読み込むとエラーを吐く」</p>
-<h2>トレースバック</h2>
+<h2 id="トレースバック">トレースバック</h2>
 <div class="ui segment">
 <div class="ui top right attached label">
 
@@ -75,7 +75,7 @@
                               location: &lt;unknown location&gt;:-1
 </code></pre>
 </div>
-<h1>バグが起きた場所</h1>
+<h1 id="バグが起きた場所">バグが起きた場所</h1>
 <div class="ui segment">
 <div class="ui top right attached label">
 
@@ -87,11 +87,11 @@
    └BlendModel.build_material_from_mtoon()
 </code></pre>
 </div>
-<h1>バグの原因</h1>
+<h1 id="バグの原因">バグの原因</h1>
 <p><code>importer/blend_model.py:449</code> で <code>bpy.data.node_groups[shader_node_group_name]</code> を取ってきているところが原因。</p>
 <p><code>bpy.data.node_groups</code> はblendfile内にある <code>node_groups</code> を保持しており、 既に「古いバージョンで読み込まれたVRM」がある場合 <code>bpy.data.node_groups["MToon_unversioned"]</code> は 「古いバージョンの <code>MToon_unversioned</code> 」=typoが含まれたものを返してしまう。</p>
 <p>そうすると、 <code>node_group_create</code> から返されたのちに <code>.inputs["Normalmap"]</code> が読まれた際に存在せずにクラッシュしてしまう。</p>
-<h1>解決方法</h1>
+<h1 id="解決方法">解決方法</h1>
 <p>ここでできるのは</p>
 <ol>
 <li>今までと同じように"Normalmap"が存在しなかったら"Nomalmap"を読ませる</li>
@@ -122,7 +122,7 @@
   
 </div>
 
-<h1>全てのメッシュの原点(Origin)を <em>ワールド座標系の</em> 原点に置く</h1>
+<h1 id="全てのメッシュの原点(Origin)を ワールド座標系の 原点に置く">全てのメッシュの原点(Origin)を <em>ワールド座標系の</em> 原点に置く</h1>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
 <p>There are not an object on the origin <mesh名> (もしくは) <mesh名> が原点座標にありません</p>
@@ -137,26 +137,26 @@
 <li><code>Set origin&gt; Origin to 3D cursor</code></li>
 </ol>
 <p>の手順を踏みます。</p>
-<h1>追加したmeshオブジェクトのtransformは全て0(scaleは1)にする</h1>
+<h1 id="追加したmeshオブジェクトのtransformは全て0(scaleは1)にする">追加したmeshオブジェクトのtransformは全て0(scaleは1)にする</h1>
 <p>Blender上では全然問題なく見えますが、これをしておかないとexportした後に変な位置にオブジェクトが表示されてしまいます。 (私は<code>3tenePRO</code>で動作確認をしていますが、おそらく他でもそうなると思います。)<br />
 具体的には、「全てのトランスフォームが0(scaleは1)に指定された通りに表示」されます。</p>
-<h2>具体例:</h2>
+<h2 id="具体例:">具体例:</h2>
 <p>scaleが1になっていない例 <img src="/images/sscale_isnt_1.jpeg" class="ui rounded image" alt="scaleが1じゃない" /></p>
 <p>scaleが1になるように調整した例 <img src="/images/scale_is_1.jpeg" class="ui rounded image" alt="scaleが1" /></p>
 <p>rotationが0になっていない例 <img src="/images/rotation_isnt_0.jpeg" class="ui rounded image" alt="rotationが0じゃない" /></p>
 <p>rotationが0になっている例 <img src="/images/rotation_is_0.jpeg" class="ui rounded image" alt="rotationが0" /></p>
-<h2>直し方</h2>
+<h2 id="直し方">直し方</h2>
 <p>Inspectorで各transformの値を確認します。そうしたら、それを覚えておき値は0に修正。 <code>Edit mode</code>に移行して、 <strong>originを中心に、軸を指定して先ほど覚えた値分</strong> 回転させます。</p>
-<h2>最終系</h2>
+<h2 id="最終系">最終系</h2>
 <p>綺麗になりました！！</p>
 <p><img src="/images/completed.jpg" class="ui rounded image" alt="全部直した" /></p>
-<h1>Shade Textureは必ず設定する</h1>
+<h1 id="Shade Textureは必ず設定する">Shade Textureは必ず設定する</h1>
 <p>ShadeTextureを設定していないと、面を法線と反対側から見たときにピンク色になってしまいます。 これは、<code>Shade Color</code>が塗られているからで、それを防ぎ表面と同じものを表示したい場合は必ず設定する必要があります。 なお、<code>MainTexture</code>と同じテクスチャで問題ないと思います。</p>
 <p>設定してなかった:<br />
 <blockquote class="twitter-tweet" data-conversation="none" data-theme="dark"><p lang="ja" dir="ltr">色々と調節は必要そうだね <a href="https://t.co/ndXTzYKdfQ">pic.twitter.com/ndXTzYKdfQ</a></p>— mi'e himari (@mihe_himari) <a href="https://twitter.com/mihe_himari/status/1320608433352003584?ref_src=twsrc%5Etfw">October 26, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 <p>設定した:<br />
 <blockquote class="twitter-tweet" data-conversation="none" data-theme="dark"><p lang="ja" dir="ltr">他のオブジェクトにも設定してきた...ﾖｼ!! <a href="https://t.co/8tMJyUaawt">pic.twitter.com/8tMJyUaawt</a></p>— mi'e himari (@mihe_himari) <a href="https://twitter.com/mihe_himari/status/1320613366864330752?ref_src=twsrc%5Etfw">October 26, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
-<h1>todo</h1>
+<h1 id="todo">todo</h1>
 <ul class="task-list">
 <li><input type="checkbox" disabled="" />
 画像入れる</li>

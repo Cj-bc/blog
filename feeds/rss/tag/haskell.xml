@@ -82,7 +82,7 @@ haskell
 </div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ot">alist ::</span> [<span class="kw">forall</span> l a<span class="op">.</span> (<span class="dt">LayoutClass</span> l a) <span class="ot">=&gt;</span> l a]</span></code></pre></div>
 </div>
-<h2>解法</h2>
+<h2 id="解法">解法</h2>
 <p><a href="https://hackage.haskell.org/package/xmonad-0.15/docs/src/XMonad.Core.html#Layout">XMonad.Core.Layout</a> を使う。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -124,8 +124,8 @@ haskell
 </div>
 
 <p>xmonad、デフォルトだと新しい機能を自作したりしようとするとシステムグローバルに突っ込む必要が出てきます。 それは面倒だし、管理が煩雑になるのでそもそもstackを使用できるようにします。</p>
-<h1>Xmonadをstackでコンパイルできるようにする</h1>
-<h2>Xmonadのコンパイル方法を指定する方法</h2>
+<h1 id="Xmonadをstackでコンパイルできるようにする">Xmonadをstackでコンパイルできるようにする</h1>
+<h2 id="Xmonadのコンパイル方法を指定する方法">Xmonadのコンパイル方法を指定する方法</h2>
 <p>xmonadの recompileは、 <a href="https://hackage.haskell.org/package/xmonad-0.15/docs/src/XMonad.Core.html#recompile">XMonad.Core.recompile</a> によって行われています。 そして内部を読んでみると、 <code class="sourceCode haskell">cfgdir <span class="op">&lt;/&gt;</span> <span class="st">&quot;build&quot;</span></code> が存在すればそれを読むということが分かります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -163,7 +163,7 @@ haskell
 </ol>
 <p>のいずれかになります。</p>
 <p>今回は、変更点をあまり作らないためにとりあえず <code>~/.xmonad</code> にしようと思います(そのうち <code>XDG_CONFIG_HOME</code> 以下に移したい)</p>
-<h2><code>build</code> スクリプトを書く</h2>
+<h2 id="build スクリプトを書く"><code>build</code> スクリプトを書く</h2>
 <p>コマンドを使用することになるので、shellscriptで書くのが妥当かなと思います。 <code>build</code> スクリプトは以下のように呼ばれます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -213,7 +213,7 @@ haskell
   
 </div>
 
-<h1>コードブロックの整形</h1>
+<h1 id="コードブロックの整形">コードブロックの整形</h1>
 <p>今まで、コードブロックは酷い見た目でした。 <img src="/images/old-codeblock.png" class="ui rounded image" alt="前までのコードブロック" /></p>
 <p>現在は以下のように表示されるようになりました！</p>
 <div class="ui segment">
@@ -223,14 +223,14 @@ haskell
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="fu">putStrLn</span> <span class="st">&quot;Hello world!&quot;</span></span></code></pre></div>
 </div>
-<h2>やったこと</h2>
+<h2 id="やったこと">やったこと</h2>
 <p>ここでは、以下のFomantic-UI要素を使用しました。</p>
 <ul>
 <li>Segment</li>
 <li>Attached label</li>
 </ul>
 <p>又、各コードブロックに同じ処理をするために、Hakyllの<code>pandocCompilerWithTransform</code>を使用しています。 syntaxhilightは<a href="https://stackoverflow.com/a/43699538"><code>Hakyll</code>に合わせて</a><code>Highlight.js</code>を使用しています。</p>
-<h3>最終的なHTML</h3>
+<h3 id="最終的なHTML">最終的なHTML</h3>
 <div class="ui segment">
 <div class="ui top right attached label">
 html
@@ -254,34 +254,34 @@ html
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>    <span class="kw">&lt;/div&gt;</span></span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
 </div>
-<h3><code>pandocCompilerWithTransform</code>を使用した処理</h3>
+<h3 id="pandocCompilerWithTransformを使用した処理"><code>pandocCompilerWithTransform</code>を使用した処理</h3>
 <p><code>pandocCompilerWithTransform</code>は<code>pandocCompiler</code>の一種で、Markdownなどを<code>Pandoc</code>型に変換しその値をいじることができます。 <code>Pandoc</code>型には便利な型クラス<code>Walkable</code>があるので、これを使用します。</p>
 <p><code>Walkable</code>とは、「値の中を歩き、各子要素を与えられた関数に適用して置き換える」ような処理をします。</p>
 <ul class="task-list">
 <li><input type="checkbox" disabled="" />
 WIP</li>
 </ul>
-<h3>右上に拡張子を表示する</h3>
+<h3 id="右上に拡張子を表示する">右上に拡張子を表示する</h3>
 <p>右上に拡張子を表示するために使われているのが、<a href="https://fomantic-ui.com/elements/label.html#attached">attached label</a>です。 注意する点として、これは「コードブロックとは別の<code>div</code>として使用する」必要があります。</p>
-<h3>親<code>Div</code>に<code>segment</code>を設定する</h3>
+<h3 id="親Divにsegmentを設定する">親<code>Div</code>に<code>segment</code>を設定する</h3>
 <p><code>code</code>ブロックの親の<code>Div</code>に、<code>class="ui segment"</code>を設定してください。 (他の要素はあっても大丈夫だと思いますが、とにかく<a href="https://fomantic-ui.com/elements/segment.html">segment</a>が必要です。)<br />
 尚、きちんと調べているわけではないので、他のものでも代用できるのかもしれません。</p>
 <p><img src="/images/attached-label-wraped-in-segment.png" class="ui rounded image" alt="segmentがある場合" /> <em>(赤丸は注釈)</em></p>
 <p>これをしない場合、ひとまわり上の<code>segment</code>、どこにもない場合webページの右上にこのラベルが表示されることになります。</p>
 <p><img src="/images/attached-label-not-wraped-in-segment.png" class="ui rounded image" alt="segmentがない場合" /> <em>(赤丸は注釈)</em></p>
-<h3>テキストの折り返し</h3>
+<h3 id="テキストの折り返し">テキストの折り返し</h3>
 <p>これはシンプルにCSSの<code>overflow:auto</code>を使っています。</p>
-<h1>画像の整形</h1>
+<h1 id="画像の整形">画像の整形</h1>
 <p>これまでは画像が正しいサイズになっておらず、このようになっていました。</p>
 <p><img src="/images/old-image-view.png" class="ui rounded image" alt="昔の画像表示" /></p>
 <p>現在は、この画像のようになっています。</p>
 <p><img src="/images/current-image.view.png" class="ui rounded image" alt="今の画像表示" /></p>
-<h2><code>ui image</code></h2>
+<h2 id="ui image"><code>ui image</code></h2>
 <p><code>ui image</code>を使うことで、親のSegment以内に納めてくれます。<br />
 又それにプラスして<code>rounded</code>をつけることで角を丸めています。 (最終的には<code>ui rounded image</code>となりました)</p>
-<h1>メニューの作成</h1>
+<h1 id="メニューの作成">メニューの作成</h1>
 <p>画面上部にあるメニューを作成しました。 これは主に<code>ui menu</code>を使っています。 それに追加して、viewportの上部に固定するために<code>fixed</code>を、色を反転させるために<code>inverted</code>をつけています。</p>
-<h2>コンテンツの内容がかぶらないようにする</h2>
+<h2 id="コンテンツの内容がかぶらないようにする">コンテンツの内容がかぶらないようにする</h2>
 <p><code>fixed</code>を使った場合、そのままでは下のdiv(このサイトではidとして<code>content</code>を持つdiv)の内容に被ってしまいます。</p>
 <p><img src="/images/fixed-menu-without-margin.png" class="ui rounded image" alt="何も対処しない場合" /></p>
 <p>そこで、<code>content</code> divに<code>margin-top: 5em</code>を適用しています。<br />
@@ -294,7 +294,7 @@ css
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    <span class="kw">margin-top</span>: <span class="dv">5</span><span class="dt">em</span><span class="op">;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
-<h2>Feedのリンクを右づめにする</h2>
+<h2 id="Feedのリンクを右づめにする">Feedのリンクを右づめにする</h2>
 <p><code>menu</code>の中にある<code>item</code>に、<code>right</code>と入れるだけでそこから下の<code>item</code>全てが右詰になります。 このサイトだと以下のようになっています。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -332,8 +332,8 @@ html
 </div>
 
 <p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:Block">hackage</a>と<a href="https://pandoc.org/MANUAL.html">pandoc manual</a> を見てもよくわからないので、markdownに変換して試してみた。</p>
-<h1>OrderedList</h1>
-<h2>ListNumberStyle</h2>
+<h1 id="OrderedList">OrderedList</h1>
+<h2 id="ListNumberStyle">ListNumberStyle</h2>
 <p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberStyle">ListNumberStyle</a>は、 数字表現(1,2,3なのかi,ii,iiiなのかなど)を決めるもの。 わかりやすいように他の内容は一致させています。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -375,7 +375,7 @@ markdown
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>(B) foo</span></code></pre></div>
 </div>
 <p><code>Default</code>/<code>Example</code>はどうやらDecimalになってしまう模様。あとは大体名前の通りになった。</p>
-<h2>ListNumberDelim</h2>
+<h2 id="ListNumberDelim">ListNumberDelim</h2>
 <p><a href="https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberDelim">ListNumberDelim</a> は、数字の後につくやつ。<br />
 コードは基本先ほどと同じものを使用</p>
 <div class="ui segment">
@@ -405,7 +405,7 @@ markdown
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>(1) hoge</span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>(2) foo</span></code></pre></div>
 </div>
-<h1>DefinitionList</h1>
+<h1 id="DefinitionList">DefinitionList</h1>
 <p><a href="">DefinitionList</a></p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -454,7 +454,7 @@ markdown
 </div>
 
 <p>AAエディター(?)である<a href="https://github.com/jtdaugherty/tart">Tart</a>の内部実装を読んだ時のメモ</p>
-<h1>Eventの処理</h1>
+<h1 id="Eventの処理">Eventの処理</h1>
 <div class="ui segment">
 <div class="ui top right attached label">
 
