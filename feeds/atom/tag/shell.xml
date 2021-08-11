@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>CLI! CLI! CLI!</title>
+    <link href="https://cj-bc.github.io/blog/feeds/atom/tag/shell.xml" rel="self" />
+    <link href="https://cj-bc.github.io/blog" />
+    <id>https://cj-bc.github.io/blog/feeds/atom/tag/shell.xml</id>
+    <author>
+        <name>Cj-bc a.k.a Cj.BC_SD</name>
+        <email>cj.bc-sd@outlook.jp</email>
+    </author>
+    <updated>2021-02-20T00:00:00Z</updated>
+    <entry>
+    <title>機密が見えるかもしれないshell作業をストリーミングする方法が見つかりそう</title>
+    <link href="https://cj-bc.github.io/blog/posts/2021-02-20-tmux-how-to-hide-credentials-on-screencast.html" />
+    <id>https://cj-bc.github.io/blog/posts/2021-02-20-tmux-how-to-hide-credentials-on-screencast.html</id>
+    <published>2021-02-20T00:00:00Z</published>
+    <updated>2021-02-20T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>機密が見えるかもしれないshell作業をストリーミングする方法が見つかりそう</h1>
+  <div class="ui list">
+    <div class="item">Posted on February 20, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on February 21, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;shell&#39;." href="/tags/shell.html" class="ui tag label">shell</a><a title="All pages tagged &#39;tmux&#39;." href="/tags/tmux.html" class="ui tag label">tmux</a>
+  
+</div>
+
+<p>わーい！！</p>
+<p>…じゃ、なくて、説明をします</p>
+<h1>Shell作業配信の現状の怖さ</h1>
+<p>shell作業してること、よくあると思います。 人類の殆どの人間が、人生の訳80%程はshellに費やすと言われています(当社調べ)ので、 その作業を配信に流したくなることも勿論あるでしょう。</p>
+<p>あるんですよ。</p>
+<p>その時に困るのが、「作業中に必要or非表示にできない機密情報」の扱いです。</p>
+<p>例えば:</p>
+<ul>
+<li>ユーザー名(ディレクトリ構造からバレることがあります)</li>
+<li>Token類(APIなど)</li>
+<li>RSAキー</li>
+</ul>
+<p>などなど…</p>
+<p>これらが映るかもしれない作業は配信に載せることができませんよね。怖いので。</p>
+<h1>指定の文字列を隠して配信をする方法！！！！</h1>
+<p>ですが！！この問題は意外と簡単に倒すことができます。</p>
+<p>そう、*tmuxならね*</p>
+<p>tmux知らない人はこんなニッチな記事には来ないと思うのですが簡単に説明しておくと、 GNU screenやbyobuと同じ「ターミナルマルチプレクサ」というプログラムです。</p>
+<p><code>あとはggってください</code></p>
+<h2>手順！！</h2>
+<p>具体的な方法に移ります。</p>
+<p>簡単です。</p>
+<ol>
+<li>tmuxで作業を開きます。</li>
+<li>使用しているターミナルで別ウィンドウを開きます。 <code>tty</code> コマンドで、使用している仮想端末を確認してください(このウィンドウを配信に使います)</li>
+<li>2.で開いたウィンドウで、 <code>tput civis; unset PS1</code> します</li>
+<li>作業しているtmux windowの中で、新しくpaneを開きます</li>
+<li>そこで <code>clear &gt;&lt;2.で確認した仮想端末&gt;; tmux capture-pane -t 1 -pe | sed 's/&lt;隠したい情報&gt;/置換して代わりにおく文字列/g' &gt; &lt;2.で確認した端末&gt;</code> します。</li>
+<li>するとあら不思議！！2.で開いたウィンドウにそっくりそのまま、隠したい情報だけ隠されて表示されました！！</li>
+</ol>
+<p>あとはこれをループさせて、裏で走らせればいいだけです！！</p>
+<p>ちなみに寝る前にお風呂で思いついてしまい、とりあえず試してみたら動いたみたいなアイデアなのでまだ実装していませんが、のちに実装します。</p>
+<p>多分。</p>
+]]></summary>
+</entry>
+
+</feed>

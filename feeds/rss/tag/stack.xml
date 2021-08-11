@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>CLI! CLI! CLI!</title>
+        <link>https://cj-bc.github.io/blog</link>
+        <description><![CDATA[Cj-bc's personal blog posts.]]></description>
+        <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/stack.xml" rel="self"
+                   type="application/rss+xml" />
+        <lastBuildDate>Tue, 04 May 2021 00:00:00 UT</lastBuildDate>
+        <item>
+    <title>xmonadにstackを使う</title>
+    <link>https://cj-bc.github.io/blog/posts/2021-05-04-xmonad-use-stack-for-compile.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>xmonadにstackを使う</h1>
+  <div class="ui list">
+    <div class="item">Posted on May  4, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on May 11, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;xmonad&#39;." href="/tags/xmonad.html" class="ui tag label">xmonad</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;stack&#39;." href="/tags/stack.html" class="ui tag label">stack</a><a title="All pages tagged &#39;linux&#39;." href="/tags/linux.html" class="ui tag label">linux</a>
+  
+</div>
+
+<p>xmonad、デフォルトだと新しい機能を自作したりしようとするとシステムグローバルに突っ込む必要が出てきます。 それは面倒だし、管理が煩雑になるのでそもそもstackを使用できるようにします。</p>
+<h1>Xmonadをstackでコンパイルできるようにする</h1>
+<h2>Xmonadのコンパイル方法を指定する方法</h2>
+<p>xmonadの recompileは、 <a href="https://hackage.haskell.org/package/xmonad-0.15/docs/src/XMonad.Core.html#recompile">XMonad.Core.recompile</a> によって行われています。 そして内部を読んでみると、 <code class="sourceCode haskell">cfgdir <span class="op">&lt;/&gt;</span> <span class="st">&quot;build&quot;</span></code> が存在すればそれを読むということが分かります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ot">recompile ::</span> <span class="dt">MonadIO</span> m <span class="ot">=&gt;</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> m <span class="dt">Bool</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>recompile force <span class="ot">=</span> io <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    cfgdir  <span class="ot">&lt;-</span> getXMonadDir</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    datadir <span class="ot">&lt;-</span> getXMonadDataDir</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="kw">let</span> binn <span class="ot">=</span> <span class="st">&quot;xmonad-&quot;</span><span class="op">++</span>arch<span class="op">++</span><span class="st">&quot;-&quot;</span><span class="op">++</span>os</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>        bin  <span class="ot">=</span> datadir <span class="op">&lt;/&gt;</span> binn</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>        err  <span class="ot">=</span> datadir <span class="op">&lt;/&gt;</span> <span class="st">&quot;xmonad.errors&quot;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>        src  <span class="ot">=</span> cfgdir <span class="op">&lt;/&gt;</span> <span class="st">&quot;xmonad.hs&quot;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>        lib  <span class="ot">=</span> cfgdir <span class="op">&lt;/&gt;</span> <span class="st">&quot;lib&quot;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>        buildscript <span class="ot">=</span> cfgdir <span class="op">&lt;/&gt;</span> <span class="st">&quot;build&quot;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>    <span class="co">-- ...</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>    useBuildscript <span class="ot">&lt;-</span> <span class="kw">do</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>      exists <span class="ot">&lt;-</span> doesFileExist buildscript</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>      <span class="kw">if</span> exists</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>        <span class="kw">then</span> <span class="kw">do</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a>          isExe <span class="ot">&lt;-</span> isExecutable buildscript</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a>          <span class="kw">if</span> isExe</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a>            <span class="kw">then</span> <span class="kw">do</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a>              trace <span class="op">$</span> <span class="st">&quot;XMonad will use build script at &quot;</span> <span class="op">++</span> <span class="fu">show</span> buildscript <span class="op">++</span> <span class="st">&quot; to recompile.&quot;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a>              <span class="fu">return</span> <span class="dt">True</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a>            <span class="kw">else</span> <span class="kw">do</span></span></code></pre></div>
+</div>
+<p><code>cfgdir</code> は</p>
+<ol>
+<li><code>$XMONAD_CONFIG_DIR</code></li>
+<li><code>~/.xmonad</code></li>
+<li><code>$XDG_CONFIG_HOME/xmonad</code></li>
+</ol>
+<p>のいずれかになります。</p>
+<p>今回は、変更点をあまり作らないためにとりあえず <code>~/.xmonad</code> にしようと思います(そのうち <code>XDG_CONFIG_HOME</code> 以下に移したい)</p>
+<h2><code>build</code> スクリプトを書く</h2>
+<p>コマンドを使用することになるので、shellscriptで書くのが妥当かなと思います。 <code>build</code> スクリプトは以下のように呼ばれます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a> <span class="co">-- ...</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a> <span class="kw">then</span> <span class="kw">do</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>   <span class="co">-- temporarily disable SIGCHLD ignoring:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>   uninstallSignalHandlers</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>   status <span class="ot">&lt;-</span> bracket (openFile err <span class="dt">WriteMode</span>) hClose <span class="op">$</span> \errHandle <span class="ot">-&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>waitForProcess <span class="op">=&lt;&lt;</span> <span class="kw">if</span> useBuildscript</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>     <span class="kw">then</span> compileScript bin cfgdir buildscript errHandle</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>     <span class="kw">else</span> compileGHC bin cfgdir errHandle</span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>compileScript bin dir script errHandle <span class="ot">=</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>        runProcess script [bin] (<span class="dt">Just</span> dir) <span class="dt">Nothing</span> <span class="dt">Nothing</span> <span class="dt">Nothing</span> (<span class="dt">Just</span> errHandle)</span></code></pre></div>
+</div>
+<p><code class="sourceCode haskell">runProcess</code> は、 <a href="https://hackage.haskell.org/package/process-1.6.11.0/docs/System-Process.html#v:runProcess">System.Process.runProcess</a> であり、上記の使い方だと <code>script</code> というプログラムに <code>bin</code> を引数として与え、 <code>dir</code> をワーキングディレクトリとしてから実行することになります。</p>
+]]></description>
+    <pubDate>Tue, 04 May 2021 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2021-05-04-xmonad-use-stack-for-compile.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+
+    </channel>
+</rss>

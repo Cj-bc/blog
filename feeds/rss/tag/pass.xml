@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>CLI! CLI! CLI!</title>
+        <link>https://cj-bc.github.io/blog</link>
+        <description><![CDATA[Cj-bc's personal blog posts.]]></description>
+        <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/pass.xml" rel="self"
+                   type="application/rss+xml" />
+        <lastBuildDate>Tue, 13 Apr 2021 00:00:00 UT</lastBuildDate>
+        <item>
+    <title>git credentialにpassを使う</title>
+    <link>https://cj-bc.github.io/blog/posts/2021-04-13-git-use-pass-for-git-credential.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>git credentialにpassを使う</h1>
+  <div class="ui list">
+    <div class="item">Posted on April 13, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on May  2, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;git&#39;." href="/tags/git.html" class="ui tag label">git</a><a title="All pages tagged &#39;pass&#39;." href="/tags/pass.html" class="ui tag label">pass</a>
+  
+</div>
+
+<p>gitの認証情報を保存する為に使う <code>git-credential helper</code> ですが、passを用いたものはデフォルトで存在しないので作ることにします。</p>
+<p>ちなみに元はどこかで見たアイデアです。確か誰かの実装があったと思うので、それを参照するのも良いかと思います。 私はなんとなく自作したかったので作っています。</p>
+<h1>git credential helperについて</h1>
+<p>git credentialは、機密を保存する為に外部のプログラムを使用します。 その方法は <a href="https://git-scm.com/book/ja/v2/Git-%E3%81%AE%E3%81%95%E3%81%BE%E3%81%96%E3%81%BE%E3%81%AA%E3%83%84%E3%83%BC%E3%83%AB-%E8%AA%8D%E8%A8%BC%E6%83%85%E5%A0%B1%E3%81%AE%E4%BF%9D%E5%AD%98">git-scm.com Git-様々なツール-認証情報の保存</a> で書かれています。</p>
+<h2>Git credential helperの役割</h2>
+<p>git credential helperは、3つの用途で呼ばれます。</p>
+<ul>
+<li>store</li>
+<li>get</li>
+<li>erase</li>
+</ul>
+<p>です。</p>
+<h3>store – 新しい認証情報を登録する</h3>
+<p>Storeは、新しい認証情報を登録する時に呼び出されます。 標準入力から情報を受け取り、それを保存します。 標準出力から何かを返しても良いですが、gitはそれを無視するので必要ではないです。</p>
+<h3>erase – 既存の認証情報を消去する</h3>
+<p>Eraseは、認証情報を消去したい時に呼ばれます。 標準入力から情報を受け取り、それに該当するものがあればそれを消去します。 標準出力から何かを返しても良いですが、これについてもgitは無視するので必要ではないです。</p>
+<h3>get – 渡された情報を基に認証情報を返す</h3>
+<p>Getは、渡された情報に合致するエントリがあればその情報を返します。 この場合のみ標準出力は必須で、gitはこの標準出力をそのまま代入文として扱います。</p>
+<h1>helperの作成</h1>
+<p>さて、簡単な説明も済んだので実際にスクリプトを組もうと思います。 例示ではRubyが使われていましたが、passコマンドを使用することと、自分がbash に慣れていることから、bashを使おうと思います。</p>
+<h2>データの格納方法</h2>
+<p>データはpassに格納しますが、格納する階層構造は以下のようにしようと思います。</p>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>Password Store └── git-cli └── &lt;protocol&gt;:&lt;host&gt; └── &lt;username&gt;</p>
+</blockquote>
+</div>
+<p>トップの <code>git-cli</code> はgitコマンドで使うものであることを示し、後はそのままです。</p>
+<p>URI形式にしようと思いましたが、</p>
+<ul>
+<li><code>//</code> がパスとして認識されてしまう</li>
+<li><code>Username</code> は <code>get</code> の際に与えられない</li>
+</ul>
+<p>ことから、</p>
+<ul>
+<li>プロトコルとホスト名の間はコロン1つ</li>
+<li>ユーザー名は下位エントリ</li>
+</ul>
+<p>にしました。</p>
+<h2>1. storeの作成</h2>
+<p>storeは、シンプルに与えられた情報からpassに登録をします。 標準入力は</p>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>protocol=&lt;protocol&gt; host=&lt;host&gt; username=&lt;username&gt; password=&lt;password&gt;</p>
+</blockquote>
+</div>
+<p>という4つの入力です。 これを保存します</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="store_key" data-org-language="sh" data-results="output verbatim" data-tangle="git-credential-pass" data-shebang="&quot;#!/usr/local/env bash&quot;"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="store_key-1"><a href="#store_key-1" aria-hidden="true"></a><span class="kw">function</span><span class="fu"> createStoreKey</span> <span class="kw">{</span></span>
+<span id="store_key-2"><a href="#store_key-2" aria-hidden="true"></a>    <span class="kw">case</span> <span class="va">$1</span><span class="kw"> in</span></span>
+<span id="store_key-3"><a href="#store_key-3" aria-hidden="true"></a>  <span class="st">&quot;store&quot;</span><span class="kw">)</span> <span class="bu">echo</span> <span class="st">&quot;git-cli/</span><span class="va">${2}</span><span class="st">:</span><span class="va">${3}</span><span class="st">/</span><span class="va">${4}</span><span class="st">&quot;</span><span class="kw">;;</span></span>
+<span id="store_key-4"><a href="#store_key-4" aria-hidden="true"></a>  <span class="st">&quot;get&quot;</span>)   <span class="bu">echo</span> <span class="st">&quot;git-cli/</span><span class="va">${2}</span><span class="st">:</span><span class="va">${3}</span><span class="st">&quot;</span><span class="kw">;;</span></span>
+<span id="store_key-5"><a href="#store_key-5" aria-hidden="true"></a>  <span class="ex">*</span>) <span class="kw">;;</span></span>
+<span id="store_key-6"><a href="#store_key-6" aria-hidden="true"></a>    <span class="kw">esac</span></span>
+<span id="store_key-7"><a href="#store_key-7" aria-hidden="true"></a><span class="kw">}</span></span>
+<span id="store_key-8"><a href="#store_key-8" aria-hidden="true"></a></span>
+<span id="store_key-9"><a href="#store_key-9" aria-hidden="true"></a><span class="kw">function</span><span class="fu"> store_key()</span> <span class="kw">{</span></span>
+<span id="store_key-10"><a href="#store_key-10" aria-hidden="true"></a>  <span class="bu">declare</span> -A <span class="va">input=()</span></span>
+<span id="store_key-11"><a href="#store_key-11" aria-hidden="true"></a></span>
+<span id="store_key-12"><a href="#store_key-12" aria-hidden="true"></a>  <span class="co"># バックスラッシュをエスケープ用に使わないために ~-r~ が必要です。</span></span>
+<span id="store_key-13"><a href="#store_key-13" aria-hidden="true"></a>  <span class="kw">while</span> <span class="va">IFS=</span>\= <span class="bu">read</span> -r <span class="va">key</span> <span class="va">value</span>; <span class="kw">do</span></span>
+<span id="store_key-14"><a href="#store_key-14" aria-hidden="true"></a><span class="va">input[$key]=$value</span></span>
+<span id="store_key-15"><a href="#store_key-15" aria-hidden="true"></a>  <span class="kw">done</span> <span class="op">&lt;</span> <span class="op">&lt;(</span><span class="fu">cat</span> -<span class="op">)</span></span>
+<span id="store_key-16"><a href="#store_key-16" aria-hidden="true"></a></span>
+<span id="store_key-17"><a href="#store_key-17" aria-hidden="true"></a>  <span class="va">store_key=$(</span><span class="ex">createStoreKey</span> <span class="st">&quot;store&quot;</span> <span class="va">${input[protocol]}</span> <span class="va">${input[host]}</span> <span class="va">${input[username]})</span></span>
+<span id="store_key-18"><a href="#store_key-18" aria-hidden="true"></a></span>
+<span id="store_key-19"><a href="#store_key-19" aria-hidden="true"></a>  <span class="bu">echo</span> <span class="st">&quot;Save credential info into pass.&quot;</span></span>
+<span id="store_key-20"><a href="#store_key-20" aria-hidden="true"></a>  <span class="bu">echo</span> <span class="st">&quot;Key is set to </span><span class="dt">\&quot;</span><span class="va">${store_key}</span><span class="dt">\&quot;</span><span class="st">&quot;</span></span>
+<span id="store_key-21"><a href="#store_key-21" aria-hidden="true"></a>  <span class="fu">cat</span> <span class="op">&lt;&lt;EOF</span> <span class="kw">|</span> <span class="ex">pass</span> insert <span class="va">$store_key</span></span>
+<span id="store_key-22"><a href="#store_key-22" aria-hidden="true"></a>  <span class="va">${input[password]}</span></span>
+<span id="store_key-23"><a href="#store_key-23" aria-hidden="true"></a>  <span class="va">${input[password]}</span></span>
+<span id="store_key-24"><a href="#store_key-24" aria-hidden="true"></a>  EOF</span>
+<span id="store_key-25"><a href="#store_key-25" aria-hidden="true"></a></span>
+<span id="store_key-26"><a href="#store_key-26" aria-hidden="true"></a>  [ <span class="va">$?</span> -eq 0 ] &amp;&amp; echo &quot;Credential <span class="op">s</span><span class="ex">aved</span> noormally<span class="st">&quot; \</span></span>
+<span id="store_key-27"><a href="#store_key-27" aria-hidden="true"></a><span class="st">    || echo &quot;</span>Failed to save credential<span class="st">&quot;</span></span>
+<span id="store_key-28"><a href="#store_key-28" aria-hidden="true"></a><span class="st">}</span></span></code></pre></div>
+</div>
+<h3>実例</h3>
+<p>例として</p>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>protocol=https host=myGitHost.com username=me password=some<sub>simplepassword</sub></p>
+</blockquote>
+</div>
+<p>を登録してみます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="store_key-example-code" data-org-language="sh" data-var="a=store_key()"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="store_key-example-code-1"><a href="#store_key-example-code-1" aria-hidden="true"></a><span class="fu">cat</span> - <span class="kw">|</span> <span class="ex">store_key</span></span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+example
+</div>
+<pre class="example SourceCode"><code>/tmp/babel-EN1Wbc/sh-script-qhWEEa: line 3: store_key: command not found
+</code></pre>
+</div>
+<h2>2. getの作成</h2>
+<p>getは、標準入力からホストとプロトコルの情報を読み込み、 標準出力からユーザー名とパスワードを返します。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="pass_get" data-org-language="sh" data-results="output verbatim" data-tangle="git-credential-pass" data-shebang="&quot;#!/usr/local/env bash&quot;"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="pass_get-1"><a href="#pass_get-1" aria-hidden="true"></a><span class="kw">function</span><span class="fu"> createStoreKey</span> <span class="kw">{</span></span>
+<span id="pass_get-2"><a href="#pass_get-2" aria-hidden="true"></a>    <span class="kw">case</span> <span class="va">$1</span><span class="kw"> in</span></span>
+<span id="pass_get-3"><a href="#pass_get-3" aria-hidden="true"></a>  <span class="st">&quot;store&quot;</span><span class="kw">)</span> <span class="bu">echo</span> <span class="st">&quot;git-cli/</span><span class="va">${2}</span><span class="st">:</span><span class="va">${3}</span><span class="st">/</span><span class="va">${4}</span><span class="st">&quot;</span><span class="kw">;;</span></span>
+<span id="pass_get-4"><a href="#pass_get-4" aria-hidden="true"></a>  <span class="st">&quot;get&quot;</span>)   <span class="bu">echo</span> <span class="st">&quot;git-cli/</span><span class="va">${2}</span><span class="st">:</span><span class="va">${3}</span><span class="st">&quot;</span><span class="kw">;;</span></span>
+<span id="pass_get-5"><a href="#pass_get-5" aria-hidden="true"></a>  <span class="ex">*</span>) <span class="kw">;;</span></span>
+<span id="pass_get-6"><a href="#pass_get-6" aria-hidden="true"></a>    <span class="kw">esac</span></span>
+<span id="pass_get-7"><a href="#pass_get-7" aria-hidden="true"></a><span class="kw">}</span></span>
+<span id="pass_get-8"><a href="#pass_get-8" aria-hidden="true"></a><span class="bu">declare</span> -A <span class="va">input=()</span></span>
+<span id="pass_get-9"><a href="#pass_get-9" aria-hidden="true"></a></span>
+<span id="pass_get-10"><a href="#pass_get-10" aria-hidden="true"></a><span class="kw">while</span> <span class="va">IFS=</span>\= <span class="bu">read</span> -r <span class="va">key</span> <span class="va">value</span>; <span class="kw">do</span></span>
+<span id="pass_get-11"><a href="#pass_get-11" aria-hidden="true"></a>  [[ <span class="va">${#key}</span> <span class="ex">-eq</span> 0 ]] <span class="kw">&amp;&amp;</span> <span class="bu">continue</span></span>
+<span id="pass_get-12"><a href="#pass_get-12" aria-hidden="true"></a>  <span class="va">input[$key]=$value</span></span>
+<span id="pass_get-13"><a href="#pass_get-13" aria-hidden="true"></a><span class="kw">done</span> <span class="op">&lt;</span> <span class="op">&lt;(</span><span class="fu">cat</span> -<span class="op">)</span></span>
+<span id="pass_get-14"><a href="#pass_get-14" aria-hidden="true"></a></span>
+<span id="pass_get-15"><a href="#pass_get-15" aria-hidden="true"></a><span class="va">store_key=$(</span><span class="ex">createStoreKey</span> <span class="st">&quot;get&quot;</span> <span class="va">${input[protocol]}</span> <span class="va">${input[host]})</span></span>
+<span id="pass_get-16"><a href="#pass_get-16" aria-hidden="true"></a></span>
+<span id="pass_get-17"><a href="#pass_get-17" aria-hidden="true"></a><span class="va">username=$(LANG=</span>C <span class="ex">pass</span> show <span class="st">&quot;</span><span class="va">$store_key</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="fu">awk</span> -v storeKey=<span class="st">&quot;</span><span class="va">$store_key</span><span class="st">&quot;</span> -v store_key=<span class="st">&quot;</span><span class="va">$store_key</span><span class="st">&quot;</span> <span class="st">&#39;$1 == store_key { getline; sub(&quot;`-- +&quot;, &quot;&quot;); print }&#39;</span><span class="va">)</span></span>
+<span id="pass_get-18"><a href="#pass_get-18" aria-hidden="true"></a></span>
+<span id="pass_get-19"><a href="#pass_get-19" aria-hidden="true"></a><span class="kw">[[</span> <span class="ot">-z</span> <span class="va">$username</span><span class="kw"> ]]</span> <span class="kw">&amp;&amp;</span> <span class="kw">{</span> <span class="bu">echo</span> <span class="st">&quot;failed to look up user for </span><span class="va">${store_key}</span><span class="st">. exit&quot;</span> <span class="kw">;</span> <span class="bu">exit</span><span class="kw">;</span> <span class="kw">}</span></span>
+<span id="pass_get-20"><a href="#pass_get-20" aria-hidden="true"></a></span>
+<span id="pass_get-21"><a href="#pass_get-21" aria-hidden="true"></a><span class="va">password=$(LANG=</span>C <span class="ex">pass</span> show <span class="st">&quot;</span><span class="va">${store_key}</span><span class="st">/</span><span class="va">$username</span><span class="st">&quot;</span><span class="va">)</span></span>
+<span id="pass_get-22"><a href="#pass_get-22" aria-hidden="true"></a><span class="fu">cat</span> <span class="op">&lt;&lt;EOF</span></span>
+<span id="pass_get-23"><a href="#pass_get-23" aria-hidden="true"></a>username=<span class="va">$username</span></span>
+<span id="pass_get-24"><a href="#pass_get-24" aria-hidden="true"></a>password=<span class="va">$password</span></span>
+<span id="pass_get-25"><a href="#pass_get-25" aria-hidden="true"></a><span class="op">EOF</span></span></code></pre></div>
+</div>
+<h3>実例</h3>
+<p>getに必要なのはホストとプロトコル(とそれに続く空白行)だけなので以下の情報を入れます</p>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>protocol=https host=myGitHost.com</p>
+</blockquote>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+example
+</div>
+<pre class="example SourceCode"><code>username=me
+password=some_simple_password
+</code></pre>
+</div>
+<h2>3. Eraseの作成(未作成)</h2>
+<p>Eraseも本来は存在しますが、入力で何を期待すれば良いのかが分からないため今はスルーすることにします。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="erase_key" data-org-language="sh" data-results="output verbatim" data-tangle="git-credential-pass" data-shebang="&quot;#!/usr/local/env bash&quot;"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="erase_key-1"><a href="#erase_key-1" aria-hidden="true"></a><span class="bu">exit</span></span></code></pre></div>
+</div>
+<h1>最終的に出来たもの</h1>
+<p><a href="https://github.com/Cj-bc/dotfiles/blob/master/dotfiles/bin/git-credential-pass">Cj-bc/dotfiles – dotfiles/bin/git-credential-pass</a> にあります。</p>
+<p>このポストから <code>org tangle</code> しようとしたのですが、諸々(関数化したりetc)上手く出来なかったのでtangleではないです 実用的なスクリプトとしてはそちらを参照して下さい</p>
+]]></description>
+    <pubDate>Tue, 13 Apr 2021 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2021-04-13-git-use-pass-for-git-credential.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+
+    </channel>
+</rss>

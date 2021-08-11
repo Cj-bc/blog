@@ -8,8 +8,344 @@
         <name>Cj-bc a.k.a Cj.BC_SD</name>
         <email>cj.bc-sd@outlook.jp</email>
     </author>
-    <updated>2020-10-24T00:00:00Z</updated>
+    <updated>2021-02-20T00:00:00Z</updated>
     <entry>
+    <title>fix-typoのデバッグメモ</title>
+    <link href="https://cj-bc.github.io/blog/posts/2021-02-20-blender-vrm-plugin-bugfix-after-merged-memo.html" />
+    <id>https://cj-bc.github.io/blog/posts/2021-02-20-blender-vrm-plugin-bugfix-after-merged-memo.html</id>
+    <published>2021-02-20T00:00:00Z</published>
+    <updated>2021-02-20T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>fix-typoのデバッグメモ</h1>
+  <div class="ui list">
+    <div class="item">Posted on February 20, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on February 22, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;python&#39;." href="/tags/python.html" class="ui tag label">python</a><a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html" class="ui tag label">blender</a><a title="All pages tagged &#39;vrm&#39;." href="/tags/vrm.html" class="ui tag label">vrm</a><a title="All pages tagged &#39;VRM_IMPORTER_for_Blender&#39;." href="/tags/VRM_IMPORTER_for_Blender.html" class="ui tag label">VRM_IMPORTER_for_Blender</a>
+  
+</div>
+
+<table>
+<tbody>
+<tr class="odd">
+<td>該当PR</td>
+<td><a href="https://github.com/saturday06/VRM_Addon_for_Blender/pull/23">saturday06/VRM<sub>IMPORTERforBlender</sub>: PR #23</a></td>
+</tr>
+<tr class="even">
+<td>作業メモ</td>
+<td><a href="https://Cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html">https://Cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html</a></td>
+</tr>
+</tbody>
+</table>
+<h1>問題</h1>
+<p><a href="https://github.com/saturday06/VRM_Addon_for_Blender/pull/23#issuecomment-782580000">issueでsaturday06さんが教えてくれた</a> のですが、「一度古いプラグインでVRMを読み込んだblendファイルで、新しくVRMを読み込むとエラーを吐く」</p>
+<h2>トレースバック</h2>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Traceback (most recent call last):
+  File &quot;/Users/me/Library/Application
+  Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/__init__.py&quot;,
+  line 88, in execute
+      blend_model.BlendModel(context, vrm_load.read_vrm(self.filepath, self),
+      self)
+        File &quot;/Users/me/Library/Application
+        Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py&quot;,
+        line 53, in __init__
+            self.vrm_model_build()
+              File &quot;/Users/me/Library/Application
+              Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py&quot;,
+              line 71, in vrm_model_build
+                  self.make_material()
+                    File &quot;/Users/me/Library/Application
+                    Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py&quot;,
+                    line 333, in make_material
+                        self.build_material_from_mtoon(b_mat, mat)
+                          File &quot;/Users/me/Library/Application
+                          Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py&quot;,
+                          line 646, in build_material_from_mtoon
+                              color_socket_to_connect=sg.inputs[tex_dic[tex_name]],
+                              KeyError: &#39;bpy_prop_collection[key]: key
+                              &quot;NormalmapTexture&quot; not found&#39;
+
+                              location: &lt;unknown location&gt;:-1
+</code></pre>
+</div>
+<h1>バグが起きた場所</h1>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>__init__.ImportVRM.execute()
+└blend_model.BlendModel.__init__()
+ └BlendModel.vrm_model_build()
+  └BlendModel.make_material()
+   └BlendModel.build_material_from_mtoon()
+</code></pre>
+</div>
+<h1>バグの原因</h1>
+<p><code>importer/blend_model.py:449</code> で <code>bpy.data.node_groups[shader_node_group_name]</code> を取ってきているところが原因。</p>
+<p><code>bpy.data.node_groups</code> はblendfile内にある <code>node_groups</code> を保持しており、 既に「古いバージョンで読み込まれたVRM」がある場合 <code>bpy.data.node_groups["MToon_unversioned"]</code> は 「古いバージョンの <code>MToon_unversioned</code> 」=typoが含まれたものを返してしまう。</p>
+<p>そうすると、 <code>node_group_create</code> から返されたのちに <code>.inputs["Normalmap"]</code> が読まれた際に存在せずにクラッシュしてしまう。</p>
+<h1>解決方法</h1>
+<p>ここでできるのは</p>
+<ol>
+<li>今までと同じように"Normalmap"が存在しなかったら"Nomalmap"を読ませる</li>
+<li>そもそも古い <code>bpy.data.node_groups["MToon_unversioned"]</code> を更新させる(どのタイミングで？)</li>
+</ol>
+]]></summary>
+</entry>
+<entry>
+    <title>VRM_IMPORTER_for_Blender \#23 作業メモ</title>
+    <link href="https://cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html" />
+    <id>https://cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html</id>
+    <published>2021-01-11T00:00:00Z</published>
+    <updated>2021-01-11T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>VRM_IMPORTER_for_Blender \#23 作業メモ</h1>
+  <div class="ui list">
+    <div class="item">Posted on January 11, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January 15, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;blender&#39;." href="/tags/blender.html" class="ui tag label">blender</a><a title="All pages tagged &#39;python&#39;." href="/tags/python.html" class="ui tag label">python</a>
+  
+</div>
+
+<h1>追加されたシェーダーを探す</h1>
+<h2>場所の特定</h2>
+<p>そもそもファイルがどこに追加されているのかを確かめる必要がある。 そこで、<code>__init__.py</code>を参照する。(どうでもいいけど中身のある<code>__init__.py</code>は初めて見た)<br />
+Blenderは、Addonが追加されるとクラスなどを登録するために<code>register()</code>という関数を探して実行する。 以下がこのAddonの<code>register()</code>関数。 (<a href="https://github.com/saturday06/VRM_IMPORTER_for_Blender/blob/a14835bfbc573a1d8f2be2a74ed198da46a573e4/__init__.py#L277-L285">githubで確認する</a>)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co"># アドオン有効化時の処理</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">def</span> register():</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="cf">for</span> cls <span class="kw">in</span> classes:</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>        bpy.utils.register_class(cls)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    bpy.types.TOPBAR_MT_file_import.append(menu_import)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    bpy.types.TOPBAR_MT_file_export.append(menu_export)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    bpy.types.VIEW3D_MT_armature_add.append(add_armature)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    <span class="co"># bpy.types.VIEW3D_MT_mesh_add.append(make_mesh)</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>    bpy.app.handlers.load_post.append(add_shaders)</span></code></pre></div>
+</div>
+<p>明らかに<code>bpy.app.handlers.load_post.append(add_shaders)</code>が怪しい。というか、<code>add_shaders</code>という わかりやすい名前があるので間違い無くここで追加している。 ということで<code>add_shaders</code>を見てみると (<a href="https://github.com/saturday06/VRM_IMPORTER_for_Blender/blob/a14835bfbc573a1d8f2be2a74ed198da46a573e4/__init__.py#L245-L253">githubで確認する</a>)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="at">@persistent</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">def</span> add_shaders(<span class="va">self</span>):</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>    filedir <span class="op">=</span> os.path.join(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>        os.path.dirname(<span class="va">__file__</span>), <span class="st">&quot;resources&quot;</span>, <span class="st">&quot;material_node_groups.blend&quot;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    )</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>    <span class="cf">with</span> bpy.data.libraries.load(filedir, link<span class="op">=</span><span class="va">False</span>) <span class="im">as</span> (data_from, data_to):</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>        <span class="cf">for</span> nt <span class="kw">in</span> data_from.node_groups:</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>            <span class="cf">if</span> nt <span class="kw">not</span> <span class="kw">in</span> bpy.data.node_groups:</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>                data_to.node_groups.append(nt)</span></code></pre></div>
+</div>
+<h2>実際にshaderを追加している部分</h2>
+<p>このコードである。そして、読めば字の如くだが、レポジトリにある<code>resources/material_node_groups.blend</code> にある<code>node_groups</code>の中でBlenderに存在していないものがあれば <code>data_to.node_groups.append()</code>して追加している。<br />
+結論から言うと<a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code>node_groups</code></a>は nodeで表現されるもの(オブジェクト？)、つまり<code>Shading</code>/<code>Textures</code>/<code>Compositin</code>に関わるものの集合である。 (<a href="https://docs.blender.org/api/current/bpy.types.NodeTree.html#bpy.types.NodeTree">公式doc</a>)<br />
+type()によると、<code>bpy.data</code>は<code>bpy.types.BlendData</code>であるので、<code>node_groups</code>は <a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code>bpy.types.BlendData.node_groups</code></a> である。 ここで、なんとなく<code>bpy.data</code>を見てみると<code>bpy.data.node_groups</code>に追加されてることがわかる。</p>
+<details>
+<summary>`bpy.data.node_groups`までたどり着く道のりメモ(でもよくわからなくて落書き)</summary>
+`data_to`は[`bpy.data.libraries.load`](https://docs.blender.org/api/current/bpy.types.BlendDataLibraries.html#bpy.types.BlendDataLibraries.load)から返されている。
+`bpy.data`が[`BlendData`](https://docs.blender.org/api/current/bpy.types.BlendData.html)のインスタンスであることから
+`bpy.data.libraries.load`は[`BlendDataLibraries.load`](https://docs.blender.org/api/current/bpy.types.BlendDataLibraries.html#bpy.types.BlendDataLibraries.load)である。  
+
+...で、なんとなく`bpy.data`を見る、に戻る
+</details>
+<p><code>node_groups</code>の中で入力を受け付けてるものなら<code>.inputs</code>にある。 今回でいうと、<code>MToon</code>マテリアルにある<code>NomalmapTexture</code>というtypoを直したいので、 <code>bpy.data.node_groups['MToon_unversioned'].input['NomalmapTexture']</code>を参照する</p>
+<h1>今行き詰まっている問題</h1>
+<h2>bpy<em>prop</em>collectionに追加できない</h2>
+<p>これをtypoが直った<code>bpy.data.node_groups['MToon_unversioned'].input['NormalmapTexture']</code>に変えたいのだけど、 どうやら<code>input['NomalmapTexture']</code>の型である<code>bpy_prop_collection</code>がC実装なようで、普段のpythonのようにはいかない。 具体的にいうと</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>bpy.data.node_groups[<span class="st">&#39;MToon_unversioned&#39;</span>].<span class="bu">input</span>[<span class="st">&#39;NormalmapTexture&#39;</span>] <span class="op">=</span> bpy.data.node_groups[<span class="st">&#39;MToon_unversioned&#39;</span>].<span class="bu">input</span>[<span class="st">&#39;NomalmapTexture&#39;</span>]</span></code></pre></div>
+</div>
+<p>では以下のようにエラーを吐かれてうまくいかない。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python-repl
+</div>
+<pre class="python-repl SourceCode"><code>&gt;&gt;&gt; mtonNode = bpy.data.node_groups[&#39;MToon_unversioned&#39;]
+&gt;&gt;&gt; mtoonNode.inputs[&#39;NormalmapTexture&#39;] = mtoonNode.inputs[&#39;NomalmapTexture&#39;]
+Traceback (most recent call last):
+  File &quot;&lt;console&gt;&quot;, line 1, in &lt;module&gt;
+TypeError: bpy_prop_collection[key]: invalid key, must be a string or an int, not str</code></pre>
+</div>
+<h3>試したこと</h3>
+<p><a href="https://docs.blender.org/api/current/bpy.types.bpy_prop_collection.html?highlight=bpy_prop_collection#bpy.types.bpy_prop_collection"><code>bpy_prop_collection</code></a>のドキュメントと<code>dir(mtoonNode.inputs[0])</code>を読んでみた所、 ドキュメントには書かれていなかったけど<code>move</code>と<code>new</code>があった。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python-repl
+</div>
+<pre class="python-repl SourceCode"><code>&gt;&gt;&gt; dir(mtoonNode.inputs)
+[&#39;__bool__&#39;, &#39;__contains__&#39;, &#39;__delattr__&#39;, &#39;__delitem__&#39;, &#39;__doc__&#39;
+, &#39;__doc__&#39;, &#39;__getattribute__&#39;, &#39;__getitem__&#39;, &#39;__iter__&#39;, &#39;__len__&#39;
+, &#39;__module__&#39;, &#39;__setattr__&#39;, &#39;__setitem__&#39;, &#39;__slots__&#39;, &#39;bl_rna&#39;
+, &#39;clear&#39;, &#39;find&#39;, &#39;foreach_get&#39;, &#39;foreach_set&#39;, &#39;get&#39;
+, &#39;items&#39;, &#39;keys&#39;, &#39;move&#39;, &#39;new&#39;, &#39;remove&#39;, &#39;rna_type&#39;, &#39;values&#39;]</code></pre>
+</div>
+<p>それぞれの挙動を試してみたが、どっちもうまく動かず...というか挙動がわからなかった</p>
+<h4><code>new()</code></h4>
+<details> <summary>Replの結果ですが長いので折りたたみ</summary>
+``` python-repl
+>>> mtoonNode.inputs
+bpy.data...inputs
+>>> mtoonNode
+bpy.data.node_groups['MToon_unversioned']
+>>> mtoonNode.inputs.new
+<bpy_func NodeTreeInputs.new()>
+>>> mtoonNode.inputs.new()
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+TypeError: NodeTreeInputs.new(): required parameter "type" not specified
+>>> # mtoonNode.inputs['NomalmapTexture']から値を拝借
+>>> mtoonNode.inputs.new('RGBA')
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+TypeError: NodeTreeInputs.new(): required parameter "name" not specified
+>>> mtoonNode.inputs.new('RGBA', 'NormalmapTexture')
+>>> mtoonNode.inputs
+bpy.data...inputs
+>>> mtoonNode.inputs['NormalmapTexture']
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+KeyError: 'bpy_prop_collection[key]: key "NormalmapTexture" not found'
+>>> mtoonNode.inputs.items()
+[('MainTexture', bpy.data...inputs[0])
+, ('MainTextureAlpha', bpy.data...inputs[1])
+, ('ShadeTexture', bpy.data...inputs[2])
+, ('ReceiveShadow_Texture_alpha', bpy.data...inputs[3])
+, ('NomalmapTexture', bpy.data...inputs[4])
+, ('ShadingGradeTexture', bpy.data...inputs[5])
+, ('Emission_Texture', bpy.data...inputs[6])
+, ('SphereAddTexture', bpy.data...inputs[7])
+, ('OutlineWidthTexture', bpy.data...inputs[8])
+, ('UV_Animation_Mask_Texture', bpy.data...inputs[9])
+, ('DiffuseColor', bpy.data...inputs[10])
+, ('ShadeColor', bpy.data...inputs[11])
+, ('EmissionColor', bpy.data...inputs[12])
+, ('OutlineColor', bpy.data...inputs[13])
+, ('RimColor', bpy.data...inputs[14])
+, ('RimTexture', bpy.data...inputs[15])
+, ('RimLightingMix', bpy.data...inputs[16])
+, ('RimFresnelPower', bpy.data...inputs[17])
+, ('RimLift', bpy.data...inputs[18])
+, ('CutoffRate', bpy.data...inputs[19])
+, ('BumpScale', bpy.data...inputs[20])
+, ('ReceiveShadowRate', bpy.data...inputs[21])
+, ('ShadeShift', bpy.data...inputs[22])
+, ('ShadeToony', bpy.data...inputs[23])
+, ('ShadingGradeRate', bpy.data...inputs[24])
+, ('LightColorAttenuation', bpy.data...inputs[25])
+, ('IndirectLightIntensity', bpy.data...inputs[26])
+, ('OutlineWidth', bpy.data...inputs[27])
+, ('OutlineScaleMaxDistance', bpy.data...inputs[28])
+, ('OutlineLightingMix', bpy.data...inputs[29])
+, ('OutlineWidthMode', bpy.data...inputs[30])
+, ('OutlineColorMode', bpy.data...inputs[31])
+, ('UV_Scroll_X', bpy.data...inputs[32])
+, ('UV_Scroll_Y', bpy.data...inputs[33])
+, ('UV_Scroll_Rotation', bpy.data...inputs[34])]
+```
+</details>
+<h4>move()</h4>
+<details> <summary> Replの結果。長いため折りたたみ。 </summary>
+``` python-repl
+>>> mtoonNode.inputs.move()
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+TypeError: NodeTreeInputs.move(): required parameter "from_index" not specified
+>>> mtoonNode.inputs.move(4)
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+TypeError: NodeTreeInputs.move(): required parameter "to_index" not specified
+>>> mtoonNode.inputs.move(4, 35)
+>>> mtoonNode.inputs.items()
+[('MainTexture', bpy.data...inputs[0]), ('MainTextureAlpha', bpy.data...inputs[1])
+, ('ShadeTexture', bpy.data...inputs[2])
+, ('ReceiveShadow_Texture_alpha', bpy.data...inputs[3])
+, ('NomalmapTexture', bpy.data...inputs[4])
+, ('ShadingGradeTexture', bpy.data...inputs[5])
+, ('Emission_Texture', bpy.data...inputs[6])
+, ('SphereAddTexture', bpy.data...inputs[7])
+, ('OutlineWidthTexture', bpy.data...inputs[8])
+, ('UV_Animation_Mask_Texture', bpy.data...inputs[9])
+, ('DiffuseColor', bpy.data...inputs[10])
+, ('ShadeColor', bpy.data...inputs[11])
+, ('EmissionColor', bpy.data...inputs[12])
+, ('OutlineColor', bpy.data...inputs[13])
+, ('RimColor', bpy.data...inputs[14])
+, ('RimTexture', bpy.data...inputs[15])
+, ('RimLightingMix', bpy.data...inputs[16])
+, ('RimFresnelPower', bpy.data...inputs[17])
+, ('RimLift', bpy.data...inputs[18])
+, ('CutoffRate', bpy.data...inputs[19])
+, ('BumpScale', bpy.data...inputs[20])
+, ('ReceiveShadowRate', bpy.data...inputs[21])
+, ('ShadeShift', bpy.data...inputs[22])
+, ('ShadeToony', bpy.data...inputs[23])
+, ('ShadingGradeRate', bpy.data...inputs[24])
+, ('LightColorAttenuation', bpy.data...inputs[25])
+, ('IndirectLightIntensity', bpy.data...inputs[26])
+, ('OutlineWidth', bpy.data...inputs[27])
+, ('OutlineScaleMaxDistance', bpy.data...inputs[28])
+, ('OutlineLightingMix', bpy.data...inputs[29])
+, ('OutlineWidthMode', bpy.data...inputs[30])
+, ('OutlineColorMode', bpy.data...inputs[31])
+, ('UV_Scroll_X', bpy.data...inputs[32])
+, ('UV_Scroll_Y', bpy.data...inputs[33])
+, ('UV_Scroll_Rotation', bpy.data...inputs[34])]
+>>> mtoonNode.inputs.values()
+[bpy.data...inputs[0]
+, bpy.data...inputs[1], bpy.data...inputs[2]
+, bpy.data...inputs[3], bpy.data...inputs[4]
+, bpy.data...inputs[5], bpy.data...inputs[6]
+, bpy.data...inputs[7], bpy.data...inputs[8]
+, bpy.data...inputs[9], bpy.data...inputs[10]
+, bpy.data...inputs[11], bpy.data...inputs[12]
+, bpy.data...inputs[13], bpy.data...inputs[14]
+, bpy.data...inputs[15], bpy.data...inputs[16]
+, bpy.data...inputs[17], bpy.data...inputs[18]
+, bpy.data...inputs[19], bpy.data...inputs[20]
+, bpy.data...inputs[21], bpy.data...inputs[22]
+, bpy.data...inputs[23], bpy.data...inputs[24]
+, bpy.data...inputs[25], bpy.data...inputs[26]
+, bpy.data...inputs[27], bpy.data...inputs[28]
+, bpy.data...inputs[29], bpy.data...inputs[30]
+, bpy.data...inputs[31], bpy.data...inputs[32]
+, bpy.data...inputs[33], bpy.data...inputs[34]]
+>>> bpy.data...inputs[1]
+  File "<console>", line 1
+    bpy.data...inputs[1]
+              ^
+SyntaxError: invalid syntax
+>>>
+```
+</details>
+]]></summary>
+</entry>
+<entry>
     <title>VRM_IMPORTER_for_BlenderでVRMモデルを作る際の注意点</title>
     <link href="https://cj-bc.github.io/blog/posts/2020-10-24-blender-vrmImporter-Not-Object-on-origin.html" />
     <id>https://cj-bc.github.io/blog/posts/2020-10-24-blender-vrmImporter-Not-Object-on-origin.html</id>

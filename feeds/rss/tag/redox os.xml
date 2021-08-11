@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>CLI! CLI! CLI!</title>
+        <link>https://cj-bc.github.io/blog</link>
+        <description><![CDATA[Cj-bc's personal blog posts.]]></description>
+        <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/redox%20os.xml" rel="self"
+                   type="application/rss+xml" />
+        <lastBuildDate>Wed, 24 Feb 2021 00:00:00 UT</lastBuildDate>
+        <item>
+    <title>Redox OSとかいう新しいOSが気になった話</title>
+    <link>https://cj-bc.github.io/blog/posts/2021-02-23-redox-os.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>Redox OSとかいう新しいOSが気になった話</h1>
+  <div class="ui list">
+    <div class="item">Posted on February 24, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on February 24, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;redox os&#39;." href="/tags/redox%20os.html" class="ui tag label">redox os</a><a title="All pages tagged &#39;os&#39;." href="/tags/os.html" class="ui tag label">os</a><a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a>
+  
+</div>
+
+<h1>お断り</h1>
+<p>私は一切Redox OSを使ったことがないし、関係者でもなくただ単に「気になってちょっとドキュメントみた」程度なので、 その程度の知識しかないことはご了承ください。</p>
+<h1>redox osとは</h1>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>Redox OS は、Rustで書かれたUNIXライクなオペレーションシステムで、 Rustという革命的手法を、モダンなマイクロカーネルおよび 全てのアプリケーションに持ち込むことを目指しています</p>
+<p>– 公式サイト <a href="https://www.redox-os.org/jp">https://www.redox-os.org/jp</a> より</p>
+</blockquote>
+</div>
+<p>Rust製のマイクロカーネルなOSのようです。</p>
+<p>別段OS(というかカーネル)は何気に色々あるのでそこまで特筆すべきほど驚くか？ と言われると微妙なところではありますが、個人的に面白いなと思ったところを軽く書いておこうと 思います。</p>
+<h1>面白いところ</h1>
+<h2>公式サイトに日本語訳がある</h2>
+<p>これは本当に驚いたところで、感動したところでもあります。</p>
+<p>大体のプロジェクトには日本語なんてないし、そもそも多国語対応している 物の方が少ないと思います。 <del>知らんけど</del></p>
+<p>全てが対応しているわけではないようですが、それでも十分インパクトがありました。</p>
+<p>ちなみにページの情報によると、全部で次のような言語があるようですね。 …読めないものも多い！！</p>
+<ul>
+<li>日本語</li>
+<li>English</li>
+<li>中文</li>
+<li>Español</li>
+<li>Русский</li>
+<li>Français</li>
+<li>Deutsch</li>
+<li>Italiano</li>
+<li>Türkçe</li>
+<li>Svenska</li>
+<li>Nederlands</li>
+<li>Dansk</li>
+<li>Norsk</li>
+<li>Čeština</li>
+<li>Esperanto</li>
+<li>Português</li>
+<li>한국어</li>
+<li>Magyar</li>
+<li>Polski</li>
+<li>Українська</li>
+</ul>
+<p><a href="https://www.jei.or.jp/3pundesiru/">Esperanto</a> があるのは個人的にめちゃくちゃ好き！！！</p>
+<p>人工言語意外と好きなので… (今の推しは <a href="https://mw.lojban.org/index.php?title=Lojban&amp;setlang=ja">lojban</a> ですが。)</p>
+<h2>Rust製である</h2>
+<p>何かと低レイヤーに使われがちな気はしていますが、 カーネルはCが使われるイメージしかなかったのでとても斬新に感じました。</p>
+<p>まぁ多分そうじゃないのもたくさんあるんだろうけど…疎いので…</p>
+<h2>Coreutilとかshellとかエディタとか自作である</h2>
+<p>何気にこれほんとすごいと思います。</p>
+<ul>
+<li><a href="https://gitlab.redox-os.org/redox-os/coreutils">coreutils</a></li>
+<li><a href="https://gitlab.redox-os.org/redox-os/binutils">binutils</a></li>
+<li><a href="https://gitlab.redox-os.org/redox-os/bootloader-efi">bootloader-efi</a></li>
+<li><a href="https://gitlab.redox-os.org/redox-os/ion">ion(shell)</a></li>
+<li><a href="https://gitlab.redox-os.org/redox-os/sodium">sodium(editor)</a></li>
+</ul>
+<h2>独自のshellがある</h2>
+<p>これは自分がshell好きだからでもあるのですが、知らないshellを見るとやっぱりワクワクしますよね… <a href="https://gitlab.redox-os.org/redox-os/ion">ion(shell)</a></p>
+]]></description>
+    <pubDate>Wed, 24 Feb 2021 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2021-02-23-redox-os.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+
+    </channel>
+</rss>

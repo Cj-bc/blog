@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- Python Language Serverにmypyにmypyの設定を追加した</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+        <div id="content" class="ui text container segment">
+            <div class="ui center aligned icon header">
+  <h1>Python Language Serverにmypyにmypyの設定を追加した</h1>
+  <div class="ui list">
+    <div class="item">Posted on February 21, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on February 21, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged 'python'." href="../tags/python.html" class="ui tag label">python</a><a title="All pages tagged '環境構築'." href="../tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89.html" class="ui tag label">環境構築</a>
+  
+</div>
+
+<h1>環境</h1>
+<table>
+<tbody>
+<tr class="odd">
+<td>エディター</td>
+<td>vim</td>
+</tr>
+<tr class="even">
+<td>LSPクライアント</td>
+<td>vim-lsp</td>
+</tr>
+<tr class="odd">
+<td>PythonのLSP</td>
+<td><a href="https://github.com/palantir/python-language-server">https://github.com/palantir/python-language-server</a></td>
+</tr>
+<tr class="even">
+<td>他</td>
+<td><a href="https://github.com/mattn/vim-lsp-settings">mattn/vim-lsp-settings</a> 使用</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1>pyls-mypy</h1>
+<p><em>pyls-mypy</em> はその名前の通り、Pyls(palantir氏のもの)にmypy対応させるプラグインです。</p>
+<p>私は型大好き人間でAnnotationを頻繁に使うため、入れます。</p>
+<h2>Install先</h2>
+<p><em>pyls</em> を <em>vim-lsp-settings</em> で導入しているので、それがインストールしているのと同じ環境に <em>pyls-mypy</em> を入れてあげる 必要があります。</p>
+<p>これは、 <code>XDG_DATA_HOME</code> が設定されていれば <code>XDG_DATA_HOME/vim-lsp-settings/servers</code> 、設定されていなければ <code>~/.local/share/vim-lsp-settings/servers</code> になります。</p>
+<p>又、 <code>pyls</code> 自体はそのディレクトリの下に <code>pyls-all/venv</code> 等としてvenvを作っています。 なので、それを呼べばいいわけです。</p>
+<p>自分用のスクリプトがdotfileにあるのですが、まだcommitしてないので実際の処理部分のみ載せます。 後にリンクに変えるかもしれません。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="va">vimLspSettings_dataDir=</span><span class="st">&quot;</span><span class="va">${XDG_DATA_HOME:-$HOME</span>/.local/share<span class="va">}</span><span class="st">/vim-lsp-settings}&quot;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">[[</span> <span class="ot">-d</span> <span class="va">$vimLspSettings_dataDir</span><span class="kw"> ]]</span> <span class="kw">&amp;&amp;</span> <span class="kw">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    <span class="bu">.</span> <span class="st">&quot;</span><span class="va">${vimLspSettings_dataDir}</span><span class="st">/servers/pyls-all/venv/bin/activate&quot;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="ex">pip</span> install pyls-mypy</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    <span class="ex">deactivate</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="kw">}</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a></span></code></pre></div>
+</div>
+
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

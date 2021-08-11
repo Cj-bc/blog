@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- XMonad.Layoutのリスト</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+        <div id="content" class="ui text container segment">
+            <div class="ui center aligned icon header">
+  <h1>XMonad.Layoutのリスト</h1>
+  <div class="ui list">
+    <div class="item">Posted on May 10, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on August 11, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged 'xmonad'." href="../tags/xmonad.html" class="ui tag label">xmonad</a><a title="All pages tagged 'haskell'." href="../tags/haskell.html" class="ui tag label">haskell</a>
+  
+</div>
+
+<p>xmonadのレイアウトは、 <code>LayoutClass</code> のインスタンスであることが条件になっており、逆にいうと様々な型によって個別に実装されている。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">LayoutClass</span><span class="ot"> ::</span> (<span class="op">*</span> <span class="ot">-&gt;</span> <span class="op">*</span>) <span class="ot">-&gt;</span> <span class="op">*</span> <span class="ot">-&gt;</span> <span class="dt">Constraint</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">class</span> <span class="dt">Show</span> (layout a) <span class="ot">=&gt;</span> <span class="dt">LayoutClass</span> layout a <span class="kw">where</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>      <span class="op">...</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">LayoutClass</span> <span class="dt">Tall</span> a <span class="kw">where</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>      <span class="op">...</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">LayoutClass</span> <span class="dt">Full</span> a</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="op">...</span></span></code></pre></div>
+</div>
+<p>これはつまり、以下のようなことが出来ないことになる</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ot">alist ::</span> <span class="dt">LayoutClass</span> layout a <span class="ot">=&gt;</span> [layout a]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>alist <span class="ot">=</span> [<span class="dt">Full</span>, <span class="dt">Tall</span> def def def]</span></code></pre></div>
+</div>
+<p>これは以下のようなエラーになる</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+example
+</div>
+<pre class="example SourceCode"><code>• Couldn't match type ‘layout’ with ‘Full’
+      ‘layout’ is a rigid type variable bound by
+        the type signature for:
+          alist :: forall (layout :: * -&gt; *) a.
+                   LayoutClass layout a =&gt;
+                   [layout a]
+        at /tmp/vpWQTsV/198/xmonad.hs:125:1-43
+      Expected type: layout a
+        Actual type: Full a
+    • In the expression: Full
+      In the expression: [Full, Tall def def def]
+      In an equation for ‘alist’: alist = [Full, Tall def def def]
+    • Relevant bindings include
+        alist :: [layout a] (bound at /tmp/vpWQTsV/198/xmonad.hs:126:1)
+    |
+126 | alist = [Full, Tall def def def]
+    |          ^^^^
+</code></pre>
+</div>
+<p>私の理解が正しければ、「 <code>Full</code> の型と <code>Tall</code> の型ちゃうやんけ!？？」ってことかなと。 正直よくわからん</p>
+<p><code>Rank2Types</code> 使ってみたけど上手く動かず</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ot">alist ::</span> [<span class="kw">forall</span> l a<span class="op">.</span> (<span class="dt">LayoutClass</span> l a) <span class="ot">=&gt;</span> l a]</span></code></pre></div>
+</div>
+<h2>解法</h2>
+<p><a href="https://hackage.haskell.org/package/xmonad-0.15/docs/src/XMonad.Core.html#Layout">XMonad.Core.Layout</a> を使う。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ot">alist ::</span> [<span class="dt">Layout</span> <span class="dt">Window</span>]</span></code></pre></div>
+</div>
+<p>なら大丈夫</p>
+<p>参考までに</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Layout</span> a <span class="ot">=</span> <span class="kw">forall</span> l<span class="op">.</span> (<span class="dt">LayoutClass</span> l a, <span class="dt">Read</span> (l a)) <span class="ot">=&gt;</span> <span class="dt">Layout</span> (l a)</span></code></pre></div>
+</div>
+
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

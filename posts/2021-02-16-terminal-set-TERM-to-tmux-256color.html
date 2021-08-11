@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- TERMをtmux-256colorにする</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+        <div id="content" class="ui text container segment">
+            <div class="ui center aligned icon header">
+  <h1>TERMをtmux-256colorにする</h1>
+  <div class="ui list">
+    <div class="item">Posted on February 15, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on February 16, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged 'tmux'." href="../tags/tmux.html" class="ui tag label">tmux</a><a title="All pages tagged 'terminal'." href="../tags/terminal.html" class="ui tag label">terminal</a><a title="All pages tagged 'vim'." href="../tags/vim.html" class="ui tag label">vim</a>
+  
+</div>
+
+<h1>なぜやるのか</h1>
+<p>かねてよりmacOSが重くなることに困っていて、 <a href="https://github.com/tmux/tmux/issues/353#issuecomment-202726966">macでtmuxとvimを使うとvimがすごく重くなる</a> を見つけました。</p>
+<p>結果論としては「これがパフォーマンスをよくする」というわけではなさそうでしたが、 とりあえずtmuxを使っているので、揃えることにしました。</p>
+<h1>前提知識</h1>
+<h2>そもそもTERM環境変数とは何か</h2>
+<p><code>$TERM</code> は、ncursesなどが使っている <strong>terminfoライブラリ</strong> の動作に影響する環境変数です。 この変数で「なんの端末を使っているか」を設定し、terminfoライブラリがそれに応じて出力を変えているため、 cursesを使用する開発者は端末の差をあまり考えずに様々な端末に対応したソフトウェアを書くことができるのです。 (エスケープシーケンスとか決めている)</p>
+<p>実は端末エミュレーター(とそもそもの端末)には色々な種類があります。有名どころだと <code>xterm</code>, <code>cygwin</code>, <code>guru</code>, <code>vtシリーズ</code> などでしょうか</p>
+<p>筆者もそこまで詳しくないですが、途方もない数の仕様の端末が存在しています。 それらを共通のインターフェースで扱えるようにするのが <code>terminfo</code>, そして「今使っている端末」を設定するのが <code>TERM</code> 環境変数、ということです。</p>
+<p>ちなみに余談ですが、=terminfo= で使用されるデータはmacの場合、 <code>/usr/share/terminfo</code> に格納されています。</p>
+<h2>terminfoエントリ</h2>
+<p>terminfoエントリは、</p>
+<p><a href="info:terminfo">info:terminfo</a></p>
+<h1>手順</h1>
+<ul>
+<li><a href="#tmux.confで、tmux内でのTERMを設定する">tmux.confで、tmux内でのTERMを設定する</a></li>
+<li><a href="#terminfoエントリーを追加する">(terminfoのエラーが出る場合) terminfoエントリーを追加する</a></li>
+</ul>
+<h2>tmux.confで、tmux内でのTERMを設定する</h2>
+<p><a href="https://github.com/tmux/tmux/issues/353#issuecomment-202726966">前出のリンク</a>で説明されているように、 以下を <code>~/. tmux.conf</code> (または使っているtmux.confファイル)に追加します</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+tmux
+</div>
+<pre class="tmux SourceCode"><code>set -g default-terminal &quot;xterm-256color&quot;
+</code></pre>
+</div>
+<h2>terminfoエントリーを追加する</h2>
+<p>筆者の環境(macOS+homebrew)では、terminfoエントリーがないと怒られてしまいエスケープシーケンスが全く使えなくなりました。</p>
+<p>しかし、実はhomebrewもきちんとterminfoエントリーを作成してくれています。 <code>/usr/local/opt/ncurses/bin/infocmp</code> には作成されたエントリーが保存されているのですが、ここは残念ながら参照されません。</p>
+<p>そこで、<a href="https://github.com/tmux/tmux/issues/1257#issuecomment-581378716">tmuxのissueにあった方法</a> で <code>/usr/bin/infocmp</code> に追加します</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>$ <span class="ex">brew</span> install ncurses</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>$ <span class="ex">/usr/local/opt/ncurses/bin/infocmp</span> tmux-256color <span class="op">&gt;</span> ~/tmux-256color.info</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>$ <span class="ex">tic</span> -xe tmux-256color tmux-256color.info</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="co"># This creates a complied entry in ~/.terminfo</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>$ <span class="ex">infocmp</span> tmux-256color <span class="kw">|</span> <span class="fu">head</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="co">#       Reconstructed via infocmp from file:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="co">#       /Users/libin/.terminfo/74/tmux-256color</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="ex">tmux-256color</span><span class="kw">|</span><span class="ex">tmux</span> with 256 colors,</span></code></pre></div>
+</div>
+<h1>参考リンク</h1>
+<ul>
+<li><a href="https://github.com/tmux/tmux/issues/353#issuecomment-202726966">https://github.com/tmux/tmux/issues/353#issuecomment-202726966</a></li>
+<li><a href="https://chakku.hatenablog.com/entry/2018/07/22/040129">tmux上でtmux-256colorを使用する(mac) – ちゃっくのメモ帳</a></li>
+<li><a href="https://github.com/tmux/tmux/issues/1257#issuecomment-581378716">https://github.com/tmux/tmux/issues/1257#issuecomment-581378716</a></li>
+</ul>
+
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
