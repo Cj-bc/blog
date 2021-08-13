@@ -7,8 +7,200 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/general.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Sat, 24 Jul 2021 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Fri, 13 Aug 2021 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2021-08-13-c-clangd-pass-appropriate-build-flags-clangd-langserver</title>
+    <link>https://cj-bc.github.io/blog/posts/2021-08-13-c-clangd-pass-appropriate-build-flags-clangd-langserver.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>2021-08-13-c-clangd-pass-appropriate-build-flags-clangd-langserver</h1>
+  <div class="ui list">
+    <div class="item">Posted on August 13, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on August 13, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  
+  
+</div>
+
+<h1 data-date="[2021-08-13 Fri 17:43]" data-tags="C clangd lsp" data-blog_post_kind="Knowledge" data-blog_post_progress="Empty" data-blog_post_status="Normal" id="LSPサーバーとして使うclangdにビルドフラグを設定する">LSPサーバーとして使うclangdにビルドフラグを設定する</h1>
+<p>公式ページ: <a href="https://clangd.llvm.org/installation">https://clangd.llvm.org/installation</a></p>
+<div class="tldr">
+<ul>
+<li>同じディレクトリに <code>compile_flags.txt</code> ファイルを作れ</li>
+<li>一行に一フラグずつ書け</li>
+</ul>
+</div>
+<p>C言語(とC++言語)のLSPサーバーに、LLVMプロジェクトの<a href="https://clangd.llvm.org/">clangd</a>があります。 何も設定しないで使おうとすると</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>$ <span class="fu">clang</span> foo.cc</span></code></pre></div>
+</div>
+<p>とビルドされるものと解釈して動きます。 これだと大体のプログラムはフラグが足りないため、 フラグを設定する方法が2通り用意されています。</p>
+<ul>
+<li><code>compile_commands.json</code></li>
+<li><code>compile_flags.txt</code></li>
+</ul>
+<h2 id="compile_commands.json: ビルドツールを使用する場合"><code>compile_commands.json</code>: ビルドツールを使用する場合</h2>
+<p>プロジェクトの中にある各ファイルのコンパイルコマンドを定義できます。 これは基本的にはツールによって生成されます。</p>
+<p><code>clangd</code> は、今編集しているファイルの親ディレクトリに このファイルを探しにいきます。</p>
+<p>下に2つの例を上げていますが、これ以外のツールでも生成出来るものがあるそうです。</p>
+<p>参考: <a href="https://clang.llvm.org/docs/JSONCompilationDatabase.html">compile<sub>commands</sub>.jsonの仕様</a></p>
+<h3 id="CMakeを使っている場合">CMakeを使っている場合</h3>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">cmake</span> -DCMAKE_EXPORT_COMPILE_COMMANDS=1</span></code></pre></div>
+</div>
+<p>とすることで、ビルドディレクトリに <code>compile_commands.json</code> を 出力します。 プロジェクトルートとは異なる場合であった場合は手動で (シムリンクorコピーすることで)移動する必要があります。</p>
+<h3 id="他のビルドツールを使っている場合">他のビルドツールを使っている場合</h3>
+<p><a href="https://github.com/rizsotto/Bear">bear</a>を使用することで様々なビルドツールでも使うことができるようです。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="ex">bear</span> -- &lt;&lt;使用しているビルドコマンド&gt;&gt;</span></code></pre></div>
+</div>
+<p>とすることで、生成できます。 仕組み的には、ビルドコマンドで普通にビルドし、そのログから コンパイラの呼び出しを特定&amp; <code>compile_commands.json</code> を作るようです。</p>
+<p>(READMEを雑に読んだ程度の知識)</p>
+<h2 id="compile_flags.txt: 手動ビルド、若しくはフラグが少ない場合"><code>compile_flags.txt</code>: 手動ビルド、若しくはフラグが少ない場合</h2>
+<p>手動でのビルドをしている場合や、フラグが少ない場合は <code>compile_flags.txt</code> を使う方が楽でしょう。</p>
+<p>但し <strong>同じディレクトリにある全てのソースに対して同じフラグが設定される</strong> ので注意が必要です。</p>
+<p>このファイルはシンプルな構文で、一行に一つフラグを記入するだけです。</p>
+<p>例えばgtk4を用いて以下のようにコンパイルしていた場合:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb4" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="fu">clang</span> <span class="va">$(</span><span class="ex">pkg-config</span> --cflags gtk4<span class="va">)</span> -o somefile somefile.c <span class="va">$(</span><span class="ex">pkg-config</span> --libs gtk4<span class="va">)</span></span></code></pre></div>
+</div>
+<p>以下のようにしてあげれば良いでしょう。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb5" data-org-language="sh" data-resuts="outputs raw"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ex">pkg-config</span> --cflags --libs gtk4 <span class="kw">|</span> <span class="fu">tr</span> <span class="st">&#39; &#39;</span> <span class="st">&#39;\n&#39;</span></span></code></pre></div>
+</div>
+<table>
+<tbody>
+<tr class="odd">
+<td>-I/usr/include/gtk-4.0</td>
+</tr>
+<tr class="even">
+<td>-I/usr/include/pango-1.0</td>
+</tr>
+<tr class="odd">
+<td>-I/usr/include/glib-2.0</td>
+</tr>
+<tr class="even">
+<td>-I/usr/lib/glib-2.0/include</td>
+</tr>
+<tr class="odd">
+<td>-I/usr/include/harfbuzz</td>
+</tr>
+<tr class="even">
+<td>-I/usr/include/freetype2</td>
+</tr>
+<tr class="odd">
+<td>-I/usr/include/libpng16</td>
+</tr>
+<tr class="even">
+<td>-I/usr/include/libmount</td>
+</tr>
+<tr class="odd">
+<td>-I/usr/include/blkid</td>
+</tr>
+<tr class="even">
+<td>-I/usr/include/fribidi</td>
+</tr>
+<tr class="odd">
+<td>-I/usr/include/cairo</td>
+</tr>
+<tr class="even">
+<td>-I/usr/include/lzo</td>
+</tr>
+<tr class="odd">
+<td>-I/usr/include/pixman-1</td>
+</tr>
+<tr class="even">
+<td>-I/usr/include/gdk-pixbuf-2.0</td>
+</tr>
+<tr class="odd">
+<td>-I/usr/include/graphene-1.0</td>
+</tr>
+<tr class="even">
+<td>-I/usr/lib/graphene-1.0/include</td>
+</tr>
+<tr class="odd">
+<td>-mfpmath=sse</td>
+</tr>
+<tr class="even">
+<td>-msse</td>
+</tr>
+<tr class="odd">
+<td>-msse2</td>
+</tr>
+<tr class="even">
+<td>-I/usr/include/gio-unix-2.0</td>
+</tr>
+<tr class="odd">
+<td>-pthread</td>
+</tr>
+<tr class="even">
+<td>-lgtk-4</td>
+</tr>
+<tr class="odd">
+<td>-lpangocairo-1.0</td>
+</tr>
+<tr class="even">
+<td>-lpango-1.0</td>
+</tr>
+<tr class="odd">
+<td>-lharfbuzz</td>
+</tr>
+<tr class="even">
+<td>-lgdk<sub>pixbuf</sub>-2.0</td>
+</tr>
+<tr class="odd">
+<td>-lcairo-gobject</td>
+</tr>
+<tr class="even">
+<td>-lcairo</td>
+</tr>
+<tr class="odd">
+<td>-lvulkan</td>
+</tr>
+<tr class="even">
+<td>-lgraphene-1.0</td>
+</tr>
+<tr class="odd">
+<td>-lgio-2.0</td>
+</tr>
+<tr class="even">
+<td>-lgobject-2.0</td>
+</tr>
+<tr class="odd">
+<td>-lglib-2.0</td>
+</tr>
+<tr class="even">
+<td></td>
+</tr>
+</tbody>
+</table>
+]]></description>
+    <pubDate>Fri, 13 Aug 2021 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2021-08-13-c-clangd-pass-appropriate-build-flags-clangd-langserver.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2021-07-24-diary-allelosphere-vol1</title>
     <link>https://cj-bc.github.io/blog/posts/2021-07-24-diary-allelosphere-vol1.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
@@ -967,86 +1159,6 @@ vim
 ]]></description>
     <pubDate>Tue, 02 Mar 2021 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2021-03-02-vim-vim9script-struggling-memo-v8.2_1-2560.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>Redox OSとかいう新しいOSが気になった話</title>
-    <link>https://cj-bc.github.io/blog/posts/2021-02-23-redox-os.html</link>
-    <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>Redox OSとかいう新しいOSが気になった話</h1>
-  <div class="ui list">
-    <div class="item">Posted on February 24, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on February 24, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;redox os&#39;." href="/tags/redox%20os.html" class="ui tag label">redox os</a><a title="All pages tagged &#39;os&#39;." href="/tags/os.html" class="ui tag label">os</a><a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a>
-  
-</div>
-
-<h1 id="お断り">お断り</h1>
-<p>私は一切Redox OSを使ったことがないし、関係者でもなくただ単に「気になってちょっとドキュメントみた」程度なので、 その程度の知識しかないことはご了承ください。</p>
-<h1 id="redox osとは">redox osとは</h1>
-<div class="ui piled segment" style="z-index: 0">
-<blockquote>
-<p>Redox OS は、Rustで書かれたUNIXライクなオペレーションシステムで、 Rustという革命的手法を、モダンなマイクロカーネルおよび 全てのアプリケーションに持ち込むことを目指しています</p>
-<p>– 公式サイト <a href="https://www.redox-os.org/jp">https://www.redox-os.org/jp</a> より</p>
-</blockquote>
-</div>
-<p>Rust製のマイクロカーネルなOSのようです。</p>
-<p>別段OS(というかカーネル)は何気に色々あるのでそこまで特筆すべきほど驚くか？ と言われると微妙なところではありますが、個人的に面白いなと思ったところを軽く書いておこうと 思います。</p>
-<h1 id="面白いところ">面白いところ</h1>
-<h2 id="公式サイトに日本語訳がある">公式サイトに日本語訳がある</h2>
-<p>これは本当に驚いたところで、感動したところでもあります。</p>
-<p>大体のプロジェクトには日本語なんてないし、そもそも多国語対応している 物の方が少ないと思います。 <del>知らんけど</del></p>
-<p>全てが対応しているわけではないようですが、それでも十分インパクトがありました。</p>
-<p>ちなみにページの情報によると、全部で次のような言語があるようですね。 …読めないものも多い！！</p>
-<ul>
-<li>日本語</li>
-<li>English</li>
-<li>中文</li>
-<li>Español</li>
-<li>Русский</li>
-<li>Français</li>
-<li>Deutsch</li>
-<li>Italiano</li>
-<li>Türkçe</li>
-<li>Svenska</li>
-<li>Nederlands</li>
-<li>Dansk</li>
-<li>Norsk</li>
-<li>Čeština</li>
-<li>Esperanto</li>
-<li>Português</li>
-<li>한국어</li>
-<li>Magyar</li>
-<li>Polski</li>
-<li>Українська</li>
-</ul>
-<p><a href="https://www.jei.or.jp/3pundesiru/">Esperanto</a> があるのは個人的にめちゃくちゃ好き！！！</p>
-<p>人工言語意外と好きなので… (今の推しは <a href="https://mw.lojban.org/index.php?title=Lojban&amp;setlang=ja">lojban</a> ですが。)</p>
-<h2 id="Rust製である">Rust製である</h2>
-<p>何かと低レイヤーに使われがちな気はしていますが、 カーネルはCが使われるイメージしかなかったのでとても斬新に感じました。</p>
-<p>まぁ多分そうじゃないのもたくさんあるんだろうけど…疎いので…</p>
-<h2 id="Coreutilとかshellとかエディタとか自作である">Coreutilとかshellとかエディタとか自作である</h2>
-<p>何気にこれほんとすごいと思います。</p>
-<ul>
-<li><a href="https://gitlab.redox-os.org/redox-os/coreutils">coreutils</a></li>
-<li><a href="https://gitlab.redox-os.org/redox-os/binutils">binutils</a></li>
-<li><a href="https://gitlab.redox-os.org/redox-os/bootloader-efi">bootloader-efi</a></li>
-<li><a href="https://gitlab.redox-os.org/redox-os/ion">ion(shell)</a></li>
-<li><a href="https://gitlab.redox-os.org/redox-os/sodium">sodium(editor)</a></li>
-</ul>
-<h2 id="独自のshellがある">独自のshellがある</h2>
-<p>これは自分がshell好きだからでもあるのですが、知らないshellを見るとやっぱりワクワクしますよね… <a href="https://gitlab.redox-os.org/redox-os/ion">ion(shell)</a></p>
-]]></description>
-    <pubDate>Wed, 24 Feb 2021 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2021-02-23-redox-os.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
