@@ -1,0 +1,22 @@
+* gtkを触りはじめてみたメモ
+  :PROPERTIES:
+  :DATE: [2021-08-14 Sat 01:22]
+  :TAGS: :Gtk:
+  :BLOG_POST_KIND: Memo
+  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2021-08-14 Sat 01:22]--[2021-08-14 Sat 01:25] =>  0:03
+  :END:
+  
+  一応 [[https://hackage.haskell.org/package/gi-gtk-4.0.4][haskellのgi-gtkバインディング]]を使えるようになることが最終目標だが、
+  まずはCでのサンプルを実装してみている
+  
+** 基本的な仕組み
+   + 基本的には ~GtkWidget~ を ~Container~ に入れてゆく
+   + ~signal~ にたいしてコールバック関数を与えてやる。
+   + トップレベルは ~GtkApplication~ で、その中に ~GtkWindow~ を入れる。
+   + ~gpointer~ は ~*void~ と同値。なので何でも入れられる
+
+   
