@@ -1,0 +1,126 @@
+* LSPサーバーとして使うclangdにビルドフラグを設定する
+  :PROPERTIES:
+  :DATE: [2021-08-13 Fri 17:43]
+  :TAGS: C clangd lsp
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2021-08-13 Fri 17:45]--[2021-08-13 Fri 18:11] =>  0:26
+  :END:
+
+  公式ページ: https://clangd.llvm.org/installation
+
+  #+begin_tldr
+  + 同じディレクトリに =compile_flags.txt= ファイルを作れ
+  + 一行に一フラグずつ書け
+  #+end_tldr
+  
+  C言語(とC++言語)のLSPサーバーに、LLVMプロジェクトの[[https://clangd.llvm.org/][clangd]]があります。  
+  何も設定しないで使おうとすると
+
+  #+begin_src sh
+    $ clang foo.cc
+  #+end_src
+
+  とビルドされるものと解釈して動きます。
+  これだと大体のプログラムはフラグが足りないため、
+  フラグを設定する方法が2通り用意されています。
+
+  + ~compile_commands.json~
+  + ~compile_flags.txt~
+  
+** ~compile_commands.json~: ビルドツールを使用する場合
+   プロジェクトの中にある各ファイルのコンパイルコマンドを定義できます。
+   これは基本的にはツールによって生成されます。
+
+   =clangd= は、今編集しているファイルの親ディレクトリに
+   このファイルを探しにいきます。
+
+   下に2つの例を上げていますが、これ以外のツールでも生成出来るものがあるそうです。
+   
+   参考: [[https://clang.llvm.org/docs/JSONCompilationDatabase.html][compile_commands.jsonの仕様]]
+   
+*** CMakeを使っている場合
+    #+begin_src sh
+      cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+    #+end_src
+
+    とすることで、ビルドディレクトリに ~compile_commands.json~ を
+    出力します。
+    プロジェクトルートとは異なる場合であった場合は手動で
+    (シムリンクorコピーすることで)移動する必要があります。
+    
+*** 他のビルドツールを使っている場合
+    [[https://github.com/rizsotto/Bear][bear]]を使用することで様々なビルドツールでも使うことができるようです。
+
+    #+begin_src sh
+      bear -- <<使用しているビルドコマンド>>
+    #+end_src
+    
+    とすることで、生成できます。
+    仕組み的には、ビルドコマンドで普通にビルドし、そのログから
+    コンパイラの呼び出しを特定& ~compile_commands.json~ を作るようです。
+
+    (READMEを雑に読んだ程度の知識)
+   
+    
+** ~compile_flags.txt~: 手動ビルド、若しくはフラグが少ない場合
+   手動でのビルドをしている場合や、フラグが少ない場合は ~compile_flags.txt~
+   を使う方が楽でしょう。
+
+   但し *同じディレクトリにある全てのソースに対して同じフラグが設定される*
+   ので注意が必要です。
+
+   このファイルはシンプルな構文で、一行に一つフラグを記入するだけです。
+   
+   例えばgtk4を用いて以下のようにコンパイルしていた場合:
+
+   #+begin_src sh
+     clang $(pkg-config --cflags gtk4) -o somefile somefile.c $(pkg-config --libs gtk4)
+   #+end_src
+
+   以下のようにしてあげれば良いでしょう。
+
+   #+begin_src sh :resuts outputs raw
+     pkg-config --cflags --libs gtk4 | tr ' ' '\n'
+   #+end_src
+
+   #+RESULTS:
+   | -I/usr/include/gtk-4.0          |
+   | -I/usr/include/pango-1.0        |
+   | -I/usr/include/glib-2.0         |
+   | -I/usr/lib/glib-2.0/include     |
+   | -I/usr/include/harfbuzz         |
+   | -I/usr/include/freetype2        |
+   | -I/usr/include/libpng16         |
+   | -I/usr/include/libmount         |
+   | -I/usr/include/blkid            |
+   | -I/usr/include/fribidi          |
+   | -I/usr/include/cairo            |
+   | -I/usr/include/lzo              |
+   | -I/usr/include/pixman-1         |
+   | -I/usr/include/gdk-pixbuf-2.0   |
+   | -I/usr/include/graphene-1.0     |
+   | -I/usr/lib/graphene-1.0/include |
+   | -mfpmath=sse                    |
+   | -msse                           |
+   | -msse2                          |
+   | -I/usr/include/gio-unix-2.0     |
+   | -pthread                        |
+   | -lgtk-4                         |
+   | -lpangocairo-1.0                |
+   | -lpango-1.0                     |
+   | -lharfbuzz                      |
+   | -lgdk_pixbuf-2.0                |
+   | -lcairo-gobject                 |
+   | -lcairo                         |
+   | -lvulkan                        |
+   | -lgraphene-1.0                  |
+   | -lgio-2.0                       |
+   | -lgobject-2.0                   |
+   | -lglib-2.0                      |
+   |                                 |
+
+
