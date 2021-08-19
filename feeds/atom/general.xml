@@ -8,8 +8,125 @@
         <name>Cj-bc a.k.a Cj.BC_SD</name>
         <email>cj.bc-sd@outlook.jp</email>
     </author>
-    <updated>2021-08-14T00:00:00Z</updated>
+    <updated>2021-08-19T00:00:00Z</updated>
     <entry>
+    <title>2021-08-19-github-use-github-actions-to-auto-release-binaries</title>
+    <link href="https://cj-bc.github.io/blog/posts/2021-08-19-github-use-github-actions-to-auto-release-binaries.html" />
+    <id>https://cj-bc.github.io/blog/posts/2021-08-19-github-use-github-actions-to-auto-release-binaries.html</id>
+    <published>2021-08-19T00:00:00Z</published>
+    <updated>2021-08-19T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>2021-08-19-github-use-github-actions-to-auto-release-binaries</h1>
+  <div class="ui list">
+    <div class="item">Posted on August 19, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on August 20, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  
+  
+</div>
+
+<h1 data-date="[2021-08-19 Thu 21:21]" data-tags=":haskell:" data-blog_post_kind="HowTo" data-blog_post_progress="WIP" data-blog_post_status="Normal" id="Github actionsでStackを使用した実行ファイルのバイナリを自動生成">Github actionsでStackを使用した実行ファイルのバイナリを自動生成</h1>
+<p>ghq:Cj-bc/oschark を作っている際、installationを書く上で 「どうせならバイナリ用意しておくか」と思ったので作業したメモ。</p>
+<h2 id="全体像">全体像</h2>
+<p>最終的にやりたいこと: Github actionsを用いてバイナリを配付する</p>
+<ol>
+<li>手動で実行できる「ビルドする」 Actionを作る</li>
+<li>ビルドしたものをリリースに載せられるようにする</li>
+<li>リリース時をトリガーとしてGithub Actionを稼動させる</li>
+<li>複数プラットフォームそれぞれ用のバイナリを用意する</li>
+</ol>
+<h2 id="1. 手動で実行できる「ビルドする」ACtionを作る">1. 手動で実行できる「ビルドする」ACtionを作る</h2>
+<p>Haskell(stack)の環境をセットアップし、ビルドする。</p>
+<p>stackの環境は、元々は公式にあったが現在は廃止され、 <a href="https://github.com/haskell/actions/tree/main/setup">haskell/actions</a> に移動されて管理されている。</p>
+<p>デフォルトではcabalの環境あセットアップされる。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+yaml
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> haskell/actions/setup@v1</span></span></code></pre></div>
+</div>
+<p>Stackを使いたい場合、 <code>enable-stack</code> を有効化する。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+yaml
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="at">   </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> haskell/actions/setup@v1</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="at">  </span><span class="fu">enable-stack</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code></pre></div>
+</div>
+<h2 id="2. ビルドしたものをリリースに載せられるようにする">2. ビルドしたものをリリースに載せられるようにする</h2>
+<p>ビルドしても、このままだと海のもずくに消えてしまいます。 なので、これをリリースに付属させる処理をします。</p>
+<p>公式の <a href="https://github.com/actions/create-release">actions/create-release</a>が昔はあったようですが、 2021年8月19日現在ではアーカイブされてしまっているので、 そこで提案されている他のアクションを使うことにしました。</p>
+<p>今回は、仕様や書き方等を軽く見た結果 <a href="https://github.com/softprops/action-gh-release">softprops/action-gh-release</a> を 使ってみることにしました。</p>
+<p>主な理由は</p>
+<ul>
+<li>設定が一番シンプルそう</li>
+<li>複数のファイルをアタッチできるから</li>
+</ul>
+<p>の2点です(特に1点目でかなり差がついた)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+yaml
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="at">   </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> softprops/action-gh-release</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="at">  </span><span class="fu">prerelease</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="at">  </span><span class="fu">files</span><span class="kw">:</span><span class="at"> |	     oschark</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="at">    LICENSE</span></span></code></pre></div>
+</div>
+<p>これだけで、 <code>oschark</code> と <code>LICENSE</code> という名前のファイルが リリースに含まれるようになります。</p>
+<p>ただ、 <code>stack build</code> しただけの状態だとファイルのパスが分からないため <code>find</code> で探して移動しておいた方が良いです。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+yaml
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="at">   </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="at">     </span><span class="kw">-</span><span class="at"> ...</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> find .stack-work/install -name oschark -exec mv {} . \;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> softprops/action-gh-release</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="co">...</span></span></code></pre></div>
+</div>
+<h2 id="3. リリース時をトリガーとしてGithub Actionを稼動させる">3. リリース時をトリガーとしてGithub Actionを稼動させる</h2>
+<p>これは一般的な方法をそのままで使います。 但し、cabalのバージョニング(厳密には<a href="https://pvp.haskell.org/?rdfrom=https%3A%2F%2Fwiki.haskell.org%2Findex.php%3Ftitle%3DPackage_versioning_policy%26redirect%3Dno">Haskell Package Versioning Policy</a>) に従うタグの形式に変えてあります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+yaml
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="at">   </span><span class="fu">on</span><span class="kw">:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="at">     </span><span class="fu">push</span><span class="kw">:</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="fu">tags</span><span class="kw">:</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;*.*.*.*&quot;</span></span></code></pre></div>
+</div>
+<h2 id="4. 複数プラットフォームそれぞれ用のバイナリを用意する">4. 複数プラットフォームそれぞれ用のバイナリを用意する</h2>
+<p>せっかくなのでLinux/macOS/Windowsそれぞれのバイナリを提供してみることに します。</p>
+<p>このためには <a href="https://docs.github.com/ja/actions/reference/workflow-syntax-for-github-actions#">matrix</a>を使います(リンクは直貼りできなかった)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+yaml
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="at">   </span><span class="fu">jobs</span><span class="kw">:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="at">     </span><span class="fu">build</span><span class="kw">:</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="fu">strategy</span><span class="kw">:</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="at">  </span><span class="fu">matrix</span><span class="kw">:</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a><span class="at">    </span><span class="fu">foo</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">bar</span><span class="kw">,</span><span class="at"> baz</span><span class="kw">,</span><span class="at"> fizz</span><span class="kw">]</span></span></code></pre></div>
+</div>
+<p>matrixを含むstrategyは、各jobの直下に書かれます(<code>jobs.&lt;job_id&gt;.strategy.matrix</code>)</p>
+<p>matrixは、値にリストを取る辞書型の値を取ります。 辞書のキーがmatrix内でのプロパティになり値のリストがそれぞれ挿入されることになります。 ここで定義したプロパティは <code>${{matrix.&lt;key&gt;}}</code> で参照することができます。 上記の例の場合は <code>${{matrix.foo}}</code> となります。</p>
+<p>これを</p>
+<h3 id="artifactを使って各バイナリを保存する">artifactを使って各バイナリを保存する</h3>
+]]></summary>
+</entry>
+<entry>
     <title>2021-08-14-gtk-learning</title>
     <link href="https://cj-bc.github.io/blog/posts/2021-08-14-gtk-learning.html" />
     <id>https://cj-bc.github.io/blog/posts/2021-08-14-gtk-learning.html</id>
@@ -1051,81 +1168,6 @@ bash
 <h1 id="最終的に出来たもの">最終的に出来たもの</h1>
 <p><a href="https://github.com/Cj-bc/dotfiles/blob/master/dotfiles/bin/git-credential-pass">Cj-bc/dotfiles – dotfiles/bin/git-credential-pass</a> にあります。</p>
 <p>このポストから <code>org tangle</code> しようとしたのですが、諸々(関数化したりetc)上手く出来なかったのでtangleではないです 実用的なスクリプトとしてはそちらを参照して下さい</p>
-]]></summary>
-</entry>
-<entry>
-    <title>うちのlightdmのログインループはxmonadが原因だった</title>
-    <link href="https://cj-bc.github.io/blog/posts/2021-04-12-lightdm-login-loop-was-caused-by-xmonad.html" />
-    <id>https://cj-bc.github.io/blog/posts/2021-04-12-lightdm-login-loop-was-caused-by-xmonad.html</id>
-    <published>2021-04-12T00:00:00Z</published>
-    <updated>2021-04-12T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>うちのlightdmのログインループはxmonadが原因だった</h1>
-  <div class="ui list">
-    <div class="item">Posted on April 12, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on May 11, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;lightdm&#39;." href="/tags/lightdm.html" class="ui tag label">lightdm</a><a title="All pages tagged &#39;xmonad&#39;." href="/tags/xmonad.html" class="ui tag label">xmonad</a><a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a>
-  
-</div>
-
-<h1 id="起きていたこと">起きていたこと</h1>
-<p><code>pacman -Syu</code> して再起動した後、=light DM= できちんとログインしても <code>light DM</code> が再度呼び出されてしまう問題があった。</p>
-<p>調べた所、色々な要因があるようだがどれも私のケースではなかった。 私のケースで問題だったのは、 「 <strong>コンパイル済みのxmonadが要求するライブラリが、アップデートによって消えていた</strong> 」 ことだった。</p>
-<p>xmonadはユーザーの書いた <code>/.xmonad/xmonad.hs</code> をコンパイルして動くが、そのバイナリはいくつかの動的ライブラリを参照している。 ~pacman -Syu~の際、(例えば <code>xmonad-contrib</code> など)がアップデートされると動的ライブラリのパスが変わってしまう。 それにより、xmonadが読みにいこうとしたライブラリが存在しなくなり、エラーが起きる。 エラーのせいでxmonadが立ち上がらないため、lightdmは「Window managerが終了した」と判断(しているのか正確には知らないが)し、またログイン画面に戻ってくる。</p>
-<h1 id="直し方">直し方</h1>
-<ol>
-<li><code>light DM</code> の画面で <code>Alt+Control+F1</code> でGUI環境を抜け、CUIを開く。</li>
-<li><code>Alt+F2</code> をし、新しいターミナルを開きそこからログインする。</li>
-<li><code>xmonad --recompile</code> する</li>
-<li><code>Alt+Control+F7</code> でGUI環境に戻り、ログインを試すと入れるはず。</li>
-</ol>
-<h1 id="他に考えられる原因">他に考えられる原因</h1>
-<p><a href="https://askubuntu.com/questions/223501/ubuntu-gets-stuck-in-a-login-loop">色々調べる途中で見付けたaskubuntuのスレッド</a> で、ありうる原因として挙げられていたものたち:</p>
-<ul>
-<li>indicator-multiloadをインストールしたのが原因だった</li>
-<li>flatpakが原因だった</li>
-<li>~/.Xauthorityの所有者が自分ではない</li>
-<li>~/.ICEauthorityの所有者が自分ではない（場合によっては必要なファイル、うちにはなかった）</li>
-<li>/tmpのパーミッションが777&amp;&amp;file mode bitがt</li>
-<li>sudo startxした（これのせいで~/.Xauthorityの所有者が変わってしまう模様）</li>
-<li>Nvidiaの公式サイトから落としたドライバーが、きちんとテストされてないことがあるらしい</li>
-<li>~/.profileにtypoや構文ミスがある</li>
-<li>容量不足</li>
-</ul>
-<h1 id="おまけ: xmonadを、関連パッケージがアップデートされる度に自動リビルドさせる。">おまけ: xmonadを、関連パッケージがアップデートされる度に自動リビルドさせる。</h1>
-<p>このためには、pacmanのhook機能が使える。 pacmanのhookは、指定した条件に合致した場合に指定した内容を実行する仕組みである。 ファイルは(多分)ini形式で書かれ、デフォルトでは <code>/etc/pacman.d/hooks</code> 以下に配置される。</p>
-<p>ここでは簡単に、必要最低限の解説だけする。 hookの書き方について詳しくは <a href="man:alpm-hooks">man:alpm-hooks</a> を参照してほしい。</p>
-<p>先に完成形はこちら(最新版は <a href="github:Cj-bc/dotfiles">github:Cj-bc/dotfiles</a> の <code>dotfiles/pacman/hooks/xmonad.hook</code>)</p>
-<p>尚、 <strong>このhookはまだテストされていません</strong> (アップデートを実行した直後に書いたため)</p>
-<p>[2021-05-02]: <code>pacman -Syu</code> 何度か試していますが多分動いている…?エラーが出てる気もする…</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-dosini
-</div>
-<pre class="dosini SourceCode"><code>[Trigger]
-Operation = Upgrade
-Type = Package
-Target = xmonad*
-Target = haskell-*
-
-[Action]
-Description = Rebuild xmonad to prevent login loop
-Exec = xmonad --recompile
-When = PostTransaction
-</code></pre>
-</div>
-<h2 id="pacman hookの作り">pacman hookの作り</h2>
-<p>pacman hookは <code>[Trigger]</code> と <code>[Action]</code> の二つのブロックから構成される。 <code>[Trigger]</code> で「そのHookが実行される条件」を指定し、 <code>[Action]</code> で実行する内容を指定する。</p>
-<p><code>Operation</code> で指定された操作が、 <code>Target</code> に一致するファイル・パッケージに対して実行された時にhookが実行される。</p>
-<p>このhookの場合は、 <code>xmonad*</code> 若しくは <code>haskell-*</code> という名前のパッケージがUpgradeされた時、Upgrade処理が終わった後に <code>xmonad --recompile</code> を実行する。</p>
 ]]></summary>
 </entry>
 
