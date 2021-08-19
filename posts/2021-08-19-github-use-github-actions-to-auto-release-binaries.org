@@ -1,0 +1,132 @@
+* Github actionsでStackを使用した実行ファイルのバイナリを自動生成
+  :PROPERTIES:
+  :DATE: [2021-08-19 Thu 21:21]
+  :TAGS: :haskell:
+  :BLOG_POST_KIND: HowTo
+  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2021-08-19 Thu 22:05]--[2021-08-19 Fri 23:00] =>  0:55
+  CLOCK: [2021-08-19 Thu 21:44]--[2021-08-19 Thu 22:00] =>  0:16
+  :END:
+  
+  ghq:Cj-bc/oschark を作っている際、installationを書く上で
+  「どうせならバイナリ用意しておくか」と思ったので作業したメモ。
+
+  
+** 全体像
+
+   最終的にやりたいこと: Github actionsを用いてバイナリを配付する
+
+   1. 手動で実行できる「ビルドする」 Actionを作る
+   2. ビルドしたものをリリースに載せられるようにする
+   3. リリース時をトリガーとしてGithub Actionを稼動させる
+   4. 複数プラットフォームそれぞれ用のバイナリを用意する
+
+
+** 1. 手動で実行できる「ビルドする」ACtionを作る
+
+   Haskell(stack)の環境をセットアップし、ビルドする。
+
+   stackの環境は、元々は公式にあったが現在は廃止され、
+   [[https://github.com/haskell/actions/tree/main/setup][haskell/actions]] に移動されて管理されている。
+    
+   デフォルトではcabalの環境あセットアップされる。
+   
+   #+begin_src yaml
+     steps:
+       - uses: haskell/actions/setup@v1
+   #+end_src
+
+   Stackを使いたい場合、 ~enable-stack~ を有効化する。
+
+   #+begin_src yaml
+     steps:
+       - uses: haskell/actions/setup@v1
+	 with:
+	   enable-stack: true
+   #+end_src
+
+** 2. ビルドしたものをリリースに載せられるようにする
+
+   ビルドしても、このままだと海のもずくに消えてしまいます。
+   なので、これをリリースに付属させる処理をします。
+
+   公式の [[https://github.com/actions/create-release][actions/create-release]]が昔はあったようですが、
+   2021年8月19日現在ではアーカイブされてしまっているので、
+   そこで提案されている他のアクションを使うことにしました。
+
+   今回は、仕様や書き方等を軽く見た結果 [[https://github.com/softprops/action-gh-release][softprops/action-gh-release]] を
+   使ってみることにしました。
+
+   主な理由は
+
+   + 設定が一番シンプルそう
+   + 複数のファイルをアタッチできるから
+
+
+   の2点です(特に1点目でかなり差がついた)
+   
+   #+begin_src yaml
+     steps:
+       - uses: softprops/action-gh-release
+	 with:
+	   prerelease: true
+	   files: |	     oschark
+	     LICENSE
+   #+end_src
+
+   これだけで、 ~oschark~ と ~LICENSE~ という名前のファイルが
+   リリースに含まれるようになります。
+
+   ただ、 ~stack build~ しただけの状態だとファイルのパスが分からないため
+   ~find~ で探して移動しておいた方が良いです。
+
+   #+begin_src yaml
+     steps:
+       - ...
+       - run: find .stack-work/install -name oschark -exec mv {} . \;
+       - uses: softprops/action-gh-release
+	 ...
+   #+end_src
+
+   
+   
+** 3. リリース時をトリガーとしてGithub Actionを稼動させる
+   これは一般的な方法をそのままで使います。
+   但し、cabalのバージョニング(厳密には[[https://pvp.haskell.org/?rdfrom=https%3A%2F%2Fwiki.haskell.org%2Findex.php%3Ftitle%3DPackage_versioning_policy%26redirect%3Dno][Haskell Package Versioning Policy]])
+   に従うタグの形式に変えてあります。
+
+   #+begin_src yaml
+     on:
+       push:
+	 tags:
+	   - "*.*.*.*"
+   #+end_src
+
+   
+** 4. 複数プラットフォームそれぞれ用のバイナリを用意する
+   せっかくなのでLinux/macOS/Windowsそれぞれのバイナリを提供してみることに
+   します。
+
+   このためには [[https://docs.github.com/ja/actions/reference/workflow-syntax-for-github-actions#][matrix]]を使います(リンクは直貼りできなかった)
+   
+   #+begin_src yaml
+     jobs:
+       build:
+	 strategy:
+	   matrix:
+	     foo: [bar, baz, fizz]
+   #+end_src
+
+   matrixを含むstrategyは、各jobの直下に書かれます(~jobs.<job_id>.strategy.matrix~)
+
+   matrixは、値にリストを取る辞書型の値を取ります。
+   辞書のキーがmatrix内でのプロパティになり値のリストがそれぞれ挿入されることになります。
+   ここで定義したプロパティは ~${{matrix.<key>}}~ で参照することができます。
+   上記の例の場合は ~${{matrix.foo}}~ となります。
+   
+   これを
+   
+*** artifactを使って各バイナリを保存する
