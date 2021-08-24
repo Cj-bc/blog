@@ -1,0 +1,174 @@
+* XMonadのLayoutからWindowのプロパティにアクセスする
+  :PROPERTIES:
+  :DATE: [2021-08-24 Tue 14:58]
+  :TAGS: :xmonad:
+  :BLOG_POST_KIND: HowTo
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2021-08-24 Tue 18:42]--[2021-08-24 Tue 19:54] =>  1:12
+  CLOCK: [2021-08-24 Tue 17:25]--[2021-08-24 Tue 17:48] =>  0:23
+  CLOCK: [2021-08-24 Tue 15:01]--[2021-08-24 Tue 16:23] =>  1:22
+  :END:
+  
+** Tl;Dr
+
+   + ~LayoutClass~ のインスタンスの定義で、 ~a~ を ~Window~ に固定する
+     + どこかに影響あるかもしれない、未確認
+   + ~doLayout~ の中で ~Query~ を使ってあげる
+   
+** モチベーション
+   ダッシュボードとして機能するworkspaceを作成したい。
+   なので所定の位置に各アプリケーションが配置されてほしいが、
+   何もしない状態だと各アプリケーションのタイトル(~WM_NAME~)等には
+   アクセスできず判断できない。
+
+   なんとかならないものか
+   
+   
+** ManageHookを参考にする
+   managehookでは、ウィンドウのプロパティにアクセスして制御を行っている。
+
+   #+begin_src haskell
+     title "This is example emacs" --> doShift "Editor"
+   #+end_src
+
+   など。
+   ここにヒントを得れば何らかの方法がありそうだなと検討が付く
+
+** ~Query~ を探る
+
+   managehookで使われているのは ~Query~ という型。これは ~X~ を基底
+   モナドに持つ ~ReaderT~ で、 ~runQuery~ で実行することで ~X a~ を
+   戻り値として取ることができる。
+   
+   [[https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-Core.html#t:Query][~Query~ と ~runQuery~ の実装]]は以下
+   
+   #+NAME: ~Query~ と ~runQuery~ の実装
+   #+begin_src haskell
+     newtype Query a = Query (ReaderT Window X a)
+	 deriving (Functor, Applicative, Monad, MonadReader Window, MonadIO)
+
+     runQuery :: Query a -> Window -> X a
+     runQuery (Query m) w = runReaderT m w
+   #+end_src
+
+   さて...どうやらこれで答えなのでは？
+   ~X~ モナドのアクションなので、あとはこれを ~doLayout~ 内部から呼んであげれば良さそう。
+
+
+   *...が、人生そう甘はないのである*
+
+** ~Query~ では上手くいかない!？
+
+   改めて ~runQuery~ の型を見てみよう。
+
+   #+begin_src haskell
+     runQuery :: Query a -> Window -> X a
+   #+end_src
+
+   第二引数に取るのは ~Window~ である。
+   [[https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-Core.html#v:doLayout][~doLayout~の型]]も見てみよう
+
+   #+begin_src haskell
+     doLayout :: layout a - Rectangle -> Stack a -> X ([(a, Rectangle)], Maybe (layout a))
+   #+end_src
+
+   このうち、ウィンドウの情報が格納されているのは ~Stack a~ の内部である。([[https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-Core.html#v:doLayout][コメント]]より)
+   そして [[https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-StackSet.html#t:Stack][~Stack a~ の定義]] を見てみると
+
+   #+begin_src haskell
+     data Stack a = Stack { focus  :: !a        -- focused thing in this set
+			  , up     :: [a]       -- clowns to the left
+			  , down   :: [a] }     -- jokers to the right
+	 deriving (Show, Read, Eq)
+   #+end_src
+
+   となっており、 /保存されている値の型は ~a~ で定義されている/ のだ。
+   これが何故問題になるか、というと *~runQuery~ に ~Stack a~ の中の ~Window~ を食わせたいが、
+   型が定まっていないため型エラーを起こす* ということだ。
+   
+   ドキュメント的に、 ~doLayout~ には実際には ~Stack Window~ が渡されるであろうことは明白なのだが、
+   プログラムからするとそんな実行時の話は知らない。
+   というか型としてはエラーを起こすのが正解だと思う。
+
+   でも確実に ~Window~ がくるはずだし、困った...
+   
+** ~LayoutClass <Layout> Window~ にしちゃえ!!
+   えいやっ!というやっつけ感が凄いが、 ~LayoutClass~ のインスタンスを作る際に ~a~ の型を指定してしまえば
+   型エラーは起こらなくなる。 ~doLayout~ は ~LayoutClass~ の型クラス関数であり、 ~doLayout~ の型定義の中の
+   ~a~ は ~LayoutClass <Layout> a~ によって束縛されているからだ。
+
+   これによって、 ~Stack a~ の型が固定される。
+   
+   #+begin_src haskell
+     instance LayoutClass MyLayout Window where
+       doLayout :: MyLayout Window -> Rectangle -> Stack Window -> X ([(Window, Rectangle)], Maybe (MyLayout Window))
+   #+end_src
+
+   そうすれば、後は ~Stack~ から取り出した ~Window~ を ~runQuery~ にかけてあげれば良いだけになる。
+   
+   
+** おまけ: 具体的な書き方
+
+   ついでなので、ケース毎に使い方(書き方)を書いてみる。
+   
+*** タイトルによって選択
+
+    [[https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-ManageHook.html#v:title][~title~]]を使います。
+    [[https://github.com/Cj-bc/dotfiles/blob/master/dotfiles/xmonad/src/XMonad/Layout/Info.hs#L25-L31][私のxmonadに記載されているもの]]と同じです。
+    
+    最初に ~[Window]~ から 適切な ~Window~ だけ取り出すために ~[X (Maybe Window)]~
+    にしてあげて、 ~X~ を実行するために ~sequence~ (~X [Maybe Window]~)、
+    ~find~ で ~Just~ なもの(=求めていたWindow)をピックアップしてあげて
+    (~X [Maybe (Maybe Window)]~)、二重になった ~Maybe~ を ~join~ で平たくしてあげています。
+    
+    #+begin_src haskell
+
+      windowTitleIs :: String -> [Window] -> X (Maybe Window)
+      windowTitleIs name ws = fmap (join . find isJust) . sequence . flip fmap ws $ \w -> flip runQuery w $ do
+	n <- w`hasTitle`name
+	if n then return (Just w) else return Nothing
+
+      hasTitle :: Window -> String -> Query Bool
+      hasTitle w name = (== name) <$> title
+    #+end_src
+
+
+    ついで(？)なので思考メモを残しておきます。
+    
+    #+NAME: 思考メモ
+    #+begin_src haskell
+      allWindows :: [Window]
+      fmap :: Functor f => (a -> b) -> f a -> f b
+      flip :: (a -> b -> c) -> b -> a -> c
+      flip fmap :: Functor f => f a -> (a -> b) -> f b
+      flip fmap allWindows :: (Window -> b) -> [b]
+
+
+      flip fmap allWindows <$> :: Functor f => f ([Window] -> (Window -> b)) -> f [b]
+
+      f :: Window -> X (Maybe Window)
+
+      flip fmap allWindows f :: [X (Maybe Window)]
+
+      sequence :: (Traversable t, Monad m) => t (m a) -> m (t a)
+
+      sequence $ flip fmap allwindows f :: X [Maybe Window]
+
+      find :: Foldable t => (a -> Bool) -> t a -> Maybe a
+      (<$>) :: Functor f => (a -> b) -> f a -> f b
+
+      find isJust :: Foldable t => t a -> Maybe a
+      find isJust <$> :: Foldable t, Functor f => f (t a) -> f (Maybe a)
+      find jsJust <$> sequence $ flip fmap allwindows f :: X (Maybe (Maybe a))
+
+      join :: Monad m => m (m a) -> m a
+      fmap join :: (Monad m, Functor f) => f (m (m a)) -> f (m a)
+
+      ($) :: (a -> b) -> a -> b
+      fmap join $ :: (Monad m, Functor f) => f (m (m a)) -> f (m a)
+
+      fmap join $ find jsJust <$> sequence $ flip fmap allwindows f :: X (Maybe a)
+    #+end_src
