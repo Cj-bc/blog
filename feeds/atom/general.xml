@@ -8,8 +8,118 @@
         <name>Cj-bc a.k.a Cj.BC_SD</name>
         <email>cj.bc-sd@outlook.jp</email>
     </author>
-    <updated>2021-08-24T00:00:00Z</updated>
+    <updated>2021-08-26T00:00:00Z</updated>
     <entry>
+    <title>2021-08-26-haskell-dot-and-infix-fmap</title>
+    <link href="https://cj-bc.github.io/blog/posts/2021-08-26-haskell-dot-and-infix-fmap.html" />
+    <id>https://cj-bc.github.io/blog/posts/2021-08-26-haskell-dot-and-infix-fmap.html</id>
+    <published>2021-08-26T00:00:00Z</published>
+    <updated>2021-08-26T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>2021-08-26-haskell-dot-and-infix-fmap</h1>
+  <div class="ui list">
+    <div class="item">Posted on August 26, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on August 26, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  
+  
+</div>
+
+<h1 data-date="[2021-08-26 Thu 23:04]" data-tags=":haskell:" data-blog_post_kind="Memo" data-blog_post_progress="Empty" data-blog_post_status="Normal" id=". と &lt;$&gt; の順序のメモ"><code>.</code> と <code>&lt;$&gt;</code> の順序のメモ</h1>
+<p>Haskellにおいてしょっちゅうお世話になる演算子二人組を連れてきたよ!</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">infixr</span> <span class="dv">9</span> <span class="op">.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="ot">(.) ::</span> (b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> c</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="kw">infixl</span> <span class="dv">4</span> <span class="op">&lt;$&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="ot">(&lt;$&gt;) ::</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b</span></code></pre></div>
+</div>
+<p>…でもたまに分からなくなるよ。</p>
+<h2 id="考えたいケース">考えたいケース</h2>
+<p>以下はまだわかる</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>(<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]</span></code></pre></div>
+</div>
+<p>でも以下のように書くと、 <strong>"Why NOT?"</strong> とか言って書き換えを提案されるよ!</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">&lt;$&gt;</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="co">-- why not</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]</span></code></pre></div>
+</div>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>Found: print &lt;$&gt; (++ " ") &lt;$&gt; getLine Why not: print . (++ " ") &lt;$&gt; getLine</p>
+</blockquote>
+</div>
+<p>で、素直にこれで書き換えられるのも分かるのだけど きちんと論理的に考えてみるのです。</p>
+<h2 id="論理的に考えるあるよ">論理的に考えるあるよ</h2>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]</span></code></pre></div>
+</div>
+<p>解釈を考えるあるよ。基本的に左から読まれるわけだけど(ほんとか？)、 今回は中置演算子で繋がれているので <code>infix</code> の値を確認するよ。</p>
+<p><code>infix</code> は、 <em>値が大きければ大きい程優先される</em> 。 冒頭でも書いたけど、 <code class="sourceCode haskell">(<span class="op">.</span>)</code> は <code>infix 9</code> で <code class="sourceCode haskell">(<span class="op">&lt;$&gt;</span>)</code> は <code>infix 4</code> 。</p>
+<p>なので、先に <code>.</code> での束縛が行われるよ。つまり:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>((<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>)) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]</span></code></pre></div>
+</div>
+<p>こうだね。 今度はそれぞれの型を考えてみるよ。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>)<span class="ot"> ::</span> <span class="dt">Num</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>(<span class="op">+</span> <span class="dv">1</span>)<span class="ot"> ::</span> <span class="dt">Num</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="ot">(.) ::</span> (b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> c</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span><span class="ot"> ::</span> <span class="dt">Num</span> a&#39; <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a&#39;) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a&#39;</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>)<span class="ot"> ::</span> <span class="dt">Num</span> a&#39; <span class="ot">=&gt;</span> a&#39; <span class="ot">-&gt;</span> a&#39;</span></code></pre></div>
+</div>
+<p>これを <code>&lt;$&gt;</code> と一緒にしてみると</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>)<span class="ot"> ::</span> <span class="dt">Num</span> a&#39; <span class="ot">=&gt;</span> a&#39; <span class="ot">-&gt;</span> a&#39;</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="ot">(&lt;$&gt;) ::</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span><span class="ot"> ::</span> (<span class="dt">Num</span> a&#39;, <span class="dt">Functor</span> f) <span class="ot">=&gt;</span> f a&#39; <span class="ot">-&gt;</span> f a&#39;</span></code></pre></div>
+</div>
+<p>なるほど。ここで晴れて <code>[1..5]</code> を適用できる。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]<span class="ot"> ::</span> <span class="dt">Num</span> a&#39; <span class="ot">=&gt;</span> [a&#39;]</span></code></pre></div>
+</div>
+<p>わーい!</p>
+<h2 id="まとめ(?)">まとめ(?)</h2>
+<p>型パズル、単純に楽しかった!</p>
+]]></summary>
+</entry>
+<entry>
     <title>2021-08-24-xmonad-how-to-access-window-properties-from-layout</title>
     <link href="https://cj-bc.github.io/blog/posts/2021-08-24-xmonad-how-to-access-window-properties-from-layout.html" />
     <id>https://cj-bc.github.io/blog/posts/2021-08-24-xmonad-how-to-access-window-properties-from-layout.html</id>
@@ -1095,50 +1205,6 @@ haskell
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>        runProcess script [bin] (<span class="dt">Just</span> dir) <span class="dt">Nothing</span> <span class="dt">Nothing</span> <span class="dt">Nothing</span> (<span class="dt">Just</span> errHandle)</span></code></pre></div>
 </div>
 <p><code class="sourceCode haskell">runProcess</code> は、 <a href="https://hackage.haskell.org/package/process-1.6.11.0/docs/System-Process.html#v:runProcess">System.Process.runProcess</a> であり、上記の使い方だと <code>script</code> というプログラムに <code>bin</code> を引数として与え、 <code>dir</code> をワーキングディレクトリとしてから実行することになります。</p>
-]]></summary>
-</entry>
-<entry>
-    <title>ewwでスタイリッシュなスライダーを使う</title>
-    <link href="https://cj-bc.github.io/blog/posts/2021-04-26-eww-linux-minimal-design-slider.html" />
-    <id>https://cj-bc.github.io/blog/posts/2021-04-26-eww-linux-minimal-design-slider.html</id>
-    <published>2021-04-26T00:00:00Z</published>
-    <updated>2021-04-26T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>ewwでスタイリッシュなスライダーを使う</h1>
-  <div class="ui list">
-    <div class="item">Posted on April 26, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on May 11, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;eww&#39;." href="/tags/eww.html" class="ui tag label">eww</a><a title="All pages tagged &#39;scss&#39;." href="/tags/scss.html" class="ui tag label">scss</a><a title="All pages tagged &#39;linux&#39;." href="/tags/linux.html" class="ui tag label">linux</a>
-  
-</div>
-
-<p><a href="https://github.com/Axarva/dotfiles-2.0">Axarva/dotfiles-2.0</a> に触発されて、 <a href="https://github.com/elkowar/eww">elkowar/eww</a> を使い始めました。(Emacsのewwではない)</p>
-<p>キーボードドリブンな設計にしたかったので、axarvaの設定を参考にしながら自分で書いていました。 でも、デフォルトでは以下のような形に。</p>
-<p><img src="file:///images/cropped-slider-without-scss.png" class="ui rounded image" /></p>
-<p>本当は以下のようになってほしい。特に <strong>スライダーノブを消したい</strong> 。</p>
-<p><img src="file:///images/cropped-slider-with-scss.png" class="ui rounded image" /></p>
-<p>色々と設定を写したのですが上手くいかなかったけど、</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-css
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode css SourceCode"><code class="sourceCode css"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="op">*</span> {</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="kw">all</span>: <span class="bu">unset</span><span class="op">;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>}</span></code></pre></div>
-</div>
-<p>を設定したら出来た!!</p>
-<p>ビフォー:</p>
-<p><img src="file:///images/slider-without-scss.png" class="ui rounded image" /></p>
-<p>アフター:</p>
-<p><img src="file:///images/slider-with-scss.png" class="ui rounded image" /></p>
 ]]></summary>
 </entry>
 
