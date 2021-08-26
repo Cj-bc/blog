@@ -1,0 +1,99 @@
+* ~.~ と ~<$>~ の順序のメモ
+  :PROPERTIES:
+  :DATE: [2021-08-26 Thu 23:04]
+  :TAGS: :haskell:
+  :BLOG_POST_KIND: Memo
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2021-08-26 Thu 23:05]--[2021-08-26 Thu 23:42] =>  0:37
+  :END:
+  
+  Haskellにおいてしょっちゅうお世話になる演算子二人組を連れてきたよ!
+
+  #+begin_src haskell
+    infixr 9 .
+    (.) :: (b -> c) -> (a -> b) -> a -> c
+
+    infixl 4 <$>
+    (<$>) :: Functor f => (a -> b) -> f a -> f b
+  #+end_src
+
+  ...でもたまに分からなくなるよ。
+
+** 考えたいケース
+   
+  以下はまだわかる
+
+  #+begin_src haskell
+    (+ 1) <$> [1..5]
+  #+end_src
+
+  でも以下のように書くと、 *"Why NOT?"* とか言って書き換えを提案されるよ!
+
+  #+begin_src haskell
+    (* 2) <$> (+ 1) <$> [1..5]
+
+    -- why not
+    (* 2) . (+ 1) <$> [1..5]
+  #+end_src
+
+  #+begin_quote
+  Found:
+    print <$> (++ " ") <$> getLine
+  Why not:
+    print . (++ " ") <$> getLine
+  #+end_quote
+
+  で、素直にこれで書き換えられるのも分かるのだけど
+  きちんと論理的に考えてみるのです。
+
+** 論理的に考えるあるよ
+   
+   #+begin_src haskell
+     (* 2) . (+ 1) <$> [1..5]
+   #+end_src
+
+   解釈を考えるあるよ。基本的に左から読まれるわけだけど(ほんとか？)、
+   今回は中置演算子で繋がれているので ~infix~ の値を確認するよ。
+
+   ~infix~ は、 /値が大きければ大きい程優先される/ 。
+   冒頭でも書いたけど、 src_haskell{(.)} は ~infix 9~ で
+   src_haskell{(<$>)} は ~infix 4~ 。
+   
+   なので、先に ~.~ での束縛が行われるよ。つまり:
+
+   #+begin_src haskell
+     ((* 2) . (+ 1)) <$> [1..5]
+   #+end_src
+
+   こうだね。
+   今度はそれぞれの型を考えてみるよ。
+   
+   #+begin_src haskell
+     (* 2) :: Num a => a -> a
+     (+ 1) :: Num a => a -> a
+     (.) :: (b -> c) -> (a -> b) -> a -> c
+
+     (* 2) . :: Num a' => (a -> a') -> a -> a'
+     (* 2) . (+ 1) :: Num a' => a' -> a'
+   #+end_src
+
+   これを ~<$>~ と一緒にしてみると
+   #+begin_src haskell
+     (* 2) . (+ 1) :: Num a' => a' -> a'
+     (<$>) :: Functor f => (a -> b) -> f a -> f b
+
+     (* 2) . (+ 1) <$> :: (Num a', Functor f) => f a' -> f a'
+   #+end_src
+
+   なるほど。ここで晴れて ~[1..5]~ を適用できる。
+
+   #+begin_src haskell
+     (* 2) . (+ 1) <$> [1..5] :: Num a' => [a']
+   #+end_src
+
+   わーい!
+** まとめ(?)
+   型パズル、単純に楽しかった!
