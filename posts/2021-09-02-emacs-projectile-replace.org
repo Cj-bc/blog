@@ -1,0 +1,18 @@
+* ProjectileのReplaceが便利だった
+  :PROPERTIES:
+  :DATE: [2021-09-02 Thu 15:07]
+  :TAGS: :Emacs:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Published
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2021-09-02 Thu 15:07]--[2021-09-02 Thu 15:11] =>  0:04
+  :END:
+  
+  Emacsのパッケージの一つである ~projectile~ に、
+  help:projectile-replace というコマンドがある。
+  
+  Projectileの管理下のファイル全てに対して置換できるし、
+  一つ一つ確認して置換するかどうかを選べるのでとても便利。
+  
