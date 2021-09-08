@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- 2021-09-08-homebrew-dfx</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+        <div id="content" class="ui text container segment">
+            <div class="ui center aligned icon header">
+  <h1>2021-09-08-homebrew-dfx</h1>
+  <div class="ui list">
+    <div class="item">Posted on September  8, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on September  8, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  
+  
+</div>
+
+<h1 data-date="[2021-09-08 Wed 12:49]" data-tags=":homebrew: :dfinity: :Internet computer:" data-blog_post_kind="Advertisment" data-blog_post_progress="WIP" data-blog_post_status="Normal" id="Dfinity SDKのHomebrew formulae(非公式)を書いた">Dfinity SDKのHomebrew formulae(非公式)を書いた</h1>
+<p>Dfinity SDKは標準のインストーラーが付属するが、 これをHomebrew管理したかったのでラッパーとなるように<a href="https://github.com/Cj-bc/homebrew-dfx">Formula</a>を書いた。</p>
+<p>尚これは非公式なものであること・あまりHomebrewのformulaeとしては お行儀良くないことは留意していただきたい。</p>
+<h2 id="使い方">使い方</h2>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">brew</span> tap cj-bc/dfx</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="ex">brew</span> install dfx</span></code></pre></div>
+</div>
+<h2 id="技術的メモ">技術的メモ</h2>
+<h3 id="環境変数を設定する">環境変数を設定する</h3>
+<p><a href="https://docs.brew.sh/Formula-Cookbook#using-environment-variables">https://docs.brew.sh/Formula-Cookbook#using-environment-variables</a></p>
+<div class="ui segment">
+<div class="ui top right attached label">
+ruby
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="dt">ENV</span>[<span class="st">&quot;DFX_INSTALL_ROOT&quot;</span>] = prefix</span></code></pre></div>
+</div>
+<h3 id="ビルド中の一時ディレクトリにファイルを保存する">ビルド中の一時ディレクトリにファイルを保存する</h3>
+<p><a href="https://docs.brew.sh/Formula-Cookbook#variables-for-directory-locations">https://docs.brew.sh/Formula-Cookbook#variables-for-directory-locations</a></p>
+<p><code>#{hoge}</code> はRubyの記法で、文字列の中に変数を埋め込むことができる。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+ruby
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>system <span class="st">&quot;curl -fsSL https://sdk.dfinity.org/install.sh &gt; </span><span class="ot">#{</span>buildpath<span class="ot">}</span><span class="st">/install.sh&quot;</span></span></code></pre></div>
+</div>
+<h3 id="system 等で実行したいプログラムの標準入出力を操作する"><code>system</code> 等で実行したいプログラムの標準入出力を操作する</h3>
+<p><a href="https://rubydoc.brew.sh/Formula.html">brewのrubydocのFormula.test</a>の部分に書かれているのだが、どうやら <code>open3</code> という ライブラリを使えるらしい。(筆者のRuby歴はHomebrew formulaeを除けば0)</p>
+<p>ということでその例を拝借して書き換えてみると:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+ruby
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>     require <span class="st">&quot;open3&quot;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>     <span class="dt">Open3</span>.popen3(<span class="st">&quot;sh&quot;</span>, <span class="st">&quot;-i install.sh&quot;</span>) <span class="kw">do</span> |stdin, stdout, _, th|</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="co"># ここでIO処理をする</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>     <span class="kw">end</span></span></code></pre></div>
+</div>
+<ol>
+<li><p>ユーザーの入力を受け付けてそれをプログラムに渡す</p>
+<p>今回の公式のインストールスクリプトは、ライセンスへの同意をキー入力で答える必要があります。 これのためには、homebrew側で受け取ったキー入力をスクリプトに渡してあげる必要があります。</p>
+<p><code>stdin</code> を先程の <code>Open3.popen3</code> で設定した変数だとすると、以下のようにすることで 入力のバイパスが出来ました。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+ruby
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>stdin &lt;&lt; <span class="dt">$stdin</span>.gets</span></code></pre></div>
+</div>
+<p>Rubyにおいて、 <code>$変数名</code> は「グローバル変数」を指します。 なので、グローバルにhomebrewが扱っている標準入力を <code>$stdin</code> として参照しています。</p></li>
+<li><p>スレッドを待機させる必要がありそう</p>
+<p>単純に <code>Open3.popen3</code> を使った場合、その処理を行っているスレッドは別スレッドとして非同期的に処理がされるようです。 なので、このままだとそちらの処理が終わる前にプログラムが進んでしまいます。</p>
+<p>他の言語での <code>await</code> のような機能として、 <code>&lt;thread&gt;.join</code> を使います。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+ruby
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>     <span class="dt">Open3</span>.popen3(<span class="st">&quot;sh&quot;</span>, <span class="st">&quot;-i&quot;</span>, <span class="st">&quot;</span><span class="ot">#{</span>buildpath<span class="ot">}</span><span class="st">/install.sh&quot;</span>)  <span class="kw">do</span> |stdin, stdout, stderr, t|</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="co"># やりたい処理</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>t.join</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>     <span class="kw">end</span>  </span></code></pre></div>
+</div>
+<p>とすることで、 <code>sh -i install.sh</code> が終了するまで待つことができます。</p></li>
+</ol>
+<h3 id="文字列にある文字列が含まれるかを確認する">文字列にある文字列が含まれるかを確認する</h3>
+<div class="ui segment">
+<div class="ui top right attached label">
+ruby
+</div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="dt">String</span><span class="co">#match?(/&lt;Regex&gt;/)</span></span></code></pre></div>
+</div>
+<p>を使うことで、正規表現 <code>&lt;Regex&gt;</code> がマッチしたなら <code>true</code>, しなかったら <code>false</code> を返してくれる。</p>
+
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
