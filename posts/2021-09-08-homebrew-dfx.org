@@ -1,0 +1,98 @@
+* Dfinity SDKのHomebrew formulae(非公式)を書いた
+  :PROPERTIES:
+  :DATE: [2021-09-08 Wed 12:49]
+  :TAGS: :homebrew: :dfinity: :Internet computer:
+  :BLOG_POST_KIND: Advertisment
+  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2021-09-08 Wed 21:40]--[2021-09-08 Wed 21:50] =>  0:10
+  CLOCK: [2021-09-08 Wed 17:24]--[2021-09-08 Wed 19:59] =>  2:35
+  CLOCK: [2021-09-08 Wed 12:50]--[2021-09-08 Wed 14:07] =>  1:17
+  :END:
+  
+  Dfinity SDKは標準のインストーラーが付属するが、
+  これをHomebrew管理したかったのでラッパーとなるように[[https://github.com/Cj-bc/homebrew-dfx][Formula]]を書いた。
+
+  尚これは非公式なものであること・あまりHomebrewのformulaeとしては
+  お行儀良くないことは留意していただきたい。
+  
+** 使い方
+
+   #+begin_src sh
+     brew tap cj-bc/dfx
+     brew install dfx
+   #+end_src
+
+** 技術的メモ
+   
+*** 環境変数を設定する
+    https://docs.brew.sh/Formula-Cookbook#using-environment-variables
+
+    #+begin_src ruby
+      ENV["DFX_INSTALL_ROOT"] = prefix
+    #+end_src
+
+*** ビルド中の一時ディレクトリにファイルを保存する
+
+    https://docs.brew.sh/Formula-Cookbook#variables-for-directory-locations
+
+    ~#{hoge}~ はRubyの記法で、文字列の中に変数を埋め込むことができる。
+
+    #+begin_src ruby
+      system "curl -fsSL https://sdk.dfinity.org/install.sh > #{buildpath}/install.sh"
+    #+end_src
+
+*** ~system~ 等で実行したいプログラムの標準入出力を操作する
+
+    [[https://rubydoc.brew.sh/Formula.html][brewのrubydocのFormula.test]]の部分に書かれているのだが、どうやら ~open3~ という
+    ライブラリを使えるらしい。(筆者のRuby歴はHomebrew formulaeを除けば0)
+
+    ということでその例を拝借して書き換えてみると:
+    
+    #+begin_src ruby
+      require "open3"
+      Open3.popen3("sh", "-i install.sh") do |stdin, stdout, _, th|
+	# ここでIO処理をする
+      end
+    #+end_src
+    
+**** ユーザーの入力を受け付けてそれをプログラムに渡す
+
+     今回の公式のインストールスクリプトは、ライセンスへの同意をキー入力で答える必要があります。
+     これのためには、homebrew側で受け取ったキー入力をスクリプトに渡してあげる必要があります。
+
+     ~stdin~ を先程の ~Open3.popen3~ で設定した変数だとすると、以下のようにすることで
+     入力のバイパスが出来ました。
+     
+     #+begin_src ruby
+       stdin << $stdin.gets
+     #+end_src
+
+     Rubyにおいて、 ~$変数名~ は「グローバル変数」を指します。
+     なので、グローバルにhomebrewが扱っている標準入力を ~$stdin~ として参照しています。
+     
+**** スレッドを待機させる必要がありそう
+     
+     単純に ~Open3.popen3~ を使った場合、その処理を行っているスレッドは別スレッドとして非同期的に処理がされるようです。
+     なので、このままだとそちらの処理が終わる前にプログラムが進んでしまいます。
+     
+     他の言語での ~await~ のような機能として、 ~<thread>.join~ を使います。
+
+     #+begin_src ruby
+       Open3.popen3("sh", "-i", "#{buildpath}/install.sh")  do |stdin, stdout, stderr, t|
+	 # やりたい処理
+	 t.join
+       end  
+     #+end_src
+
+     とすることで、 ~sh -i install.sh~ が終了するまで待つことができます。
+
+*** 文字列にある文字列が含まれるかを確認する
+
+    #+begin_src ruby
+      String#match?(/<Regex>/)
+    #+end_src
+
+    を使うことで、正規表現 ~<Regex>~ がマッチしたなら ~true~, しなかったら ~false~ を返してくれる。
