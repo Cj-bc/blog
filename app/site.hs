@@ -125,12 +125,12 @@ main = hakyll $ do
             saveSnapshot "pandoc" $ Item (ident <> " <title>") titleMetadata
             -- pandocCompilerWithTransform  def myPandocTransform
             writePandocWith def pandocData
-            >>= saveSnapshot "raw content"
-            >>= loadAndApplyTemplate "templates/post.html"    ctx
-            >>= saveSnapshot "content"
-            >>= loadAndApplyTemplate "templates/default.html" ctx
-            >>= modifySourceUrl
-            >>= relativizeUrls
+              >>= saveSnapshot "raw content"
+              >>= loadAndApplyTemplate "templates/post.html" ctx
+              >>= saveSnapshot "content"
+              >>= loadAndApplyTemplate "templates/default.html" ctx
+              >>= modifySourceUrl
+              >>= relativizeUrls
 
     create ["archive.html"] $ do
         route idRoute
