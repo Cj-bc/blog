@@ -3,7 +3,10 @@
 import           Data.Monoid (mappend)
 import           Hakyll
 import           Text.Pandoc.Options (ReaderOptions(..), Extension(..), extensionsFromList)
+import           Text.Pandoc.Shared (stringify)
+import           Text.Pandoc.Definition (docTitle, Pandoc(Pandoc))
 import           Data.Default (def)
+import qualified Data.Text as T
 import           Control.Monad (forM_)
 
 import           Hakyll.Web.Html (withUrls)
@@ -115,11 +118,17 @@ main = hakyll $ do
 
     match "posts/*" $ do
         route $ setExtension "html"
-        compile $ pandocCompilerWithTransform pandocMarkdownCfg def myPandocTransform
+        compile $ do
+            pandocData@(Item ident (Pandoc pandocMeta _)) <- getResourceBody >>= readPandocWith pandocMarkdownCfg
+            let titleMetadata = T.unpack . foldl (\p n -> p <> stringify n) "" . docTitle $ pandocMeta
+                ctx = postCtx tags <> constField "title" titleMetadata
+            saveSnapshot "pandoc" $ Item (ident <> " <title>") titleMetadata
+            -- pandocCompilerWithTransform  def myPandocTransform
+            writePandocWith def pandocData
             >>= saveSnapshot "raw content"
-            >>= loadAndApplyTemplate "templates/post.html"    (postCtx tags)
+            >>= loadAndApplyTemplate "templates/post.html"    ctx
             >>= saveSnapshot "content"
-            >>= loadAndApplyTemplate "templates/default.html" (postCtx tags)
+            >>= loadAndApplyTemplate "templates/default.html" ctx
             >>= modifySourceUrl
             >>= relativizeUrls
 
