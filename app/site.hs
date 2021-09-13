@@ -124,7 +124,7 @@ main = hakyll $ do
                 ctx = postCtx tags <> constField "title" titleMetadata
             saveSnapshot "pandoc" $ Item (ident <> " <title>") titleMetadata
             -- pandocCompilerWithTransform  def myPandocTransform
-            writePandocWith def pandocData
+            return (writePandocWith def pandocData)
               >>= saveSnapshot "raw content"
               >>= loadAndApplyTemplate "templates/post.html" ctx
               >>= saveSnapshot "content"
