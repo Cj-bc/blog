@@ -122,7 +122,7 @@ main = hakyll $ do
             pandocData@(Item ident (Pandoc pandocMeta _)) <- getResourceBody >>= readPandocWith pandocMarkdownCfg >>= traverse myPandocTransform
             let titleMetadata = T.unpack . foldl (\p n -> p <> stringify n) "" . docTitle $ pandocMeta
                 ctx = postCtx tags <> constField "title" titleMetadata
-            saveSnapshot "pandoc" $ Item (ident <> " <title>") titleMetadata
+            saveSnapshot "pandoc" ( Item (ident <> " <title>") titleMetadata )
             -- pandocCompilerWithTransform  def myPandocTransform
             return (writePandocWith def pandocData)
               >>= saveSnapshot "raw content"
