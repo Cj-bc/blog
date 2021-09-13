@@ -49,7 +49,6 @@
   
 </div>
 
-<h1 data-date="[2021-08-26 Thu 23:04]" data-tags=":haskell:" data-blog_post_kind="Memo" data-blog_post_progress="Empty" data-blog_post_status="Normal" id=". と &lt;$&gt; の順序のメモ"><code>.</code> と <code>&lt;$&gt;</code> の順序のメモ</h1>
 <p>Haskellにおいてしょっちゅうお世話になる演算子二人組を連れてきたよ!</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -62,7 +61,7 @@ haskell
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="ot">(&lt;$&gt;) ::</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b</span></code></pre></div>
 </div>
 <p>…でもたまに分からなくなるよ。</p>
-<h2 id="考えたいケース">考えたいケース</h2>
+<h1 id="考えたいケース">考えたいケース</h1>
 <p>以下はまだわかる</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -86,7 +85,7 @@ haskell
 </blockquote>
 </div>
 <p>で、素直にこれで書き換えられるのも分かるのだけど きちんと論理的に考えてみるのです。</p>
-<h2 id="論理的に考えるあるよ">論理的に考えるあるよ</h2>
+<h1 id="論理的に考えるあるよ">論理的に考えるあるよ</h1>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
@@ -132,7 +131,7 @@ haskell
 <div class="sourceCode" id="cb8"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]<span class="ot"> ::</span> <span class="dt">Num</span> a' <span class="ot">=&gt;</span> [a']</span></code></pre></div>
 </div>
 <p>わーい!</p>
-<h2 id="まとめ(?)">まとめ(?)</h2>
+<h1 id="まとめ(?)">まとめ(?)</h1>
 <p>型パズル、単純に楽しかった!</p>
 
         </div>

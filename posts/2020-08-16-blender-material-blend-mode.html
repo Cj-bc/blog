@@ -54,17 +54,17 @@
 <li>公式のリファレンス: <a href="https://docs.blender.org/manual/en/2.80/render/eevee/materials/settings.html">blender manual -- materials</a></li>
 </ul>
 <p>Blend modeは、表面の色の計算が終わった後にどのようにカラーバッファに影響するかを決めます。</p>
-<h1 class="small-caption" id="Opaque">Opaque</h1>
+<p>Opaque</p>
 <p>アルファチャンネル(=透明度)を完全に無視し、色を上書きします。これが一番早いモードです。</p>
-<h1 class="small-caption" id="Additive">Additive</h1>
+<p>Additive</p>
 <p>直前の色に表面の色を加算します。アルファ値は、 <em>neutral color</em> の黒 (0.0, 0.0, 0.0, 0.0) と表面の色を混ぜるために使われます。</p>
-<h1 class="small-caption" id="Multiplicative">Multiplicative</h1>
+<p>Multiplicative</p>
 <p>直前の色と表面の色を乗算します。アルファ値は、 <em>neutral color</em> の白 (1.0, 1.0, 1.0) と表面の色を混ぜるために使われます。</p>
-<h1 class="small-caption" id="Alpha Clip">Alpha Clip</h1>
+<p>Alpha Clip</p>
 <p>アルファ値がclip閾値を上回った場合のみ、直前の色は表面の色で上書きされます。</p>
-<h1 class="small-caption" id="Alpha Hashed">Alpha Hashed</h1>
+<p>Alpha Hashed</p>
 <p>アルファ値がランダムで決められたclip閾値を上回った場合のみ、直前の色は表面の色で上書きされます。 この統計学的なアプローチはノイズが多いですが、ソートの問題なしにアルファ値のブレンドを概算できます。レンダー設定でサンプル数を増やすと、最終的なノイズを減らすことができます。</p>
-<h1 class="small-caption" id="Alpha Blending">Alpha Blending</h1>
+<p>Alpha Blending</p>
 <p>アルファ値のブレンドを使い、直前の色の上に表面の色をオーバーレイします。</p>
 
         </div>

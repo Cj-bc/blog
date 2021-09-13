@@ -28,7 +28,6 @@
   
 </div>
 
-<h1 id="Tl;Dr">Tl;Dr</h1>
 <p>基本的にはここに書いてありました</p>
 <ul>
 <li><a href="https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/reviewing-your-ssh-keys">公式マニュアル</a></li>
@@ -44,10 +43,10 @@
 </blockquote>
 </div>
 <p>これは、昔確かに自分で追加したはずのSSH鍵なので問題はないはず...ですが念のため確認してみます</p>
-<h1 id="確認する">確認する</h1>
+<p>確認する</p>
 <p>私はgpgキーを使ってssh認証をしているため、gpgキーの情報を確認すれば良いはずです。 が、<code>xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx</code>なんて文字列を見つけることができない。IPv6でしかみたことないぞ。<br />
 ...そんなことなかったです。 <strong>md5のハッシュでした</strong></p>
-<h2 id="自分の鍵のmd5ハッシュを確認する">自分の鍵のmd5ハッシュを確認する</h2>
+<h1 id="自分の鍵のmd5ハッシュを確認する">自分の鍵のmd5ハッシュを確認する</h1>
 <div class="ui segment">
 <div class="ui top right attached label">
 sh
@@ -59,7 +58,7 @@ sh
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="op">&gt;</span> <span class="op">&lt;</span><span class="ex">md5</span>ハッシュ<span class="op">&gt;</span></span></code></pre></div>
 </div>
 <p>これが一致すれば大丈夫</p>
-<h2 id="Githubの設定画面から確認する">Githubの設定画面から確認する</h2>
+<h1 id="Githubの設定画面から確認する">Githubの設定画面から確認する</h1>
 <p><a href="https://github.com/settings/keys">githubの設定画面のここ</a>で鍵の一覧を見ることができます。 その中の <em>New SSH keys</em> に該当の名前の鍵があるはずです。 そこの鍵名の下に書いてある<code>SHA256: ...</code>が確認するべき値です。<br />
 この値について、「GPG fingerprintとも合わん！」「GPG keyidとも合わん！！」「何だこいつ！！！」と暴れていましたが<br />
 安心してください。 <em>GPGじゃない</em> です。<br />

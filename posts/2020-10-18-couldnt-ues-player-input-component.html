@@ -50,13 +50,13 @@
 </div>
 
 <p>Player Inputが上手く使えないと思ったら単純なミスだった</p>
-<h1 id="tl;dr">tl;dr</h1>
+<p>tl;dr</p>
 <p>UnityEventを使用する場合、Eventに登録するスクリプトは、そのInspectorビューから選択し、スクリプトファイルそのものを入れないようにする</p>
 <hr />
 <p>Player Inputは、Unityで<code>2019.1</code>から追加された、<code>Input</code>に取って変わる新しい入力管理システムです。 詳しくは<a href="https://blogs.unity3d.com/jp/2019/10/14/introducing-the-new-input-system/">新しい Input System のご紹介 -- blogs.unity3d.com</a>を参照してください。</p>
-<h1 id="環境">環境</h1>
+<p>環境</p>
 <p>ソフトウェア バージョン ------------- --------------------- - Unity 2019.4.11f1 Personal InputSystem 1.0.0</p>
-<h1 id="現状">現状</h1>
+<p>現状</p>
 <p>基本的には<a href="https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/manual/QuickStartGuide.html">Quick Start Guide</a>に沿って作業をしています。(<code>Input System</code>は導入済とします。)</p>
 <ol>
 <li>入力を反映させたい<code>GameObject</code>に<code>PlayerInput</code>をattachします。</li>
@@ -66,9 +66,9 @@
 <li><code>1.</code>の<code>GameObject</code>に戻り、<code>PlayerInput</code>のEvents欄にScript fileを指定します</li>
 <li>あれ!?<code>No Function</code>しか出てこない!?</li>
 </ol>
-<h1 id="原因">原因</h1>
+<p>原因</p>
 <p>今回の原因は、上記の<code>5.</code>にある <strong>Events欄に設定したもの</strong> でした。 ここで、私は「スクリプトファイル自体」を選択していましたが、そうではなく、「実際に使いたいオブジェクトに紐づけられている該当ファイルのインスタンスを渡してると、上手くいきます。</p>
-<h2 id="もう一つ考えられる原因">もう一つ考えられる原因</h2>
+<h1 id="もう一つ考えられる原因">もう一つ考えられる原因</h1>
 <p>今回は違いましたが、調べている間に見つけたのが<a href="https://forum.unity.com/threads/cant-assign-public-script-function-to-player-input-component-new-input-system.881032/">これ</a>で、「コールバック関数の引数は<code>InputAction.CallbackContext callbackContext</code>にしないといけない、というもの。</p>
 
         </div>

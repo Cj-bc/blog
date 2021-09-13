@@ -49,10 +49,9 @@
   
 </div>
 
-<h1 data-date="[2021-09-08 Wed 12:49]" data-tags=":homebrew: :dfinity: :Internet computer:" data-blog_post_kind="Advertisment" data-blog_post_progress="WIP" data-blog_post_status="Normal" id="Dfinity SDKのHomebrew formulae(非公式)を書いた">Dfinity SDKのHomebrew formulae(非公式)を書いた</h1>
 <p>Dfinity SDKは標準のインストーラーが付属するが、 これをHomebrew管理したかったのでラッパーとなるように<a href="https://github.com/Cj-bc/homebrew-dfx">Formula</a>を書いた。</p>
 <p>尚これは非公式なものであること・あまりHomebrewのformulaeとしては お行儀良くないことは留意していただきたい。</p>
-<h2 id="使い方">使い方</h2>
+<h1 id="使い方">使い方</h1>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
@@ -60,8 +59,8 @@ bash
 <div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">brew</span> tap cj-bc/dfx</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="ex">brew</span> install dfx</span></code></pre></div>
 </div>
-<h2 id="技術的メモ">技術的メモ</h2>
-<h3 id="環境変数を設定する">環境変数を設定する</h3>
+<h1 id="技術的メモ">技術的メモ</h1>
+<h2 id="環境変数を設定する">環境変数を設定する</h2>
 <p><a href="https://docs.brew.sh/Formula-Cookbook#using-environment-variables">https://docs.brew.sh/Formula-Cookbook#using-environment-variables</a></p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -69,7 +68,7 @@ ruby
 </div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="dt">ENV</span>[<span class="st">&quot;DFX_INSTALL_ROOT&quot;</span>] = prefix</span></code></pre></div>
 </div>
-<h3 id="ビルド中の一時ディレクトリにファイルを保存する">ビルド中の一時ディレクトリにファイルを保存する</h3>
+<h2 id="ビルド中の一時ディレクトリにファイルを保存する">ビルド中の一時ディレクトリにファイルを保存する</h2>
 <p><a href="https://docs.brew.sh/Formula-Cookbook#variables-for-directory-locations">https://docs.brew.sh/Formula-Cookbook#variables-for-directory-locations</a></p>
 <p><code>#{hoge}</code> はRubyの記法で、文字列の中に変数を埋め込むことができる。</p>
 <div class="ui segment">
@@ -78,7 +77,7 @@ ruby
 </div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>system <span class="st">&quot;curl -fsSL https://sdk.dfinity.org/install.sh &gt; </span><span class="ot">#{</span>buildpath<span class="ot">}</span><span class="st">/install.sh&quot;</span></span></code></pre></div>
 </div>
-<h3 id="system 等で実行したいプログラムの標準入出力を操作する"><code>system</code> 等で実行したいプログラムの標準入出力を操作する</h3>
+<h2 id="system 等で実行したいプログラムの標準入出力を操作する"><code>system</code> 等で実行したいプログラムの標準入出力を操作する</h2>
 <p><a href="https://rubydoc.brew.sh/Formula.html">brewのrubydocのFormula.test</a>の部分に書かれているのだが、どうやら <code>open3</code> という ライブラリを使えるらしい。(筆者のRuby歴はHomebrew formulaeを除けば0)</p>
 <p>ということでその例を拝借して書き換えてみると:</p>
 <div class="ui segment">
@@ -115,7 +114,7 @@ ruby
 </div>
 <p>とすることで、 <code>sh -i install.sh</code> が終了するまで待つことができます。</p></li>
 </ol>
-<h3 id="文字列にある文字列が含まれるかを確認する">文字列にある文字列が含まれるかを確認する</h3>
+<h2 id="文字列にある文字列が含まれるかを確認する">文字列にある文字列が含まれるかを確認する</h2>
 <div class="ui segment">
 <div class="ui top right attached label">
 ruby

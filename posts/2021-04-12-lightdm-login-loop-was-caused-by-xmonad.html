@@ -49,18 +49,17 @@
   
 </div>
 
-<h1 id="起きていたこと">起きていたこと</h1>
 <p><code>pacman -Syu</code> して再起動した後、=light DM= できちんとログインしても <code>light DM</code> が再度呼び出されてしまう問題があった。</p>
 <p>調べた所、色々な要因があるようだがどれも私のケースではなかった。 私のケースで問題だったのは、 「 <strong>コンパイル済みのxmonadが要求するライブラリが、アップデートによって消えていた</strong> 」 ことだった。</p>
 <p>xmonadはユーザーの書いた <code>/.xmonad/xmonad.hs</code> をコンパイルして動くが、そのバイナリはいくつかの動的ライブラリを参照している。 ~pacman -Syu~の際、(例えば <code>xmonad-contrib</code> など)がアップデートされると動的ライブラリのパスが変わってしまう。 それにより、xmonadが読みにいこうとしたライブラリが存在しなくなり、エラーが起きる。 エラーのせいでxmonadが立ち上がらないため、lightdmは「Window managerが終了した」と判断(しているのか正確には知らないが)し、またログイン画面に戻ってくる。</p>
-<h1 id="直し方">直し方</h1>
+<p>直し方</p>
 <ol>
 <li><code>light DM</code> の画面で <code>Alt+Control+F1</code> でGUI環境を抜け、CUIを開く。</li>
 <li><code>Alt+F2</code> をし、新しいターミナルを開きそこからログインする。</li>
 <li><code>xmonad --recompile</code> する</li>
 <li><code>Alt+Control+F7</code> でGUI環境に戻り、ログインを試すと入れるはず。</li>
 </ol>
-<h1 id="他に考えられる原因">他に考えられる原因</h1>
+<p>他に考えられる原因</p>
 <p><a href="https://askubuntu.com/questions/223501/ubuntu-gets-stuck-in-a-login-loop">色々調べる途中で見付けたaskubuntuのスレッド</a> で、ありうる原因として挙げられていたものたち:</p>
 <ul>
 <li>indicator-multiloadをインストールしたのが原因だった</li>
@@ -73,7 +72,7 @@
 <li>~/.profileにtypoや構文ミスがある</li>
 <li>容量不足</li>
 </ul>
-<h1 id="おまけ: xmonadを、関連パッケージがアップデートされる度に自動リビルドさせる。">おまけ: xmonadを、関連パッケージがアップデートされる度に自動リビルドさせる。</h1>
+<p>おまけ: xmonadを、関連パッケージがアップデートされる度に自動リビルドさせる。</p>
 <p>このためには、pacmanのhook機能が使える。 pacmanのhookは、指定した条件に合致した場合に指定した内容を実行する仕組みである。 ファイルは(多分)ini形式で書かれ、デフォルトでは <code>/etc/pacman.d/hooks</code> 以下に配置される。</p>
 <p>ここでは簡単に、必要最低限の解説だけする。 hookの書き方について詳しくは <a href="man:alpm-hooks">man:alpm-hooks</a> を参照してほしい。</p>
 <p>先に完成形はこちら(最新版は <a href="github:Cj-bc/dotfiles">github:Cj-bc/dotfiles</a> の <code>dotfiles/pacman/hooks/xmonad.hook</code>)</p>
@@ -95,7 +94,7 @@ Exec = xmonad --recompile
 When = PostTransaction
 </code></pre>
 </div>
-<h2 id="pacman hookの作り">pacman hookの作り</h2>
+<h1 id="pacman hookの作り">pacman hookの作り</h1>
 <p>pacman hookは <code>[Trigger]</code> と <code>[Action]</code> の二つのブロックから構成される。 <code>[Trigger]</code> で「そのHookが実行される条件」を指定し、 <code>[Action]</code> で実行する内容を指定する。</p>
 <p><code>Operation</code> で指定された操作が、 <code>Target</code> に一致するファイル・パッケージに対して実行された時にhookが実行される。</p>
 <p>このhookの場合は、 <code>xmonad*</code> 若しくは <code>haskell-*</code> という名前のパッケージがUpgradeされた時、Upgrade処理が終わった後に <code>xmonad --recompile</code> を実行する。</p>

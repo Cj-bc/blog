@@ -32,7 +32,6 @@
   
 </div>
 
-<h1 data-date="[2021-09-12 Sun 23:47]" data-tags=":Akihabara_Wado:" data-blog_post_kind="Diary" data-blog_post_progress="Empty" data-blog_post_status="Normal" id="秋葉原和堂に行ってきた">秋葉原和堂に行ってきた</h1>
 <p>今日は仕事が早めに終わったので、折角だからどこかで御飯食べて帰ろ~と 思った矢先に思い出したのが秋葉原和堂だった。 秋葉原和堂は存在こそ知っていたものの、その雰囲気と</p>
 <p>—</p>
 <p>意を決して階段を降りる。 そもそも地下なことも把握していなかった。 階段を降りつつ、最初で最後の踊り場で下を見てみると、そこには重い両開きの 扉が一つ。</p>
@@ -93,10 +92,9 @@
   
 </div>
 
-<h1 data-date="[2021-09-08 Wed 12:49]" data-tags=":homebrew: :dfinity: :Internet computer:" data-blog_post_kind="Advertisment" data-blog_post_progress="WIP" data-blog_post_status="Normal" id="Dfinity SDKのHomebrew formulae(非公式)を書いた">Dfinity SDKのHomebrew formulae(非公式)を書いた</h1>
 <p>Dfinity SDKは標準のインストーラーが付属するが、 これをHomebrew管理したかったのでラッパーとなるように<a href="https://github.com/Cj-bc/homebrew-dfx">Formula</a>を書いた。</p>
 <p>尚これは非公式なものであること・あまりHomebrewのformulaeとしては お行儀良くないことは留意していただきたい。</p>
-<h2 id="使い方">使い方</h2>
+<h1 id="使い方">使い方</h1>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
@@ -104,8 +102,8 @@ bash
 <div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">brew</span> tap cj-bc/dfx</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="ex">brew</span> install dfx</span></code></pre></div>
 </div>
-<h2 id="技術的メモ">技術的メモ</h2>
-<h3 id="環境変数を設定する">環境変数を設定する</h3>
+<h1 id="技術的メモ">技術的メモ</h1>
+<h2 id="環境変数を設定する">環境変数を設定する</h2>
 <p><a href="https://docs.brew.sh/Formula-Cookbook#using-environment-variables">https://docs.brew.sh/Formula-Cookbook#using-environment-variables</a></p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -113,7 +111,7 @@ ruby
 </div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="dt">ENV</span>[<span class="st">&quot;DFX_INSTALL_ROOT&quot;</span>] = prefix</span></code></pre></div>
 </div>
-<h3 id="ビルド中の一時ディレクトリにファイルを保存する">ビルド中の一時ディレクトリにファイルを保存する</h3>
+<h2 id="ビルド中の一時ディレクトリにファイルを保存する">ビルド中の一時ディレクトリにファイルを保存する</h2>
 <p><a href="https://docs.brew.sh/Formula-Cookbook#variables-for-directory-locations">https://docs.brew.sh/Formula-Cookbook#variables-for-directory-locations</a></p>
 <p><code>#{hoge}</code> はRubyの記法で、文字列の中に変数を埋め込むことができる。</p>
 <div class="ui segment">
@@ -122,7 +120,7 @@ ruby
 </div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>system <span class="st">&quot;curl -fsSL https://sdk.dfinity.org/install.sh &gt; </span><span class="ot">#{</span>buildpath<span class="ot">}</span><span class="st">/install.sh&quot;</span></span></code></pre></div>
 </div>
-<h3 id="system 等で実行したいプログラムの標準入出力を操作する"><code>system</code> 等で実行したいプログラムの標準入出力を操作する</h3>
+<h2 id="system 等で実行したいプログラムの標準入出力を操作する"><code>system</code> 等で実行したいプログラムの標準入出力を操作する</h2>
 <p><a href="https://rubydoc.brew.sh/Formula.html">brewのrubydocのFormula.test</a>の部分に書かれているのだが、どうやら <code>open3</code> という ライブラリを使えるらしい。(筆者のRuby歴はHomebrew formulaeを除けば0)</p>
 <p>ということでその例を拝借して書き換えてみると:</p>
 <div class="ui segment">
@@ -159,7 +157,7 @@ ruby
 </div>
 <p>とすることで、 <code>sh -i install.sh</code> が終了するまで待つことができます。</p></li>
 </ol>
-<h3 id="文字列にある文字列が含まれるかを確認する">文字列にある文字列が含まれるかを確認する</h3>
+<h2 id="文字列にある文字列が含まれるかを確認する">文字列にある文字列が含まれるかを確認する</h2>
 <div class="ui segment">
 <div class="ui top right attached label">
 ruby
@@ -192,15 +190,14 @@ ruby
   
 </div>
 
-<h1 data-date="[2021-09-08 Wed 12:02]" data-tags=":Dfinity: :Internet Computer:" data-blog_post_kind="Memo" data-blog_post_progress="WIP" data-blog_post_status="Normal" id="Dfinity SDKのインストールスクリプトを読んでみたメモ">Dfinity SDKのインストールスクリプトを読んでみたメモ</h1>
 <p>Internet Computerを使うためのSDKはDfinityから<a href="https://sdk.dfinity.org/install.sh">インストールスクリプト</a>が公開されていますが、 <strong>インターネットに転がっているスクリプトを何も考えずに実行してはいけない</strong> のでとりあえず読んでみたメモです。</p>
 <p>一応書いておくと、別にDfinityが何か悪事をしているとかそういうことではなく、 単純にネットに置いてあるものは自己責任で使用するものなので確認しているだけです。</p>
 <p>又、コード自体は転記するとTerm of Useに引っかかるかもわからなかったので載せていません。 (日本の法律上は引用なら大丈夫だと思うけどそもそも日本の会社ではないので…)</p>
-<h2 id="全体の所感">全体の所感</h2>
+<h1 id="全体の所感">全体の所感</h1>
 <p>特に変な部分はなく安全そうだなと個人的には判断しました。 あとスクリプトの書き方的な意味で「こういう方法があるのか…」となっています。</p>
 <p>流石きちんと書かれている…(尚rustupのスクリプトを借りてきていることが明記されています)</p>
 <p><code>main</code> 関数にメインの処理を入れ、あとはユーティリティ関数が定義されている作りになっています。 コメントのつけ方的に元は別ファイルで管理してそう。</p>
-<h2 id="プログラムの流れ">プログラムの流れ</h2>
+<h1 id="プログラムの流れ">プログラムの流れ</h1>
 <p>main関数内部での流れについて</p>
 <ol>
 <li>ANSIエスケープが可能かどうかの判定</li>
@@ -218,7 +215,7 @@ ruby
 <li>SDKのダウンロード、展開、権限設定</li>
 <li>インストール(mv)</li>
 </ol>
-<h2 id="インストール先ディレクトリの選定">インストール先ディレクトリの選定</h2>
+<h1 id="インストール先ディレクトリの選定">インストール先ディレクトリの選定</h1>
 <p>インストール先は以下の順番で選ばれます。</p>
 <ol>
 <li><code>DFX_INSTALL_ROOT</code> の値</li>
@@ -228,7 +225,7 @@ ruby
 <li><code>$HOME/bin</code></li>
 </ol>
 <p>3番、普通2番と同じなのでちょっとよくわかんないですね…</p>
-<h2 id="カスタマイズに使える環境変数">カスタマイズに使える環境変数</h2>
+<h1 id="カスタマイズに使える環境変数">カスタマイズに使える環境変数</h1>
 <p>SDK installerの中では、いくつかの環境変数が使われています。</p>
 <table>
 <thead>
@@ -278,7 +275,6 @@ ruby
   
 </div>
 
-<h1 data-date="[2021-09-02 Thu 15:07]" data-tags=":Emacs:" data-blog_post_kind="Knowledge" data-blog_post_progress="Published" data-blog_post_status="Normal" id="ProjectileのReplaceが便利だった">ProjectileのReplaceが便利だった</h1>
 <p>Emacsのパッケージの一つである <code>projectile</code> に、 help:projectile-replace というコマンドがある。</p>
 <p>Projectileの管理下のファイル全てに対して置換できるし、 一つ一つ確認して置換するかどうかを選べるのでとても便利。</p>
 ]]></summary>
@@ -306,7 +302,6 @@ ruby
   
 </div>
 
-<h1 data-date="[2021-08-26 Thu 23:04]" data-tags=":haskell:" data-blog_post_kind="Memo" data-blog_post_progress="Empty" data-blog_post_status="Normal" id=". と &lt;$&gt; の順序のメモ"><code>.</code> と <code>&lt;$&gt;</code> の順序のメモ</h1>
 <p>Haskellにおいてしょっちゅうお世話になる演算子二人組を連れてきたよ!</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -319,7 +314,7 @@ haskell
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="ot">(&lt;$&gt;) ::</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b</span></code></pre></div>
 </div>
 <p>…でもたまに分からなくなるよ。</p>
-<h2 id="考えたいケース">考えたいケース</h2>
+<h1 id="考えたいケース">考えたいケース</h1>
 <p>以下はまだわかる</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -343,7 +338,7 @@ haskell
 </blockquote>
 </div>
 <p>で、素直にこれで書き換えられるのも分かるのだけど きちんと論理的に考えてみるのです。</p>
-<h2 id="論理的に考えるあるよ">論理的に考えるあるよ</h2>
+<h1 id="論理的に考えるあるよ">論理的に考えるあるよ</h1>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
@@ -389,7 +384,7 @@ haskell
 <div class="sourceCode" id="cb8"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]<span class="ot"> ::</span> <span class="dt">Num</span> a&#39; <span class="ot">=&gt;</span> [a&#39;]</span></code></pre></div>
 </div>
 <p>わーい!</p>
-<h2 id="まとめ(?)">まとめ(?)</h2>
+<h1 id="まとめ(?)">まとめ(?)</h1>
 <p>型パズル、単純に楽しかった!</p>
 ]]></summary>
 </entry>
@@ -416,8 +411,7 @@ haskell
   
 </div>
 
-<h1 data-date="[2021-08-24 Tue 14:58]" data-tags=":xmonad:" data-blog_post_kind="HowTo" data-blog_post_progress="Empty" data-blog_post_status="Normal" id="XMonadのLayoutからWindowのプロパティにアクセスする">XMonadのLayoutからWindowのプロパティにアクセスする</h1>
-<h2 id="Tl;Dr">Tl;Dr</h2>
+<h1 id="Tl;Dr">Tl;Dr</h1>
 <ul>
 <li><code>LayoutClass</code> のインスタンスの定義で、 <code>a</code> を <code>Window</code> に固定する
 <ul>
@@ -425,10 +419,10 @@ haskell
 </ul></li>
 <li><code>doLayout</code> の中で <code>Query</code> を使ってあげる</li>
 </ul>
-<h2 id="モチベーション">モチベーション</h2>
+<h1 id="モチベーション">モチベーション</h1>
 <p>ダッシュボードとして機能するworkspaceを作成したい。 なので所定の位置に各アプリケーションが配置されてほしいが、 何もしない状態だと各アプリケーションのタイトル(<code>WM_NAME</code>)等には アクセスできず判断できない。</p>
 <p>なんとかならないものか</p>
-<h2 id="ManageHookを参考にする">ManageHookを参考にする</h2>
+<h1 id="ManageHookを参考にする">ManageHookを参考にする</h1>
 <p>managehookでは、ウィンドウのプロパティにアクセスして制御を行っている。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -437,7 +431,7 @@ haskell
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>title <span class="st">&quot;This is example emacs&quot;</span> <span class="op">--&gt;</span> doShift <span class="st">&quot;Editor&quot;</span></span></code></pre></div>
 </div>
 <p>など。 ここにヒントを得れば何らかの方法がありそうだなと検討が付く</p>
-<h2 id="Query を探る"><code>Query</code> を探る</h2>
+<h1 id="Query を探る"><code>Query</code> を探る</h1>
 <p>managehookで使われているのは <code>Query</code> という型。これは <code>X</code> を基底 モナドに持つ <code>ReaderT</code> で、 <code>runQuery</code> で実行することで <code>X a</code> を 戻り値として取ることができる。</p>
 <p><a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-Core.html#t:Query"><code>Query</code> と <code>runQuery</code> の実装</a>は以下</p>
 <div class="ui segment">
@@ -452,7 +446,7 @@ haskell
 </div>
 <p>さて…どうやらこれで答えなのでは？ <code>X</code> モナドのアクションなので、あとはこれを <code>doLayout</code> 内部から呼んであげれば良さそう。</p>
 <p><strong>…が、人生そう甘はないのである</strong></p>
-<h2 id="Query では上手くいかない!？"><code>Query</code> では上手くいかない!？</h2>
+<h1 id="Query では上手くいかない!？"><code>Query</code> では上手くいかない!？</h1>
 <p>改めて <code>runQuery</code> の型を見てみよう。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -480,7 +474,7 @@ haskell
 <p>となっており、 <em>保存されている値の型は <code>a</code> で定義されている</em> のだ。 これが何故問題になるか、というと <strong><code>runQuery</code> に <code>Stack a</code> の中の <code>Window</code> を食わせたいが、 型が定まっていないため型エラーを起こす</strong> ということだ。</p>
 <p>ドキュメント的に、 <code>doLayout</code> には実際には <code>Stack Window</code> が渡されるであろうことは明白なのだが、 プログラムからするとそんな実行時の話は知らない。 というか型としてはエラーを起こすのが正解だと思う。</p>
 <p>でも確実に <code>Window</code> がくるはずだし、困った…</p>
-<h2 id="LayoutClass &lt;Layout&gt; Window にしちゃえ!!"><code>LayoutClass &lt;Layout&gt; Window</code> にしちゃえ!!</h2>
+<h1 id="LayoutClass &lt;Layout&gt; Window にしちゃえ!!"><code>LayoutClass &lt;Layout&gt; Window</code> にしちゃえ!!</h1>
 <p>えいやっ!というやっつけ感が凄いが、 <code>LayoutClass</code> のインスタンスを作る際に <code>a</code> の型を指定してしまえば 型エラーは起こらなくなる。 <code>doLayout</code> は <code>LayoutClass</code> の型クラス関数であり、 <code>doLayout</code> の型定義の中の <code>a</code> は <code>LayoutClass &lt;Layout&gt; a</code> によって束縛されているからだ。</p>
 <p>これによって、 <code>Stack a</code> の型が固定される。</p>
 <div class="ui segment">
@@ -491,9 +485,9 @@ haskell
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="ot">  doLayout ::</span> <span class="dt">MyLayout</span> <span class="dt">Window</span> <span class="ot">-&gt;</span> <span class="dt">Rectangle</span> <span class="ot">-&gt;</span> <span class="dt">Stack</span> <span class="dt">Window</span> <span class="ot">-&gt;</span> <span class="dt">X</span> ([(<span class="dt">Window</span>, <span class="dt">Rectangle</span>)], <span class="dt">Maybe</span> (<span class="dt">MyLayout</span> <span class="dt">Window</span>))</span></code></pre></div>
 </div>
 <p>そうすれば、後は <code>Stack</code> から取り出した <code>Window</code> を <code>runQuery</code> にかけてあげれば良いだけになる。</p>
-<h2 id="おまけ: 具体的な書き方">おまけ: 具体的な書き方</h2>
+<h1 id="おまけ: 具体的な書き方">おまけ: 具体的な書き方</h1>
 <p>ついでなので、ケース毎に使い方(書き方)を書いてみる。</p>
-<h3 id="タイトルによって選択">タイトルによって選択</h3>
+<h2 id="タイトルによって選択">タイトルによって選択</h2>
 <p><a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-ManageHook.html#v:title"><code>title</code></a>を使います。 <a href="https://github.com/Cj-bc/dotfiles/blob/master/dotfiles/xmonad/src/XMonad/Layout/Info.hs#L25-L31">私のxmonadに記載されているもの</a>と同じです。</p>
 <p>最初に <code>[Window]</code> から 適切な <code>Window</code> だけ取り出すために <code>[X (Maybe Window)]</code> にしてあげて、 <code>X</code> を実行するために <code>sequence</code> (<code>X [Maybe Window]</code>)、 <code>find</code> で <code>Just</code> なもの(=求めていたWindow)をピックアップしてあげて (<code>X [Maybe (Maybe Window)]</code>)、二重になった <code>Maybe</code> を <code>join</code> で平たくしてあげています。</p>
 <div class="ui segment">
@@ -571,9 +565,8 @@ haskell
   
 </div>
 
-<h1 data-date="[2021-08-19 Thu 21:21]" data-tags=":haskell:" data-blog_post_kind="HowTo" data-blog_post_progress="WIP" data-blog_post_status="Normal" id="Github actionsでStackを使用した実行ファイルのバイナリを自動生成">Github actionsでStackを使用した実行ファイルのバイナリを自動生成</h1>
 <p>ghq:Cj-bc/oschark を作っている際、installationを書く上で 「どうせならバイナリ用意しておくか」と思ったので作業したメモ。</p>
-<h2 id="全体像">全体像</h2>
+<h1 id="全体像">全体像</h1>
 <p>最終的にやりたいこと: Github actionsを用いてバイナリを配付する</p>
 <ol>
 <li>手動で実行できる「ビルドする」 Actionを作る</li>
@@ -581,7 +574,7 @@ haskell
 <li>リリース時をトリガーとしてGithub Actionを稼動させる</li>
 <li>複数プラットフォームそれぞれ用のバイナリを用意する</li>
 </ol>
-<h2 id="1. 手動で実行できる「ビルドする」ACtionを作る">1. 手動で実行できる「ビルドする」ACtionを作る</h2>
+<h1 id="1. 手動で実行できる「ビルドする」ACtionを作る">1. 手動で実行できる「ビルドする」ACtionを作る</h1>
 <p>Haskell(stack)の環境をセットアップし、ビルドする。</p>
 <p>stackの環境は、元々は公式にあったが現在は廃止され、 <a href="https://github.com/haskell/actions/tree/main/setup">haskell/actions</a> に移動されて管理されている。</p>
 <p>デフォルトではcabalの環境あセットアップされる。</p>
@@ -602,7 +595,7 @@ yaml
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="fu">with</span><span class="kw">:</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="at">  </span><span class="fu">enable-stack</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code></pre></div>
 </div>
-<h2 id="2. ビルドしたものをリリースに載せられるようにする">2. ビルドしたものをリリースに載せられるようにする</h2>
+<h1 id="2. ビルドしたものをリリースに載せられるようにする">2. ビルドしたものをリリースに載せられるようにする</h1>
 <p>ビルドしても、このままだと海のもずくに消えてしまいます。 なので、これをリリースに付属させる処理をします。</p>
 <p>公式の <a href="https://github.com/actions/create-release">actions/create-release</a>が昔はあったようですが、 2021年8月19日現在ではアーカイブされてしまっているので、 そこで提案されている他のアクションを使うことにしました。</p>
 <p>今回は、仕様や書き方等を軽く見た結果 <a href="https://github.com/softprops/action-gh-release">softprops/action-gh-release</a> を 使ってみることにしました。</p>
@@ -635,7 +628,7 @@ yaml
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> softprops/action-gh-release</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="co">...</span></span></code></pre></div>
 </div>
-<h2 id="3. リリース時をトリガーとしてGithub Actionを稼動させる">3. リリース時をトリガーとしてGithub Actionを稼動させる</h2>
+<h1 id="3. リリース時をトリガーとしてGithub Actionを稼動させる">3. リリース時をトリガーとしてGithub Actionを稼動させる</h1>
 <p>これは一般的な方法をそのままで使います。 但し、cabalのバージョニング(厳密には<a href="https://pvp.haskell.org/?rdfrom=https%3A%2F%2Fwiki.haskell.org%2Findex.php%3Ftitle%3DPackage_versioning_policy%26redirect%3Dno">Haskell Package Versioning Policy</a>) に従うタグの形式に変えてあります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -646,7 +639,7 @@ yaml
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="fu">tags</span><span class="kw">:</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;*.*.*.*&quot;</span></span></code></pre></div>
 </div>
-<h2 id="4. 複数プラットフォームそれぞれ用のバイナリを用意する">4. 複数プラットフォームそれぞれ用のバイナリを用意する</h2>
+<h1 id="4. 複数プラットフォームそれぞれ用のバイナリを用意する">4. 複数プラットフォームそれぞれ用のバイナリを用意する</h1>
 <p>せっかくなのでLinux/macOS/Windowsそれぞれのバイナリを提供してみることに します。</p>
 <p>このためには <a href="https://docs.github.com/ja/actions/reference/workflow-syntax-for-github-actions#">matrix</a>を使います(リンクは直貼りできなかった)</p>
 <div class="ui segment">
@@ -662,7 +655,7 @@ yaml
 <p>matrixを含むstrategyは、各jobの直下に書かれます(<code>jobs.&lt;job_id&gt;.strategy.matrix</code>)</p>
 <p>matrixは、値にリストを取る辞書型の値を取ります。 辞書のキーがmatrix内でのプロパティになり値のリストがそれぞれ挿入されることになります。 ここで定義したプロパティは <code>${{matrix.&lt;key&gt;}}</code> で参照することができます。 上記の例の場合は <code>${{matrix.foo}}</code> となります。</p>
 <p>これを</p>
-<h3 id="artifactを使って各バイナリを保存する">artifactを使って各バイナリを保存する</h3>
+<h2 id="artifactを使って各バイナリを保存する">artifactを使って各バイナリを保存する</h2>
 ]]></summary>
 </entry>
 <entry>
@@ -688,9 +681,8 @@ yaml
   
 </div>
 
-<h1 data-date="[2021-08-14 Sat 01:22]" data-tags=":Gtk:" data-blog_post_kind="Memo" data-blog_post_progress="WIP" data-blog_post_status="Normal" id="gtkを触りはじめてみたメモ">gtkを触りはじめてみたメモ</h1>
 <p>一応 <a href="https://hackage.haskell.org/package/gi-gtk-4.0.4">haskellのgi-gtkバインディング</a>を使えるようになることが最終目標だが、 まずはCでのサンプルを実装してみている</p>
-<h2 id="基本的な仕組み">基本的な仕組み</h2>
+<h1 id="基本的な仕組み">基本的な仕組み</h1>
 <ul>
 <li>基本的には <code>GtkWidget</code> を <code>Container</code> に入れてゆく</li>
 <li><code>signal</code> にたいしてコールバック関数を与えてやる。</li>
@@ -722,7 +714,6 @@ yaml
   
 </div>
 
-<h1 data-date="[2021-08-13 Fri 17:43]" data-tags="C clangd lsp" data-blog_post_kind="Knowledge" data-blog_post_progress="Empty" data-blog_post_status="Normal" id="LSPサーバーとして使うclangdにビルドフラグを設定する">LSPサーバーとして使うclangdにビルドフラグを設定する</h1>
 <p>公式ページ: <a href="https://clangd.llvm.org/installation">https://clangd.llvm.org/installation</a></p>
 <div class="tldr">
 <ul>
@@ -742,12 +733,12 @@ bash
 <li><code>compile_commands.json</code></li>
 <li><code>compile_flags.txt</code></li>
 </ul>
-<h2 id="compile_commands.json: ビルドツールを使用する場合"><code>compile_commands.json</code>: ビルドツールを使用する場合</h2>
+<h1 id="compile_commands.json: ビルドツールを使用する場合"><code>compile_commands.json</code>: ビルドツールを使用する場合</h1>
 <p>プロジェクトの中にある各ファイルのコンパイルコマンドを定義できます。 これは基本的にはツールによって生成されます。</p>
 <p><code>clangd</code> は、今編集しているファイルの親ディレクトリに このファイルを探しにいきます。</p>
 <p>下に2つの例を上げていますが、これ以外のツールでも生成出来るものがあるそうです。</p>
 <p>参考: <a href="https://clang.llvm.org/docs/JSONCompilationDatabase.html">compile<sub>commands</sub>.jsonの仕様</a></p>
-<h3 id="CMakeを使っている場合">CMakeを使っている場合</h3>
+<h2 id="CMakeを使っている場合">CMakeを使っている場合</h2>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
@@ -755,7 +746,7 @@ bash
 <div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">cmake</span> -DCMAKE_EXPORT_COMPILE_COMMANDS=1</span></code></pre></div>
 </div>
 <p>とすることで、ビルドディレクトリに <code>compile_commands.json</code> を 出力します。 プロジェクトルートとは異なる場合であった場合は手動で (シムリンクorコピーすることで)移動する必要があります。</p>
-<h3 id="他のビルドツールを使っている場合">他のビルドツールを使っている場合</h3>
+<h2 id="他のビルドツールを使っている場合">他のビルドツールを使っている場合</h2>
 <p><a href="https://github.com/rizsotto/Bear">bear</a>を使用することで様々なビルドツールでも使うことができるようです。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -765,7 +756,7 @@ bash
 </div>
 <p>とすることで、生成できます。 仕組み的には、ビルドコマンドで普通にビルドし、そのログから コンパイラの呼び出しを特定&amp; <code>compile_commands.json</code> を作るようです。</p>
 <p>(READMEを雑に読んだ程度の知識)</p>
-<h2 id="compile_flags.txt: 手動ビルド、若しくはフラグが少ない場合"><code>compile_flags.txt</code>: 手動ビルド、若しくはフラグが少ない場合</h2>
+<h1 id="compile_flags.txt: 手動ビルド、若しくはフラグが少ない場合"><code>compile_flags.txt</code>: 手動ビルド、若しくはフラグが少ない場合</h1>
 <p>手動でのビルドをしている場合や、フラグが少ない場合は <code>compile_flags.txt</code> を使う方が楽でしょう。</p>
 <p>但し <strong>同じディレクトリにある全てのソースに対して同じフラグが設定される</strong> ので注意が必要です。</p>
 <p>このファイルはシンプルな構文で、一行に一つフラグを記入するだけです。</p>
@@ -914,23 +905,22 @@ bash
   
 </div>
 
-<h1 id="ALLELOSPHERE Reverse Real v1">ALLELOSPHERE Reverse Real v1</h1>
 <p>や~~~最初はみあちゃんのあちゃんだけ見て流し見しようかと思ってたけど みんな良だったので通しで見てしまった。</p>
 <p>今見返してて気が付いたけど、ライブ中殆どはライブ側にコメしてるのでTwitterに 記録があまりない…</p>
-<h2 id="各回の感想">各回の感想</h2>
-<h3 id="来栖らいあ"><a href="https://twitter.com/Raiaxxxia">来栖らいあ</a></h3>
+<h1 id="各回の感想">各回の感想</h1>
+<h2 id="来栖らいあ"><a href="https://twitter.com/Raiaxxxia">来栖らいあ</a></h2>
 <p>2曲、ファンの方と作ったオリ曲？とその次にリバリアで作った曲のお披露目!</p>
 <p>一曲目は電車の中で聞いていたので実はあまり聞けてない…かわいかったのだけ 覚えている。</p>
 <p>二曲目、 Dear Darlin(?) はASMRが入ってたりして結構ぞくっとした… 車内で聞いてたんですがこう…非日常感やば… 曲としてここまでASMR入れ込んでたの聞いたことなかったのでそれだけですごく良でした。</p>
-<h3 id="織田りこる"><a href="https://twitter.com/reco_v">織田りこる</a></h3>
+<h2 id="織田りこる"><a href="https://twitter.com/reco_v">織田りこる</a></h2>
 <p>Live2Dでの参加! 大体が3Dになってると思ってたのでびっくりした。 でも、中々3Dだと(今回は)実現しにくい演出だとかが沢山で良きでした。</p>
 <p>かわいい+ウサギさん+桜吹雪っていうのが みあのあ(特にのあ)に似たものを感じてちょっと嬉しみがあった。</p>
-<h3 id="火渡飛鳥"><a href="https://twitter.com/asuka_shovel">火渡飛鳥</a></h3>
+<h2 id="火渡飛鳥"><a href="https://twitter.com/asuka_shovel">火渡飛鳥</a></h2>
 <p>声優の卵とのこと。 今迄の二人と打ってかわって渋い、力強い声での歌唱でした。 かっこよい。 盛り上ってるなぁぁぁ!!!</p>
-<h3 id="琴子"><a href="https://twitter.com/honey_kotoko">琴子</a></h3>
+<h2 id="琴子"><a href="https://twitter.com/honey_kotoko">琴子</a></h2>
 <p>大分の御当地VTuber。 MVとして作り上げられており、映像として凄い。 大分の有名なものとかが沢山入ってたらしいけど私大分分からん+移動中で 画面があまり見れなかったのが残念orz</p>
 <p>とても綺麗で「大和撫子」という雰囲気の映像でした。</p>
-<h3 id="夜桜みあ"><a href="https://twitter.com/yozakura_mia">夜桜みあ</a></h3>
+<h2 id="夜桜みあ"><a href="https://twitter.com/yozakura_mia">夜桜みあ</a></h2>
 <p>我らが!!!!!!みあちゃん!!!!!!!!!!!</p>
 <p>フルトラでは動けず(多分)facerigとかを使ってたと思うけど、 動いているみあちゃんが見られただけでも嬉しかったです。 「アリ~~ナ~~!!」ってやりたがってるのがかわいい。 「技術ってしゅげ~~~」じゃないんだよ貴女のかわいさもしゅげ~~~だよ。 技術ってほんとしゅげぇ…</p>
 <p>blooming magicはコール&amp;レスポンスもある曲で、みあちゃんが コール&amp;レスポンス講座してくれた。そのお陰でみんなやってくれてありがてぇ… 黒猫さん以外の方もみんなコール&amp;レスポンスしてくれていて、めっちゃ 会場全体で盛り上りました。とても良い。</p>
@@ -939,19 +929,19 @@ bash
 <p>…最近の切り抜き作っておけばよかったなって思ってます!!うん!!!! 絶対そうするべきだったねぇぇぇぇ!!!!!</p>
 <p>ちなみにさらっと「ありがと~!」とか言ってた気がしますが ありがとうはこっちなんだよなありがとぉぉぉぉぉぉあのさぁぁぁあぁぁ 存在してくれててありがとうなぁぁぁぁぁぁ</p>
 <p>すき</p>
-<h3 id="九条林檎"><a href="https://twitter.com/ringo_0_0_5">九条林檎</a></h3>
+<h2 id="九条林檎"><a href="https://twitter.com/ringo_0_0_5">九条林檎</a></h2>
 <p>林檎さまだねぇ。うん。 流石の林檎様、というステージでした。</p>
 <p>衣装も麗しくかつかっこ良い。 セルフカメラらしいし、それでいて歌も踊りもしっかりとこなす。 流石なんだよな…</p>
 <p>ステージで林檎様が出る度にコメ欄が「麗しい…」「征服して!」になるのが とても好きです。こんなに本人の雰囲気がにじみ出るコメ欄他にあるだろうか。 <del>あ、名取のとことかはある意味滲み出ていますg</del></p>
 <p>かっこよい+麗しいが本当に素敵でした。</p>
-<h3 id="魅紗"><a href="https://twitter.com/misyasamadayo">魅紗</a></h3>
+<h2 id="魅紗"><a href="https://twitter.com/misyasamadayo">魅紗</a></h2>
 <p>一目見てわかるこのたたずまい。 実は前回のオリ曲コンピの時に知ってそこからフォローしておりましたが、 相変わらず歌が綺麗。声の出し方とか関係なしに凄く綺麗。</p>
 <p>曲も御姿も美しくて最高でした。</p>
-<h3 id="夜桜のあ"><a href="https://twitter.com/yozakura_noa">夜桜のあ</a></h3>
+<h2 id="夜桜のあ"><a href="https://twitter.com/yozakura_noa">夜桜のあ</a></h2>
 <p>ア゛イ゛ド゛ル゛!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</p>
 <p>今日ののあちゃんはガチでアイドルでした。 導入のカメラワーク・歓声からのパーティクルの演出とても綺麗でした。</p>
 <p>サビ以外の振り付けは自分で考えたって言ってたけどかわいかったでし… りんりんちゃん作の衣装も素敵でした。</p>
-<h3 id="柚月ゆず"><a href="https://twitter.com/0w0_YUZU">柚月ゆず</a></h3>
+<h2 id="柚月ゆず"><a href="https://twitter.com/0w0_YUZU">柚月ゆず</a></h2>
 <p>Live2Dでの参戦…と思いきや超綺麗な3D!! 多分MMD…? 沢山動いていてとても楽しい!</p>
 <p>衣装も、姿もステージも演出も綺麗でした。</p>
 <p>海の上のステージ、というのがアイマリンプロジェクトのMarine Dreamin'と 重なって懐しい気持ちになりました。 私の3DCGとの馴初めがMarine Dreamin'なので…</p>
@@ -959,17 +949,17 @@ bash
 <hr />
 <p>あの、ここらへんからライブ視聴後数時間経って書いているので段々と内容を忘れています</p>
 <hr />
-<h3 id="V01 YUME"><a href="https://twitter.com/V01Yume">V01 YUME</a></h3>
+<h2 id="V01 YUME"><a href="https://twitter.com/V01Yume">V01 YUME</a></h2>
 <p>声が綺麗… お目目も綺麗…YU"ME"だけに…</p>
 <p>はい。</p>
 <p>くっ…?って体かしげてるのがとてもかわいかった。</p>
-<h3 id="幸糖ミュウミュウ"><a href="https://twitter.com/mewmewsugar">幸糖ミュウミュウ</a></h3>
+<h2 id="幸糖ミュウミュウ"><a href="https://twitter.com/mewmewsugar">幸糖ミュウミュウ</a></h2>
 <p>我らがA2Pのミュウミュウちゃん!! 休止中だったのを途中で思い出しましたが、そんな中の出演って中々エモでは…</p>
 <p>私はそこまでガッツリ追ってなかったけれど、待ち侘びてたファンも 多かったろうなぁという気持ちで見ていました。</p>
 <p>振り付けがかわいい!!とてもかわいい!!</p>
-<h3 id="御兎木乃天"><a href="https://twitter.com/Noakun_RET">御兎木乃天</a></h3>
+<h2 id="御兎木乃天"><a href="https://twitter.com/Noakun_RET">御兎木乃天</a></h2>
 <p>動画での参戦。 MV調に仕上がっていて、童謡？民謡？的な曲と合う世界観で引き込まれました。 すっ…と聞き入っておったよ…</p>
-<h3 id="サクラメイ"><a href="https://twitter.com/Sakura_Maychan">サクラメイ</a></h3>
+<h2 id="サクラメイ"><a href="https://twitter.com/Sakura_Maychan">サクラメイ</a></h2>
 <p>大トリ! 最初っからめちゃくちゃ元気な声・元気な動きをしていて、 一気にテンションが上がりました。 先程のしんみりさは何処へ…</p>
 <p>歌っている間もずっと元気で見ていて元気が貰えるタイプの子でした。ありがたぅ</p>
 ]]></summary>

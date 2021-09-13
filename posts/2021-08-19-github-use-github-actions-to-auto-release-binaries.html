@@ -49,9 +49,8 @@
   
 </div>
 
-<h1 data-date="[2021-08-19 Thu 21:21]" data-tags=":haskell:" data-blog_post_kind="HowTo" data-blog_post_progress="WIP" data-blog_post_status="Normal" id="Github actionsでStackを使用した実行ファイルのバイナリを自動生成">Github actionsでStackを使用した実行ファイルのバイナリを自動生成</h1>
 <p>ghq:Cj-bc/oschark を作っている際、installationを書く上で 「どうせならバイナリ用意しておくか」と思ったので作業したメモ。</p>
-<h2 id="全体像">全体像</h2>
+<h1 id="全体像">全体像</h1>
 <p>最終的にやりたいこと: Github actionsを用いてバイナリを配付する</p>
 <ol>
 <li>手動で実行できる「ビルドする」 Actionを作る</li>
@@ -59,7 +58,7 @@
 <li>リリース時をトリガーとしてGithub Actionを稼動させる</li>
 <li>複数プラットフォームそれぞれ用のバイナリを用意する</li>
 </ol>
-<h2 id="1. 手動で実行できる「ビルドする」ACtionを作る">1. 手動で実行できる「ビルドする」ACtionを作る</h2>
+<h1 id="1. 手動で実行できる「ビルドする」ACtionを作る">1. 手動で実行できる「ビルドする」ACtionを作る</h1>
 <p>Haskell(stack)の環境をセットアップし、ビルドする。</p>
 <p>stackの環境は、元々は公式にあったが現在は廃止され、 <a href="https://github.com/haskell/actions/tree/main/setup">haskell/actions</a> に移動されて管理されている。</p>
 <p>デフォルトではcabalの環境あセットアップされる。</p>
@@ -80,7 +79,7 @@ yaml
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="fu">with</span><span class="kw">:</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="at">  </span><span class="fu">enable-stack</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code></pre></div>
 </div>
-<h2 id="2. ビルドしたものをリリースに載せられるようにする">2. ビルドしたものをリリースに載せられるようにする</h2>
+<h1 id="2. ビルドしたものをリリースに載せられるようにする">2. ビルドしたものをリリースに載せられるようにする</h1>
 <p>ビルドしても、このままだと海のもずくに消えてしまいます。 なので、これをリリースに付属させる処理をします。</p>
 <p>公式の <a href="https://github.com/actions/create-release">actions/create-release</a>が昔はあったようですが、 2021年8月19日現在ではアーカイブされてしまっているので、 そこで提案されている他のアクションを使うことにしました。</p>
 <p>今回は、仕様や書き方等を軽く見た結果 <a href="https://github.com/softprops/action-gh-release">softprops/action-gh-release</a> を 使ってみることにしました。</p>
@@ -113,7 +112,7 @@ yaml
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> softprops/action-gh-release</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="co">...</span></span></code></pre></div>
 </div>
-<h2 id="3. リリース時をトリガーとしてGithub Actionを稼動させる">3. リリース時をトリガーとしてGithub Actionを稼動させる</h2>
+<h1 id="3. リリース時をトリガーとしてGithub Actionを稼動させる">3. リリース時をトリガーとしてGithub Actionを稼動させる</h1>
 <p>これは一般的な方法をそのままで使います。 但し、cabalのバージョニング(厳密には<a href="https://pvp.haskell.org/?rdfrom=https%3A%2F%2Fwiki.haskell.org%2Findex.php%3Ftitle%3DPackage_versioning_policy%26redirect%3Dno">Haskell Package Versioning Policy</a>) に従うタグの形式に変えてあります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -124,7 +123,7 @@ yaml
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="fu">tags</span><span class="kw">:</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;*.*.*.*&quot;</span></span></code></pre></div>
 </div>
-<h2 id="4. 複数プラットフォームそれぞれ用のバイナリを用意する">4. 複数プラットフォームそれぞれ用のバイナリを用意する</h2>
+<h1 id="4. 複数プラットフォームそれぞれ用のバイナリを用意する">4. 複数プラットフォームそれぞれ用のバイナリを用意する</h1>
 <p>せっかくなのでLinux/macOS/Windowsそれぞれのバイナリを提供してみることに します。</p>
 <p>このためには <a href="https://docs.github.com/ja/actions/reference/workflow-syntax-for-github-actions#">matrix</a>を使います(リンクは直貼りできなかった)</p>
 <div class="ui segment">
@@ -140,7 +139,7 @@ yaml
 <p>matrixを含むstrategyは、各jobの直下に書かれます(<code>jobs.&lt;job_id&gt;.strategy.matrix</code>)</p>
 <p>matrixは、値にリストを取る辞書型の値を取ります。 辞書のキーがmatrix内でのプロパティになり値のリストがそれぞれ挿入されることになります。 ここで定義したプロパティは <code>${{matrix.&lt;key&gt;}}</code> で参照することができます。 上記の例の場合は <code>${{matrix.foo}}</code> となります。</p>
 <p>これを</p>
-<h3 id="artifactを使って各バイナリを保存する">artifactを使って各バイナリを保存する</h3>
+<h2 id="artifactを使って各バイナリを保存する">artifactを使って各バイナリを保存する</h2>
 
         </div>
         <div id="footer">

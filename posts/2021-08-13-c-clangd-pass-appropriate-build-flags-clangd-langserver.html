@@ -49,7 +49,6 @@
   
 </div>
 
-<h1 data-date="[2021-08-13 Fri 17:43]" data-tags="C clangd lsp" data-blog_post_kind="Knowledge" data-blog_post_progress="Empty" data-blog_post_status="Normal" id="LSPサーバーとして使うclangdにビルドフラグを設定する">LSPサーバーとして使うclangdにビルドフラグを設定する</h1>
 <p>公式ページ: <a href="https://clangd.llvm.org/installation">https://clangd.llvm.org/installation</a></p>
 <div class="tldr">
 <ul>
@@ -69,12 +68,12 @@ bash
 <li><code>compile_commands.json</code></li>
 <li><code>compile_flags.txt</code></li>
 </ul>
-<h2 id="compile_commands.json: ビルドツールを使用する場合"><code>compile_commands.json</code>: ビルドツールを使用する場合</h2>
+<h1 id="compile_commands.json: ビルドツールを使用する場合"><code>compile_commands.json</code>: ビルドツールを使用する場合</h1>
 <p>プロジェクトの中にある各ファイルのコンパイルコマンドを定義できます。 これは基本的にはツールによって生成されます。</p>
 <p><code>clangd</code> は、今編集しているファイルの親ディレクトリに このファイルを探しにいきます。</p>
 <p>下に2つの例を上げていますが、これ以外のツールでも生成出来るものがあるそうです。</p>
 <p>参考: <a href="https://clang.llvm.org/docs/JSONCompilationDatabase.html">compile<sub>commands</sub>.jsonの仕様</a></p>
-<h3 id="CMakeを使っている場合">CMakeを使っている場合</h3>
+<h2 id="CMakeを使っている場合">CMakeを使っている場合</h2>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
@@ -82,7 +81,7 @@ bash
 <div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">cmake</span> -DCMAKE_EXPORT_COMPILE_COMMANDS=1</span></code></pre></div>
 </div>
 <p>とすることで、ビルドディレクトリに <code>compile_commands.json</code> を 出力します。 プロジェクトルートとは異なる場合であった場合は手動で (シムリンクorコピーすることで)移動する必要があります。</p>
-<h3 id="他のビルドツールを使っている場合">他のビルドツールを使っている場合</h3>
+<h2 id="他のビルドツールを使っている場合">他のビルドツールを使っている場合</h2>
 <p><a href="https://github.com/rizsotto/Bear">bear</a>を使用することで様々なビルドツールでも使うことができるようです。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -92,7 +91,7 @@ bash
 </div>
 <p>とすることで、生成できます。 仕組み的には、ビルドコマンドで普通にビルドし、そのログから コンパイラの呼び出しを特定&amp; <code>compile_commands.json</code> を作るようです。</p>
 <p>(READMEを雑に読んだ程度の知識)</p>
-<h2 id="compile_flags.txt: 手動ビルド、若しくはフラグが少ない場合"><code>compile_flags.txt</code>: 手動ビルド、若しくはフラグが少ない場合</h2>
+<h1 id="compile_flags.txt: 手動ビルド、若しくはフラグが少ない場合"><code>compile_flags.txt</code>: 手動ビルド、若しくはフラグが少ない場合</h1>
 <p>手動でのビルドをしている場合や、フラグが少ない場合は <code>compile_flags.txt</code> を使う方が楽でしょう。</p>
 <p>但し <strong>同じディレクトリにある全てのソースに対して同じフラグが設定される</strong> ので注意が必要です。</p>
 <p>このファイルはシンプルな構文で、一行に一つフラグを記入するだけです。</p>

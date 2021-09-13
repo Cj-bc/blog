@@ -30,9 +30,9 @@
 
 <p>gitの認証情報を保存する為に使う <code>git-credential helper</code> ですが、passを用いたものはデフォルトで存在しないので作ることにします。</p>
 <p>ちなみに元はどこかで見たアイデアです。確か誰かの実装があったと思うので、それを参照するのも良いかと思います。 私はなんとなく自作したかったので作っています。</p>
-<h1 id="git credential helperについて">git credential helperについて</h1>
+<p>git credential helperについて</p>
 <p>git credentialは、機密を保存する為に外部のプログラムを使用します。 その方法は <a href="https://git-scm.com/book/ja/v2/Git-%E3%81%AE%E3%81%95%E3%81%BE%E3%81%96%E3%81%BE%E3%81%AA%E3%83%84%E3%83%BC%E3%83%AB-%E8%AA%8D%E8%A8%BC%E6%83%85%E5%A0%B1%E3%81%AE%E4%BF%9D%E5%AD%98">git-scm.com Git-様々なツール-認証情報の保存</a> で書かれています。</p>
-<h2 id="Git credential helperの役割">Git credential helperの役割</h2>
+<h1 id="Git credential helperの役割">Git credential helperの役割</h1>
 <p>git credential helperは、3つの用途で呼ばれます。</p>
 <ul>
 <li>store</li>
@@ -40,15 +40,15 @@
 <li>erase</li>
 </ul>
 <p>です。</p>
-<h3 id="store – 新しい認証情報を登録する">store – 新しい認証情報を登録する</h3>
+<h2 id="store – 新しい認証情報を登録する">store – 新しい認証情報を登録する</h2>
 <p>Storeは、新しい認証情報を登録する時に呼び出されます。 標準入力から情報を受け取り、それを保存します。 標準出力から何かを返しても良いですが、gitはそれを無視するので必要ではないです。</p>
-<h3 id="erase – 既存の認証情報を消去する">erase – 既存の認証情報を消去する</h3>
+<h2 id="erase – 既存の認証情報を消去する">erase – 既存の認証情報を消去する</h2>
 <p>Eraseは、認証情報を消去したい時に呼ばれます。 標準入力から情報を受け取り、それに該当するものがあればそれを消去します。 標準出力から何かを返しても良いですが、これについてもgitは無視するので必要ではないです。</p>
-<h3 id="get – 渡された情報を基に認証情報を返す">get – 渡された情報を基に認証情報を返す</h3>
+<h2 id="get – 渡された情報を基に認証情報を返す">get – 渡された情報を基に認証情報を返す</h2>
 <p>Getは、渡された情報に合致するエントリがあればその情報を返します。 この場合のみ標準出力は必須で、gitはこの標準出力をそのまま代入文として扱います。</p>
-<h1 id="helperの作成">helperの作成</h1>
+<p>helperの作成</p>
 <p>さて、簡単な説明も済んだので実際にスクリプトを組もうと思います。 例示ではRubyが使われていましたが、passコマンドを使用することと、自分がbash に慣れていることから、bashを使おうと思います。</p>
-<h2 id="データの格納方法">データの格納方法</h2>
+<h1 id="データの格納方法">データの格納方法</h1>
 <p>データはpassに格納しますが、格納する階層構造は以下のようにしようと思います。</p>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
@@ -67,7 +67,7 @@
 <li>ユーザー名は下位エントリ</li>
 </ul>
 <p>にしました。</p>
-<h2 id="1. storeの作成">1. storeの作成</h2>
+<h1 id="1. storeの作成">1. storeの作成</h1>
 <p>storeは、シンプルに与えられた情報からpassに登録をします。 標準入力は</p>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
@@ -108,7 +108,7 @@ bash
 <span id="store_key-27"><a href="#store_key-27" aria-hidden="true"></a><span class="st">    || echo &quot;</span>Failed to save credential<span class="st">&quot;</span></span>
 <span id="store_key-28"><a href="#store_key-28" aria-hidden="true"></a><span class="st">}</span></span></code></pre></div>
 </div>
-<h3 id="実例">実例</h3>
+<h2 id="実例">実例</h2>
 <p>例として</p>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
@@ -129,7 +129,7 @@ example
 <pre class="example SourceCode"><code>/tmp/babel-EN1Wbc/sh-script-qhWEEa: line 3: store_key: command not found
 </code></pre>
 </div>
-<h2 id="2. getの作成">2. getの作成</h2>
+<h1 id="2. getの作成">2. getの作成</h1>
 <p>getは、標準入力からホストとプロトコルの情報を読み込み、 標準出力からユーザー名とパスワードを返します。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -161,7 +161,7 @@ bash
 <span id="pass_get-24"><a href="#pass_get-24" aria-hidden="true"></a>password=<span class="va">$password</span></span>
 <span id="pass_get-25"><a href="#pass_get-25" aria-hidden="true"></a><span class="op">EOF</span></span></code></pre></div>
 </div>
-<h3 id="実例">実例</h3>
+<h2 id="実例">実例</h2>
 <p>getに必要なのはホストとプロトコル(とそれに続く空白行)だけなので以下の情報を入れます</p>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
@@ -176,7 +176,7 @@ example
 password=some_simple_password
 </code></pre>
 </div>
-<h2 id="3. Eraseの作成(未作成)">3. Eraseの作成(未作成)</h2>
+<h1 id="3. Eraseの作成(未作成)">3. Eraseの作成(未作成)</h1>
 <p>Eraseも本来は存在しますが、入力で何を期待すれば良いのかが分からないため今はスルーすることにします。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -184,7 +184,7 @@ bash
 </div>
 <div class="sourceCode" id="erase_key" data-org-language="sh" data-results="output verbatim" data-tangle="git-credential-pass" data-shebang="&quot;#!/usr/local/env bash&quot;"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="erase_key-1"><a href="#erase_key-1" aria-hidden="true"></a><span class="bu">exit</span></span></code></pre></div>
 </div>
-<h1 id="最終的に出来たもの">最終的に出来たもの</h1>
+<p>最終的に出来たもの</p>
 <p><a href="https://github.com/Cj-bc/dotfiles/blob/master/dotfiles/bin/git-credential-pass">Cj-bc/dotfiles – dotfiles/bin/git-credential-pass</a> にあります。</p>
 <p>このポストから <code>org tangle</code> しようとしたのですが、諸々(関数化したりetc)上手く出来なかったのでtangleではないです 実用的なスクリプトとしてはそちらを参照して下さい</p>
 ]]></description>

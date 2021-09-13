@@ -33,8 +33,8 @@
 </div>
 
 <p>xmonad、デフォルトだと新しい機能を自作したりしようとするとシステムグローバルに突っ込む必要が出てきます。 それは面倒だし、管理が煩雑になるのでそもそもstackを使用できるようにします。</p>
-<h1 id="Xmonadをstackでコンパイルできるようにする">Xmonadをstackでコンパイルできるようにする</h1>
-<h2 id="Xmonadのコンパイル方法を指定する方法">Xmonadのコンパイル方法を指定する方法</h2>
+<p>Xmonadをstackでコンパイルできるようにする</p>
+<h1 id="Xmonadのコンパイル方法を指定する方法">Xmonadのコンパイル方法を指定する方法</h1>
 <p>xmonadの recompileは、 <a href="https://hackage.haskell.org/package/xmonad-0.15/docs/src/XMonad.Core.html#recompile">XMonad.Core.recompile</a> によって行われています。 そして内部を読んでみると、 <code class="sourceCode haskell">cfgdir <span class="op">&lt;/&gt;</span> <span class="st">&quot;build&quot;</span></code> が存在すればそれを読むということが分かります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -72,7 +72,7 @@ haskell
 </ol>
 <p>のいずれかになります。</p>
 <p>今回は、変更点をあまり作らないためにとりあえず <code>~/.xmonad</code> にしようと思います(そのうち <code>XDG_CONFIG_HOME</code> 以下に移したい)</p>
-<h2 id="build スクリプトを書く"><code>build</code> スクリプトを書く</h2>
+<h1 id="build スクリプトを書く"><code>build</code> スクリプトを書く</h1>
 <p>コマンドを使用することになるので、shellscriptで書くのが妥当かなと思います。 <code>build</code> スクリプトは以下のように呼ばれます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">

@@ -44,9 +44,9 @@
 </tr>
 </tbody>
 </table>
-<h1 id="問題">問題</h1>
+<p>問題</p>
 <p><a href="https://github.com/saturday06/VRM_Addon_for_Blender/pull/23#issuecomment-782580000">issueでsaturday06さんが教えてくれた</a> のですが、「一度古いプラグインでVRMを読み込んだblendファイルで、新しくVRMを読み込むとエラーを吐く」</p>
-<h2 id="トレースバック">トレースバック</h2>
+<h1 id="トレースバック">トレースバック</h1>
 <div class="ui segment">
 <div class="ui top right attached label">
 
@@ -79,7 +79,7 @@
                               location: &lt;unknown location&gt;:-1
 </code></pre>
 </div>
-<h1 id="バグが起きた場所">バグが起きた場所</h1>
+<p>バグが起きた場所</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 
@@ -91,11 +91,11 @@
    └BlendModel.build_material_from_mtoon()
 </code></pre>
 </div>
-<h1 id="バグの原因">バグの原因</h1>
+<p>バグの原因</p>
 <p><code>importer/blend_model.py:449</code> で <code>bpy.data.node_groups[shader_node_group_name]</code> を取ってきているところが原因。</p>
 <p><code>bpy.data.node_groups</code> はblendfile内にある <code>node_groups</code> を保持しており、 既に「古いバージョンで読み込まれたVRM」がある場合 <code>bpy.data.node_groups["MToon_unversioned"]</code> は 「古いバージョンの <code>MToon_unversioned</code> 」=typoが含まれたものを返してしまう。</p>
 <p>そうすると、 <code>node_group_create</code> から返されたのちに <code>.inputs["Normalmap"]</code> が読まれた際に存在せずにクラッシュしてしまう。</p>
-<h1 id="解決方法">解決方法</h1>
+<p>解決方法</p>
 <p>ここでできるのは</p>
 <ol>
 <li>今までと同じように"Normalmap"が存在しなかったら"Nomalmap"を読ませる</li>
