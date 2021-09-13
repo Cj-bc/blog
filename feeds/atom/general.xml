@@ -16,7 +16,7 @@
     <published>2021-09-12T00:00:00Z</published>
     <updated>2021-09-12T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>2021-09-12-akihabara-wado-first-try</h1>
+  <h1>秋葉原和堂に行ってきた</h1>
   <div class="ui list">
     <div class="item">Posted on September 12, 2021</div>
     <div class="item">
@@ -76,7 +76,7 @@
     <published>2021-09-08T00:00:00Z</published>
     <updated>2021-09-08T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>2021-09-08-homebrew-dfx</h1>
+  <h1>Dfinity SDKのHomebrew formulae(非公式)を書いた</h1>
   <div class="ui list">
     <div class="item">Posted on September  8, 2021</div>
     <div class="item">
@@ -174,7 +174,7 @@ ruby
     <published>2021-09-08T00:00:00Z</published>
     <updated>2021-09-08T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>2021-09-08-dfinity-sdk-installer-unofficial-explained-memo</h1>
+  <h1>Dfinity SDKのインストールスクリプトを読んでみたメモ</h1>
   <div class="ui list">
     <div class="item">Posted on September  8, 2021</div>
     <div class="item">
@@ -259,7 +259,7 @@ ruby
     <published>2021-09-02T00:00:00Z</published>
     <updated>2021-09-02T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>2021-09-02-emacs-projectile-replace</h1>
+  <h1>ProjectileのReplaceが便利だった</h1>
   <div class="ui list">
     <div class="item">Posted on September  2, 2021</div>
     <div class="item">
@@ -286,7 +286,7 @@ ruby
     <published>2021-08-26T00:00:00Z</published>
     <updated>2021-08-26T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>2021-08-26-haskell-dot-and-infix-fmap</h1>
+  <h1>. と <$> の順序のメモ</h1>
   <div class="ui list">
     <div class="item">Posted on August 26, 2021</div>
     <div class="item">
@@ -395,7 +395,7 @@ haskell
     <published>2021-08-24T00:00:00Z</published>
     <updated>2021-08-24T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>2021-08-24-xmonad-how-to-access-window-properties-from-layout</h1>
+  <h1>XMonadのLayoutからWindowのプロパティにアクセスする</h1>
   <div class="ui list">
     <div class="item">Posted on August 24, 2021</div>
     <div class="item">
@@ -549,7 +549,7 @@ haskell
     <published>2021-08-19T00:00:00Z</published>
     <updated>2021-08-19T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>2021-08-19-github-use-github-actions-to-auto-release-binaries</h1>
+  <h1>Github actionsでStackを使用した実行ファイルのバイナリを自動生成</h1>
   <div class="ui list">
     <div class="item">Posted on August 19, 2021</div>
     <div class="item">
@@ -665,7 +665,7 @@ yaml
     <published>2021-08-14T00:00:00Z</published>
     <updated>2021-08-14T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>2021-08-14-gtk-learning</h1>
+  <h1>gtkを触りはじめてみたメモ</h1>
   <div class="ui list">
     <div class="item">Posted on August 14, 2021</div>
     <div class="item">
@@ -698,7 +698,7 @@ yaml
     <published>2021-08-13T00:00:00Z</published>
     <updated>2021-08-13T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>2021-08-13-c-clangd-pass-appropriate-build-flags-clangd-langserver</h1>
+  <h1>LSPサーバーとして使うclangdにビルドフラグを設定する</h1>
   <div class="ui list">
     <div class="item">Posted on August 13, 2021</div>
     <div class="item">
@@ -889,7 +889,7 @@ bash
     <published>2021-07-24T00:00:00Z</published>
     <updated>2021-07-24T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>2021-07-24-diary-allelosphere-vol1</h1>
+  <h1>ALLELOSPHERE Reverse Real v1</h1>
   <div class="ui list">
     <div class="item">Posted on July 24, 2021</div>
     <div class="item">

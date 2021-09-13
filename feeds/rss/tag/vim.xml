@@ -12,7 +12,7 @@
     <title>vim9scriptで気をつけること</title>
     <link>https://cj-bc.github.io/blog/posts/2021-03-02-vim-vim9script-struggling-memo-v8.2_1-2560.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>vim9scriptで気をつけること</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on March  2, 2021</div>
     <div class="item">
@@ -80,7 +80,7 @@ vim
     <title>TERMをtmux-256colorにする</title>
     <link>https://cj-bc.github.io/blog/posts/2021-02-16-terminal-set-TERM-to-tmux-256color.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>TERMをtmux-256colorにする</h1>
+  <h1>なぜやるのか</h1>
   <div class="ui list">
     <div class="item">Posted on February 15, 2021</div>
     <div class="item">
@@ -153,7 +153,7 @@ bash
     <title>fzf.vimでカレントディレクトリ以外のGitファイルを検索</title>
     <link>https://cj-bc.github.io/blog/posts/2021-01-13-GFiles-more-careful-with-fzf.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>fzf.vimでカレントディレクトリ以外のGitファイルを検索</h1>
+  <h1>GFilesは便利</h1>
   <div class="ui list">
     <div class="item">Posted on January 14, 2021</div>
     <div class="item">
@@ -204,7 +204,7 @@ endfunction</code></pre>
     <title>vim-pandoc-syntaxでurlを非表示にしたい</title>
     <link>https://cj-bc.github.io/blog/posts/2020-11-13-pandoc-vim-conceal-url-by-default.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>vim-pandoc-syntaxでurlを非表示にしたい</h1>
+  <h1>markdown/vimwiki/pandocのsyntaxハイライト</h1>
   <div class="ui list">
     <div class="item">Posted on November 13, 2020</div>
     <div class="item">

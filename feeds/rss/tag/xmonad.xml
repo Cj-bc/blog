@@ -12,7 +12,7 @@
     <title>XMonad.Layoutのリスト</title>
     <link>https://cj-bc.github.io/blog/posts/2021-05-10-xmonad-list-of-layouts.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>XMonad.Layoutのリスト</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on May 10, 2021</div>
     <div class="item">
@@ -107,7 +107,7 @@ haskell
     <title>xmonadにstackを使う</title>
     <link>https://cj-bc.github.io/blog/posts/2021-05-04-xmonad-use-stack-for-compile.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>xmonadにstackを使う</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on May  4, 2021</div>
     <div class="item">
@@ -195,7 +195,7 @@ haskell
     <title>うちのlightdmのログインループはxmonadが原因だった</title>
     <link>https://cj-bc.github.io/blog/posts/2021-04-12-lightdm-login-loop-was-caused-by-xmonad.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>うちのlightdmのログインループはxmonadが原因だった</h1>
+  <h1>起きていたこと</h1>
   <div class="ui list">
     <div class="item">Posted on April 12, 2021</div>
     <div class="item">

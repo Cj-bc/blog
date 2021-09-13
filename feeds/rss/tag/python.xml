@@ -12,7 +12,7 @@
     <title>Python Language Serverにmypyにmypyの設定を追加した</title>
     <link>https://cj-bc.github.io/blog/posts/2021-02-21-python-install-pyls-mypy-along-with-vim-lsp-settings.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>Python Language Serverにmypyにmypyの設定を追加した</h1>
+  <h1>環境</h1>
   <div class="ui list">
     <div class="item">Posted on February 21, 2021</div>
     <div class="item">
@@ -86,7 +86,7 @@ bash
     <title>fix-typoのデバッグメモ</title>
     <link>https://cj-bc.github.io/blog/posts/2021-02-20-blender-vrm-plugin-bugfix-after-merged-memo.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>fix-typoのデバッグメモ</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on February 20, 2021</div>
     <div class="item">
@@ -180,7 +180,7 @@ bash
     <title>VRM_IMPORTER_for_Blender \#23 作業メモ</title>
     <link>https://cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>VRM_IMPORTER_for_Blender \#23 作業メモ</h1>
+  <h1>追加されたシェーダーを探す</h1>
   <div class="ui list">
     <div class="item">Posted on January 11, 2021</div>
     <div class="item">
@@ -421,7 +421,7 @@ SyntaxError: invalid syntax
     <title>pythonのelifはifよりも速いのか</title>
     <link>https://cj-bc.github.io/blog/posts/2020-11-07-python-is-elif-faster-than-ifs.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>pythonのelifはifよりも速いのか</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on November  7, 2020</div>
     <div class="item">
@@ -1028,7 +1028,7 @@ s
     <title>簡易的な素数探索アルゴリズムの速度比較</title>
     <link>https://cj-bc.github.io/blog/posts/2020-10-17-comparing-primes-algorithm.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>簡易的な素数探索アルゴリズムの速度比較</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on October 17, 2020</div>
     <div class="item">
@@ -1123,7 +1123,7 @@ eratosthenes  : 2.4552106857299804e-05</code></pre>
     <title>jupyter notebookがうまく起動しなかった</title>
     <link>https://cj-bc.github.io/blog/posts/2020-10-08-jupyter-notebook-doesnt-up-so-long.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>jupyter notebookがうまく起動しなかった</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on October 10, 2020</div>
     <div class="item">

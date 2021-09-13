@@ -12,7 +12,7 @@
     <title>XMonad.Layoutのリスト</title>
     <link>https://cj-bc.github.io/blog/posts/2021-05-10-xmonad-list-of-layouts.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>XMonad.Layoutのリスト</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on May 10, 2021</div>
     <div class="item">
@@ -107,7 +107,7 @@ haskell
     <title>xmonadにstackを使う</title>
     <link>https://cj-bc.github.io/blog/posts/2021-05-04-xmonad-use-stack-for-compile.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>xmonadにstackを使う</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on May  4, 2021</div>
     <div class="item">
@@ -195,7 +195,7 @@ haskell
     <title>ブログの見た目を整える</title>
     <link>https://cj-bc.github.io/blog/posts/2021-01-03-fomantic-ui.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>ブログの見た目を整える</h1>
+  <h1>コードブロックの整形</h1>
   <div class="ui list">
     <div class="item">Posted on January  3, 2021</div>
     <div class="item">
@@ -314,7 +314,7 @@ html
     <title>pandocのBlock</title>
     <link>https://cj-bc.github.io/blog/posts/2020-11-16-pandoc-orderedlist-attr-view.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>pandocのBlock</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on November 16, 2020</div>
     <div class="item">
@@ -436,7 +436,7 @@ markdown
     <title>jtdaugherty/tart ソースリーディングメモ</title>
     <link>https://cj-bc.github.io/blog/posts/2020-08-24-jdaughertys-tart-code-reading.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>jtdaugherty/tart ソースリーディングメモ</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on August 24, 2020</div>
     <div class="item">

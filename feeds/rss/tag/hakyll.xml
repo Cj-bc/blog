@@ -12,7 +12,7 @@
     <title>ブログの見た目を整える</title>
     <link>https://cj-bc.github.io/blog/posts/2021-01-03-fomantic-ui.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>ブログの見た目を整える</h1>
+  <h1>コードブロックの整形</h1>
   <div class="ui list">
     <div class="item">Posted on January  3, 2021</div>
     <div class="item">
@@ -131,7 +131,7 @@ html
     <title>Github ActionsでGithub Pagesのリリースを自動化する</title>
     <link>https://cj-bc.github.io/blog/posts/2020-08-07-AddedGithubActionsToBlog.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>Github ActionsでGithub Pagesのリリースを自動化する</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on August  7, 2020</div>
     <div class="item">

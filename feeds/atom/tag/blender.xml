@@ -16,7 +16,7 @@
     <published>2021-02-20T00:00:00Z</published>
     <updated>2021-02-20T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>fix-typoのデバッグメモ</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on February 20, 2021</div>
     <div class="item">
@@ -110,7 +110,7 @@
     <published>2021-01-11T00:00:00Z</published>
     <updated>2021-01-11T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>VRM_IMPORTER_for_Blender \#23 作業メモ</h1>
+  <h1>追加されたシェーダーを探す</h1>
   <div class="ui list">
     <div class="item">Posted on January 11, 2021</div>
     <div class="item">
@@ -351,7 +351,7 @@ SyntaxError: invalid syntax
     <published>2020-10-24T00:00:00Z</published>
     <updated>2020-10-24T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>VRM_IMPORTER_for_BlenderでVRMモデルを作る際の注意点</h1>
+  <h1>全てのメッシュの原点(Origin)を ワールド座標系の 原点に置く</h1>
   <div class="ui list">
     <div class="item">Posted on October 24, 2020</div>
     <div class="item">
@@ -416,7 +416,7 @@ SyntaxError: invalid syntax
     <published>2020-08-19T00:00:00Z</published>
     <updated>2020-08-19T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>Blender docs -- data block</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on August 19, 2020</div>
     <div class="item">
@@ -483,7 +483,7 @@ SyntaxError: invalid syntax
     <published>2020-08-17T00:00:00Z</published>
     <updated>2020-08-17T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>blenderのSmooth</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on August 17, 2020</div>
     <div class="item">
@@ -517,7 +517,7 @@ SyntaxError: invalid syntax
     <published>2020-08-16T00:00:00Z</published>
     <updated>2020-08-16T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>blenderマテリアル のblend modeについて</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on August 16, 2020</div>
     <div class="item">

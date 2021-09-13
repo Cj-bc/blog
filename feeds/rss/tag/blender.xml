@@ -12,7 +12,7 @@
     <title>fix-typoのデバッグメモ</title>
     <link>https://cj-bc.github.io/blog/posts/2021-02-20-blender-vrm-plugin-bugfix-after-merged-memo.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>fix-typoのデバッグメモ</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on February 20, 2021</div>
     <div class="item">
@@ -106,7 +106,7 @@
     <title>VRM_IMPORTER_for_Blender \#23 作業メモ</title>
     <link>https://cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>VRM_IMPORTER_for_Blender \#23 作業メモ</h1>
+  <h1>追加されたシェーダーを探す</h1>
   <div class="ui list">
     <div class="item">Posted on January 11, 2021</div>
     <div class="item">
@@ -347,7 +347,7 @@ SyntaxError: invalid syntax
     <title>VRM_IMPORTER_for_BlenderでVRMモデルを作る際の注意点</title>
     <link>https://cj-bc.github.io/blog/posts/2020-10-24-blender-vrmImporter-Not-Object-on-origin.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>VRM_IMPORTER_for_BlenderでVRMモデルを作る際の注意点</h1>
+  <h1>全てのメッシュの原点(Origin)を ワールド座標系の 原点に置く</h1>
   <div class="ui list">
     <div class="item">Posted on October 24, 2020</div>
     <div class="item">
@@ -412,7 +412,7 @@ SyntaxError: invalid syntax
     <title>Blender docs -- data block</title>
     <link>https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>Blender docs -- data block</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on August 19, 2020</div>
     <div class="item">
@@ -479,7 +479,7 @@ SyntaxError: invalid syntax
     <title>blenderのSmooth</title>
     <link>https://cj-bc.github.io/blog/posts/2020-08-17-blender-auto-smooth.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>blenderのSmooth</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on August 17, 2020</div>
     <div class="item">
@@ -513,7 +513,7 @@ SyntaxError: invalid syntax
     <title>blenderマテリアル のblend modeについて</title>
     <link>https://cj-bc.github.io/blog/posts/2020-08-16-blender-material-blend-mode.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>blenderマテリアル のblend modeについて</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on August 16, 2020</div>
     <div class="item">

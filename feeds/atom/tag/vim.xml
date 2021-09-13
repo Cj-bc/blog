@@ -16,7 +16,7 @@
     <published>2021-03-02T00:00:00Z</published>
     <updated>2021-03-02T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>vim9scriptで気をつけること</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on March  2, 2021</div>
     <div class="item">
@@ -84,7 +84,7 @@ vim
     <published>2021-02-15T00:00:00Z</published>
     <updated>2021-02-15T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>TERMをtmux-256colorにする</h1>
+  <h1>なぜやるのか</h1>
   <div class="ui list">
     <div class="item">Posted on February 15, 2021</div>
     <div class="item">
@@ -157,7 +157,7 @@ bash
     <published>2021-01-14T00:00:00Z</published>
     <updated>2021-01-14T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>fzf.vimでカレントディレクトリ以外のGitファイルを検索</h1>
+  <h1>GFilesは便利</h1>
   <div class="ui list">
     <div class="item">Posted on January 14, 2021</div>
     <div class="item">
@@ -208,7 +208,7 @@ endfunction</code></pre>
     <published>2020-11-13T00:00:00Z</published>
     <updated>2020-11-13T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>vim-pandoc-syntaxでurlを非表示にしたい</h1>
+  <h1>markdown/vimwiki/pandocのsyntaxハイライト</h1>
   <div class="ui list">
     <div class="item">Posted on November 13, 2020</div>
     <div class="item">

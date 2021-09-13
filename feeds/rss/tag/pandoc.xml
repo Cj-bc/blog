@@ -12,7 +12,7 @@
     <title>pandocのBlock</title>
     <link>https://cj-bc.github.io/blog/posts/2020-11-16-pandoc-orderedlist-attr-view.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>pandocのBlock</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on November 16, 2020</div>
     <div class="item">
@@ -134,7 +134,7 @@ markdown
     <title>vim-pandoc-syntaxでurlを非表示にしたい</title>
     <link>https://cj-bc.github.io/blog/posts/2020-11-13-pandoc-vim-conceal-url-by-default.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>vim-pandoc-syntaxでurlを非表示にしたい</h1>
+  <h1>markdown/vimwiki/pandocのsyntaxハイライト</h1>
   <div class="ui list">
     <div class="item">Posted on November 13, 2020</div>
     <div class="item">
