@@ -25,6 +25,8 @@ myPandocTransform = walk codeBlockFormat
                   . walk (walk imageFormat :: Block -> Block)
                   . walk addAnchorToHeader
                   . walk (walk orgLinkFormat :: Block -> Block)
+                  . headerShift (-1)
+
 
 -- | Defines code block format
 
