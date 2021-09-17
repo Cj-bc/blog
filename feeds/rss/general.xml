@@ -7,8 +7,86 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/general.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Sun, 12 Sep 2021 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Fri, 17 Sep 2021 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2021-09-17-xmobar-reason-utf8-wasnt-rendered</title>
+    <link>https://cj-bc.github.io/blog/posts/2021-09-17-xmobar-reason-utf8-wasnt-rendered.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>xmobarでwithutf8してるのにUTF8出来なかった理由</h1>
+  <div class="ui list">
+    <div class="item">Posted on September 17, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on September 17, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  
+  
+</div>
+
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p><code>LANG</code> の設定を確認して。 <code>bashrc</code> 等で設定していても、xmonadから呼び出される場合は それらは反映されない。</p>
+<p>xmobarを呼び出している場所でそのまま設定できる 詳しい方法は以下</p>
+</blockquote>
+</div>
+<p>xmobarは、ビルド時のフラグ <code>with_utf8</code> を付けることで UTF-8文字列を扱えるようになる。 そしてこのフラグはデフォルトで <code>True</code> (=有効)なので、特に 何もしなくても使えるはずだった。</p>
+<p>が、上手くいかなかった。</p>
+<h1 id="試したが上手くいかなかったこと">試したが上手くいかなかったこと</h1>
+<ul>
+<li>xmobarのビルドフラグの確認
+<ul>
+<li>archlinuxユーザーなので<a href="https://github.com/archlinux/svntogit-community/blob/packages/xmobar/trunk/PKGBUILD">PKGBUILD</a>を確認したがフラグは全て有効になっている</li>
+</ul></li>
+<li>フォントの確認
+<ul>
+<li>普段使いのフォントなので、日本語は対応しているはず</li>
+</ul></li>
+</ul>
+<h1 id="判明した原因">判明した原因</h1>
+<p>bashからではなくxmonadから起動していた影響で 環境変数が伝搬されておらず、 <code>LANG=ja_JP.UTF-8</code> でない環境で 実行されていた。</p>
+<p>証拠に、ターミナルから <code class="sourceCode bash" data-org-language="sh"><span class="va">LANG=</span>C <span class="ex">xmobar</span></code> と実行してみると 日本語が表示できなくなった。</p>
+<h1 id="解決策">解決策</h1>
+<h2 id="XMonad.Hooks.DynamicLogを使用している場合"><a href="https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Hooks-DynamicLog.html">XMonad.Hooks.DynamicLog</a>を使用している場合</h2>
+<p>多分大半がこちらなのではないか…??</p>
+<p>とは思うんだけど時間がない&amp;&amp;私やってないので割愛、 <a href="https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/src/XMonad.Hooks.DynamicLog.html#xmobar">xmobar</a>関数の定義を少し弄ってあげた以下のような関数を作れば動くはず。 理由は [[* <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html">XMonad.Hooks.StatusBar</a> を使用している場合]] を参照。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>xmobar&#39; conf <span class="ot">=</span> statusbar <span class="st">&quot;LANG=ja_JP.UTF-8 xmobar&quot;</span> xmobarPP toggleStructsKey conf</span></code></pre></div>
+</div>
+<h2 id="XMonad.Hooks.StatusBar を使用している場合"><a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html">XMonad.Hooks.StatusBar</a> を使用している場合</h2>
+<p>実はこちらの方が新しいらしく、もう <a href="https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Hooks-DynamicLog.html">DynamicLog</a> は推奨されていないのだそうだ。</p>
+<p><strong>知るか!!!!!</strong></p>
+<p>と怒鳴ってもしかたないのだけど怒鳴られても仕方ない事情もある。 (それはそれで別で書こう。 )</p>
+<p>さて。 <code>StatusBar</code> を使用している場合、 <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#t:StatusBarConfig">StatusBarConfig</a> 型の 値を使っているはず。 今はみんなここで <code class="sourceCode haskell">statusBarProp <span class="st">&quot;xmobar&quot;</span> (<span class="fu">pure</span> xmobarPP)</code> とかしているのではないだろうか。</p>
+<p>ここを以下のように書き換えればよい:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>statusBarProp <span class="st">&quot;LANG=ja_JP.UTF-8 xmobar&quot;</span> (<span class="fu">pure</span> xmobarPP)</span></code></pre></div>
+</div>
+<p>そう、 <em>先頭に <code>LANG=ja_JP.UTF-8</code> を付け加えるだけ</em> である。 かんたん!!</p>
+<ol>
+<li><p>仕組み</p>
+<p>実は <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#v:statusBarProp">statusBarProp</a> の中を見てみても分かりづらいのだが、 <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#t:StatusBarConfig">StatusBarConfig</a> から読み解くとわかる。</p>
+<p><code>StatusBarConfig</code> では、 <code>sbStartUpHook</code> を使って 「ステータスバーを起動する <code>X ()</code> アクション」を定義している。</p>
+<p><code>statusBarProp</code> 関数にて引数に取った文字列 ( <code>LANG=ja_JP.UTF-8 xmobar</code> なり <code>xmobar</code> なり)は <code>statusBarProp</code> → <code>statusBarPropTo</code> → <code>statusBarGeneric</code> → <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#v:spawnStatusBar">spawnStatusBar</a> とそのまま受け渡されていき、</p>
+<p>そこから<a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-Core.html#v:spawnPID">spawnPID</a>へと渡される。 そしてこの中では <a href="https://hackage.haskell.org/package/unix-2.7.2.2/docs/System-Posix-Process.html#v:executeFile">executeFile</a> に <strong>なんと <code>/bin/sh -c</code> の引数として</strong> 渡され、最終的に <code>execv</code> システムコールによって実行される。</p>
+<p>ここが大事で、 <em>shの上で実行される</em> ことによって環境変数を その場で設定したりといったシェルの機能を使うことができる。</p></li>
+</ol>
+]]></description>
+    <pubDate>Fri, 17 Sep 2021 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2021-09-17-xmobar-reason-utf8-wasnt-rendered.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2021-09-12-akihabara-wado-first-try</title>
     <link>https://cj-bc.github.io/blog/posts/2021-09-12-akihabara-wado-first-try.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
@@ -879,88 +957,6 @@ bash
 ]]></description>
     <pubDate>Fri, 13 Aug 2021 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2021-08-13-c-clangd-pass-appropriate-build-flags-clangd-langserver.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2021-07-24-diary-allelosphere-vol1</title>
-    <link>https://cj-bc.github.io/blog/posts/2021-07-24-diary-allelosphere-vol1.html</link>
-    <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>ALLELOSPHERE Reverse Real v1</h1>
-  <div class="ui list">
-    <div class="item">Posted on July 24, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on July 24, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  
-  
-</div>
-
-<p>や~~~最初はみあちゃんのあちゃんだけ見て流し見しようかと思ってたけど みんな良だったので通しで見てしまった。</p>
-<p>今見返してて気が付いたけど、ライブ中殆どはライブ側にコメしてるのでTwitterに 記録があまりない…</p>
-<h1 id="各回の感想">各回の感想</h1>
-<h2 id="来栖らいあ"><a href="https://twitter.com/Raiaxxxia">来栖らいあ</a></h2>
-<p>2曲、ファンの方と作ったオリ曲？とその次にリバリアで作った曲のお披露目!</p>
-<p>一曲目は電車の中で聞いていたので実はあまり聞けてない…かわいかったのだけ 覚えている。</p>
-<p>二曲目、 Dear Darlin(?) はASMRが入ってたりして結構ぞくっとした… 車内で聞いてたんですがこう…非日常感やば… 曲としてここまでASMR入れ込んでたの聞いたことなかったのでそれだけですごく良でした。</p>
-<h2 id="織田りこる"><a href="https://twitter.com/reco_v">織田りこる</a></h2>
-<p>Live2Dでの参加! 大体が3Dになってると思ってたのでびっくりした。 でも、中々3Dだと(今回は)実現しにくい演出だとかが沢山で良きでした。</p>
-<p>かわいい+ウサギさん+桜吹雪っていうのが みあのあ(特にのあ)に似たものを感じてちょっと嬉しみがあった。</p>
-<h2 id="火渡飛鳥"><a href="https://twitter.com/asuka_shovel">火渡飛鳥</a></h2>
-<p>声優の卵とのこと。 今迄の二人と打ってかわって渋い、力強い声での歌唱でした。 かっこよい。 盛り上ってるなぁぁぁ!!!</p>
-<h2 id="琴子"><a href="https://twitter.com/honey_kotoko">琴子</a></h2>
-<p>大分の御当地VTuber。 MVとして作り上げられており、映像として凄い。 大分の有名なものとかが沢山入ってたらしいけど私大分分からん+移動中で 画面があまり見れなかったのが残念orz</p>
-<p>とても綺麗で「大和撫子」という雰囲気の映像でした。</p>
-<h2 id="夜桜みあ"><a href="https://twitter.com/yozakura_mia">夜桜みあ</a></h2>
-<p>我らが!!!!!!みあちゃん!!!!!!!!!!!</p>
-<p>フルトラでは動けず(多分)facerigとかを使ってたと思うけど、 動いているみあちゃんが見られただけでも嬉しかったです。 「アリ~~ナ~~!!」ってやりたがってるのがかわいい。 「技術ってしゅげ~~~」じゃないんだよ貴女のかわいさもしゅげ~~~だよ。 技術ってほんとしゅげぇ…</p>
-<p>blooming magicはコール&amp;レスポンスもある曲で、みあちゃんが コール&amp;レスポンス講座してくれた。そのお陰でみんなやってくれてありがてぇ… 黒猫さん以外の方もみんなコール&amp;レスポンスしてくれていて、めっちゃ 会場全体で盛り上りました。とても良い。</p>
-<p>ただね!!!キーボードで打つには間隔が短いのよねあのコール!!!!!! 全然追いつきませんでした。 追いつかなかったけど楽しかった。 声でコールしたらそのまま届いてくれませんかね？？ダメ？？？はい…</p>
-<p>夜桜みあのかわいさが世に知れちまったな~~~これはみんな 見るしかないな~~ほんと。</p>
-<p>…最近の切り抜き作っておけばよかったなって思ってます!!うん!!!! 絶対そうするべきだったねぇぇぇぇ!!!!!</p>
-<p>ちなみにさらっと「ありがと~!」とか言ってた気がしますが ありがとうはこっちなんだよなありがとぉぉぉぉぉぉあのさぁぁぁあぁぁ 存在してくれててありがとうなぁぁぁぁぁぁ</p>
-<p>すき</p>
-<h2 id="九条林檎"><a href="https://twitter.com/ringo_0_0_5">九条林檎</a></h2>
-<p>林檎さまだねぇ。うん。 流石の林檎様、というステージでした。</p>
-<p>衣装も麗しくかつかっこ良い。 セルフカメラらしいし、それでいて歌も踊りもしっかりとこなす。 流石なんだよな…</p>
-<p>ステージで林檎様が出る度にコメ欄が「麗しい…」「征服して!」になるのが とても好きです。こんなに本人の雰囲気がにじみ出るコメ欄他にあるだろうか。 <del>あ、名取のとことかはある意味滲み出ていますg</del></p>
-<p>かっこよい+麗しいが本当に素敵でした。</p>
-<h2 id="魅紗"><a href="https://twitter.com/misyasamadayo">魅紗</a></h2>
-<p>一目見てわかるこのたたずまい。 実は前回のオリ曲コンピの時に知ってそこからフォローしておりましたが、 相変わらず歌が綺麗。声の出し方とか関係なしに凄く綺麗。</p>
-<p>曲も御姿も美しくて最高でした。</p>
-<h2 id="夜桜のあ"><a href="https://twitter.com/yozakura_noa">夜桜のあ</a></h2>
-<p>ア゛イ゛ド゛ル゛!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</p>
-<p>今日ののあちゃんはガチでアイドルでした。 導入のカメラワーク・歓声からのパーティクルの演出とても綺麗でした。</p>
-<p>サビ以外の振り付けは自分で考えたって言ってたけどかわいかったでし… りんりんちゃん作の衣装も素敵でした。</p>
-<h2 id="柚月ゆず"><a href="https://twitter.com/0w0_YUZU">柚月ゆず</a></h2>
-<p>Live2Dでの参戦…と思いきや超綺麗な3D!! 多分MMD…? 沢山動いていてとても楽しい!</p>
-<p>衣装も、姿もステージも演出も綺麗でした。</p>
-<p>海の上のステージ、というのがアイマリンプロジェクトのMarine Dreamin'と 重なって懐しい気持ちになりました。 私の3DCGとの馴初めがMarine Dreamin'なので…</p>
-<p>綺麗なステージを見て、「あぁ我もCGやりたいな…」となりました。 声も素敵でした。</p>
-<hr />
-<p>あの、ここらへんからライブ視聴後数時間経って書いているので段々と内容を忘れています</p>
-<hr />
-<h2 id="V01 YUME"><a href="https://twitter.com/V01Yume">V01 YUME</a></h2>
-<p>声が綺麗… お目目も綺麗…YU"ME"だけに…</p>
-<p>はい。</p>
-<p>くっ…?って体かしげてるのがとてもかわいかった。</p>
-<h2 id="幸糖ミュウミュウ"><a href="https://twitter.com/mewmewsugar">幸糖ミュウミュウ</a></h2>
-<p>我らがA2Pのミュウミュウちゃん!! 休止中だったのを途中で思い出しましたが、そんな中の出演って中々エモでは…</p>
-<p>私はそこまでガッツリ追ってなかったけれど、待ち侘びてたファンも 多かったろうなぁという気持ちで見ていました。</p>
-<p>振り付けがかわいい!!とてもかわいい!!</p>
-<h2 id="御兎木乃天"><a href="https://twitter.com/Noakun_RET">御兎木乃天</a></h2>
-<p>動画での参戦。 MV調に仕上がっていて、童謡？民謡？的な曲と合う世界観で引き込まれました。 すっ…と聞き入っておったよ…</p>
-<h2 id="サクラメイ"><a href="https://twitter.com/Sakura_Maychan">サクラメイ</a></h2>
-<p>大トリ! 最初っからめちゃくちゃ元気な声・元気な動きをしていて、 一気にテンションが上がりました。 先程のしんみりさは何処へ…</p>
-<p>歌っている間もずっと元気で見ていて元気が貰えるタイプの子でした。ありがたぅ</p>
-]]></description>
-    <pubDate>Sat, 24 Jul 2021 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2021-07-24-diary-allelosphere-vol1.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
