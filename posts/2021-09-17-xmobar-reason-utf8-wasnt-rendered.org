@@ -1,0 +1,100 @@
+* xmobarでwith_utf8してるのにUTF8出来なかった理由
+  :PROPERTIES:
+  :DATE: [2021-09-17 Fri 16:31]
+  :TAGS: :xmobar:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2021-09-17 Fri 17:25]--[2021-09-17 Fri 17:35] =>  0:10
+  CLOCK: [2021-09-17 Fri 16:32]--[2021-09-17 Fri 17:12] =>  0:40
+  :END:
+
+  #+NAME: Tl;Dr
+  #+begin_quote
+  ~LANG~ の設定を確認して。
+  ~bashrc~ 等で設定していても、xmonadから呼び出される場合は
+  それらは反映されない。
+
+  xmobarを呼び出している場所でそのまま設定できる
+  詳しい方法は以下
+  #+end_quote
+  
+  xmobarは、ビルド時のフラグ ~with_utf8~ を付けることで
+  UTF-8文字列を扱えるようになる。
+  そしてこのフラグはデフォルトで ~True~ (=有効)なので、特に
+  何もしなくても使えるはずだった。
+
+  が、上手くいかなかった。
+  
+** 試したが上手くいかなかったこと
+
+   + xmobarのビルドフラグの確認
+     + archlinuxユーザーなので[[https://github.com/archlinux/svntogit-community/blob/packages/xmobar/trunk/PKGBUILD][PKGBUILD]]を確認したがフラグは全て有効になっている
+   + フォントの確認
+     + 普段使いのフォントなので、日本語は対応しているはず
+     
+     
+** 判明した原因
+   bashからではなくxmonadから起動していた影響で
+   環境変数が伝搬されておらず、 ~LANG=ja_JP.UTF-8~ でない環境で
+   実行されていた。
+
+   証拠に、ターミナルから src_sh{LANG=C xmobar} と実行してみると
+   日本語が表示できなくなった。
+
+** 解決策
+*** [[https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Hooks-DynamicLog.html][XMonad.Hooks.DynamicLog]]を使用している場合
+    多分大半がこちらなのではないか...??
+
+    とは思うんだけど時間がない&&私やってないので割愛、
+    [[https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/src/XMonad.Hooks.DynamicLog.html#xmobar][xmobar]]関数の定義を少し弄ってあげた以下のような関数を作れば動くはず。
+    理由は [[* [[https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html][XMonad.Hooks.StatusBar]] を使用している場合]] を参照。
+
+    #+begin_src haskell
+      xmobar' conf = statusbar "LANG=ja_JP.UTF-8 xmobar" xmobarPP toggleStructsKey conf
+    #+end_src
+    
+   
+*** [[https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html][XMonad.Hooks.StatusBar]] を使用している場合
+    実はこちらの方が新しいらしく、もう [[https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Hooks-DynamicLog.html][DynamicLog]] は推奨されていないのだそうだ。
+    
+    *知るか!!!!!*
+
+
+    と怒鳴ってもしかたないのだけど怒鳴られても仕方ない事情もある。
+    (それはそれで別で書こう。 )
+
+    さて。 ~StatusBar~ を使用している場合、 [[https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#t:StatusBarConfig][StatusBarConfig]] 型の
+    値を使っているはず。
+    今はみんなここで src_haskell{statusBarProp "xmobar" (pure xmobarPP)}
+    とかしているのではないだろうか。
+
+    ここを以下のように書き換えればよい:
+
+    #+begin_src haskell
+      statusBarProp "LANG=ja_JP.UTF-8 xmobar" (pure xmobarPP)
+    #+end_src
+
+    そう、 /先頭に ~LANG=ja_JP.UTF-8~ を付け加えるだけ/ である。
+    かんたん!!
+
+**** 仕組み
+     実は [[https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#v:statusBarProp][statusBarProp]] の中を見てみても分かりづらいのだが、
+     [[https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#t:StatusBarConfig][StatusBarConfig]] から読み解くとわかる。
+
+     ~StatusBarConfig~ では、 ~sbStartUpHook~ を使って
+     「ステータスバーを起動する ~X ()~ アクション」を定義している。
+     
+     ~statusBarProp~ 関数にて引数に取った文字列
+     ( ~LANG=ja_JP.UTF-8 xmobar~ なり ~xmobar~ なり)は
+     ~statusBarProp~ → ~statusBarPropTo~ → ~statusBarGeneric~ →
+     [[https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#v:spawnStatusBar][spawnStatusBar]] とそのまま受け渡されていき、
+
+     そこから[[https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-Core.html#v:spawnPID][spawnPID]]へと渡される。
+     そしてこの中では [[https://hackage.haskell.org/package/unix-2.7.2.2/docs/System-Posix-Process.html#v:executeFile][executeFile]] に *なんと ~/bin/sh -c~ の引数として*
+     渡され、最終的に ~execv~ システムコールによって実行される。
+
+     ここが大事で、 /shの上で実行される/ ことによって環境変数を
+     その場で設定したりといったシェルの機能を使うことができる。
