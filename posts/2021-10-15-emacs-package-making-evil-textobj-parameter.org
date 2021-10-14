@@ -1,0 +1,37 @@
+* evil-textobj-parameterを作成中です
+  :PROPERTIES:
+  :DATE: [2021-10-15 Fri 00:49]
+  :TAGS: :emacs:
+  :BLOG_POST_KIND: Advertisment
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2021-10-15 Fri 00:50]
+  :END:
+  
+  [[https://github.com/sgur/vim-textobj-parameter][sgur/vim-textobj-parameter]]のevil版である[[https://github.com/Cj-bc/evil-textobj-parameter][Cj-bc/evil-textobj-parameter]]
+  を作っています。
+  
+ 
+** 基本的な仕様
+
+   + キーバインドは提供していないので、 ~define-key~ で設定してください。
+   + ~i2,~ はないですが、それ以外はオリジナルと同じ挙動にしようとしています。
+
+** 現状
+
+*** 出来ること
+    + Inner textobjectは動きます
+    + Outer textobjectは最後のパラメーター以外の時は動きます
+
+*** 出来無いこと・欠けていること
+    + 適切なライセンスの表記
+      + そもそもライセンスに制約がないかの確認をまだしていない
+    + Outer textobjectが、最後のパラメーターの上にカーソルがある
+      状態で使うとうまく動きません。これの修正
+    + 内部処理、多分 ~evil-common~ とかを上手く使えばもっとよく書ける
+
+----
+
+とりあえず適当な報告まで
