@@ -1,0 +1,58 @@
+* Elispパッケージを書く際の諸メモ
+  :PROPERTIES:
+  :DATE: [2021-10-14 Thu 23:45]
+  :TAGS: :emacs:
+  :BLOG_POST_KIND: Memo
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2021-10-14 Thu 23:46]--[2021-10-15 Fri 00:39] =>  0:53
+  :END:
+  
+  
+  初めて[[https://github.com/Cj-bc/evil-textobj-parameter][きちんとしたElispパッケージ]]を作成しているので、パッケージとして書く
+  場合の注意点とか。
+** 参考リンク
+   + info:elisp#Packaging :: ほぼほぼ全てここに書いてある
+   + info:elisp#Tips :: コメントの書き方のTipsとか
+** ヘッダーのテキスト作成
+   Elispファイルは大体同じようなコメント行があるが、
+   どうやらメタ情報を書いていたりして形式があるらしい。
+
+   + [[info:elisp#Library Headers]]
+
+   以下は[[info:elisp#Library Headers][上記リンク]]にある、コメントの一例
+   
+   #+begin_src elisp
+     ;;; foo.el --- Support for the Foo programming language  -*- lexical-binding: t; -*-
+
+     ;; Copyright (C) 2010-2021 Your Name
+
+     ;; Author: Your Name <yourname@example.com>
+     ;; Maintainer: Someone Else <someone@example.com>
+     ;; Created: 14 Jul 2010
+     ;; Keywords: languages
+     ;; URL: https://example.com/foo
+
+     ;; This file is not part of GNU Emacs.
+
+   #+end_src
+*** 最初の行
+    一番最初の行は特定のフォーマットになっている必要がある。
+
+    #+begin_src elisp
+      ;;; FILENAME --- DESCRIPTION  -*- lexical-binding: t; -*-
+    #+end_src
+*** ヘッダーコメント
+
+    | ~Author~     | 作者の名前とメアド。複数いる場合は、次の行に ~;;~ とタブ(若しくは最低2つ以上のスペース)を置いた後に書く    |
+    | ~Maintainer~ | 現状メンテナンス(バグレポートの対処とか)する人。書式は ~Author~ と同じで、省略された場合 ~Author~ になる。 |
+    | ~Created~    | オプショナル。ファイルが最初に作られた日の記録、歴史上の興味以上の意味はない。                             |
+    | ~Version~    |                                                                                                            |
+*** フッターコメント
+    ファイルの区切りを明示することで、ファイルの全体を持っているかがわかる。
+
+    (正直「一部の欠けたファイル」になることって今もうないと思うので
+    必要性はあんまりわからないな？？？)
+
