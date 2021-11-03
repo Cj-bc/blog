@@ -8,8 +8,72 @@
         <name>Cj-bc a.k.a Cj.BC_SD</name>
         <email>cj.bc-sd@outlook.jp</email>
     </author>
-    <updated>2021-10-15T00:00:00Z</updated>
+    <updated>2021-11-03T00:00:00Z</updated>
     <entry>
+    <title>2021-11-03-learnt-about-clean-architecture</title>
+    <link href="https://cj-bc.github.io/blog/posts/2021-11-03-learnt-about-clean-architecture.html" />
+    <id>https://cj-bc.github.io/blog/posts/2021-11-03-learnt-about-clean-architecture.html</id>
+    <published>2021-11-03T00:00:00Z</published>
+    <updated>2021-11-03T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>クリーンアーキテクチャーについて少し学んだ</h1>
+  <div class="ui list">
+    <div class="item">Posted on November  3, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on November  4, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  
+  
+</div>
+
+<p>今迄あまり設計というものに触れてきていなかったのだけど、今回初めて「クリーンアーキテクチャ」という概念を少し学んだ。 実をいうと SOLID原則すら触れていなかった。名前は知ってたけどねぇ…</p>
+<p>関数型を使ってることが多いのもあるけど、古いものと考えていた節は正直ある。 いざ触れてみるとやっぱり為になることが多いねぇ…</p>
+<p><a href="https://github.com/Cj-bc/3dShell">Cj-bc/3dShell</a>の設計に悩んだ挙句、部分的に考え方を取り入れてみている。</p>
+<p>以下は、調べている間に感じたことの個人的なメモで <strong>技術的に但しいかは保証できない</strong> ので注意。 何かしら「これは違うぞ!!」というのがあれば、 <a href="https://twitter.com/Cj-bc">Twitter</a>にでも直接直リプライ等で指摘していただけるとありがたいです</p>
+<h1 id="クリーンアーキテクチャについて軽いメモ">クリーンアーキテクチャについて軽いメモ</h1>
+<ul>
+<li>クリーンアーキテクチャは「こうやって作ると良い設計になる」というだけであり、別段正解の使い方が一つあるわけではない</li>
+<li>サンプル実装もあるにはあるがあくまでサンプル
+<ul>
+<li>別にもっと層があっても少なくてもいい</li>
+</ul></li>
+<li>アーキテクチャはそれぞれの事例に合わせて作るべき</li>
+<li>SOLID原則をつきつめるとこれになる感じがある。</li>
+<li>Onion Architectureや<a href="https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)">Hexagonal architecure</a>等の共通点を取り出した(ような)もの
+<ul>
+<li>なので図式には共通点が色々ある</li>
+</ul></li>
+<li>永続化の仕組みやフロントエンド、入力の取得方法等を個別のクラスに切り分けることができるので、パーツ毎の作成が楽
+<ul>
+<li>「DB決まってないけどフロント作って!」みたいな無茶ぶりができる</li>
+<li>テストする時にMockにいれかえたり等できる。</li>
+</ul></li>
+<li>インターフェースを介したやりとりには <code>DTO</code> (Data Transfer Object) を作成して行う
+<ul>
+<li>ただDBとのやりとりに <code>DTO</code> 使ってない例が結構あるのでそこの匙加減わからんなぁ</li>
+</ul></li>
+</ul>
+<h2 id="大事な要素">大事な要素</h2>
+<ul>
+<li><strong>「ドメイン・ビジネスロジックを守る」</strong> のが何よりも大事</li>
+<li>外から内側への依存</li>
+<li>インターフェースを用いることにより、「具象」ではなく「抽象」への依存にする</li>
+</ul>
+<h1 id="参考">参考</h1>
+<ul>
+<li><a href="https://qiita.com/nrslib/items/a5f902c4defc83bd46b8#humble-view">実装クリーンアーキテクチャ – @nrslib qiita.com</a></li>
+<li><a href="https://ja.wikipedia.org/wiki/SOLID">wiki:SOLID</a></li>
+<li><a href="https://gist.github.com/mpppk/609d592f25cab9312654b39f1b357c60">クリーンアーキテクチャ完全に理解した – @mpppk github.com</a></li>
+</ul>
+]]></summary>
+</entry>
+<entry>
     <title>2021-10-15-emacs-package-making-evil-textobj-parameter</title>
     <link href="https://cj-bc.github.io/blog/posts/2021-10-15-emacs-package-making-evil-textobj-parameter.html" />
     <id>https://cj-bc.github.io/blog/posts/2021-10-15-emacs-package-making-evil-textobj-parameter.html</id>
@@ -758,122 +822,6 @@ haskell
 <span id="思考メモ-30"><a href="#思考メモ-30" aria-hidden="true"></a></span>
 <span id="思考メモ-31"><a href="#思考メモ-31" aria-hidden="true"></a><span class="fu">fmap</span> join <span class="op">$</span> find jsJust <span class="op">&lt;$&gt;</span> <span class="fu">sequence</span> <span class="op">$</span> <span class="fu">flip</span> <span class="fu">fmap</span> allwindows<span class="ot"> f ::</span> <span class="dt">X</span> (<span class="dt">Maybe</span> a)</span></code></pre></div>
 </div>
-]]></summary>
-</entry>
-<entry>
-    <title>2021-08-19-github-use-github-actions-to-auto-release-binaries</title>
-    <link href="https://cj-bc.github.io/blog/posts/2021-08-19-github-use-github-actions-to-auto-release-binaries.html" />
-    <id>https://cj-bc.github.io/blog/posts/2021-08-19-github-use-github-actions-to-auto-release-binaries.html</id>
-    <published>2021-08-19T00:00:00Z</published>
-    <updated>2021-08-19T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>Github actionsでStackを使用した実行ファイルのバイナリを自動生成</h1>
-  <div class="ui list">
-    <div class="item">Posted on August 19, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on August 20, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  
-  
-</div>
-
-<p>ghq:Cj-bc/oschark を作っている際、installationを書く上で 「どうせならバイナリ用意しておくか」と思ったので作業したメモ。</p>
-<h1 id="全体像">全体像</h1>
-<p>最終的にやりたいこと: Github actionsを用いてバイナリを配付する</p>
-<ol>
-<li>手動で実行できる「ビルドする」 Actionを作る</li>
-<li>ビルドしたものをリリースに載せられるようにする</li>
-<li>リリース時をトリガーとしてGithub Actionを稼動させる</li>
-<li>複数プラットフォームそれぞれ用のバイナリを用意する</li>
-</ol>
-<h1 id="1. 手動で実行できる「ビルドする」ACtionを作る">1. 手動で実行できる「ビルドする」ACtionを作る</h1>
-<p>Haskell(stack)の環境をセットアップし、ビルドする。</p>
-<p>stackの環境は、元々は公式にあったが現在は廃止され、 <a href="https://github.com/haskell/actions/tree/main/setup">haskell/actions</a> に移動されて管理されている。</p>
-<p>デフォルトではcabalの環境あセットアップされる。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-yaml
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> haskell/actions/setup@v1</span></span></code></pre></div>
-</div>
-<p>Stackを使いたい場合、 <code>enable-stack</code> を有効化する。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-yaml
-</div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="at">   </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> haskell/actions/setup@v1</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="at">  </span><span class="fu">enable-stack</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code></pre></div>
-</div>
-<h1 id="2. ビルドしたものをリリースに載せられるようにする">2. ビルドしたものをリリースに載せられるようにする</h1>
-<p>ビルドしても、このままだと海のもずくに消えてしまいます。 なので、これをリリースに付属させる処理をします。</p>
-<p>公式の <a href="https://github.com/actions/create-release">actions/create-release</a>が昔はあったようですが、 2021年8月19日現在ではアーカイブされてしまっているので、 そこで提案されている他のアクションを使うことにしました。</p>
-<p>今回は、仕様や書き方等を軽く見た結果 <a href="https://github.com/softprops/action-gh-release">softprops/action-gh-release</a> を 使ってみることにしました。</p>
-<p>主な理由は</p>
-<ul>
-<li>設定が一番シンプルそう</li>
-<li>複数のファイルをアタッチできるから</li>
-</ul>
-<p>の2点です(特に1点目でかなり差がついた)</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-yaml
-</div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="at">   </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> softprops/action-gh-release</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="at">  </span><span class="fu">prerelease</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="at">  </span><span class="fu">files</span><span class="kw">:</span><span class="at"> |	     oschark</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="at">    LICENSE</span></span></code></pre></div>
-</div>
-<p>これだけで、 <code>oschark</code> と <code>LICENSE</code> という名前のファイルが リリースに含まれるようになります。</p>
-<p>ただ、 <code>stack build</code> しただけの状態だとファイルのパスが分からないため <code>find</code> で探して移動しておいた方が良いです。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-yaml
-</div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="at">   </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="at">     </span><span class="kw">-</span><span class="at"> ...</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> find .stack-work/install -name oschark -exec mv {} . \;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> softprops/action-gh-release</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="co">...</span></span></code></pre></div>
-</div>
-<h1 id="3. リリース時をトリガーとしてGithub Actionを稼動させる">3. リリース時をトリガーとしてGithub Actionを稼動させる</h1>
-<p>これは一般的な方法をそのままで使います。 但し、cabalのバージョニング(厳密には<a href="https://pvp.haskell.org/?rdfrom=https%3A%2F%2Fwiki.haskell.org%2Findex.php%3Ftitle%3DPackage_versioning_policy%26redirect%3Dno">Haskell Package Versioning Policy</a>) に従うタグの形式に変えてあります。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-yaml
-</div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="at">   </span><span class="fu">on</span><span class="kw">:</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="at">     </span><span class="fu">push</span><span class="kw">:</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="fu">tags</span><span class="kw">:</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;*.*.*.*&quot;</span></span></code></pre></div>
-</div>
-<h1 id="4. 複数プラットフォームそれぞれ用のバイナリを用意する">4. 複数プラットフォームそれぞれ用のバイナリを用意する</h1>
-<p>せっかくなのでLinux/macOS/Windowsそれぞれのバイナリを提供してみることに します。</p>
-<p>このためには <a href="https://docs.github.com/ja/actions/reference/workflow-syntax-for-github-actions#">matrix</a>を使います(リンクは直貼りできなかった)</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-yaml
-</div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="at">   </span><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="at">     </span><span class="fu">build</span><span class="kw">:</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="fu">strategy</span><span class="kw">:</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="at">  </span><span class="fu">matrix</span><span class="kw">:</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a><span class="at">    </span><span class="fu">foo</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">bar</span><span class="kw">,</span><span class="at"> baz</span><span class="kw">,</span><span class="at"> fizz</span><span class="kw">]</span></span></code></pre></div>
-</div>
-<p>matrixを含むstrategyは、各jobの直下に書かれます(<code>jobs.&lt;job_id&gt;.strategy.matrix</code>)</p>
-<p>matrixは、値にリストを取る辞書型の値を取ります。 辞書のキーがmatrix内でのプロパティになり値のリストがそれぞれ挿入されることになります。 ここで定義したプロパティは <code>${{matrix.&lt;key&gt;}}</code> で参照することができます。 上記の例の場合は <code>${{matrix.foo}}</code> となります。</p>
-<p>これを</p>
-<h2 id="artifactを使って各バイナリを保存する">artifactを使って各バイナリを保存する</h2>
 ]]></summary>
 </entry>
 
