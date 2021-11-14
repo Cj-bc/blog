@@ -1,0 +1,38 @@
+* XMonadのManageHook表記順番について
+  :PROPERTIES:
+  :DATE: [2021-11-15 Mon 00:56]
+  :TAGS: :xmonad:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2021-11-15 Mon 00:57]--[2021-11-15 Mon 01:37] =>  0:40
+  :END:
+  
+  [[https://hackage.haskell.org/package/xmonad-0.17.0/docs/XMonad-Core.html#t:ManageHook][ManageHook]] は、XMonadの重要な要素の一つで、ウィンドウ毎に
+  設定をしたり [[https://hackage.haskell.org/package/xmonad-0.17.0/docs/XMonad-Core.html#t:X][Xモナド]] のアクションを実行したりするためのもの。
+  
+  
+** やりたかったこと
+   条件に一致するウィンドウをFloat化し、レイアウトを調節する。
+
+   
+** ポイント: 順序に気をつける
+   ポイントは、 *[[https://hackage.haskell.org/package/xmonad-0.17.0/docs/XMonad-Core.html#t:ManageHook][ManageHook]]の中身に[[https://hackage.haskell.org/package/base-4.16.0.0/docs/Data-Monoid.html#t:Endo][Endo]]が使われている* ことです。
+   Endoは、関数のモノイドを提供するためのラッパーで、これは
+   結合に ~.~ (関数合成)を用います。
+   (参考: [[https://blog.miz-ar.info/2019/02/monoid-for-haskellers/#_a_-gt_a_Endo][Haskellerのためのモノイド完全ガイド]])
+
+   これはつまり、二つの ~ManageHook~ ~a ::ManageHook~
+   / ~b ::ManageHook~ があった場合、これをモノイドとして結合
+   (e.g. ~a <> b~) した
+   際の実行順序は後ろからかけた方(例の場合は ~b~)
+   が先に実行されるということです。
+   
+   なので、「Float化してからレイアウト調整する」のであれば
+   先にFloatさせる  = 先に ~doFloat~ する
+
+
+   眠いのでちょっとあとでまた整理するかもzzz
+
