@@ -1,0 +1,35 @@
+* 行番号を表示するdisplay-line-numbers-modeの表示形式について
+  :PROPERTIES:
+  :DATE: [2021-11-18 Thu 10:03]
+  :TAGS: :emacs:
+  :BLOG_POST_KIND: Memo
+  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2021-11-18 Thu 10:04]--[2021-11-18 Thu 10:22] =>  0:18
+  :END:
+  
+  
+  help:display-line-numbers-mode は、
+  行番号をWindowの左側に表示してくれるモード。
+  (help:linum-mode も似たような効果があるが、
+  help:display-line-numbers-mode の方がカスタマイズ出来るので
+  こちらを使っている。
+
+  表示形式は help:display-line-numbers-type を設定することで
+  変更できる。
+
+  | ~t~        | 絶対的(absolute)な行数を表示する                   |
+  | ~relative~ | 現在の行からの相対的な行数を表示する               |
+  | ~visible~  | 現在の行から、「見た目上の行数」を表示する |
+
+  ~visible~ は例えば、evilユーザーかつ何かしらの
+  ナローイングしてる時に便利。
+
+  Normal modeで他の行を見にいきたい時、
+  ~<相対的な行数>k~ / ~<相対的な行数>j~ とかすると思うのだけど、
+  これはナローイングされている内部は見にいかずに「見た目上の行数」
+  を基にして動作するため、 ~visible~ にしていると便利
+
+  
