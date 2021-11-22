@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- Qiitaの記事を全部引っ越ししている [WIP]</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+        <div id="content" class="ui text container segment">
+            <div class="ui center aligned icon header">
+  <h1>Qiitaの記事を全部引っ越ししている [WIP]</h1>
+  <div class="ui list">
+    <div class="item">Posted on November 22, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on November 23, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  
+  
+</div>
+
+<p>長らくの間私は <a href="https://qiita.com/Cj-bc">Qiita</a>に記事を書いていましたが、今や自分のページを持つに 至りました。</p>
+<p>依然技術系の記事は別に出しても良いのですが、とりあえず このブログには全ての記事を載せておきたかったのでQiitaの記事を引っ越して こようと思います。</p>
+<h1 id="行いたいこと">行いたいこと</h1>
+<ul>
+<li>Qiitaにある全ての記事を、ほぼそのまま持ってくる
+<ul>
+<li>メタ情報(投稿日時やタグなど)はできるだけ保持する</li>
+<li>(管理上の都合で)org文書にコンバートする</li>
+</ul></li>
+<li>画像データもローカルに保存しなおす</li>
+</ul>
+<h1 id="注意すること">注意すること</h1>
+<ul>
+<li>URIエンコードされているものはデコードする</li>
+</ul>
+<h1 id="使うもの">使うもの</h1>
+<dl>
+<dt><a href="https://qiita.com/api/v2/docs">Qiita API v2</a></dt>
+<dd>あたり前だがQiitaのAPI。「特定のユーザーの公開記事」なら認証なしで引っ張ってこれる
+</dd>
+<dt><a href="https://www.nushell.sh/">nushell</a></dt>
+<dd>Rust製の、データの扱いに長けたシェル
+</dd>
+<dt>node.js</dt>
+<dd>いわずもがな。Qiita APIが、コンテンツをURIエンコードして返してくるのでデコードするのに使う
+</dd>
+</dl>
+<h1 id="作業">作業</h1>
+<h2 id="TODO 1. Qiitaから情報を取得する"><span class="todo TODO">TODO</span> 1. Qiitaから情報を取得する</h2>
+<p>まずはQiitaから情報を引っ張ってきます。 これは <code>/users/:user_id/items</code> エンドポイントを使用します。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">curl</span> https://qiita.com/api/v2/users/Cj-bc/items</span></code></pre></div>
+</div>
+<p>これで、指定したユーザーの投稿のリストが取得できます。 各投稿はディクショナリで、そのキーの完全なリストは<a href="https://qiita.com/api/v2/docs#投稿">Qiita APIドキュメントの「投稿」</a>に記載されています。</p>
+<p>ここでは、今回使うものとして以下のキーを紹介します:</p>
+<dl>
+<dt><code>body</code></dt>
+<dd><strong>Markdown形式で</strong> 表現された本文を保持します。 これは <strong>URLエンコードされています</strong> 。
+</dd>
+<dt><code>created_at</code></dt>
+<dd>この投稿が作成された日時です。ISO8601形式で秒数まで記載されています。
+</dd>
+<dt><code>title</code></dt>
+<dd>その投稿のタイトルです。
+</dd>
+</dl>
+<p>これらのキーの値を用いて、 「 <code>body</code> に格納されている本文を <code>created_at</code> と <code>title</code> からファイル名を考え、リダイレクトする」という中々な力技をして保存します。</p>
+<p>…んで、ここで「JSONデータを扱いやすい」という理由でnushellが出てきます。</p>
+<p>ねむいのでいったんここまででいい？</p>
+<h2 id="TODO 2. HTMLエンコードを外す"><span class="todo TODO">TODO</span> 2. HTMLエンコードを外す</h2>
+<p>にゃーん。ねむい。 とりあえず、一番簡単かつ確実なのはnodeの <code>[[https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/decodeURI][decodeURI]]</code> 使えばいいでしょってだけ</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ex">node</span> -e <span class="st">'console.log(encodeURI(&quot;https://qiita/てすともーど!!!&gt;&quot;))'</span> <span class="kw">|</span> <span class="ex">node</span> -e <span class="st">'console.log(decodeURI(fs.readFileSync(&quot;/dev/stdin&quot;, &quot;utf8&quot;)))'</span></span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+example
+</div>
+<pre class="example SourceCode"><code>https://qiita/てすともーど!!!&gt;
+</code></pre>
+</div>
+<h2 id="TODO 3. ファイルに保存する"><span class="todo TODO">TODO</span> 3. ファイルに保存する</h2>
+<p>つかったものだけ</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb4" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ex">fetch</span> https://qiita.com/api/v2/users/Cj-bc/items?per_page=86 <span class="kw">|</span> <span class="ex">each</span> { <span class="va">$it</span>.body <span class="kw">|</span> <span class="ex">save</span> <span class="st">$&quot;(</span><span class="va">$it</span><span class="st">.created_at | str substring [0 10])-(</span><span class="va">$it</span><span class="st">.title|str kebab-case).md&quot;</span> }</span></code></pre></div>
+</div>
+
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

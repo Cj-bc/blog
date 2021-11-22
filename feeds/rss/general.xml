@@ -7,8 +7,108 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/general.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Thu, 18 Nov 2021 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Mon, 22 Nov 2021 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2021-11-22-blog-import-all-qiita-posts-to-my-blog</title>
+    <link>https://cj-bc.github.io/blog/posts/2021-11-22-blog-import-all-qiita-posts-to-my-blog.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>Qiitaの記事を全部引っ越ししている [WIP]</h1>
+  <div class="ui list">
+    <div class="item">Posted on November 22, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on November 23, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  
+  
+</div>
+
+<p>長らくの間私は <a href="https://qiita.com/Cj-bc">Qiita</a>に記事を書いていましたが、今や自分のページを持つに 至りました。</p>
+<p>依然技術系の記事は別に出しても良いのですが、とりあえず このブログには全ての記事を載せておきたかったのでQiitaの記事を引っ越して こようと思います。</p>
+<h1 id="行いたいこと">行いたいこと</h1>
+<ul>
+<li>Qiitaにある全ての記事を、ほぼそのまま持ってくる
+<ul>
+<li>メタ情報(投稿日時やタグなど)はできるだけ保持する</li>
+<li>(管理上の都合で)org文書にコンバートする</li>
+</ul></li>
+<li>画像データもローカルに保存しなおす</li>
+</ul>
+<h1 id="注意すること">注意すること</h1>
+<ul>
+<li>URIエンコードされているものはデコードする</li>
+</ul>
+<h1 id="使うもの">使うもの</h1>
+<dl>
+<dt><a href="https://qiita.com/api/v2/docs">Qiita API v2</a></dt>
+<dd>あたり前だがQiitaのAPI。「特定のユーザーの公開記事」なら認証なしで引っ張ってこれる
+</dd>
+<dt><a href="https://www.nushell.sh/">nushell</a></dt>
+<dd>Rust製の、データの扱いに長けたシェル
+</dd>
+<dt>node.js</dt>
+<dd>いわずもがな。Qiita APIが、コンテンツをURIエンコードして返してくるのでデコードするのに使う
+</dd>
+</dl>
+<h1 id="作業">作業</h1>
+<h2 id="TODO 1. Qiitaから情報を取得する"><span class="todo TODO">TODO</span> 1. Qiitaから情報を取得する</h2>
+<p>まずはQiitaから情報を引っ張ってきます。 これは <code>/users/:user_id/items</code> エンドポイントを使用します。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">curl</span> https://qiita.com/api/v2/users/Cj-bc/items</span></code></pre></div>
+</div>
+<p>これで、指定したユーザーの投稿のリストが取得できます。 各投稿はディクショナリで、そのキーの完全なリストは<a href="https://qiita.com/api/v2/docs#投稿">Qiita APIドキュメントの「投稿」</a>に記載されています。</p>
+<p>ここでは、今回使うものとして以下のキーを紹介します:</p>
+<dl>
+<dt><code>body</code></dt>
+<dd><strong>Markdown形式で</strong> 表現された本文を保持します。 これは <strong>URLエンコードされています</strong> 。
+</dd>
+<dt><code>created_at</code></dt>
+<dd>この投稿が作成された日時です。ISO8601形式で秒数まで記載されています。
+</dd>
+<dt><code>title</code></dt>
+<dd>その投稿のタイトルです。
+</dd>
+</dl>
+<p>これらのキーの値を用いて、 「 <code>body</code> に格納されている本文を <code>created_at</code> と <code>title</code> からファイル名を考え、リダイレクトする」という中々な力技をして保存します。</p>
+<p>…んで、ここで「JSONデータを扱いやすい」という理由でnushellが出てきます。</p>
+<p>ねむいのでいったんここまででいい？</p>
+<h2 id="TODO 2. HTMLエンコードを外す"><span class="todo TODO">TODO</span> 2. HTMLエンコードを外す</h2>
+<p>にゃーん。ねむい。 とりあえず、一番簡単かつ確実なのはnodeの <code>[[https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/decodeURI][decodeURI]]</code> 使えばいいでしょってだけ</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ex">node</span> -e <span class="st">&#39;console.log(encodeURI(&quot;https://qiita/てすともーど!!!&gt;&quot;))&#39;</span> <span class="kw">|</span> <span class="ex">node</span> -e <span class="st">&#39;console.log(decodeURI(fs.readFileSync(&quot;/dev/stdin&quot;, &quot;utf8&quot;)))&#39;</span></span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+example
+</div>
+<pre class="example SourceCode"><code>https://qiita/てすともーど!!!&gt;
+</code></pre>
+</div>
+<h2 id="TODO 3. ファイルに保存する"><span class="todo TODO">TODO</span> 3. ファイルに保存する</h2>
+<p>つかったものだけ</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb4" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ex">fetch</span> https://qiita.com/api/v2/users/Cj-bc/items?per_page=86 <span class="kw">|</span> <span class="ex">each</span> { <span class="va">$it</span>.body <span class="kw">|</span> <span class="ex">save</span> <span class="st">$&quot;(</span><span class="va">$it</span><span class="st">.created_at | str substring [0 10])-(</span><span class="va">$it</span><span class="st">.title|str kebab-case).md&quot;</span> }</span></code></pre></div>
+</div>
+]]></description>
+    <pubDate>Mon, 22 Nov 2021 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2021-11-22-blog-import-all-qiita-posts-to-my-blog.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2021-11-18-emacs-display-line-numbers-type</title>
     <link>https://cj-bc.github.io/blog/posts/2021-11-18-emacs-display-line-numbers-type.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
@@ -609,33 +709,6 @@ ruby
 ]]></description>
     <pubDate>Wed, 08 Sep 2021 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2021-09-08-dfinity-sdk-installer-unofficial-explained-memo.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2021-09-02-emacs-projectile-replace</title>
-    <link>https://cj-bc.github.io/blog/posts/2021-09-02-emacs-projectile-replace.html</link>
-    <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>ProjectileのReplaceが便利だった</h1>
-  <div class="ui list">
-    <div class="item">Posted on September  2, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on September  2, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  
-  
-</div>
-
-<p>Emacsのパッケージの一つである <code>projectile</code> に、 help:projectile-replace というコマンドがある。</p>
-<p>Projectileの管理下のファイル全てに対して置換できるし、 一つ一つ確認して置換するかどうかを選べるのでとても便利。</p>
-]]></description>
-    <pubDate>Thu, 02 Sep 2021 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2021-09-02-emacs-projectile-replace.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
