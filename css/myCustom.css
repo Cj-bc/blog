@@ -9,3 +9,14 @@ pre .SourceCode {
 .ui.close.rail {
     width: 6em;
 }
+
+/* Reference: https://fomantic-ui.com/usage/theming.html */
+code {
+    background-color: rgba(0, 0, 0, 0.08);
+    border-radius: 3px;
+    display: inline-block;
+    font-size: 0.875em;
+    font-weight: bold;
+    padding: 1px 6px;
+    vertical-align: baseline;
+}
