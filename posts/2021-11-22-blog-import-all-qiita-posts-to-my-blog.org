@@ -1,0 +1,82 @@
+* Qiitaの記事を全部引っ越ししている [WIP]
+  :PROPERTIES:
+  :DATE: [2021-11-22 Mon 22:55]
+  :TAGS: :blog:
+  :BLOG_POST_KIND: HowTo
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2021-11-22 Mon 22:57]--[2021-11-23 Tue 00:59] =>  2:02
+  CLOCK: [2021-11-22 Mon 22:56]--[2021-11-22 Mon 22:56] =>  0:00
+  :END:
+  
+  長らくの間私は [[https://qiita.com/Cj-bc][Qiita]]に記事を書いていましたが、今や自分のページを持つに
+  至りました。
+
+  依然技術系の記事は別に出しても良いのですが、とりあえず
+  このブログには全ての記事を載せておきたかったのでQiitaの記事を引っ越して
+  こようと思います。
+** 行いたいこと
+
+   + Qiitaにある全ての記事を、ほぼそのまま持ってくる
+     + メタ情報(投稿日時やタグなど)はできるだけ保持する
+     + (管理上の都合で)org文書にコンバートする
+   + 画像データもローカルに保存しなおす
+** 注意すること
+   + URIエンコードされているものはデコードする
+** 使うもの
+
+   + [[https://qiita.com/api/v2/docs][Qiita API v2]] :: あたり前だがQiitaのAPI。「特定のユーザーの公開記事」なら認証なしで引っ張ってこれる
+   + [[https://www.nushell.sh/][nushell]] :: Rust製の、データの扱いに長けたシェル
+   + node.js :: いわずもがな。Qiita APIが、コンテンツをURIエンコードして返してくるのでデコードするのに使う
+** 作業
+*** TODO 1. Qiitaから情報を取得する
+    まずはQiitaから情報を引っ張ってきます。
+    これは ~/users/:user_id/items~ エンドポイントを使用します。
+
+    #+begin_src sh
+      curl https://qiita.com/api/v2/users/Cj-bc/items
+    #+end_src
+
+    これで、指定したユーザーの投稿のリストが取得できます。
+    各投稿はディクショナリで、そのキーの完全なリストは[[https://qiita.com/api/v2/docs#投稿][Qiita APIドキュメントの「投稿」]]に記載されています。
+
+    
+    ここでは、今回使うものとして以下のキーを紹介します:
+    + ~body~ :: *Markdown形式で* 表現された本文を保持します。 これは *URLエンコードされています* 。
+    + ~created_at~ :: この投稿が作成された日時です。ISO8601形式で秒数まで記載されています。
+    + ~title~ :: その投稿のタイトルです。
+
+
+    これらのキーの値を用いて、
+    「 ~body~ に格納されている本文を ~created_at~ と ~title~ からファイル名を考え、リダイレクトする」という中々な力技をして保存します。
+
+    
+    ...んで、ここで「JSONデータを扱いやすい」という理由でnushellが出てきます。
+    
+
+
+
+    
+    ねむいのでいったんここまででいい？
+*** TODO 2. HTMLエンコードを外す
+    
+    にゃーん。ねむい。
+    とりあえず、一番簡単かつ確実なのはnodeの
+    ~[[https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/decodeURI][decodeURI]]~ 使えばいいでしょってだけ
+    
+    #+begin_src sh
+      node -e 'console.log(encodeURI("https://qiita/てすともーど!!!>"))' | node -e 'console.log(decodeURI(fs.readFileSync("/dev/stdin", "utf8")))'
+    #+end_src
+
+    #+RESULTS:
+    : https://qiita/てすともーど!!!>
+    
+*** TODO 3. ファイルに保存する
+
+    つかったものだけ
+    #+begin_src sh
+       fetch https://qiita.com/api/v2/users/Cj-bc/items?per_page=86 | each { $it.body | save $"($it.created_at | str substring [0 10])-($it.title|str kebab-case).md" }
+    #+end_src
+
