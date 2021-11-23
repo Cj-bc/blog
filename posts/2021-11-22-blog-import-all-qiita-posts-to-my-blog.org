@@ -3,7 +3,7 @@
   :DATE: [2021-11-22 Mon 22:55]
   :TAGS: :blog:
   :BLOG_POST_KIND: HowTo
-  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_PROGRESS: WIP
   :BLOG_POST_STATUS: Normal
   :END:
   :LOGBOOK:
@@ -28,7 +28,7 @@
 ** 使うもの
 
    + [[https://qiita.com/api/v2/docs][Qiita API v2]] :: あたり前だがQiitaのAPI。「特定のユーザーの公開記事」なら認証なしで引っ張ってこれる
-   + [[https://www.nushell.sh/][nushell]] :: Rust製の、データの扱いに長けたシェル
+   + [[https://www.nushell.sh/][nushell]] :: Rust製の、データの扱いに長けたシェル。JSONを素で扱えて楽なので使用する。
    + node.js :: いわずもがな。Qiita APIが、コンテンツをURIエンコードして返してくるのでデコードするのに使う
 ** 作業
 *** TODO 1. Qiitaから情報を取得する
@@ -49,17 +49,43 @@
     + ~title~ :: その投稿のタイトルです。
 
 
-    これらのキーの値を用いて、
-    「 ~body~ に格納されている本文を ~created_at~ と ~title~ からファイル名を考え、リダイレクトする」という中々な力技をして保存します。
-
-    
-    ...んで、ここで「JSONデータを扱いやすい」という理由でnushellが出てきます。
-    
-
+    これらのキーの値を用いて:
+    1. APIからデータを取得
+    2. [[2. 本文を ~body~ から取得][本文を ~body~ から取得]]
+    3. ~created_at~ と ~title~ からファイル名を構築する
+    4. そのファイルに本文を保存する
 
 
-    
-    ねむいのでいったんここまででいい？
+    という処理がしたい。
+    これを何を用いてやるか...という話なのですが、ここで「JSONデータを扱いやすい」という理由でnushellが出てきます。
+
+    最初はjqとか使おうとしてたけど、
+    + そもそもjqはあまり知らない
+    + ファイル名を構築してそこへのリダイレクトが出来なさそう(少なくとも知らない)
+    + 文字列に他の処理をかけたい場合がある
+
+    というのでjqではなくnushellにしました。
+
+**** 1. APIからデータを取得
+     nushellでは、ビルトインの ~fetch~ コマンドで HTTPの ~GET~ リクエストを送信できます。
+
+     #+begin_src nu
+     fetch https://qiita.com/api/v2/users/Cj-bc/items
+     #+end_src
+
+     こうすると、JSONをnushellのtableに変換して返してくれます。
+     
+**** 2. 本文を ~body~ から取得
+
+     このAPIは、「投稿のリスト」を返してくるので、それぞれに対してbodyを取得してあげる。
+
+     #+begin_src nu
+     fetch https://qiita.com/api/v2/users/Cj-bc/items | each {$it.body}
+     #+end_src
+
+     
+**** TODO 3. ~created_at~ と ~title~ からファイル名を構築する
+     ファイル名は
 *** TODO 2. HTMLエンコードを外す
     
     にゃーん。ねむい。
@@ -79,4 +105,7 @@
     #+begin_src sh
        fetch https://qiita.com/api/v2/users/Cj-bc/items?per_page=86 | each { $it.body | save $"($it.created_at | str substring [0 10])-($it.title|str kebab-case).md" }
     #+end_src
+
+
+    https://qiita.com/saba_can00/items/02ff28a16a0d312a5259
 
