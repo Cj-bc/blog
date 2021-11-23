@@ -21,7 +21,7 @@
     <div class="item">Posted on November 22, 2021</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on November 23, 2021
+      Updated on November 24, 2021
     </div>
   </div>
     
@@ -53,7 +53,7 @@
 <dd>あたり前だがQiitaのAPI。「特定のユーザーの公開記事」なら認証なしで引っ張ってこれる
 </dd>
 <dt><a href="https://www.nushell.sh/">nushell</a></dt>
-<dd>Rust製の、データの扱いに長けたシェル
+<dd>Rust製の、データの扱いに長けたシェル。JSONを素で扱えて楽なので使用する。
 </dd>
 <dt>node.js</dt>
 <dd>いわずもがな。Qiita APIが、コンテンツをURIエンコードして返してくるのでデコードするのに使う
@@ -81,16 +81,51 @@ bash
 <dd>その投稿のタイトルです。
 </dd>
 </dl>
-<p>これらのキーの値を用いて、 「 <code>body</code> に格納されている本文を <code>created_at</code> と <code>title</code> からファイル名を考え、リダイレクトする」という中々な力技をして保存します。</p>
-<p>…んで、ここで「JSONデータを扱いやすい」という理由でnushellが出てきます。</p>
-<p>ねむいのでいったんここまででいい？</p>
+<p>これらのキーの値を用いて:</p>
+<ol>
+<li>APIからデータを取得</li>
+<li><em>本文を <code>body</code> から取得</em></li>
+<li><code>created_at</code> と <code>title</code> からファイル名を構築する</li>
+<li>そのファイルに本文を保存する</li>
+</ol>
+<p>という処理がしたい。 これを何を用いてやるか…という話なのですが、ここで「JSONデータを扱いやすい」という理由でnushellが出てきます。</p>
+<p>最初はjqとか使おうとしてたけど、</p>
+<ul>
+<li>そもそもjqはあまり知らない</li>
+<li>ファイル名を構築してそこへのリダイレクトが出来なさそう(少なくとも知らない)</li>
+<li>文字列に他の処理をかけたい場合がある</li>
+</ul>
+<p>というのでjqではなくnushellにしました。</p>
+<ol>
+<li><p>1. APIからデータを取得</p>
+<p>nushellでは、ビルトインの <code>fetch</code> コマンドで HTTPの <code>GET</code> リクエストを送信できます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+nu
+</div>
+<pre class="nu SourceCode"><code>fetch https://qiita.com/api/v2/users/Cj-bc/items
+</code></pre>
+</div>
+<p>こうすると、JSONをnushellのtableに変換して返してくれます。</p></li>
+<li><p>2. 本文を <code>body</code> から取得</p>
+<p>このAPIは、「投稿のリスト」を返してくるので、それぞれに対してbodyを取得してあげる。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+nu
+</div>
+<pre class="nu SourceCode"><code>fetch https://qiita.com/api/v2/users/Cj-bc/items | each {$it.body}
+</code></pre>
+</div></li>
+<li><p><span class="todo TODO">TODO</span> 3. <code>created_at</code> と <code>title</code> からファイル名を構築する</p>
+<p>ファイル名は</p></li>
+</ol>
 <h2 id="TODO 2. HTMLエンコードを外す"><span class="todo TODO">TODO</span> 2. HTMLエンコードを外す</h2>
 <p>にゃーん。ねむい。 とりあえず、一番簡単かつ確実なのはnodeの <code>[[https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/decodeURI][decodeURI]]</code> 使えばいいでしょってだけ</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ex">node</span> -e <span class="st">&#39;console.log(encodeURI(&quot;https://qiita/てすともーど!!!&gt;&quot;))&#39;</span> <span class="kw">|</span> <span class="ex">node</span> -e <span class="st">&#39;console.log(decodeURI(fs.readFileSync(&quot;/dev/stdin&quot;, &quot;utf8&quot;)))&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb4" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ex">node</span> -e <span class="st">&#39;console.log(encodeURI(&quot;https://qiita/てすともーど!!!&gt;&quot;))&#39;</span> <span class="kw">|</span> <span class="ex">node</span> -e <span class="st">&#39;console.log(decodeURI(fs.readFileSync(&quot;/dev/stdin&quot;, &quot;utf8&quot;)))&#39;</span></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -105,8 +140,9 @@ example
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb4" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ex">fetch</span> https://qiita.com/api/v2/users/Cj-bc/items?per_page=86 <span class="kw">|</span> <span class="ex">each</span> { <span class="va">$it</span>.body <span class="kw">|</span> <span class="ex">save</span> <span class="st">$&quot;(</span><span class="va">$it</span><span class="st">.created_at | str substring [0 10])-(</span><span class="va">$it</span><span class="st">.title|str kebab-case).md&quot;</span> }</span></code></pre></div>
+<div class="sourceCode" id="cb6" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="ex">fetch</span> https://qiita.com/api/v2/users/Cj-bc/items?per_page=86 <span class="kw">|</span> <span class="ex">each</span> { <span class="va">$it</span>.body <span class="kw">|</span> <span class="ex">save</span> <span class="st">$&quot;(</span><span class="va">$it</span><span class="st">.created_at | str substring [0 10])-(</span><span class="va">$it</span><span class="st">.title|str kebab-case).md&quot;</span> }</span></code></pre></div>
 </div>
+<p><a href="https://qiita.com/saba_can00/items/02ff28a16a0d312a5259">https://qiita.com/saba_can00/items/02ff28a16a0d312a5259</a></p>
 ]]></summary>
 </entry>
 <entry>
