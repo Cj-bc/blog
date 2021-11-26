@@ -299,7 +299,7 @@ bash
     <div class="item">Posted on October 15, 2021</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on October 15, 2021
+      Updated on November 26, 2021
     </div>
   </div>
     
@@ -324,11 +324,14 @@ bash
 </ul>
 <h2 id="出来無いこと・欠けていること">出来無いこと・欠けていること</h2>
 <ul>
-<li>適切なライセンスの表記
+<li><del>適切なライセンスの表記</del>
 <ul>
-<li>そもそもライセンスに制約がないかの確認をまだしていない</li>
+<li><a href="https://github.com/Cj-bc/evil-textobj-parameter/commit/c4f62be46b062289b27ad55fedbe3a71e048c37d">MPLに設定されました</a></li>
 </ul></li>
-<li>Outer textobjectが、最後のパラメーターの上にカーソルがある 状態で使うとうまく動きません。これの修正</li>
+<li><del>Outer textobjectが、最後のパラメーターの上にカーソルがある状態で使うとうまく動きません。これの修正</del>
+<ul>
+<li>修正済</li>
+</ul></li>
 <li>内部処理、多分 <code>evil-common</code> とかを上手く使えばもっとよく書ける</li>
 </ul>
 <p>—-</p>
