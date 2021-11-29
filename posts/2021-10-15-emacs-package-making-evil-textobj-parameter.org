@@ -6,12 +6,9 @@
   :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
-  :LOGBOOK:
-  CLOCK: [2021-10-15 Fri 00:50]
-  :END:
   
   [[https://github.com/sgur/vim-textobj-parameter][sgur/vim-textobj-parameter]]のevil版である[[https://github.com/Cj-bc/evil-textobj-parameter][Cj-bc/evil-textobj-parameter]]
-  を作っています。
+  を +作っています。+ 完成しました!
   
  
 ** 基本的な仕様
