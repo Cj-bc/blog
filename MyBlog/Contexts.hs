@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module MyBlog.Contexts where
 import              Hakyll
+import              Hakyll.Web.Tags (Tags)
 import qualified    Data.Attoparsec.Text as P
 import qualified Data.Text as T
 import Text.Blaze.Html (toHtml, toValue, (!))
@@ -67,3 +68,11 @@ tagsFieldWithFomanticClassName = tagsFieldWith getTags simpleRenderLink' mconcat
 feedCtx = dateField "date" (T.unpack dateFormat)
           <> bodyField "description"
           <> defaultContext'
+
+-- | Common Contexts for pages that holds post list
+postListCtx :: Tags -> [Item String] -> Context b
+postListCtx tags posts = listField "posts" (titleSnapshotField "title" <> postCtx tags) (return posts)
+
+-- | スナップショットに仕舞ってあるタイトルを取り出して使う
+titleSnapshotField :: String -> Context String
+titleSnapshotField fName = field fName $ \item -> loadSnapshotBody (itemIdentifier item) "title"
