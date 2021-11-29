@@ -105,10 +105,11 @@ main = hakyll $ do
         let title = "タグ \"" ++ tag ++ "\" がつけられた投稿"
         route idRoute
         compile $ do
+            posts <- recentFirst =<< loadAll pattern
             let ctx = constField "title" title
                       <> constField "atomFeedUrl" (tagAtomFeedUrl tag)
                       <> constField "rssFeedUrl"  (tagRssFeedUrl tag)
-                      <> listField "posts" (postCtx tags) (recentFirst =<< loadAll pattern)
+                      <> postListCtx tags posts
                       <> defaultContext'
 
             makeItem ""
@@ -140,7 +141,7 @@ main = hakyll $ do
             -- TODO: listFieldを元にして, 各postにContextも独自に適用できるフィールドを生成する
             -- id:6da7268f-a417-436f-ab64-8aaef1373dbe
             let archiveCtx =
-                    listField "posts" (field "title" (\(Item i b) -> loadSnapshotBody i "title") <> postCtx tags) (return posts) `mappend`
+                    postListCtx tags posts `mappend`
                     constField "title" "Archives"            `mappend`
                     defaultContext'
 
@@ -169,7 +170,7 @@ main = hakyll $ do
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
             let indexCtx =
-                    listField "posts" (postCtx tags) (return posts) `mappend`
+                    postListCtx tags posts `mappend`
                     constField "title" ""                    `mappend`
                     defaultContext'
 
