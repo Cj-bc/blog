@@ -44,7 +44,7 @@
     <div class="item">Posted on November 22, 2021</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on November 24, 2021
+      Updated on November 29, 2021
     </div>
   </div>
     
@@ -132,6 +132,17 @@ nu
 <p>こうすると、JSONをnushellのtableに変換して返してくれます。</p></li>
 <li><p>2. 本文を <code>body</code> から取得</p>
 <p>このAPIは、「投稿のリスト」を返してくるので、それぞれに対してbodyを取得してあげる。</p>
+<dl>
+<dt><code>each</code></dt>
+<dd>標準入力にリストを取り、その各要素に対してコードブロックを適用します
+</dd>
+<dt><code>{}</code></dt>
+<dd>コードブロックです。この中の <code>$it</code> は、このコードブロックに渡されるパラメーターを示します。
+</dd>
+<dt><code>{|x| }</code></dt>
+<dd>コードブロックは名前付きでも定義することができます。この場合、 <code>$it</code> の変わりに <code>$x</code> を同じ意味で使用できます。(ついでの解説)
+</dd>
+</dl>
 <div class="ui segment">
 <div class="ui top right attached label">
 nu
@@ -140,15 +151,48 @@ nu
 </code></pre>
 </div></li>
 <li><p><span class="todo TODO">TODO</span> 3. <code>created_at</code> と <code>title</code> からファイル名を構築する</p>
-<p>ファイル名は</p></li>
+<p>現在、ブログ記事のファイル名は <code>&lt;日付&gt;-&lt;タイトル&gt;</code> のケバブケースになっている。 なのでこの形に合うように整形する。</p>
+<dl>
+<dt><code>$"&lt;text&gt;"</code></dt>
+<dd><code>$</code> から始まる文字列は、文字列埋め込みです。 <code>()</code> で囲んであげた部分を式として評価し、文字列に埋め込みます。
+</dd>
+<dt><code>str substring &lt;range&gt;</code></dt>
+<dd>指定の範囲のスライスを作成します。
+</dd>
+<dt><code>str kebab-case</code></dt>
+<dd>標準入力で来た文字列をケバブケースに変換します。
+</dd>
+</dl>
+<div class="ui segment">
+<div class="ui top right attached label">
+nu
+</div>
+<pre class="nu SourceCode"><code>fetch https://qiita.com/api/v2/users/Cj-bc/items | each {$&quot;($it.created_at | str substring [0,10])-($it.title | str kebab-case).md&quot;}
+</code></pre>
+</div></li>
 </ol>
 <h2 id="TODO 2. HTMLエンコードを外す"><span class="todo TODO">TODO</span> 2. HTMLエンコードを外す</h2>
-<p>にゃーん。ねむい。 とりあえず、一番簡単かつ確実なのはnodeの <code>[[https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/decodeURI][decodeURI]]</code> 使えばいいでしょってだけ</p>
+<p>APIから取得した <code>body</code> は HTMLエンコードされている(e.g. <code>-&gt;</code> が <code>-&amp;gt;</code> になるなど) ので、これをデコードしてあげます。</p>
+<div class="waring">
+<p><em>HTML エンコード</em> と <em>URI エンコード</em> は(異なります。</p>
+</div>
+<p>多分色々な方法が色々な言語にあると思いますが、 一番最初に思い付いた簡単かつ確実なのはnodeを使うことだったのでそうします。 <code>decodeURI</code> (<a href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/decodeURI">参考</a>) 使えばよさそう。</p>
+<dl>
+<dt><code>console.log</code></dt>
+<dd>標準出力に出力するために使用します
+</dd>
+<dt><code>fs.readFileSync("/dev/stdin", "utf8")</code></dt>
+<dd>標準入力から読むために使用します
+</dd>
+<dt><code>decodeURI</code></dt>
+<dd>URIエンコードをデコードする関数です。
+</dd>
+</dl>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb4" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ex">node</span> -e <span class="st">&#39;console.log(encodeURI(&quot;https://qiita/てすともーど!!!&gt;&quot;))&#39;</span> <span class="kw">|</span> <span class="ex">node</span> -e <span class="st">&#39;console.log(decodeURI(fs.readFileSync(&quot;/dev/stdin&quot;, &quot;utf8&quot;)))&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb5" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ex">node</span> -e <span class="st">&#39;console.log(encodeURI(&quot;https://qiita/てすともーど!!!&gt;&quot;))&#39;</span> <span class="kw">|</span> <span class="ex">node</span> -e <span class="st">&#39;console.log(decodeURI(fs.readFileSync(&quot;/dev/stdin&quot;, &quot;utf8&quot;)))&#39;</span></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -158,12 +202,12 @@ example
 </code></pre>
 </div>
 <h2 id="TODO 3. ファイルに保存する"><span class="todo TODO">TODO</span> 3. ファイルに保存する</h2>
-<p>つかったものだけ</p>
+<p><code>save</code> で標準入力からきたものをファイルに保存できます。 つかったものだけ</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb6" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="ex">fetch</span> https://qiita.com/api/v2/users/Cj-bc/items?per_page=86 <span class="kw">|</span> <span class="ex">each</span> { <span class="va">$it</span>.body <span class="kw">|</span> <span class="ex">save</span> <span class="st">$&quot;(</span><span class="va">$it</span><span class="st">.created_at | str substring [0 10])-(</span><span class="va">$it</span><span class="st">.title|str kebab-case).md&quot;</span> }</span></code></pre></div>
+<div class="sourceCode" id="cb7" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="ex">fetch</span> https://qiita.com/api/v2/users/Cj-bc/items?per_page=86 <span class="kw">|</span> <span class="ex">each</span> { <span class="va">$it</span>.body <span class="kw">|</span> <span class="ex">save</span> <span class="st">$&quot;(</span><span class="va">$it</span><span class="st">.created_at | str substring [0 10])-(</span><span class="va">$it</span><span class="st">.title|str kebab-case).md&quot;</span> }</span></code></pre></div>
 </div>
 <p><a href="https://qiita.com/saba_can00/items/02ff28a16a0d312a5259">https://qiita.com/saba_can00/items/02ff28a16a0d312a5259</a></p>
 ]]></description>
@@ -322,7 +366,7 @@ bash
     <div class="item">Posted on October 15, 2021</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on November 26, 2021
+      Updated on November 29, 2021
     </div>
   </div>
     
@@ -333,7 +377,7 @@ bash
   
 </div>
 
-<p><a href="https://github.com/sgur/vim-textobj-parameter">sgur/vim-textobj-parameter</a>のevil版である<a href="https://github.com/Cj-bc/evil-textobj-parameter">Cj-bc/evil-textobj-parameter</a> を作っています。</p>
+<p><a href="https://github.com/sgur/vim-textobj-parameter">sgur/vim-textobj-parameter</a>のevil版である<a href="https://github.com/Cj-bc/evil-textobj-parameter">Cj-bc/evil-textobj-parameter</a> を <del>作っています。</del> 完成しました!</p>
 <h1 id="基本的な仕様">基本的な仕様</h1>
 <ul>
 <li>キーバインドは提供していないので、 <code>define-key</code> で設定してください。</li>
