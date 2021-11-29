@@ -137,8 +137,10 @@ main = hakyll $ do
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
+            -- TODO: listFieldを元にして, 各postにContextも独自に適用できるフィールドを生成する
+            -- id:6da7268f-a417-436f-ab64-8aaef1373dbe
             let archiveCtx =
-                    listField "posts" (postCtx tags) (return posts) `mappend`
+                    listField "posts" (field "title" (\(Item i b) -> loadSnapshotBody i "title") <> postCtx tags) (return posts) `mappend`
                     constField "title" "Archives"            `mappend`
                     defaultContext'
 
