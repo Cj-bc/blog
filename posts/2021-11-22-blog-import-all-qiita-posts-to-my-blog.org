@@ -79,18 +79,46 @@
 
      このAPIは、「投稿のリスト」を返してくるので、それぞれに対してbodyを取得してあげる。
 
+     + ~each~ :: 標準入力にリストを取り、その各要素に対してコードブロックを適用します
+     + ~{}~ :: コードブロックです。この中の ~$it~ は、このコードブロックに渡されるパラメーターを示します。
+     + ~{|x| }~ :: コードブロックは名前付きでも定義することができます。この場合、 ~$it~ の変わりに ~$x~ を同じ意味で使用できます。(ついでの解説)
+
      #+begin_src nu
      fetch https://qiita.com/api/v2/users/Cj-bc/items | each {$it.body}
      #+end_src
 
      
 **** TODO 3. ~created_at~ と ~title~ からファイル名を構築する
-     ファイル名は
+     現在、ブログ記事のファイル名は ~<日付>-<タイトル>~ のケバブケースになっている。
+     なのでこの形に合うように整形する。
+
+     + ~$"<text>"~ :: ~$~ から始まる文字列は、文字列埋め込みです。
+       ~()~ で囲んであげた部分を式として評価し、文字列に埋め込みます。
+     + ~str substring <range>~ :: 指定の範囲のスライスを作成します。
+     + ~str kebab-case~ :: 標準入力で来た文字列をケバブケースに変換します。
+       
+
+     #+begin_src nu
+     fetch https://qiita.com/api/v2/users/Cj-bc/items | each {$"($it.created_at | str substring [0,10])-($it.title | str kebab-case).md"}
+     #+end_src
+     
+     
 *** TODO 2. HTMLエンコードを外す
     
-    にゃーん。ねむい。
-    とりあえず、一番簡単かつ確実なのはnodeの
-    ~[[https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/decodeURI][decodeURI]]~ 使えばいいでしょってだけ
+    APIから取得した ~body~ は HTMLエンコードされている(e.g. ~->~ が ~-&gt;~ になるなど)
+    ので、これをデコードしてあげます。
+
+    #+begin_waring
+    /HTML エンコード/ と /URI エンコード/ は(異なります。
+    #+end_waring
+
+    多分色々な方法が色々な言語にあると思いますが、
+    一番最初に思い付いた簡単かつ確実なのはnodeを使うことだったのでそうします。
+    ~decodeURI~ ([[https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/decodeURI][参考]]) 使えばよさそう。
+
+    + ~console.log~ :: 標準出力に出力するために使用します
+    + ~fs.readFileSync("/dev/stdin", "utf8")~ :: 標準入力から読むために使用します
+    + ~decodeURI~ :: URIエンコードをデコードする関数です。
     
     #+begin_src sh
       node -e 'console.log(encodeURI("https://qiita/てすともーど!!!>"))' | node -e 'console.log(decodeURI(fs.readFileSync("/dev/stdin", "utf8")))'
@@ -101,6 +129,7 @@
     
 *** TODO 3. ファイルに保存する
 
+    ~save~ で標準入力からきたものをファイルに保存できます。
     つかったものだけ
     #+begin_src sh
        fetch https://qiita.com/api/v2/users/Cj-bc/items?per_page=86 | each { $it.body | save $"($it.created_at | str substring [0 10])-($it.title|str kebab-case).md" }
