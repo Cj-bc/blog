@@ -1,0 +1,281 @@
+* 古い形式のブログ記事を変換するおしごと [WIP]
+  :PROPERTIES:
+  :DATE: [2021-12-02 Thu 14:25]
+  :TAGS: :blog:
+  :BLOG_POST_KIND: Memo
+  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2021-12-02 Thu 13:00]--[2021-12-02 Thu 14:47] =>  1:47
+  :END:
+  
+** これまでの遷移
+
+   | blog以前                              | Qiita flavored markdownでQiitaに投稿      |
+   | 一番初めの時期([[https://cj-bc.github.io/blog/posts/2020-08-02-helloHakylly.html][2020/08/02]]~[[https://cj-bc.github.io/blog/posts/2021-01-19-after-effect-markers.html][2021/01/19]]) | markdown+pandoc拡張(メタデータをyaml管理) |
+   | org移行期([[https://cj-bc.github.io/blog/posts/2021-01-31-org-file-test.html][2021/01/31]]                  |                                           |
+
+** なぜ移行するのか
+
+   複数のフォーマットに対応したHakyllコードをかくのが
+   そろそろ辛くなってきたからです。
+   特に、メタデータの取り扱い周りが厄介なのです。
+
+   Pandocでは、独自の構文としてメタデータを
+   YAML フォーマットのヘッダーに保存することができます。
+   昔はこれを使っていたのですが、
+   Emacs+Org mode の構成で投稿を作成する際、それらをプロパティとして
+   扱えたら便利だなと感じるようになりました。
+
+   プロパティとして扱える利点としては、例えば現在の投稿にある
+   ~BLOG_POST_PROGRESS~ を ~org-agenda~ から見ることによって、
+   作成中の投稿の一覧を容易に作成することができます。
+   これは、org modeの機能の一つであるプロパティを用いているからできること
+   であって、pandocのYAML構文を用いようとしたらまた新しいプログラムを
+   書く必要がでてきます。それは面倒だし非効率なので、
+   今迄YAMLメタデータとして仕舞っていたデータも
+   プロパティとして保存するように変更しました。
+
+   
+   それに伴い、タイトルの取得の方法等も変わって昔の方法は使えなくなりました。
+   どちらにも対応することは不可能ではないでしょうが、
+   正直もう昔の方法を利用することは無いであろうこと・今後のメンテナンス性を
+   考えると非効率であることから、完全な移行をするに至りました。
+
+** 移行スクリプト
+   :PROPERTIES:
+   :HEADER-ARGS: :results raw :shebang #!/bin/nu :noweb yes 
+   :END:
+
+   とりあえずpandocを使うことは決定していましたが、
+   実はpandoc単体(フィルターなし)では「その内容を参照して
+   あれこれする」ことができません。
+   というか、そういうニーズを満たすためのものがフィルターなんですが...
+
+   
+   でもちょっと面倒なんだよね...
+   今はYAML形式のメタデータの情報を使いたいだけなので、
+   テキスト処理ならawkなりsedなりあるし
+   わざわざフィルター書く程のものでもないように感じます。
+   
+   なので、手軽にYAMLを使えるnushellを使ってみることにしました。
+
+   
+   以下、便宜上コードブロックの言語を ~sh~ にしていますが、
+   実際は nushell のスクリプトです。
+   
+   
+     let target = ./2021-01-03-fomantic-ui.md
+
+     let metadata = (awk 'BEGIN {c=0} /---/ {if (c == 0) { c=1; } else { c = 0; }; next; } /.*/ {if (c == 1) { print $0;} }' $target | from yaml)
+     let newHeading = $"* ($metadata.title)
+       :PROPERTIES:
+       :DATE: ($metadata.date)
+       :TAGS: 
+       :BLOG_POST_KIND: Knowledge
+       :BLOG_POST_PROGRESS: Published
+       :BLOG_POST_STATUS: Normal
+       :END:
+     "
+
+     echo $newHeading (pandoc -f markdown -t org --shift-heading-level-by=1 $target) | reduce { echo $"($acc)
+     ($it)" }
+   #+end_src
+
+*** 1. YAML部分を取り出す
+    ここは単純なテキスト処理なのでawkを使います。
+    メタデータは ~---~ と ~---~ で囲まれているので、
+    「 ~---~ の次の行から次に ~---~ がくるまで」を出力します。
+
+    #+NAME: extract-yaml-metadata
+    #+begin_src awk :in-file ./2021-01-03-fomantic-ui.md :results raw :wrap SRC yaml
+      BEGIN { inside=0; }
+      /---/ {if (inside == 0) { inside=1; }
+	  else { inside=0; };
+	  next;
+      }
+      { if (inside == 1) { print $0; }; }
+    #+end_src
+
+    #+RESULTS: extract-yaml-metadata
+    #+begin_SRC yaml
+    title: ブログの見た目を整える
+    author: Cj-bc
+    tags:
+      - hakyll
+      - ブログ
+      - haskell
+    date: Jan 03, 2021
+    #+end_SRC
+
+*** 2. Yaml部分からメタデータを取得する
+    
+    #+HEADER: :noweb-ref migration-script
+    #+begin_src sh
+      let target = ./2021-01-03-fomantic-ui.md
+      let metadata = (awk '
+      <<extract-yaml-metadata>>
+      ' $target | from yaml)
+    #+end_src
+
+
+    #+begin_src sh
+      <<migration-script>>
+
+      echo $metadata
+    #+end_src
+
+    #+RESULTS:
+      #           title            author        tags            date      
+    ───────────────────────────────────────────────────────────────────────
+      0   ブログの見た目を整える   Cj-bc    [table 3 rows]   Jan 03, 2021  
+
+*** 3. メタデータを加工して新しいヘッダーを作成する
+    さて、これで投稿のタイトルと諸々のデータは取れるようになりました。
+    あとはこれを加工して、新しいヘッダーを作成します。
+
+    #+HEADER: :noweb-ref migration-script
+    #+begin_src sh
+      let newHeading = $"* ($metadata.title)
+	  :PROPERTIES:
+	  :DATE: (LANG=C ^date --date $metadata.date +"[%Y-%m-%d %a]" | tr -d '\n')
+	  :TAGS: ($metadata.tags | reduce -f ':' { $acc + $it + ':' })
+	  :AUTHOR: ($metadata.author)
+	  :BLOG_POST_KIND:
+	  :BLOG_POST_PROGRESS: Published
+	  :BLOG_POST_STATUS: Normal
+	  :END:
+      "
+    #+end_src
+
+    #+begin_src sh
+      <<migration-script>>
+      echo $newHeading
+    #+end_src
+
+    #+RESULTS:
+    * ブログの見た目を整える
+	:PROPERTIES:
+	:DATE: [2021-01-03 Sun]
+	:TAGS: :hakyll:ブログ:haskell:
+	:AUTHOR: Cj-bc
+	:BLOG_POST_KIND:
+	:BLOG_POST_PROGRESS: Published
+	:BLOG_POST_STATUS: Normal
+	:END:
+
+
+**** タグをOrg形式に変換する
+     org形式のタグはタグ名を ~:~ で囲んだものになります。
+     タグ名はメタデータ内にリストとして持っているので、nushellの ~reduce~
+     コマンドで整形します。
+
+     #+HEADERS: :noweb-ref migration-script
+     #+begin_src sh
+       def formatTags [tags: table] {
+	   $tags | reduce -f ':' { $acc + $it + ':' }
+       }
+     #+end_src
+     
+     #+begin_src sh
+       <<migration-script>>
+       formatTags $metadata.tags
+     #+end_src
+
+     #+RESULTS:
+     :hakyll:ブログ:haskell:
+
+**** 記事の日付を変換する
+
+     昔のフォーマットでは ~月 日, 年~ となっているので、これを
+     org形式の ~[年-月-日 曜日]~ に変換します。
+
+     最初は nushell の ~parse~ コマンドでパースしてうんたら...って
+     考えていたけれど、曜日を出す方法や月番号周りの変換に悩んでいました。
+     で、その間に GNU coreutils の ~date~ コマンド(nushellは組込みで ~date~
+     コマンド持っているが、そっちではない)が全ての仕事を出来そうだとわかったので
+     こちらでやることにしました。
+
+
+     GNU coreutilsの ~date~ コマンドはデフォルトでは現在時刻を吐きますが、
+     ~--date~ オプションに文字列を渡してあげることで別の日付にすることが可能です。
+     このオプションに元の文字列をセットして、それをorg形式にフォーマットしなおします。
+
+
+     nushellでは、前述の通りそれ自体が提供している ~date~ コマンドが存在し、
+     GNU coreutilsの ~date~ コマンドはそのままでは使用することができません。
+     そのため、[[https://www.nushell.sh/book/escaping.html][nushell bookの"Escaping to the System"]]を参考にコマンド名の前に
+     ~^~ を付けることでnushell独自のコマンドを呼び出さず、GNU coreutilsの ~date~
+     コマンドを呼びだします。
+     
+
+     尚、GNU coreutilsの ~date~ コマンドは環境変数 ~LANG~ に応じて曜日名の
+     出力などを変化させます。ここでは英語表記になってほしいので ~LANG=C~ にしています。
+
+     #+begin_src sh
+       <<migration-script>>
+       LANG=C ^date --date $"($metadata.date)" +"[%Y-%m-%d %a]"
+     #+end_src
+
+*** 4. 元の記事を一段階下げる
+
+    さて、今迄作ってきたheadingを、元の記事と組合せる前段階をします。
+    トップレベル(level1)のheadingは一つだけであってほしいので、
+    元の記事のレベルを一段階下げます。これはpandocを用いて行うことができます。
+
+    #+NAME: pandocを用いたheadingレベル下げの例
+    #+begin_src sh :shbang #!/bin/bash
+      pandoc -f org --shift-heading-level-by=1 -t org <(echo "
+      ,* Leve1 header example
+	hello!
+
+      ,** Inner level2 header
+      ")
+
+    #+end_src
+
+    #+RESULTS:
+    ** Leve1 header example
+       :PROPERTIES:
+       :CUSTOM_ID: leve1-header-example
+       :END:
+    hello!
+
+    *** Inner level2 header
+	:PROPERTIES:
+	:CUSTOM_ID: inner-level2-header
+	:END:
+
+*** 5. 3.と4.を組み合わせる
+    これは単に ~echo~ でいいと思います。
+    但し、nushellの ~echo~ はListで出力してくるので、
+    GNU coreutilsの ~echo~ を使います。
+    又、 ~^echo $newHeading (pandoc...)~ だと ~$newHeading~ と
+    ~(pandoc...)~ の間に改行が作成されず、 ~$newHeading~ の後ろに空行を追加して
+    おいてもなんか消されてしまうので以下のような方法を取っています。
+
+    #+begin_src sh :wrap SRC org
+      <<migration-script>>
+      ^echo $"($newHeading)
+      (pandoc --shift-heading-level-by=1 -t org $target)
+      "
+    #+end_src
+
+
+    #+RESULTS:
+    #+begin_SRC org
+    #+end_SRC
+
+*** 6. ファイルに保存する
+    ~save~ コマンドでファイルに保存できます。
+    あとついでなので、全ファイルの拡張子を ~org~ に変換します。
+
+    #+HEADER: :noweb-ref migration-script
+    #+begin_src sh :wrap SRC org
+      $"($newHeading)
+      (pandoc --shift-heading-level-by=1 -t org $target)
+      " | save $target
+    #+end_src
+    
+*** 7. 全ファイルに対して実行する
