@@ -8,8 +8,57 @@
         <name>Cj-bc a.k.a Cj.BC_SD</name>
         <email>cj.bc-sd@outlook.jp</email>
     </author>
-    <updated>2021-11-27T00:00:00Z</updated>
+    <updated>2021-12-21T00:00:00Z</updated>
     <entry>
+    <title>2021-12-21-qutebrwoser-extend-download-directory-suggestion</title>
+    <link href="https://cj-bc.github.io/blog/posts/2021-12-21-qutebrwoser-extend-download-directory-suggestion.html" />
+    <id>https://cj-bc.github.io/blog/posts/2021-12-21-qutebrwoser-extend-download-directory-suggestion.html</id>
+    <published>2021-12-21T00:00:00Z</published>
+    <updated>2021-12-21T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>Qutebrowserでのダウンロード先ディレクトリをrofiで選べるようにしてみた</h1>
+  <div class="ui list">
+    <div class="item">Posted on December 21, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on December 21, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  
+  
+</div>
+
+<p>Qutebrowserでは、ファイルをダウンロードする際に保存先を選ぶポップアップ？が出てくる。 しかし、これは前回使用したパスしかないし、タブキーでの補完もあまり上手く動かない(補完しようとすると 一つ上の階層を選択したりする)しで使い勝手があまりよくなかった。</p>
+<p>私は、保存先がいくつかあってそれを使い分けるタイプなので、いっそのこと最初に表示する保存先の候補を リストから選択できるようにしよう、と思い立った。 Qutebrowserでも絞り込みとかはできるが、なんか挙動がいまいちに感じていたので、それならrofiを使ってやろう と思い立ったのがきっかけ。</p>
+<h1 id="どう動くのか">どう動くのか</h1>
+<p><a href="https://www.youtube.com/watch?v=XX9JRI-8QQw">ゆーちゅーぶってヤツにデモ動画を上げてみた</a>のでそちらを参照してほしい。 主には、今迄通りダウンロードをしようとするとrofiが(dmenuモードで)立ち上がり、 一つ選択したらそれが・選択されなかった場合は元のqutebrowserのアルゴリズムで選ばれたパスが ダウンロード先として表示される。</p>
+<h1 id="技術的詳解">技術的詳解</h1>
+<p>詳解ってほどでもないけど…</p>
+<p>qutebrowserのブラウザに関連する処理は <code>qutebrowser/browser</code> に集められている。 その中でもダウンロードに関係するのは <code>qutebrowser/browser/downloads.py</code> である。 一目瞭然なので。 ここのうち、パスを割り出すのに使っている部分が <code>download_dir</code> なので ここに処理を挟み込んだ。</p>
+<h2 id="Rofiを呼び出す際の注意点">Rofiを呼び出す際の注意点</h2>
+<ul>
+<li>標準入力に渡すファイルオブジェクトは <strong>必ず <code>seek(0)</code> すること</strong>
+<ul>
+<li>これを怠ると、読み込みのポインタがファイルの最後にあるので何も読めない</li>
+</ul></li>
+<li><code>tempfile.TemporaryFile</code> には <code>mode="w+"</code> オプション引数を付けてあげる
+<ul>
+<li>そうじゃないとバイナリを期待される。まぁどちらでも良いのかもだけどバイナリではないので。</li>
+</ul></li>
+<li><code>rofi -dmenu</code> の標準出力を <code>CompletedProcess.stdout</code> から取得すると、末尾に改行文字( <code>\n</code> )を含む
+<ul>
+<li>外してあげないと表示がうまくいかない。空白があるように見えた。</li>
+</ul></li>
+</ul>
+<h2 id="Qutebrowserに新しい設定を組込む">Qutebrowserに新しい設定を組込む</h2>
+<p>この実装では <code>downloads.location.favorite_paths</code> という新しい設定項目を 追加している。 これは、 <code>qutebrowser/config/configdata.yml</code> というYAMLファイルをいじるだけで良い (少なくともそれで動いている、公式の情報を元にしていないため何かしら足りない可能性はある)</p>
+]]></summary>
+</entry>
+<entry>
     <title>2021-11-27-qutebrowser-you-should-set-locale-properly-to-upload-files</title>
     <link href="https://cj-bc.github.io/blog/posts/2021-11-27-qutebrowser-you-should-set-locale-properly-to-upload-files.html" />
     <id>https://cj-bc.github.io/blog/posts/2021-11-27-qutebrowser-you-should-set-locale-properly-to-upload-files.html</id>
@@ -21,7 +70,7 @@
     <div class="item">Posted on November 27, 2021</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on November 29, 2021
+      Updated on December 21, 2021
     </div>
   </div>
     
@@ -637,104 +686,6 @@ haskell
 <p>普段から通うには少し御高いけれども、一ヶ月に1回とか自分のご褒美として秋葉原和堂に来るのが良いのかも しれない、と感じた。</p>
 <p>あとがき</p>
 <p>あと眠いながら書いてるので誤字脱字諸々すまん頭がまわらない。 でも当日中にどうしても記録しておきたかった…</p>
-]]></summary>
-</entry>
-<entry>
-    <title>2021-09-08-homebrew-dfx</title>
-    <link href="https://cj-bc.github.io/blog/posts/2021-09-08-homebrew-dfx.html" />
-    <id>https://cj-bc.github.io/blog/posts/2021-09-08-homebrew-dfx.html</id>
-    <published>2021-09-08T00:00:00Z</published>
-    <updated>2021-09-08T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>Dfinity SDKのHomebrew formulae(非公式)を書いた</h1>
-  <div class="ui list">
-    <div class="item">Posted on September  8, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on September  8, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  
-  
-</div>
-
-<p>Dfinity SDKは標準のインストーラーが付属するが、 これをHomebrew管理したかったのでラッパーとなるように<a href="https://github.com/Cj-bc/homebrew-dfx">Formula</a>を書いた。</p>
-<p>尚これは非公式なものであること・あまりHomebrewのformulaeとしては お行儀良くないことは留意していただきたい。</p>
-<h1 id="使い方">使い方</h1>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">brew</span> tap cj-bc/dfx</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="ex">brew</span> install dfx</span></code></pre></div>
-</div>
-<h1 id="技術的メモ">技術的メモ</h1>
-<h2 id="環境変数を設定する">環境変数を設定する</h2>
-<p><a href="https://docs.brew.sh/Formula-Cookbook#using-environment-variables">https://docs.brew.sh/Formula-Cookbook#using-environment-variables</a></p>
-<div class="ui segment">
-<div class="ui top right attached label">
-ruby
-</div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="dt">ENV</span>[<span class="st">&quot;DFX_INSTALL_ROOT&quot;</span>] = prefix</span></code></pre></div>
-</div>
-<h2 id="ビルド中の一時ディレクトリにファイルを保存する">ビルド中の一時ディレクトリにファイルを保存する</h2>
-<p><a href="https://docs.brew.sh/Formula-Cookbook#variables-for-directory-locations">https://docs.brew.sh/Formula-Cookbook#variables-for-directory-locations</a></p>
-<p><code>#{hoge}</code> はRubyの記法で、文字列の中に変数を埋め込むことができる。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-ruby
-</div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>system <span class="st">&quot;curl -fsSL https://sdk.dfinity.org/install.sh &gt; </span><span class="ot">#{</span>buildpath<span class="ot">}</span><span class="st">/install.sh&quot;</span></span></code></pre></div>
-</div>
-<h2 id="system 等で実行したいプログラムの標準入出力を操作する"><code>system</code> 等で実行したいプログラムの標準入出力を操作する</h2>
-<p><a href="https://rubydoc.brew.sh/Formula.html">brewのrubydocのFormula.test</a>の部分に書かれているのだが、どうやら <code>open3</code> という ライブラリを使えるらしい。(筆者のRuby歴はHomebrew formulaeを除けば0)</p>
-<p>ということでその例を拝借して書き換えてみると:</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-ruby
-</div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>     require <span class="st">&quot;open3&quot;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>     <span class="dt">Open3</span>.popen3(<span class="st">&quot;sh&quot;</span>, <span class="st">&quot;-i install.sh&quot;</span>) <span class="kw">do</span> |stdin, stdout, _, th|</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="co"># ここでIO処理をする</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>     <span class="kw">end</span></span></code></pre></div>
-</div>
-<ol>
-<li><p>ユーザーの入力を受け付けてそれをプログラムに渡す</p>
-<p>今回の公式のインストールスクリプトは、ライセンスへの同意をキー入力で答える必要があります。 これのためには、homebrew側で受け取ったキー入力をスクリプトに渡してあげる必要があります。</p>
-<p><code>stdin</code> を先程の <code>Open3.popen3</code> で設定した変数だとすると、以下のようにすることで 入力のバイパスが出来ました。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-ruby
-</div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>stdin &lt;&lt; <span class="dt">$stdin</span>.gets</span></code></pre></div>
-</div>
-<p>Rubyにおいて、 <code>$変数名</code> は「グローバル変数」を指します。 なので、グローバルにhomebrewが扱っている標準入力を <code>$stdin</code> として参照しています。</p></li>
-<li><p>スレッドを待機させる必要がありそう</p>
-<p>単純に <code>Open3.popen3</code> を使った場合、その処理を行っているスレッドは別スレッドとして非同期的に処理がされるようです。 なので、このままだとそちらの処理が終わる前にプログラムが進んでしまいます。</p>
-<p>他の言語での <code>await</code> のような機能として、 <code>&lt;thread&gt;.join</code> を使います。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-ruby
-</div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>     <span class="dt">Open3</span>.popen3(<span class="st">&quot;sh&quot;</span>, <span class="st">&quot;-i&quot;</span>, <span class="st">&quot;</span><span class="ot">#{</span>buildpath<span class="ot">}</span><span class="st">/install.sh&quot;</span>)  <span class="kw">do</span> |stdin, stdout, stderr, t|</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="co"># やりたい処理</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>t.join</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>     <span class="kw">end</span>  </span></code></pre></div>
-</div>
-<p>とすることで、 <code>sh -i install.sh</code> が終了するまで待つことができます。</p></li>
-</ol>
-<h2 id="文字列にある文字列が含まれるかを確認する">文字列にある文字列が含まれるかを確認する</h2>
-<div class="ui segment">
-<div class="ui top right attached label">
-ruby
-</div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="dt">String</span><span class="co">#match?(/&lt;Regex&gt;/)</span></span></code></pre></div>
-</div>
-<p>を使うことで、正規表現 <code>&lt;Regex&gt;</code> がマッチしたなら <code>true</code>, しなかったら <code>false</code> を返してくれる。</p>
 ]]></summary>
 </entry>
 
