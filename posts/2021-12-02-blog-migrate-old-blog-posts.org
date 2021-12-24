@@ -7,6 +7,7 @@
   :BLOG_POST_STATUS: Normal
   :END:
   :LOGBOOK:
+  CLOCK: [2021-12-24 Fri 10:23]
   CLOCK: [2021-12-23 Thu 09:05]--[2021-12-23 Thu 10:23] =>  1:18
   CLOCK: [2021-12-22 Wed 17:10]--[2021-12-22 Wed 17:40] =>  0:30
   CLOCK: [2021-12-22 Wed 15:38]--[2021-12-22 Wed 17:03] =>  1:25
@@ -496,9 +497,13 @@
     #+begin_src sh  :shebang #!/bin/bash
       [[ -z $1 ]] && { echo "usage: migration-script.sh TARGETFILE"; exit; }
       target=$1
+      format=$(filename=($(echo $target | tr -s '.' ' '));
+	       echo ${filename[-1]})
+
+
       cat <(TARGET=$target ./blog-migration-script--createHeader.nu) <(awk '
       <<awk-trim-yaml-header>>
-      ' $target | pandoc --shift-heading-level-by=1 -t org)
+      ' $target | pandoc -f ${format} --shift-heading-level-by=1 -t org)
     #+end_src
 
     #+RESULTS:
