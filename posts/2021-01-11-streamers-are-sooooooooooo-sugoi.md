@@ -1,95 +1,142 @@
----
-title: ぶいちゅーばーってすごいよね〜って話
-tags:
-  - blog
-kind: scratch
-date: January 10, 2021
----
 いやラフに書きたくなっただけで特に意味はない。
 勢いに任せているのでまぁ適当だけどまぁ。うん。
 
+尚若干影響を与えてないわけでもないイベントに[[http://mamo.sakura.ne.jp/19bright/][19の煌き]]があるので宣伝をしておきます。
 
-尚若干影響を与えてないわけでもないイベントに[19の煌き](http://mamo.sakura.ne.jp/19bright/)があるので宣伝をしておきます。
+#+begin_html
+  <blockquote class="twitter-tweet">
+#+end_html
 
-<blockquote class="twitter-tweet">
-  <p lang="ja" dir="ltr">19の煌き2、HappyVirtualRoom2、DigitalFairyTaleの告知イラストが完成しました！　素敵なみなさんが大集合！<br>
-  イラストはbk様（<a href="https://twitter.com/StampedeM2?ref_src=twsrc%5Etfw">@StampedeM2</a>）<br>サークル参加は12/27まで受付中です！<a href="https://t.co/l0wUV3KDpL">https://t.co/l0wUV3KDpL</a> <a href="https://t.co/y0smq9PZnc">pic.twitter.com/y0smq9PZnc</a></p>&mdash; 『19の煌き』運営 (@61light1) <a href="https://twitter.com/61light1/status/1342047369446055937?ref_src=twsrc%5Etfw">December 24, 2020</a>
-</blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+#+begin_html
+  <p lang="ja" dir="ltr">
+#+end_html
 
-尚推しの一人である[想間ミレイ](https://dic.pixiv.net/a/%E6%83%B3%E9%96%93%E3%83%9F%E3%83%AC%E3%82%A4)ちゃんのサークルも是非に。
+19の煌き2、HappyVirtualRoom2、DigitalFairyTaleの告知イラストが完成しました！　素敵なみなさんが大集合！
+イラストはbk様（@StampedeM2）サークル参加は12/27まで受付中です！https://t.co/l0wUV3KDpL
+pic.twitter.com/y0smq9PZnc
 
-<blockquote class="twitter-tweet" data-conversation="none"><p lang="ja" dir="ltr">ｶﾞﾝﾊﾞﾘﾏｼﾀ <a href="https://t.co/shZvFIFMaY">pic.twitter.com/shZvFIFMaY</a></p>&mdash; 想間ミレイ@ゼロから始めるVTuber (@zerovabi) <a href="https://twitter.com/zerovabi/status/1348244692354232323?ref_src=twsrc%5Etfw">January 10, 2021</a></blockquote>
+#+begin_html
+  </p>
+#+end_html
 
----
+--- 『19の煌き』運営 (@61light1) December 24, 2020
+
+#+begin_html
+  </blockquote>
+#+end_html
+
+#+begin_html
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+#+end_html
+
+尚推しの一人である[[https://dic.pixiv.net/a/%E6%83%B3%E9%96%93%E3%83%9F%E3%83%AC%E3%82%A4][想間ミレイ]]ちゃんのサークルも是非に。
+
+#+begin_html
+  <blockquote class="twitter-tweet" data-conversation="none">
+#+end_html
+
+#+begin_html
+  <p lang="ja" dir="ltr">
+#+end_html
+
+ｶﾞﾝﾊﾞﾘﾏｼﾀ pic.twitter.com/shZvFIFMaY
+
+#+begin_html
+  </p>
+#+end_html
+
+--- 想間ミレイ@ゼロから始めるVTuber (@zerovabi) January 10, 2021
+
+#+begin_html
+  </blockquote>
+#+end_html
 
 はい。
 
 そもそもVirtualでなくとも配信者ってすごいと思う。まずはそこから
 
-# 配信者のどこがすごいのか
-
-## 1. 配信の内容がある
-
+** 配信者のどこがすごいのか
+   :PROPERTIES:
+   :CUSTOM_ID: 配信者のどこがすごいのか
+   :END:
+*** 1. 配信の内容がある
+    :PROPERTIES:
+    :CUSTOM_ID: 配信の内容がある
+    :END:
 いやマジで全てはこれ。特に雑談枠と企画枠の二つ。
-私からしたらなぜあんなにも面白い話ができるのか微塵たりともわからない。  
+私からしたらなぜあんなにも面白い話ができるのか微塵たりともわからない。\\
 雑談ってお前、雑な談話やぞ？？って思われるかもしれないけど、
-雑な談話の方が難しくないですか？？？テーマ決まってたほうが話しやすい。  
-主がコミュ障なだけやろ？？と言われるとそれはそうで何も言えないんですが。  
+雑な談話の方が難しくないですか？？？テーマ決まってたほうが話しやすい。\\
+主がコミュ障なだけやろ？？と言われるとそれはそうで何も言えないんですが。\\
 これは配信者の適性というか、そもそもコミュニケーションの適性みたいなところでは
 あるけれどすごいなって毎回思っています。
 
-## 2. 雑談が謎に面白い
-
+*** 2. 雑談が謎に面白い
+    :PROPERTIES:
+    :CUSTOM_ID: 雑談が謎に面白い
+    :END:
 内容が、というのもありますが「別段めっちゃ面白いトピックじゃないのに
-なぜかめちゃくちゃ聞いてて面白い」っていう事例が割とある気がしています。  
+なぜかめちゃくちゃ聞いてて面白い」っていう事例が割とある気がしています。\\
 具体例とか言われると思い出せないんですが、まぁ逆にいうとそのくらいどうでもいいような
 内容でも面白いというか。
 
-## 3. なんか知らんけどゲームしながら話ができる
-
+*** 3. なんか知らんけどゲームしながら話ができる
+    :PROPERTIES:
+    :CUSTOM_ID: なんか知らんけどゲームしながら話ができる
+    :END:
 これはゲーム配信する人(VTuber見てるので多いがち)に限った話なんですけど、ゲームしながら話してるのすごいと思う。
 
-## 4. 時間が取れる
-
+*** 4. 時間が取れる
+    :PROPERTIES:
+    :CUSTOM_ID: 時間が取れる
+    :END:
 配信時間ってよく確保できますね？？？
 
-## 5. 積極的に宣伝できる
-これ地味にすごく大事で、かつすごくすごいなって思うことの一つ。  
+*** 5. 積極的に宣伝できる
+    :PROPERTIES:
+    :CUSTOM_ID: 積極的に宣伝できる
+    :END:
+これ地味にすごく大事で、かつすごくすごいなって思うことの一つ。\\
 わりかし配信に自信がないと宣伝って難しいと思うんですよ。
 でも、宣伝しないと人ってこないんですよ。結果的に自信もつかないんですよ。
 
+まぁ+主がコミュ障だからってのは言わないで+
 
-まぁ~~主がコミュ障だからってのは言わないで~~
-
-## 6. 声出せる環境がある
-
+*** 6. 声出せる環境がある
+    :PROPERTIES:
+    :CUSTOM_ID: 声出せる環境がある
+    :END:
 これはすごいというより羨ましいの部分なのかもしれない。
 私は家の都合とか立地とかの問題であまり声が出せない。
 小声でやってるけど音漏れしないかビクビクしています。ぴぇん。
 
 まぁここまで些細なことはどうでも良いとしても、「大きな声を出せる」
-っていうの自体でもすごいなと。声を出すのって勇気入りません？~~え？？コミュs~~
+っていうの自体でもすごいなと。声を出すのって勇気入りません？+え？？コミュs+
 
-## 7. 反応が良い(かわいいor面白い)
+*** 7. 反応が良い(かわいいor面白い)
+    :PROPERTIES:
+    :CUSTOM_ID: 反応が良いかわいいor面白い
+    :END:
 雑談やゲームで何かが起こったときの反応が良い。まぁこれは多分配信者だけじゃなく芸能人とかもそうだとは思う。
 なんでなんだろうね？？？？
 
-# VTuberのどこがすごいのか
-
+** VTuberのどこがすごいのか
+   :PROPERTIES:
+   :CUSTOM_ID: vtuberのどこがすごいのか
+   :END:
 じゃあここからは少し具体的に「VTuber特有のすごさ」をつらつら書きたいと思う
 
-
-## 1. 配信ができる(技術)
-
+*** 1. 配信ができる(技術)
+    :PROPERTIES:
+    :CUSTOM_ID: 配信ができる技術
+    :END:
 まずこれがすごい。自分でやってみればわかるけど割と面倒。
 結構Virtualゆえ+私の特殊事情があるのかもしれないけど、それでもすごいと思う。
 
 特にボイチェン勢つょい。まぁまず声が可愛いのは置いておくとして、反応も可愛いのは置いておくとして、
-とりあえず技術面だけを考えても結構すごい。  
+とりあえず技術面だけを考えても結構すごい。\\
 みんなの環境がわからないけれど、私はmacなのもあり結構大変な思いをしている
 (ボイチェンはwindowsオンリーが多いんじゃ〜〜)
-
 
 ちなみに私の音のルーティングは
 物理マイク→ボイチェン→GarageBand(ノイズ除去とか)→OBSという流れなのだけど、
@@ -97,19 +144,20 @@ date: January 10, 2021
 後これだとイヤホンから聞けなかったりして、それを対応したらBGM聞こえなくなって、...
 ウオォやる気がﾋﾟﾝﾁ！！
 
-
-## 2. パソコンのスペック
-
+*** 2. パソコンのスペック
+    :PROPERTIES:
+    :CUSTOM_ID: パソコンのスペック
+    :END:
 これは人によりけりだけど、私の環境だとlive2dも3Dモデルもなしでも
-あまり画質が出ない。その上なんかぱちょから音がなっておる...  
+あまり画質が出ない。その上なんかぱちょから音がなっておる...\\
 Live2Dでも綺麗に動いてる人が少ないのからして、きちんと写ってる人のスペックやばそうだなぁという気持ち。
 
-
-## 3. ママパパ探し
-
+*** 3. ママパパ探し
+    :PROPERTIES:
+    :CUSTOM_ID: ママパパ探し
+    :END:
 念のため書いておくと、ママは元イラストを描いてくれた人、
 パパはlive2Dや3Dモデルを作成してくれた人のことを指す用語です。
 
 いやまぁ依頼募集してる人に依頼すればいいというのはそうなのだけども、
 行動力。よ。行動力。
-

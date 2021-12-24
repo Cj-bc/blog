@@ -1,67 +1,63 @@
----
-title: Githubのssh鍵の確認をする
-tags:
-  - ssh
-  - github
-kind: memo
-date: October 20, 2020
----
-
-# Tl;Dr
-
+** Tl;Dr
+   :PROPERTIES:
+   :CUSTOM_ID: tldr
+   :END:
 基本的にはここに書いてありました
 
-- [公式マニュアル][manual]
-
----
+- [[https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/reviewing-your-ssh-keys][公式マニュアル]]
 
 未読メールを確認していたところ、Githubさんから以下のようなメールが届いていました
 
-> The following SSH key was added to your account:
-> 
-<key name>
-<:区切りの二文字の英数字が並んでいる文字列(`\([[:alnum:]]{2}:\)\+`)(正規表現は自信ない)>
-> 
-If you believe this key was added in error, you can remove the key and disable
-access at the following location:
->
-https://github.com/settings/keys
+#+begin_quote
+  The following SSH key was added to your account:
 
+  <:区切りの二文字の英数字が並んでいる文字列(=\([[:alnum:]]{2}:\)\+=)(正規表現は自信ない)>
+
+  If you believe this key was added in error, you can remove the key and
+  disable access at the following location:
+
+  https://github.com/settings/keys
+#+end_quote
 
 これは、昔確かに自分で追加したはずのSSH鍵なので問題はないはず...ですが念のため確認してみます
 
-# 確認する
-
+** 確認する
+   :PROPERTIES:
+   :CUSTOM_ID: 確認する
+   :END:
 私はgpgキーを使ってssh認証をしているため、gpgキーの情報を確認すれば良いはずです。
-が、`xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx`なんて文字列を見つけることができない。IPv6でしかみたことないぞ。  
-...そんなことなかったです。 **md5のハッシュでした**
+が、=xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx=なんて文字列を見つけることができない。IPv6でしかみたことないぞ。\\
+...そんなことなかったです。 *md5のハッシュでした*
 
-## 自分の鍵のmd5ハッシュを確認する
+*** 自分の鍵のmd5ハッシュを確認する
+    :PROPERTIES:
+    :CUSTOM_ID: 自分の鍵のmd5ハッシュを確認する
+    :END:
+#+begin_example
+  # ssh-agentが立ち上がっていなければ、以下のコマンドで立ち上げます
+  $ eval "$(ssh-agent -s)"
 
-```sh
-# ssh-agentが立ち上がっていなければ、以下のコマンドで立ち上げます
-$ eval "$(ssh-agent -s)"
-
-$ ssh-add -l -E md5
-> <md5ハッシュ>
-```
+  $ ssh-add -l -E md5
+  > <md5ハッシュ>
+#+end_example
 
 これが一致すれば大丈夫
 
-## Githubの設定画面から確認する
+*** Githubの設定画面から確認する
+    :PROPERTIES:
+    :CUSTOM_ID: githubの設定画面から確認する
+    :END:
+[[https://github.com/settings/keys][githubの設定画面のここ]]で鍵の一覧を見ることができます。
+その中の /New SSH keys/ に該当の名前の鍵があるはずです。
+そこの鍵名の下に書いてある=SHA256: ...=が確認するべき値です。\\
+この値について、「GPG fingerprintとも合わん！」「GPG
+keyidとも合わん！！」「何だこいつ！！！」と暴れていましたが\\
+安心してください。 /GPGじゃない/ です。\\
+これは、[[https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/reviewing-your-ssh-keys][マニュアル]]に書いてあります。
 
-[githubの設定画面のここ](https://github.com/settings/keys)で鍵の一覧を見ることができます。
-その中の *New SSH keys* に該当の名前の鍵があるはずです。
-そこの鍵名の下に書いてある`SHA256: ...`が確認するべき値です。  
-この値について、「GPG fingerprintとも合わん！」「GPG keyidとも合わん！！」「何だこいつ！！！」と暴れていましたが  
-安心してください。 *GPGじゃない* です。  
-これは、[マニュアル][manual]に書いてあります。
-
-```sh
-$ ssh-add -l -E sha256
-> <sha256ハッシュ>
-```
+#+begin_example
+  $ ssh-add -l -E sha256
+  > <sha256ハッシュ>
+#+end_example
 
 ここで出てきたハッシュを比較すれば良いです。
-
-[manual]: <https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/reviewing-your-ssh-keys>

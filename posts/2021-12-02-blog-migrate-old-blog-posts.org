@@ -7,7 +7,8 @@
   :BLOG_POST_STATUS: Normal
   :END:
   :LOGBOOK:
-  CLOCK: [2021-12-24 Fri 10:23]
+  CLOCK: [2021-12-24 Fri 13:34]
+  CLOCK: [2021-12-24 Fri 10:23]--[2021-12-24 Fri 11:51] =>  1:28
   CLOCK: [2021-12-23 Thu 09:05]--[2021-12-23 Thu 10:23] =>  1:18
   CLOCK: [2021-12-22 Wed 17:10]--[2021-12-22 Wed 17:40] =>  0:30
   CLOCK: [2021-12-22 Wed 15:38]--[2021-12-22 Wed 17:03] =>  1:25
@@ -189,7 +190,7 @@
 	  :DATE: (formatDate $metadata)
 	  :TAGS: ($metadata.tags | reduce -f ':' { $acc + $it + ':' })
 	  :AUTHOR: (getAuthor $metadata)
-	  :BLOG_POST_KIND:
+	  :BLOG_POST_KIND: Memo
 	  :BLOG_POST_PROGRESS: Published
 	  :BLOG_POST_STATUS: Normal
 	  :END:
@@ -207,7 +208,7 @@
 	:DATE: [2021-01-03 Sun]
 	:TAGS: :hakyll:ブログ:haskell:
 	:AUTHOR: Cj-bc
-	:BLOG_POST_KIND:
+	:BLOG_POST_KIND: Memo
 	:BLOG_POST_PROGRESS: Published
 	:BLOG_POST_STATUS: Normal
 	:END:
@@ -584,6 +585,7 @@
     
     #+RESULTS:
     #+begin_accordion
+    Finished!
     #+end_accordion
     
 

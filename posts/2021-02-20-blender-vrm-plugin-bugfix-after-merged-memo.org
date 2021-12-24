@@ -1,83 +1,81 @@
----
-title: fix-typoのデバッグメモ
-tags:
-  - python
-  - blender
-  - vrm
-  - VRM_IMPORTER_for_Blender
-kind: memo
-date: February 20, 2021
----
+|          |                                                                                                              |
+| 該当PR   | [[https://github.com/saturday06/VRM_Addon_for_Blender/pull/23][saturday06/VRM_{IMPORTERforBlender}: PR #23]] |
+| 作業メモ | [[https://Cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html]]                                   |
 
-|          |                                                                        |
-|----------+------------------------------------------------------------------------|
-| 該当PR   | [[https://github.com/saturday06/VRM_Addon_for_Blender/pull/23][saturday06/VRM_IMPORTER_for_Blender: PR #23]]                            |
-| 作業メモ | [[https://Cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html]] |
-
-* 問題
-
+** 問題
+   :PROPERTIES:
+   :CUSTOM_ID: 問題
+   :END:
 [[https://github.com/saturday06/VRM_Addon_for_Blender/pull/23#issuecomment-782580000][issueでsaturday06さんが教えてくれた]]
 のですが、「一度古いプラグインでVRMを読み込んだblendファイルで、新しくVRMを読み込むとエラーを吐く」
 
+*** トレースバック
+    :PROPERTIES:
+    :CUSTOM_ID: トレースバック
+    :END:
+#+begin_example
+  Traceback (most recent call last):
+    File "/Users/me/Library/Application
+    Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/__init__.py",
+    line 88, in execute
+        blend_model.BlendModel(context, vrm_load.read_vrm(self.filepath, self),
+        self)
+          File "/Users/me/Library/Application
+          Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py",
+          line 53, in __init__
+              self.vrm_model_build()
+                File "/Users/me/Library/Application
+                Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py",
+                line 71, in vrm_model_build
+                    self.make_material()
+                      File "/Users/me/Library/Application
+                      Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py",
+                      line 333, in make_material
+                          self.build_material_from_mtoon(b_mat, mat)
+                            File "/Users/me/Library/Application
+                            Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py",
+                            line 646, in build_material_from_mtoon
+                                color_socket_to_connect=sg.inputs[tex_dic[tex_name]],
+                                KeyError: 'bpy_prop_collection[key]: key
+                                "NormalmapTexture" not found'
 
-** トレースバック
+                                location: <unknown location>:-1
+#+end_example
 
-#+begin_src 
-Traceback (most recent call last):
-  File "/Users/me/Library/Application
-  Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/__init__.py",
-  line 88, in execute
-      blend_model.BlendModel(context, vrm_load.read_vrm(self.filepath, self),
-      self)
-        File "/Users/me/Library/Application
-        Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py",
-        line 53, in __init__
-            self.vrm_model_build()
-              File "/Users/me/Library/Application
-              Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py",
-              line 71, in vrm_model_build
-                  self.make_material()
-                    File "/Users/me/Library/Application
-                    Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py",
-                    line 333, in make_material
-                        self.build_material_from_mtoon(b_mat, mat)
-                          File "/Users/me/Library/Application
-                          Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/importer/blend_model.py",
-                          line 646, in build_material_from_mtoon
-                              color_socket_to_connect=sg.inputs[tex_dic[tex_name]],
-                              KeyError: 'bpy_prop_collection[key]: key
-                              "NormalmapTexture" not found'
+** バグが起きた場所
+   :PROPERTIES:
+   :CUSTOM_ID: バグが起きた場所
+   :END:
+#+begin_example
+  __init__.ImportVRM.execute()
+  └blend_model.BlendModel.__init__()
+   └BlendModel.vrm_model_build()
+    └BlendModel.make_material()
+     └BlendModel.build_material_from_mtoon()
+#+end_example
 
-                              location: <unknown location>:-1
-#+end_src
-
-* バグが起きた場所
-
-#+begin_src
-__init__.ImportVRM.execute()
-└blend_model.BlendModel.__init__()
- └BlendModel.vrm_model_build()
-  └BlendModel.make_material()
-   └BlendModel.build_material_from_mtoon()
-#+end_src
-
-* バグの原因
-
+** バグの原因
+   :PROPERTIES:
+   :CUSTOM_ID: バグの原因
+   :END:
 =importer/blend_model.py:449= で
-~bpy.data.node_groups[shader_node_group_name]~ を取ってきているところが原因。
+=bpy.data.node_groups[shader_node_group_name]=
+を取ってきているところが原因。
 
+=bpy.data.node_groups= はblendfile内にある =node_groups=
+を保持しており、 既に「古いバージョンで読み込まれたVRM」がある場合
+=bpy.data.node_groups["MToon_unversioned"]= は 「古いバージョンの
+=MToon_unversioned= 」=typoが含まれたものを返してしまう。
 
-~bpy.data.node_groups~ はblendfile内にある =node_groups= を保持しており、
-既に「古いバージョンで読み込まれたVRM」がある場合
-~bpy.data.node_groups["MToon_unversioned"]~ は
-「古いバージョンの =MToon_unversioned= 」=typoが含まれたものを返してしまう。
+そうすると、 =node_group_create= から返されたのちに
+=.inputs["Normalmap"]= が読まれた際に存在せずにクラッシュしてしまう。
 
-そうすると、 ~node_group_create~ から返されたのちに ~.inputs["Normalmap"]~
-が読まれた際に存在せずにクラッシュしてしまう。
-
-* 解決方法
-
+** 解決方法
+   :PROPERTIES:
+   :CUSTOM_ID: 解決方法
+   :END:
 ここでできるのは
 
 1. 今までと同じように"Normalmap"が存在しなかったら"Nomalmap"を読ませる
-2. そもそも古い ~bpy.data.node_groups["MToon_unversioned"]~ を更新させる(どのタイミングで？)
+2. そもそも古い =bpy.data.node_groups["MToon_unversioned"]=
+   を更新させる(どのタイミングで？)

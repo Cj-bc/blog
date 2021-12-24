@@ -1,112 +1,117 @@
----
-title: pandocのBlock
-tags:
-  - pandoc
-  - haskell
-kind: memo
-date: November 16, 2020
----
+* pandocのBlock
+    :PROPERTIES:
+    :DATE: [2020-11-16 Mon]
+    :TAGS: :pandoc:haskell:
+    :AUTHOR: Cj-bc
+    :BLOG_POST_KIND: Memo
+    :BLOG_POST_PROGRESS: Published
+    :BLOG_POST_STATUS: Normal
+    :END:
+[[https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:Block][hackage]]と[[https://pandoc.org/MANUAL.html][pandoc
+manual]] を見てもよくわからないので、markdownに変換して試してみた。
 
-[hackage](https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:Block)と[pandoc manual](https://pandoc.org/MANUAL.html)
-を見てもよくわからないので、markdownに変換して試してみた。
-
-# OrderedList
-
-## ListNumberStyle
-
-[ListNumberStyle](https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberStyle)は、
+** OrderedList
+   :PROPERTIES:
+   :CUSTOM_ID: orderedlist
+   :END:
+*** ListNumberStyle
+    :PROPERTIES:
+    :CUSTOM_ID: listnumberstyle
+    :END:
+[[https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberStyle][ListNumberStyle]]は、
 数字表現(1,2,3なのかi,ii,iiiなのかなど)を決めるもの。
 わかりやすいように他の内容は一致させています。
 
-``` haskell
-[OrderedList (1,DefaultStyle,TwoParens) [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
-,OrderedList (1, Example,TwoParens)     [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
-,OrderedList (1,Decimal,TwoParens)      [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
-,OrderedList (1,LowerRoman,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
-,OrderedList (1,UpperRoman,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
-,OrderedList (1,LowerAlpha,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
-,OrderedList (1,UpperAlpha,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
-]
-```
+#+begin_src haskell
+  [OrderedList (1,DefaultStyle,TwoParens) [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
+  ,OrderedList (1, Example,TwoParens)     [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
+  ,OrderedList (1,Decimal,TwoParens)      [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
+  ,OrderedList (1,LowerRoman,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
+  ,OrderedList (1,UpperRoman,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
+  ,OrderedList (1,LowerAlpha,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
+  ,OrderedList (1,UpperAlpha,TwoParens)   [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
+  ]
+#+end_src
 
-これをvimで開き、`%!pandoc -f native -t markdown`で試した。これ便利なのでおすすめ。
+これをvimで開き、=%!pandoc -f native -t markdown=で試した。これ便利なのでおすすめ。
 その結果が以下:
 
-``` {.markdown .result}
-(1) hoge
-(2) foo
+#+begin_example
+  (1) hoge
+  (2) foo
 
-(1) hoge
-(2) foo
+  (1) hoge
+  (2) foo
 
-(1) hoge
-(2) foo
+  (1) hoge
+  (2) foo
 
-(i) hoge
-(ii) foo
+  (i) hoge
+  (ii) foo
 
-(I) hoge
-(II) foo
+  (I) hoge
+  (II) foo
 
-(a) hoge
-(b) foo
+  (a) hoge
+  (b) foo
 
-(A) hoge
-(B) foo
-```
+  (A) hoge
+  (B) foo
+#+end_example
 
-`Default`/`Example`はどうやらDecimalになってしまう模様。あとは大体名前の通りになった。
+=Default=/=Example=はどうやらDecimalになってしまう模様。あとは大体名前の通りになった。
 
-## ListNumberDelim
-
-[ListNumberDelim](https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberDelim)
-は、数字の後につくやつ。  
+*** ListNumberDelim
+    :PROPERTIES:
+    :CUSTOM_ID: listnumberdelim
+    :END:
+[[https://hackage.haskell.org/package/pandoc-types-1.22/docs/Text-Pandoc-Definition.html#t:ListNumberDelim][ListNumberDelim]]
+は、数字の後につくやつ。\\
 コードは基本先ほどと同じものを使用
 
-
-
-
-``` haskell
-[OrderedList (1,DefaultStyle,DefaultDelim) [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
-,OrderedList (1,DefaultStyle,Period)       [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
-,OrderedList (1,DefaultStyle,OneParen)     [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
-,OrderedList (1,DefaultStyle,TwoParens)    [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
-]
-```
+#+begin_src haskell
+  [OrderedList (1,DefaultStyle,DefaultDelim) [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
+  ,OrderedList (1,DefaultStyle,Period)       [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
+  ,OrderedList (1,DefaultStyle,OneParen)     [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
+  ,OrderedList (1,DefaultStyle,TwoParens)    [[Plain [Str "hoge"]],[Plain [Str "foo"]]]
+  ]
+#+end_src
 
 結果が以下。
 
-``` {.markdown .result}
-1.  hoge
-2.  foo
+#+begin_example
+  1.  hoge
+  2.  foo
 
-1.  hoge
-2.  foo
+  1.  hoge
+  2.  foo
 
-1)  hoge
-2)  foo
+  1)  hoge
+  2)  foo
 
-(1) hoge
-(2) foo
-```
+  (1) hoge
+  (2) foo
+#+end_example
 
-# DefinitionList
+** DefinitionList
+   :PROPERTIES:
+   :CUSTOM_ID: definitionlist
+   :END:
+[[][DefinitionList]]
 
-[DefinitionList]()
+#+begin_src haskell
+  [DefinitionList
+   [([Str "term"],
+     [[Plain [Str "One",Space,Str "definition",Space,Str "here"]]
+     ,[Plain [Str "Second?",SoftBreak,Str ":"], Plain [Str"Second", Space,Str "line",Space,Str "of",Space, Str "definition"]]
+     ]
+   )]
+  ]
+#+end_src
 
-``` haskell
-[DefinitionList
- [([Str "term"],
-   [[Plain [Str "One",Space,Str "definition",Space,Str "here"]]
-   ,[Plain [Str "Second?",SoftBreak,Str ":"], Plain [Str"Second", Space,Str "line",Space,Str "of",Space, Str "definition"]]
-   ]
- )]
-]
-```
-
-``` markdown
-term
-:   One definition here
-:   Second? :
-:   Maybe second, maybe third
-```
+#+begin_example
+  term
+  :   One definition here
+  :   Second? :
+  :   Maybe second, maybe third
+#+end_example

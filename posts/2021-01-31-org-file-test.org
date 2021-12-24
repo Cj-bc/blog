@@ -1,20 +1,23 @@
----
-title: org fileでの投稿のテストです
-tags:
-  - org
-kind: scratch
-date: January 31, 2021
----
-
 * org fileでの投稿のテストです
+    :PROPERTIES:
+    :DATE: [2021-01-31 Sun]
+    :TAGS: :org:
+    :AUTHOR: Cj-bc
+    :BLOG_POST_KIND: Memo
+    :BLOG_POST_PROGRESS: Published
+    :BLOG_POST_STATUS: Normal
+    :END:
+** org fileでの投稿のテストです
+   :PROPERTIES:
+   :CUSTOM_ID: org-fileでの投稿のテストです
+   :END:
+org fileには別の~Compiler~が必要かな？ もしかして =code=
+の左右には空白が必要？
 
-
-org fileには別の~Compiler~が必要かな？
-もしかして ~code~ の左右には空白が必要？
-
-** h2, 大体は動いてそう
-
+*** h2, 大体は動いてそう
+    :PROPERTIES:
+    :CUSTOM_ID: h2-大体は動いてそう
+    :END:
 #+begin_src haskell
-main = putStrLn "hello world"
+  main = putStrLn "hello world"
 #+end_src
-
