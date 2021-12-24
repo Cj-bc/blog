@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- Blender docs -- data block</title>
+        <title>CLI! CLI! CLI! -- </title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -33,64 +33,60 @@
 
         <div id="content" class="ui text container segment">
             <div class="ui center aligned icon header">
-  <h1>Blender docs -- data block</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on August 19, 2020</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on August 31, 2020
+      Updated on December 24, 2021
     </div>
   </div>
     
 </div>
 <div class="info">
   
-  <a title="All pages tagged 'blender'." href="../tags/blender.html" class="ui tag label">blender</a><a title="All pages tagged 'document'." href="../tags/document.html" class="ui tag label">document</a><a title="All pages tagged 'translation'." href="../tags/translation.html" class="ui tag label">translation</a><a title="All pages tagged 'wip'." href="../tags/wip.html" class="ui tag label">wip</a>
+  
   
 </div>
 
-<p>公式: <a href="https://docs.blender.org/manual/ja/2.80/files/data_blocks.html" class="uri">https://docs.blender.org/manual/ja/2.80/files/data_blocks.html</a></p>
-<h1 id="Data blocks">Data blocks</h1>
-<p>いかなるBlenderプロジェクトの基本単位は<code>data-block</code>です。<code>data-block</code>の例としては: meshes, objects, materials, textures, node trees, scenes, texts, brushes, そして workspace</p>
-<p><code>data-block</code>は、とても異なる種類のデータの全体的な抽象であり、共通の基本的な<code>feature</code>であるプロパティと<code>behaviors</code>に重心を置いています。</p>
+<ul>
+<li>Blender docs -- data block :PROPERTIES: :DATE: [2020-08-19 Wed] :TAGS: :blender:document:translation:wip: :AUTHOR: Cj-bc :BLOG<em>POST</em>KIND: Memo :BLOG<em>POST</em>PROGRESS: Published :BLOG<em>POST</em>STATUS: Normal :END: 公式: [[https://docs.blender.org/manual/ja/2.80/files/data_blocks.html]]</li>
+</ul>
+<p>** Data blocks :PROPERTIES: :CUSTOM_ID: data-blocks :END: いかなるBlenderプロジェクトの基本単位は=data-block=です。=data-block=の例としては: meshes, objects, materials, textures, node trees, scenes, texts, brushes, そして workspace</p>
+<p>=data-block=は、とても異なる種類のデータの全体的な抽象であり、共通の基本的な=feature=であるプロパティと=behaviors=に重心を置いています。</p>
 <p>いくつかの共通した特徴は:</p>
 <ul>
-<li><code>blend-file</code>の<code>primary contents</code>です。</li>
+<li>=blend-file=の=primary contents=です。</li>
 <li>再利用やインスタンス化のために、違いを参照することができます。(Child/parent, object/object-data, materials/images, in modifiers or constraints too...)</li>
-<li>それぞれの名前は、<code>blend-file</code>内で同じタイプの中で<code>unique</code>です。</li>
+<li>それぞれの名前は、=blend-file=内で同じタイプの中で=unique=です。</li>
 <li>追加、削除、編集、複製が可能です。</li>
-<li>ファイル間で<code>link</code>することができます。(限られた種類の<code>data-blocks</code>のみです)</li>
+<li>ファイル間で=link=することができます。(限られた種類の=data-blocks=のみです)</li>
 <li>それぞれ独自のアニメーションデータを持つことができます。</li>
-<li>それぞれ<a href="https://docs.blender.org/manual/ja/2.80/files/data_blocks.html#files-data-blocks-custom-properties">Custom properties</a>を持つことができます。</li>
+<li>それぞれ[[https://docs.blender.org/manual/ja/2.80/files/data_blocks.html#files-data-blocks-custom-properties][Custom properties]]を持つことができます。</li>
 </ul>
-<p>ユーザーは<code>typically</code>高レベルの<code>data type</code>を扱うことになります(<code>obects</code>, <code>meshes</code>など)。 複雑なプロジェクトを扱う場合、特に<code>inter-linking blend-files</code>の場合、<code>data-block</code>の管理はより重要になります。 それ用の主なエディターは<a href="https://docs.blender.org/manual/ja/2.80/editors/outliner.html">Outliner</a>です</p>
-<p>Blender内の全てのデータが<code>data-block</code>なわけではありません。例えば、<code>bones</code>, <code>sequence strips</code>や<code>vertex groups</code>は違っており、 それぞれ<code>armature</code>、<code>scene</code>、<code>mesh types</code>に付属(<code>belong to</code>)しています。</p>
-<h1 id="Life Time">Life Time</h1>
-<p>全ての<code>data-block</code>は<code>usage counted</code>(<code>reference count</code>)を持っており、一つ以上である場合は、UIの中で<code>data-block</code>の名前の右側に<code>current user</code>の数が表示されます。</p>
-<p>Blenderは、使用されていないデータは最終的に削除されるという<code>general rule</code>に従っています。</p>
-<p>作業中にたくさんのデータを追加・削除することは一般的なため、全ての<code>data-block</code>を一つ一つ手動で管理する必要がないのは利点です。</p>
-<p>これは、<code>blend-file</code>を書き込む際に、<code>zero user</code>な<code>data-block</code>をスキップする仕組みになっています。</p>
-<h1 id="Protected">Protected</h1>
-<p><code>zero user</code>な<code>data-block</code>は保存されないため、時にはユーザーのことを考えずにデータの保存を強制させたい時があるでしょう。</p>
-<p>もし、<code>blend-file</code>を<code>library</code>として使っていたり、他のファイルから<code>link</code>したりされたりする目的で使っていた場合、 突然削除されないように気をつける必要があります。</p>
-<p><code>data-block</code>を<code>protect</code>するためには、その<code>data-block</code>の名前の横にある盾のボタンを使用します。 そうすると、その<code>data-block</code>はblenderによって自動的に削除されることは無くなりますが、必要ならば手動で削除することができます。</p>
-<h1 id="Sharing">Sharing</h1>
-<p><code>data-block</code>は他の<code>data-block</code>間でも共有できます。</p>
+<p>ユーザーは=typically=高レベルの=data type=を扱うことになります(=obects=, =meshes=など)。 複雑なプロジェクトを扱う場合、特に=inter-linking blend-files=の場合、=data-block=の管理はより重要になります。 それ用の主なエディターは[[https://docs.blender.org/manual/ja/2.80/editors/outliner.html][Outliner]]です</p>
+<p>Blender内の全てのデータが=data-block=なわけではありません。例えば、=bones=, =sequence strips=や=vertex groups=は違っており、 それぞれ=armature=、=scene=、=mesh types=に付属(=belong to=)しています。</p>
+<p>** Life Time :PROPERTIES: :CUSTOM_ID: life-time :END: 全ての=data-block=は=usage counted=(=reference count=)を持っており、一つ以上である場合は、UIの中で=data-block=の名前の右側に=current user=の数が表示されます。</p>
+<p>Blenderは、使用されていないデータは最終的に削除されるという=general rule=に従っています。</p>
+<p>作業中にたくさんのデータを追加・削除することは一般的なため、全ての=data-block=を一つ一つ手動で管理する必要がないのは利点です。</p>
+<p>これは、=blend-file=を書き込む際に、=zero user=な=data-block=をスキップする仕組みになっています。</p>
+<p>** Protected :PROPERTIES: :CUSTOM_ID: protected :END: =zero user=な=data-block=は保存されないため、時にはユーザーのことを考えずにデータの保存を強制させたい時があるでしょう。</p>
+<p>もし、=blend-file=を=library=として使っていたり、他のファイルから=link=したりされたりする目的で使っていた場合、 突然削除されないように気をつける必要があります。</p>
+<p>=data-block=を=protect=するためには、その=data-block=の名前の横にある盾のボタンを使用します。 そうすると、その=data-block=はblenderによって自動的に削除されることは無くなりますが、必要ならば手動で削除することができます。</p>
+<p>** Sharing :PROPERTIES: :CUSTOM_ID: sharing :END: =data-block=は他の=data-block=間でも共有できます。</p>
 <p>よくデータの共有が行われる例:</p>
 <ul>
-<li><code>materials</code>間で<code>textures</code>を共有する</li>
-<li><code>objects</code>(<code>instances</code>)間で<code>meshes</code>を共有する</li>
-<li><code>objects</code>間で<code>animated actions</code>を共有する。例えば、全てのライトが同時に<code>dim</code>するようにします。</li>
+<li>=materials=間で=textures=を共有する</li>
+<li>=objects=(=instances=)間で=meshes=を共有する</li>
+<li>=objects=間で=animated actions=を共有する。例えば、全てのライトが同時に=dim=するようにします。</li>
 </ul>
-<p><code>data-block</code>をファイル間でも共有できます、詳しくは:</p>
+<p>=data-block=をファイル間でも共有できます、詳しくは:</p>
 <ul>
-<li><a href="https://docs.blender.org/manual/ja/2.80/files/linked_libraries.html">linked libraries</a></li>
+<li>[[https://docs.blender.org/manual/ja/2.80/files/linked_libraries.html][linked libraries]]</li>
 </ul>
-<h1 id="Making Single User">Making Single User</h1>
-<p><code>data-block</code>が複数のユーザーによって共有されている時、あるユーザーのためにコピーを作成することができます。 そうするには、名前の右にある<code>user-count</code>ボタンを押してください。そうすることにより、その<code>data-block</code>を複製してその用途のみに<code>assign</code>します。</p>
-<h2 id="注釈">注釈</h2>
-<p><code>Objects</code>は<code>single-user</code>になるためにより発展的な<code>actions</code>を持っています。<a href="https://docs.blender.org/manual/ja/2.80/scene_layout/object/editing/duplication.html">彼らのドキュメント</a>を参照してください。</p>
-<h1 id="Removing Data-Blocks">Removing Data-Blocks</h1>
+<p>** Making Single User :PROPERTIES: :CUSTOM_ID: making-single-user :END: =data-block=が複数のユーザーによって共有されている時、あるユーザーのためにコピーを作成することができます。 そうするには、名前の右にある=user-count=ボタンを押してください。そうすることにより、その=data-block=を複製してその用途のみに=assign=します。</p>
+<p>*** 注釈 :PROPERTIES: :CUSTOM_ID: 注釈 :END: =Objects=は=single-user=になるためにより発展的な=actions=を持っています。[[https://docs.blender.org/manual/ja/2.80/scene_layout/object/editing/duplication.html][彼らのドキュメント]]を参照してください。</p>
+<p>** Removing Data-Blocks :PROPERTIES: :CUSTOM_ID: removing-data-blocks :END:</p>
 
         </div>
         <div id="footer">

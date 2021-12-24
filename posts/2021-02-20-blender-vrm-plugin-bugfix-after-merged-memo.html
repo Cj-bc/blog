@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- fix-typoのデバッグメモ</title>
+        <title>CLI! CLI! CLI! -- </title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -33,29 +33,33 @@
 
         <div id="content" class="ui text container segment">
             <div class="ui center aligned icon header">
-  <h1>fix-typoのデバッグメモ</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on February 20, 2021</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on February 22, 2021
+      Updated on December 24, 2021
     </div>
   </div>
     
 </div>
 <div class="info">
   
-  <a title="All pages tagged 'python'." href="../tags/python.html" class="ui tag label">python</a><a title="All pages tagged 'blender'." href="../tags/blender.html" class="ui tag label">blender</a><a title="All pages tagged 'vrm'." href="../tags/vrm.html" class="ui tag label">vrm</a><a title="All pages tagged 'VRM_IMPORTER_for_Blender'." href="../tags/VRM_IMPORTER_for_Blender.html" class="ui tag label">VRM_IMPORTER_for_Blender</a>
+  
   
 </div>
 
 <table>
 <tbody>
 <tr class="odd">
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
 <td>該当PR</td>
 <td><a href="https://github.com/saturday06/VRM_Addon_for_Blender/pull/23">saturday06/VRM<sub>IMPORTERforBlender</sub>: PR #23</a></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>作業メモ</td>
 <td><a href="https://Cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html">https://Cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html</a></td>
 </tr>
@@ -66,9 +70,9 @@
 <h2 id="トレースバック">トレースバック</h2>
 <div class="ui segment">
 <div class="ui top right attached label">
-
+example
 </div>
-<pre class="SourceCode"><code>Traceback (most recent call last):
+<pre class="example SourceCode"><code>Traceback (most recent call last):
   File &quot;/Users/me/Library/Application
   Support/Blender/2.80/scripts/addons/VRM_IMPORTER_for_Blender/__init__.py&quot;,
   line 88, in execute
@@ -99,9 +103,9 @@
 <h1 id="バグが起きた場所">バグが起きた場所</h1>
 <div class="ui segment">
 <div class="ui top right attached label">
-
+example
 </div>
-<pre class="SourceCode"><code>__init__.ImportVRM.execute()
+<pre class="example SourceCode"><code>__init__.ImportVRM.execute()
 └blend_model.BlendModel.__init__()
  └BlendModel.vrm_model_build()
   └BlendModel.make_material()

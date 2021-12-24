@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- HaskellのIxedインスタンスを自作型につける</title>
+        <title>CLI! CLI! CLI! -- Ixed とは</title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -33,7 +33,7 @@
 
         <div id="content" class="ui text container segment">
             <div class="ui center aligned icon header">
-  <h1>HaskellのIxedインスタンスを自作型につける</h1>
+  <h1>Ixed とは</h1>
   <div class="ui list">
     <div class="item">Posted on May 19, 2021</div>
     <div class="item">
@@ -49,7 +49,6 @@
   
 </div>
 
-<h1 id="Ixed とは"><code>Ixed</code> とは</h1>
 <p>数学的解説はわかりませんごめんなさい。誰か補足があれば <a href="https://github.com/Cj-bc/blog">blogのレポジトリ</a> にissueでも残してください() Haskellなのでとりあえず hoogleを参照します。 <code>Ixed</code> の定義は以下の通りです</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -91,7 +90,7 @@ haskell
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="kw">type</span> <span class="kw">family</span> <span class="dt">IxValue</span> (<span class="ot">m ::</span> <span class="op">*</span>)<span class="ot"> ::</span> <span class="op">*</span></span></code></pre></div>
 </div>
 <p><code>Ixed</code> において、 <code>Index</code> はインデックスの型、 <code>IxValue</code> はそこに格納されている 値の型です。</p>
-<h1 id="作る">作る</h1>
+<p>作る</p>
 <p>とりあえず作り始めます。</p>
 <p>前提として、今回~Ixed~のインスタンスを作るのは以下の型です。 元のファイルは <a href="https://github.com/Cj-bc/playground/blob/0fb982f28f7ab0444ffd2ad59eacc3cd904b99ba/haskell/hit-n-blow/src/HitNBlow/Type.hs#L15-20">Cj-bc/playground – hit-n-blow</a> で使われているものです。</p>
 <div class="ui segment">
@@ -106,7 +105,7 @@ haskell
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>    <span class="kw">deriving</span> (<span class="dt">Show</span>)</span></code></pre></div>
 </div>
 <p><code>Ixed</code> の定義に特に制限がかかれていないので、 <code>ix</code> を定義することにします。 そのために、 <code>ix</code> で使用される <code>Index</code> と <code>IxValue</code> を定義することにします。</p>
-<h2 id="Index">Index</h2>
+<h1 id="Index">Index</h1>
 <p><code>Index</code> はあまり説明がありませんが、型の情報からすると恐らく「添字に使う型」 の定義であろうと推測が出来ます。 (名前が <code>Index</code> であること、 <code>ix</code> において最初に取ること等。又、 既にあるインスタンスを確認するのも良い方法だと思います。)</p>
 <p><code>Lane</code> において添字は <code>Int</code> です。</p>
 <div class="ui segment">
@@ -115,7 +114,7 @@ haskell
 </div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">type</span> <span class="kw">instance</span> <span class="dt">Index</span> <span class="dt">Lane</span> <span class="ot">=</span> <span class="dt">Int</span></span></code></pre></div>
 </div>
-<h2 id="IxValue">IxValue</h2>
+<h1 id="IxValue">IxValue</h1>
 <p>同様ですが、今度はそれぞれの中身の型を定義します。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -123,7 +122,7 @@ haskell
 </div>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">type</span> <span class="kw">instance</span> <span class="dt">IxValue</span> <span class="dt">Lane</span> <span class="ot">=</span> <span class="dt">Maybe</span> <span class="dt">Pin</span></span></code></pre></div>
 </div>
-<h2 id="Ixed">Ixed</h2>
+<h1 id="Ixed">Ixed</h1>
 <p><code>Ixed</code> 本体に行きます!!</p>
 <p><code>ix</code> の型は</p>
 <div class="ui segment">
@@ -142,7 +141,7 @@ haskell
 <p>ということになります。</p>
 <p>で、 <code>Lens</code> 少ししか分からんので一つ疑問が浮かびます</p>
 <p><strong>&gt;&gt;&gt;&gt;&gt; <code>Traversal'</code> ってナニよ!!!!! &lt;&lt;&lt;&lt;&lt;</strong></p>
-<h2 id="Traversal' ってナニよ!">Traversal' ってナニよ!</h2>
+<h1 id="Traversal' ってナニよ!">Traversal' ってナニよ!</h1>
 <p>はい。名前は知ってるけど使い方良く分からずに放置してた子ですね。 定義によると</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -159,7 +158,7 @@ haskell
 <ul>
 <li><a href="https://fumieval.hatenablog.com/entry/2015/07/14/223329">lensパッケージのオプティクス(弱い順) – モナドとわたしとコモナド</a></li>
 </ul>
-<h2 id="ix を作る"><code>ix</code> を作る</h2>
+<h1 id="ix を作る"><code>ix</code> を作る</h1>
 <p>さて、 <code>Traversal'</code> がわかったので <code>ix</code> を作れ(る気がし)ます。 <code>Traversal'</code> を置き換えてみると:</p>
 <div class="ui segment">
 <div class="ui top right attached label">

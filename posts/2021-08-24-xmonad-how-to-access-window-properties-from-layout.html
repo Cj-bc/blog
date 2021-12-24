@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- XMonadのLayoutからWindowのプロパティにアクセスする</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+        <div id="content" class="ui text container segment">
+            <div class="ui center aligned icon header">
+  <h1>XMonadのLayoutからWindowのプロパティにアクセスする</h1>
+  <div class="ui list">
+    <div class="item">Posted on August 24, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on August 24, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  
+  
+</div>
+
+<h1 id="Tl;Dr">Tl;Dr</h1>
+<ul>
+<li><code>LayoutClass</code> のインスタンスの定義で、 <code>a</code> を <code>Window</code> に固定する
+<ul>
+<li>どこかに影響あるかもしれない、未確認</li>
+</ul></li>
+<li><code>doLayout</code> の中で <code>Query</code> を使ってあげる</li>
+</ul>
+<h1 id="モチベーション">モチベーション</h1>
+<p>ダッシュボードとして機能するworkspaceを作成したい。 なので所定の位置に各アプリケーションが配置されてほしいが、 何もしない状態だと各アプリケーションのタイトル(<code>WM_NAME</code>)等には アクセスできず判断できない。</p>
+<p>なんとかならないものか</p>
+<h1 id="ManageHookを参考にする">ManageHookを参考にする</h1>
+<p>managehookでは、ウィンドウのプロパティにアクセスして制御を行っている。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>title <span class="st">&quot;This is example emacs&quot;</span> <span class="op">--&gt;</span> doShift <span class="st">&quot;Editor&quot;</span></span></code></pre></div>
+</div>
+<p>など。 ここにヒントを得れば何らかの方法がありそうだなと検討が付く</p>
+<h1 id="Query を探る"><code>Query</code> を探る</h1>
+<p>managehookで使われているのは <code>Query</code> という型。これは <code>X</code> を基底 モナドに持つ <code>ReaderT</code> で、 <code>runQuery</code> で実行することで <code>X a</code> を 戻り値として取ることができる。</p>
+<p><a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-Core.html#t:Query"><code>Query</code> と <code>runQuery</code> の実装</a>は以下</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="~Query~ と ~runQuery~ の実装"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="~Query~ と ~runQuery~ の実装-1"><a href="#~Query~ と ~runQuery~ の実装-1" aria-hidden="true"></a>   <span class="kw">newtype</span> <span class="dt">Query</span> a <span class="ot">=</span> <span class="dt">Query</span> (<span class="dt">ReaderT</span> <span class="dt">Window</span> <span class="dt">X</span> a)</span>
+<span id="~Query~ と ~runQuery~ の実装-2"><a href="#~Query~ と ~runQuery~ の実装-2" aria-hidden="true"></a><span class="kw">deriving</span> (<span class="dt">Functor</span>, <span class="dt">Applicative</span>, <span class="dt">Monad</span>, <span class="dt">MonadReader</span> <span class="dt">Window</span>, <span class="dt">MonadIO</span>)</span>
+<span id="~Query~ と ~runQuery~ の実装-3"><a href="#~Query~ と ~runQuery~ の実装-3" aria-hidden="true"></a></span>
+<span id="~Query~ と ~runQuery~ の実装-4"><a href="#~Query~ と ~runQuery~ の実装-4" aria-hidden="true"></a><span class="ot">   runQuery ::</span> <span class="dt">Query</span> a <span class="ot">-&gt;</span> <span class="dt">Window</span> <span class="ot">-&gt;</span> <span class="dt">X</span> a</span>
+<span id="~Query~ と ~runQuery~ の実装-5"><a href="#~Query~ と ~runQuery~ の実装-5" aria-hidden="true"></a>   runQuery (<span class="dt">Query</span> m) w <span class="ot">=</span> runReaderT m w</span></code></pre></div>
+</div>
+<p>さて…どうやらこれで答えなのでは？ <code>X</code> モナドのアクションなので、あとはこれを <code>doLayout</code> 内部から呼んであげれば良さそう。</p>
+<p><strong>…が、人生そう甘はないのである</strong></p>
+<h1 id="Query では上手くいかない!？"><code>Query</code> では上手くいかない!？</h1>
+<p>改めて <code>runQuery</code> の型を見てみよう。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ot">runQuery ::</span> <span class="dt">Query</span> a <span class="ot">-&gt;</span> <span class="dt">Window</span> <span class="ot">-&gt;</span> <span class="dt">X</span> a</span></code></pre></div>
+</div>
+<p>第二引数に取るのは <code>Window</code> である。 <a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-Core.html#v:doLayout">~doLayout~の型</a>も見てみよう</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="ot">doLayout ::</span> layout a <span class="op">-</span> <span class="dt">Rectangle</span> <span class="ot">-&gt;</span> <span class="dt">Stack</span> a <span class="ot">-&gt;</span> <span class="dt">X</span> ([(a, <span class="dt">Rectangle</span>)], <span class="dt">Maybe</span> (layout a))</span></code></pre></div>
+</div>
+<p>このうち、ウィンドウの情報が格納されているのは <code>Stack a</code> の内部である。(<a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-Core.html#v:doLayout">コメント</a>より) そして <a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-StackSet.html#t:Stack"><code>Stack a</code> の定義</a> を見てみると</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>   <span class="kw">data</span> <span class="dt">Stack</span> a <span class="ot">=</span> <span class="dt">Stack</span> {<span class="ot"> focus  ::</span> <span class="op">!</span>a        <span class="co">-- focused thing in this set</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>   ,<span class="ot"> up     ::</span> [a]       <span class="co">-- clowns to the left</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>   ,<span class="ot"> down   ::</span> [a] }     <span class="co">-- jokers to the right</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Read</span>, <span class="dt">Eq</span>)</span></code></pre></div>
+</div>
+<p>となっており、 <em>保存されている値の型は <code>a</code> で定義されている</em> のだ。 これが何故問題になるか、というと <strong><code>runQuery</code> に <code>Stack a</code> の中の <code>Window</code> を食わせたいが、 型が定まっていないため型エラーを起こす</strong> ということだ。</p>
+<p>ドキュメント的に、 <code>doLayout</code> には実際には <code>Stack Window</code> が渡されるであろうことは明白なのだが、 プログラムからするとそんな実行時の話は知らない。 というか型としてはエラーを起こすのが正解だと思う。</p>
+<p>でも確実に <code>Window</code> がくるはずだし、困った…</p>
+<h1 id="LayoutClass &lt;Layout&gt; Window にしちゃえ!!"><code>LayoutClass &lt;Layout&gt; Window</code> にしちゃえ!!</h1>
+<p>えいやっ!というやっつけ感が凄いが、 <code>LayoutClass</code> のインスタンスを作る際に <code>a</code> の型を指定してしまえば 型エラーは起こらなくなる。 <code>doLayout</code> は <code>LayoutClass</code> の型クラス関数であり、 <code>doLayout</code> の型定義の中の <code>a</code> は <code>LayoutClass &lt;Layout&gt; a</code> によって束縛されているからだ。</p>
+<p>これによって、 <code>Stack a</code> の型が固定される。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">LayoutClass</span> <span class="dt">MyLayout</span> <span class="dt">Window</span> <span class="kw">where</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="ot">  doLayout ::</span> <span class="dt">MyLayout</span> <span class="dt">Window</span> <span class="ot">-&gt;</span> <span class="dt">Rectangle</span> <span class="ot">-&gt;</span> <span class="dt">Stack</span> <span class="dt">Window</span> <span class="ot">-&gt;</span> <span class="dt">X</span> ([(<span class="dt">Window</span>, <span class="dt">Rectangle</span>)], <span class="dt">Maybe</span> (<span class="dt">MyLayout</span> <span class="dt">Window</span>))</span></code></pre></div>
+</div>
+<p>そうすれば、後は <code>Stack</code> から取り出した <code>Window</code> を <code>runQuery</code> にかけてあげれば良いだけになる。</p>
+<h1 id="おまけ: 具体的な書き方">おまけ: 具体的な書き方</h1>
+<p>ついでなので、ケース毎に使い方(書き方)を書いてみる。</p>
+<h2 id="タイトルによって選択">タイトルによって選択</h2>
+<p><a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-ManageHook.html#v:title"><code>title</code></a>を使います。 <a href="https://github.com/Cj-bc/dotfiles/blob/master/dotfiles/xmonad/src/XMonad/Layout/Info.hs#L25-L31">私のxmonadに記載されているもの</a>と同じです。</p>
+<p>最初に <code>[Window]</code> から 適切な <code>Window</code> だけ取り出すために <code>[X (Maybe Window)]</code> にしてあげて、 <code>X</code> を実行するために <code>sequence</code> (<code>X [Maybe Window]</code>)、 <code>find</code> で <code>Just</code> なもの(=求めていたWindow)をピックアップしてあげて (<code>X [Maybe (Maybe Window)]</code>)、二重になった <code>Maybe</code> を <code>join</code> で平たくしてあげています。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="ot">     windowTitleIs ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> [<span class="dt">Window</span>] <span class="ot">-&gt;</span> <span class="dt">X</span> (<span class="dt">Maybe</span> <span class="dt">Window</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>     windowTitleIs name ws <span class="ot">=</span> <span class="fu">fmap</span> (join <span class="op">.</span> find isJust) <span class="op">.</span> <span class="fu">sequence</span> <span class="op">.</span> <span class="fu">flip</span> <span class="fu">fmap</span> ws <span class="op">$</span> \w <span class="ot">-&gt;</span> <span class="fu">flip</span> runQuery w <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>n <span class="ot">&lt;-</span> w<span class="ot">`hasTitle`</span>name</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a><span class="kw">if</span> n <span class="kw">then</span> <span class="fu">return</span> (<span class="dt">Just</span> w) <span class="kw">else</span> <span class="fu">return</span> <span class="dt">Nothing</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a><span class="ot">     hasTitle ::</span> <span class="dt">Window</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Query</span> <span class="dt">Bool</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a>     hasTitle w name <span class="ot">=</span> (<span class="op">==</span> name) <span class="op">&lt;$&gt;</span> title</span></code></pre></div>
+</div>
+<p>ついで(？)なので思考メモを残しておきます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="思考メモ"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="思考メモ-1"><a href="#思考メモ-1" aria-hidden="true"></a><span class="ot">allWindows ::</span> [<span class="dt">Window</span>]</span>
+<span id="思考メモ-2"><a href="#思考メモ-2" aria-hidden="true"></a><span class="fu">fmap</span><span class="ot"> ::</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b</span>
+<span id="思考メモ-3"><a href="#思考メモ-3" aria-hidden="true"></a><span class="fu">flip</span><span class="ot"> ::</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> c</span>
+<span id="思考メモ-4"><a href="#思考メモ-4" aria-hidden="true"></a><span class="fu">flip</span><span class="ot"> fmap ::</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> f a <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f b</span>
+<span id="思考メモ-5"><a href="#思考メモ-5" aria-hidden="true"></a><span class="fu">flip</span> <span class="fu">fmap</span><span class="ot"> allWindows ::</span> (<span class="dt">Window</span> <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> [b]</span>
+<span id="思考メモ-6"><a href="#思考メモ-6" aria-hidden="true"></a></span>
+<span id="思考メモ-7"><a href="#思考メモ-7" aria-hidden="true"></a></span>
+<span id="思考メモ-8"><a href="#思考メモ-8" aria-hidden="true"></a><span class="fu">flip</span> <span class="fu">fmap</span> allWindows <span class="op">&lt;$&gt;</span><span class="ot"> ::</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> f ([<span class="dt">Window</span>] <span class="ot">-&gt;</span> (<span class="dt">Window</span> <span class="ot">-&gt;</span> b)) <span class="ot">-&gt;</span> f [b]</span>
+<span id="思考メモ-9"><a href="#思考メモ-9" aria-hidden="true"></a></span>
+<span id="思考メモ-10"><a href="#思考メモ-10" aria-hidden="true"></a><span class="ot">f ::</span> <span class="dt">Window</span> <span class="ot">-&gt;</span> <span class="dt">X</span> (<span class="dt">Maybe</span> <span class="dt">Window</span>)</span>
+<span id="思考メモ-11"><a href="#思考メモ-11" aria-hidden="true"></a></span>
+<span id="思考メモ-12"><a href="#思考メモ-12" aria-hidden="true"></a><span class="fu">flip</span> <span class="fu">fmap</span> allWindows<span class="ot"> f ::</span> [<span class="dt">X</span> (<span class="dt">Maybe</span> <span class="dt">Window</span>)]</span>
+<span id="思考メモ-13"><a href="#思考メモ-13" aria-hidden="true"></a></span>
+<span id="思考メモ-14"><a href="#思考メモ-14" aria-hidden="true"></a><span class="fu">sequence</span><span class="ot"> ::</span> (<span class="dt">Traversable</span> t, <span class="dt">Monad</span> m) <span class="ot">=&gt;</span> t (m a) <span class="ot">-&gt;</span> m (t a)</span>
+<span id="思考メモ-15"><a href="#思考メモ-15" aria-hidden="true"></a></span>
+<span id="思考メモ-16"><a href="#思考メモ-16" aria-hidden="true"></a><span class="fu">sequence</span> <span class="op">$</span> <span class="fu">flip</span> <span class="fu">fmap</span> allwindows<span class="ot"> f ::</span> <span class="dt">X</span> [<span class="dt">Maybe</span> <span class="dt">Window</span>]</span>
+<span id="思考メモ-17"><a href="#思考メモ-17" aria-hidden="true"></a></span>
+<span id="思考メモ-18"><a href="#思考メモ-18" aria-hidden="true"></a><span class="ot">find ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> <span class="dt">Bool</span>) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> <span class="dt">Maybe</span> a</span>
+<span id="思考メモ-19"><a href="#思考メモ-19" aria-hidden="true"></a><span class="ot">(&lt;$&gt;) ::</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b</span>
+<span id="思考メモ-20"><a href="#思考メモ-20" aria-hidden="true"></a></span>
+<span id="思考メモ-21"><a href="#思考メモ-21" aria-hidden="true"></a>find<span class="ot"> isJust ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> t a <span class="ot">-&gt;</span> <span class="dt">Maybe</span> a</span>
+<span id="思考メモ-22"><a href="#思考メモ-22" aria-hidden="true"></a>find isJust <span class="op">&lt;$&gt;</span><span class="ot"> ::</span> <span class="dt">Foldable</span> t, <span class="dt">Functor</span> f <span class="ot">=&gt;</span> f (t a) <span class="ot">-&gt;</span> f (<span class="dt">Maybe</span> a)</span>
+<span id="思考メモ-23"><a href="#思考メモ-23" aria-hidden="true"></a>find jsJust <span class="op">&lt;$&gt;</span> <span class="fu">sequence</span> <span class="op">$</span> <span class="fu">flip</span> <span class="fu">fmap</span> allwindows<span class="ot"> f ::</span> <span class="dt">X</span> (<span class="dt">Maybe</span> (<span class="dt">Maybe</span> a))</span>
+<span id="思考メモ-24"><a href="#思考メモ-24" aria-hidden="true"></a></span>
+<span id="思考メモ-25"><a href="#思考メモ-25" aria-hidden="true"></a><span class="ot">join ::</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> m (m a) <span class="ot">-&gt;</span> m a</span>
+<span id="思考メモ-26"><a href="#思考メモ-26" aria-hidden="true"></a><span class="fu">fmap</span><span class="ot"> join ::</span> (<span class="dt">Monad</span> m, <span class="dt">Functor</span> f) <span class="ot">=&gt;</span> f (m (m a)) <span class="ot">-&gt;</span> f (m a)</span>
+<span id="思考メモ-27"><a href="#思考メモ-27" aria-hidden="true"></a></span>
+<span id="思考メモ-28"><a href="#思考メモ-28" aria-hidden="true"></a><span class="ot">($) ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> b</span>
+<span id="思考メモ-29"><a href="#思考メモ-29" aria-hidden="true"></a><span class="fu">fmap</span> join <span class="op">$</span><span class="ot"> ::</span> (<span class="dt">Monad</span> m, <span class="dt">Functor</span> f) <span class="ot">=&gt;</span> f (m (m a)) <span class="ot">-&gt;</span> f (m a)</span>
+<span id="思考メモ-30"><a href="#思考メモ-30" aria-hidden="true"></a></span>
+<span id="思考メモ-31"><a href="#思考メモ-31" aria-hidden="true"></a><span class="fu">fmap</span> join <span class="op">$</span> find jsJust <span class="op">&lt;$&gt;</span> <span class="fu">sequence</span> <span class="op">$</span> <span class="fu">flip</span> <span class="fu">fmap</span> allwindows<span class="ot"> f ::</span> <span class="dt">X</span> (<span class="dt">Maybe</span> a)</span></code></pre></div>
+</div>
+
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

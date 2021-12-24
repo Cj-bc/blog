@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- Expressionを使ったアニメーションのメモ</title>
+        <title>CLI! CLI! CLI! -- </title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -33,47 +33,37 @@
 
         <div id="content" class="ui text container segment">
             <div class="ui center aligned icon header">
-  <h1>Expressionを使ったアニメーションのメモ</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on January 13, 2021</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on January 19, 2021
+      Updated on December 24, 2021
     </div>
   </div>
     
 </div>
 <div class="info">
   
-  <a title="All pages tagged 'after effect'." href="../tags/after%20effect.html" class="ui tag label">after effect</a>
+  
   
 </div>
 
-<h1 id="Expression制御のEffectは必ずリネームする">Expression制御のEffectは必ずリネームする</h1>
-<p>同じ種類のExpression制御Effectを一度しか使わないなら問題にはならない気がしますが、 後々見やすいのでリネームをした方が良いです。<br />
-そして、<strong>できる限り早く</strong>リネームするようにしてください。 複数の同じエフェクトを作成・Expressionから参照した後にリネームした場合、 <strong>Expression内の同名の部分が全て新しい名前に置き換わります</strong>。<br />
-例えば、</p>
-<h2 id="リネームの仕方">リネームの仕方</h2>
-<p><a href="https://creativecow.net/forums/thread/rename-expression-controlsae-2/">参考にしたもの</a></p>
-<p>例えばスライダー制御のEffectをリネームする場合、<code>エフェクト→スライダー制御</code>を選択してEnterを押します。 すると普段通りにリネームできます。~~私は気付かなかった...~~</p>
-<h1 id="Expressionのコピペ">Expressionのコピペ</h1>
-<p>作成したExpressionを含むプロパティを選択しC-cで普段通りコピー。 コピー先のレイヤーを選択してC-vするとそのままペーストされる。</p>
-<h1 id="一定の時間から色などを変化させる">一定の時間から色などを変化させる</h1>
-<p>固定値を使わなくても<code>Marker</code>を使えばできる。</p>
 <ul>
-<li><a href="https://helpx.adobe.com/jp/after-effects/user-guide.html/jp/after-effects/using/layer-markers-composition-markers.ug.html">公式URL</a></li>
-<li><a href="https://cj-bc.github.com/blog/posts/2021-01-19-after-effect-markers.html">Markerについて</a></li>
+<li>Expressionを使ったアニメーションのメモ :PROPERTIES: :DATE: [2021-01-13 Wed] :TAGS: :after effect: :AUTHOR: Cj-bc :BLOG<em>POST</em>KIND: Memo :BLOG<em>POST</em>PROGRESS: Published :BLOG<em>POST</em>STATUS: Normal :END: ** Expression制御のEffectは必ずリネームする :PROPERTIES: :CUSTOM_ID: expression制御のeffectは必ずリネームする :END: 同じ種類のExpression制御Effectを一度しか使わないなら問題にはならない気がしますが、 後々見やすいのでリネームをした方が良いです。\ そして、<em>できる限り早く</em>リネームするようにしてください。 複数の同じエフェクトを作成・Expressionから参照した後にリネームした場合、 <em>Expression内の同名の部分が全て新しい名前に置き換わります</em>。\ 例えば、</li>
 </ul>
-<h2 id="レイヤーマーカーを参照する">レイヤーマーカーを参照する</h2>
-<p>https://helpx.adobe.com/jp/after-effects/user-guide.html/jp/after-effects/using/expression-language-reference.ug.html</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-javascript
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode javascript SourceCode"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>thisLayer<span class="op">.</span><span class="at">marker</span><span class="op">.</span><span class="fu">key</span>(n<span class="op">:</span> int)    <span class="co">// n番目のマーカーを参照する</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>thisLayer<span class="op">.</span><span class="at">marker</span><span class="op">.</span><span class="fu">key</span>(name<span class="op">:</span> str) <span class="co">// nameという名前のマーカーを参照する</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>thisLayer<span class="op">.</span><span class="at">marker</span><span class="op">.</span><span class="fu">nearestKey</span>(t<span class="op">:</span> float) <span class="co">// tという時間に一番近いマーカーを参照する</span></span></code></pre></div>
-</div>
+<p>*** リネームの仕方 :PROPERTIES: :CUSTOM_ID: リネームの仕方 :END: [[https://creativecow.net/forums/thread/rename-expression-controlsae-2/][参考にしたもの]]</p>
+<p>例えばスライダー制御のEffectをリネームする場合、=エフェクト→スライダー制御=を選択してEnterを押します。 すると普段通りにリネームできます。+私は気付かなかった...+</p>
+<p>** Expressionのコピペ :PROPERTIES: :CUSTOM_ID: expressionのコピペ :END: 作成したExpressionを含むプロパティを選択しC-cで普段通りコピー。 コピー先のレイヤーを選択してC-vするとそのままペーストされる。</p>
+<p>** 一定の時間から色などを変化させる :PROPERTIES: :CUSTOM_ID: 一定の時間から色などを変化させる :END: 固定値を使わなくても=Marker=を使えばできる。</p>
+<ul>
+<li>[[https://helpx.adobe.com/jp/after-effects/user-guide.html/jp/after-effects/using/layer-markers-composition-markers.ug.html][公式URL]]</li>
+<li>[[https://cj-bc.github.com/blog/posts/2021-01-19-after-effect-markers.html][Markerについて]]</li>
+</ul>
+<p>*** レイヤーマーカーを参照する :PROPERTIES: :CUSTOM_ID: レイヤーマーカーを参照する :END: https://helpx.adobe.com/jp/after-effects/user-guide.html/jp/after-effects/using/expression-language-reference.ug.html</p>
+<p>+begin_example</p>
+<p>thisLayer.marker.key(n: int) // n番目のマーカーを参照する thisLayer.marker.key(name: str) // nameという名前のマーカーを参照する thisLayer.marker.nearestKey(t: float) // tという時間に一番近いマーカーを参照する</p>
+<p>+end_example</p>
 
         </div>
         <div id="footer">

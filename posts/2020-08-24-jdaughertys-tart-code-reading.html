@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- jtdaugherty/tart ソースリーディングメモ</title>
+        <title>CLI! CLI! CLI! -- </title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -33,40 +33,29 @@
 
         <div id="content" class="ui text container segment">
             <div class="ui center aligned icon header">
-  <h1>jtdaugherty/tart ソースリーディングメモ</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on August 24, 2020</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on August 31, 2020
+      Updated on December 24, 2021
     </div>
   </div>
     
 </div>
 <div class="info">
   
-  <a title="All pages tagged 'tart'." href="../tags/tart.html" class="ui tag label">tart</a><a title="All pages tagged 'cli'." href="../tags/cli.html" class="ui tag label">cli</a><a title="All pages tagged 'haskell'." href="../tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged 'memo'." href="../tags/memo.html" class="ui tag label">memo</a>
+  
   
 </div>
 
-<p>AAエディター(?)である<a href="https://github.com/jtdaugherty/tart">Tart</a>の内部実装を読んだ時のメモ</p>
-<h1 id="Eventの処理">Eventの処理</h1>
-<div class="ui segment">
-<div class="ui top right attached label">
-
-</div>
-<pre class="SourceCode"><code>main
- |- Events.handleEvent
-    |- マウスでの描画イベントを処理
-    |- マウスがドラッグ中でかつ前回と違うものの上にある時はここでイベントを終了する
-    |- 現在のモードに合わせて、イベントを処理する
-      |- Events.Main.handleEvent
-        |- Events.Main.handleCommonEvent
-        |   |- ツールバー系のトグルをする
-        |- Events.Main.handleAttrEvent
-        |   |- Attributes(fg,bg,style)がクリックされた場合、変更作業をする
-        |- Events.Main.handleEvent</code></pre>
-</div>
+<ul>
+<li>jtdaugherty/tart ソースリーディングメモ :PROPERTIES: :DATE: [2020-08-24 Mon] :TAGS: :tart:cli:haskell<span class="emoji" data-emoji="memo">📝</span> :AUTHOR: Cj-bc :BLOG<em>POST</em>KIND: Memo :BLOG<em>POST</em>PROGRESS: Published :BLOG<em>POST</em>STATUS: Normal :END: AAエディター(?)である[[https://github.com/jtdaugherty/tart][Tart]]の内部実装を読んだ時のメモ</li>
+</ul>
+<p>** Eventの処理 :PROPERTIES: :CUSTOM_ID: eventの処理 :END:</p>
+<p>+begin_example</p>
+<p>main |- Events.handleEvent |- マウスでの描画イベントを処理 |- マウスがドラッグ中でかつ前回と違うものの上にある時はここでイベントを終了する |- 現在のモードに合わせて、イベントを処理する |- Events.Main.handleEvent |- Events.Main.handleCommonEvent | |- ツールバー系のトグルをする |- Events.Main.handleAttrEvent | |- Attributes(fg,bg,style)がクリックされた場合、変更作業をする |- Events.Main.handleEvent</p>
+<p>+end_example</p>
 
         </div>
         <div id="footer">

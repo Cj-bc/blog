@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- VRM_IMPORTER_for_BlenderでVRMモデルを作る際の注意点</title>
+        <title>CLI! CLI! CLI! -- </title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -33,57 +33,84 @@
 
         <div id="content" class="ui text container segment">
             <div class="ui center aligned icon header">
-  <h1>VRM_IMPORTER_for_BlenderでVRMモデルを作る際の注意点</h1>
+  <h1></h1>
   <div class="ui list">
     <div class="item">Posted on October 24, 2020</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on November 15, 2020
+      Updated on December 24, 2021
     </div>
   </div>
     
 </div>
 <div class="info">
   
-  <a title="All pages tagged 'VRM'." href="../tags/VRM.html" class="ui tag label">VRM</a><a title="All pages tagged 'blender'." href="../tags/blender.html" class="ui tag label">blender</a><a title="All pages tagged 'VRM_IMPORTER_for_Blender'." href="../tags/VRM_IMPORTER_for_Blender.html" class="ui tag label">VRM_IMPORTER_for_Blender</a>
+  
   
 </div>
 
-<h1 id="全てのメッシュの原点(Origin)を ワールド座標系の 原点に置く">全てのメッシュの原点(Origin)を <em>ワールド座標系の</em> 原点に置く</h1>
-<div class="ui piled segment" style="z-index: 0">
-<blockquote>
-<p>There are not an object on the origin <mesh名> (もしくは) <mesh名> が原点座標にありません</p>
-</blockquote>
-</div>
-<p>というエラーについて。単刀直入にいうと、 全てのメッシュは <strong>Originをワールド座標系の原点におく必要があります</strong></p>
-<p>これは、 <strong><code>Set origin&gt; Origin to Geometry</code>とは違う</strong> ので注意してください。</p>
+<ul>
+<li>VRM<em>IMPORTER</em>for<em>BlenderでVRMモデルを作る際の注意点 :PROPERTIES: :DATE: [2020-10-24 Sat] :TAGS: :VRM:blender:VRM</em>IMPORTER<em>for</em>Blender: :AUTHOR: Cj-bc :BLOG<em>POST</em>KIND: Memo :BLOG<em>POST</em>PROGRESS: Published :BLOG<em>POST</em>STATUS: Normal :END: ** 全てのメッシュの原点(Origin)を /ワールド座標系の/ 原点に置く :PROPERTIES: :CUSTOM_ID: 全てのメッシュの原点originを-ワールド座標系の-原点に置く :END:</li>
+</ul>
+<p>+begin_quote</p>
+<p>There are not an object on the origin (もしくは) が原点座標にありません</p>
+<p>+end_quote</p>
+<p>というエラーについて。単刀直入にいうと、 全てのメッシュは <em>Originをワールド座標系の原点におく必要があります</em></p>
+<p>これは、 <em>=Set origin&gt; Origin to Geometry=とは違う</em> ので注意してください。</p>
 <p>これをするには、</p>
 <ol>
 <li>3Dカーソルを原点に移動</li>
 <li>オブジェクトを選択</li>
-<li><code>Set origin&gt; Origin to 3D cursor</code></li>
+<li>=Set origin&gt; Origin to 3D cursor=</li>
 </ol>
 <p>の手順を踏みます。</p>
-<h1 id="追加したmeshオブジェクトのtransformは全て0(scaleは1)にする">追加したmeshオブジェクトのtransformは全て0(scaleは1)にする</h1>
-<p>Blender上では全然問題なく見えますが、これをしておかないとexportした後に変な位置にオブジェクトが表示されてしまいます。 (私は<code>3tenePRO</code>で動作確認をしていますが、おそらく他でもそうなると思います。)<br />
-具体的には、「全てのトランスフォームが0(scaleは1)に指定された通りに表示」されます。</p>
-<h2 id="具体例:">具体例:</h2>
-<p>scaleが1になっていない例 <img src="../images/2020-10-24-blender-vrmImporter-Not-Object-on-origin/sscale_isnt_1.jpeg" class="ui rounded image" alt="scaleが1じゃない" /></p>
-<p>scaleが1になるように調整した例 <img src="../images/2020-10-24-blender-vrmImporter-Not-Object-on-origin/scale_is_1.jpeg" class="ui rounded image" alt="scaleが1" /></p>
-<p>rotationが0になっていない例 <img src="../images/2020-10-24-blender-vrmImporter-Not-Object-on-origin/rotation_isnt_0.jpeg" class="ui rounded image" alt="rotationが0じゃない" /></p>
-<p>rotationが0になっている例 <img src="../images/2020-10-24-blender-vrmImporter-Not-Object-on-origin/rotation_is_0.jpeg" class="ui rounded image" alt="rotationが0" /></p>
-<h2 id="直し方">直し方</h2>
-<p>Inspectorで各transformの値を確認します。そうしたら、それを覚えておき値は0に修正。 <code>Edit mode</code>に移行して、 <strong>originを中心に、軸を指定して先ほど覚えた値分</strong> 回転させます。</p>
-<h2 id="最終系">最終系</h2>
-<p>綺麗になりました！！</p>
-<p><img src="../images/2020-10-24-blender-vrmImporter-Not-Object-on-origin/completed.jpg" class="ui rounded image" alt="全部直した" /></p>
-<h1 id="Shade Textureは必ず設定する">Shade Textureは必ず設定する</h1>
-<p>ShadeTextureを設定していないと、面を法線と反対側から見たときにピンク色になってしまいます。 これは、<code>Shade Color</code>が塗られているからで、それを防ぎ表面と同じものを表示したい場合は必ず設定する必要があります。 なお、<code>MainTexture</code>と同じテクスチャで問題ないと思います。</p>
-<p>設定してなかった:<br />
-<blockquote class="twitter-tweet" data-conversation="none" data-theme="dark"><p lang="ja" dir="ltr">色々と調節は必要そうだね <a href="https://t.co/ndXTzYKdfQ">pic.twitter.com/ndXTzYKdfQ</a></p>— mi'e himari (@mihe_himari) <a href="https://twitter.com/mihe_himari/status/1320608433352003584?ref_src=twsrc%5Etfw">October 26, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
-<p>設定した:<br />
-<blockquote class="twitter-tweet" data-conversation="none" data-theme="dark"><p lang="ja" dir="ltr">他のオブジェクトにも設定してきた...ﾖｼ!! <a href="https://t.co/8tMJyUaawt">pic.twitter.com/8tMJyUaawt</a></p>— mi'e himari (@mihe_himari) <a href="https://twitter.com/mihe_himari/status/1320613366864330752?ref_src=twsrc%5Etfw">October 26, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
-<h1 id="todo">todo</h1>
+<p>** 追加したmeshオブジェクトのtransformは全て0(scaleは1)にする :PROPERTIES: :CUSTOM_ID: 追加したmeshオブジェクトのtransformは全て0scaleは1にする :END: Blender上では全然問題なく見えますが、これをしておかないとexportした後に変な位置にオブジェクトが表示されてしまいます。 (私は=3tenePRO=で動作確認をしていますが、おそらく他でもそうなると思います。)\ 具体的には、「全てのトランスフォームが0(scaleは1)に指定された通りに表示」されます。</p>
+<p>*** 具体例: :PROPERTIES: :CUSTOM<em>ID: 具体例 :END: scaleが1になっていない例 [[/images/sscale</em>isnt_1.jpeg]]</p>
+<p>scaleが1になるように調整した例 [[/images/scale<em>is</em>1.jpeg]]</p>
+<p>rotationが0になっていない例 [[/images/rotation<em>isnt</em>0.jpeg]]</p>
+<p>rotationが0になっている例 [[/images/rotation<em>is</em>0.jpeg]]</p>
+<p>*** 直し方 :PROPERTIES: :CUSTOM_ID: 直し方 :END: Inspectorで各transformの値を確認します。そうしたら、それを覚えておき値は0に修正。 =Edit mode=に移行して、 <em>originを中心に、軸を指定して先ほど覚えた値分</em> 回転させます。</p>
+<p>*** 最終系 :PROPERTIES: :CUSTOM_ID: 最終系 :END: 綺麗になりました！！</p>
+<p>+caption: 全部直した</p>
+<p>[[/images/completed.jpg]]</p>
+<p>** Shade Textureは必ず設定する :PROPERTIES: :CUSTOM_ID: shade-textureは必ず設定する :END: ShadeTextureを設定していないと、面を法線と反対側から見たときにピンク色になってしまいます。 これは、=Shade Color=が塗られているからで、それを防ぎ表面と同じものを表示したい場合は必ず設定する必要があります。 なお、=MainTexture=と同じテクスチャで問題ないと思います。</p>
+<p>設定してなかった:\</p>
+<p>+begin_html</p>
+<p><blockquote class="twitter-tweet" data-conversation="none" data-theme="dark"></p>
+<p>+end_html</p>
+<p>+begin_html</p>
+<p><p lang="ja" dir="ltr"></p>
+<p>+end_html</p>
+<p>色々と調節は必要そうだね pic.twitter.com/ndXTzYKdfQ</p>
+<p>+begin_html</p>
+<p></p></p>
+<p>+end_html</p>
+<p>--- mi'e himari (@mihe_himari) October 26, 2020</p>
+<p>+begin_html</p>
+<p></blockquote></p>
+<p>+end_html</p>
+<p>+begin_html</p>
+<p><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+<p>+end_html</p>
+<p>設定した:\</p>
+<p>+begin_html</p>
+<p><blockquote class="twitter-tweet" data-conversation="none" data-theme="dark"></p>
+<p>+end_html</p>
+<p>+begin_html</p>
+<p><p lang="ja" dir="ltr"></p>
+<p>+end_html</p>
+<p>他のオブジェクトにも設定してきた...ﾖｼ!! pic.twitter.com/8tMJyUaawt</p>
+<p>+begin_html</p>
+<p></p></p>
+<p>+end_html</p>
+<p>--- mi'e himari (@mihe_himari) October 26, 2020</p>
+<p>+begin_html</p>
+<p></blockquote></p>
+<p>+end_html</p>
+<p>+begin_html</p>
+<p><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+<p>+end_html</p>
+<p>** todo :PROPERTIES: :CUSTOM_ID: todo :END:</p>
 <ul class="task-list">
 <li><input type="checkbox" disabled />
 画像入れる</li>
