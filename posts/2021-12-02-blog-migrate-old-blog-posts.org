@@ -577,7 +577,9 @@
 	  mv ${target}.new $target
       }
 
+      set -e
       ls 2020-* 2021-0{1,2,3,4}* | grep "\(md\|org\)$" | filter "filterGitKnownFile"  | map convertFile
+      echo "Finished!"
     #+end_src
     
     #+RESULTS:
