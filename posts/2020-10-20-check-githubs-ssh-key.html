@@ -49,39 +49,50 @@
   
 </div>
 
-<p>** Tl;Dr :PROPERTIES: :CUSTOM_ID: tldr :END: 基本的にはここに書いてありました</p>
+<h1 id="tldr">Tl;Dr</h1>
+<p>基本的にはここに書いてありました</p>
 <ul>
-<li>[[https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/reviewing-your-ssh-keys][公式マニュアル]]</li>
+<li><a href="https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/reviewing-your-ssh-keys">公式マニュアル</a></li>
 </ul>
 <p>未読メールを確認していたところ、Githubさんから以下のようなメールが届いていました</p>
-<p>+begin_quote</p>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
 <p>The following SSH key was added to your account:</p>
-<p>&lt;:区切りの二文字の英数字が並んでいる文字列(=([[:alnum:]]{2}:)+=)(正規表現は自信ない)&gt;</p>
+<p>&lt;:区切りの二文字の英数字が並んでいる文字列(<code>\([[:alnum:]]{2}:\)\+</code>)(正規表現は自信ない)&gt;</p>
 <p>If you believe this key was added in error, you can remove the key and disable access at the following location:</p>
-<p>https://github.com/settings/keys</p>
-<p>+end_quote</p>
-<p>これは、昔確かに自分で追加したはずのSSH鍵なので問題はないはず...ですが念のため確認してみます</p>
-<p>** 確認する :PROPERTIES: :CUSTOM_ID: 確認する :END: 私はgpgキーを使ってssh認証をしているため、gpgキーの情報を確認すれば良いはずです。 が、=xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx=なんて文字列を見つけることができない。IPv6でしかみたことないぞ。\ ...そんなことなかったです。 <em>md5のハッシュでした</em></p>
-<p>*** 自分の鍵のmd5ハッシュを確認する :PROPERTIES: :CUSTOM_ID: 自分の鍵のmd5ハッシュを確認する :END:</p>
-<p>+begin_example</p>
-<p># ssh-agentが立ち上がっていなければ、以下のコマンドで立ち上げます $ eval "$(ssh-agent -s)"</p>
-<p>$ ssh-add -l -E md5</p>
-<div class="ui piled segment" style="z-index: 0">
-<blockquote>
-<p><md5ハッシュ></p>
+<p><a href="https://github.com/settings/keys">https://github.com/settings/keys</a></p>
 </blockquote>
 </div>
-<p>+end_example</p>
+<p>これは、昔確かに自分で追加したはずのSSH鍵なので問題はないはず…ですが念のため確認してみます</p>
+<h1 id="確認する">確認する</h1>
+<p>私はgpgキーを使ってssh認証をしているため、gpgキーの情報を確認すれば良いはずです。 が、=xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx=なんて文字列を見つけることができない。IPv6でしかみたことないぞ。<br />
+…そんなことなかったです。 <strong>md5のハッシュでした</strong></p>
+<h2 id="自分の鍵のmd5ハッシュを確認する">自分の鍵のmd5ハッシュを確認する</h2>
+<div class="ui segment">
+<div class="ui top right attached label">
+example
+</div>
+<pre class="example SourceCode"><code># ssh-agentが立ち上がっていなければ、以下のコマンドで立ち上げます
+$ eval &quot;$(ssh-agent -s)&quot;
+
+$ ssh-add -l -E md5
+&gt; &lt;md5ハッシュ&gt;
+</code></pre>
+</div>
 <p>これが一致すれば大丈夫</p>
-<p>*** Githubの設定画面から確認する :PROPERTIES: :CUSTOM_ID: githubの設定画面から確認する :END: [[https://github.com/settings/keys][githubの設定画面のここ]]で鍵の一覧を見ることができます。 その中の /New SSH keys/ に該当の名前の鍵があるはずです。 そこの鍵名の下に書いてある=SHA256: ...=が確認するべき値です。\ この値について、「GPG fingerprintとも合わん！」「GPG keyidとも合わん！！」「何だこいつ！！！」と暴れていましたが\ 安心してください。 /GPGじゃない/ です。\ これは、[[https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/reviewing-your-ssh-keys][マニュアル]]に書いてあります。</p>
-<p>+begin_example</p>
-<p>$ ssh-add -l -E sha256</p>
-<div class="ui piled segment" style="z-index: 0">
-<blockquote>
-<p><sha256ハッシュ></p>
-</blockquote>
+<h2 id="githubの設定画面から確認する">Githubの設定画面から確認する</h2>
+<p><a href="https://github.com/settings/keys">githubの設定画面のここ</a>で鍵の一覧を見ることができます。 その中の <em>New SSH keys</em> に該当の名前の鍵があるはずです。 そこの鍵名の下に書いてある=SHA256: …=が確認するべき値です。<br />
+この値について、「GPG fingerprintとも合わん！」「GPG keyidとも合わん！！」「何だこいつ！！！」と暴れていましたが<br />
+安心してください。 <em>GPGじゃない</em> です。<br />
+これは、<a href="https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/reviewing-your-ssh-keys">マニュアル</a>に書いてあります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+example
 </div>
-<p>+end_example</p>
+<pre class="example SourceCode"><code>$ ssh-add -l -E sha256
+&gt; &lt;sha256ハッシュ&gt;
+</code></pre>
+</div>
 <p>ここで出てきたハッシュを比較すれば良いです。</p>
 
         </div>

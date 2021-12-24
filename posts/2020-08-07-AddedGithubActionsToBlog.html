@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- </title>
+        <title>CLI! CLI! CLI! -- Github ActionsでGithub Pagesのリリースを自動化する</title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -33,7 +33,7 @@
 
         <div id="content" class="ui text container segment">
             <div class="ui center aligned icon header">
-  <h1></h1>
+  <h1>Github ActionsでGithub Pagesのリリースを自動化する</h1>
   <div class="ui list">
     <div class="item">Posted on August  7, 2020</div>
     <div class="item">
@@ -49,87 +49,111 @@
   
 </div>
 
-<ul>
-<li>Github ActionsでGithub Pagesのリリースを自動化する :PROPERTIES: :DATE: [2020-08-07 Fri] :TAGS: :github actions:github pages:hakyll:ブログ:自動化: :AUTHOR: Cj-bc :BLOG<em>POST</em>KIND: Memo :BLOG<em>POST</em>PROGRESS: Published :BLOG<em>POST</em>STATUS: Normal :END: [[https://cj-bc.github.io/blog][このブログ]]の生成をGithub Actionsで行えるようにしたので、その時のメモ\ 尚、現在のworkflowファイルは[[https://github.com/Cj-bc/blog/blob/source/.github/workflows/publish.yaml][Cj-bc/blog -- .github/workflows/publish.yaml]]にあります。</li>
-</ul>
-<p>** 前提 :PROPERTIES: :CUSTOM_ID: 前提 :END:</p>
+<p><a href="https://cj-bc.github.io/blog">このブログ</a>の生成をGithub Actionsで行えるようにしたので、その時のメモ<br />
+尚、現在のworkflowファイルは<a href="https://github.com/Cj-bc/blog/blob/source/.github/workflows/publish.yaml">Cj-bc/blog – .github/workflows/publish.yaml</a>にあります。</p>
+<h1 id="前提">前提</h1>
 <ul>
 <li><p>静的サイトジェネレーターはHakyll</p></li>
-<li><p>ほぼ[[https://jaspervdj.be/hakyll/tutorials/github-pages-tutorial.html][チュートリアル]]通りの作りになっている</p>
+<li><p>ほぼ<a href="https://jaspervdj.be/hakyll/tutorials/github-pages-tutorial.html">チュートリアル</a>通りの作りになっている</p>
 <ul>
 <li>=master=の代わりに=publish=、=develop=の代わりに=source=にしてある</li>
 </ul></li>
 <li><p>Github Pageでホスティング</p></li>
 </ul>
-<p>** workflowファイルを作成する :PROPERTIES: :CUSTOM<em>ID: workflowファイルを作成する :END: *** トリガーの設定 :PROPERTIES: :CUSTOM</em>ID: トリガーの設定 :END: 自分の環境では、=source=ブランチの中身を使ってビルド→=publish=ブランチにおいて公開、という手順を追っているので、=source=ブランチにpushされたときだけ走るようにします</p>
-<p>+begin_example</p>
-<p>on: push: branches: [source]</p>
-<p>+end_example</p>
-<p>*** Jobの作成 :PROPERTIES: :CUSTOM_ID: jobの作成 :END: Jobを作成します。環境はstackが動けばどこでも問題がないので、ubuntuにします。</p>
-<p>+begin_example</p>
-<p>jobs: runPublish: name: run publish runs-on: ubuntu-latest</p>
-<p>+end_example</p>
-<p>*** ステップの作成 :PROPERTIES: :CUSTOM_ID: ステップの作成 :END: ここからstepを作っていきます。</p>
-<p>**** 必要なブランチをcheckoutする :PROPERTIES: :CUSTOM_ID: 必要なブランチをcheckoutする :END: 今回、トリガー対象のブランチ=source=の他に=publish=ブランチを使っています。 しかし、デフォルトではローカルに=publish=ブランチは存在しません。\ なので、=actions/checkout=に、全てのブランチとタグの履歴をfetchする=fetch-depth: 0=を付け足す必要があります。</p>
-<p>+begin_example</p>
+<h1 id="workflowファイルを作成する">workflowファイルを作成する</h1>
+<h2 id="トリガーの設定">トリガーの設定</h2>
+<p>自分の環境では、=source=ブランチの中身を使ってビルド→=publish=ブランチにおいて公開、という手順を追っているので、=source=ブランチにpushされたときだけ走るようにします</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-
+example
 </div>
-<pre class="SourceCode"><code>  steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0</code></pre>
+<pre class="example SourceCode"><code>on:
+  push:
+    branches: [source]
+</code></pre>
 </div>
-<p>+end_example</p>
-<p>**** キャッシュの設定をする :PROPERTIES: :CUSTOM_ID: キャッシュの設定をする :END: ビルドはなかなかに重い(現在の構成で約4,50分くらい)ので、なるべくキャッシュを活用します。\ キャッシュには=actions/cache@v2=を使用します。キャッシュしたいものを生成するactionの前に実行し、キャッシュがあればそこをスキップするようにします。 キャッシュ対象は=~/.stack=ディレクトリです。\ これは、[ncaqさんの記事][ncaq -- HaskellプログラムをGitHub Actionsでビルドしてクロスプラットフォーム向けにバイナリをReleaseにアップロードする]から大体を引用させていただきました。</p>
-<p>+begin_example</p>
+<h2 id="jobの作成">Jobの作成</h2>
+<p>Jobを作成します。環境はstackが動けばどこでも問題がないので、ubuntuにします。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-
+example
 </div>
-<pre class="SourceCode"><code>    - name: Cache stack
-      uses: actions/cache@v2
-      with:
-        path: ~/.stack
-        key: stack-${{ hashFiles('**/stack.yaml.lock') }}-${{ hashFiles('**/package.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-stack-${{ hashFiles('**/stack.yaml.lock') }}-</code></pre>
+<pre class="example SourceCode"><code>jobs:
+  runPublish:
+    name: run publish
+    runs-on: ubuntu-latest
+</code></pre>
 </div>
-<p>+end_example</p>
-<p>**** haskellおよびstackのセットアップをする :PROPERTIES: :CUSTOM_ID: haskellおよびstackのセットアップをする :END: Haskell stackを使うので、=actions/setup-haskell=のアクションを借ります。\ ghcのバージョンは、とりあえず手元にあったものに合わせました。</p>
-<p>+begin_example</p>
+<h2 id="ステップの作成">ステップの作成</h2>
+<p>ここからstepを作っていきます。</p>
+<ol>
+<li><p>必要なブランチをcheckoutする</p>
+<p>今回、トリガー対象のブランチ=source=の他に=publish=ブランチを使っています。 しかし、デフォルトではローカルに=publish=ブランチは存在しません。<br />
+なので、=actions/checkout=に、全てのブランチとタグの履歴をfetchする=fetch-depth: 0=を付け足す必要があります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-
+example
 </div>
-<pre class="SourceCode"><code>    - uses: actions/setup-haskell@v1.1.2
-      with:
-        ghc-version: '8.8.1'
-        stack-version: 'latest'</code></pre>
-</div>
-<p>+end_example</p>
-<p>**** publishコマンドを実行する :PROPERTIES: :CUSTOM_ID: publishコマンドを実行する :END: 環境の準備がほぼできたので、あとはhakyllのビルドをしておしまいです。\ その前に、<em>gitのuserを=github-actions=に設定</em>しておきます。このアカウントにすると、内部トークンを使ってくれます。\ また、ビルド周りのコマンドはMakefileにしまってあったのでそのまま使います。</p>
-<p>+begin_example</p>
+<pre class="example SourceCode"><code>steps:
+  - uses: actions/checkout@v2
+    with:
+      fetch-depth: 0
+</code></pre>
+</div></li>
+<li><p>キャッシュの設定をする</p>
+<p>ビルドはなかなかに重い(現在の構成で約4,50分くらい)ので、なるべくキャッシュを活用します。<br />
+キャッシュには=actions/cache@v2=を使用します。キャッシュしたいものを生成するactionの前に実行し、キャッシュがあればそこをスキップするようにします。 キャッシュ対象は=~/.stack=ディレクトリです。<br />
+これは、[ncaqさんの記事][ncaq – HaskellプログラムをGitHub Actionsでビルドしてクロスプラットフォーム向けにバイナリをReleaseにアップロードする]から大体を引用させていただきました。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-
+example
 </div>
-<pre class="SourceCode"><code>    - name: run publish
-      run: |
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git switch source
-        make publish
-        git push origin publish</code></pre>
+<pre class="example SourceCode"><code>- name: Cache stack
+  uses: actions/cache@v2
+  with:
+    path: ~/.stack
+    key: stack-${{ hashFiles('**/stack.yaml.lock') }}-${{ hashFiles('**/package.yaml') }}
+    restore-keys: |
+      ${{ runner.os }}-stack-${{ hashFiles('**/stack.yaml.lock') }}-
+</code></pre>
+</div></li>
+<li><p>haskellおよびstackのセットアップをする</p>
+<p>Haskell stackを使うので、=actions/setup-haskell=のアクションを借ります。<br />
+ghcのバージョンは、とりあえず手元にあったものに合わせました。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+example
 </div>
-<p>+end_example</p>
-<p>** 参考にしたサイト :PROPERTIES: :CUSTOM_ID: 参考にしたサイト :END:</p>
+<pre class="example SourceCode"><code>- uses: actions/setup-haskell@v1.1.2
+  with:
+    ghc-version: '8.8.1'
+    stack-version: 'latest'
+</code></pre>
+</div></li>
+<li><p>publishコマンドを実行する</p>
+<p>環境の準備がほぼできたので、あとはhakyllのビルドをしておしまいです。<br />
+その前に、*gitのuserを=github-actions=に設定*しておきます。このアカウントにすると、内部トークンを使ってくれます。<br />
+また、ビルド周りのコマンドはMakefileにしまってあったのでそのまま使います。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+example
+</div>
+<pre class="example SourceCode"><code>- name: run publish
+  run: |
+    git config user.name github-actions
+    git config user.email github-actions@github.com
+    git switch source
+    make publish
+    git push origin publish
+</code></pre>
+</div></li>
+</ol>
+<h1 id="参考にしたサイト">参考にしたサイト</h1>
 <ul>
-<li>[[https://www.ncaq.net/2020/04/05/15/54/26/][ncaq -- HaskellプログラムをGitHub Actionsでビルドしてクロスプラットフォーム向けにバイナリをReleaseにアップロードする]]</li>
-<li>[[https://github.com/actions/setup-haskell][Github -- actions/setup-haskell]]</li>
-<li>[[https://docs.github.com/en/actions/configuring-and-managing-workflows/caching-dependencies-to-speed-up-workflows][Github Docs -- Caching dependencies to speed up workflows]]</li>
-<li>[[https://github.com/actions/checkout#push-a-commit-using-the-built-in-token][Github -- actions/checkout#push-a-commit-using-the-built-in-token]]</li>
+<li>[[<a href="https://www.ncaq.net/2020/04/05/15/54/26/">https://www.ncaq.net/2020/04/05/15/54/26/</a>][ncaq – HaskellプログラムをGitHub Actionsでビルドしてクロスプラットフォーム向けにバイナリをReleaseにアップロードする]]</li>
+<li><a href="https://github.com/actions/setup-haskell">Github – actions/setup-haskell</a></li>
+<li><a href="https://docs.github.com/en/actions/configuring-and-managing-workflows/caching-dependencies-to-speed-up-workflows">Github Docs – Caching dependencies to speed up workflows</a></li>
+<li><a href="https://github.com/actions/checkout#push-a-commit-using-the-built-in-token">Github – actions/checkout#push-a-commit-using-the-built-in-token</a></li>
 </ul>
 
         </div>

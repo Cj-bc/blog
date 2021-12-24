@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- </title>
+        <title>CLI! CLI! CLI! -- fzf.vimでカレントディレクトリ以外のGitファイルを検索</title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -33,7 +33,7 @@
 
         <div id="content" class="ui text container segment">
             <div class="ui center aligned icon header">
-  <h1></h1>
+  <h1>fzf.vimでカレントディレクトリ以外のGitファイルを検索</h1>
   <div class="ui list">
     <div class="item">Posted on January 13, 2021</div>
     <div class="item">
@@ -49,21 +49,35 @@
   
 </div>
 
-<ul>
-<li>fzf.vimでカレントディレクトリ以外のGitファイルを検索 :PROPERTIES: :DATE: [2021-01-14 Thu] :TAGS: :fzf.vim:fzf:vim: :AUTHOR: Cj-bc :BLOG<em>POST</em>KIND: Memo :BLOG<em>POST</em>PROGRESS: Published :BLOG<em>POST</em>STATUS: Normal :END: ** =GFiles=は便利 :PROPERTIES: :CUSTOM_ID: gfilesは便利 :END: =GFiles=は、カレントディレクトリにgitレポジトリがあると仮定して、そのレポジトリに認識されるファイル(=一度はコミットされているファイル) の一覧を作り出します。</li>
-</ul>
+<h1 id="gfilesは便利">=GFiles=は便利</h1>
+<p>=GFiles=は、カレントディレクトリにgitレポジトリがあると仮定して、そのレポジトリに認識されるファイル(=一度はコミットされているファイル) の一覧を作り出します。</p>
 <p>しかし、場合によっては「カレントディレクトリ以外のgitレポジトリにあるファイルを参照したい」ことがあると思います。</p>
 <p>例えば、私は普段プロジェクトに取り組んでいる最中にブログを書いたりするのですが、まさにその時などです。 カレントディレクトリはプロジェクトディレクトリのままで、ブログのレポジトリに対して=GFiles=を使いたいのです。</p>
 <p>これは公式の方法が(多分)ないので直接書き換えます。</p>
-<p>=~/.vim/bundle/fzf.vim/autoload/fzf/vim.vim=の=s:get<em>git</em>root()=がgitレポジトリを見つけるためのコードなので、ここにfugitiveが使う=b:git_dir=変数の中身を適用するように編集します。</p>
-<p>+begin_example</p>
-<p>function! s:get<em>git</em>root() let root = split(system('git rev-parse --show-toplevel'), '\n')[0] return v:shell_error ? '' : root endfunction</p>
-<p>+end_example</p>
+<p>=~/.vim/bundle/fzf.vim/autoload/fzf/vim.vim=の=s:get<sub>gitroot</sub>()=がgitレポジトリを見つけるためのコードなので、ここにfugitiveが使う=b:git<sub>dir</sub>=変数の中身を適用するように編集します。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+example
+</div>
+<pre class="example SourceCode"><code>function! s:get_git_root()
+  let root = split(system('git rev-parse --show-toplevel'), '\n')[0]
+  return v:shell_error ? '' : root
+endfunction
+</code></pre>
+</div>
 <p>こうだったのが</p>
-<p>+begin_example</p>
-<p>function! s:get<em>git</em>root() let root = split(system('git rev-parse --show-toplevel'), '\n')[0] let root_ = root ? root : b:git<em>dir return v:shell</em>error ? '' : root_ endfunction</p>
-<p>+end_example</p>
-<p>こうすることにより、=git_dir=も有効に検索されるようになりました。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+example
+</div>
+<pre class="example SourceCode"><code>function! s:get_git_root()
+  let root = split(system('git rev-parse --show-toplevel'), '\n')[0]
+  let root_ = root ? root : b:git_dir
+  return v:shell_error ? '' : root_
+endfunction
+</code></pre>
+</div>
+<p>こうすることにより、=git<sub>dir</sub>=も有効に検索されるようになりました。</p>
 
         </div>
         <div id="footer">
