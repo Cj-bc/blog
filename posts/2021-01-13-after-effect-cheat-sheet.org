@@ -1,3 +1,14 @@
-個人用のチートシート
+* After Effectショートカットキーチートシート(個人用) 
+    :PROPERTIES:
+    :DATE: [2021-01-13 Wed]
+    :TAGS: :afterEffect:cheatsheet:
+    :AUTHOR: Cj-bc
+    :BLOG_POST_KIND: Memo
+    :BLOG_POST_PROGRESS: Published
+    :BLOG_POST_STATUS: Normal
+    :END:
+    個人用のチートシート
 
-やりたいこと ショートカットキー Layerをカットする Ctrl+Shift+D
+    | やりたいこと      | ショートカットキー |
+    |-------------------+--------------------|
+    | Layerをカットする | Ctrl+Shift+D       |
