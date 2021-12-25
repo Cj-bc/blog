@@ -1,3 +1,11 @@
+* Githubのssh鍵の確認をする
+  :PROPERTIES:
+  :DATE: [2020-10-20 Tue]
+  :TAGS: :ssh:github:
+  :BLOG_POST_KIND: Memo
+  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_STATUS: Normal
+  :END:
 ** Tl;Dr
    :PROPERTIES:
    :CUSTOM_ID: tldr
@@ -26,38 +34,39 @@
    :CUSTOM_ID: 確認する
    :END:
 私はgpgキーを使ってssh認証をしているため、gpgキーの情報を確認すれば良いはずです。
-が、=xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx=なんて文字列を見つけることができない。IPv6でしかみたことないぞ。\\
+が、 ~xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx~ なんて文字列を見つけることができない。IPv6でしかみたことないぞ。\\
 ...そんなことなかったです。 *md5のハッシュでした*
 
 *** 自分の鍵のmd5ハッシュを確認する
     :PROPERTIES:
     :CUSTOM_ID: 自分の鍵のmd5ハッシュを確認する
     :END:
-#+begin_example
-  # ssh-agentが立ち上がっていなければ、以下のコマンドで立ち上げます
-  $ eval "$(ssh-agent -s)"
+    #+begin_src sh
+    # ssh-agentが立ち上がっていなければ、以下のコマンドで立ち上げます
+    $ eval "$(ssh-agent -s)"
+    
+    $ ssh-add -l -E md5
+    > <md5ハッシュ>
+    #+end_src
 
-  $ ssh-add -l -E md5
-  > <md5ハッシュ>
-#+end_example
-
-これが一致すれば大丈夫
+    これが一致すれば大丈夫
 
 *** Githubの設定画面から確認する
     :PROPERTIES:
     :CUSTOM_ID: githubの設定画面から確認する
     :END:
-[[https://github.com/settings/keys][githubの設定画面のここ]]で鍵の一覧を見ることができます。
-その中の /New SSH keys/ に該当の名前の鍵があるはずです。
-そこの鍵名の下に書いてある=SHA256: ...=が確認するべき値です。\\
-この値について、「GPG fingerprintとも合わん！」「GPG
-keyidとも合わん！！」「何だこいつ！！！」と暴れていましたが\\
-安心してください。 /GPGじゃない/ です。\\
-これは、[[https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/reviewing-your-ssh-keys][マニュアル]]に書いてあります。
+    [[https://github.com/settings/keys][githubの設定画面のここ]]で鍵の一覧を見ることができます。
+    その中の /New SSH keys/ に該当の名前の鍵があるはずです。
 
-#+begin_example
-  $ ssh-add -l -E sha256
-  > <sha256ハッシュ>
-#+end_example
+    そこの鍵名の下に書いてある ~SHA256: ...~ が確認するべき値です。
+    この値について、「GPG fingerprintとも合わん！」
+    「GPG keyidとも合わん！！」「何だこいつ！！！」と暴れていましたが\\
+    安心してください。 /GPGじゃない/ です。
+    これは、[[https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/reviewing-your-ssh-keys][マニュアル]]に書いてあります。
 
-ここで出てきたハッシュを比較すれば良いです。
+    #+begin_src sh
+    $ ssh-add -l -E sha256
+    > <sha256ハッシュ>
+    #+end_src
+
+    ここで出てきたハッシュを比較すれば良いです。
