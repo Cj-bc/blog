@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- </title>
+        <title>CLI! CLI! CLI! -- Player Inputが上手く使えないと思ったら単純なミスだった</title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -33,12 +33,12 @@
 
         <div id="content" class="ui text container segment">
             <div class="ui center aligned icon header">
-  <h1></h1>
+  <h1>Player Inputが上手く使えないと思ったら単純なミスだった</h1>
   <div class="ui list">
     <div class="item">Posted on October 18, 2020</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on October 26, 2020
+      Updated on December 25, 2021
     </div>
   </div>
     
@@ -49,27 +49,43 @@
   
 </div>
 
-<p>Player Inputが上手く使えないと思ったら単純なミスだった</p>
-<p>tl;dr</p>
-<p>UnityEventを使用する場合、Eventに登録するスクリプトは、そのInspectorビューから選択し、スクリプトファイルそのものを入れないようにする</p>
-<hr />
-<p>Player Inputは、Unityで<code>2019.1</code>から追加された、<code>Input</code>に取って変わる新しい入力管理システムです。 詳しくは<a href="https://blogs.unity3d.com/jp/2019/10/14/introducing-the-new-input-system/">新しい Input System のご紹介 -- blogs.unity3d.com</a>を参照してください。</p>
-<p>環境</p>
-<p>ソフトウェア バージョン ------------- --------------------- - Unity 2019.4.11f1 Personal InputSystem 1.0.0</p>
-<p>現状</p>
-<p>基本的には<a href="https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/manual/QuickStartGuide.html">Quick Start Guide</a>に沿って作業をしています。(<code>Input System</code>は導入済とします。)</p>
+<div class="line-block">UnityEventを使用する場合、Eventに登録するスクリプトは、<br />
+そのInspectorビューから選択し、<br />
+スクリプトファイルそのものを入れないようにする</div>
+<p>Player Inputは、Unityで`2019.1`から追加された、`Input`に取って変わる新しい入力管理システムです。 詳しくは[新しい Input System のご紹介 – blogs.unity3d.com](<a href="https://blogs.unity3d.com/jp/2019/10/14/introducing-the-new-input-system/)を参照してください">https://blogs.unity3d.com/jp/2019/10/14/introducing-the-new-input-system/)を参照してください</a>。</p>
+<h1 id="環境">環境</h1>
+<table>
+<thead>
+<tr class="header">
+<th>ソフトウェア</th>
+<th>バージョン</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Unity</td>
+<td>2019.4.11f1 Personal</td>
+</tr>
+<tr class="even">
+<td>Input System</td>
+<td>1.0.0</td>
+</tr>
+</tbody>
+</table>
+<h1 id="現状">現状</h1>
+<p>基本的には<a href="https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/manual/QuickStartGuide.html">Quick Start Guide</a>に沿って作業をしています。 (=Input System=は導入済とします。)</p>
 <ol>
-<li>入力を反映させたい<code>GameObject</code>に<code>PlayerInput</code>をattachします。</li>
-<li>"Create Actions"を押し、新しい<code>Action Asset</code>を作成します</li>
-<li>"Quick Start Guide"に従って、入力を<code>Unity Events</code>で受けとるようにします。</li>
+<li>入力を反映させたい <code>GameObject</code> に <code>PlayerInput</code> をattachします。</li>
+<li>"Create Actions"を押し、新しい <code>Action Asset</code> を作成します</li>
+<li>"Quick Start Guide"に従って、入力を <code>Unity Events</code> で受けとるようにします。</li>
 <li>今回は必要なかったので、デフォルトで入っているActionを自分で使うものに入れかえました</li>
-<li><code>1.</code>の<code>GameObject</code>に戻り、<code>PlayerInput</code>のEvents欄にScript fileを指定します</li>
-<li>あれ!?<code>No Function</code>しか出てこない!?</li>
+<li><code>1.</code> の <code>GameObject</code> に戻り、 <code>PlayerInput</code> のEvents欄にScript fileを指定します</li>
+<li>あれ!? <code>No Function</code> しか出てこない!?</li>
 </ol>
-<p>原因</p>
-<p>今回の原因は、上記の<code>5.</code>にある <strong>Events欄に設定したもの</strong> でした。 ここで、私は「スクリプトファイル自体」を選択していましたが、そうではなく、「実際に使いたいオブジェクトに紐づけられている該当ファイルのインスタンスを渡してると、上手くいきます。</p>
-<h1 id="もう一つ考えられる原因">もう一つ考えられる原因</h1>
-<p>今回は違いましたが、調べている間に見つけたのが<a href="https://forum.unity.com/threads/cant-assign-public-script-function-to-player-input-component-new-input-system.881032/">これ</a>で、「コールバック関数の引数は<code>InputAction.CallbackContext callbackContext</code>にしないといけない、というもの。</p>
+<h1 id="原因">原因</h1>
+<p>今回の原因は、上記の <code>5.</code> にある <strong>Events欄に設定したもの</strong> でした。 ここで、私は「スクリプトファイル自体」を選択していましたが、そうではなく、「実際に使いたいオブジェクトに紐づけられている該当ファイルのインスタンスを渡してると、上手くいきます。</p>
+<h2 id="もう一つ考えられる原因">もう一つ考えられる原因</h2>
+<p>今回は違いましたが、調べている間に見つけたのが<a href="https://forum.unity.com/threads/cant-assign-public-script-function-to-player-input-component-new-input-system.881032/">これ</a>で、 「コールバック関数の引数は <code>InputAction.CallbackContext callbackContext</code> にしないといけない」 というもの。</p>
 
         </div>
         <div id="footer">

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- </title>
+        <title>CLI! CLI! CLI! -- 簡易的な素数探索アルゴリズムの速度比較</title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -33,25 +33,25 @@
 
         <div id="content" class="ui text container segment">
             <div class="ui center aligned icon header">
-  <h1></h1>
+  <h1>簡易的な素数探索アルゴリズムの速度比較</h1>
   <div class="ui list">
     <div class="item">Posted on October 17, 2020</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on October 17, 2020
+      Updated on December 24, 2021
     </div>
   </div>
     
 </div>
 <div class="info">
   
-  <a title="All pages tagged 'python'." href="../tags/python.html" class="ui tag label">python</a><a title="All pages tagged 'アルゴリズム'." href="../tags/%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0.html" class="ui tag label">アルゴリズム</a>
+  
   
 </div>
 
-<p>いや簡単なものなのですが個人的なメモ。 実行言語は<code>python 3.7.4</code>です。</p>
-<p>比較するアルゴリズム</p>
-<p>1. 定義通りの求め方</p>
+<p>いや簡単なものなのですが個人的なメモ。 実行言語は=python 3.7.4=です。</p>
+<h1 id="比較するアルゴリズム">比較するアルゴリズム</h1>
+<h1 id="定義通りの求め方">1. 定義通りの求め方</h1>
 <p>素数は「自分自身と1のみを約数に持つ数」なので、「自分自身と1以外に割り切れる数があるか」を調べれば素数かの判定ができることになります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -66,7 +66,7 @@ python
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    <span class="cf">return</span> <span class="bu">list</span>(<span class="bu">filter</span>(f, nums))</span></code></pre></div>
 </div>
-<h1 id="エラトステネスの揮">エラトステネスの揮</h1>
+<h2 id="エラトステネスの揮">エラトステネスの揮</h2>
 <p>多分中学校かそこらへんで習ったであろう方法。 求めたい範囲の数の集合から、小さい素数の倍数をふるい落としていく方法です。<br />
 <a href="https://ja.wikipedia.org/wiki/%E3%82%A8%E3%83%A9%E3%83%88%E3%82%B9%E3%83%86%E3%83%8D%E3%82%B9%E3%81%AE%E7%AF%A9">wikipediaの図解</a>がわかりやすい。</p>
 <div class="ui segment">
@@ -87,9 +87,9 @@ python
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>    ret <span class="op">=</span> <span class="bu">list</span>(<span class="bu">filter</span>(<span class="kw">lambda</span> i: i <span class="op">%</span> head <span class="op">!=</span> <span class="dv">0</span>, nums))</span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>    <span class="cf">return</span> [head] <span class="op">+</span> eratosthenes(ret)</span></code></pre></div>
 </div>
-<p>実行時間計測</p>
+<h1 id="実行時間計測">実行時間計測</h1>
 <p>それぞれの処理を1000回ずつ実行し、その平均を求めた</p>
-<h1 id="計測用コード">計測用コード</h1>
+<h2 id="計測用コード">計測用コード</h2>
 <div class="ui segment">
 <div class="ui top right attached label">
 python
@@ -110,13 +110,14 @@ python
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a><span class="bu">print</span>(<span class="ss">f&quot;fromDefinition: </span><span class="sc">{</span>mesureTimeAvr(fromDefinition, x)<span class="sc">}</span><span class="ss">&quot;</span>)</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a><span class="bu">print</span>(<span class="ss">f&quot;eratosthenes  : </span><span class="sc">{</span>mesureTimeAvr(eratosthenes, x)<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
 </div>
-<h1 id="結果">結果</h1>
+<h2 id="結果">結果</h2>
 <div class="ui segment">
 <div class="ui top right attached label">
-
+example
 </div>
-<pre class="SourceCode"><code>fromDefinition: 3.378009796142578e-05
-eratosthenes  : 2.4552106857299804e-05</code></pre>
+<pre class="example SourceCode"><code>fromDefinition: 3.378009796142578e-05
+eratosthenes  : 2.4552106857299804e-05
+</code></pre>
 </div>
 <p>エラトステネスの揮の方が1秒くらい早い。 Orderはわからん！！</p>
 

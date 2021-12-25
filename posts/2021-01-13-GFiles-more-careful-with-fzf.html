@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- GFilesは便利</title>
+        <title>CLI! CLI! CLI! -- fzf.vimでカレントディレクトリ以外のGitファイルを検索</title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -33,48 +33,51 @@
 
         <div id="content" class="ui text container segment">
             <div class="ui center aligned icon header">
-  <h1>GFilesは便利</h1>
+  <h1>fzf.vimでカレントディレクトリ以外のGitファイルを検索</h1>
   <div class="ui list">
-    <div class="item">Posted on January 14, 2021</div>
+    <div class="item">Posted on January 13, 2021</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on January 14, 2021
+      Updated on December 24, 2021
     </div>
   </div>
     
 </div>
 <div class="info">
   
-  <a title="All pages tagged 'fzf.vim'." href="../tags/fzf.vim.html" class="ui tag label">fzf.vim</a><a title="All pages tagged 'fzf'." href="../tags/fzf.html" class="ui tag label">fzf</a><a title="All pages tagged 'vim'." href="../tags/vim.html" class="ui tag label">vim</a>
+  
   
 </div>
 
-<p><code>GFiles</code>は、カレントディレクトリにgitレポジトリがあると仮定して、そのレポジトリに認識されるファイル(=一度はコミットされているファイル) の一覧を作り出します。</p>
+<h1 id="gfilesは便利">=GFiles=は便利</h1>
+<p>=GFiles=は、カレントディレクトリにgitレポジトリがあると仮定して、そのレポジトリに認識されるファイル(=一度はコミットされているファイル) の一覧を作り出します。</p>
 <p>しかし、場合によっては「カレントディレクトリ以外のgitレポジトリにあるファイルを参照したい」ことがあると思います。</p>
-<p>例えば、私は普段プロジェクトに取り組んでいる最中にブログを書いたりするのですが、まさにその時などです。 カレントディレクトリはプロジェクトディレクトリのままで、ブログのレポジトリに対して<code>GFiles</code>を使いたいのです。</p>
+<p>例えば、私は普段プロジェクトに取り組んでいる最中にブログを書いたりするのですが、まさにその時などです。 カレントディレクトリはプロジェクトディレクトリのままで、ブログのレポジトリに対して=GFiles=を使いたいのです。</p>
 <p>これは公式の方法が(多分)ないので直接書き換えます。</p>
-<p><code>~/.vim/bundle/fzf.vim/autoload/fzf/vim.vim</code>の<code>s:get_git_root()</code>がgitレポジトリを見つけるためのコードなので、ここにfugitiveが使う<code>b:git_dir</code>変数の中身を適用するように編集します。</p>
+<p>=~/.vim/bundle/fzf.vim/autoload/fzf/vim.vim=の=s:get<sub>gitroot</sub>()=がgitレポジトリを見つけるためのコードなので、ここにfugitiveが使う=b:git<sub>dir</sub>=変数の中身を適用するように編集します。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-vim
+example
 </div>
-<pre class="vim SourceCode"><code>function! s:get_git_root()
+<pre class="example SourceCode"><code>function! s:get_git_root()
   let root = split(system('git rev-parse --show-toplevel'), '\n')[0]
   return v:shell_error ? '' : root
-endfunction</code></pre>
+endfunction
+</code></pre>
 </div>
 <p>こうだったのが</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-vim
+example
 </div>
-<pre class="vim SourceCode"><code>function! s:get_git_root()
+<pre class="example SourceCode"><code>function! s:get_git_root()
   let root = split(system('git rev-parse --show-toplevel'), '\n')[0]
   let root_ = root ? root : b:git_dir
   return v:shell_error ? '' : root_
-endfunction</code></pre>
+endfunction
+</code></pre>
 </div>
-<p>こうすることにより、<code>git_dir</code>も有効に検索されるようになりました。</p>
+<p>こうすることにより、=git<sub>dir</sub>=も有効に検索されるようになりました。</p>
 
         </div>
         <div id="footer">

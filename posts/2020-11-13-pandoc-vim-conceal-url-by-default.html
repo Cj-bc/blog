@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- markdown/vimwiki/pandocのsyntaxハイライト</title>
+        <title>CLI! CLI! CLI! -- vim-pandoc-syntaxでurlを非表示にしたい</title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -33,57 +33,66 @@
 
         <div id="content" class="ui text container segment">
             <div class="ui center aligned icon header">
-  <h1>markdown/vimwiki/pandocのsyntaxハイライト</h1>
+  <h1>vim-pandoc-syntaxでurlを非表示にしたい</h1>
   <div class="ui list">
     <div class="item">Posted on November 13, 2020</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on November 13, 2020
+      Updated on December 24, 2021
     </div>
   </div>
     
 </div>
 <div class="info">
   
-  <a title="All pages tagged 'vim'." href="../tags/vim.html" class="ui tag label">vim</a><a title="All pages tagged 'pandoc'." href="../tags/pandoc.html" class="ui tag label">pandoc</a>
+  
   
 </div>
 
+<h1 id="vimwikiのハイライトが欲しい">vimwikiのハイライトが欲しい</h1>
+<h1 id="markdownvimwikipandocのsyntaxハイライト">markdown/vimwiki/pandocのsyntaxハイライト</h1>
 <p>vimwikiのsyntaxでは、以下のようなリンクは</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-markdown
+example
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode markdown SourceCode"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co">[</span><span class="ot">説明</span><span class="co">](url)</span></span></code></pre></div>
+<pre class="example SourceCode"><code>[説明](url)
+</code></pre>
 </div>
-<p>このように表示されます(<code>+conceal</code>オプションが有効な場合)</p>
+<p>このように表示されます(=+conceal=オプションが有効な場合)</p>
 <p><a href="url">説明</a></p>
 <p>これがあると、長いURLを持つドキュメントでの可読性がグンと上がります</p>
-<p>例えば、<a href="https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html">blender data blocks</a>の記事は<code>markdown</code>/<code>vimwiki</code>/<code>pandoc</code>それぞれのsyntaxで 以下のように見えます。</p>
-<p><img src="../images/2020-11-13-pandoc-vim-conceal-url-by-default/difference_md-vimwiki-pandoc.png" class="ui rounded image" alt="markdown, vimwiki, pandocのハイライトの違い" /></p>
-<p>さて、これを普段使いの<code>pandoc</code>syntaxでも使いたいというのが今回の希望です。</p>
-<p>結論: デフォルトの変数を設定しろ</p>
+<p>例えば、<a href="https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html">blender data blocks</a>の記事は=markdown=/=vimwiki=/=pandoc=それぞれのsyntaxで 以下のように見えます。</p>
+<figure>
+<img src="file:///images/difference_md-vimwiki-pandoc.png" class="ui rounded image" alt /><figcaption>markdown, vimwiki, pandocのハイライトの違い</figcaption>
+</figure>
+<p>さて、これを普段使いの=pandoc=syntaxでも使いたいというのが今回の希望です。</p>
+<h1 id="結論-デフォルトの変数を設定しろ">結論: デフォルトの変数を設定しろ</h1>
 <p>もうこれが答えでした！<br />
 ドキュメントよもうね！！！！</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-vim
+example
 </div>
-<pre class="vim SourceCode"><code>let g:pandoc#syntax#conceal#urls = 1</code></pre>
+<pre class="example SourceCode"><code>let g:pandoc#syntax#conceal#urls = 1
+</code></pre>
 </div>
-<p>これだけでURLの<code>conceal</code>が有効になり、vimwikiと同じような見た目になります</p>
-<p><img src="../images/2020-11-13-pandoc-vim-conceal-url-by-default/pandoc-with-conceal.png" class="ui rounded image" alt="設定後のpandoc" /></p>
-<p>おまけ</p>
+<p>これだけでURLの=conceal=が有効になり、vimwikiと同じような見た目になります</p>
+<figure>
+<img src="file:///images/pandoc-with-conceal.png" class="ui rounded image" alt /><figcaption>設定後のpandoc</figcaption>
+</figure>
+<h1 id="おまけ">おまけ</h1>
 <p>ちなみに該当のコードは<a href="https://github.com/vim-pandoc/vim-pandoc-syntax/blob/2521e2e9b99a3550e1a20f24e09fa46679cbbbc7/syntax/pandoc.vim#L300-L304">300-304行目</a>にありました。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-vim
+example
 </div>
-<pre class="vim SourceCode"><code>if g:pandoc#syntax#conceal#urls == 1
+<pre class="example SourceCode"><code>if g:pandoc#syntax#conceal#urls == 1
     syn region pandocReferenceURL matchgroup=pandocOperator start=/\]\@1&lt;=(/ end=/)/ keepend conceal
 else
     syn region pandocReferenceURL matchgroup=pandocOperator start=/\]\@1&lt;=(/ end=/)/ keepend
-endif</code></pre>
+endif
+</code></pre>
 </div>
 
         </div>

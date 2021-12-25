@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- </title>
+        <title>CLI! CLI! CLI! -- xmonadにstackを使う</title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -33,26 +33,26 @@
 
         <div id="content" class="ui text container segment">
             <div class="ui center aligned icon header">
-  <h1></h1>
+  <h1>xmonadにstackを使う</h1>
   <div class="ui list">
     <div class="item">Posted on May  4, 2021</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on May 11, 2021
+      Updated on December 25, 2021
     </div>
   </div>
     
 </div>
 <div class="info">
   
-  <a title="All pages tagged 'xmonad'." href="../tags/xmonad.html" class="ui tag label">xmonad</a><a title="All pages tagged 'haskell'." href="../tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged 'stack'." href="../tags/stack.html" class="ui tag label">stack</a><a title="All pages tagged 'linux'." href="../tags/linux.html" class="ui tag label">linux</a>
+  
   
 </div>
 
 <p>xmonad、デフォルトだと新しい機能を自作したりしようとするとシステムグローバルに突っ込む必要が出てきます。 それは面倒だし、管理が煩雑になるのでそもそもstackを使用できるようにします。</p>
-<p>Xmonadをstackでコンパイルできるようにする</p>
-<h1 id="Xmonadのコンパイル方法を指定する方法">Xmonadのコンパイル方法を指定する方法</h1>
-<p>xmonadの recompileは、 <a href="https://hackage.haskell.org/package/xmonad-0.15/docs/src/XMonad.Core.html#recompile">XMonad.Core.recompile</a> によって行われています。 そして内部を読んでみると、 <code class="sourceCode haskell">cfgdir <span class="op">&lt;/&gt;</span> <span class="st">&quot;build&quot;</span></code> が存在すればそれを読むということが分かります。</p>
+<h1 id="xmonadをstackでコンパイルできるようにする">Xmonadをstackでコンパイルできるようにする</h1>
+<h2 id="xmonadのコンパイル方法を指定する方法">Xmonadのコンパイル方法を指定する方法</h2>
+<p>xmonadの recompileは、 <a href="https://hackage.haskell.org/package/xmonad-0.15/docs/src/XMonad.Core.html#recompile">XMonad.Core.recompile</a> によって行われています。 そして内部を読んでみると、 <code>cfgdir &lt;/&gt; "build"</code> が存在すればそれを読むということが分かります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
@@ -89,20 +89,20 @@ haskell
 </ol>
 <p>のいずれかになります。</p>
 <p>今回は、変更点をあまり作らないためにとりあえず <code>~/.xmonad</code> にしようと思います(そのうち <code>XDG_CONFIG_HOME</code> 以下に移したい)</p>
-<h1 id="build スクリプトを書く"><code>build</code> スクリプトを書く</h1>
+<h2 id="build-スクリプトを書く"><code>build</code> スクリプトを書く</h2>
 <p>コマンドを使用することになるので、shellscriptで書くのが妥当かなと思います。 <code>build</code> スクリプトは以下のように呼ばれます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a> <span class="co">-- ...</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a> <span class="kw">then</span> <span class="kw">do</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>   <span class="co">-- temporarily disable SIGCHLD ignoring:</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>   uninstallSignalHandlers</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>   status <span class="ot">&lt;-</span> bracket (openFile err <span class="dt">WriteMode</span>) hClose <span class="op">$</span> \errHandle <span class="ot">-&gt;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>waitForProcess <span class="op">=&lt;&lt;</span> <span class="kw">if</span> useBuildscript</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>     <span class="kw">then</span> compileScript bin cfgdir buildscript errHandle</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>     <span class="kw">else</span> compileGHC bin cfgdir errHandle</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co">-- ...</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">then</span> <span class="kw">do</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>  <span class="co">-- temporarily disable SIGCHLD ignoring:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>  uninstallSignalHandlers</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>  status <span class="ot">&lt;-</span> bracket (openFile err <span class="dt">WriteMode</span>) hClose <span class="op">$</span> \errHandle <span class="ot">-&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>  waitForProcess <span class="op">=&lt;&lt;</span> <span class="kw">if</span> useBuildscript</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>             <span class="kw">then</span> compileScript bin cfgdir buildscript errHandle</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>             <span class="kw">else</span> compileGHC bin cfgdir errHandle</span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -111,7 +111,7 @@ haskell
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>compileScript bin dir script errHandle <span class="ot">=</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>        runProcess script [bin] (<span class="dt">Just</span> dir) <span class="dt">Nothing</span> <span class="dt">Nothing</span> <span class="dt">Nothing</span> (<span class="dt">Just</span> errHandle)</span></code></pre></div>
 </div>
-<p><code class="sourceCode haskell">runProcess</code> は、 <a href="https://hackage.haskell.org/package/process-1.6.11.0/docs/System-Process.html#v:runProcess">System.Process.runProcess</a> であり、上記の使い方だと <code>script</code> というプログラムに <code>bin</code> を引数として与え、 <code>dir</code> をワーキングディレクトリとしてから実行することになります。</p>
+<p><code>runProcess</code> は、 <a href="https://hackage.haskell.org/package/process-1.6.11.0/docs/System-Process.html#v:runProcess">System.Process.runProcess</a> であり、上記の使い方だと <code>script</code> というプログラムに <code>bin</code> を引数として与え、 <code>dir</code> をワーキングディレクトリとしてから実行することになります。</p>
 
         </div>
         <div id="footer">

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- </title>
+        <title>CLI! CLI! CLI! -- vim9scriptで気をつけること</title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -33,19 +33,19 @@
 
         <div id="content" class="ui text container segment">
             <div class="ui center aligned icon header">
-  <h1></h1>
+  <h1>vim9scriptで気をつけること</h1>
   <div class="ui list">
     <div class="item">Posted on March  2, 2021</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on March  2, 2021
+      Updated on December 24, 2021
     </div>
   </div>
     
 </div>
 <div class="info">
   
-  <a title="All pages tagged 'vim'." href="../tags/vim.html" class="ui tag label">vim</a><a title="All pages tagged 'vim script'." href="../tags/vim%20script.html" class="ui tag label">vim script</a><a title="All pages tagged 'vim9'." href="../tags/vim9.html" class="ui tag label">vim9</a>
+  
   
 </div>
 
@@ -56,11 +56,11 @@
 <p>なお当方のvimは現時点でのgitのマスターブランチから <code>make</code> コマンドのみによってコンパイルされたもので、</p>
 <p>バージョンは <code>8.2 (2019 Dec 12, compiled Mar 2 2021 10:43:55) patch 1-2560</code> です。</p>
 <p>又、コードの実行には <a href="https://github.com/thinca/vim-quickrun">thinca/vim-quickrun</a> を使用させていただいております。</p>
-<p>文字列連結は'..'。'.'ではない。</p>
+<h1 id="文字列連結は...ではない">文字列連結は'..'。'.'ではない。</h1>
 <p>これは明確に「変更点」としては見当たらなかったのですが、恐らく変更されているところです。 <code>.</code> を使って連結しようとしてみたところ、 <code>E15: 無効な式です</code> と言われてしまいました。</p>
 <p>&lt;画像入れる&gt;</p>
 <p>これを <code>..</code> に変えたところすんなり動きました。</p>
-<p>'map()'と'mapnew()'を使い分ける</p>
+<h1 id="mapとmapnewを使い分ける">'map()'と'mapnew()'を使い分ける</h1>
 <p><code>map()</code> は、リストや辞書型のオブジェクトの要素ひとつひとつに対して関数を適用してくれる関数です。</p>
 <p>Haskellとかやってると馴染みが深いですが、その分注意する必要がある点があります。</p>
 <p><code>map()</code> 関数、実は <strong>与えられたリストや辞書型のオブジェクトをそのまま更新</strong> します。 つまり <strong>新しいオブジェクトを作って返すわけではない</strong> のです。</p>
@@ -68,18 +68,18 @@
 <p>例えば、</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-vim
+example
 </div>
-<pre class="vim SourceCode"><code>var ret = [1, 2, 3]
+<pre class="example SourceCode"><code>var ret = [1, 2, 3]
 map(ret, (n) =&gt; n + 1)
 </code></pre>
 </div>
 <p>は <code>a -&gt; a</code> な関数を渡しているので動きますが、</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-vim
+example
 </div>
-<pre class="vim SourceCode"><code>var ret = [1, 2, 3]
+<pre class="example SourceCode"><code>var ret = [1, 2, 3]
 map(ret, (n) =&gt; n .. &quot;th&quot;)
 </code></pre>
 </div>
@@ -87,9 +87,9 @@ map(ret, (n) =&gt; n .. &quot;th&quot;)
 <p>この場合、*新しいオブジェクトを作って返す* バージョンである <code>mapnew()</code> を使用して回避できます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-vim
+example
 </div>
-<pre class="vim SourceCode"><code>var ret = mapnew([1,2,3], (n) =&gt; n .. &quot;th&quot;)
+<pre class="example SourceCode"><code>var ret = mapnew([1,2,3], (n) =&gt; n .. &quot;th&quot;)
 </code></pre>
 </div>
 

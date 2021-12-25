@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- </title>
+        <title>CLI! CLI! CLI! -- blenderマテリアル のblend modeについて</title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -33,38 +33,38 @@
 
         <div id="content" class="ui text container segment">
             <div class="ui center aligned icon header">
-  <h1></h1>
+  <h1>blenderマテリアル のblend modeについて</h1>
   <div class="ui list">
     <div class="item">Posted on August 16, 2020</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on August 31, 2020
+      Updated on December 24, 2021
     </div>
   </div>
     
 </div>
 <div class="info">
   
-  <a title="All pages tagged 'blender'." href="../tags/blender.html" class="ui tag label">blender</a><a title="All pages tagged 'memo'." href="../tags/memo.html" class="ui tag label">memo</a><a title="All pages tagged 'material'." href="../tags/material.html" class="ui tag label">material</a><a title="All pages tagged '3dcg'." href="../tags/3dcg.html" class="ui tag label">3dcg</a>
+  
   
 </div>
 
 <ul>
 <li>Blenderのバージョン: 2.80</li>
-<li>公式のリファレンス: <a href="https://docs.blender.org/manual/en/2.80/render/eevee/materials/settings.html">blender manual -- materials</a></li>
+<li>公式のリファレンス: <a href="https://docs.blender.org/manual/en/2.80/render/eevee/materials/settings.html">blender manual – materials</a></li>
 </ul>
 <p>Blend modeは、表面の色の計算が終わった後にどのようにカラーバッファに影響するかを決めます。</p>
-<p>Opaque</p>
+<h1 class="small-caption" id="opaque">Opaque</h1>
 <p>アルファチャンネル(=透明度)を完全に無視し、色を上書きします。これが一番早いモードです。</p>
-<p>Additive</p>
+<h1 class="small-caption" id="additive">Additive</h1>
 <p>直前の色に表面の色を加算します。アルファ値は、 <em>neutral color</em> の黒 (0.0, 0.0, 0.0, 0.0) と表面の色を混ぜるために使われます。</p>
-<p>Multiplicative</p>
+<h1 class="small-caption" id="multiplicative">Multiplicative</h1>
 <p>直前の色と表面の色を乗算します。アルファ値は、 <em>neutral color</em> の白 (1.0, 1.0, 1.0) と表面の色を混ぜるために使われます。</p>
-<p>Alpha Clip</p>
+<h1 class="small-caption" id="alpha-clip">Alpha Clip</h1>
 <p>アルファ値がclip閾値を上回った場合のみ、直前の色は表面の色で上書きされます。</p>
-<p>Alpha Hashed</p>
+<h1 class="small-caption" id="alpha-hashed">Alpha Hashed</h1>
 <p>アルファ値がランダムで決められたclip閾値を上回った場合のみ、直前の色は表面の色で上書きされます。 この統計学的なアプローチはノイズが多いですが、ソートの問題なしにアルファ値のブレンドを概算できます。レンダー設定でサンプル数を増やすと、最終的なノイズを減らすことができます。</p>
-<p>Alpha Blending</p>
+<h1 class="small-caption" id="alpha-blending">Alpha Blending</h1>
 <p>アルファ値のブレンドを使い、直前の色の上に表面の色をオーバーレイします。</p>
 
         </div>

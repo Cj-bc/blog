@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- 古い形式のブログ記事を変換するおしごと [WIP]</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+        <div id="content" class="ui text container segment">
+            <div class="ui center aligned icon header">
+  <h1>古い形式のブログ記事を変換するおしごと [WIP]</h1>
+  <div class="ui list">
+    <div class="item">Posted on December  2, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on December 25, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  
+  
+</div>
+
+<h1 id="これまでの遷移">これまでの遷移</h1>
+<table>
+<tbody>
+<tr class="odd">
+<td>blog以前</td>
+<td>Qiita flavored markdownでQiitaに投稿</td>
+</tr>
+<tr class="even">
+<td>一番初めの時期(<a href="https://cj-bc.github.io/blog/posts/2020-08-02-helloHakylly.html">2020/08/02</a><code>[[https://cj-bc.github.io/blog/posts/2021-01-19-after-effect-markers.html][2021/01/19]]) | markdown+pandoc拡張(メタデータをyamlで管理) |
+   | org移行期([[https://cj-bc.github.io/blog/posts/2021-01-31-org-file-test.html][2021/01/31]]</code> <a href="https://cj-bc.github.io/blog/posts/2021-05-19-emacs-org-roam-setup.html">2021-05-19</a></td>
+<td>Org format(メタデータをyamlで管理</td>
+</tr>
+<tr class="odd">
+<td>現在のフォーマット(<a href="https://cj-bc.github.io/blog/posts/2021-07-24-diary-allelosphere-vol1.html">2021/07/24</a>~)</td>
+<td>Org format(メタデータをPropertyで管理)</td>
+</tr>
+</tbody>
+</table>
+<h1 id="なぜ移行するのか">なぜ移行するのか</h1>
+<p>複数のフォーマットに対応したHakyllコードをかくのが そろそろ辛くなってきたからです。 特に、メタデータの取り扱い周りが厄介なのです。</p>
+<p>Pandocでは、独自の構文としてメタデータを YAML フォーマットのヘッダーに保存することができます。 昔はこれを使っていたのですが、 Emacs+Org mode の構成で投稿を作成する際、それらをプロパティとして 扱えたら便利だなと感じるようになりました。</p>
+<p>プロパティとして扱える利点としては、例えば現在の投稿にある <code>BLOG_POST_PROGRESS</code> を <code>org-agenda</code> から見ることによって、 作成中の投稿の一覧を容易に作成することができます。 これは、org modeの機能の一つであるプロパティを用いているからできること であって、pandocのYAML構文を用いようとしたらまた新しいプログラムを 書く必要がでてきます。それは面倒だし非効率なので、 今迄YAMLメタデータとして仕舞っていたデータも プロパティとして保存するように変更しました。</p>
+<p>それに伴い、タイトルの取得の方法等も変わって昔の方法は使えなくなりました。 どちらにも対応することは不可能ではないでしょうが、 正直もう昔の方法を利用することは無いであろうこと・今後のメンテナンス性を 考えると非効率であることから、完全な移行をするに至りました。</p>
+<h1 data-header-args=":results raw :noweb yes" id="移行スクリプト">移行スクリプト</h1>
+<h2 id="技術選定">技術選定</h2>
+<p>今回使っていくのは</p>
+<ul>
+<li><a href="https://pandoc.org/">pandoc</a></li>
+<li><a href="https://www.nushell.sh/">nushell</a></li>
+<li>awk</li>
+<li>bash</li>
+</ul>
+<p>です</p>
+<p>以下のコード内で、便宜上コードブロックの言語を <code>sh</code> にしていますが、 一部は実際はnushellのスクリプトです。 (Emacs上でOrg babelで実行する際は、 <code>:shbang #!/bin/nu</code> の効果で nushellのスクリプトとして実行されます。)</p>
+<ol>
+<li><p>pandoc</p>
+<p>いわずと知れたフォーマット変換(等)ツール。 今回、markdown→org formatの変換を必要とするファイルもあるため必須です。 又、整形にも使います。</p></li>
+<li><p>nushell</p>
+<p>言わずと知れた‥というにはまだ早いので紹介します。 nushellは、色々な新しい面を持ちますが、今回の目的にそった紹介をする のであればデータ型を持つシェルです。 内部にリストやテーブル・日付型・サイズ型等色々な型を持つほか、 CVSやINI, TOML, ICS, XML, そして今回の本命YAML等のデータを 取り込むんことができます。</p>
+<p>今回はこのYAMLを取り込めるという機能を目的に採用しました。 YAML形式で保存されているメタデータの取り出しから、それを新しいHeadingに 整形する部分までかnushellの役割です。</p>
+<ol>
+<li><p>経緯</p>
+<p>とりあえずpandocを使うことは決定していましたが、 実はpandoc単体(フィルターなし)では「その内容を参照して あれこれする」ことができません。 というか、そういうニーズを満たすためのものがフィルターなんですが…</p>
+<p>でもフィルター書くのはちょっと面倒なんだよね… 今はYAML形式のメタデータの情報を使いたいだけなので、 テキスト処理ならawkなりsedなりあるし わざわざフィルター書く程のものでもないように感じます。</p>
+<p>なので、手軽にYAMLを使えるnushellを使ってみることにしました。</p></li>
+</ol></li>
+<li><p>awk</p>
+<p>文字列処理ならsedかawkでしょ、ということで使用。 今回は、記事からYAML形式のメタデータ部分を取得するために使用します。</p></li>
+<li><p>bash</p>
+<p>nushellで全てを書こうとしたのですが、いかんせん新しいプロジェクトなので 未だ使い勝手が整ってなかったり出来無いことがあったりします。</p>
+<p>私がnushellに慣れていない、というのもありますが、 テキストを読み込んだ時に謎にTableにされてしまい、それを頑張ってテキストに戻して… みたいなことをやるのに疲れてしまいました。 ということで、nushellの得意な部分はnushellに任せて、他の処理は手慣れたbashで 行おうということになりました。</p></li>
+</ol>
+<h2 id="1. YAML部分を取り出す">1. YAML部分を取り出す</h2>
+<p>ここは単純なテキスト処理なのでawkを使います。(もっと良い方法があれば教えてください)</p>
+<p>メタデータは <code>---</code> と <code>---</code> で囲まれているので、 「 <code>---</code> の次の行から次に <code>---</code> がくるまで」を出力します。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+awk
+</div>
+<div class="sourceCode" id="extract-yaml-metadata" data-in-file="./2021-01-03-fomantic-ui.md" data-results="raw" wrap="SRC yaml"><pre class="sourceCode awk SourceCode"><code class="sourceCode awk"><span id="extract-yaml-metadata-1"><a href="#extract-yaml-metadata-1" aria-hidden="true"></a>   <span class="cf">BEGIN</span> { inside<span class="op">=</span><span class="dv">0</span>; }</span>
+<span id="extract-yaml-metadata-2"><a href="#extract-yaml-metadata-2" aria-hidden="true"></a>   <span class="ot">/</span><span class="ss">---</span><span class="ot">/</span> {<span class="cf">if</span> (inside <span class="op">==</span> <span class="dv">0</span>) { inside<span class="op">=</span><span class="dv">1</span>; }</span>
+<span id="extract-yaml-metadata-3"><a href="#extract-yaml-metadata-3" aria-hidden="true"></a><span class="cf">else</span> { inside<span class="op">=</span><span class="dv">0</span>; };</span>
+<span id="extract-yaml-metadata-4"><a href="#extract-yaml-metadata-4" aria-hidden="true"></a><span class="kw">next</span>;</span>
+<span id="extract-yaml-metadata-5"><a href="#extract-yaml-metadata-5" aria-hidden="true"></a>   }</span>
+<span id="extract-yaml-metadata-6"><a href="#extract-yaml-metadata-6" aria-hidden="true"></a>   { <span class="cf">if</span> (inside <span class="op">==</span> <span class="dv">1</span>) { <span class="kw">print</span> <span class="dt">$0</span>; }; }</span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+yaml
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> ブログの見た目を整える</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> Cj-bc</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="fu">tags</span><span class="kw">:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> hakyll</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> ブログ</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> haskell</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> Jan 03, 2021</span></span></code></pre></div>
+</div>
+<h2 id="2. Yaml部分からメタデータを取得する">2. Yaml部分からメタデータを取得する</h2>
+<p>先程のawkスクリプトを適用してあげて…</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="bu">let</span> target = (if (<span class="va">$nu</span>.env <span class="kw">|</span> <span class="kw">select</span> <span class="ex">TARGET</span> <span class="kw">|</span> <span class="ex">empty?</span>) <span class="dt">{&quot;&quot;}</span> <span class="dt">{</span><span class="va">$nu</span><span class="dt">.env.TARGET}</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">if</span> <span class="kw">(</span><span class="va">$target</span> <span class="kw">|</span> <span class="ex">empty?</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>^<span class="ex">echo</span> <span class="st">&quot;usage: TARGET=&lt;TARGET_FILENAME&gt; blog-migration-script--createHeader.nu&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="bu">exit</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="kw">}</span> {}</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="bu">let</span> metadata = (awk <span class="st">'</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="st">&lt;&lt;extract-yaml-metadata&gt;&gt;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="st">'</span> <span class="va">$target</span> <span class="kw">|</span> <span class="ex">from</span> yaml)</span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb3" data-org-language="sh" data-tangle="no" data-shebang="#!/bin/nu"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="op">&lt;&lt;migration-script&gt;&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>echo <span class="va">$metadata</span></span></code></pre></div>
+</div>
+<p>─────────────────────────────────────────────────────────────────────── 0 ブログの見た目を整える Cj-bc [table 3 rows] Jan 03, 2021</p>
+<h2 id="3. メタデータを加工して新しいヘッダーを作成する">3. メタデータを加工して新しいヘッダーを作成する</h2>
+<p>さて、これで投稿のタイトルと諸々のデータは取れるようになりました。 あとはこれを加工して、新しいヘッダーを作成します。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb4" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>   <span class="op">&lt;&lt;nu-getAuthor&gt;&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>   &lt;&lt;nu-formatTags<span class="op">&gt;&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>   &lt;&lt;nu-formatDate<span class="op">&gt;&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>   echo $&quot;* (<span class="va">$metadata</span>.title)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>:PROPERTIES:</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>:DATE: (formatDate <span class="va">$metadata</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>:TAGS: (<span class="va">$metadata</span>.tags | reduce -f ':' { <span class="va">$acc</span> + <span class="va">$it</span> + ':' })</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>:AUTHOR: (getAuthor <span class="va">$metadata</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>:BLOG_POST_KIND: Memo</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>:BLOG_POST_PROGRESS: Published</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a>:BLOG_POST_STATUS: Normal</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a>:END:</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a>   &quot;</span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb5" data-org-language="sh" data-tangle="no"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="op">&lt;&lt;migration-script&gt;&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>echo <span class="va">$newHeading</span></span></code></pre></div>
+</div>
+<ul>
+<li>ブログの見た目を整える</li>
+</ul>
+<ol>
+<li><p>タグをOrg形式に変換する</p>
+<p>org形式のタグはタグ名を <code>:</code> で囲んだものになります。 タグ名はメタデータ内にリストとして持っているので、nushellの <code>reduce</code> コマンドで整形します。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb6" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>   <span class="ex">def</span> formatTags [tags: table] {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="va">$tags</span> <span class="kw">|</span> <span class="ex">reduce</span> -f <span class="st">':'</span> { <span class="va">$acc</span> + <span class="va">$it</span> + <span class="st">':'</span> }</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>   }</span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb7" data-org-language="sh" data-tangle="no"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="op">&lt;&lt;nu-formatTags&gt;&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>formatTags <span class="va">$metadata</span>.tags</span></code></pre></div>
+</div>
+<p>:hakyll:ブログ:haskell:</p></li>
+<li><p>記事の日付を変換する</p>
+<p>昔のフォーマットでは <code>月 日, 年</code> となっているので、これを org形式の <code>[年-月-日 曜日]</code> に変換します。</p>
+<p>最初は nushell の <code>parse</code> コマンドでパースしてうんたら…って 考えていたけれど、曜日を出す方法や月番号周りの変換に悩んでいました。 で、その間に GNU coreutils の <code>date</code> コマンド(nushellは組込みで <code>date</code> コマンド持っているが、そっちではない)が全ての仕事を出来そうだとわかったので こちらでやることにしました。</p>
+<p>GNU coreutilsの <code>date</code> コマンドはデフォルトでは現在時刻を吐きますが、 <code>--date</code> オプションに文字列を渡してあげることで別の日付にすることが可能です。 このオプションに元の文字列をセットして、それをorg形式にフォーマットしなおします。</p>
+<p>nushellでは、前述の通りそれ自体が提供している <code>date</code> コマンドが存在し、 GNU coreutilsの <code>date</code> コマンドはそのままでは使用することができません。 そのため、<a href="https://www.nushell.sh/book/escaping.html">nushell bookの"Escaping to the System"</a>を参考にコマンド名の前に <code>^</code> を付けることでnushell独自のコマンドを呼び出さず、GNU coreutilsの <code>date</code> コマンドを呼びだします。</p>
+<p>尚、GNU coreutilsの <code>date</code> コマンドは環境変数 <code>LANG</code> に応じて曜日名の 出力などを変化させます。ここでは英語表記になってほしいので <code>LANG=C</code> にしています。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb8" data-org-language="sh" data-tangle="no" data-noweb-ref="nu-formatDate"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>   <span class="ex">def</span> formatDate [metadata] {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a><span class="va">LANG=</span>C ^<span class="ex">date</span> --date <span class="st">$&quot;(</span><span class="va">$metadata</span><span class="st">.date)&quot;</span> +[%Y-%m-%d %a] <span class="kw">|</span> <span class="fu">tr</span> -d <span class="st">'\n'</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>   }</span></code></pre></div>
+</div>
+<p>"[2021-01-03 Sun]"</p></li>
+<li><p>デフォルトの筆者を設定する</p>
+<p>いくつかの記事はAUTHORが記載されていないので、 その場合はデフォルト値を使うようにしてあげます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb9" data-org-language="sh" data-tangle="no" data-noweb-ref="nu-getAuthor"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>    <span class="ex">def</span> getAuthor [metadata] {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>    <span class="kw">if</span> <span class="kw">(</span><span class="va">$metadata</span> <span class="kw">|</span> <span class="kw">select</span> <span class="ex">author</span> <span class="kw">|</span> <span class="ex">empty?</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="st">&quot;Cj-bc&quot;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>    <span class="kw">}</span> <span class="kw">{</span> <span class="va">$metadata</span><span class="ex">.author</span> <span class="kw">}</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a>    }</span></code></pre></div>
+</div></li>
+</ol>
+<h2 id="4. 元の記事を一段階下げる">4. 元の記事を一段階下げる</h2>
+<p>さて、今迄作ってきたheadingを、元の記事と組合せる前段階をします。 トップレベル(level1)のheadingは一つだけであってほしいので、 元の記事のレベルを一段階下げます。これはpandocを用いて行うことができます。</p>
+<p>但し、その前にYAMLヘッダーを取り除いてあげます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+awk
+</div>
+<div class="sourceCode" id="cb10" data-in-file="./2021-05-14-haskell-make-Ixed-instance.org" wrap="src org" data-noweb-ref="awk-trim-yaml-header"><pre class="sourceCode awk SourceCode"><code class="sourceCode awk"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>     <span class="cf">BEGIN</span> { inside<span class="op">=</span><span class="dv">0</span>; }</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>     <span class="ot">/</span><span class="ss">---</span><span class="ot">/</span> {<span class="cf">if</span> (inside <span class="op">==</span> <span class="dv">0</span>) { inside<span class="op">=</span><span class="dv">1</span>; }</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a><span class="cf">else</span> { inside<span class="op">=</span><span class="dv">2</span>; };</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="kw">next</span>;</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a>     }</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a>     { <span class="cf">if</span> (inside <span class="op">==</span> <span class="dv">2</span>) { <span class="kw">print</span> <span class="dt">$0</span>; }; }</span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+org
+</div>
+<pre class="org SourceCode"><code>
+     * ~Ixed~ とは
+
+     数学的解説はわかりませんごめんなさい。誰か補足があれば [[https://github.com/Cj-bc/blog][blogのレポジトリ]] にissueでも残してください()
+     Haskellなのでとりあえず hoogleを参照します。
+     ~Ixed~ の定義は以下の通りです
+
+     #+begin_src haskell
+class Ixed m where
+  -- |
+  -- /NB:/ Setting the value of this 'Traversal' will only set the value in
+  -- 'at' if it is already present.
+  --
+  -- If you want to be able to insert /missing/ values, you want 'at'.
+  --
+  -- &gt;&gt;&gt; Seq.fromList [a,b,c,d] &amp; ix 2 %~ f
+  -- fromList [a,b,f c,d]
+  --
+  -- &gt;&gt;&gt; Seq.fromList [a,b,c,d] &amp; ix 2 .~ e
+  -- fromList [a,b,e,d]
+  --
+  -- &gt;&gt;&gt; Seq.fromList [a,b,c,d] ^? ix 2
+  -- Just c
+  --
+  -- &gt;&gt;&gt; Seq.fromList [] ^? ix 2
+  -- Nothing
+  ix :: Index m -&gt; Traversal' m (IxValue m)
+  default ix :: At m =&gt; Index m -&gt; Traversal' m (IxValue m)
+  ix = ixAt
+  {-# INLINE ix #-}
+     #+end_src
+
+     ~Ixed~ は =Lens= の提供する型の一つで、 ~Map~ のような型の値に対して
+     値を ~traverse~ するシンプルな ~Traversal~ を提供するものです。
+
+     簡潔に言うと、
+     *リスト等の要素にLensでアクセスできるようにするやつ*
+     みたいなざっくりとした理解をしています。
+
+
+     また、これに関連するオープンな型ファミリーとして ~Index~ と ~IxValue~ があります
+
+     #+begin_src haskell
+type family Index (s :: *) :: *
+
+-- | This provides a common notion of a value at an index that is shared by both 'Ixed' and 'At'.
+type family IxValue (m :: *) :: *
+     #+end_src
+
+     ~Ixed~ において、 ~Index~ はインデックスの型、 ~IxValue~ はそこに格納されている
+     値の型です。
+
+     * 作る
+
+     とりあえず作り始めます。
+
+     前提として、今回~Ixed~のインスタンスを作るのは以下の型です。
+     元のファイルは [[https://github.com/Cj-bc/playground/blob/0fb982f28f7ab0444ffd2ad59eacc3cd904b99ba/haskell/hit-n-blow/src/HitNBlow/Type.hs#L15-20][Cj-bc/playground -- hit-n-blow]] で使われているものです。
+
+     #+begin_src haskell
+-- | Represents each Pin
+data Pin = Red | Blue | Green | White | Purple deriving (Show)
+
+-- | One Set of Pins that user will guess 
+data Lane = Lane (Maybe Pin) (Maybe Pin) (Maybe Pin) (Maybe Pin) (Maybe Pin)
+    deriving (Show)
+     #+end_src
+
+
+
+     ~Ixed~ の定義に特に制限がかかれていないので、 ~ix~ を定義することにします。
+     そのために、 ~ix~ で使用される ~Index~ と ~IxValue~ を定義することにします。
+
+     ** Index
+ ~Index~ はあまり説明がありませんが、型の情報からすると恐らく「添字に使う型」
+ の定義であろうと推測が出来ます。
+ (名前が ~Index~ であること、 ~ix~ において最初に取ること等。又、
+ 既にあるインスタンスを確認するのも良い方法だと思います。)
+
+ ~Lane~ において添字は ~Int~ です。
+
+ #+begin_src haskell
+   type instance Index Lane = Int
+ #+end_src
+
+     ** IxValue
+ 同様ですが、今度はそれぞれの中身の型を定義します。
+
+ #+begin_src haskell
+   type instance IxValue Lane = Maybe Pin
+ #+end_src
+
+     ** Ixed
+ ~Ixed~ 本体に行きます!!
+
+ ~ix~ の型は
+
+ #+begin_src haskell
+   ix :: Index m -&gt; Traversal' m (IxValue m)
+ #+end_src
+
+ で、今回は ~m~ が ~Lane~ なので具体的な型にすると
+
+ #+begin_src haskell
+   ix :: Int -&gt; Traversal' Lane (Maybe Pin)
+ #+end_src
+
+ ということになります。
+
+ で、 ~Lens~ 少ししか分からんので一つ疑問が浮かびます
+
+ *&gt;&gt;&gt;&gt;&gt; ~Traversal'~ ってナニよ!!!!! &lt;&lt;&lt;&lt;&lt;*
+
+     ** Traversal' ってナニよ!
+
+ はい。名前は知ってるけど使い方良く分からずに放置してた子ですね。
+ 定義によると
+
+ #+begin_src haskell
+   type Traversal' s a = Traversal s s a a
+
+   type Traversal s t a b = forall f. Applicative f =&gt; (a -&gt; f b) -&gt; s -&gt; f t
+ #+end_src
+
+ ついでなので [[https://hackage.haskell.org/package/lens-5.0.1/docs/Control-Lens-Type.html#t:Traversal][~Traversal~]] の定義も載せておきました。
+ ~Lens~ と同じように、実体はただの関数ですね。
+
+ ~Lens~ よりも制限の緩い型で ~Traversable~ の型関数である ~traverse~ の一般化らしいです。
+ しっかりと理解はしていないが、まぁ型を考えれば作れてしまうのでとりあえずは
+ ふんわりと掴んだ状態で作ってみます。
+
+ あ、ちなみに ~Traversal'~ は単純に、値の更新等した時に型が変化しないものですね。
+
+ 参考:
+
+ - [[https://fumieval.hatenablog.com/entry/2015/07/14/223329][lensパッケージのオプティクス(弱い順) -- モナドとわたしとコモナド]]
+
+     ** ~ix~ を作る
+ さて、 ~Traversal'~ がわかったので ~ix~ を作れ(る気がし)ます。
+ ~Traversal'~ を置き換えてみると:
+
+ #+begin_src haskell
+   ix :: Int -&gt; Traversa' Lane (Maybe Pin)
+   ix :: Int -&gt; Traversal Lane Lane (Maybe Pin) (Maybe Pin)
+   ix :: Int -&gt; (forall f. Applicative f =&gt; (Maybe Pin -&gt; f (Maybe Pin) -&gt; Lane -&gt; f Lane
+ #+end_src
+
+ となります(forallの位置は少し自信がないけど多分あってる)
+
+ ~Int~ は元々 ~Index m~ だった部分なので、今興味のあるインデックス(に該当する数字)が来るのがわかります。
+
+ 又、元の ~Traversal'~ の部分も要は「中身( ~Maybe Pin~ )に作用する関数を受け取り、作用させた
+ 結果を返す」わけなので、その通りに実装します。
+
+ #+begin_src haskell
+   instance Ixed Lane where
+     ix 1 = \g l@(Lane a b c d e) -&gt; Lane &lt;$&gt; g a &lt;*&gt; b &lt;*&gt; c &lt;*&gt; d &lt;*&gt; e
+     ix 2 = \g l@(Lane a b c d e) -&gt; Lane a &lt;$&gt; g b &lt;*&gt; c &lt;*&gt; d &lt;*&gt; e
+     ix 3 = \g l@(Lane a b c d e) -&gt; Lane a b &lt;$&gt; g c &lt;*&gt; d &lt;*&gt; e
+     ix 4 = \g l@(Lane a b c d e) -&gt; Lane a b c &lt;$&gt; g d &lt;*&gt; e
+     ix 5 = \g l@(Lane a b c d e) -&gt; Lane a b c d &lt;$&gt; g e
+     ix _ = \_ l -&gt; pure l
+ #+end_src
+
+ 多分動いた!!
+</code></pre>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="pandocを用いたheadingレベル下げの例" data-org-language="sh" data-shbang="#!/bin/bash" data-tangle="no"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="pandocを用いたheadingレベル下げの例-1"><a href="#pandocを用いたheadingレベル下げの例-1" aria-hidden="true"></a>     <span class="ex">pandoc</span> -f org --shift-heading-level-by=1 -t org <span class="op">&lt;(</span><span class="bu">echo</span> <span class="st">&quot;</span></span>
+<span id="pandocを用いたheadingレベル下げの例-2"><a href="#pandocを用いたheadingレベル下げの例-2" aria-hidden="true"></a><span class="st">     * Leve1 header example</span></span>
+<span id="pandocを用いたheadingレベル下げの例-3"><a href="#pandocを用いたheadingレベル下げの例-3" aria-hidden="true"></a><span class="st">hello!</span></span>
+<span id="pandocを用いたheadingレベル下げの例-4"><a href="#pandocを用いたheadingレベル下げの例-4" aria-hidden="true"></a></span>
+<span id="pandocを用いたheadingレベル下げの例-5"><a href="#pandocを用いたheadingレベル下げの例-5" aria-hidden="true"></a><span class="st">     ** Inner level2 header</span></span>
+<span id="pandocを用いたheadingレベル下げの例-6"><a href="#pandocを用いたheadingレベル下げの例-6" aria-hidden="true"></a><span class="st">     &quot;</span><span class="op">)</span></span>
+<span id="pandocを用いたheadingレベル下げの例-7"><a href="#pandocを用いたheadingレベル下げの例-7" aria-hidden="true"></a></span></code></pre></div>
+</div>
+<p>** Leve1 header example</p>
+<p>hello!</p>
+<p><strong>*</strong> Inner level2 header</p>
+<h2 id="5. 3.と4.を組み合わせる">5. 3.と4.を組み合わせる</h2>
+<p>ここからはbashを使います。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb12" data-org-language="sh" data-shebang="#!/bin/bash"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>   [[ <span class="ex">-z</span> <span class="va">$1</span> ]] <span class="kw">&amp;&amp;</span> <span class="kw">{</span> <span class="bu">echo</span> <span class="st">&quot;usage: migration-script.sh TARGETFILE&quot;</span><span class="kw">;</span> <span class="bu">exit</span><span class="kw">;</span> <span class="kw">}</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>   <span class="va">target=$1</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a>   <span class="va">extensions=(</span>emoji task_lists</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a> <span class="ex">backtick_code_blocks</span> fenced_code_attributes</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a> <span class="ex">header_attributes</span> raw_html</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true"></a>   <span class="kw">function</span><span class="fu"> formatExtension()</span> <span class="kw">{</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;+</span><span class="va">${extensions[@]}</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="st">' '</span> <span class="st">'+'</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true"></a>   <span class="kw">}</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true"></a>   <span class="va">format=$(filename=($(</span><span class="bu">echo</span> <span class="va">$target</span> <span class="kw">|</span> <span class="fu">tr</span> -s <span class="st">'.'</span> <span class="st">' '</span><span class="va">))</span>;</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true"></a>     <span class="kw">case</span> <span class="st">&quot;</span><span class="va">${filename[-1]}</span><span class="st">&quot;</span><span class="kw"> in</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true"></a>  <span class="st">&quot;md&quot;</span><span class="kw">)</span> <span class="bu">echo</span> <span class="st">&quot;markdown</span><span class="va">$(</span><span class="ex">formatExtension</span><span class="va">)</span><span class="st">&quot;</span><span class="kw">;;</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true"></a>  <span class="ex">*</span>) <span class="bu">echo</span> <span class="st">&quot;org&quot;</span><span class="kw">;;</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true"></a>     <span class="kw">esac</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true"></a>  <span class="va">)</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true"></a>   <span class="fu">cat</span> <span class="op">&lt;(</span><span class="va">TARGET=$target</span> <span class="ex">./blog-migration-script--createHeader.nu</span><span class="op">)</span> <span class="op">&lt;(</span><span class="fu">awk</span> <span class="st">'</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true"></a><span class="st">   &lt;&lt;awk-trim-yaml-header&gt;&gt;</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true"></a><span class="st">   '</span> <span class="va">$target</span> <span class="kw">|</span> <span class="ex">pandoc</span> -f <span class="st">&quot;</span><span class="va">${format}</span><span class="st">&quot;</span> --shift-heading-level-by=1 -t org<span class="op">)</span></span></code></pre></div>
+</div>
+<p>usage: migration-script.sh TARGETFILE</p>
+<ol>
+<li><p>ここでnushellを使わなかった理由</p>
+<p>nushellの <code>echo</code> はListで出力してくるので、 GNU coreutilsの <code>echo</code> を使います。 又、 <code>^echo $newHeading (pandoc...)</code> だと <code>$newHeading</code> と <code>(pandoc...)</code> の間に改行が作成されず、 <code>$newHeading</code> の後ろに空行を追加して おいてもなんか消されてしまうので以下のような方法を取っています。</p></li>
+</ol>
+<h2 id="7. 全ファイルに対して実行する">7. 全ファイルに対して実行する</h2>
+<p>あとはこれを全てのファイルに対して実行してあげれば良いわけです! <em>これまでの遷移</em>から、 2021/05/19以前の投稿が古いフォーマットを使用している ことがわかるので、それ以前のファイルのみを探し出します。</p>
+<p>この取得はちょっと面倒で、昔のファイルでも最近変更していたりするので <code>find</code> コマンドが使えません( <code>-newer</code> 系を使いたいが、一定の日付より前のみに 変更しているという根拠はない)。 しかし、私のブログは(ありがたいことに)ファイル名が日付で始まっているので、それをglob展開して取得することにします。</p>
+<p>そしてその各ファイルに先程のスクリプトを適用してあげて、変形します。</p>
+<ol>
+<li><p>まずはGit管理されているファイルに実行する</p>
+<p>ただ、念の為にまずはGitにコミットされているファイルのみを対象にします。コミットさえされていれば失敗しても大丈夫なので… Gitに認識されていないファイルは <code class="sourceCode bash" data-org-language="sh"><span class="fu">git</span> status --short FILENAME</code> が <code>?? &lt;ファイル名&gt;</code> となるので、それを使って 判定します。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb13" data-org-language="sh" wrap="accordion"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a>   <span class="kw">function</span><span class="fu"> filter</span> <span class="kw">{</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="bu">local</span> <span class="va">filterFunction=$1</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a><span class="kw">while</span> <span class="bu">read</span> <span class="va">candidate</span>; <span class="kw">do</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a>    <span class="va">$filterFunction</span> <span class="st">&quot;</span><span class="va">$candidate</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a>      <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$candidate</span><span class="st">&quot;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a><span class="kw">done</span> <span class="op">&lt;</span> <span class="op">&lt;(</span><span class="fu">cat</span> /dev/stdin<span class="op">)</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true"></a>   <span class="kw">}</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true"></a>   <span class="kw">function</span><span class="fu"> map</span> <span class="kw">{</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true"></a><span class="bu">local</span> <span class="va">f=$1</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true"></a><span class="kw">while</span> <span class="bu">read</span> <span class="va">target</span>; <span class="kw">do</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true"></a>    <span class="va">$f</span> <span class="st">&quot;</span><span class="va">$target</span><span class="st">&quot;</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true"></a><span class="kw">done</span> <span class="op">&lt;</span> <span class="op">&lt;(</span><span class="fu">cat</span> /dev/stdin<span class="op">)</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true"></a>   <span class="kw">}</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true"></a>   <span class="kw">function</span><span class="fu"> filterGitKnownFile</span> <span class="kw">{</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true"></a><span class="bu">local</span> <span class="va">filename=$1</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true"></a></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true"></a><span class="bu">local</span> <span class="va">gitStatusResult=</span><span class="st">&quot;</span><span class="va">$(</span><span class="fu">git</span> status --short <span class="va">$filename)</span><span class="st">&quot;</span> </span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true"></a><span class="kw">[[</span> <span class="ot">!</span> <span class="st">&quot;</span><span class="va">$gitStatusResult</span><span class="st">&quot;</span><span class="kw"> ]]</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true"></a>   <span class="kw">}</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true"></a></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true"></a>   <span class="kw">function</span><span class="fu"> convertFile</span> <span class="kw">{</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true"></a><span class="bu">local</span> <span class="va">target=$1</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true"></a><span class="ex">./migration-script.sh</span> <span class="va">$target</span> <span class="op">&gt;</span> <span class="va">${target}</span>.new</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true"></a><span class="fu">mv</span> <span class="va">${target}</span>.new <span class="va">$target</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true"></a>   <span class="kw">}</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true"></a></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true"></a>   <span class="kw">set</span> <span class="ex">-e</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true"></a>   <span class="fu">ls</span> 2020-* 2021-0<span class="dt">{1,2,3,4}</span>* <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;\(md\|org\)$&quot;</span> <span class="kw">|</span> <span class="ex">filter</span> <span class="st">&quot;filterGitKnownFile&quot;</span>  <span class="kw">|</span> <span class="ex">map</span> convertFile</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true"></a>   <span class="ex">convertFile</span> 2021-05-04-xmonad-use-stack-for-compile.org</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true"></a>   <span class="ex">convertFile</span> 2021-05-10-xmonad-list-of-layouts.org </span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true"></a></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true"></a>   <span class="bu">echo</span> <span class="st">&quot;Finished!&quot;</span></span></code></pre></div>
+</div>
+<div class="accordion">
+<p>Finished!</p>
+</div></li>
+</ol>
+<h2 id="8.">8.</h2>
+
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

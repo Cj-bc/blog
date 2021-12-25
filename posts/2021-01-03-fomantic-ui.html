@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- コードブロックの整形</title>
+        <title>CLI! CLI! CLI! -- ブログの見た目を整える</title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -33,25 +33,24 @@
 
         <div id="content" class="ui text container segment">
             <div class="ui center aligned icon header">
-  <h1>コードブロックの整形</h1>
+  <h1>ブログの見た目を整える</h1>
   <div class="ui list">
     <div class="item">Posted on January  3, 2021</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on January  5, 2021
+      Updated on December 24, 2021
     </div>
   </div>
-    
-        by Cj-bc
     
 </div>
 <div class="info">
   
-  <a title="All pages tagged 'hakyll'." href="../tags/hakyll.html" class="ui tag label">hakyll</a><a title="All pages tagged 'ブログ'." href="../tags/%E3%83%96%E3%83%AD%E3%82%B0.html" class="ui tag label">ブログ</a><a title="All pages tagged 'haskell'." href="../tags/haskell.html" class="ui tag label">haskell</a>
+  
   
 </div>
 
-<p>今まで、コードブロックは酷い見た目でした。 <img src="../images/2021-01-03-fomantic-ui/old-codeblock.png" class="ui rounded image" alt="前までのコードブロック" /></p>
+<h1 id="コードブロックの整形">コードブロックの整形</h1>
+<p>今まで、コードブロックは酷い見た目でした。 <img src="file:///images/old-codeblock.png" class="ui rounded image" /></p>
 <p>現在は以下のように表示されるようになりました！</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -60,68 +59,76 @@ haskell
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="fu">putStrLn</span> <span class="st">&quot;Hello world!&quot;</span></span></code></pre></div>
 </div>
-<h1 id="やったこと">やったこと</h1>
+<h2 id="やったこと">やったこと</h2>
 <p>ここでは、以下のFomantic-UI要素を使用しました。</p>
 <ul>
 <li>Segment</li>
 <li>Attached label</li>
 </ul>
-<p>又、各コードブロックに同じ処理をするために、Hakyllの<code>pandocCompilerWithTransform</code>を使用しています。 syntaxhilightは<a href="https://stackoverflow.com/a/43699538"><code>Hakyll</code>に合わせて</a><code>Highlight.js</code>を使用しています。</p>
-<h2 id="最終的なHTML">最終的なHTML</h2>
+<p>又、各コードブロックに同じ処理をするために、Hakyllの=pandocCompilerWithTransform=を使用しています。 syntaxhilightは<a href="https://stackoverflow.com/a/43699538">=Hakyll=に合わせて</a>=Highlight.js=を使用しています。</p>
+<ol>
+<li><p>最終的なHTML</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-html
+example
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode html SourceCode"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;ui segment&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    <span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;ui top right attached label&quot;</span><span class="kw">&gt;</span> haskell <span class="kw">&lt;/div&gt;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>    <span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;sourceCode&quot;</span><span class="ot"> id=</span><span class="st">&quot;cb1&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>        <span class="kw">&lt;pre</span><span class="ot"> class=</span><span class="st">&quot;sourceCode haskell SourceCode&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>            <span class="kw">&lt;code</span><span class="ot"> class=</span><span class="st">&quot;sourceCode haskell hljs bash&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>                <span class="kw">&lt;span</span><span class="ot"> id=</span><span class="st">&quot;cb1-1&quot;</span><span class="kw">&gt;&lt;a</span><span class="ot"> href=</span><span class="st">&quot;#cb1-1&quot;</span><span class="ot"> aria-hidden=</span><span class="st">&quot;true&quot;</span><span class="kw">&gt;&lt;/a&gt;</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>                    main</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>                    <span class="kw">&lt;span</span><span class="ot"> class=</span><span class="st">&quot;ot&quot;</span><span class="kw">&gt;</span>=<span class="kw">&lt;/span&gt;</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>                    <span class="kw">&lt;span</span><span class="ot"> class=</span><span class="st">&quot;kw&quot;</span><span class="kw">&gt;&lt;span</span><span class="ot"> class=</span><span class="st">&quot;hljs-keyword&quot;</span><span class="kw">&gt;</span>do<span class="kw">&lt;/span&gt;&lt;/span&gt;</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>                <span class="kw">&lt;/span&gt;</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>                <span class="kw">&lt;span</span><span class="ot"> id=</span><span class="st">&quot;cb1-2&quot;</span><span class="kw">&gt;&lt;a</span><span class="ot"> href=</span><span class="st">&quot;#cb1-2&quot;</span><span class="ot"> aria-hidden=</span><span class="st">&quot;true&quot;</span><span class="kw">&gt;&lt;/a&gt;</span>    </span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>                    <span class="kw">&lt;span</span><span class="ot"> class=</span><span class="st">&quot;fu&quot;</span><span class="kw">&gt;</span>putStrLn<span class="kw">&lt;/span&gt;</span> </span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>                    <span class="kw">&lt;span</span><span class="ot"> class=</span><span class="st">&quot;st&quot;</span><span class="kw">&gt;&lt;span</span><span class="ot"> class=</span><span class="st">&quot;hljs-string&quot;</span><span class="kw">&gt;</span>&quot;Hello world!&quot;<span class="kw">&lt;/span&gt;&lt;/span&gt;</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>                <span class="kw">&lt;/span&gt;</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a>            <span class="kw">&lt;/code&gt;</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a>        <span class="kw">&lt;/pre&gt;</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>    <span class="kw">&lt;/div&gt;</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
-</div>
-<h2 id="pandocCompilerWithTransformを使用した処理"><code>pandocCompilerWithTransform</code>を使用した処理</h2>
-<p><code>pandocCompilerWithTransform</code>は<code>pandocCompiler</code>の一種で、Markdownなどを<code>Pandoc</code>型に変換しその値をいじることができます。 <code>Pandoc</code>型には便利な型クラス<code>Walkable</code>があるので、これを使用します。</p>
-<p><code>Walkable</code>とは、「値の中を歩き、各子要素を与えられた関数に適用して置き換える」ような処理をします。</p>
-<ul class="task-list">
-<li><input type="checkbox" disabled />
-WIP</li>
-</ul>
-<h2 id="右上に拡張子を表示する">右上に拡張子を表示する</h2>
-<p>右上に拡張子を表示するために使われているのが、<a href="https://fomantic-ui.com/elements/label.html#attached">attached label</a>です。 注意する点として、これは「コードブロックとは別の<code>div</code>として使用する」必要があります。</p>
-<h2 id="親Divにsegmentを設定する">親<code>Div</code>に<code>segment</code>を設定する</h2>
-<p><code>code</code>ブロックの親の<code>Div</code>に、<code>class="ui segment"</code>を設定してください。 (他の要素はあっても大丈夫だと思いますが、とにかく<a href="https://fomantic-ui.com/elements/segment.html">segment</a>が必要です。)<br />
+<pre class="example SourceCode"><code>&lt;div class=&quot;ui segment&quot;&gt;
+    &lt;div class=&quot;ui top right attached label&quot;&gt; haskell &lt;/div&gt;
+    &lt;div class=&quot;sourceCode&quot; id=&quot;cb1&quot;&gt;
+        &lt;pre class=&quot;sourceCode haskell SourceCode&quot;&gt;
+            &lt;code class=&quot;sourceCode haskell hljs bash&quot;&gt;
+                &lt;span id=&quot;cb1-1&quot;&gt;&lt;a href=&quot;#cb1-1&quot; aria-hidden=&quot;true&quot;&gt;&lt;/a&gt;
+                    main
+                    &lt;span class=&quot;ot&quot;&gt;=&lt;/span&gt;
+                    &lt;span class=&quot;kw&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;do&lt;/span&gt;&lt;/span&gt;
+                &lt;/span&gt;
+                &lt;span id=&quot;cb1-2&quot;&gt;&lt;a href=&quot;#cb1-2&quot; aria-hidden=&quot;true&quot;&gt;&lt;/a&gt;    
+                    &lt;span class=&quot;fu&quot;&gt;putStrLn&lt;/span&gt; 
+                    &lt;span class=&quot;st&quot;&gt;&lt;span class=&quot;hljs-string&quot;&gt;&quot;Hello world!&quot;&lt;/span&gt;&lt;/span&gt;
+                &lt;/span&gt;
+            &lt;/code&gt;
+        &lt;/pre&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+</div></li>
+<li><p>=pandocCompilerWithTransform=を使用した処理</p>
+<p>=pandocCompilerWithTransform=は=pandocCompiler=の一種で、Markdownなどを=Pandoc=型に変換しその値をいじることができます。 =Pandoc=型には便利な型クラス=Walkable=があるので、これを使用します。</p>
+<p>=Walkable=とは、「値の中を歩き、各子要素を与えられた関数に適用して置き換える」ような処理をします。</p>
+<ul>
+<li>[ ] WIP</li>
+</ul></li>
+<li><p>右上に拡張子を表示する</p>
+<p>右上に拡張子を表示するために使われているのが、<a href="https://fomantic-ui.com/elements/label.html#attached">attached label</a>です。 注意する点として、これは「コードブロックとは別の=div=として使用する」必要があります。</p></li>
+<li><p>親=Div=に=segment=を設定する</p>
+<p><code>code=ブロックの親の=Div=に、=class</code>"ui segment"=を設定してください。 (他の要素はあっても大丈夫だと思いますが、とにかく<a href="https://fomantic-ui.com/elements/segment.html">segment</a>が必要です。)<br />
 尚、きちんと調べているわけではないので、他のものでも代用できるのかもしれません。</p>
-<p><img src="../images/2021-01-03-fomantic-ui/attached-label-wraped-in-segment.png" class="ui rounded image" alt="segmentがある場合" /> <em>(赤丸は注釈)</em></p>
-<p>これをしない場合、ひとまわり上の<code>segment</code>、どこにもない場合webページの右上にこのラベルが表示されることになります。</p>
-<p><img src="../images/2021-01-03-fomantic-ui/attached-label-not-wraped-in-segment.png" class="ui rounded image" alt="segmentがない場合" /> <em>(赤丸は注釈)</em></p>
-<h2 id="テキストの折り返し">テキストの折り返し</h2>
-<p>これはシンプルにCSSの<code>overflow:auto</code>を使っています。</p>
-<p>画像の整形</p>
+<p><img src="file:///images/attached-label-wraped-in-segment.png" class="ui rounded image ui rounded image" /> <em>(赤丸は注釈)</em></p>
+<p>これをしない場合、ひとまわり上の=segment=、どこにもない場合webページの右上にこのラベルが表示されることになります。</p>
+<p><img src="file:///images/attached-label-not-wraped-in-segment.png" class="ui rounded image ui rounded image" /> <em>(赤丸は注釈)</em></p></li>
+<li><p>テキストの折り返し</p>
+<p>これはシンプルにCSSの=overflow:auto=を使っています。</p></li>
+</ol>
+<h1 id="画像の整形">画像の整形</h1>
 <p>これまでは画像が正しいサイズになっておらず、このようになっていました。</p>
-<p><img src="../images/2021-01-03-fomantic-ui/old-image-view.png" class="ui rounded image" alt="昔の画像表示" /></p>
+<figure>
+<img src="file:///images/old-image-view.png" class="ui rounded image" alt /><figcaption>昔の画像表示</figcaption>
+</figure>
 <p>現在は、この画像のようになっています。</p>
-<p><img src="../images/2021-01-03-fomantic-ui/current-image.view.png" class="ui rounded image" alt="今の画像表示" /></p>
-<h1 id="ui image"><code>ui image</code></h1>
-<p><code>ui image</code>を使うことで、親のSegment以内に納めてくれます。<br />
-又それにプラスして<code>rounded</code>をつけることで角を丸めています。 (最終的には<code>ui rounded image</code>となりました)</p>
-<p>メニューの作成</p>
-<p>画面上部にあるメニューを作成しました。 これは主に<code>ui menu</code>を使っています。 それに追加して、viewportの上部に固定するために<code>fixed</code>を、色を反転させるために<code>inverted</code>をつけています。</p>
-<h1 id="コンテンツの内容がかぶらないようにする">コンテンツの内容がかぶらないようにする</h1>
-<p><code>fixed</code>を使った場合、そのままでは下のdiv(このサイトではidとして<code>content</code>を持つdiv)の内容に被ってしまいます。</p>
-<p><img src="../images/2021-01-03-fomantic-ui/fixed-menu-without-margin.png" class="ui rounded image" alt="何も対処しない場合" /></p>
-<p>そこで、<code>content</code> divに<code>margin-top: 5em</code>を適用しています。<br />
+<figure>
+<img src="file:///images/current-image.view.png" class="ui rounded image" alt /><figcaption>今の画像表示</figcaption>
+</figure>
+<h2 id="ui-image"><code>ui image</code></h2>
+<p>=ui image=を使うことで、親のSegment以内に納めてくれます。<br />
+又それにプラスして=rounded=をつけることで角を丸めています。 (最終的には=ui rounded image=となりました)</p>
+<h1 id="メニューの作成">メニューの作成</h1>
+<p>画面上部にあるメニューを作成しました。 これは主に=ui menu=を使っています。 それに追加して、viewportの上部に固定するために=fixed=を、色を反転させるために=inverted=をつけています。</p>
+<h2 id="コンテンツの内容がかぶらないようにする">コンテンツの内容がかぶらないようにする</h2>
+<p>=fixed=を使った場合、そのままでは下のdiv(このサイトではidとして=content=を持つdiv)の内容に被ってしまいます。</p>
+<figure>
+<img src="file:///images/fixed-menu-without-margin.png" class="ui rounded image" alt /><figcaption>何も対処しない場合</figcaption>
+</figure>
+<p>そこで、=content= divに=margin-top: 5em=を適用しています。<br />
 尚これは、同じ構成をしていた<a href="https://fomantic-ui.com/collections/menu.html">Fomantic-UIのモバイルページ</a>での設定値をそのまま持ってきています。 (モバイル端末で見るか、ブラウザの横幅を狭めれば見えると思います)</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -131,17 +138,18 @@ css
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    <span class="kw">margin-top</span>: <span class="dv">5</span><span class="dt">em</span><span class="op">;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>}</span></code></pre></div>
 </div>
-<h1 id="Feedのリンクを右づめにする">Feedのリンクを右づめにする</h1>
-<p><code>menu</code>の中にある<code>item</code>に、<code>right</code>と入れるだけでそこから下の<code>item</code>全てが右詰になります。 このサイトだと以下のようになっています。</p>
+<h2 id="feedのリンクを右づめにする">Feedのリンクを右づめにする</h2>
+<p>=menu=の中にある=item=に、=right=と入れるだけでそこから下の=item=全てが右詰になります。 このサイトだと以下のようになっています。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-html
+example
 </div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode html SourceCode"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;header&quot;</span><span class="ot"> class=</span><span class="st">&quot;ui fixed inverted menu&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>    <span class="co">&lt;!-- 省略 --&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>    <span class="kw">&lt;a</span><span class="ot"> href=</span><span class="st">&quot;/feeds/atom/general.xml&quot;</span><span class="ot"> class=</span><span class="st">&quot;right item&quot;</span><span class="kw">&gt;</span>Atom feed<span class="kw">&lt;/a&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>    <span class="kw">&lt;a</span><span class="ot"> href=</span><span class="st">&quot;/feeds/rss/general.xml&quot;</span><span class="ot"> class=</span><span class="st">&quot;item&quot;</span><span class="kw">&gt;&lt;i</span><span class="ot"> class=</span><span class="st">&quot;rss icon&quot;</span><span class="kw">&gt;&lt;/i&gt;&lt;/a&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
+<pre class="example SourceCode"><code>&lt;div id=&quot;header&quot; class=&quot;ui fixed inverted menu&quot;&gt;
+    &lt;!-- 省略 --&gt;
+    &lt;a href=&quot;/feeds/atom/general.xml&quot; class=&quot;right item&quot;&gt;Atom feed&lt;/a&gt;
+    &lt;a href=&quot;/feeds/rss/general.xml&quot; class=&quot;item&quot;&gt;&lt;i class=&quot;rss icon&quot;&gt;&lt;/i&gt;&lt;/a&gt;
+&lt;/div&gt;
+</code></pre>
 </div>
 
         </div>

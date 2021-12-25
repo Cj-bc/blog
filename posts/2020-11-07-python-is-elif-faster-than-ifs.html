@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- </title>
+        <title>CLI! CLI! CLI! -- pythonのelifはifよりも速いのか</title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -33,23 +33,23 @@
 
         <div id="content" class="ui text container segment">
             <div class="ui center aligned icon header">
-  <h1></h1>
+  <h1>pythonのelifはifよりも速いのか</h1>
   <div class="ui list">
     <div class="item">Posted on November  7, 2020</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on November  7, 2020
+      Updated on December 24, 2021
     </div>
   </div>
     
 </div>
 <div class="info">
   
-  <a title="All pages tagged 'python'." href="../tags/python.html" class="ui tag label">python</a><a title="All pages tagged '検証'." href="../tags/%E6%A4%9C%E8%A8%BC.html" class="ui tag label">検証</a>
+  
   
 </div>
 
-<p>一つの変数に対して、複数の条件で分岐させたい時時、大抵は<code>elif</code>を使って以下のように書くと思います。</p>
+<p>一つの変数に対して、複数の条件で分岐させたい時時、大抵は=elif=を使って以下のように書くと思います。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 python
@@ -70,453 +70,462 @@ python
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    ...</span></code></pre></div>
 </div>
 <p>直感的に、nの値によってはelifの方がif文の実行回数が少なくなるため速そうに思えますが、本当にそうなのか気になったので試してみます。</p>
-<p>tl;dr</p>
+<h1 id="tldr">tl;dr</h1>
 <p>速いぽい</p>
-<p>条件</p>
+<h1 id="条件">条件</h1>
 <p>pythonは3.7.4、if文の中身が同じものだと最適化がかかったりしないか怖かったのでそれぞれ違う出力をするprint文を入れます。 elifの数は適当に多めにしておきました。 また、1000回実行した平均の速度を表示するようにしました。</p>
-<p>測定に使ったコード</p>
+<h1 id="測定に使ったコード">測定に使ったコード</h1>
 <p>長いので</p>
-<details><summary>測定コード</summary>
-```
-import time
+<details>
+
+<summary>
+
+<p>測定コード</p>
+</summary>
+
+<div class="ui segment">
+<div class="ui top right attached label">
+example
+</div>
+<pre class="example SourceCode"><code>import time
 
 a = 100
 
 # without elif {{{
 def f_without_elif():
-    if a < 10:
-        print("10")
-    if 10 <= a < 20:
-        print("20")
-    if 20 <= a < 30:
-        print("30")
-    if 30 <= a < 40:
-        print("40")
-    if 40 <= a < 50:
-        print("50")
-    if 50 <= a < 60:
-        print("60")
-    if 60 <= a < 70:
-        print("70")
-    if 70 <= a < 80:
-        print("80")
-    if 80 <= a < 90:
-        print("90")
-    if 90 <= a < 100:
-        print("100")
-    if 100 <= a < 110:
-        print("110")
-    if 110 <= a < 120:
-        print("120")
-    if 120 <= a < 130:
-        print("130")
-    if 130 <= a < 140:
-        print("140")
-    if 140 <= a < 150:
-        print("150")
-    if 150 <= a < 160:
-        print("160")
-    if 160 <= a < 170:
-        print("170")
-    if 170 <= a < 180:
-        print("180")
-    if 180 <= a < 190:
-        print("190")
-    if 190 <= a < 200:
-        print("200")
-    if 200 <= a < 210:
-        print("210")
-    if 210 <= a < 220:
-        print("220")
-    if 220 <= a < 230:
-        print("230")
-    if 230 <= a < 240:
-        print("240")
-    if 240 <= a < 250:
-        print("250")
-    if 250 <= a < 260:
-        print("260")
-    if 260 <= a < 270:
-        print("270")
-    if 270 <= a < 280:
-        print("280")
-    if 280 <= a < 290:
-        print("290")
-    if 290 <= a < 300:
-        print("300")
-    if 300 <= a < 310:
-        print("310")
-    if 310 <= a < 320:
-        print("320")
-    if 320 <= a < 330:
-        print("330")
-    if 330 <= a < 340:
-        print("340")
-    if 340 <= a < 350:
-        print("350")
-    if 350 <= a < 360:
-        print("360")
-    if 360 <= a < 370:
-        print("370")
-    if 370 <= a < 380:
-        print("380")
-    if 380 <= a < 390:
-        print("390")
-    if 390 <= a < 400:
-        print("400")
-    if 400 <= a < 410:
-        print("410")
-    if 410 <= a < 420:
-        print("420")
-    if 420 <= a < 430:
-        print("430")
-    if 430 <= a < 440:
-        print("440")
-    if 440 <= a < 450:
-        print("450")
-    if 450 <= a < 460:
-        print("460")
-    if 460 <= a < 470:
-        print("470")
-    if 470 <= a < 480:
-        print("480")
-    if 480 <= a < 490:
-        print("490")
-    if 490 <= a < 500:
-        print("500")
-    if 500 <= a < 510:
-        print("510")
-    if 510 <= a < 520:
-        print("520")
-    if 520 <= a < 530:
-        print("530")
-    if 530 <= a < 540:
-        print("540")
-    if 540 <= a < 550:
-        print("550")
-    if 550 <= a < 560:
-        print("560")
-    if 560 <= a < 570:
-        print("570")
-    if 570 <= a < 580:
-        print("580")
-    if 580 <= a < 590:
-        print("590")
-    if 590 <= a < 600:
-        print("600")
-    if 600 <= a < 610:
-        print("610")
-    if 610 <= a < 620:
-        print("620")
-    if 620 <= a < 630:
-        print("630")
-    if 630 <= a < 640:
-        print("640")
-    if 640 <= a < 650:
-        print("650")
-    if 650 <= a < 660:
-        print("660")
-    if 660 <= a < 670:
-        print("670")
-    if 670 <= a < 680:
-        print("680")
-    if 680 <= a < 690:
-        print("690")
-    if 690 <= a < 700:
-        print("700")
-    if 700 <= a < 710:
-        print("710")
-    if 710 <= a < 720:
-        print("720")
-    if 720 <= a < 730:
-        print("730")
-    if 730 <= a < 740:
-        print("740")
-    if 740 <= a < 750:
-        print("750")
-    if 750 <= a < 760:
-        print("760")
-    if 760 <= a < 770:
-        print("770")
-    if 770 <= a < 780:
-        print("780")
-    if 780 <= a < 790:
-        print("790")
-    if 790 <= a < 800:
-        print("800")
-    if 800 <= a < 810:
-        print("810")
-    if 810 <= a < 820:
-        print("820")
-    if 820 <= a < 830:
-        print("830")
-    if 830 <= a < 840:
-        print("840")
-    if 840 <= a < 850:
-        print("850")
-    if 850 <= a < 860:
-        print("860")
-    if 860 <= a < 870:
-        print("870")
-    if 870 <= a < 880:
-        print("880")
-    if 880 <= a < 890:
-        print("890")
-    if 890 <= a < 900:
-        print("900")
-    if 900 <= a < 910:
-        print("910")
-    if 910 <= a < 920:
-        print("920")
-    if 920 <= a < 930:
-        print("930")
-    if 930 <= a < 940:
-        print("940")
-    if 940 <= a < 950:
-        print("950")
-    if 950 <= a < 960:
-        print("960")
-    if 960 <= a < 970:
-        print("970")
-    if 970 <= a < 980:
-        print("980")
-    if 980 <= a < 990:
-        print("990")
-    if 990 <= a < 1000:
-        print("1000")
-    if 1000 <= a < 1010:
-        print("1010")
-    if 1010 <= a < 1020:
-        print("1020")
-    if 1020 <= a < 1030:
-        print("1030")
-    if 1030 <= a < 1040:
-        print("1040")
-    if 1040 <= a < 1050:
-        print("1050")
-    if 1050 <= a < 1060:
-        print("1060")
-    if 1060 <= a < 1070:
-        print("1070")
+    if a &lt; 10:
+        print(&quot;10&quot;)
+    if 10 &lt;= a &lt; 20:
+        print(&quot;20&quot;)
+    if 20 &lt;= a &lt; 30:
+        print(&quot;30&quot;)
+    if 30 &lt;= a &lt; 40:
+        print(&quot;40&quot;)
+    if 40 &lt;= a &lt; 50:
+        print(&quot;50&quot;)
+    if 50 &lt;= a &lt; 60:
+        print(&quot;60&quot;)
+    if 60 &lt;= a &lt; 70:
+        print(&quot;70&quot;)
+    if 70 &lt;= a &lt; 80:
+        print(&quot;80&quot;)
+    if 80 &lt;= a &lt; 90:
+        print(&quot;90&quot;)
+    if 90 &lt;= a &lt; 100:
+        print(&quot;100&quot;)
+    if 100 &lt;= a &lt; 110:
+        print(&quot;110&quot;)
+    if 110 &lt;= a &lt; 120:
+        print(&quot;120&quot;)
+    if 120 &lt;= a &lt; 130:
+        print(&quot;130&quot;)
+    if 130 &lt;= a &lt; 140:
+        print(&quot;140&quot;)
+    if 140 &lt;= a &lt; 150:
+        print(&quot;150&quot;)
+    if 150 &lt;= a &lt; 160:
+        print(&quot;160&quot;)
+    if 160 &lt;= a &lt; 170:
+        print(&quot;170&quot;)
+    if 170 &lt;= a &lt; 180:
+        print(&quot;180&quot;)
+    if 180 &lt;= a &lt; 190:
+        print(&quot;190&quot;)
+    if 190 &lt;= a &lt; 200:
+        print(&quot;200&quot;)
+    if 200 &lt;= a &lt; 210:
+        print(&quot;210&quot;)
+    if 210 &lt;= a &lt; 220:
+        print(&quot;220&quot;)
+    if 220 &lt;= a &lt; 230:
+        print(&quot;230&quot;)
+    if 230 &lt;= a &lt; 240:
+        print(&quot;240&quot;)
+    if 240 &lt;= a &lt; 250:
+        print(&quot;250&quot;)
+    if 250 &lt;= a &lt; 260:
+        print(&quot;260&quot;)
+    if 260 &lt;= a &lt; 270:
+        print(&quot;270&quot;)
+    if 270 &lt;= a &lt; 280:
+        print(&quot;280&quot;)
+    if 280 &lt;= a &lt; 290:
+        print(&quot;290&quot;)
+    if 290 &lt;= a &lt; 300:
+        print(&quot;300&quot;)
+    if 300 &lt;= a &lt; 310:
+        print(&quot;310&quot;)
+    if 310 &lt;= a &lt; 320:
+        print(&quot;320&quot;)
+    if 320 &lt;= a &lt; 330:
+        print(&quot;330&quot;)
+    if 330 &lt;= a &lt; 340:
+        print(&quot;340&quot;)
+    if 340 &lt;= a &lt; 350:
+        print(&quot;350&quot;)
+    if 350 &lt;= a &lt; 360:
+        print(&quot;360&quot;)
+    if 360 &lt;= a &lt; 370:
+        print(&quot;370&quot;)
+    if 370 &lt;= a &lt; 380:
+        print(&quot;380&quot;)
+    if 380 &lt;= a &lt; 390:
+        print(&quot;390&quot;)
+    if 390 &lt;= a &lt; 400:
+        print(&quot;400&quot;)
+    if 400 &lt;= a &lt; 410:
+        print(&quot;410&quot;)
+    if 410 &lt;= a &lt; 420:
+        print(&quot;420&quot;)
+    if 420 &lt;= a &lt; 430:
+        print(&quot;430&quot;)
+    if 430 &lt;= a &lt; 440:
+        print(&quot;440&quot;)
+    if 440 &lt;= a &lt; 450:
+        print(&quot;450&quot;)
+    if 450 &lt;= a &lt; 460:
+        print(&quot;460&quot;)
+    if 460 &lt;= a &lt; 470:
+        print(&quot;470&quot;)
+    if 470 &lt;= a &lt; 480:
+        print(&quot;480&quot;)
+    if 480 &lt;= a &lt; 490:
+        print(&quot;490&quot;)
+    if 490 &lt;= a &lt; 500:
+        print(&quot;500&quot;)
+    if 500 &lt;= a &lt; 510:
+        print(&quot;510&quot;)
+    if 510 &lt;= a &lt; 520:
+        print(&quot;520&quot;)
+    if 520 &lt;= a &lt; 530:
+        print(&quot;530&quot;)
+    if 530 &lt;= a &lt; 540:
+        print(&quot;540&quot;)
+    if 540 &lt;= a &lt; 550:
+        print(&quot;550&quot;)
+    if 550 &lt;= a &lt; 560:
+        print(&quot;560&quot;)
+    if 560 &lt;= a &lt; 570:
+        print(&quot;570&quot;)
+    if 570 &lt;= a &lt; 580:
+        print(&quot;580&quot;)
+    if 580 &lt;= a &lt; 590:
+        print(&quot;590&quot;)
+    if 590 &lt;= a &lt; 600:
+        print(&quot;600&quot;)
+    if 600 &lt;= a &lt; 610:
+        print(&quot;610&quot;)
+    if 610 &lt;= a &lt; 620:
+        print(&quot;620&quot;)
+    if 620 &lt;= a &lt; 630:
+        print(&quot;630&quot;)
+    if 630 &lt;= a &lt; 640:
+        print(&quot;640&quot;)
+    if 640 &lt;= a &lt; 650:
+        print(&quot;650&quot;)
+    if 650 &lt;= a &lt; 660:
+        print(&quot;660&quot;)
+    if 660 &lt;= a &lt; 670:
+        print(&quot;670&quot;)
+    if 670 &lt;= a &lt; 680:
+        print(&quot;680&quot;)
+    if 680 &lt;= a &lt; 690:
+        print(&quot;690&quot;)
+    if 690 &lt;= a &lt; 700:
+        print(&quot;700&quot;)
+    if 700 &lt;= a &lt; 710:
+        print(&quot;710&quot;)
+    if 710 &lt;= a &lt; 720:
+        print(&quot;720&quot;)
+    if 720 &lt;= a &lt; 730:
+        print(&quot;730&quot;)
+    if 730 &lt;= a &lt; 740:
+        print(&quot;740&quot;)
+    if 740 &lt;= a &lt; 750:
+        print(&quot;750&quot;)
+    if 750 &lt;= a &lt; 760:
+        print(&quot;760&quot;)
+    if 760 &lt;= a &lt; 770:
+        print(&quot;770&quot;)
+    if 770 &lt;= a &lt; 780:
+        print(&quot;780&quot;)
+    if 780 &lt;= a &lt; 790:
+        print(&quot;790&quot;)
+    if 790 &lt;= a &lt; 800:
+        print(&quot;800&quot;)
+    if 800 &lt;= a &lt; 810:
+        print(&quot;810&quot;)
+    if 810 &lt;= a &lt; 820:
+        print(&quot;820&quot;)
+    if 820 &lt;= a &lt; 830:
+        print(&quot;830&quot;)
+    if 830 &lt;= a &lt; 840:
+        print(&quot;840&quot;)
+    if 840 &lt;= a &lt; 850:
+        print(&quot;850&quot;)
+    if 850 &lt;= a &lt; 860:
+        print(&quot;860&quot;)
+    if 860 &lt;= a &lt; 870:
+        print(&quot;870&quot;)
+    if 870 &lt;= a &lt; 880:
+        print(&quot;880&quot;)
+    if 880 &lt;= a &lt; 890:
+        print(&quot;890&quot;)
+    if 890 &lt;= a &lt; 900:
+        print(&quot;900&quot;)
+    if 900 &lt;= a &lt; 910:
+        print(&quot;910&quot;)
+    if 910 &lt;= a &lt; 920:
+        print(&quot;920&quot;)
+    if 920 &lt;= a &lt; 930:
+        print(&quot;930&quot;)
+    if 930 &lt;= a &lt; 940:
+        print(&quot;940&quot;)
+    if 940 &lt;= a &lt; 950:
+        print(&quot;950&quot;)
+    if 950 &lt;= a &lt; 960:
+        print(&quot;960&quot;)
+    if 960 &lt;= a &lt; 970:
+        print(&quot;970&quot;)
+    if 970 &lt;= a &lt; 980:
+        print(&quot;980&quot;)
+    if 980 &lt;= a &lt; 990:
+        print(&quot;990&quot;)
+    if 990 &lt;= a &lt; 1000:
+        print(&quot;1000&quot;)
+    if 1000 &lt;= a &lt; 1010:
+        print(&quot;1010&quot;)
+    if 1010 &lt;= a &lt; 1020:
+        print(&quot;1020&quot;)
+    if 1020 &lt;= a &lt; 1030:
+        print(&quot;1030&quot;)
+    if 1030 &lt;= a &lt; 1040:
+        print(&quot;1040&quot;)
+    if 1040 &lt;= a &lt; 1050:
+        print(&quot;1050&quot;)
+    if 1050 &lt;= a &lt; 1060:
+        print(&quot;1060&quot;)
+    if 1060 &lt;= a &lt; 1070:
+        print(&quot;1070&quot;)
 # }}}
 
 
 # with elif {{{
 def f_with_elif():
-    if a < 10:
-        print("10")
-    elif 10 <= a < 20:
-        print("20")
-    elif 20 <= a < 30:
-        print("30")
-    elif 30 <= a < 40:
-        print("40")
-    elif 40 <= a < 50:
-        print("50")
-    elif 50 <= a < 60:
-        print("60")
-    elif 60 <= a < 70:
-        print("70")
-    elif 70 <= a < 80:
-        print("80")
-    elif 80 <= a < 90:
-        print("90")
-    elif 90 <= a < 100:
-        print("100")
-    elif 100 <= a < 110:
-        print("110")
-    elif 110 <= a < 120:
-        print("120")
-    elif 120 <= a < 130:
-        print("130")
-    elif 130 <= a < 140:
-        print("140")
-    elif 140 <= a < 150:
-        print("150")
-    elif 150 <= a < 160:
-        print("160")
-    elif 160 <= a < 170:
-        print("170")
-    elif 170 <= a < 180:
-        print("180")
-    elif 180 <= a < 190:
-        print("190")
-    elif 190 <= a < 200:
-        print("200")
-    elif 200 <= a < 210:
-        print("210")
-    elif 210 <= a < 220:
-        print("220")
-    elif 220 <= a < 230:
-        print("230")
-    elif 230 <= a < 240:
-        print("240")
-    elif 240 <= a < 250:
-        print("250")
-    elif 250 <= a < 260:
-        print("260")
-    elif 260 <= a < 270:
-        print("270")
-    elif 270 <= a < 280:
-        print("280")
-    elif 280 <= a < 290:
-        print("290")
-    elif 290 <= a < 300:
-        print("300")
-    elif 300 <= a < 310:
-        print("310")
-    elif 310 <= a < 320:
-        print("320")
-    elif 320 <= a < 330:
-        print("330")
-    elif 330 <= a < 340:
-        print("340")
-    elif 340 <= a < 350:
-        print("350")
-    elif 350 <= a < 360:
-        print("360")
-    elif 360 <= a < 370:
-        print("370")
-    elif 370 <= a < 380:
-        print("380")
-    elif 380 <= a < 390:
-        print("390")
-    elif 390 <= a < 400:
-        print("400")
-    elif 400 <= a < 410:
-        print("410")
-    elif 410 <= a < 420:
-        print("420")
-    elif 420 <= a < 430:
-        print("430")
-    elif 430 <= a < 440:
-        print("440")
-    elif 440 <= a < 450:
-        print("450")
-    elif 450 <= a < 460:
-        print("460")
-    elif 460 <= a < 470:
-        print("470")
-    elif 470 <= a < 480:
-        print("480")
-    elif 480 <= a < 490:
-        print("490")
-    elif 490 <= a < 500:
-        print("500")
-    elif 500 <= a < 510:
-        print("510")
-    elif 510 <= a < 520:
-        print("520")
-    elif 520 <= a < 530:
-        print("530")
-    elif 530 <= a < 540:
-        print("540")
-    elif 540 <= a < 550:
-        print("550")
-    elif 550 <= a < 560:
-        print("560")
-    elif 560 <= a < 570:
-        print("570")
-    elif 570 <= a < 580:
-        print("580")
-    elif 580 <= a < 590:
-        print("590")
-    elif 590 <= a < 600:
-        print("600")
-    elif 600 <= a < 610:
-        print("610")
-    elif 610 <= a < 620:
-        print("620")
-    elif 620 <= a < 630:
-        print("630")
-    elif 630 <= a < 640:
-        print("640")
-    elif 640 <= a < 650:
-        print("650")
-    elif 650 <= a < 660:
-        print("660")
-    elif 660 <= a < 670:
-        print("670")
-    elif 670 <= a < 680:
-        print("680")
-    elif 680 <= a < 690:
-        print("690")
-    elif 690 <= a < 700:
-        print("700")
-    elif 700 <= a < 710:
-        print("710")
-    elif 710 <= a < 720:
-        print("720")
-    elif 720 <= a < 730:
-        print("730")
-    elif 730 <= a < 740:
-        print("740")
-    elif 740 <= a < 750:
-        print("750")
-    elif 750 <= a < 760:
-        print("760")
-    elif 760 <= a < 770:
-        print("770")
-    elif 770 <= a < 780:
-        print("780")
-    elif 780 <= a < 790:
-        print("790")
-    elif 790 <= a < 800:
-        print("800")
-    elif 800 <= a < 810:
-        print("810")
-    elif 810 <= a < 820:
-        print("820")
-    elif 820 <= a < 830:
-        print("830")
-    elif 830 <= a < 840:
-        print("840")
-    elif 840 <= a < 850:
-        print("850")
-    elif 850 <= a < 860:
-        print("860")
-    elif 860 <= a < 870:
-        print("870")
-    elif 870 <= a < 880:
-        print("880")
-    elif 880 <= a < 890:
-        print("890")
-    elif 890 <= a < 900:
-        print("900")
-    elif 900 <= a < 910:
-        print("910")
-    elif 910 <= a < 920:
-        print("920")
-    elif 920 <= a < 930:
-        print("930")
-    elif 930 <= a < 940:
-        print("940")
-    elif 940 <= a < 950:
-        print("950")
-    elif 950 <= a < 960:
-        print("960")
-    elif 960 <= a < 970:
-        print("970")
-    elif 970 <= a < 980:
-        print("980")
-    elif 980 <= a < 990:
-        print("990")
-    elif 990 <= a < 1000:
-        print("1000")
-    elif 1000 <= a < 1010:
-        print("1010")
-    elif 1010 <= a < 1020:
-        print("1020")
-    elif 1020 <= a < 1030:
-        print("1030")
-    elif 1030 <= a < 1040:
-        print("1040")
-    elif 1040 <= a < 1050:
-        print("1050")
-    elif 1050 <= a < 1060:
-        print("1060")
-    elif 1060 <= a < 1070:
-        print("1070")
+    if a &lt; 10:
+        print(&quot;10&quot;)
+    elif 10 &lt;= a &lt; 20:
+        print(&quot;20&quot;)
+    elif 20 &lt;= a &lt; 30:
+        print(&quot;30&quot;)
+    elif 30 &lt;= a &lt; 40:
+        print(&quot;40&quot;)
+    elif 40 &lt;= a &lt; 50:
+        print(&quot;50&quot;)
+    elif 50 &lt;= a &lt; 60:
+        print(&quot;60&quot;)
+    elif 60 &lt;= a &lt; 70:
+        print(&quot;70&quot;)
+    elif 70 &lt;= a &lt; 80:
+        print(&quot;80&quot;)
+    elif 80 &lt;= a &lt; 90:
+        print(&quot;90&quot;)
+    elif 90 &lt;= a &lt; 100:
+        print(&quot;100&quot;)
+    elif 100 &lt;= a &lt; 110:
+        print(&quot;110&quot;)
+    elif 110 &lt;= a &lt; 120:
+        print(&quot;120&quot;)
+    elif 120 &lt;= a &lt; 130:
+        print(&quot;130&quot;)
+    elif 130 &lt;= a &lt; 140:
+        print(&quot;140&quot;)
+    elif 140 &lt;= a &lt; 150:
+        print(&quot;150&quot;)
+    elif 150 &lt;= a &lt; 160:
+        print(&quot;160&quot;)
+    elif 160 &lt;= a &lt; 170:
+        print(&quot;170&quot;)
+    elif 170 &lt;= a &lt; 180:
+        print(&quot;180&quot;)
+    elif 180 &lt;= a &lt; 190:
+        print(&quot;190&quot;)
+    elif 190 &lt;= a &lt; 200:
+        print(&quot;200&quot;)
+    elif 200 &lt;= a &lt; 210:
+        print(&quot;210&quot;)
+    elif 210 &lt;= a &lt; 220:
+        print(&quot;220&quot;)
+    elif 220 &lt;= a &lt; 230:
+        print(&quot;230&quot;)
+    elif 230 &lt;= a &lt; 240:
+        print(&quot;240&quot;)
+    elif 240 &lt;= a &lt; 250:
+        print(&quot;250&quot;)
+    elif 250 &lt;= a &lt; 260:
+        print(&quot;260&quot;)
+    elif 260 &lt;= a &lt; 270:
+        print(&quot;270&quot;)
+    elif 270 &lt;= a &lt; 280:
+        print(&quot;280&quot;)
+    elif 280 &lt;= a &lt; 290:
+        print(&quot;290&quot;)
+    elif 290 &lt;= a &lt; 300:
+        print(&quot;300&quot;)
+    elif 300 &lt;= a &lt; 310:
+        print(&quot;310&quot;)
+    elif 310 &lt;= a &lt; 320:
+        print(&quot;320&quot;)
+    elif 320 &lt;= a &lt; 330:
+        print(&quot;330&quot;)
+    elif 330 &lt;= a &lt; 340:
+        print(&quot;340&quot;)
+    elif 340 &lt;= a &lt; 350:
+        print(&quot;350&quot;)
+    elif 350 &lt;= a &lt; 360:
+        print(&quot;360&quot;)
+    elif 360 &lt;= a &lt; 370:
+        print(&quot;370&quot;)
+    elif 370 &lt;= a &lt; 380:
+        print(&quot;380&quot;)
+    elif 380 &lt;= a &lt; 390:
+        print(&quot;390&quot;)
+    elif 390 &lt;= a &lt; 400:
+        print(&quot;400&quot;)
+    elif 400 &lt;= a &lt; 410:
+        print(&quot;410&quot;)
+    elif 410 &lt;= a &lt; 420:
+        print(&quot;420&quot;)
+    elif 420 &lt;= a &lt; 430:
+        print(&quot;430&quot;)
+    elif 430 &lt;= a &lt; 440:
+        print(&quot;440&quot;)
+    elif 440 &lt;= a &lt; 450:
+        print(&quot;450&quot;)
+    elif 450 &lt;= a &lt; 460:
+        print(&quot;460&quot;)
+    elif 460 &lt;= a &lt; 470:
+        print(&quot;470&quot;)
+    elif 470 &lt;= a &lt; 480:
+        print(&quot;480&quot;)
+    elif 480 &lt;= a &lt; 490:
+        print(&quot;490&quot;)
+    elif 490 &lt;= a &lt; 500:
+        print(&quot;500&quot;)
+    elif 500 &lt;= a &lt; 510:
+        print(&quot;510&quot;)
+    elif 510 &lt;= a &lt; 520:
+        print(&quot;520&quot;)
+    elif 520 &lt;= a &lt; 530:
+        print(&quot;530&quot;)
+    elif 530 &lt;= a &lt; 540:
+        print(&quot;540&quot;)
+    elif 540 &lt;= a &lt; 550:
+        print(&quot;550&quot;)
+    elif 550 &lt;= a &lt; 560:
+        print(&quot;560&quot;)
+    elif 560 &lt;= a &lt; 570:
+        print(&quot;570&quot;)
+    elif 570 &lt;= a &lt; 580:
+        print(&quot;580&quot;)
+    elif 580 &lt;= a &lt; 590:
+        print(&quot;590&quot;)
+    elif 590 &lt;= a &lt; 600:
+        print(&quot;600&quot;)
+    elif 600 &lt;= a &lt; 610:
+        print(&quot;610&quot;)
+    elif 610 &lt;= a &lt; 620:
+        print(&quot;620&quot;)
+    elif 620 &lt;= a &lt; 630:
+        print(&quot;630&quot;)
+    elif 630 &lt;= a &lt; 640:
+        print(&quot;640&quot;)
+    elif 640 &lt;= a &lt; 650:
+        print(&quot;650&quot;)
+    elif 650 &lt;= a &lt; 660:
+        print(&quot;660&quot;)
+    elif 660 &lt;= a &lt; 670:
+        print(&quot;670&quot;)
+    elif 670 &lt;= a &lt; 680:
+        print(&quot;680&quot;)
+    elif 680 &lt;= a &lt; 690:
+        print(&quot;690&quot;)
+    elif 690 &lt;= a &lt; 700:
+        print(&quot;700&quot;)
+    elif 700 &lt;= a &lt; 710:
+        print(&quot;710&quot;)
+    elif 710 &lt;= a &lt; 720:
+        print(&quot;720&quot;)
+    elif 720 &lt;= a &lt; 730:
+        print(&quot;730&quot;)
+    elif 730 &lt;= a &lt; 740:
+        print(&quot;740&quot;)
+    elif 740 &lt;= a &lt; 750:
+        print(&quot;750&quot;)
+    elif 750 &lt;= a &lt; 760:
+        print(&quot;760&quot;)
+    elif 760 &lt;= a &lt; 770:
+        print(&quot;770&quot;)
+    elif 770 &lt;= a &lt; 780:
+        print(&quot;780&quot;)
+    elif 780 &lt;= a &lt; 790:
+        print(&quot;790&quot;)
+    elif 790 &lt;= a &lt; 800:
+        print(&quot;800&quot;)
+    elif 800 &lt;= a &lt; 810:
+        print(&quot;810&quot;)
+    elif 810 &lt;= a &lt; 820:
+        print(&quot;820&quot;)
+    elif 820 &lt;= a &lt; 830:
+        print(&quot;830&quot;)
+    elif 830 &lt;= a &lt; 840:
+        print(&quot;840&quot;)
+    elif 840 &lt;= a &lt; 850:
+        print(&quot;850&quot;)
+    elif 850 &lt;= a &lt; 860:
+        print(&quot;860&quot;)
+    elif 860 &lt;= a &lt; 870:
+        print(&quot;870&quot;)
+    elif 870 &lt;= a &lt; 880:
+        print(&quot;880&quot;)
+    elif 880 &lt;= a &lt; 890:
+        print(&quot;890&quot;)
+    elif 890 &lt;= a &lt; 900:
+        print(&quot;900&quot;)
+    elif 900 &lt;= a &lt; 910:
+        print(&quot;910&quot;)
+    elif 910 &lt;= a &lt; 920:
+        print(&quot;920&quot;)
+    elif 920 &lt;= a &lt; 930:
+        print(&quot;930&quot;)
+    elif 930 &lt;= a &lt; 940:
+        print(&quot;940&quot;)
+    elif 940 &lt;= a &lt; 950:
+        print(&quot;950&quot;)
+    elif 950 &lt;= a &lt; 960:
+        print(&quot;960&quot;)
+    elif 960 &lt;= a &lt; 970:
+        print(&quot;970&quot;)
+    elif 970 &lt;= a &lt; 980:
+        print(&quot;980&quot;)
+    elif 980 &lt;= a &lt; 990:
+        print(&quot;990&quot;)
+    elif 990 &lt;= a &lt; 1000:
+        print(&quot;1000&quot;)
+    elif 1000 &lt;= a &lt; 1010:
+        print(&quot;1010&quot;)
+    elif 1010 &lt;= a &lt; 1020:
+        print(&quot;1020&quot;)
+    elif 1020 &lt;= a &lt; 1030:
+        print(&quot;1030&quot;)
+    elif 1030 &lt;= a &lt; 1040:
+        print(&quot;1040&quot;)
+    elif 1040 &lt;= a &lt; 1050:
+        print(&quot;1050&quot;)
+    elif 1050 &lt;= a &lt; 1060:
+        print(&quot;1060&quot;)
+    elif 1060 &lt;= a &lt; 1070:
+        print(&quot;1070&quot;)
 # }}}
 
 
@@ -525,60 +534,64 @@ t_start = time.time()
 for _ in range(1000):
     f_without_elif()
 t_end   = time.time()
-print(f"without elif: {(t_end - t_start)/1000} sec")
+print(f&quot;without elif: {(t_end - t_start)/1000} sec&quot;)
 
 t_with_elif_start = time.time()
 for _ in range(1000):
     f_with_elif()
 t_with_elif_end   = time.time()
-print(f"with elif   : {(t_with_elif_end - t_with_elif_start)/1000} sec")
-```
+print(f&quot;with elif   : {(t_with_elif_end - t_with_elif_start)/1000} sec&quot;)
+</code></pre>
+</div>
 </details>
-<p>結果</p>
-<p><code>print</code>でたくさん標準出力を使っていますが、 そこの値は重要ではないので 私は<a href="https://github.com/thinca/vim-quickrun">quickrun</a>を使って vim上のバッファで加工して消しています</p>
+
+<h1 id="結果">結果</h1>
+<p>=print=でたくさん標準出力を使っていますが、 そこの値は重要ではないので 私は<a href="https://github.com/thinca/vim-quickrun">quickrun</a>を使って vim上のバッファで加工して消しています</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-
+example
 </div>
-<pre class="SourceCode"><code>without elif: 4.281997680664063e-06 sec
-with elif   : 9.88006591796875e-07 sec</code></pre>
+<pre class="example SourceCode"><code>without elif: 4.281997680664063e-06 sec
+with elif   : 9.88006591796875e-07 sec
+</code></pre>
 </div>
 <p>一瞬遅くなって見えますが、桁が一桁違います。少数表記にすると</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-
+example
 </div>
-<pre class="SourceCode"><code>without elif: 0.000004 sec
-with elif   : 0.000001 sec</code></pre>
+<pre class="example SourceCode"><code>without elif: 0.000004 sec
+with elif   : 0.000001 sec
+</code></pre>
 </div>
-<p>となり、<code>elif</code>の方が速いことがわかります。</p>
-<p>考察</p>
+<p>となり、=elif=の方が速いことがわかります。</p>
+<h1 id="考察">考察</h1>
 <p>なぜ速いのかを考えてみます。</p>
-<h1 id="構文木">構文木</h1>
-<p><code>elif</code>には特別なノードがなく、構文木に落とすと親の<code>If</code>ノードの<code>oreelse</code>に含まれる<code>If</code>ノードになります。</p>
+<h2 id="構文木">構文木</h2>
+<p>=elif=には特別なノードがなく、構文木に落とすと親の=If=ノードの=oreelse=に含まれる=If=ノードになります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 python
 </div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="im">import</span> ast</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="bu">print</span>(ast.dump(ast.parse(<span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="st">if x:</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a><span class="st">   ...</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a><span class="st">elif y:</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="st">   ...</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a><span class="st">else:</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a><span class="st">   ...</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a><span class="st">if z:</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a><span class="st">    ...</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a><span class="st">&quot;&quot;&quot;</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="im">import</span> ast</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="bu">print</span>(ast.dump(ast.parse(<span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="st">if x:</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a><span class="st">   ...</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a><span class="st">elif y:</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a><span class="st">   ...</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a><span class="st">else:</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a><span class="st">   ...</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true"></a><span class="st">if z:</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true"></a><span class="st">    ...</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true"></a><span class="st">&quot;&quot;&quot;</span>)))</span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
-
+example
 </div>
-<pre class="SourceCode"><code>Module(
+<pre class="example SourceCode"><code>Module(
     body=[
         If(test=Name(id='x', ctx=Load()),
            body=[Expr(value=Ellipsis())],
@@ -592,16 +605,17 @@ python
            body=[Expr(value=Ellipsis())],
            orelse=[])
         ]
-)</code></pre>
+)
+</code></pre>
 </div>
-<p>https://docs.python.org/ja/3/library/ast.html?highlight=elif#ast.If</p>
-<h1 id="ステップ数を調べる">ステップ数を調べる</h1>
+<p><a href="https://docs.python.org/ja/3/library/ast.html?highlight=elif#ast.If">https://docs.python.org/ja/3/library/ast.html?highlight=elif#ast.If</a></p>
+<h2 id="ステップ数を調べる">ステップ数を調べる</h2>
 <p>おそらく、if文が実行される回数が少ないはず、なのでpythonのデバッガである<a href="https://docs.python.org/3/library/pdb.html">pdb</a>を使って調べてみます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-
+example
 </div>
-<pre class="SourceCode"><code>&gt;&gt;&gt; # まずはelif使わないもの
+<pre class="example SourceCode"><code>&gt;&gt;&gt; # まずはelif使わないもの
 &gt;&gt;&gt; pdb.run(&quot;&quot;&quot;
     ... if True:
     ...     print(&quot;s&quot;)
@@ -628,9 +642,10 @@ s
 --Return--
 &gt; &lt;string&gt;(3)&lt;module&gt;()-&gt;None
 (Pdb)
-&gt;&gt;&gt;</code></pre>
+&gt;&gt;&gt;
+</code></pre>
 </div>
-<p>やはり、<code>if</code>文を分割した場合と比べて<code>elif</code>の方が"--Return--"が早く来ていますね。 これひとつではそこまで差異はないと思いますが、もっと複雑な条件式を使っている場合や何度も重なっている場合は影響が出そうですね。</p>
+<p>やはり、=if=文を分割した場合と比べて=elif=の方が”–Return–“が早く来ていますね。 これひとつではそこまで差異はないと思いますが、もっと複雑な条件式を使っている場合や何度も重なっている場合は影響が出そうですね。</p>
 
         </div>
         <div id="footer">
