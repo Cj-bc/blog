@@ -21,7 +21,7 @@
     <div class="item">Posted on December  2, 2021</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on December 24, 2021
+      Updated on December 25, 2021
     </div>
   </div>
     
@@ -489,7 +489,10 @@ bash
 <span id="cb13-29"><a href="#cb13-29" aria-hidden="true"></a></span>
 <span id="cb13-30"><a href="#cb13-30" aria-hidden="true"></a>   <span class="kw">set</span> <span class="ex">-e</span></span>
 <span id="cb13-31"><a href="#cb13-31" aria-hidden="true"></a>   <span class="fu">ls</span> 2020-* 2021-0<span class="dt">{1,2,3,4}</span>* <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;\(md\|org\)$&quot;</span> <span class="kw">|</span> <span class="ex">filter</span> <span class="st">&quot;filterGitKnownFile&quot;</span>  <span class="kw">|</span> <span class="ex">map</span> convertFile</span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true"></a>   <span class="bu">echo</span> <span class="st">&quot;Finished!&quot;</span></span></code></pre></div>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true"></a>   <span class="ex">convertFile</span> 2021-05-04-xmonad-use-stack-for-compile.org</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true"></a>   <span class="ex">convertFile</span> 2021-05-10-xmonad-list-of-layouts.org </span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true"></a></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true"></a>   <span class="bu">echo</span> <span class="st">&quot;Finished!&quot;</span></span></code></pre></div>
 </div>
 <div class="accordion">
 <p>Finished!</p>
