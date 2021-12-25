@@ -1,73 +1,72 @@
----
-title: XMonad.Layoutのリスト
-tags:
-  - xmonad
-  - haskell
-kind: memo
-date: May 10, 2021
----
-
-xmonadのレイアウトは、 ~LayoutClass~
+* XMonad.Layoutのリスト
+    :PROPERTIES:
+    :DATE: [2021-05-10 Mon]
+    :TAGS: :xmonad:haskell:
+    :AUTHOR: Cj-bc
+    :BLOG_POST_KIND: Memo
+    :BLOG_POST_PROGRESS: Published
+    :BLOG_POST_STATUS: Normal
+    :END:
+xmonadのレイアウトは、 =LayoutClass=
 のインスタンスであることが条件になっており、逆にいうと様々な型によって個別に実装されている。
 
 #+begin_src haskell
-type LayoutClass :: (* -> *) -> * -> Constraint
-class Show (layout a) => LayoutClass layout a where
-      ...
+  type LayoutClass :: (* -> *) -> * -> Constraint
+  class Show (layout a) => LayoutClass layout a where
+        ...
 
-instance LayoutClass Tall a where
-      ...
-instance LayoutClass Full a
-...
+  instance LayoutClass Tall a where
+        ...
+  instance LayoutClass Full a
+  ...
 #+end_src
 
 これはつまり、以下のようなことが出来ないことになる
 
 #+begin_src haskell
-alist :: LayoutClass layout a => [layout a]
-alist = [Full, Tall def def def]
+  alist :: LayoutClass layout a => [layout a]
+  alist = [Full, Tall def def def]
 #+end_src
 
 これは以下のようなエラーになる
 
 #+begin_example
-• Couldn't match type ‘layout’ with ‘Full’
-      ‘layout’ is a rigid type variable bound by
-        the type signature for:
-          alist :: forall (layout :: * -> *) a.
-                   LayoutClass layout a =>
-                   [layout a]
-        at /tmp/vpWQTsV/198/xmonad.hs:125:1-43
-      Expected type: layout a
-        Actual type: Full a
-    • In the expression: Full
-      In the expression: [Full, Tall def def def]
-      In an equation for ‘alist’: alist = [Full, Tall def def def]
-    • Relevant bindings include
-        alist :: [layout a] (bound at /tmp/vpWQTsV/198/xmonad.hs:126:1)
-    |
-126 | alist = [Full, Tall def def def]
-    |          ^^^^
+  • Couldn't match type ‘layout’ with ‘Full’
+        ‘layout’ is a rigid type variable bound by
+          the type signature for:
+            alist :: forall (layout :: * -> *) a.
+                     LayoutClass layout a =>
+                     [layout a]
+          at /tmp/vpWQTsV/198/xmonad.hs:125:1-43
+        Expected type: layout a
+          Actual type: Full a
+      • In the expression: Full
+        In the expression: [Full, Tall def def def]
+        In an equation for ‘alist’: alist = [Full, Tall def def def]
+      • Relevant bindings include
+          alist :: [layout a] (bound at /tmp/vpWQTsV/198/xmonad.hs:126:1)
+      |
+  126 | alist = [Full, Tall def def def]
+      |          ^^^^
 #+end_example
 
-私の理解が正しければ、「 ~Full~ の型と ~Tall~
-の型ちゃうやんけ!？？」ってことかなと。
-正直よくわからん
-
+私の理解が正しければ、「 ~Full~ の型と ~Tall~ 
+の型ちゃうやんけ!？？」ってことかなと。 正直よくわからん
 
 ~Rank2Types~ 使ってみたけど上手く動かず
 
 #+begin_src haskell
-alist :: [forall l a. (LayoutClass l a) => l a]
+  alist :: [forall l a. (LayoutClass l a) => l a]
 #+end_src
 
-** 解法
-
-[[https://hackage.haskell.org/package/xmonad-0.15/docs/src/XMonad.Core.html#Layout][XMonad.Core.Layout]]
-を使う。
+*** 解法
+    :PROPERTIES:
+    :CUSTOM_ID: 解法
+    :END:
+[[https://hackage.haskell.org/package/xmonad-0.15/docs/src/XMonad.Core.html#Layout][XMonad.Core.Layout]]を使う。
 
 #+begin_src haskell
-alist :: [Layout Window]
+  alist :: [Layout Window]
 #+end_src
 
 なら大丈夫
@@ -75,5 +74,5 @@ alist :: [Layout Window]
 参考までに
 
 #+begin_src haskell
-data Layout a = forall l. (LayoutClass l a, Read (l a)) => Layout (l a)
+  data Layout a = forall l. (LayoutClass l a, Read (l a)) => Layout (l a)
 #+end_src
