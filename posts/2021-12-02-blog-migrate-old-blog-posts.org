@@ -1,0 +1,597 @@
+* 古い形式のブログ記事を変換するおしごと [WIP]
+  :PROPERTIES:
+  :DATE: [2021-12-02 Thu 14:25]
+  :TAGS: :blog:
+  :BLOG_POST_KIND: Memo
+  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2021-12-25 Sat 09:15]--[2021-12-25 Sat 09:56] =>  0:41
+  CLOCK: [2021-12-25 Sat 08:30]--[2021-12-25 Sat 09:11] =>  0:41
+  CLOCK: [2021-12-24 Fri 13:34]--[2021-12-24 Fri 14:59] =>  1:25
+  CLOCK: [2021-12-24 Fri 10:23]--[2021-12-24 Fri 11:51] =>  1:28
+  CLOCK: [2021-12-23 Thu 09:05]--[2021-12-23 Thu 10:23] =>  1:18
+  CLOCK: [2021-12-22 Wed 17:10]--[2021-12-22 Wed 17:40] =>  0:30
+  CLOCK: [2021-12-22 Wed 15:38]--[2021-12-22 Wed 17:03] =>  1:25
+  CLOCK: [2021-12-22 Wed 10:29]--[2021-12-22 Wed 12:10] =>  1:41
+  CLOCK: [2021-12-02 Thu 13:00]--[2021-12-02 Thu 14:47] =>  1:47
+  :END:
+  
+** これまでの遷移
+
+   | blog以前                              | Qiita flavored markdownでQiitaに投稿        |
+   | 一番初めの時期([[https://cj-bc.github.io/blog/posts/2020-08-02-helloHakylly.html][2020/08/02]]~[[https://cj-bc.github.io/blog/posts/2021-01-19-after-effect-markers.html][2021/01/19]]) | markdown+pandoc拡張(メタデータをyamlで管理) |
+   | org移行期([[https://cj-bc.github.io/blog/posts/2021-01-31-org-file-test.html][2021/01/31]]~ [[https://cj-bc.github.io/blog/posts/2021-05-19-emacs-org-roam-setup.html][2021-05-19]]      | Org format(メタデータをyamlで管理           |
+   | 現在のフォーマット([[https://cj-bc.github.io/blog/posts/2021-07-24-diary-allelosphere-vol1.html][2021/07/24]]~)       | Org format(メタデータをPropertyで管理)      |
+
+** なぜ移行するのか
+
+   複数のフォーマットに対応したHakyllコードをかくのが
+   そろそろ辛くなってきたからです。
+   特に、メタデータの取り扱い周りが厄介なのです。
+
+   Pandocでは、独自の構文としてメタデータを
+   YAML フォーマットのヘッダーに保存することができます。
+   昔はこれを使っていたのですが、
+   Emacs+Org mode の構成で投稿を作成する際、それらをプロパティとして
+   扱えたら便利だなと感じるようになりました。
+
+   プロパティとして扱える利点としては、例えば現在の投稿にある
+   ~BLOG_POST_PROGRESS~ を ~org-agenda~ から見ることによって、
+   作成中の投稿の一覧を容易に作成することができます。
+   これは、org modeの機能の一つであるプロパティを用いているからできること
+   であって、pandocのYAML構文を用いようとしたらまた新しいプログラムを
+   書く必要がでてきます。それは面倒だし非効率なので、
+   今迄YAMLメタデータとして仕舞っていたデータも
+   プロパティとして保存するように変更しました。
+
+   
+   それに伴い、タイトルの取得の方法等も変わって昔の方法は使えなくなりました。
+   どちらにも対応することは不可能ではないでしょうが、
+   正直もう昔の方法を利用することは無いであろうこと・今後のメンテナンス性を
+   考えると非効率であることから、完全な移行をするに至りました。
+
+** 移行スクリプト
+   :PROPERTIES:
+   :HEADER-ARGS: :results raw :noweb yes 
+   :END:
+*** 技術選定
+
+    今回使っていくのは
+
+    + [[https://pandoc.org/][pandoc]]
+    + [[https://www.nushell.sh/][nushell]]
+    + awk
+    + bash
+
+    です
+    
+    
+    以下のコード内で、便宜上コードブロックの言語を ~sh~ にしていますが、
+    一部は実際はnushellのスクリプトです。
+    (Emacs上でOrg babelで実行する際は、 ~:shbang #!/bin/nu~ の効果で
+    nushellのスクリプトとして実行されます。)
+   
+**** pandoc
+     いわずと知れたフォーマット変換(等)ツール。
+     今回、markdown→org formatの変換を必要とするファイルもあるため必須です。
+     又、整形にも使います。
+**** nushell     
+     言わずと知れた‥というにはまだ早いので紹介します。
+     nushellは、色々な新しい面を持ちますが、今回の目的にそった紹介をする
+     のであればデータ型を持つシェルです。
+     内部にリストやテーブル・日付型・サイズ型等色々な型を持つほか、
+     CVSやINI, TOML, ICS, XML, そして今回の本命YAML等のデータを
+     取り込むんことができます。
+     
+     今回はこのYAMLを取り込めるという機能を目的に採用しました。
+     YAML形式で保存されているメタデータの取り出しから、それを新しいHeadingに
+     整形する部分までかnushellの役割です。
+***** 経緯     
+     とりあえずpandocを使うことは決定していましたが、
+     実はpandoc単体(フィルターなし)では「その内容を参照して
+     あれこれする」ことができません。
+     というか、そういうニーズを満たすためのものがフィルターなんですが...
+
+     でもフィルター書くのはちょっと面倒なんだよね...
+     今はYAML形式のメタデータの情報を使いたいだけなので、
+     テキスト処理ならawkなりsedなりあるし
+     わざわざフィルター書く程のものでもないように感じます。
+   
+     なので、手軽にYAMLを使えるnushellを使ってみることにしました。
+     
+**** awk
+     文字列処理ならsedかawkでしょ、ということで使用。
+     今回は、記事からYAML形式のメタデータ部分を取得するために使用します。
+     
+**** bash
+     nushellで全てを書こうとしたのですが、いかんせん新しいプロジェクトなので
+     未だ使い勝手が整ってなかったり出来無いことがあったりします。
+
+     私がnushellに慣れていない、というのもありますが、
+     テキストを読み込んだ時に謎にTableにされてしまい、それを頑張ってテキストに戻して...
+     みたいなことをやるのに疲れてしまいました。
+     ということで、nushellの得意な部分はnushellに任せて、他の処理は手慣れたbashで
+     行おうということになりました。
+   
+*** 1. YAML部分を取り出す
+    ここは単純なテキスト処理なのでawkを使います。(もっと良い方法があれば教えてください)
+    
+    メタデータは ~---~ と ~---~ で囲まれているので、
+    「 ~---~ の次の行から次に ~---~ がくるまで」を出力します。
+
+    #+NAME: extract-yaml-metadata
+    #+begin_src awk :in-file ./2021-01-03-fomantic-ui.md :results raw :wrap SRC yaml
+      BEGIN { inside=0; }
+      /---/ {if (inside == 0) { inside=1; }
+	  else { inside=0; };
+	  next;
+      }
+      { if (inside == 1) { print $0; }; }
+    #+end_src
+
+    #+RESULTS: extract-yaml-metadata
+    #+begin_SRC yaml
+    title: ブログの見た目を整える
+    author: Cj-bc
+    tags:
+      - hakyll
+      - ブログ
+      - haskell
+    date: Jan 03, 2021
+    #+end_SRC
+
+    
+*** 2. Yaml部分からメタデータを取得する
+
+    先程のawkスクリプトを適用してあげて...
+    
+    #+HEADER: :shebang #!/bin/nu :tangle blog-migration-script--createHeader.nu
+    #+HEADER: :noweb-ref migration-script
+    #+begin_src sh
+      let target = (if ($nu.env | select TARGET | empty?) {""} {$nu.env.TARGET})
+      if ($target | empty?) {
+	     ^echo "usage: TARGET=<TARGET_FILENAME> blog-migration-script--createHeader.nu"
+	     exit
+      } {}
+
+      let metadata = (awk '
+      <<extract-yaml-metadata>>
+      ' $target | from yaml)
+    #+end_src
+
+    #+RESULTS:
+
+
+    #+begin_src sh :tangle no :shebang #!/bin/nu
+      <<migration-script>>
+
+      echo $metadata
+    #+end_src
+
+    #+RESULTS:
+      #           title            author        tags            date      
+    ───────────────────────────────────────────────────────────────────────
+      0   ブログの見た目を整える   Cj-bc    [table 3 rows]   Jan 03, 2021  
+
+*** 3. メタデータを加工して新しいヘッダーを作成する
+    さて、これで投稿のタイトルと諸々のデータは取れるようになりました。
+    あとはこれを加工して、新しいヘッダーを作成します。
+
+    #+HEADER: :shebang #!/bin/nu :tangle blog-migration-script--createHeader.nu
+    #+HEADER: :noweb-ref migration-script
+    #+begin_src sh
+
+      <<nu-getAuthor>>
+      <<nu-formatTags>>
+      <<nu-formatDate>>
+
+      echo $"* ($metadata.title)
+	  :PROPERTIES:
+	  :DATE: (formatDate $metadata)
+	  :TAGS: ($metadata.tags | reduce -f ':' { $acc + $it + ':' })
+	  :AUTHOR: (getAuthor $metadata)
+	  :BLOG_POST_KIND: Memo
+	  :BLOG_POST_PROGRESS: Published
+	  :BLOG_POST_STATUS: Normal
+	  :END:
+      "
+    #+end_src
+
+    #+begin_src sh :tangle no
+      <<migration-script>>
+      echo $newHeading
+    #+end_src
+
+    #+RESULTS:
+    * ブログの見た目を整える
+	:PROPERTIES:
+	:DATE: [2021-01-03 Sun]
+	:TAGS: :hakyll:ブログ:haskell:
+	:AUTHOR: Cj-bc
+	:BLOG_POST_KIND: Memo
+	:BLOG_POST_PROGRESS: Published
+	:BLOG_POST_STATUS: Normal
+	:END:
+
+
+**** タグをOrg形式に変換する
+     org形式のタグはタグ名を ~:~ で囲んだものになります。
+     タグ名はメタデータ内にリストとして持っているので、nushellの ~reduce~
+     コマンドで整形します。
+
+     #+HEADERS: :noweb-ref nu-formatTags :tangle no
+     #+begin_src sh
+       def formatTags [tags: table] {
+	   $tags | reduce -f ':' { $acc + $it + ':' }
+       }
+     #+end_src
+     
+     #+begin_src sh :tangle no
+       <<nu-formatTags>>
+       formatTags $metadata.tags
+     #+end_src
+
+     #+RESULTS:
+     :hakyll:ブログ:haskell:
+
+**** 記事の日付を変換する
+
+     昔のフォーマットでは ~月 日, 年~ となっているので、これを
+     org形式の ~[年-月-日 曜日]~ に変換します。
+
+     最初は nushell の ~parse~ コマンドでパースしてうんたら...って
+     考えていたけれど、曜日を出す方法や月番号周りの変換に悩んでいました。
+     で、その間に GNU coreutils の ~date~ コマンド(nushellは組込みで ~date~
+     コマンド持っているが、そっちではない)が全ての仕事を出来そうだとわかったので
+     こちらでやることにしました。
+
+
+     GNU coreutilsの ~date~ コマンドはデフォルトでは現在時刻を吐きますが、
+     ~--date~ オプションに文字列を渡してあげることで別の日付にすることが可能です。
+     このオプションに元の文字列をセットして、それをorg形式にフォーマットしなおします。
+
+
+     nushellでは、前述の通りそれ自体が提供している ~date~ コマンドが存在し、
+     GNU coreutilsの ~date~ コマンドはそのままでは使用することができません。
+     そのため、[[https://www.nushell.sh/book/escaping.html][nushell bookの"Escaping to the System"]]を参考にコマンド名の前に
+     ~^~ を付けることでnushell独自のコマンドを呼び出さず、GNU coreutilsの ~date~
+     コマンドを呼びだします。
+     
+
+     尚、GNU coreutilsの ~date~ コマンドは環境変数 ~LANG~ に応じて曜日名の
+     出力などを変化させます。ここでは英語表記になってほしいので ~LANG=C~ にしています。
+
+     #+begin_src sh :tangle no :noweb-ref nu-formatDate
+       def formatDate [metadata] {
+	   LANG=C ^date --date $"($metadata.date)" +[%Y-%m-%d %a] | tr -d '\n'
+       }
+     #+end_src
+     
+     #+RESULTS:
+     "[2021-01-03 Sun]"
+
+**** デフォルトの筆者を設定する
+     いくつかの記事はAUTHORが記載されていないので、
+     その場合はデフォルト値を使うようにしてあげます。
+
+     #+begin_src sh :tangle no :noweb-ref nu-getAuthor
+       def getAuthor [metadata] {
+       if ($metadata | select author | empty?) {
+	  "Cj-bc"
+       } { $metadata.author }
+       }
+     #+end_src
+     
+
+*** 4. 元の記事を一段階下げる
+
+    さて、今迄作ってきたheadingを、元の記事と組合せる前段階をします。
+    トップレベル(level1)のheadingは一つだけであってほしいので、
+    元の記事のレベルを一段階下げます。これはpandocを用いて行うことができます。
+
+    但し、その前にYAMLヘッダーを取り除いてあげます。
+    #+begin_src awk :in-file ./2021-05-14-haskell-make-Ixed-instance.org :wrap src org :noweb-ref awk-trim-yaml-header
+      BEGIN { inside=0; }
+      /---/ {if (inside == 0) { inside=1; }
+	else { inside=2; };
+	next;
+      }
+      { if (inside == 2) { print $0; }; }
+    #+end_src
+
+    #+RESULTS:
+    #+begin_src org
+
+      ,* ~Ixed~ とは
+
+      数学的解説はわかりませんごめんなさい。誰か補足があれば [[https://github.com/Cj-bc/blog][blogのレポジトリ]] にissueでも残してください()
+      Haskellなのでとりあえず hoogleを参照します。
+      ~Ixed~ の定義は以下の通りです
+
+      ,#+begin_src haskell
+	class Ixed m where
+	  -- |
+	  -- /NB:/ Setting the value of this 'Traversal' will only set the value in
+	  -- 'at' if it is already present.
+	  --
+	  -- If you want to be able to insert /missing/ values, you want 'at'.
+	  --
+	  -- >>> Seq.fromList [a,b,c,d] & ix 2 %~ f
+	  -- fromList [a,b,f c,d]
+	  --
+	  -- >>> Seq.fromList [a,b,c,d] & ix 2 .~ e
+	  -- fromList [a,b,e,d]
+	  --
+	  -- >>> Seq.fromList [a,b,c,d] ^? ix 2
+	  -- Just c
+	  --
+	  -- >>> Seq.fromList [] ^? ix 2
+	  -- Nothing
+	  ix :: Index m -> Traversal' m (IxValue m)
+	  default ix :: At m => Index m -> Traversal' m (IxValue m)
+	  ix = ixAt
+	  {-# INLINE ix #-}
+      ,#+end_src
+
+      ~Ixed~ は =Lens= の提供する型の一つで、 ~Map~ のような型の値に対して
+      値を ~traverse~ するシンプルな ~Traversal~ を提供するものです。
+
+      簡潔に言うと、
+      ,*リスト等の要素にLensでアクセスできるようにするやつ*
+      みたいなざっくりとした理解をしています。
+
+
+      また、これに関連するオープンな型ファミリーとして ~Index~ と ~IxValue~ があります
+
+      ,#+begin_src haskell
+	type family Index (s :: *) :: *
+
+	-- | This provides a common notion of a value at an index that is shared by both 'Ixed' and 'At'.
+	type family IxValue (m :: *) :: *
+      ,#+end_src
+
+      ~Ixed~ において、 ~Index~ はインデックスの型、 ~IxValue~ はそこに格納されている
+      値の型です。
+
+      ,* 作る
+
+      とりあえず作り始めます。
+
+      前提として、今回~Ixed~のインスタンスを作るのは以下の型です。
+      元のファイルは [[https://github.com/Cj-bc/playground/blob/0fb982f28f7ab0444ffd2ad59eacc3cd904b99ba/haskell/hit-n-blow/src/HitNBlow/Type.hs#L15-20][Cj-bc/playground -- hit-n-blow]] で使われているものです。
+
+      ,#+begin_src haskell
+	-- | Represents each Pin
+	data Pin = Red | Blue | Green | White | Purple deriving (Show)
+
+	-- | One Set of Pins that user will guess 
+	data Lane = Lane (Maybe Pin) (Maybe Pin) (Maybe Pin) (Maybe Pin) (Maybe Pin)
+	    deriving (Show)
+      ,#+end_src
+
+
+
+      ~Ixed~ の定義に特に制限がかかれていないので、 ~ix~ を定義することにします。
+      そのために、 ~ix~ で使用される ~Index~ と ~IxValue~ を定義することにします。
+
+      ,** Index
+	 ~Index~ はあまり説明がありませんが、型の情報からすると恐らく「添字に使う型」
+	 の定義であろうと推測が出来ます。
+	 (名前が ~Index~ であること、 ~ix~ において最初に取ること等。又、
+	 既にあるインスタンスを確認するのも良い方法だと思います。)
+
+	 ~Lane~ において添字は ~Int~ です。
+
+	 ,#+begin_src haskell
+	   type instance Index Lane = Int
+	 ,#+end_src
+
+      ,** IxValue
+	 同様ですが、今度はそれぞれの中身の型を定義します。
+
+	 ,#+begin_src haskell
+	   type instance IxValue Lane = Maybe Pin
+	 ,#+end_src
+
+      ,** Ixed
+	 ~Ixed~ 本体に行きます!!
+
+	 ~ix~ の型は
+
+	 ,#+begin_src haskell
+	   ix :: Index m -> Traversal' m (IxValue m)
+	 ,#+end_src
+
+	 で、今回は ~m~ が ~Lane~ なので具体的な型にすると
+
+	 ,#+begin_src haskell
+	   ix :: Int -> Traversal' Lane (Maybe Pin)
+	 ,#+end_src
+
+	 ということになります。
+
+	 で、 ~Lens~ 少ししか分からんので一つ疑問が浮かびます
+
+	 ,*>>>>> ~Traversal'~ ってナニよ!!!!! <<<<<*
+
+      ,** Traversal' ってナニよ!
+
+	 はい。名前は知ってるけど使い方良く分からずに放置してた子ですね。
+	 定義によると
+
+	 ,#+begin_src haskell
+	   type Traversal' s a = Traversal s s a a
+
+	   type Traversal s t a b = forall f. Applicative f => (a -> f b) -> s -> f t
+	 ,#+end_src
+
+	 ついでなので [[https://hackage.haskell.org/package/lens-5.0.1/docs/Control-Lens-Type.html#t:Traversal][~Traversal~]] の定義も載せておきました。
+	 ~Lens~ と同じように、実体はただの関数ですね。
+
+	 ~Lens~ よりも制限の緩い型で ~Traversable~ の型関数である ~traverse~ の一般化らしいです。
+	 しっかりと理解はしていないが、まぁ型を考えれば作れてしまうのでとりあえずは
+	 ふんわりと掴んだ状態で作ってみます。
+
+	 あ、ちなみに ~Traversal'~ は単純に、値の更新等した時に型が変化しないものですね。
+
+	 参考:
+
+	 - [[https://fumieval.hatenablog.com/entry/2015/07/14/223329][lensパッケージのオプティクス(弱い順) -- モナドとわたしとコモナド]]
+
+      ,** ~ix~ を作る
+	 さて、 ~Traversal'~ がわかったので ~ix~ を作れ(る気がし)ます。
+	 ~Traversal'~ を置き換えてみると:
+
+	 ,#+begin_src haskell
+	   ix :: Int -> Traversa' Lane (Maybe Pin)
+	   ix :: Int -> Traversal Lane Lane (Maybe Pin) (Maybe Pin)
+	   ix :: Int -> (forall f. Applicative f => (Maybe Pin -> f (Maybe Pin) -> Lane -> f Lane
+	 ,#+end_src
+
+	 となります(forallの位置は少し自信がないけど多分あってる)
+
+	 ~Int~ は元々 ~Index m~ だった部分なので、今興味のあるインデックス(に該当する数字)が来るのがわかります。
+
+	 又、元の ~Traversal'~ の部分も要は「中身( ~Maybe Pin~ )に作用する関数を受け取り、作用させた
+	 結果を返す」わけなので、その通りに実装します。
+
+	 ,#+begin_src haskell
+	   instance Ixed Lane where
+	     ix 1 = \g l@(Lane a b c d e) -> Lane <$> g a <*> b <*> c <*> d <*> e
+	     ix 2 = \g l@(Lane a b c d e) -> Lane a <$> g b <*> c <*> d <*> e
+	     ix 3 = \g l@(Lane a b c d e) -> Lane a b <$> g c <*> d <*> e
+	     ix 4 = \g l@(Lane a b c d e) -> Lane a b c <$> g d <*> e
+	     ix 5 = \g l@(Lane a b c d e) -> Lane a b c d <$> g e
+	     ix _ = \_ l -> pure l
+	 ,#+end_src
+
+	 多分動いた!!
+    #+end_src
+    
+    #+NAME: pandocを用いたheadingレベル下げの例
+    #+begin_src sh :shbang #!/bin/bash :tangle no
+      pandoc -f org --shift-heading-level-by=1 -t org <(echo "
+      ,* Leve1 header example
+	hello!
+
+      ,** Inner level2 header
+      ")
+
+    #+end_src
+
+    #+RESULTS:
+    ** Leve1 header example
+       :PROPERTIES:
+       :CUSTOM_ID: leve1-header-example
+       :END:
+    hello!
+
+    *** Inner level2 header
+	:PROPERTIES:
+	:CUSTOM_ID: inner-level2-header
+	:END:
+
+*** 5. 3.と4.を組み合わせる
+    ここからはbashを使います。
+
+    #+HEADER: :tangle migration-script.sh
+    #+begin_src sh  :shebang #!/bin/bash
+      [[ -z $1 ]] && { echo "usage: migration-script.sh TARGETFILE"; exit; }
+      target=$1
+
+      extensions=(emoji task_lists
+		  backtick_code_blocks fenced_code_attributes
+		  header_attributes raw_html
+		 )
+      function formatExtension() {
+	  echo "+${extensions[@]}" | tr ' ' '+'
+      }
+
+      format=$(filename=($(echo $target | tr -s '.' ' '));
+	       case "${filename[-1]}" in
+		   "md") echo "markdown$(formatExtension)";;
+		   ,*) echo "org";;
+	       esac
+	    )
+
+      cat <(TARGET=$target ./blog-migration-script--createHeader.nu) <(awk '
+      <<awk-trim-yaml-header>>
+      ' $target | pandoc -f "${format}" --shift-heading-level-by=1 -t org)
+    #+end_src
+
+    #+RESULTS:
+    usage: migration-script.sh TARGETFILE
+
+
+**** ここでnushellを使わなかった理由
+     nushellの ~echo~ はListで出力してくるので、
+     GNU coreutilsの ~echo~ を使います。
+     又、 ~^echo $newHeading (pandoc...)~ だと ~$newHeading~ と
+     ~(pandoc...)~ の間に改行が作成されず、 ~$newHeading~ の後ろに空行を追加して
+     おいてもなんか消されてしまうので以下のような方法を取っています。
+
+    
+*** 7. 全ファイルに対して実行する
+    あとはこれを全てのファイルに対して実行してあげれば良いわけです!
+    [[これまでの遷移]]から、 2021/05/19以前の投稿が古いフォーマットを使用している
+    ことがわかるので、それ以前のファイルのみを探し出します。
+
+    この取得はちょっと面倒で、昔のファイルでも最近変更していたりするので
+    ~find~ コマンドが使えません( ~-newer~ 系を使いたいが、一定の日付より前のみに
+    変更しているという根拠はない)。
+    しかし、私のブログは(ありがたいことに)ファイル名が日付で始まっているので、それをglob展開して取得することにします。
+    
+    そしてその各ファイルに先程のスクリプトを適用してあげて、変形します。
+    
+**** まずはGit管理されているファイルに実行する
+     ただ、念の為にまずはGitにコミットされているファイルのみを対象にします。コミットさえされていれば失敗しても大丈夫なので...
+     Gitに認識されていないファイルは src_sh{git status --short FILENAME} が ~?? <ファイル名>~ となるので、それを使って
+     判定します。
+    
+    #+begin_src sh :wrap accordion
+      function filter {
+	  local filterFunction=$1
+
+	  while read candidate; do
+	      $filterFunction "$candidate" \
+			      && echo "$candidate"
+	  done < <(cat /dev/stdin)
+      }
+
+      function map {
+	  local f=$1
+	  while read target; do
+	      $f "$target"
+	  done < <(cat /dev/stdin)
+      }
+
+      function filterGitKnownFile {
+	  local filename=$1
+
+	  local gitStatusResult="$(git status --short $filename)" 
+	  [[ ! "$gitStatusResult" ]]
+      }
+
+      function convertFile {
+	  local target=$1
+	  ./migration-script.sh $target > ${target}.new
+	  mv ${target}.new $target
+      }
+
+      set -e
+      ls 2020-* 2021-0{1,2,3,4}* | grep "\(md\|org\)$" | filter "filterGitKnownFile"  | map convertFile
+      convertFile 2021-05-04-xmonad-use-stack-for-compile.org
+      convertFile 2021-05-10-xmonad-list-of-layouts.org 
+
+      echo "Finished!"
+    #+end_src
+    
+    #+RESULTS:
+    #+begin_accordion
+    Finished!
+    #+end_accordion
+    
+
+*** 8.

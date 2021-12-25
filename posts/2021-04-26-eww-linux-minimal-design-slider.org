@@ -1,42 +1,39 @@
----
-title: ewwでスタイリッシュなスライダーを使う
-tags:
-  - eww
-  - scss
-  - linux
-kind: memo
-date: April 26, 2021
----
-
-
-[[https://github.com/Axarva/dotfiles-2.0][Axarva/dotfiles-2.0]] に触発されて、 [[https://github.com/elkowar/eww][elkowar/eww]] を使い始めました。(Emacsのewwではない)
-
+* ewwでスタイリッシュなスライダーを使う
+    :PROPERTIES:
+    :DATE: [2021-04-26 Mon]
+    :TAGS: :eww:scss:linux:
+    :AUTHOR: Cj-bc
+    :BLOG_POST_KIND: Memo
+    :BLOG_POST_PROGRESS: Published
+    :BLOG_POST_STATUS: Normal
+    :END:
+[[https://github.com/Axarva/dotfiles-2.0][Axarva/dotfiles-2.0]]
+に触発されて、 [[https://github.com/elkowar/eww][elkowar/eww]]
+を使い始めました。(Emacsのewwではない)
 
 キーボードドリブンな設計にしたかったので、axarvaの設定を参考にしながら自分で書いていました。
 でも、デフォルトでは以下のような形に。
 
-[[/images/cropped-slider-without-scss.png]]
+[[file:///images/cropped-slider-without-scss.png]]
 
 本当は以下のようになってほしい。特に *スライダーノブを消したい* 。
 
-[[/images/cropped-slider-with-scss.png]]
+[[file:///images/cropped-slider-with-scss.png]]
 
 色々と設定を写したのですが上手くいかなかったけど、
 
 #+begin_src css
-* {
-  all: unset;
-}
+  * {
+    all: unset;
+  }
 #+end_src
-
 
 を設定したら出来た!!
 
-
 ビフォー:
 
-[[/images/slider-without-scss.png]]
+[[file:///images/slider-without-scss.png]]
 
 アフター:
 
-[[/images/slider-with-scss.png]]
+[[file:///images/slider-with-scss.png]]

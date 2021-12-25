@@ -1,26 +1,33 @@
----
-title: TERMをtmux-256colorにする
-tags:
-  - tmux
-  - terminal
-  - vim
-kind: note
-date: February 15, 2021
----
-
-* なぜやるのか
-
-かねてよりmacOSが重くなることに困っていて、 [[https://github.com/tmux/tmux/issues/353#issuecomment-202726966][macでtmuxとvimを使うとvimがすごく重くなる]]
+* TERMをtmux-256colorにする
+    :PROPERTIES:
+    :DATE: [2021-02-15 Mon]
+    :TAGS: :tmux:terminal:vim:
+    :AUTHOR: Cj-bc
+    :BLOG_POST_KIND: Memo
+    :BLOG_POST_PROGRESS: Published
+    :BLOG_POST_STATUS: Normal
+    :END:
+** なぜやるのか
+   :PROPERTIES:
+   :CUSTOM_ID: なぜやるのか
+   :END:
+かねてよりmacOSが重くなることに困っていて、
+[[https://github.com/tmux/tmux/issues/353#issuecomment-202726966][macでtmuxとvimを使うとvimがすごく重くなる]]
 を見つけました。
 
 結果論としては「これがパフォーマンスをよくする」というわけではなさそうでしたが、
 とりあえずtmuxを使っているので、揃えることにしました。
 
-* 前提知識
-
-** そもそもTERM環境変数とは何か
-
-=$TERM= は、ncursesなどが使っている *terminfoライブラリ* の動作に影響する環境変数です。
+** 前提知識
+   :PROPERTIES:
+   :CUSTOM_ID: 前提知識
+   :END:
+*** そもそもTERM環境変数とは何か
+    :PROPERTIES:
+    :CUSTOM_ID: そもそもterm環境変数とは何か
+    :END:
+=$TERM= は、ncursesなどが使っている *terminfoライブラリ*
+の動作に影響する環境変数です。
 この変数で「なんの端末を使っているか」を設定し、terminfoライブラリがそれに応じて出力を変えているため、
 cursesを使用する開発者は端末の差をあまり考えずに様々な端末に対応したソフトウェアを書くことができるのです。
 (エスケープシーケンスとか決めている)
@@ -30,35 +37,44 @@ cursesを使用する開発者は端末の差をあまり考えずに様々な�
 
 筆者もそこまで詳しくないですが、途方もない数の仕様の端末が存在しています。
 それらを共通のインターフェースで扱えるようにするのが =terminfo=,
-そして「今使っている端末」を設定するのが =TERM= 環境変数、ということです。
-
+そして「今使っている端末」を設定するのが =TERM=
+環境変数、ということです。
 
 ちなみに余談ですが、=terminfo= で使用されるデータはmacの場合、
 =/usr/share/terminfo= に格納されています。
 
-** terminfoエントリ
-
+*** terminfoエントリ
+    :PROPERTIES:
+    :CUSTOM_ID: terminfoエントリ
+    :END:
 terminfoエントリは、
 
-info:terminfo
+[[info:terminfo]]
 
+** 手順
+   :PROPERTIES:
+   :CUSTOM_ID: 手順
+   :END:
 
-* 手順
+- [[#tmux.confで、tmux内でのTERMを設定する][tmux.confで、tmux内でのTERMを設定する]]
+- [[#terminfoエントリーを追加する][(terminfoのエラーが出る場合)
+  terminfoエントリーを追加する]]
 
-+ [[#tmux.confで、tmux内でのTERMを設定する][tmux.confで、tmux内でのTERMを設定する]]
-+ [[#terminfoエントリーを追加する][(terminfoのエラーが出る場合) terminfoエントリーを追加する]]
-
-** tmux.confで、tmux内でのTERMを設定する
-
+*** tmux.confで、tmux内でのTERMを設定する
+    :PROPERTIES:
+    :CUSTOM_ID: tmux.confでtmux内でのtermを設定する
+    :END:
 [[https://github.com/tmux/tmux/issues/353#issuecomment-202726966][前出のリンク]]で説明されているように、
 以下を =~/. tmux.conf= (または使っているtmux.confファイル)に追加します
 
-#+begin_src tmux
-set -g default-terminal "xterm-256color"
-#+end_src
+#+begin_example
+  set -g default-terminal "xterm-256color"
+#+end_example
 
-** terminfoエントリーを追加する
-
+*** terminfoエントリーを追加する
+    :PROPERTIES:
+    :CUSTOM_ID: terminfoエントリーを追加する
+    :END:
 筆者の環境(macOS+homebrew)では、terminfoエントリーがないと怒られてしまいエスケープシーケンスが全く使えなくなりました。
 
 しかし、実はhomebrewもきちんとterminfoエントリーを作成してくれています。
@@ -68,19 +84,23 @@ set -g default-terminal "xterm-256color"
 そこで、[[https://github.com/tmux/tmux/issues/1257#issuecomment-581378716][tmuxのissueにあった方法]]
 で =/usr/bin/infocmp= に追加します
 
-#+begin_src sh
-$ brew install ncurses
-$ /usr/local/opt/ncurses/bin/infocmp tmux-256color > ~/tmux-256color.info
-$ tic -xe tmux-256color tmux-256color.info
-# This creates a complied entry in ~/.terminfo
-$ infocmp tmux-256color | head
-#       Reconstructed via infocmp from file:
-#       /Users/libin/.terminfo/74/tmux-256color
-tmux-256color|tmux with 256 colors,
+#+begin_src shell
+  $ brew install ncurses
+  $ /usr/local/opt/ncurses/bin/infocmp tmux-256color > ~/tmux-256color.info
+  $ tic -xe tmux-256color tmux-256color.info
+  # This creates a complied entry in ~/.terminfo
+  $ infocmp tmux-256color | head
+  #       Reconstructed via infocmp from file:
+  #       /Users/libin/.terminfo/74/tmux-256color
+  tmux-256color|tmux with 256 colors,
 #+end_src
 
-* 参考リンク
+** 参考リンク
+   :PROPERTIES:
+   :CUSTOM_ID: 参考リンク
+   :END:
 
-+ https://github.com/tmux/tmux/issues/353#issuecomment-202726966
-+ [[https://chakku.hatenablog.com/entry/2018/07/22/040129][tmux上でtmux-256colorを使用する(mac) -- ちゃっくのメモ帳]]
-+ https://github.com/tmux/tmux/issues/1257#issuecomment-581378716
+- [[https://github.com/tmux/tmux/issues/353#issuecomment-202726966]]
+- [[https://chakku.hatenablog.com/entry/2018/07/22/040129][tmux上でtmux-256colorを使用する(mac)
+  -- ちゃっくのメモ帳]]
+- [[https://github.com/tmux/tmux/issues/1257#issuecomment-581378716]]

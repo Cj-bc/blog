@@ -1,29 +1,32 @@
----
-title: Redox OSとかいう新しいOSが気になった話
-tags:
-  - redox os
-  - os
-  - rust
-kind: memo
-date: February 24, 2021
----
-
-* お断り
-
+* Redox OSとかいう新しいOSが気になった話
+    :PROPERTIES:
+    :DATE: [2021-02-24 Wed]
+    :TAGS: :redox os:os:rust:
+    :AUTHOR: Cj-bc
+    :BLOG_POST_KIND: Memo
+    :BLOG_POST_PROGRESS: Published
+    :BLOG_POST_STATUS: Normal
+    :END:
+** お断り
+   :PROPERTIES:
+   :CUSTOM_ID: お断り
+   :END:
 私は一切Redox
 OSを使ったことがないし、関係者でもなくただ単に「気になってちょっとドキュメントみた」程度なので、
 その程度の知識しかないことはご了承ください。
 
-* redox osとは
+** redox osとは
+   :PROPERTIES:
+   :CUSTOM_ID: redox-osとは
+   :END:
 
 #+begin_quote
-Redox OS は、Rustで書かれたUNIXライクなオペレーションシステムで、
-Rustという革命的手法を、モダンなマイクロカーネルおよび
-全てのアプリケーションに持ち込むことを目指しています
+  Redox OS は、Rustで書かれたUNIXライクなオペレーションシステムで、
+  Rustという革命的手法を、モダンなマイクロカーネルおよび
+  全てのアプリケーションに持ち込むことを目指しています
 
--- 公式サイト https://www.redox-os.org/jp より
+  -- 公式サイト [[https://www.redox-os.org/jp]] より
 #+end_quote
-
 
 Rust製のマイクロカーネルなOSのようです。
 
@@ -31,10 +34,14 @@ Rust製のマイクロカーネルなOSのようです。
 と言われると微妙なところではありますが、個人的に面白いなと思ったところを軽く書いておこうと
 思います。
 
-* 面白いところ
-
-** 公式サイトに日本語訳がある
-
+** 面白いところ
+   :PROPERTIES:
+   :CUSTOM_ID: 面白いところ
+   :END:
+*** 公式サイトに日本語訳がある
+    :PROPERTIES:
+    :CUSTOM_ID: 公式サイトに日本語訳がある
+    :END:
 これは本当に驚いたところで、感動したところでもあります。
 
 大体のプロジェクトには日本語なんてないし、そもそも多国語対応している
@@ -45,54 +52,58 @@ Rust製のマイクロカーネルなOSのようです。
 ちなみにページの情報によると、全部で次のような言語があるようですね。
 ...読めないものも多い！！
 
-+ 日本語
-+ English
-+ 中文
-+ Español
-+ Русский
-+ Français
-+ Deutsch
-+ Italiano
-+ Türkçe
-+ Svenska
-+ Nederlands
-+ Dansk
-+ Norsk
-+ Čeština
-+ Esperanto
-+ Português
-+ 한국어
-+ Magyar
-+ Polski
-+ Українська
+- 日本語
+- English
+- 中文
+- Español
+- Русский
+- Français
+- Deutsch
+- Italiano
+- Türkçe
+- Svenska
+- Nederlands
+- Dansk
+- Norsk
+- Čeština
+- Esperanto
+- Português
+- 한국어
+- Magyar
+- Polski
+- Українська
 
+[[https://www.jei.or.jp/3pundesiru/][Esperanto]]
+があるのは個人的にめちゃくちゃ好き！！！
 
-[[https://www.jei.or.jp/3pundesiru/][Esperanto]] があるのは個人的にめちゃくちゃ好き！！！
+人工言語意外と好きなので... (今の推しは
+[[https://mw.lojban.org/index.php?title=Lojban&setlang=ja][lojban]]
+ですが。)
 
-人工言語意外と好きなので...
-(今の推しは [[https://mw.lojban.org/index.php?title=Lojban&setlang=ja][lojban]] ですが。)
-
-
-** Rust製である
-
+*** Rust製である
+    :PROPERTIES:
+    :CUSTOM_ID: rust製である
+    :END:
 何かと低レイヤーに使われがちな気はしていますが、
 カーネルはCが使われるイメージしかなかったのでとても斬新に感じました。
 
 まぁ多分そうじゃないのもたくさんあるんだろうけど...疎いので...
 
-
-** Coreutilとかshellとかエディタとか自作である
-
+*** Coreutilとかshellとかエディタとか自作である
+    :PROPERTIES:
+    :CUSTOM_ID: coreutilとかshellとかエディタとか自作である
+    :END:
 何気にこれほんとすごいと思います。
 
-+ [[https://gitlab.redox-os.org/redox-os/coreutils][coreutils]]
-+ [[https://gitlab.redox-os.org/redox-os/binutils][binutils]]
-+ [[https://gitlab.redox-os.org/redox-os/bootloader-efi][bootloader-efi]]
-+ [[https://gitlab.redox-os.org/redox-os/ion][ion(shell)]]
-+ [[https://gitlab.redox-os.org/redox-os/sodium][sodium(editor)]]
+- [[https://gitlab.redox-os.org/redox-os/coreutils][coreutils]]
+- [[https://gitlab.redox-os.org/redox-os/binutils][binutils]]
+- [[https://gitlab.redox-os.org/redox-os/bootloader-efi][bootloader-efi]]
+- [[https://gitlab.redox-os.org/redox-os/ion][ion(shell)]]
+- [[https://gitlab.redox-os.org/redox-os/sodium][sodium(editor)]]
 
-
-** 独自のshellがある
-
+*** 独自のshellがある
+    :PROPERTIES:
+    :CUSTOM_ID: 独自のshellがある
+    :END:
 これは自分がshell好きだからでもあるのですが、知らないshellを見るとやっぱりワクワクしますよね...
 [[https://gitlab.redox-os.org/redox-os/ion][ion(shell)]]
