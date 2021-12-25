@@ -7,6 +7,8 @@
   :BLOG_POST_STATUS: Normal
   :END:
   :LOGBOOK:
+  CLOCK: [2021-12-25 Sat 09:15]--[2021-12-25 Sat 09:56] =>  0:41
+  CLOCK: [2021-12-25 Sat 08:30]--[2021-12-25 Sat 09:11] =>  0:41
   CLOCK: [2021-12-24 Fri 13:34]--[2021-12-24 Fri 14:59] =>  1:25
   CLOCK: [2021-12-24 Fri 10:23]--[2021-12-24 Fri 11:51] =>  1:28
   CLOCK: [2021-12-23 Thu 09:05]--[2021-12-23 Thu 10:23] =>  1:18
@@ -580,6 +582,9 @@
 
       set -e
       ls 2020-* 2021-0{1,2,3,4}* | grep "\(md\|org\)$" | filter "filterGitKnownFile"  | map convertFile
+      convertFile 2021-05-04-xmonad-use-stack-for-compile.org
+      convertFile 2021-05-10-xmonad-list-of-layouts.org 
+
       echo "Finished!"
     #+end_src
     
