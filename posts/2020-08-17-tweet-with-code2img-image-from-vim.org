@@ -25,26 +25,13 @@ vimmerとして、すごく、困る。
 
 #+begin_html
   <blockquote class="twitter-tweet">
-#+end_html
-
-#+begin_html
   <p lang="ja" dir="ltr">
-#+end_html
-
 ツイートのテストだよ。中身は適当なコードだよ。
 pic.twitter.com/QGJ2Y9iLfz
 
-#+begin_html
   </p>
-#+end_html
-
 --- Cj-bc_sd.sh🐟🔯🌸🐾@ソーダー (@Cj_bc_sd) August 17, 2020
-
-#+begin_html
   </blockquote>
-#+end_html
-
-#+begin_html
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 #+end_html
 
