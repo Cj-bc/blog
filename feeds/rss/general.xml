@@ -7,8 +7,63 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/general.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Thu, 30 Dec 2021 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Tue, 04 Jan 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-01-04-android-retrofit2-api-declaration-should-not-start-with-slash</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-01-04-android-retrofit2-api-declaration-should-not-start-with-slash.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>Retrofit2のAPI定義はスラッシュで始めない</h1>
+  <div class="ui list">
+    <div class="item">Posted on January  4, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January  4, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  
+  
+</div>
+
+<p><a href="https://square.github.io/retrofit/">retrofit</a>を使用してAPIを叩く際、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+kotlin
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>   <span class="kw">import</span> <span class="im">retrofit2.Call</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>   <span class="kw">import</span> <span class="im">retrofit2.http.GET</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>   <span class="kw">public</span> <span class="kw">interface</span> MyApi {</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="at">@GET</span>(<span class="st">&quot;endpoint/example&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="kw">public</span> abstract <span class="kw">fun</span> <span class="fu">exampleGet</span>(): <span class="dt">Call</span>&lt;<span class="dt">ExampleResponse</span>&gt;</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>// <span class="fu">ExampleResponse</span>はどこかで定義されているものとする</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>   }</span></code></pre></div>
+</div>
+<p>とかするわけなんですが、この <code>@GET</code> に与えるパスの先頭に <code>/</code> をつけてはいけない。 そうするとHTTP Status Code 404を吐かれてしまう。 代わりに、 <code>retrofit2.Retrofit.Builder()</code> の <code>baseUrl</code> に渡すURLの末尾に <code>/</code> をつける。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+kotlin
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co">// ダメ</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="at">@GET</span>(<span class="st">&quot;/endpoint/example&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="kw">public</span> abstract <span class="kw">fun</span> <span class="fu">exampleGet</span>(): <span class="dt">Call</span>&lt;<span class="dt">ExampleResponse</span>&gt;</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>// <span class="fu">OK</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>@<span class="fu">GET</span>(&quot;<span class="va">endpoint</span>/<span class="va">example</span>&quot;)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="kw">public</span> <span class="fu">abstract</span> <span class="kw">fun</span> <span class="fu">exampleGet</span>(): <span class="dt">Call</span>&lt;<span class="dt">ExampleResponse</span>&gt;</span></code></pre></div>
+</div>
+<h1 id="おまけ: baseUrlにslashなし&amp;API宣言にslashありは動かない">おまけ: baseUrlにslashなし&amp;API宣言にslashありは動かない</h1>
+<p>最終的に同じになりそうだから試してみたが、エラーが出て駄目でした。 baseUrlはslashで終わらないといけないらしい。</p>
+<div class="line-block">java.lang.IllegalArgumentException: baseUrl must end in /: <a href="https://misskey.io/api">https://misskey.io/api</a></div>
+]]></description>
+    <pubDate>Tue, 04 Jan 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-01-04-android-retrofit2-api-declaration-should-not-start-with-slash.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2021-12-30-math-how-to-rasterize-line-with-begin-and-end-vertices-to-ascii-art</title>
     <link>https://cj-bc.github.io/blog/posts/2021-12-30-math-how-to-rasterize-line-with-begin-and-end-vertices-to-ascii-art.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
@@ -1016,98 +1071,6 @@ bash
 ]]></description>
     <pubDate>Fri, 15 Oct 2021 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2021-10-15-emacs-package-making-evil-textobj-parameter.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2021-10-14-elisp-how-to-write-package</title>
-    <link>https://cj-bc.github.io/blog/posts/2021-10-14-elisp-how-to-write-package.html</link>
-    <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>Elispパッケージを書く際の諸メモ</h1>
-  <div class="ui list">
-    <div class="item">Posted on October 14, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on October 15, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  
-  
-</div>
-
-<p>初めて<a href="https://github.com/Cj-bc/evil-textobj-parameter">きちんとしたElispパッケージ</a>を作成しているので、パッケージとして書く 場合の注意点とか。</p>
-<h1 id="参考リンク">参考リンク</h1>
-<dl>
-<dt><a href="info:elisp#Packaging">info:elisp#Packaging</a></dt>
-<dd>ほぼほぼ全てここに書いてある
-</dd>
-<dt><a href="info:elisp#Tips">info:elisp#Tips</a></dt>
-<dd>コメントの書き方のTipsとか
-</dd>
-</dl>
-<h1 id="ヘッダーのテキスト作成">ヘッダーのテキスト作成</h1>
-<p>Elispファイルは大体同じようなコメント行があるが、 どうやらメタ情報を書いていたりして形式があるらしい。</p>
-<ul>
-<li><a href="info:elisp#Library Headers">info:elisp#Library Headers</a></li>
-</ul>
-<p>以下は<a href="info:elisp#Library Headers">上記リンク</a>にある、コメントの一例</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>;;; foo.el --- Support for the Foo programming language  -*- lexical-binding: t; -*-
-
-;; Copyright (C) 2010-2021 Your Name
-
-;; Author: Your Name &lt;yourname@example.com&gt;
-;; Maintainer: Someone Else &lt;someone@example.com&gt;
-;; Created: 14 Jul 2010
-;; Keywords: languages
-;; URL: https://example.com/foo
-
-;; This file is not part of GNU Emacs.
-
-</code></pre>
-</div>
-<h2 id="最初の行">最初の行</h2>
-<p>一番最初の行は特定のフォーマットになっている必要がある。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>;;; FILENAME --- DESCRIPTION  -*- lexical-binding: t; -*-
-</code></pre>
-</div>
-<h2 id="ヘッダーコメント">ヘッダーコメント</h2>
-<table>
-<tbody>
-<tr class="odd">
-<td><code>Author</code></td>
-<td>作者の名前とメアド。複数いる場合は、次の行に <code>;;</code> とタブ(若しくは最低2つ以上のスペース)を置いた後に書く</td>
-</tr>
-<tr class="even">
-<td><code>Maintainer</code></td>
-<td>現状メンテナンス(バグレポートの対処とか)する人。書式は <code>Author</code> と同じで、省略された場合 <code>Author</code> になる。</td>
-</tr>
-<tr class="odd">
-<td><code>Created</code></td>
-<td>オプショナル。ファイルが最初に作られた日の記録、歴史上の興味以上の意味はない。</td>
-</tr>
-<tr class="even">
-<td><code>Version</code></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h2 id="フッターコメント">フッターコメント</h2>
-<p>ファイルの区切りを明示することで、ファイルの全体を持っているかがわかる。</p>
-<p>(正直「一部の欠けたファイル」になることって今もうないと思うので 必要性はあんまりわからないな？？？)</p>
-]]></description>
-    <pubDate>Thu, 14 Oct 2021 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2021-10-14-elisp-how-to-write-package.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
