@@ -1,0 +1,49 @@
+* Retrofit2のAPI定義はスラッシュで始めない
+  :PROPERTIES:
+  :DATE: [2022-01-04 Tue 14:20]
+  :TAGS: :android:retrofit2:kotlin:
+  :BLOG_POST_KIND: Memo
+  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2022-01-04 Tue 14:22]--[2022-01-04 Tue 14:35] =>  0:13
+  :END:
+  
+  [[https://square.github.io/retrofit/][retrofit]]を使用してAPIを叩く際、
+
+  #+begin_src kotlin
+    import retrofit2.Call
+    import retrofit2.http.GET
+
+    public interface MyApi {
+	@GET("endpoint/example")
+	public abstract fun exampleGet(): Call<ExampleResponse>
+	// ExampleResponseはどこかで定義されているものとする
+    }
+  #+end_src
+
+  とかするわけなんですが、この ~@GET~ に与えるパスの先頭に ~/~ をつけてはいけない。
+  そうするとHTTP Status Code 404を吐かれてしまう。
+  代わりに、 ~retrofit2.Retrofit.Builder()~ の ~baseUrl~ に渡すURLの末尾に ~/~ をつける。
+
+  #+begin_src kotlin
+    // ダメ
+    @GET("/endpoint/example")
+    public abstract fun exampleGet(): Call<ExampleResponse>
+
+    // OK
+    @GET("endpoint/example")
+    public abstract fun exampleGet(): Call<ExampleResponse>
+  #+end_src
+  
+
+
+** おまけ: baseUrlにslashなし&API宣言にslashありは動かない
+   最終的に同じになりそうだから試してみたが、エラーが出て駄目でした。
+   baseUrlはslashで終わらないといけないらしい。
+
+   #+begin_verse
+    java.lang.IllegalArgumentException: baseUrl must end in /: https://misskey.io/api
+   #+end_verse
+
