@@ -1,0 +1,45 @@
+* foldl1/foldr1のワナ -- Foldableが空だと死ぬ
+  :PROPERTIES:
+  :DATE: [2022-01-06 Thu 23:24]
+  :TAGS: :haskell:fold:
+  :BLOG_POST_KIND: Memo
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2022-01-06 Thu 23:26]--[2022-01-06 Thu 23:35] =>  0:09
+  :END:
+  
+  当たり前といえば当たり前だけど、気付くのに数十分くらいはかかってしまったのでメモ
+  
+  
+  ~foldl1~ / ~foldr1~ はそれぞれ ~foldl~ / ~foldr~ の亜種で、後者が初期Accumlatorを
+  指定した後に対象の ~Foldable~ を渡す必要がある一方、 ~1~ が付いているシリーズは
+  対象の ~Foldable~ から初期Accumlatorを取得する。
+
+  #+begin_src haskell
+    foldl1 :: Foldable t => (a -> a -> a) -> t a -> a
+    foldr1 :: Foldable t => (a -> a -> a) -> t a -> a
+
+    foldl  :: Foldable t => (a -> a -> a) -> a -> t a -> a
+    foldr  :: Foldable t => (a -> a -> a) -> a -> t a -> a
+  #+end_src
+
+  で、 ~1~ シリーズを使用するのであれば *対象の ~Foldable~ が空にならないように確認する* 必要がある。
+  もし空であった場合、 ~Prelude.foldr1~ であれば
+
+  #+begin_src haskell
+    > Prelude.foldr1 const []
+    ,*** Exception: Prelude.foldr1: empty list
+  #+end_src
+
+  というエラーが出る。
+  ちなみに ~vector~ パッケージの ~Data.Vector.foldr1~  も同じような問題がある。
+  その場合のエラーメッセージはこんな感じ
+
+  #+begin_src shell
+    brick3D: ./Data/Vector/Fusion/Stream/Monadic.hs:929 (foldl1M): empty stream
+    CallStack (from HasCallStack):
+      error, called at ./Data/Vector/Internal/Check.hs:87:5 in vector-0.12.3.0-DdzviVbdPFECkUuJzBxnHY:Data.Vector.Internal.Check
+  #+end_src
+  
