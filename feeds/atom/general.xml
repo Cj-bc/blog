@@ -8,8 +8,68 @@
         <name>Cj-bc a.k.a Cj.BC_SD</name>
         <email>cj.bc-sd@outlook.jp</email>
     </author>
-    <updated>2022-01-06T00:00:00Z</updated>
+    <updated>2022-01-26T00:00:00Z</updated>
     <entry>
+    <title>2022-01-26-elisp-time-related-functions</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-01-26-elisp-time-related-functions.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-01-26-elisp-time-related-functions.html</id>
+    <published>2022-01-26T00:00:00Z</published>
+    <updated>2022-01-26T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>時間関連のElisp関数</h1>
+  <div class="ui list">
+    <div class="item">Posted on January 26, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January 26, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  
+  
+</div>
+
+<p>時間に関連するElisp関数達</p>
+<h1 id="ビルトイン関数群 ( src/timefns.c )">ビルトイン関数群 ( <code>src/timefns.c</code> )</h1>
+<p>エポック秒 (1970年1月1日0時0分0秒からの経過時間) で時間を 扱います。 基本的には <code>format-time-string</code> を用いて変換することになります。</p>
+<h2 id="format-time-string"><code>format-time-string</code></h2>
+<p>help:format-time-string 指定したフォーマットで時間を文字列にしてくれる関数。</p>
+<h2 id="current-time"><code>current-time</code></h2>
+<p>help:current-time 現在の時間を返します</p>
+<h2 id="time-add"><code>time-add</code></h2>
+<p>help:time-add</p>
+<p>時間を加算してくれます。負数を足せば減算できます。 足す値のフォーマットは <code>current-time</code> で使われているものと同じで ちょっと分かりづらいですが、 <a href="https://github.com/org-roam/org-roam/blob/445e3594b25c1c29dd269e99cb0cc958ed3f28b0/extensions/org-roam-dailies.el#L157">org-roam-dailes.elで使われている箇所</a>を参考にすると、 1日足し引きするには <code>86400</code> を足し引きすればよさそうです。</p>
+<p>n日足すには:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>     (defun nth-day (n)
+&quot;Return nth day from today&quot;
+(time-add (* n 86400) nil))
+</code></pre>
+</div>
+<h1 id="calendar">calendar</h1>
+<p>曜日等を扱うことができます。</p>
+<h2 id="calendar-nth-named-day"><code>calendar-nth-named-day</code></h2>
+<p>help:calendar-nth-named-day</p>
+<p>「特定の日付の前後の特定の曜日」を返すことができます。 曜日は数値で指定され、 0が日曜日、1が月曜日…となっていきます (参考: help:calendar-week-start-day)</p>
+<p>例えば、今日2022年1月26日の次の日曜日を取得するには</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode" data-export="both" data-results="raw"><code>(calendar-nth-named-day 1 0 1 2022 26)
+</code></pre>
+</div>
+<p>(1 30 2022)</p>
+<p>となります</p>
+]]></summary>
+</entry>
+<entry>
     <title>2022-01-06-haskell-trap-of-foldl1</title>
     <link href="https://cj-bc.github.io/blog/posts/2022-01-06-haskell-trap-of-foldl1.html" />
     <id>https://cj-bc.github.io/blog/posts/2022-01-06-haskell-trap-of-foldl1.html</id>
@@ -1012,70 +1072,6 @@ bash
 <p>これはつまり、二つの <code>ManageHook</code> <code>a ::ManageHook</code> / <code>b ::ManageHook</code> があった場合、これをモノイドとして結合 (e.g. <code>a &lt;&gt; b</code>) した 際の実行順序は後ろからかけた方(例の場合は <code>b</code>) が先に実行されるということです。</p>
 <p>なので、「Float化してからレイアウト調整する」のであれば 先にFloatさせる = 先に <code>doFloat</code> する</p>
 <p>眠いのでちょっとあとでまた整理するかもzzz</p>
-]]></summary>
-</entry>
-<entry>
-    <title>2021-11-03-learnt-about-clean-architecture</title>
-    <link href="https://cj-bc.github.io/blog/posts/2021-11-03-learnt-about-clean-architecture.html" />
-    <id>https://cj-bc.github.io/blog/posts/2021-11-03-learnt-about-clean-architecture.html</id>
-    <published>2021-11-03T00:00:00Z</published>
-    <updated>2021-11-03T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>クリーンアーキテクチャーについて少し学んだ</h1>
-  <div class="ui list">
-    <div class="item">Posted on November  3, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on November  4, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  
-  
-</div>
-
-<p>今迄あまり設計というものに触れてきていなかったのだけど、今回初めて「クリーンアーキテクチャ」という概念を少し学んだ。 実をいうと SOLID原則すら触れていなかった。名前は知ってたけどねぇ…</p>
-<p>関数型を使ってることが多いのもあるけど、古いものと考えていた節は正直ある。 いざ触れてみるとやっぱり為になることが多いねぇ…</p>
-<p><a href="https://github.com/Cj-bc/3dShell">Cj-bc/3dShell</a>の設計に悩んだ挙句、部分的に考え方を取り入れてみている。</p>
-<p>以下は、調べている間に感じたことの個人的なメモで <strong>技術的に但しいかは保証できない</strong> ので注意。 何かしら「これは違うぞ!!」というのがあれば、 <a href="https://twitter.com/Cj-bc">Twitter</a>にでも直接直リプライ等で指摘していただけるとありがたいです</p>
-<h1 id="クリーンアーキテクチャについて軽いメモ">クリーンアーキテクチャについて軽いメモ</h1>
-<ul>
-<li>クリーンアーキテクチャは「こうやって作ると良い設計になる」というだけであり、別段正解の使い方が一つあるわけではない</li>
-<li>サンプル実装もあるにはあるがあくまでサンプル
-<ul>
-<li>別にもっと層があっても少なくてもいい</li>
-</ul></li>
-<li>アーキテクチャはそれぞれの事例に合わせて作るべき</li>
-<li>SOLID原則をつきつめるとこれになる感じがある。</li>
-<li>Onion Architectureや<a href="https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)">Hexagonal architecure</a>等の共通点を取り出した(ような)もの
-<ul>
-<li>なので図式には共通点が色々ある</li>
-</ul></li>
-<li>永続化の仕組みやフロントエンド、入力の取得方法等を個別のクラスに切り分けることができるので、パーツ毎の作成が楽
-<ul>
-<li>「DB決まってないけどフロント作って!」みたいな無茶ぶりができる</li>
-<li>テストする時にMockにいれかえたり等できる。</li>
-</ul></li>
-<li>インターフェースを介したやりとりには <code>DTO</code> (Data Transfer Object) を作成して行う
-<ul>
-<li>ただDBとのやりとりに <code>DTO</code> 使ってない例が結構あるのでそこの匙加減わからんなぁ</li>
-</ul></li>
-</ul>
-<h2 id="大事な要素">大事な要素</h2>
-<ul>
-<li><strong>「ドメイン・ビジネスロジックを守る」</strong> のが何よりも大事</li>
-<li>外から内側への依存</li>
-<li>インターフェースを用いることにより、「具象」ではなく「抽象」への依存にする</li>
-</ul>
-<h1 id="参考">参考</h1>
-<ul>
-<li><a href="https://qiita.com/nrslib/items/a5f902c4defc83bd46b8#humble-view">実装クリーンアーキテクチャ – @nrslib qiita.com</a></li>
-<li><a href="https://ja.wikipedia.org/wiki/SOLID">wiki:SOLID</a></li>
-<li><a href="https://gist.github.com/mpppk/609d592f25cab9312654b39f1b357c60">クリーンアーキテクチャ完全に理解した – @mpppk github.com</a></li>
-</ul>
 ]]></summary>
 </entry>
 
