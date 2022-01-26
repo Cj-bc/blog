@@ -1,0 +1,63 @@
+* 時間関連のElisp関数
+  :PROPERTIES:
+  :DATE: [2022-01-26 Wed 10:50]
+  :TAGS: :elisp:emacs:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Published
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2022-01-26 Wed 11:05]--[2022-01-26 Wed 11:12] =>  0:07
+  CLOCK: [2022-01-26 Wed 10:51]--[2022-01-26 Wed 10:54] =>  0:03
+  :END:
+  
+  時間に関連するElisp関数達
+
+  
+** ビルトイン関数群 ( ~src/timefns.c~ )
+   エポック秒 (1970年1月1日0時0分0秒からの経過時間) で時間を
+   扱います。
+   基本的には ~format-time-string~ を用いて変換することになります。
+   
+*** ~format-time-string~
+    help:format-time-string
+    指定したフォーマットで時間を文字列にしてくれる関数。
+*** ~current-time~
+    help:current-time
+    現在の時間を返します
+*** ~time-add~
+    help:time-add
+
+    時間を加算してくれます。負数を足せば減算できます。
+    足す値のフォーマットは ~current-time~ で使われているものと同じで
+    ちょっと分かりづらいですが、
+    [[https://github.com/org-roam/org-roam/blob/445e3594b25c1c29dd269e99cb0cc958ed3f28b0/extensions/org-roam-dailies.el#L157][org-roam-dailes.elで使われている箇所]]を参考にすると、
+    1日足し引きするには ~86400~ を足し引きすればよさそうです。
+
+    
+    n日足すには:
+
+    #+begin_src elisp
+      (defun nth-day (n)
+	"Return nth day from today"
+	(time-add (* n 86400) nil))
+    #+end_src
+** calendar
+   曜日等を扱うことができます。
+*** ~calendar-nth-named-day~
+    help:calendar-nth-named-day
+
+    「特定の日付の前後の特定の曜日」を返すことができます。
+    曜日は数値で指定され、 0が日曜日、1が月曜日...となっていきます
+    (参考: help:calendar-week-start-day)
+    
+    例えば、今日2022年1月26日の次の日曜日を取得するには
+
+    #+begin_src elisp :export both :results raw
+      (calendar-nth-named-day 1 0 1 2022 26)
+    #+end_src
+
+    #+RESULTS:
+    (1 30 2022)
+
+    となります
