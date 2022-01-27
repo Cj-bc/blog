@@ -1,0 +1,27 @@
+* archlinuxで本当にマウントされているファイルシステムの一覧を得る
+  :PROPERTIES:
+  :DATE: [2022-01-27 Thu 17:46]
+  :TAGS: :archlinux:filesystem:proc:kernel:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Published
+  :BLOG_POST_STATUS: Normal
+  :END:
+
+  マウントされているファイルシステムを知るために、
+  今迄 ~lsblk -f~ を使っていたが、これでは全て表示されないことを知ってしまった。
+
+  
+  全て表示するには ~/proc/mounts~ を参照した方が良い。
+  ~proc~ 自身はカーネルのデータ構造へのインターフェースを提供する
+  仮想ファイルシステム(man:proc より)で、
+  
+  その中でも ~/proc/mounts~ はマウントされているものの情報を提供してくれている。
+
+  
+  このファイルのフォーマットはfstabで使用されているものと同じなのでそちらを参照すること。
+  (今回は、何がマウントされているかを知りたかっただけなので詳しくは触れない)
+
+  #+begin_src sh
+    cat /proc/mounts
+  #+end_src
+
