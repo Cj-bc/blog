@@ -1,0 +1,90 @@
+* [GTK] Expandされたウィンドウを縮小させる
+  :PROPERTIES:
+  :DATE: [2022-01-29 Sat 21:55]
+  :TAGS: :gtk:rust:gui:
+  :BLOG_POST_KIND: HowTo
+  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_STATUS: Normal
+  :END:
+  
+  Gtkでは、WindowやWidgetのサイズを小さめにしておき、
+  子要素が必要とする大きさが大きくなった際に必要に応じて拡張することができます。
+
+  子要素が大きくなる時は自動的に拡張されますが、
+  逆に小さくなる時はこれが行われません。
+
+  基本的にはそこまで問題がないのかもしれませんが、これが気になる時があります。
+  
+** 解決したい問題
+   [[https://github.com/elkowar/eww][elkowar/eww]]というウィジェットアプリケーションがあります。
+   プリミティブで用意されているウィジェットを組み合わせることで色々なウィジェットを
+   定義できるのですが、そのプリミティブの中に "Revealer" というものがあります。
+
+   これは Gtkにあるウィジェット[[https://docs.gtk.org/gtk3/class.Revealer.html][Revealer]]であり、子要素を
+   アニメーションによって表示したり隠したりすることができます。
+   Revealerを使った例が以下です。スライドアニメーションを用いて、
+   画面に出たり入ったりするウィジェットを作成することができました。
+
+   #+NAME: Revealerを使った出し入れ可能なウィジェット
+   https://youtu.be/mYKXHcgTyo0
+
+   しかしこれには一つ問題があります。
+   
+   上の動画では背景を透明にしているので気付きづらいのですが、
+   Revealerでスライドした時それを囲うウィンドウ自体の領域は動かず残ったままなのです!
+
+   
+   #+NAME: ウィンドウを赤、Revealerが入っているBoxを青く染めた図
+   https://youtu.be/3bU_D-JGisk
+
+   この動画で赤色がウィンドウ全体、青色がRevealer(を格納しているBox)です。
+   Revealerが右側に仕舞われた後も赤色のウィンドウが残っているのがわかるでしょうか。
+   この部分は透明にしたとしてもこのウィジェットとして判定されるので、
+   この下にあるものをクリックとかが出来なくなります。困った...
+   
+** この問題の原因
+   ウィジェットのサイズが [[https://docs.gtk.org/gtk3/method.Widget.set_size_request.html][~Widget.set_size_request~]]で設定されている時、
+   子要素の大きさがそれ以上になった場合は大きくなります。
+
+   しかし、小さくなった際はそのまま残ります。
+
+   そのため、Revealerが出てきた時は広がりますが仕舞った際はウィンドウはそのまま残ります。
+   
+** 解決策
+   端的に言うと、 *自動的にサイズを縮小するものはありません* (少なくとも調べた限りでは)。
+   替わりに、 *ウィンドウの ~resize~ と「自動拡大」する特徴を組合せる* ことが必要になります。
+   
+   以下の2ステップです:
+   1. ウィンドウのサイズを最小(1,1)まで ~resize~ する
+   2. Gtkクンが、子要素のサイズにぴったり合うように自動的に拡大してくれる
+
+
+   見てわかる通り2はGtkがやってくれるので、ユーザー側でやるのは1の ~resize~ だけになります。
+   Widgetは ~window~ をプロパティとして所持しているので、それの ~resize~ を呼んであげます。
+
+   #+begin_src rust
+     window.gtk_window.resize(1,1);
+   #+end_src
+  
+*** 具体的な処置
+    Revealerの状態が変更された時に ~resize~ を実行できれば良いのですが、
+    残念ながらその状態の変更に関するSignalは存在しません。
+    なので、Revealerの状態が変更される可能性のある時にresizeを呼んであげます。
+
+    
+    今回はEwwが扱っている全てのウィンドウに対してこれを実行したいので、
+    openされているWindow全てのウィンドウで ~resize~ を実行してあげます。
+    
+
+    #+begin_src diff
+	DaemonCommand::UpdateVars(mappings) => {
+	    for (var_name, new_value) in mappings {
+		self.update_global_state(var_name, new_value);
+	    }
+      +     for (_, _window) in self.open_windows.clone() {
+      +         _window.gtk_window.resize(1,1);
+      +     }
+	}
+    #+end_src
+
+    [[https://github.com/Cj-bc/eww/commit/4109bbd601a777e25bdbbc6383ff42893181ed4a][実際に使っているコミットはこちら]]
