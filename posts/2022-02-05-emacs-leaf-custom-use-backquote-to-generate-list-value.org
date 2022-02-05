@@ -1,0 +1,58 @@
+* [leaf]:customで動的に生成したリストを使う
+  :PROPERTIES:
+  :DATE: [2022-02-05 Sat 11:46]
+  :TAGS: :emacs:elisp:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2022-02-05 Sat 12:08]--[2022-02-05 Sat 12:17] =>  0:09
+  :END:
+  
+  [[https://github.com/conao3/leaf.el][conao3/leaf.el]]に於いて、動的な値を ~:custom~ キーワードに与えるにはバッククォートを使う必要があります。
+  ([[https://qiita.com/conao3/items/347d7e472afd0c58fbd7#変数の変更について][conao3さんのQiita記事 「Emacs入門から始めるleaf.el入門」]]にも記載があります。
+
+  #+begin_src elisp
+    (leaf foo
+      :custom
+      `(foo-variable . ,(+ 3 3)))
+  #+end_src
+  
+  (backquoteについては info:elisp#Backquote を参照すると良いと思います。)
+
+  
+  先の事例では、リストではない値を割り当てていましたが、リストを割り当てる場合は
+  少しトリッキーになります。
+
+  #+begin_src elisp :results value raw replace
+    `(org-agenda-list . ',(directory-files "~/Documents/org" ))
+  #+end_src
+
+  #+RESULTS:
+  (org-agenda-list quote (foo.org bar.org))
+
+  Org babelで実行して ~RESULTS~ を見てみると変な感じがしますが、動いているぽい。
+  ~'~ でクォートしてあげないと、完全に一つのリストになってしまいます。
+  これの理屈としては、恐らくバッククォートを用いたことで以下のように展開され:
+
+  #+begin_src elisp
+    (org-agenda-list . ("path1" . ("path2" . nil)))
+  #+end_src
+
+  これはつまりリストの構成と同じなのでくっついてしまうんでしょうね。
+
+  
+
+  ちなみに、CDRがリストならDotted pair表示にはならないらしい ([[info:elisp#Dotted Pair Notation]]より)
+  のでDotted pairの表示じゃないのは正常なようです。
+  
+  #+begin_quote
+  When printing a list, the dotted pair notation is only
+  used if the CDR of a cons cell is not a list.
+  #+end_quote
+
+  まぁ普通のリストになっちゃうからそれはそうだよねっていう。
+** まだわからないこと
+   + ~(org-agenda-files quote ("path1" "path2"))~ と続いているが、なぜ ~quote~ がそこにあって動くのか？
+   + そもそも dotted Pairじゃなくしたらダメ...?(これはleafの仕様の話になってきます
