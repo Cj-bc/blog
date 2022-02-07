@@ -97,6 +97,13 @@ bash
 </tr>
 </tbody>
 </table>
+<h1 id="参考">参考</h1>
+<ul>
+<li><a href="https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09">passの修正コミット</a></li>
+<li><a href="https://github.com/archlinux/svntogit-community/blob/packages/pass/trunk/PKGBUILD">passの正式なURL取得元のPKGBUILD</a></li>
+<li><a href="http://mama.indstate.edu/users/ice/tree/changes.html">treeのCHANGELOG</a></li>
+<li><a href="https://www.archlinux.jp/packages/extra/x86_64/tree/">treeの正式なURL取得元のarchlinuxのパッケージページ</a></li>
+</ul>
 ]]></description>
     <pubDate>Mon, 07 Feb 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-02-07-pass-command-is-affected-by-tree-version-2.html</guid>
