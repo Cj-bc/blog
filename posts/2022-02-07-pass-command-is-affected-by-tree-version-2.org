@@ -1,0 +1,100 @@
+* passコマンドが最近上手く動かなくなった時の対処法[tree v2.0.0関連]
+  :PROPERTIES:
+  :DATE: [2022-02-07 Mon 10:44]
+  :TAGS: :pass:tool:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2022-02-07 Mon 11:04]
+  CLOCK: [2022-02-07 Mon 10:46]--[2022-02-07 Mon 11:04] =>  0:18
+  :END:
+  
+  [[https://git.zx2c4.com/password-store/about/][pass]]コマンドは内部で[[http://mama.indstate.edu/users/ice/tree/][tree]]コマンドを使用しています。
+  このところ、treeコマンドの使用変更によってpassコマンドが上手く動かなくなったので
+  その原因と対処法について書き残しておきます。
+
+  #+NAME: Tl;Dr
+  + tree v2.0.0 から、FD 3が開いていると標準出力の替わりにそちらにデータをJSONで流すよ
+  + 今迄通りの挙動をさせるには、 ~3>&-~ 等でFD 3を閉じてあげる必要があるよ
+  + [[https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09][passはこれに対処済み]]だけどまだリリースされてないのでユーザーサイドでは使えないよ
+  + 現状passを呼び出す際は必ず ~pass 3>&-~ としておけば対策できるよ
+  
+    
+** 原因
+   treeの2.0.0リリースにて入った破壊的変更が原因です。
+
+   [[http://mama.indstate.edu/users/ice/tree/changes.html][treeのCHANGELOG]]から引用させてもらうと
+
+   #+begin_quote
+   Output un-indented JSON on file descriptor 3 ("stddata") automatically
+   if file descriptor 3 is present (currently Linux only.) Maybe switch to BSON.
+   #+end_quote
+
+   ざっくりと訳すと「Linuxに於いては、File Descriptor 3が開いている場合はそこに整形されていないJSON
+   を書き込むようになりました。BSONになるかもしれない」とのことです。
+
+   pass自体も普通に使っていれば問題ないのですが、 ~git credential~ を呼んだ際はどうしてか
+   沢山ファイルディスクリプタが使用されます。
+
+   私の環境下では以下のファイルディスクリプタが開いていました
+
+   #+NAME: 開いていたファイルディスクリプタ
+   + 0 (標準入力)
+   + 1 (標準出力)
+   + 2 (標準エラー出力)
+   + 255
+   + 3
+   + 4
+   + 5
+   + 6
+
+
+   そう、ここで3番があったんですね...
+** 対策
+   必要なのは、treeコマンドのファイルディスクリプタの3番を閉じるだけです。
+*** 上流で行われている対策
+    実はpassではこれに対して対策が取られており、[[https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09][commit:eea24967]]にてコミットされています。
+
+    *しかし* 、2022/02/07現在ではこれはまだリリースされていないためエンドユーザーは使用できません。
+    (まぁgitでmasterから取って来て使うことは勿論出来ますが)
+
+    はやいとこリリースされてほしい...
+*** 現状できること
+    passを呼び出す際にfd 3を塞ぎます。
+    #+begin_src sh
+      pass 3>&-
+    #+end_src
+    
+    とすることで、passプロセスのファイルディスクリプタ3番を閉じることができます。
+    passを使用する何らかのスクリプトを書いている場合、当面はこうするのがよさそうです。
+
+** おまけ: ~>&-~ の意味
+
+   元は ~[n]>&word~ という形です。
+   ~n~ で指定された、出力のファイルディスクリプターを ~word~ で指定された番号の
+   ファイルディスクリプターに複製します。
+   そして、 *もし ~word~ が ~-~ であるなら* 指定したファイルディスクリプターを閉じます。
+
+   
+   man:bash(1) /Redirection/ 節の /Duplicating File Descriptors/ に説明があります。
+
+** おまけ2: あるプログラムが開いているファイルデイスクリプターの一覧を取得する
+   Linuxでは、カーネルがあらゆる情報を *procファイルシステム* に擬似的なファイルとして書き込んでくれています。
+   (man:proc(5))
+
+   大抵はこれが ~/proc~ にマウントされているはずです。
+   各プロセスの情報は ~/proc/${PID}/~ ディレクトリ下に生成され、ファイルディスクリプターの
+   情報は ~/proc/${PID}/fd~ ディレクトリ下に生成されます。
+   
+
+   #+begin_src sh
+     ls /proc/$$/fd
+   #+end_src
+
+   #+RESULTS:
+   | 0 |
+   | 1 |
+   | 2 |
+
