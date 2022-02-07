@@ -7,8 +7,74 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/general.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Sat, 29 Jan 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Sat, 05 Feb 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-02-05-emacs-leaf-custom-use-backquote-to-generate-list-value</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-02-05-emacs-leaf-custom-use-backquote-to-generate-list-value.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>[leaf]:customで動的に生成したリストを使う</h1>
+  <div class="ui list">
+    <div class="item">Posted on February  5, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on February  5, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  
+  
+</div>
+
+<p><a href="https://github.com/conao3/leaf.el">conao3/leaf.el</a>に於いて、動的な値を <code>:custom</code> キーワードに与えるにはバッククォートを使う必要があります。 (<a href="https://qiita.com/conao3/items/347d7e472afd0c58fbd7#変数の変更について">conao3さんのQiita記事 「Emacs入門から始めるleaf.el入門」</a>にも記載があります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(leaf foo
+  :custom
+  `(foo-variable . ,(+ 3 3)))
+</code></pre>
+</div>
+<p>(backquoteについては <a href="info:elisp#Backquote">info:elisp#Backquote</a> を参照すると良いと思います。)</p>
+<p>先の事例では、リストではない値を割り当てていましたが、リストを割り当てる場合は 少しトリッキーになります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode" data-results="value raw replace"><code>`(org-agenda-list . &#39;,(directory-files &quot;~/Documents/org&quot; ))
+</code></pre>
+</div>
+<p>(org-agenda-list quote (foo.org bar.org))</p>
+<p>Org babelで実行して <code>RESULTS</code> を見てみると変な感じがしますが、動いているぽい。 <code>'</code> でクォートしてあげないと、完全に一つのリストになってしまいます。 これの理屈としては、恐らくバッククォートを用いたことで以下のように展開され:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(org-agenda-list . (&quot;path1&quot; . (&quot;path2&quot; . nil)))
+</code></pre>
+</div>
+<p>これはつまりリストの構成と同じなのでくっついてしまうんでしょうね。</p>
+<p>ちなみに、CDRがリストならDotted pair表示にはならないらしい (<a href="info:elisp#Dotted Pair Notation">info:elisp#Dotted Pair Notation</a>より) のでDotted pairの表示じゃないのは正常なようです。</p>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>When printing a list, the dotted pair notation is only used if the CDR of a cons cell is not a list.</p>
+</blockquote>
+</div>
+<p>まぁ普通のリストになっちゃうからそれはそうだよねっていう。</p>
+<h1 id="まだわからないこと">まだわからないこと</h1>
+<ul>
+<li><code>(org-agenda-files quote ("path1" "path2"))</code> と続いているが、なぜ <code>quote</code> がそこにあって動くのか？</li>
+<li>そもそも dotted Pairじゃなくしたらダメ…?(これはleafの仕様の話になってきます</li>
+</ul>
+]]></description>
+    <pubDate>Sat, 05 Feb 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-02-05-emacs-leaf-custom-use-backquote-to-generate-list-value.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-01-29-gtk-shrink-window-region-after-expanding-it</title>
     <link>https://cj-bc.github.io/blog/posts/2022-01-29-gtk-shrink-window-region-after-expanding-it.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
@@ -919,186 +985,6 @@ bash
 ]]></description>
     <pubDate>Sat, 27 Nov 2021 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2021-11-27-qutebrowser-you-should-set-locale-properly-to-upload-files.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2021-11-22-blog-import-all-qiita-posts-to-my-blog</title>
-    <link>https://cj-bc.github.io/blog/posts/2021-11-22-blog-import-all-qiita-posts-to-my-blog.html</link>
-    <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>Qiitaの記事を全部引っ越ししている [WIP]</h1>
-  <div class="ui list">
-    <div class="item">Posted on November 22, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on November 29, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  
-  
-</div>
-
-<p>長らくの間私は <a href="https://qiita.com/Cj-bc">Qiita</a>に記事を書いていましたが、今や自分のページを持つに 至りました。</p>
-<p>依然技術系の記事は別に出しても良いのですが、とりあえず このブログには全ての記事を載せておきたかったのでQiitaの記事を引っ越して こようと思います。</p>
-<h1 id="行いたいこと">行いたいこと</h1>
-<ul>
-<li>Qiitaにある全ての記事を、ほぼそのまま持ってくる
-<ul>
-<li>メタ情報(投稿日時やタグなど)はできるだけ保持する</li>
-<li>(管理上の都合で)org文書にコンバートする</li>
-</ul></li>
-<li>画像データもローカルに保存しなおす</li>
-</ul>
-<h1 id="注意すること">注意すること</h1>
-<ul>
-<li>URIエンコードされているものはデコードする</li>
-</ul>
-<h1 id="使うもの">使うもの</h1>
-<dl>
-<dt><a href="https://qiita.com/api/v2/docs">Qiita API v2</a></dt>
-<dd>あたり前だがQiitaのAPI。「特定のユーザーの公開記事」なら認証なしで引っ張ってこれる
-</dd>
-<dt><a href="https://www.nushell.sh/">nushell</a></dt>
-<dd>Rust製の、データの扱いに長けたシェル。JSONを素で扱えて楽なので使用する。
-</dd>
-<dt>node.js</dt>
-<dd>いわずもがな。Qiita APIが、コンテンツをURIエンコードして返してくるのでデコードするのに使う
-</dd>
-</dl>
-<h1 id="作業">作業</h1>
-<h2 id="TODO 1. Qiitaから情報を取得する"><span class="todo TODO">TODO</span> 1. Qiitaから情報を取得する</h2>
-<p>まずはQiitaから情報を引っ張ってきます。 これは <code>/users/:user_id/items</code> エンドポイントを使用します。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">curl</span> https://qiita.com/api/v2/users/Cj-bc/items</span></code></pre></div>
-</div>
-<p>これで、指定したユーザーの投稿のリストが取得できます。 各投稿はディクショナリで、そのキーの完全なリストは<a href="https://qiita.com/api/v2/docs#投稿">Qiita APIドキュメントの「投稿」</a>に記載されています。</p>
-<p>ここでは、今回使うものとして以下のキーを紹介します:</p>
-<dl>
-<dt><code>body</code></dt>
-<dd><strong>Markdown形式で</strong> 表現された本文を保持します。 これは <strong>URLエンコードされています</strong> 。
-</dd>
-<dt><code>created_at</code></dt>
-<dd>この投稿が作成された日時です。ISO8601形式で秒数まで記載されています。
-</dd>
-<dt><code>title</code></dt>
-<dd>その投稿のタイトルです。
-</dd>
-</dl>
-<p>これらのキーの値を用いて:</p>
-<ol>
-<li>APIからデータを取得</li>
-<li><em>本文を <code>body</code> から取得</em></li>
-<li><code>created_at</code> と <code>title</code> からファイル名を構築する</li>
-<li>そのファイルに本文を保存する</li>
-</ol>
-<p>という処理がしたい。 これを何を用いてやるか…という話なのですが、ここで「JSONデータを扱いやすい」という理由でnushellが出てきます。</p>
-<p>最初はjqとか使おうとしてたけど、</p>
-<ul>
-<li>そもそもjqはあまり知らない</li>
-<li>ファイル名を構築してそこへのリダイレクトが出来なさそう(少なくとも知らない)</li>
-<li>文字列に他の処理をかけたい場合がある</li>
-</ul>
-<p>というのでjqではなくnushellにしました。</p>
-<ol>
-<li><p>1. APIからデータを取得</p>
-<p>nushellでは、ビルトインの <code>fetch</code> コマンドで HTTPの <code>GET</code> リクエストを送信できます。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-nu
-</div>
-<pre class="nu SourceCode"><code>fetch https://qiita.com/api/v2/users/Cj-bc/items
-</code></pre>
-</div>
-<p>こうすると、JSONをnushellのtableに変換して返してくれます。</p></li>
-<li><p>2. 本文を <code>body</code> から取得</p>
-<p>このAPIは、「投稿のリスト」を返してくるので、それぞれに対してbodyを取得してあげる。</p>
-<dl>
-<dt><code>each</code></dt>
-<dd>標準入力にリストを取り、その各要素に対してコードブロックを適用します
-</dd>
-<dt><code>{}</code></dt>
-<dd>コードブロックです。この中の <code>$it</code> は、このコードブロックに渡されるパラメーターを示します。
-</dd>
-<dt><code>{|x| }</code></dt>
-<dd>コードブロックは名前付きでも定義することができます。この場合、 <code>$it</code> の変わりに <code>$x</code> を同じ意味で使用できます。(ついでの解説)
-</dd>
-</dl>
-<div class="ui segment">
-<div class="ui top right attached label">
-nu
-</div>
-<pre class="nu SourceCode"><code>fetch https://qiita.com/api/v2/users/Cj-bc/items | each {$it.body}
-</code></pre>
-</div></li>
-<li><p><span class="todo TODO">TODO</span> 3. <code>created_at</code> と <code>title</code> からファイル名を構築する</p>
-<p>現在、ブログ記事のファイル名は <code>&lt;日付&gt;-&lt;タイトル&gt;</code> のケバブケースになっている。 なのでこの形に合うように整形する。</p>
-<dl>
-<dt><code>$"&lt;text&gt;"</code></dt>
-<dd><code>$</code> から始まる文字列は、文字列埋め込みです。 <code>()</code> で囲んであげた部分を式として評価し、文字列に埋め込みます。
-</dd>
-<dt><code>str substring &lt;range&gt;</code></dt>
-<dd>指定の範囲のスライスを作成します。
-</dd>
-<dt><code>str kebab-case</code></dt>
-<dd>標準入力で来た文字列をケバブケースに変換します。
-</dd>
-</dl>
-<div class="ui segment">
-<div class="ui top right attached label">
-nu
-</div>
-<pre class="nu SourceCode"><code>fetch https://qiita.com/api/v2/users/Cj-bc/items | each {$&quot;($it.created_at | str substring [0,10])-($it.title | str kebab-case).md&quot;}
-</code></pre>
-</div></li>
-</ol>
-<h2 id="TODO 2. HTMLエンコードを外す"><span class="todo TODO">TODO</span> 2. HTMLエンコードを外す</h2>
-<p>APIから取得した <code>body</code> は HTMLエンコードされている(e.g. <code>-&gt;</code> が <code>-&amp;gt;</code> になるなど) ので、これをデコードしてあげます。</p>
-<div class="waring">
-<p><em>HTML エンコード</em> と <em>URI エンコード</em> は(異なります。</p>
-</div>
-<p>多分色々な方法が色々な言語にあると思いますが、 一番最初に思い付いた簡単かつ確実なのはnodeを使うことだったのでそうします。 <code>decodeURI</code> (<a href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/decodeURI">参考</a>) 使えばよさそう。</p>
-<dl>
-<dt><code>console.log</code></dt>
-<dd>標準出力に出力するために使用します
-</dd>
-<dt><code>fs.readFileSync("/dev/stdin", "utf8")</code></dt>
-<dd>標準入力から読むために使用します
-</dd>
-<dt><code>decodeURI</code></dt>
-<dd>URIエンコードをデコードする関数です。
-</dd>
-</dl>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb5" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ex">node</span> -e <span class="st">&#39;console.log(encodeURI(&quot;https://qiita/てすともーど!!!&gt;&quot;))&#39;</span> <span class="kw">|</span> <span class="ex">node</span> -e <span class="st">&#39;console.log(decodeURI(fs.readFileSync(&quot;/dev/stdin&quot;, &quot;utf8&quot;)))&#39;</span></span></code></pre></div>
-</div>
-<div class="ui segment">
-<div class="ui top right attached label">
-example
-</div>
-<pre class="example SourceCode"><code>https://qiita/てすともーど!!!&gt;
-</code></pre>
-</div>
-<h2 id="TODO 3. ファイルに保存する"><span class="todo TODO">TODO</span> 3. ファイルに保存する</h2>
-<p><code>save</code> で標準入力からきたものをファイルに保存できます。 つかったものだけ</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb7" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="ex">fetch</span> https://qiita.com/api/v2/users/Cj-bc/items?per_page=86 <span class="kw">|</span> <span class="ex">each</span> { <span class="va">$it</span>.body <span class="kw">|</span> <span class="ex">save</span> <span class="st">$&quot;(</span><span class="va">$it</span><span class="st">.created_at | str substring [0 10])-(</span><span class="va">$it</span><span class="st">.title|str kebab-case).md&quot;</span> }</span></code></pre></div>
-</div>
-<p><a href="https://qiita.com/saba_can00/items/02ff28a16a0d312a5259">https://qiita.com/saba_can00/items/02ff28a16a0d312a5259</a></p>
-]]></description>
-    <pubDate>Mon, 22 Nov 2021 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2021-11-22-blog-import-all-qiita-posts-to-my-blog.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
