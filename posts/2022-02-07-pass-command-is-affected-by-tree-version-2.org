@@ -98,3 +98,9 @@
    | 1 |
    | 2 |
 
+** 参考
+   + [[https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09][passの修正コミット]]
+   + [[https://github.com/archlinux/svntogit-community/blob/packages/pass/trunk/PKGBUILD][passの正式なURL取得元のPKGBUILD]]
+   + [[http://mama.indstate.edu/users/ice/tree/changes.html][treeのCHANGELOG]]
+   + [[https://www.archlinux.jp/packages/extra/x86_64/tree/][treeの正式なURL取得元のarchlinuxのパッケージページ]]
+
