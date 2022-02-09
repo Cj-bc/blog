@@ -1,9 +1,9 @@
 {-# LANGUAGE OverloadedStrings, TemplateHaskell #-}
 module MyBlog.MetaData where
-import Lens.Micro.Platform (makeLenses, set)
+import Lens.Micro.Platform (makeLenses, set, (.~), (&))
 import Data.Foldable (fold)
 import Data.Default (Default(..))
-import Text.Pandoc.Shared (safeRead, splitBy)
+import Text.Pandoc.Shared (safeRead, splitTextBy)
 import Text.Pandoc.Definition
 import Data.Text (Text)
 
@@ -54,7 +54,7 @@ instance Monoid BlogMetaData where
   mempty = def
 
 collectMetaData :: Pandoc -> BlogMetaData
-collectMetaData (Pandoc _ (titleBlock:_)) = fold . fmap readOneMetaData $ getMeta titleBlock
+collectMetaData (Pandoc _ (titleBlock:_)) = maybe def id . fold . fmap readOneMetaData $ getMeta titleBlock
   where
     getMeta :: Block -> [(Text, Text)]
     getMeta (Header 1 (_, _, kv) _) = kv
@@ -63,8 +63,8 @@ collectMetaData (Pandoc _ (titleBlock:_)) = fold . fmap readOneMetaData $ getMet
 
 -- | 一種類のメタデータを読む
 readOneMetaData :: (Text, Text) -> Maybe BlogMetaData
-readOneMetaData ("blog_post_kind", k)     = safeRead k >>= flip (set _kind    ) def
-readOneMetaData ("blog_post_status", s)   = safeRead s >>= flip (set _status  ) def
-readOneMetaData ("blog_post_progress", p) = safeRead p >>= flip (set _progress) def
-readOneMetaData ("tags", t)               = Just . filter (/= "") $ splitBy (== ':') t 
+readOneMetaData ("blog_post_kind", k)     = safeRead k >>= pure . flip (set kind    ) def
+readOneMetaData ("blog_post_status", s)   = safeRead s >>= pure . flip (set status  ) def
+readOneMetaData ("blog_post_progress", p) = safeRead p >>= pure . flip (set progress) def
+readOneMetaData ("tags", t)               = Just $ def&tags.~(filter (/= "") $ splitTextBy (== ':') t)
 readOneMetaData _                         = Nothing
