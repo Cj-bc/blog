@@ -1,0 +1,95 @@
+* brick 0.46から0.62へのアップグレードメモ
+  :PROPERTIES:
+  :DATE: [2021-09-02 Thu 16:29]
+  :TAGS: :Haskell:
+  :BLOG_POST_KIND: Memo
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2021-09-02 Thu 16:29]--[2021-09-02 Thu 16:49] =>  0:20
+  :END:
+  
+  ghq:Cj-bc/brick-shgif を久々に使おうとしたが、
+  brickのバージョンが凄い上がっていたのでアップグレードしよ~のコーナー
+
+  ちなみに最新の0.64にしないのは、 ghq:Cj-bc/brick-shgif の
+  他の依存パッケージであるtartが最新版でも0.63より古いバージョンまでしか
+  対応していないため。
+  
+** チェンジログからわかる!変更点まとめ
+   但し実装に影響がありそうなもののみ、又簡素な纏め。
+   
+
+   + customMain が ~Vty~ ハンドルを初期値として取るようになった。
+   + ~main~ が終了した後に ~Vty~ を返す ~customMainWithVty~ が追加
+   + ~Edit~ Widgetが ~EvPaste~ イベントに反応するように。
+     + UTF-8としてデコードされ、デコードできないものは無視される
+   + ~txtWrapWith~ は、 ~Greedy~ に応じて利用可能な横幅目一杯まで
+     パディングを追加するようになった。
+   + ~FileBrowser~ はシンボリックリンクに対応した
+     + シンボリックリンクの上で ~Enter~ を押すとリンク先に飛ぶようになった。
+     + [[https://hackage.haskell.org/package/brick-0.62/docs/Brick-Widgets-FileBrowser.html][~Brick.Widgets.FileBrowser~]]に新しいフィールド ~fileInfoLinkTargetType~
+       が追加された。
+   + ~writeBChanNonBlocking~ を追加。
+     + BChanへのnon-blockingな書き込みを可能にし、書き込みが成功したかを返す
+     + これによりSTMの対応バージョンの下限が2.4.3に引き上げられた。
+   + ~Brick.Focus.focusRingLength~ を追加。
+     + ~focus ring~ の大きさを取得できる。
+   + ~Brick.Focus.focusRingToList~ を追加。
+     + ~focus ring~ の全ての中身をリストで取得できる。
+     + focusしているものが先頭にある。
+   + ~EventM~ に ~MonadFail~, ~MonadMask~, ~MonadCatch~, ~MonadThrow~ インスタンス追加
+   + ~FileBrowser~ がvi風のキーバインディングも追加でサポートした。
+   + ~Brick.Widgets.FileBrowser.maybeSelectCurrentEntry~ を export
+   + ~Brick.Widgets.Edit.handleEditorEvent~ に
+     ~Home~ と ~End~ キーのハンドラを追加
+   + ~customMain~ が、シャットダウン後に初期のterminal input stateを復元するように
+   + ~Brick.Forms.updateFormState~ を追加
+     + ~Form~ の中にあり ~Form~ に管理されているステートの更新をする
+     + フォームのフィールドをステートの中身と一致させるのを勝手にやってくれる
+   + vtyのバージョン下限を 5.31に引き上げ、 ~strikethrough~ が使えるように
+   + theme customizeation fileで ~strikethrough~ が使用可能に。
+   + GHC 9.0.1 でビルドできるように ~base~ のバージョン制約を緩めた
+   + ~FileBrowser~ モジュールが、それの管理するイベントそれぞれのための
+     関数をexport
+     + ドキュメントも、どの関数がどのキーイベントで実行されるかを示す
+       ように変更。
+   + ~List.listFindBy~ 関数が、カーソルとリストの最後までだけでなく
+     リストのどの場所にもマッチするように
+   + ~FileBrowsr~ はfocusされた時に、カーソルを選択されているエントリーの
+     行の始めに配置するように。
+   + ~Brick.Widgets.List~ に ~listMoveToBeginning~ と ~listMoveToEnd~ 関数を追加
+   + ~Extent~ から、使用されていなかった ~extentOffset~ フィールドを削除
+   + 簡易的なテーブルを書ける ~Brick.Widgets.Table~ を追加。
+   + ~cached~ でキャッシュされている時も、 ~clickable~ が ~clickable~ として
+     報告(report)されるように。
+   + ~Brick.Forms~ に ~editShowableFieldWithValidate~ を追加。
+     + ~editShowableField~ に、呼出元が追加のバリデーションをする関数を
+       与えられるようにした抽象化(generalization)した。
+   + ~Brick.Widgets.Core~ に ~crop{Left,Right,Bottom,Top}To~ 関数が追加。
+     + 説明はよくわからんかったのでちょっと放置
+   
+** 変更が必要そうなもの
+   機能の追加等は修正必要ないのでスルーする。
+
+   + customMain が ~Vty~ ハンドルを初期値として取るようになった。
+   + ~txtWrapWith~ は、 ~Greedy~ に応じて利用可能な横幅目一杯まで
+     パディングを追加するようになった。
+   + ~FileBrowser~ はシンボリックリンクに対応した
+     + シンボリックリンクの上で ~Enter~ を押すとリンク先に飛ぶようになった。
+     + [[https://hackage.haskell.org/package/brick-0.62/docs/Brick-Widgets-FileBrowser.html][~Brick.Widgets.FileBrowser~]]に新しいフィールド ~fileInfoLinkTargetType~
+       が追加された。
+   + ~EventM~ に ~MonadFail~, ~MonadMask~, ~MonadCatch~, ~MonadThrow~ インスタンス追加
+   + ~customMain~ が、シャットダウン後に初期のterminal input stateを復元するように
+   + vtyのバージョン下限を 5.31に引き上げ、 ~strikethrough~ が使えるように
+   + GHC 9.0.1 でビルドできるように ~base~ のバージョン制約を緩めた
+   + ~List.listFindBy~ 関数が、カーソルとリストの最後までだけでなく
+     リストのどの場所にもマッチするように
+   + ~FileBrowsr~ はfocusされた時に、カーソルを選択されているエントリーの
+     行の始めに配置するように。
+   + ~Extent~ から、使用されていなかった ~extentOffset~ フィールドを削除
+   + ~cached~ でキャッシュされている時も、 ~clickable~ が ~clickable~ として
+     報告(report)されるように。
+
+     
