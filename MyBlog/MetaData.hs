@@ -1,10 +1,11 @@
 {-# LANGUAGE OverloadedStrings, TemplateHaskell #-}
 module MyBlog.MetaData where
-import Lens.Micro.Platform (makeLenses)
+import Lens.Micro.Platform (makeLenses, set)
 import Data.Foldable (fold)
 import Data.Default (Default(..))
-import Text.Pandoc.Shared (safeRead)
+import Text.Pandoc.Shared (safeRead, splitBy)
 import Text.Pandoc.Definition
+import Data.Text (Text)
 
 data PostKind = Memo | Diary | Knowledge | Advertisment | Translation | HowTo
               deriving (Read, Show, Eq)
@@ -47,7 +48,7 @@ instance Default BlogMetaData where
 
 instance Semigroup BlogMetaData where
   (BlogMetaData ts a k s p) <> (BlogMetaData ts' a' k' s' p')
-    = (BlogMetaData (ts<>ts') (a<>a') (a<>k') (s<>s') (p<>p'))
+    = (BlogMetaData (ts<>ts') (a<>a') (k<>k') (s<>s') (p<>p'))
 
 instance Monoid BlogMetaData where
   mempty = def
