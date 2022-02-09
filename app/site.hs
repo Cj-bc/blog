@@ -8,7 +8,7 @@ import           Text.Pandoc.Definition (docTitle, Pandoc(Pandoc))
 import           Data.Default (def)
 import qualified Data.Text as T
 import           Control.Monad (forM_)
-
+import           Control.Lens ((^.))
 import           Hakyll.Web.Html (withUrls)
 import           Hakyll.Core.Compiler (getResourceFilePath)
 import           System.FilePath.Posix (takeBaseName)
@@ -16,6 +16,7 @@ import           Data.List (isPrefixOf)
 
 import           MyBlog.Contexts
 import           MyBlog.Pandoc
+import           MyBlog.MetaData
 --------------------------------------------------------------------------------
 
 blogName :: String
@@ -120,11 +121,14 @@ main = hakyll $ do
     match "posts/*" $ do
         route $ setExtension "html"
         compile $ do
-            pandocData@(Item ident (Pandoc pandocMeta _)) <- getResourceBody >>= readPandocWith pandocMarkdownCfg >>= traverse (return . myPandocTransform)
+            originalPostData <- getResourceBody >>= readPandocWith pandocMarkdownCfg
+            pandocData@(Item ident (Pandoc pandocMeta _)) <- traverse (return . myPandocTransform) originalPostData
             let titleMetadata = T.unpack . foldl (\p n -> p <> stringify n) "" . docTitle $ pandocMeta
+                metadataSet = collectMetaData originalPostData
                 ctx = constField "title" titleMetadata <> postCtx tags
             currentIdentifier <- getUnderlying 
             saveSnapshot "title" ( Item currentIdentifier titleMetadata)
+            saveSnapshot "tags" (Item currentIdentifier $ fmap T.unpack (metadataSet^.tags))
             -- pandocCompilerWithTransform  def myPandocTransform
             return (writePandocWith def pandocData)
               >>= saveSnapshot "raw content"
