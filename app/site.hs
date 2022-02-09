@@ -8,7 +8,7 @@ import           Text.Pandoc.Definition (docTitle, Pandoc(Pandoc))
 import           Data.Default (def)
 import qualified Data.Text as T
 import           Control.Monad (forM_)
-import           Control.Lens ((^.))
+import           Lens.Micro.Platform ((^.))
 import           Hakyll.Web.Html (withUrls)
 import           Hakyll.Core.Compiler (getResourceFilePath)
 import           System.FilePath.Posix (takeBaseName)

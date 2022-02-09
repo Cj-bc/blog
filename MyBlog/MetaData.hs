@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings, TemplateHaskell #-}
 module MyBlog.MetaData where
-import Control.Lens (makeLenses)
+import Lens.Micro.Platform (makeLenses)
 import Data.Foldable (fold)
 import Data.Default (Default(..))
 import Text.Pandoc.Shared (safeRead)
