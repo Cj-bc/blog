@@ -16,7 +16,7 @@ import           Data.List (isPrefixOf)
 
 import           MyBlog.Contexts
 import           MyBlog.Pandoc
-import           MyBlog.MetaData
+import qualified MyBlog.MetaData as MD
 --------------------------------------------------------------------------------
 
 blogName :: String
@@ -124,11 +124,11 @@ main = hakyll $ do
             originalPostData <- getResourceBody >>= readPandocWith pandocMarkdownCfg
             pandocData@(Item ident (Pandoc pandocMeta _)) <- traverse (return . myPandocTransform) originalPostData
             let titleMetadata = T.unpack . foldl (\p n -> p <> stringify n) "" . docTitle $ pandocMeta
-                metadataSet = fmap collectMetaData originalPostData
+                metadataSet = fmap MD.collectMetaData originalPostData
                 ctx = constField "title" titleMetadata <> postCtx tags
             currentIdentifier <- getUnderlying 
             saveSnapshot "title" ( Item currentIdentifier titleMetadata)
-            saveSnapshot "tags" $ view tags <$> metadataSet
+            saveSnapshot "tags" $ view MD.tags <$> metadataSet
             -- pandocCompilerWithTransform  def myPandocTransform
             return (writePandocWith def pandocData)
               >>= saveSnapshot "raw content"
