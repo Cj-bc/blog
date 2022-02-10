@@ -100,7 +100,7 @@ main = hakyll $ do
         route $ constRoute "css/myCustom.css"
         compile copyFileCompiler
 
-    tags <- buildTags "posts/*" (fromCapture "tags/*.html")
+    tags <- buildTagsWith (flip loadSnapshotBody "tags") "posts/*" (fromCapture "tags/*.html")
 
     tagsRules tags $ \tag pattern -> do
         let title = "タグ \"" ++ tag ++ "\" がつけられた投稿"
