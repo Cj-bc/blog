@@ -17,6 +17,7 @@ import           Data.List (isPrefixOf)
 import           MyBlog.Contexts
 import           MyBlog.Pandoc
 import qualified MyBlog.MetaData as MD
+import Hakyll (rulesExtraDependencies, tagsRules)
 --------------------------------------------------------------------------------
 
 blogName :: String
@@ -125,10 +126,12 @@ main = hakyll $ do
             pandocData@(Item ident (Pandoc pandocMeta _)) <- traverse (return . myPandocTransform) originalPostData
             let titleMetadata = T.unpack . foldl (\p n -> p <> stringify n) "" . docTitle $ pandocMeta
                 metadataSet = fmap MD.collectMetaData originalPostData
-                ctx = constField "title" titleMetadata <> postCtx tags
             currentIdentifier <- getUnderlying 
             saveSnapshot "title" ( Item currentIdentifier titleMetadata)
             saveSnapshot "tags" $ view MD.tags <$> metadataSet
+            tags <- buildTagsWith (flip loadSnapshotBody "tags") "posts/*" (fromCapture "tags/*.html")
+            let ctx = constField "title" titleMetadata <> postCtx tags
+
             -- pandocCompilerWithTransform  def myPandocTransform
             return (writePandocWith def pandocData)
               >>= saveSnapshot "raw content"
@@ -142,6 +145,9 @@ main = hakyll $ do
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
+            tags <- buildTagsWith (flip loadSnapshotBody "tags") "posts/*" (fromCapture "tags/*.html")
+            rulesExtraDependencies [tagsRules tags]
+
             -- TODO: listFieldを元にして, 各postにContextも独自に適用できるフィールドを生成する
             -- id:6da7268f-a417-436f-ab64-8aaef1373dbe
             let archiveCtx =
@@ -173,6 +179,7 @@ main = hakyll $ do
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
+            tags <- buildTagsWith (flip loadSnapshotBody "tags") "posts/*" (fromCapture "tags/*.html")
             let indexCtx =
                     postListCtx tags posts `mappend`
                     constField "title" ""                    `mappend`
