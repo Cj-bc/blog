@@ -128,7 +128,7 @@ main = hakyll $ do
                 metadataSet = fmap MD.collectMetaData originalPostData
             currentIdentifier <- getUnderlying 
             saveSnapshot "title" ( Item currentIdentifier titleMetadata)
-            saveSnapshot "tags" $ view MD.tags <$> metadataSet
+            saveSnapshot "tags" (fmap T.unpack . view MD.tags <$> metadataSet)
             tags <- buildTagsWith (flip loadSnapshotBody "tags") "posts/*" (fromCapture "tags/*.html")
             let ctx = constField "title" titleMetadata <> postCtx tags
 
