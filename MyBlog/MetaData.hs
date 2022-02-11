@@ -59,6 +59,7 @@ collectMetaData (Pandoc _ (titleBlock:_)) = maybe def id . fold . fmap readOneMe
     getMeta :: Block -> [(Text, Text)]
     getMeta (Header 1 (_, _, kv) _) = kv
     getMeta _ = []
+collectMetaData _ = mempty
 
 
 -- | 一種類のメタデータを読む
