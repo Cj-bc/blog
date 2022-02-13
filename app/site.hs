@@ -133,7 +133,9 @@ main = hakyll $ do
             let titleMetadata = T.unpack . foldl (\p n -> p <> stringify n) "" . docTitle $ pandocMeta
                 metadataSet = fmap MD.collectMetaData originalPostData
             currentIdentifier <- getUnderlying 
-            saveSnapshot "title" ( Item currentIdentifier titleMetadata)
+            saveSnapshot "title" (Item currentIdentifier titleMetadata)
+
+            -- Store tags of this Post in snapshot
             saveSnapshot "tags" (fmap T.unpack . view MD.tags <$> metadataSet)
             tags <- buildTagsWith (flip loadSnapshotBody "tags") "posts/*" (fromCapture "tags/*.html")
 

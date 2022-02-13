@@ -35,10 +35,10 @@ updateDataField = field "updated" $ \item -> do
                       date  <- unsafeCompiler . shelly $ do
                             lsFilesResult <- run "git" ["ls-files", "--", fp]
                             if (T.null lsFilesResult)
-                            then return Nothing
-                            else P.maybeResult <$> P.parse parseDate <$> run "git" ["log", "--date=format:" `T.append` dateFormat, "--", fp]
-                                                                     -|- run "grep" ["^Date:"]
-                                                                     -|- run "head" ["-n1"]
+                              then return Nothing
+                              else P.maybeResult <$> P.parse parseDate <$> run "git" ["log", "--date=format:" `T.append` dateFormat, "--", fp]
+                                                                       -|- run "grep" ["^Date:"]
+                                                                       -|- run "head" ["-n1"]
                       return $ maybe "- No update yet -" id date -- TODO: use 'created time'
 
 parseDate :: P.Parser String
