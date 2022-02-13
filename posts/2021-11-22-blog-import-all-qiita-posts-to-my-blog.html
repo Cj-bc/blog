@@ -45,7 +45,7 @@
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged 'blog'." href="../tags/blog.html" class="ui tag label">blog</a>
   
 </div>
 
@@ -83,7 +83,7 @@
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">curl</span> https://qiita.com/api/v2/users/Cj-bc/items</span></code></pre></div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> https://qiita.com/api/v2/users/Cj-bc/items</span></code></pre></div>
 </div>
 <p>これで、指定したユーザーの投稿のリストが取得できます。 各投稿はディクショナリで、そのキーの完全なリストは<a href="https://qiita.com/api/v2/docs#投稿">Qiita APIドキュメントの「投稿」</a>に記載されています。</p>
 <p>ここでは、今回使うものとして以下のキーを紹介します:</p>
@@ -101,7 +101,7 @@ bash
 <p>これらのキーの値を用いて:</p>
 <ol>
 <li>APIからデータを取得</li>
-<li><em>本文を <code>body</code> から取得</em></li>
+<li><span class="spurious-link" target="2. 本文を ~body~ から取得"><em>本文を <code>body</code> から取得</em></span></li>
 <li><code>created_at</code> と <code>title</code> からファイル名を構築する</li>
 <li>そのファイルに本文を保存する</li>
 </ol>
@@ -186,7 +186,7 @@ nu
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb5" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ex">node</span> -e <span class="st">'console.log(encodeURI(&quot;https://qiita/てすともーど!!!&gt;&quot;))'</span> <span class="kw">|</span> <span class="ex">node</span> -e <span class="st">'console.log(decodeURI(fs.readFileSync(&quot;/dev/stdin&quot;, &quot;utf8&quot;)))'</span></span></code></pre></div>
+<div class="sourceCode" id="cb5" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">node</span> <span class="at">-e</span> <span class="st">'console.log(encodeURI(&quot;https://qiita/てすともーど!!!&gt;&quot;))'</span> <span class="kw">|</span> <span class="ex">node</span> <span class="at">-e</span> <span class="st">'console.log(decodeURI(fs.readFileSync(&quot;/dev/stdin&quot;, &quot;utf8&quot;)))'</span></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -201,7 +201,7 @@ example
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb7" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="ex">fetch</span> https://qiita.com/api/v2/users/Cj-bc/items?per_page=86 <span class="kw">|</span> <span class="ex">each</span> { <span class="va">$it</span>.body <span class="kw">|</span> <span class="ex">save</span> <span class="st">$&quot;(</span><span class="va">$it</span><span class="st">.created_at | str substring [0 10])-(</span><span class="va">$it</span><span class="st">.title|str kebab-case).md&quot;</span> }</span></code></pre></div>
+<div class="sourceCode" id="cb7" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fetch</span> https://qiita.com/api/v2/users/Cj-bc/items<span class="pp">?</span>per_page=86 <span class="kw">|</span> <span class="ex">each</span> { <span class="va">$it</span>.body <span class="kw">|</span> <span class="ex">save</span> <span class="st">$&quot;(</span><span class="va">$it</span><span class="st">.created_at | str substring [0 10])-(</span><span class="va">$it</span><span class="st">.title|str kebab-case).md&quot;</span> }</span></code></pre></div>
 </div>
 <p><a href="https://qiita.com/saba_can00/items/02ff28a16a0d312a5259">https://qiita.com/saba_can00/items/02ff28a16a0d312a5259</a></p>
 

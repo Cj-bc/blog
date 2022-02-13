@@ -45,7 +45,7 @@
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged 'python'." href="../tags/python.html" class="ui tag label">python</a><a title="All pages tagged '検証'." href="../tags/%E6%A4%9C%E8%A8%BC.html" class="ui tag label">検証</a>
   
 </div>
 
@@ -54,20 +54,20 @@
 <div class="ui top right attached label">
 python
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;A&quot;</span>:</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    ...</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="cf">elif</span> n <span class="op">==</span> <span class="st">&quot;B&quot;</span>:</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    ...</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;A&quot;</span>:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> n <span class="op">==</span> <span class="st">&quot;B&quot;</span>:</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div>
 </div>
 <p>しかし、全ての場合ではありませんがこの場合はif文の羅列で書くこともできます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 python
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;A&quot;</span>:</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    ...</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;B&quot;</span>:</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    ...</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;A&quot;</span>:</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> n <span class="op">==</span> <span class="st">&quot;B&quot;</span>:</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div>
 </div>
 <p>直感的に、nの値によってはelifの方がif文の実行回数が少なくなるため速そうに思えますが、本当にそうなのか気になったので試してみます。</p>
 <h1 id="tldr">tl;dr</h1>
@@ -573,19 +573,19 @@ with elif   : 0.000001 sec
 <div class="ui top right attached label">
 python
 </div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="im">import</span> ast</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="bu">print</span>(ast.dump(ast.parse(<span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="st">if x:</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a><span class="st">   ...</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a><span class="st">elif y:</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a><span class="st">   ...</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a><span class="st">else:</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a><span class="st">   ...</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true"></a><span class="st">if z:</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true"></a><span class="st">    ...</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true"></a><span class="st">&quot;&quot;&quot;</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ast</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ast.dump(ast.parse(<span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="st">if x:</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="st">   ...</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="st">elif y:</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="st">   ...</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="st">else:</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="st">   ...</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="st">if z:</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="st">    ...</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span>)))</span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">

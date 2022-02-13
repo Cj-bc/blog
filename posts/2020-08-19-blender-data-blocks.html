@@ -45,7 +45,7 @@
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged 'blender'." href="../tags/blender.html" class="ui tag label">blender</a><a title="All pages tagged 'document'." href="../tags/document.html" class="ui tag label">document</a><a title="All pages tagged 'translation'." href="../tags/translation.html" class="ui tag label">translation</a><a title="All pages tagged 'wip'." href="../tags/wip.html" class="ui tag label">wip</a>
   
 </div>
 
@@ -63,11 +63,11 @@
 <li>それぞれ独自のアニメーションデータを持つことができます。</li>
 <li>それぞれ<a href="https://docs.blender.org/manual/ja/2.80/files/data_blocks.html#files-data-blocks-custom-properties">Custom properties</a>を持つことができます。</li>
 </ul>
-<p>ユーザーは=typically=高レベルの=data type=を扱うことになります(<code>obects</code>, =meshes=など)。 複雑なプロジェクトを扱う場合、特に=inter-linking blend-files=の場合、=data-block=の管理はより重要になります。 それ用の主なエディターは<a href="https://docs.blender.org/manual/ja/2.80/editors/outliner.html">Outliner</a>です</p>
-<p>Blender内の全てのデータが=data-block=なわけではありません。例えば、=bones=, <code>sequence strips=や=vertex groups=は違っており、
+<p>ユーザーは=typically=高レベルの=data type=を扱うことになります(<code class="verbatim">obects</code>, =meshes=など)。 複雑なプロジェクトを扱う場合、特に=inter-linking blend-files=の場合、=data-block=の管理はより重要になります。 それ用の主なエディターは<a href="https://docs.blender.org/manual/ja/2.80/editors/outliner.html">Outliner</a>です</p>
+<p>Blender内の全てのデータが=data-block=なわけではありません。例えば、=bones=, <code class="verbatim">sequence strips=や=vertex groups=は違っており、
 それぞれ=armature=、=scene=、=mesh types=に付属(=belong to</code>)しています。</p>
 <h1 id="life-time">Life Time</h1>
-<p>全ての=data-block=は=usage counted=(<code>reference count</code>)を持っており、一つ以上である場合は、UIの中で=data-block=の名前の右側に=current user=の数が表示されます。</p>
+<p>全ての=data-block=は=usage counted=(<code class="verbatim">reference count</code>)を持っており、一つ以上である場合は、UIの中で=data-block=の名前の右側に=current user=の数が表示されます。</p>
 <p>Blenderは、使用されていないデータは最終的に削除されるという=general rule=に従っています。</p>
 <p>作業中にたくさんのデータを追加・削除することは一般的なため、全ての=data-block=を一つ一つ手動で管理する必要がないのは利点です。</p>
 <p>これは、=blend-file=を書き込む際に、=zero user=な=data-block=をスキップする仕組みになっています。</p>
@@ -80,7 +80,7 @@
 <p>よくデータの共有が行われる例:</p>
 <ul>
 <li>=materials=間で=textures=を共有する</li>
-<li><code>objects=(=instances</code>)間で=meshes=を共有する</li>
+<li><code class="verbatim">objects=(=instances</code>)間で=meshes=を共有する</li>
 <li>=objects=間で=animated actions=を共有する。例えば、全てのライトが同時に=dim=するようにします。</li>
 </ul>
 <p>=data-block=をファイル間でも共有できます、詳しくは:</p>

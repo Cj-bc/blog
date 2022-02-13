@@ -45,7 +45,7 @@
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged 'android'." href="../tags/android.html" class="ui tag label">android</a><a title="All pages tagged 'viewbinding'." href="../tags/viewbinding.html" class="ui tag label">viewbinding</a>
   
 </div>
 
@@ -56,23 +56,23 @@
 <div class="ui top right attached label">
 kotlin
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>   <span class="kw">class</span> MyFragment: <span class="dt">Fragment</span>() {</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">override</span> <span class="kw">fun</span> <span class="fu">onCreateView</span>(</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    <span class="va">inflater</span>: <span class="dt">LayoutInflater</span>, <span class="va">container</span>: <span class="dt">ViewGroup?</span>,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="va">savedInstanceState</span>: <span class="dt">Bundle?</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>): <span class="dt">View?</span> {</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    <span class="kw">val</span> <span class="va">view</span>: View? = inflater.inflate(R.layout.fragment_mine, container, <span class="kw">false</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>    <span class="kw">val</span> <span class="va">binding</span> = MyBinding.inflate(inflator)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>    binding.myButton.setOnClickListener { view -&gt;</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>           <span class="co">// Do some action</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>    }</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>    <span class="kw">return</span> view</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>}</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>   }</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">class</span> MyFragment<span class="op">:</span> <span class="dt">Fragment</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">override</span> <span class="kw">fun</span> <span class="fu">onCreateView</span><span class="op">(</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">inflater</span><span class="op">:</span> <span class="dt">LayoutInflater</span><span class="op">,</span> <span class="va">container</span><span class="op">:</span> <span class="dt">ViewGroup</span><span class="op">?,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">savedInstanceState</span><span class="op">:</span> <span class="dt">Bundle</span><span class="op">?</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">):</span> <span class="dt">View</span><span class="op">?</span> <span class="op">{</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">view</span><span class="op">:</span> View<span class="op">?</span> <span class="op">=</span> inflater<span class="op">.</span>inflate<span class="op">(</span>R<span class="op">.</span>layout<span class="op">.</span>fragment_mine<span class="op">,</span> container<span class="op">,</span> <span class="kw">false</span><span class="op">)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">binding</span> <span class="op">=</span> MyBinding<span class="op">.</span>inflate<span class="op">(</span>inflator<span class="op">)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    binding<span class="op">.</span>myButton<span class="op">.</span>setOnClickListener <span class="op">{</span> view <span class="op">-&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>           <span class="co">// Do some action</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> view</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>   <span class="op">}</span></span></code></pre></div>
 </div>
 <p>でも、実行して <code>myButon</code> を押してみても一向に反応しない。 他のレイアウトだとか何だとかをいじってみたりしたけど変わらず…</p>
 <h1 id="原因">原因</h1>
@@ -84,24 +84,24 @@ kotlin
 <div class="ui top right attached label">
 diff
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a> class MyFragment: Fragment() {</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>   override fun onCreateView(</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>inflater: LayoutInflater, container: ViewGroup?,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>savedInstanceState: Bundle?</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>   ): View? {</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a> - 	     val view: View? = inflater.inflate(R.layout.fragment_mine, container, false)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>val binding = MyBinding.inflate(inflator)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>binding.myButton.setOnClickListener { view -&gt;</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>       // Do some action</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>}</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a> - 	     return view</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a> +	     return binding.root</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>   }</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a> }</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a> class MyFragment: Fragment() {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>   override fun onCreateView(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>inflater: LayoutInflater, container: ViewGroup?,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>savedInstanceState: Bundle?</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>   ): View? {</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a> - 	     val view: View? = inflater.inflate(R.layout.fragment_mine, container, false)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>val binding = MyBinding.inflate(inflator)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>binding.myButton.setOnClickListener { view -&gt;</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>       // Do some action</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a> - 	     return view</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a> +	     return binding.root</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>   }</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a> }</span></code></pre></div>
 </div>
 
         </div>

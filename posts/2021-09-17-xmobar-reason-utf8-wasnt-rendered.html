@@ -45,7 +45,7 @@
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged 'xmobar'." href="../tags/xmobar.html" class="ui tag label">xmobar</a>
   
 </div>
 
@@ -70,7 +70,7 @@
 </ul>
 <h1 id="判明した原因">判明した原因</h1>
 <p>bashからではなくxmonadから起動していた影響で 環境変数が伝搬されておらず、 <code>LANG=ja_JP.UTF-8</code> でない環境で 実行されていた。</p>
-<p>証拠に、ターミナルから <code class="sourceCode bash" data-org-language="sh"><span class="va">LANG=</span>C <span class="ex">xmobar</span></code> と実行してみると 日本語が表示できなくなった。</p>
+<p>証拠に、ターミナルから <code class="sourceCode bash" data-org-language="sh"><span class="va">LANG</span><span class="op">=</span>C <span class="ex">xmobar</span></code> と実行してみると 日本語が表示できなくなった。</p>
 <h1 id="解決策">解決策</h1>
 <h2 id="XMonad.Hooks.DynamicLogを使用している場合"><a href="https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Hooks-DynamicLog.html">XMonad.Hooks.DynamicLog</a>を使用している場合</h2>
 <p>多分大半がこちらなのではないか…??</p>
@@ -79,7 +79,7 @@
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>xmobar' conf <span class="ot">=</span> statusbar <span class="st">&quot;LANG=ja_JP.UTF-8 xmobar&quot;</span> xmobarPP toggleStructsKey conf</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>xmobar' conf <span class="ot">=</span> statusbar <span class="st">&quot;LANG=ja_JP.UTF-8 xmobar&quot;</span> xmobarPP toggleStructsKey conf</span></code></pre></div>
 </div>
 <h2 id="XMonad.Hooks.StatusBar を使用している場合"><a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html">XMonad.Hooks.StatusBar</a> を使用している場合</h2>
 <p>実はこちらの方が新しいらしく、もう <a href="https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Hooks-DynamicLog.html">DynamicLog</a> は推奨されていないのだそうだ。</p>
@@ -91,7 +91,7 @@ haskell
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>statusBarProp <span class="st">&quot;LANG=ja_JP.UTF-8 xmobar&quot;</span> (<span class="fu">pure</span> xmobarPP)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>statusBarProp <span class="st">&quot;LANG=ja_JP.UTF-8 xmobar&quot;</span> (<span class="fu">pure</span> xmobarPP)</span></code></pre></div>
 </div>
 <p>そう、 <em>先頭に <code>LANG=ja_JP.UTF-8</code> を付け加えるだけ</em> である。 かんたん!!</p>
 <ol>

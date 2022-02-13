@@ -45,7 +45,7 @@
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged 'hakyll'." href="../tags/hakyll.html" class="ui tag label">hakyll</a><a title="All pages tagged 'ブログ'." href="../tags/%E3%83%96%E3%83%AD%E3%82%B0.html" class="ui tag label">ブログ</a><a title="All pages tagged 'haskell'." href="../tags/haskell.html" class="ui tag label">haskell</a>
   
 </div>
 
@@ -56,8 +56,8 @@
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="fu">putStrLn</span> <span class="st">&quot;Hello world!&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">putStrLn</span> <span class="st">&quot;Hello world!&quot;</span></span></code></pre></div>
 </div>
 <h2 id="やったこと">やったこと</h2>
 <p>ここでは、以下のFomantic-UI要素を使用しました。</p>
@@ -95,13 +95,14 @@ example
 <li><p>=pandocCompilerWithTransform=を使用した処理</p>
 <p>=pandocCompilerWithTransform=は=pandocCompiler=の一種で、Markdownなどを=Pandoc=型に変換しその値をいじることができます。 =Pandoc=型には便利な型クラス=Walkable=があるので、これを使用します。</p>
 <p>=Walkable=とは、「値の中を歩き、各子要素を与えられた関数に適用して置き換える」ような処理をします。</p>
-<ul>
-<li>[ ] WIP</li>
+<ul class="task-list">
+<li><input type="checkbox" disabled />
+WIP</li>
 </ul></li>
 <li><p>右上に拡張子を表示する</p>
 <p>右上に拡張子を表示するために使われているのが、<a href="https://fomantic-ui.com/elements/label.html#attached">attached label</a>です。 注意する点として、これは「コードブロックとは別の=div=として使用する」必要があります。</p></li>
 <li><p>親=Div=に=segment=を設定する</p>
-<p><code>code=ブロックの親の=Div=に、=class</code>"ui segment"=を設定してください。 (他の要素はあっても大丈夫だと思いますが、とにかく<a href="https://fomantic-ui.com/elements/segment.html">segment</a>が必要です。)<br />
+<p><code class="verbatim">code=ブロックの親の=Div=に、=class</code>"ui segment"=を設定してください。 (他の要素はあっても大丈夫だと思いますが、とにかく<a href="https://fomantic-ui.com/elements/segment.html">segment</a>が必要です。)<br />
 尚、きちんと調べているわけではないので、他のものでも代用できるのかもしれません。</p>
 <p><img src="file:///images/attached-label-wraped-in-segment.png" class="ui rounded image ui rounded image" /> <em>(赤丸は注釈)</em></p>
 <p>これをしない場合、ひとまわり上の=segment=、どこにもない場合webページの右上にこのラベルが表示されることになります。</p>
@@ -112,13 +113,13 @@ example
 <h1 id="画像の整形">画像の整形</h1>
 <p>これまでは画像が正しいサイズになっておらず、このようになっていました。</p>
 <figure>
-<img src="file:///images/old-image-view.png" class="ui rounded image" alt /><figcaption>昔の画像表示</figcaption>
+<img src="file:///images/old-image-view.png" class="ui rounded image" alt="昔の画像表示" /><figcaption aria-hidden="true">昔の画像表示</figcaption>
 </figure>
 <p>現在は、この画像のようになっています。</p>
 <figure>
-<img src="file:///images/current-image.view.png" class="ui rounded image" alt /><figcaption>今の画像表示</figcaption>
+<img src="file:///images/current-image.view.png" class="ui rounded image" alt="今の画像表示" /><figcaption aria-hidden="true">今の画像表示</figcaption>
 </figure>
-<h2 id="ui-image"><code>ui image</code></h2>
+<h2 id="ui-image"><code class="verbatim">ui image</code></h2>
 <p>=ui image=を使うことで、親のSegment以内に納めてくれます。<br />
 又それにプラスして=rounded=をつけることで角を丸めています。 (最終的には=ui rounded image=となりました)</p>
 <h1 id="メニューの作成">メニューの作成</h1>
@@ -126,7 +127,7 @@ example
 <h2 id="コンテンツの内容がかぶらないようにする">コンテンツの内容がかぶらないようにする</h2>
 <p>=fixed=を使った場合、そのままでは下のdiv(このサイトではidとして=content=を持つdiv)の内容に被ってしまいます。</p>
 <figure>
-<img src="file:///images/fixed-menu-without-margin.png" class="ui rounded image" alt /><figcaption>何も対処しない場合</figcaption>
+<img src="file:///images/fixed-menu-without-margin.png" class="ui rounded image" alt="何も対処しない場合" /><figcaption aria-hidden="true">何も対処しない場合</figcaption>
 </figure>
 <p>そこで、=content= divに=margin-top: 5em=を適用しています。<br />
 尚これは、同じ構成をしていた<a href="https://fomantic-ui.com/collections/menu.html">Fomantic-UIのモバイルページ</a>での設定値をそのまま持ってきています。 (モバイル端末で見るか、ブラウザの横幅を狭めれば見えると思います)</p>
@@ -134,9 +135,9 @@ example
 <div class="ui top right attached label">
 css
 </div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode css SourceCode"><code class="sourceCode css"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="pp">#content</span> {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>    <span class="kw">margin-top</span>: <span class="dv">5</span><span class="dt">em</span><span class="op">;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode css SourceCode"><code class="sourceCode css"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#content</span> {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">margin-top</span>: <span class="dv">5</span><span class="dt">em</span><span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <h2 id="feedのリンクを右づめにする">Feedのリンクを右づめにする</h2>
 <p>=menu=の中にある=item=に、=right=と入れるだけでそこから下の=item=全てが右詰になります。 このサイトだと以下のようになっています。</p>

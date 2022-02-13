@@ -45,7 +45,7 @@
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged 'blog'." href="../tags/blog.html" class="ui tag label">blog</a>
   
 </div>
 
@@ -108,24 +108,24 @@
 <div class="ui top right attached label">
 awk
 </div>
-<div class="sourceCode" id="extract-yaml-metadata" data-in-file="./2021-01-03-fomantic-ui.md" data-results="raw" wrap="SRC yaml"><pre class="sourceCode awk SourceCode"><code class="sourceCode awk"><span id="extract-yaml-metadata-1"><a href="#extract-yaml-metadata-1" aria-hidden="true"></a>   <span class="cf">BEGIN</span> { inside<span class="op">=</span><span class="dv">0</span>; }</span>
-<span id="extract-yaml-metadata-2"><a href="#extract-yaml-metadata-2" aria-hidden="true"></a>   <span class="ot">/</span><span class="ss">---</span><span class="ot">/</span> {<span class="cf">if</span> (inside <span class="op">==</span> <span class="dv">0</span>) { inside<span class="op">=</span><span class="dv">1</span>; }</span>
-<span id="extract-yaml-metadata-3"><a href="#extract-yaml-metadata-3" aria-hidden="true"></a><span class="cf">else</span> { inside<span class="op">=</span><span class="dv">0</span>; };</span>
-<span id="extract-yaml-metadata-4"><a href="#extract-yaml-metadata-4" aria-hidden="true"></a><span class="kw">next</span>;</span>
-<span id="extract-yaml-metadata-5"><a href="#extract-yaml-metadata-5" aria-hidden="true"></a>   }</span>
-<span id="extract-yaml-metadata-6"><a href="#extract-yaml-metadata-6" aria-hidden="true"></a>   { <span class="cf">if</span> (inside <span class="op">==</span> <span class="dv">1</span>) { <span class="kw">print</span> <span class="dt">$0</span>; }; }</span></code></pre></div>
+<div class="sourceCode" id="extract-yaml-metadata" data-in-file="./2021-01-03-fomantic-ui.md" data-results="raw" wrap="SRC yaml"><pre class="sourceCode awk SourceCode"><code class="sourceCode awk"><span id="extract-yaml-metadata-1"><a href="#extract-yaml-metadata-1" aria-hidden="true" tabindex="-1"></a>   <span class="cf">BEGIN</span> <span class="op">{</span> inside<span class="op">=</span><span class="dv">0</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="extract-yaml-metadata-2"><a href="#extract-yaml-metadata-2" aria-hidden="true" tabindex="-1"></a>   <span class="ot">/</span><span class="ss">---</span><span class="ot">/</span> <span class="op">{</span><span class="cf">if</span> <span class="op">(</span>inside <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> inside<span class="op">=</span><span class="dv">1</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="extract-yaml-metadata-3"><a href="#extract-yaml-metadata-3" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="op">{</span> inside<span class="op">=</span><span class="dv">0</span><span class="op">;</span> <span class="op">};</span></span>
+<span id="extract-yaml-metadata-4"><a href="#extract-yaml-metadata-4" aria-hidden="true" tabindex="-1"></a><span class="kw">next</span><span class="op">;</span></span>
+<span id="extract-yaml-metadata-5"><a href="#extract-yaml-metadata-5" aria-hidden="true" tabindex="-1"></a>   <span class="op">}</span></span>
+<span id="extract-yaml-metadata-6"><a href="#extract-yaml-metadata-6" aria-hidden="true" tabindex="-1"></a>   <span class="op">{</span> <span class="cf">if</span> <span class="op">(</span>inside <span class="op">==</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span> <span class="kw">print</span> <span class="dt">$0</span><span class="op">;</span> <span class="op">};</span> <span class="op">}</span></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
 yaml
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> ブログの見た目を整える</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> Cj-bc</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="fu">tags</span><span class="kw">:</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> hakyll</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> ブログ</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> haskell</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> Jan 03, 2021</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> ブログの見た目を整える</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> Cj-bc</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tags</span><span class="kw">:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> hakyll</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> ブログ</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> haskell</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> Jan 03, 2021</span></span></code></pre></div>
 </div>
 <h2 id="2. Yaml部分からメタデータを取得する">2. Yaml部分からメタデータを取得する</h2>
 <p>先程のawkスクリプトを適用してあげて…</p>
@@ -133,23 +133,23 @@ yaml
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="bu">let</span> target = (if (<span class="va">$nu</span>.env <span class="kw">|</span> <span class="kw">select</span> <span class="ex">TARGET</span> <span class="kw">|</span> <span class="ex">empty?</span>) <span class="dt">{&quot;&quot;}</span> <span class="dt">{</span><span class="va">$nu</span><span class="dt">.env.TARGET}</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">if</span> <span class="kw">(</span><span class="va">$target</span> <span class="kw">|</span> <span class="ex">empty?</span><span class="kw">)</span> <span class="kw">{</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>^<span class="ex">echo</span> <span class="st">&quot;usage: TARGET=&lt;TARGET_FILENAME&gt; blog-migration-script--createHeader.nu&quot;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="bu">exit</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="kw">}</span> {}</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="bu">let</span> metadata = (awk <span class="st">'</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="st">&lt;&lt;extract-yaml-metadata&gt;&gt;</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="st">'</span> <span class="va">$target</span> <span class="kw">|</span> <span class="ex">from</span> yaml)</span></code></pre></div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">let</span> <span class="va">target</span> <span class="op">=</span> <span class="er">(</span><span class="cf">if</span> <span class="kw">(</span><span class="va">$nu</span><span class="ex">.env</span> <span class="kw">|</span> <span class="cf">select</span> TARGET <span class="kw">|</span> <span class="ex">empty?</span><span class="kw">)</span> <span class="ex">{</span><span class="st">&quot;&quot;</span><span class="ex">}</span> {<span class="va">$nu</span>.env.TARGET}<span class="kw">)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">(</span><span class="va">$target</span> <span class="kw">|</span> <span class="ex">empty?</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">^echo</span> <span class="st">&quot;usage: TARGET=&lt;TARGET_FILENAME&gt; blog-migration-script--createHeader.nu&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span> <span class="ex">{}</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="bu">let</span> <span class="va">metadata</span> <span class="op">=</span> <span class="er">(</span><span class="fu">awk</span> <span class="st">'</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;&lt;extract-yaml-metadata&gt;&gt;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">'</span> <span class="va">$target</span> <span class="kw">|</span> <span class="ex">from</span> yaml<span class="kw">)</span></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb3" data-org-language="sh" data-tangle="no" data-shebang="#!/bin/nu"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="op">&lt;&lt;migration-script&gt;&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>echo <span class="va">$metadata</span></span></code></pre></div>
+<div class="sourceCode" id="cb3" data-org-language="sh" data-tangle="no" data-shebang="#!/bin/nu"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;&lt;migration-script&gt;&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="st">echo </span><span class="va">$metadata</span></span></code></pre></div>
 </div>
 <p>─────────────────────────────────────────────────────────────────────── 0 ブログの見た目を整える Cj-bc [table 3 rows] Jan 03, 2021</p>
 <h2 id="3. メタデータを加工して新しいヘッダーを作成する">3. メタデータを加工して新しいヘッダーを作成する</h2>
@@ -158,28 +158,28 @@ bash
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb4" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>   <span class="op">&lt;&lt;nu-getAuthor&gt;&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>   &lt;&lt;nu-formatTags<span class="op">&gt;&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>   &lt;&lt;nu-formatDate<span class="op">&gt;&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>   echo $&quot;* (<span class="va">$metadata</span>.title)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>:PROPERTIES:</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>:DATE: (formatDate <span class="va">$metadata</span>)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>:TAGS: (<span class="va">$metadata</span>.tags | reduce -f ':' { <span class="va">$acc</span> + <span class="va">$it</span> + ':' })</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>:AUTHOR: (getAuthor <span class="va">$metadata</span>)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>:BLOG_POST_KIND: Memo</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>:BLOG_POST_PROGRESS: Published</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a>:BLOG_POST_STATUS: Normal</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a>:END:</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a>   &quot;</span></code></pre></div>
+<div class="sourceCode" id="cb4" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>   <span class="op">&lt;&lt;nu-getAuthor&gt;&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">   &lt;&lt;nu-formatTags&gt;&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">   &lt;&lt;nu-formatDate&gt;&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">   echo $&quot;* (</span><span class="va">$metadata</span><span class="st">.title)</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="st">:PROPERTIES:</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="st">:DATE: (formatDate </span><span class="va">$metadata</span><span class="st">)</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">:TAGS: (</span><span class="va">$metadata</span><span class="st">.tags | reduce -f ':' { </span><span class="va">$acc</span><span class="st"> + </span><span class="va">$it</span><span class="st"> + ':' })</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="st">:AUTHOR: (getAuthor </span><span class="va">$metadata</span><span class="st">)</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="st">:BLOG_POST_KIND: Memo</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="st">:BLOG_POST_PROGRESS: Published</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="st">:BLOG_POST_STATUS: Normal</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="st">:END:</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="st">   &quot;</span></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb5" data-org-language="sh" data-tangle="no"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="op">&lt;&lt;migration-script&gt;&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>echo <span class="va">$newHeading</span></span></code></pre></div>
+<div class="sourceCode" id="cb5" data-org-language="sh" data-tangle="no"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;&lt;migration-script&gt;&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="st">echo </span><span class="va">$newHeading</span></span></code></pre></div>
 </div>
 <ul>
 <li>ブログの見た目を整える</li>
@@ -191,16 +191,16 @@ bash
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb6" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>   <span class="ex">def</span> formatTags [tags: table] {</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="va">$tags</span> <span class="kw">|</span> <span class="ex">reduce</span> -f <span class="st">':'</span> { <span class="va">$acc</span> + <span class="va">$it</span> + <span class="st">':'</span> }</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>   }</span></code></pre></div>
+<div class="sourceCode" id="cb6" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>   <span class="ex">def</span> formatTags [tags: table] {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="va">$tags</span> <span class="kw">|</span> <span class="ex">reduce</span> <span class="at">-f</span> <span class="st">':'</span> { <span class="va">$acc</span> + <span class="va">$it</span> + <span class="st">':'</span> }</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>   <span class="er">}</span></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb7" data-org-language="sh" data-tangle="no"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="op">&lt;&lt;nu-formatTags&gt;&gt;</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>formatTags <span class="va">$metadata</span>.tags</span></code></pre></div>
+<div class="sourceCode" id="cb7" data-org-language="sh" data-tangle="no"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;&lt;nu-formatTags&gt;&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="st">formatTags </span><span class="va">$metadata</span><span class="st">.tags</span></span></code></pre></div>
 </div>
 <p>:hakyll:ブログ:haskell:</p></li>
 <li><p>記事の日付を変換する</p>
@@ -213,9 +213,9 @@ bash
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb8" data-org-language="sh" data-tangle="no" data-noweb-ref="nu-formatDate"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>   <span class="ex">def</span> formatDate [metadata] {</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a><span class="va">LANG=</span>C ^<span class="ex">date</span> --date <span class="st">$&quot;(</span><span class="va">$metadata</span><span class="st">.date)&quot;</span> +[%Y-%m-%d %a] <span class="kw">|</span> <span class="fu">tr</span> -d <span class="st">'\n'</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>   }</span></code></pre></div>
+<div class="sourceCode" id="cb8" data-org-language="sh" data-tangle="no" data-noweb-ref="nu-formatDate"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>   <span class="ex">def</span> formatDate [metadata] {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="va">LANG</span><span class="op">=</span>C <span class="ex">^date</span> <span class="at">--date</span> <span class="st">$&quot;(</span><span class="va">$metadata</span><span class="st">.date)&quot;</span> +[%Y-%m-%d %a] <span class="kw">|</span> <span class="fu">tr</span> <span class="at">-d</span> <span class="st">'\n'</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>   <span class="er">}</span></span></code></pre></div>
 </div>
 <p>"[2021-01-03 Sun]"</p></li>
 <li><p>デフォルトの筆者を設定する</p>
@@ -224,11 +224,11 @@ bash
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb9" data-org-language="sh" data-tangle="no" data-noweb-ref="nu-getAuthor"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>    <span class="ex">def</span> getAuthor [metadata] {</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>    <span class="kw">if</span> <span class="kw">(</span><span class="va">$metadata</span> <span class="kw">|</span> <span class="kw">select</span> <span class="ex">author</span> <span class="kw">|</span> <span class="ex">empty?</span><span class="kw">)</span> <span class="kw">{</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="st">&quot;Cj-bc&quot;</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>    <span class="kw">}</span> <span class="kw">{</span> <span class="va">$metadata</span><span class="ex">.author</span> <span class="kw">}</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a>    }</span></code></pre></div>
+<div class="sourceCode" id="cb9" data-org-language="sh" data-tangle="no" data-noweb-ref="nu-getAuthor"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>    <span class="ex">def</span> getAuthor [metadata] {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">(</span><span class="va">$metadata</span> <span class="kw">|</span> <span class="cf">select</span> author <span class="kw">|</span> <span class="ex">empty?</span><span class="kw">)</span> <span class="kw">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;Cj-bc&quot;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span> <span class="kw">{</span> <span class="va">$metadata</span><span class="ex">.author</span> }</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">}</span></span></code></pre></div>
 </div></li>
 </ol>
 <h2 id="4. 元の記事を一段階下げる">4. 元の記事を一段階下げる</h2>
@@ -238,12 +238,12 @@ bash
 <div class="ui top right attached label">
 awk
 </div>
-<div class="sourceCode" id="cb10" data-in-file="./2021-05-14-haskell-make-Ixed-instance.org" wrap="src org" data-noweb-ref="awk-trim-yaml-header"><pre class="sourceCode awk SourceCode"><code class="sourceCode awk"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>     <span class="cf">BEGIN</span> { inside<span class="op">=</span><span class="dv">0</span>; }</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>     <span class="ot">/</span><span class="ss">---</span><span class="ot">/</span> {<span class="cf">if</span> (inside <span class="op">==</span> <span class="dv">0</span>) { inside<span class="op">=</span><span class="dv">1</span>; }</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a><span class="cf">else</span> { inside<span class="op">=</span><span class="dv">2</span>; };</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="kw">next</span>;</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a>     }</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a>     { <span class="cf">if</span> (inside <span class="op">==</span> <span class="dv">2</span>) { <span class="kw">print</span> <span class="dt">$0</span>; }; }</span></code></pre></div>
+<div class="sourceCode" id="cb10" data-in-file="./2021-05-14-haskell-make-Ixed-instance.org" wrap="src org" data-noweb-ref="awk-trim-yaml-header"><pre class="sourceCode awk SourceCode"><code class="sourceCode awk"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>     <span class="cf">BEGIN</span> <span class="op">{</span> inside<span class="op">=</span><span class="dv">0</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>     <span class="ot">/</span><span class="ss">---</span><span class="ot">/</span> <span class="op">{</span><span class="cf">if</span> <span class="op">(</span>inside <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> inside<span class="op">=</span><span class="dv">1</span><span class="op">;</span> <span class="op">}</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="op">{</span> inside<span class="op">=</span><span class="dv">2</span><span class="op">;</span> <span class="op">};</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">next</span><span class="op">;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>     <span class="op">}</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>     <span class="op">{</span> <span class="cf">if</span> <span class="op">(</span>inside <span class="op">==</span> <span class="dv">2</span><span class="op">)</span> <span class="op">{</span> <span class="kw">print</span> <span class="dt">$0</span><span class="op">;</span> <span class="op">};</span> <span class="op">}</span></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -420,13 +420,13 @@ data Lane = Lane (Maybe Pin) (Maybe Pin) (Maybe Pin) (Maybe Pin) (Maybe Pin)
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="pandocを用いたheadingレベル下げの例" data-org-language="sh" data-shbang="#!/bin/bash" data-tangle="no"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="pandocを用いたheadingレベル下げの例-1"><a href="#pandocを用いたheadingレベル下げの例-1" aria-hidden="true"></a>     <span class="ex">pandoc</span> -f org --shift-heading-level-by=1 -t org <span class="op">&lt;(</span><span class="bu">echo</span> <span class="st">&quot;</span></span>
-<span id="pandocを用いたheadingレベル下げの例-2"><a href="#pandocを用いたheadingレベル下げの例-2" aria-hidden="true"></a><span class="st">     * Leve1 header example</span></span>
-<span id="pandocを用いたheadingレベル下げの例-3"><a href="#pandocを用いたheadingレベル下げの例-3" aria-hidden="true"></a><span class="st">hello!</span></span>
-<span id="pandocを用いたheadingレベル下げの例-4"><a href="#pandocを用いたheadingレベル下げの例-4" aria-hidden="true"></a></span>
-<span id="pandocを用いたheadingレベル下げの例-5"><a href="#pandocを用いたheadingレベル下げの例-5" aria-hidden="true"></a><span class="st">     ** Inner level2 header</span></span>
-<span id="pandocを用いたheadingレベル下げの例-6"><a href="#pandocを用いたheadingレベル下げの例-6" aria-hidden="true"></a><span class="st">     &quot;</span><span class="op">)</span></span>
-<span id="pandocを用いたheadingレベル下げの例-7"><a href="#pandocを用いたheadingレベル下げの例-7" aria-hidden="true"></a></span></code></pre></div>
+<div class="sourceCode" id="pandocを用いたheadingレベル下げの例" data-org-language="sh" data-shbang="#!/bin/bash" data-tangle="no"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="pandocを用いたheadingレベル下げの例-1"><a href="#pandocを用いたheadingレベル下げの例-1" aria-hidden="true" tabindex="-1"></a>     <span class="ex">pandoc</span> <span class="at">-f</span> org <span class="at">--shift-heading-level-by</span><span class="op">=</span>1 <span class="at">-t</span> org <span class="op">&lt;(</span><span class="bu">echo</span> <span class="st">&quot;</span></span>
+<span id="pandocを用いたheadingレベル下げの例-2"><a href="#pandocを用いたheadingレベル下げの例-2" aria-hidden="true" tabindex="-1"></a><span class="st">     * Leve1 header example</span></span>
+<span id="pandocを用いたheadingレベル下げの例-3"><a href="#pandocを用いたheadingレベル下げの例-3" aria-hidden="true" tabindex="-1"></a><span class="st">hello!</span></span>
+<span id="pandocを用いたheadingレベル下げの例-4"><a href="#pandocを用いたheadingレベル下げの例-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="pandocを用いたheadingレベル下げの例-5"><a href="#pandocを用いたheadingレベル下げの例-5" aria-hidden="true" tabindex="-1"></a><span class="st">     ** Inner level2 header</span></span>
+<span id="pandocを用いたheadingレベル下げの例-6"><a href="#pandocを用いたheadingレベル下げの例-6" aria-hidden="true" tabindex="-1"></a><span class="st">     &quot;</span><span class="op">)</span></span>
+<span id="pandocを用いたheadingレベル下げの例-7"><a href="#pandocを用いたheadingレベル下げの例-7" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 </div>
 <p>** Leve1 header example</p>
 <p>hello!</p>
@@ -437,27 +437,27 @@ bash
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb12" data-org-language="sh" data-shebang="#!/bin/bash"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>   [[ <span class="ex">-z</span> <span class="va">$1</span> ]] <span class="kw">&amp;&amp;</span> <span class="kw">{</span> <span class="bu">echo</span> <span class="st">&quot;usage: migration-script.sh TARGETFILE&quot;</span><span class="kw">;</span> <span class="bu">exit</span><span class="kw">;</span> <span class="kw">}</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>   <span class="va">target=$1</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a>   <span class="va">extensions=(</span>emoji task_lists</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a> <span class="ex">backtick_code_blocks</span> fenced_code_attributes</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a> <span class="ex">header_attributes</span> raw_html</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a>)</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true"></a>   <span class="kw">function</span><span class="fu"> formatExtension()</span> <span class="kw">{</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;+</span><span class="va">${extensions[@]}</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="st">' '</span> <span class="st">'+'</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true"></a>   <span class="kw">}</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true"></a></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true"></a>   <span class="va">format=$(filename=($(</span><span class="bu">echo</span> <span class="va">$target</span> <span class="kw">|</span> <span class="fu">tr</span> -s <span class="st">'.'</span> <span class="st">' '</span><span class="va">))</span>;</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true"></a>     <span class="kw">case</span> <span class="st">&quot;</span><span class="va">${filename[-1]}</span><span class="st">&quot;</span><span class="kw"> in</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true"></a>  <span class="st">&quot;md&quot;</span><span class="kw">)</span> <span class="bu">echo</span> <span class="st">&quot;markdown</span><span class="va">$(</span><span class="ex">formatExtension</span><span class="va">)</span><span class="st">&quot;</span><span class="kw">;;</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true"></a>  <span class="ex">*</span>) <span class="bu">echo</span> <span class="st">&quot;org&quot;</span><span class="kw">;;</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true"></a>     <span class="kw">esac</span></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true"></a>  <span class="va">)</span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true"></a></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true"></a>   <span class="fu">cat</span> <span class="op">&lt;(</span><span class="va">TARGET=$target</span> <span class="ex">./blog-migration-script--createHeader.nu</span><span class="op">)</span> <span class="op">&lt;(</span><span class="fu">awk</span> <span class="st">'</span></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true"></a><span class="st">   &lt;&lt;awk-trim-yaml-header&gt;&gt;</span></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true"></a><span class="st">   '</span> <span class="va">$target</span> <span class="kw">|</span> <span class="ex">pandoc</span> -f <span class="st">&quot;</span><span class="va">${format}</span><span class="st">&quot;</span> --shift-heading-level-by=1 -t org<span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb12" data-org-language="sh" data-shebang="#!/bin/bash"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>   <span class="kw">[[</span> <span class="ot">-z</span> <span class="va">$1</span> <span class="kw">]]</span> <span class="kw">&amp;&amp;</span> <span class="kw">{</span> <span class="bu">echo</span> <span class="st">&quot;usage: migration-script.sh TARGETFILE&quot;</span><span class="kw">;</span> <span class="bu">exit</span><span class="kw">;</span> <span class="kw">}</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>   <span class="va">target</span><span class="op">=</span><span class="va">$1</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>   <span class="va">extensions</span><span class="op">=</span><span class="va">(</span>emoji task_lists</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a> backtick_code_blocks fenced_code_attributes</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a> header_attributes raw_html</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="va">)</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>   <span class="kw">function</span><span class="fu"> formatExtension()</span> <span class="kw">{</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;+</span><span class="va">${extensions</span><span class="op">[@]</span><span class="va">}</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="st">' '</span> <span class="st">'+'</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>   <span class="kw">}</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>   <span class="va">format</span><span class="op">=</span><span class="va">$(filename</span><span class="op">=</span><span class="va">($(</span><span class="bu">echo</span> <span class="va">$target</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="at">-s</span> <span class="st">'.'</span> <span class="st">' '</span><span class="va">))</span><span class="kw">;</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>     <span class="cf">case</span> <span class="st">&quot;</span><span class="va">${filename</span><span class="op">[</span>-1<span class="op">]</span><span class="va">}</span><span class="st">&quot;</span> <span class="kw">in</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;md&quot;</span><span class="kw">)</span> <span class="bu">echo</span> <span class="st">&quot;markdown</span><span class="va">$(</span><span class="ex">formatExtension</span><span class="va">)</span><span class="st">&quot;</span><span class="cf">;;</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="pp">*</span><span class="kw">)</span> <span class="bu">echo</span> <span class="st">&quot;org&quot;</span><span class="cf">;;</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>     <span class="cf">esac</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="va">)</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>   <span class="fu">cat</span> <span class="op">&lt;(</span><span class="va">TARGET</span><span class="op">=</span><span class="va">$target</span> <span class="ex">./blog-migration-script--createHeader.nu</span><span class="op">)</span> <span class="op">&lt;(</span><span class="fu">awk</span> <span class="st">'</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="st">   &lt;&lt;awk-trim-yaml-header&gt;&gt;</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="st">   '</span> <span class="va">$target</span> <span class="kw">|</span> <span class="ex">pandoc</span> <span class="at">-f</span> <span class="st">&quot;</span><span class="va">${format}</span><span class="st">&quot;</span> <span class="at">--shift-heading-level-by</span><span class="op">=</span>1 <span class="at">-t</span> org<span class="op">)</span></span></code></pre></div>
 </div>
 <p>usage: migration-script.sh TARGETFILE</p>
 <ol>
@@ -465,51 +465,51 @@ bash
 <p>nushellの <code>echo</code> はListで出力してくるので、 GNU coreutilsの <code>echo</code> を使います。 又、 <code>^echo $newHeading (pandoc...)</code> だと <code>$newHeading</code> と <code>(pandoc...)</code> の間に改行が作成されず、 <code>$newHeading</code> の後ろに空行を追加して おいてもなんか消されてしまうので以下のような方法を取っています。</p></li>
 </ol>
 <h2 id="7. 全ファイルに対して実行する">7. 全ファイルに対して実行する</h2>
-<p>あとはこれを全てのファイルに対して実行してあげれば良いわけです! <em>これまでの遷移</em>から、 2021/05/19以前の投稿が古いフォーマットを使用している ことがわかるので、それ以前のファイルのみを探し出します。</p>
+<p>あとはこれを全てのファイルに対して実行してあげれば良いわけです! <span class="spurious-link" target="これまでの遷移"><em>これまでの遷移</em></span>から、 2021/05/19以前の投稿が古いフォーマットを使用している ことがわかるので、それ以前のファイルのみを探し出します。</p>
 <p>この取得はちょっと面倒で、昔のファイルでも最近変更していたりするので <code>find</code> コマンドが使えません( <code>-newer</code> 系を使いたいが、一定の日付より前のみに 変更しているという根拠はない)。 しかし、私のブログは(ありがたいことに)ファイル名が日付で始まっているので、それをglob展開して取得することにします。</p>
 <p>そしてその各ファイルに先程のスクリプトを適用してあげて、変形します。</p>
 <ol>
 <li><p>まずはGit管理されているファイルに実行する</p>
-<p>ただ、念の為にまずはGitにコミットされているファイルのみを対象にします。コミットさえされていれば失敗しても大丈夫なので… Gitに認識されていないファイルは <code class="sourceCode bash" data-org-language="sh"><span class="fu">git</span> status --short FILENAME</code> が <code>?? &lt;ファイル名&gt;</code> となるので、それを使って 判定します。</p>
+<p>ただ、念の為にまずはGitにコミットされているファイルのみを対象にします。コミットさえされていれば失敗しても大丈夫なので… Gitに認識されていないファイルは <code class="sourceCode bash" data-org-language="sh"><span class="fu">git</span> status <span class="at">--short</span> FILENAME</code> が <code>?? &lt;ファイル名&gt;</code> となるので、それを使って 判定します。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb13" data-org-language="sh" wrap="accordion"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a>   <span class="kw">function</span><span class="fu"> filter</span> <span class="kw">{</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="bu">local</span> <span class="va">filterFunction=$1</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a><span class="kw">while</span> <span class="bu">read</span> <span class="va">candidate</span>; <span class="kw">do</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a>    <span class="va">$filterFunction</span> <span class="st">&quot;</span><span class="va">$candidate</span><span class="st">&quot;</span> <span class="kw">\</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a>      <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$candidate</span><span class="st">&quot;</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a><span class="kw">done</span> <span class="op">&lt;</span> <span class="op">&lt;(</span><span class="fu">cat</span> /dev/stdin<span class="op">)</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true"></a>   <span class="kw">}</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true"></a></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true"></a>   <span class="kw">function</span><span class="fu"> map</span> <span class="kw">{</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true"></a><span class="bu">local</span> <span class="va">f=$1</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true"></a><span class="kw">while</span> <span class="bu">read</span> <span class="va">target</span>; <span class="kw">do</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true"></a>    <span class="va">$f</span> <span class="st">&quot;</span><span class="va">$target</span><span class="st">&quot;</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true"></a><span class="kw">done</span> <span class="op">&lt;</span> <span class="op">&lt;(</span><span class="fu">cat</span> /dev/stdin<span class="op">)</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true"></a>   <span class="kw">}</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true"></a></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true"></a>   <span class="kw">function</span><span class="fu"> filterGitKnownFile</span> <span class="kw">{</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true"></a><span class="bu">local</span> <span class="va">filename=$1</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true"></a></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true"></a><span class="bu">local</span> <span class="va">gitStatusResult=</span><span class="st">&quot;</span><span class="va">$(</span><span class="fu">git</span> status --short <span class="va">$filename)</span><span class="st">&quot;</span> </span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true"></a><span class="kw">[[</span> <span class="ot">!</span> <span class="st">&quot;</span><span class="va">$gitStatusResult</span><span class="st">&quot;</span><span class="kw"> ]]</span></span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true"></a>   <span class="kw">}</span></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true"></a></span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true"></a>   <span class="kw">function</span><span class="fu"> convertFile</span> <span class="kw">{</span></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true"></a><span class="bu">local</span> <span class="va">target=$1</span></span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true"></a><span class="ex">./migration-script.sh</span> <span class="va">$target</span> <span class="op">&gt;</span> <span class="va">${target}</span>.new</span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true"></a><span class="fu">mv</span> <span class="va">${target}</span>.new <span class="va">$target</span></span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true"></a>   <span class="kw">}</span></span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true"></a></span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true"></a>   <span class="kw">set</span> <span class="ex">-e</span></span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true"></a>   <span class="fu">ls</span> 2020-* 2021-0<span class="dt">{1,2,3,4}</span>* <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;\(md\|org\)$&quot;</span> <span class="kw">|</span> <span class="ex">filter</span> <span class="st">&quot;filterGitKnownFile&quot;</span>  <span class="kw">|</span> <span class="ex">map</span> convertFile</span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true"></a>   <span class="ex">convertFile</span> 2021-05-04-xmonad-use-stack-for-compile.org</span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true"></a>   <span class="ex">convertFile</span> 2021-05-10-xmonad-list-of-layouts.org </span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true"></a></span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true"></a>   <span class="bu">echo</span> <span class="st">&quot;Finished!&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb13" data-org-language="sh" wrap="accordion"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>   <span class="kw">function</span><span class="fu"> filter</span> <span class="kw">{</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">local</span> <span class="va">filterFunction</span><span class="op">=</span><span class="va">$1</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="bu">read</span> <span class="va">candidate</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">$filterFunction</span> <span class="st">&quot;</span><span class="va">$candidate</span><span class="st">&quot;</span> <span class="dt">\</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$candidate</span><span class="st">&quot;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span> <span class="op">&lt;</span> <span class="op">&lt;(</span><span class="fu">cat</span> /dev/stdin<span class="op">)</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>   <span class="kw">}</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>   <span class="kw">function</span><span class="fu"> map</span> <span class="kw">{</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="bu">local</span> <span class="va">f</span><span class="op">=</span><span class="va">$1</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="bu">read</span> <span class="va">target</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="va">$f</span> <span class="st">&quot;</span><span class="va">$target</span><span class="st">&quot;</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span> <span class="op">&lt;</span> <span class="op">&lt;(</span><span class="fu">cat</span> /dev/stdin<span class="op">)</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>   <span class="kw">}</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>   <span class="kw">function</span><span class="fu"> filterGitKnownFile</span> <span class="kw">{</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="bu">local</span> <span class="va">filename</span><span class="op">=</span><span class="va">$1</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="bu">local</span> <span class="va">gitStatusResult</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$(</span><span class="fu">git</span> status <span class="at">--short</span> <span class="va">$filename)</span><span class="st">&quot;</span> </span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="kw">[[</span> <span class="ot">!</span> <span class="st">&quot;</span><span class="va">$gitStatusResult</span><span class="st">&quot;</span> <span class="kw">]]</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>   <span class="kw">}</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>   <span class="kw">function</span><span class="fu"> convertFile</span> <span class="kw">{</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="bu">local</span> <span class="va">target</span><span class="op">=</span><span class="va">$1</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a><span class="ex">./migration-script.sh</span> <span class="va">$target</span> <span class="op">&gt;</span> <span class="va">${target}</span>.new</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="va">${target}</span>.new <span class="va">$target</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>   <span class="kw">}</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>   <span class="bu">set</span> <span class="at">-e</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ls</span> 2020-<span class="pp">*</span> 2021-0<span class="dt">{1</span><span class="op">,</span><span class="dt">2</span><span class="op">,</span><span class="dt">3</span><span class="op">,</span><span class="dt">4}</span><span class="pp">*</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;\(md\|org\)$&quot;</span> <span class="kw">|</span> <span class="ex">filter</span> <span class="st">&quot;filterGitKnownFile&quot;</span>  <span class="kw">|</span> <span class="ex">map</span> convertFile</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>   <span class="ex">convertFile</span> 2021-05-04-xmonad-use-stack-for-compile.org</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>   <span class="ex">convertFile</span> 2021-05-10-xmonad-list-of-layouts.org </span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>   <span class="bu">echo</span> <span class="st">&quot;Finished!&quot;</span></span></code></pre></div>
 </div>
 <div class="accordion">
 <p>Finished!</p>

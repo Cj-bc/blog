@@ -45,7 +45,7 @@
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged 'homebrew'." href="../tags/homebrew.html" class="ui tag label">homebrew</a>
   
 </div>
 
@@ -56,8 +56,8 @@
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">brew</span> tap cj-bc/dfx</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="ex">brew</span> install dfx</span></code></pre></div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> tap cj-bc/dfx</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install dfx</span></code></pre></div>
 </div>
 <h1 id="技術的メモ">技術的メモ</h1>
 <h2 id="環境変数を設定する">環境変数を設定する</h2>
@@ -66,7 +66,7 @@ bash
 <div class="ui top right attached label">
 ruby
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="dt">ENV</span>[<span class="st">&quot;DFX_INSTALL_ROOT&quot;</span>] = prefix</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cn">ENV</span><span class="kw">[</span><span class="st">&quot;DFX_INSTALL_ROOT&quot;</span><span class="kw">]</span> <span class="kw">=</span> prefix</span></code></pre></div>
 </div>
 <h2 id="ビルド中の一時ディレクトリにファイルを保存する">ビルド中の一時ディレクトリにファイルを保存する</h2>
 <p><a href="https://docs.brew.sh/Formula-Cookbook#variables-for-directory-locations">https://docs.brew.sh/Formula-Cookbook#variables-for-directory-locations</a></p>
@@ -75,7 +75,7 @@ ruby
 <div class="ui top right attached label">
 ruby
 </div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>system <span class="st">&quot;curl -fsSL https://sdk.dfinity.org/install.sh &gt; </span><span class="ot">#{</span>buildpath<span class="ot">}</span><span class="st">/install.sh&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">system</span> <span class="st">&quot;curl -fsSL https://sdk.dfinity.org/install.sh &gt; </span><span class="sc">#{</span>buildpath<span class="sc">}</span><span class="st">/install.sh&quot;</span></span></code></pre></div>
 </div>
 <h2 id="system 等で実行したいプログラムの標準入出力を操作する"><code>system</code> 等で実行したいプログラムの標準入出力を操作する</h2>
 <p><a href="https://rubydoc.brew.sh/Formula.html">brewのrubydocのFormula.test</a>の部分に書かれているのだが、どうやら <code>open3</code> という ライブラリを使えるらしい。(筆者のRuby歴はHomebrew formulaeを除けば0)</p>
@@ -84,10 +84,10 @@ ruby
 <div class="ui top right attached label">
 ruby
 </div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>     require <span class="st">&quot;open3&quot;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>     <span class="dt">Open3</span>.popen3(<span class="st">&quot;sh&quot;</span>, <span class="st">&quot;-i install.sh&quot;</span>) <span class="kw">do</span> |stdin, stdout, _, th|</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="co"># ここでIO処理をする</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>     <span class="kw">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>     <span class="fu">require</span> <span class="st">&quot;open3&quot;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>     <span class="dt">Open3</span><span class="at">.popen3</span>(<span class="st">&quot;sh&quot;</span>, <span class="st">&quot;-i install.sh&quot;</span>) <span class="cf">do</span> <span class="kw">|</span>stdin, stdout, _, th<span class="kw">|</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ここでIO処理をする</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>     <span class="cf">end</span></span></code></pre></div>
 </div>
 <ol>
 <li><p>ユーザーの入力を受け付けてそれをプログラムに渡す</p>
@@ -97,7 +97,7 @@ ruby
 <div class="ui top right attached label">
 ruby
 </div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>stdin &lt;&lt; <span class="dt">$stdin</span>.gets</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>stdin <span class="kw">&lt;&lt;</span> <span class="va">$stdin</span><span class="at">.gets</span></span></code></pre></div>
 </div>
 <p>Rubyにおいて、 <code>$変数名</code> は「グローバル変数」を指します。 なので、グローバルにhomebrewが扱っている標準入力を <code>$stdin</code> として参照しています。</p></li>
 <li><p>スレッドを待機させる必要がありそう</p>
@@ -107,10 +107,10 @@ ruby
 <div class="ui top right attached label">
 ruby
 </div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>     <span class="dt">Open3</span>.popen3(<span class="st">&quot;sh&quot;</span>, <span class="st">&quot;-i&quot;</span>, <span class="st">&quot;</span><span class="ot">#{</span>buildpath<span class="ot">}</span><span class="st">/install.sh&quot;</span>)  <span class="kw">do</span> |stdin, stdout, stderr, t|</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="co"># やりたい処理</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>t.join</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>     <span class="kw">end</span>  </span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>     <span class="dt">Open3</span><span class="at">.popen3</span>(<span class="st">&quot;sh&quot;</span>, <span class="st">&quot;-i&quot;</span>, <span class="st">&quot;</span><span class="sc">#{</span>buildpath<span class="sc">}</span><span class="st">/install.sh&quot;</span>)  <span class="cf">do</span> <span class="kw">|</span>stdin, stdout, stderr, t<span class="kw">|</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># やりたい処理</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>t<span class="at">.join</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>     <span class="cf">end</span>  </span></code></pre></div>
 </div>
 <p>とすることで、 <code>sh -i install.sh</code> が終了するまで待つことができます。</p></li>
 </ol>
@@ -119,7 +119,7 @@ ruby
 <div class="ui top right attached label">
 ruby
 </div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="dt">String</span><span class="co">#match?(/&lt;Regex&gt;/)</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">String</span><span class="co">#match?(/&lt;Regex&gt;/)</span></span></code></pre></div>
 </div>
 <p>を使うことで、正規表現 <code>&lt;Regex&gt;</code> がマッチしたなら <code>true</code>, しなかったら <code>false</code> を返してくれる。</p>
 

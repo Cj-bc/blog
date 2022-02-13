@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>CLI! CLI! CLI!</title>
+    <link href="https://cj-bc.github.io/blog/feeds/atom/tag/afterEffect.xml" rel="self" />
+    <link href="https://cj-bc.github.io/blog" />
+    <id>https://cj-bc.github.io/blog/feeds/atom/tag/afterEffect.xml</id>
+    <author>
+        <name>Cj-bc a.k.a Cj.BC_SD</name>
+        <email>cj.bc-sd@outlook.jp</email>
+    </author>
+    <updated>2022-02-08T00:00:00Z</updated>
+    <entry>
+    <title>2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment.html</id>
+    <published>2022-02-08T00:00:00Z</published>
+    <updated>2022-02-08T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>ViewBindingでの設定がきちんと反映されていなかった理由がわかった</h1>
+  <div class="ui list">
+    <div class="item">Posted on February  8, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on February  8, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;android&#39;." href="/tags/android.html" class="ui tag label">android</a><a title="All pages tagged &#39;viewbinding&#39;." href="/tags/viewbinding.html" class="ui tag label">viewbinding</a>
+  
+</div>
+
+<p>分かる人が見ればすぐ分かる凡ミスなのだけど、結構時間掛かってしまったので 置いておきます。</p>
+<h1 id="問題">問題</h1>
+<p>以下のようなコードを書いていました。 ViewBindingを用いて、 <code>myButton</code> が押された時に実行される <code>OnClickListener</code> を 設定しているものです。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+kotlin
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">class</span> MyFragment<span class="op">:</span> <span class="dt">Fragment</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">override</span> <span class="kw">fun</span> <span class="fu">onCreateView</span><span class="op">(</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">inflater</span><span class="op">:</span> <span class="dt">LayoutInflater</span><span class="op">,</span> <span class="va">container</span><span class="op">:</span> <span class="dt">ViewGroup</span><span class="op">?,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">savedInstanceState</span><span class="op">:</span> <span class="dt">Bundle</span><span class="op">?</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">):</span> <span class="dt">View</span><span class="op">?</span> <span class="op">{</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">view</span><span class="op">:</span> View<span class="op">?</span> <span class="op">=</span> inflater<span class="op">.</span>inflate<span class="op">(</span>R<span class="op">.</span>layout<span class="op">.</span>fragment_mine<span class="op">,</span> container<span class="op">,</span> <span class="kw">false</span><span class="op">)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">binding</span> <span class="op">=</span> MyBinding<span class="op">.</span>inflate<span class="op">(</span>inflator<span class="op">)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    binding<span class="op">.</span>myButton<span class="op">.</span>setOnClickListener <span class="op">{</span> view <span class="op">-&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>           <span class="co">// Do some action</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> view</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>   <span class="op">}</span></span></code></pre></div>
+</div>
+<p>でも、実行して <code>myButon</code> を押してみても一向に反応しない。 他のレイアウトだとか何だとかをいじってみたりしたけど変わらず…</p>
+<h1 id="原因">原因</h1>
+<p>初めから <a href="https://developer.android.com/topic/libraries/view-binding?hl=ja">フラグメントでビューバインディングを使用する</a>を読んでおけばよかったはなしではある。</p>
+<p>凄く単純な話で、 <strong>戻り値として <code>binding.root</code> を返す必要があります!!!!!!</strong></p>
+<p>今だと <code>inflater.inflate</code> で作成したViewを返していて、それには <code>OnClickListener</code> が設定 されていないんですね。 なので呼び出されるはずもないという。なるほど~~~!!!!</p>
+<p>と、いうことで結果的にはこうすれば良いのでした:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a> class MyFragment: Fragment() {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>   override fun onCreateView(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>inflater: LayoutInflater, container: ViewGroup?,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>savedInstanceState: Bundle?</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>   ): View? {</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a> - 	     val view: View? = inflater.inflate(R.layout.fragment_mine, container, false)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>val binding = MyBinding.inflate(inflator)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>binding.myButton.setOnClickListener { view -&gt;</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>       // Do some action</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a> - 	     return view</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a> +	     return binding.root</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>   }</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a> }</span></code></pre></div>
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-02-07-pass-command-is-affected-by-tree-version-2</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-02-07-pass-command-is-affected-by-tree-version-2.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-02-07-pass-command-is-affected-by-tree-version-2.html</id>
+    <published>2022-02-07T00:00:00Z</published>
+    <updated>2022-02-07T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>passコマンドが最近上手く動かなくなった時の対処法[tree v2.0.0関連]</h1>
+  <div class="ui list">
+    <div class="item">Posted on February  7, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on February  7, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;pass&#39;." href="/tags/pass.html" class="ui tag label">pass</a><a title="All pages tagged &#39;tool&#39;." href="/tags/tool.html" class="ui tag label">tool</a>
+  
+</div>
+
+<p><a href="https://git.zx2c4.com/password-store/about/">pass</a>コマンドは内部で<a href="http://mama.indstate.edu/users/ice/tree/">tree</a>コマンドを使用しています。 このところ、treeコマンドの使用変更によってpassコマンドが上手く動かなくなったので その原因と対処法について書き残しておきます。</p>
+<ul>
+<li>tree v2.0.0 から、FD 3が開いていると標準出力の替わりにそちらにデータをJSONで流すよ</li>
+<li>今迄通りの挙動をさせるには、 <code>3&gt;&amp;-</code> 等でFD 3を閉じてあげる必要があるよ</li>
+<li><a href="https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09">passはこれに対処済み</a>だけどまだリリースされてないのでユーザーサイドでは使えないよ</li>
+<li>現状passを呼び出す際は必ず <code>pass 3&gt;&amp;-</code> としておけば対策できるよ</li>
+</ul>
+<h1 id="原因">原因</h1>
+<p>treeの2.0.0リリースにて入った破壊的変更が原因です。</p>
+<p><a href="http://mama.indstate.edu/users/ice/tree/changes.html">treeのCHANGELOG</a>から引用させてもらうと</p>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>Output un-indented JSON on file descriptor 3 ("stddata") automatically if file descriptor 3 is present (currently Linux only.) Maybe switch to BSON.</p>
+</blockquote>
+</div>
+<p>ざっくりと訳すと「Linuxに於いては、File Descriptor 3が開いている場合はそこに整形されていないJSON を書き込むようになりました。BSONになるかもしれない」とのことです。</p>
+<p>pass自体も普通に使っていれば問題ないのですが、 <code>git credential</code> を呼んだ際はどうしてか 沢山ファイルディスクリプタが使用されます。</p>
+<p>私の環境下では以下のファイルディスクリプタが開いていました</p>
+<ul>
+<li>0 (標準入力)</li>
+<li>1 (標準出力)</li>
+<li>2 (標準エラー出力)</li>
+<li>255</li>
+<li>3</li>
+<li>4</li>
+<li>5</li>
+<li>6</li>
+</ul>
+<p>そう、ここで3番があったんですね…</p>
+<h1 id="対策">対策</h1>
+<p>必要なのは、treeコマンドのファイルディスクリプタの3番を閉じるだけです。</p>
+<h2 id="上流で行われている対策">上流で行われている対策</h2>
+<p>実はpassではこれに対して対策が取られており、<a href="https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09">commit:eea24967</a>にてコミットされています。</p>
+<p><strong>しかし</strong> 、2022/02/07現在ではこれはまだリリースされていないためエンドユーザーは使用できません。 (まぁgitでmasterから取って来て使うことは勿論出来ますが)</p>
+<p>はやいとこリリースされてほしい…</p>
+<h2 id="現状できること">現状できること</h2>
+<p>passを呼び出す際にfd 3を塞ぎます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pass</span> <span class="dv">3</span><span class="op">&gt;&amp;</span>-</span></code></pre></div>
+</div>
+<p>とすることで、passプロセスのファイルディスクリプタ3番を閉じることができます。 passを使用する何らかのスクリプトを書いている場合、当面はこうするのがよさそうです。</p>
+<h1 id="おまけ: &gt;&amp;- の意味">おまけ: <code>&gt;&amp;-</code> の意味</h1>
+<p>元は <code>[n]&gt;&amp;word</code> という形です。 <code>n</code> で指定された、出力のファイルディスクリプターを <code>word</code> で指定された番号の ファイルディスクリプターに複製します。 そして、 <strong>もし <code>word</code> が <code>-</code> であるなら</strong> 指定したファイルディスクリプターを閉じます。</p>
+<p>man:bash(1) <em>Redirection</em> 節の <em>Duplicating File Descriptors</em> に説明があります。</p>
+<h1 id="おまけ2: あるプログラムが開いているファイルデイスクリプターの一覧を取得する">おまけ2: あるプログラムが開いているファイルデイスクリプターの一覧を取得する</h1>
+<p>Linuxでは、カーネルがあらゆる情報を <strong>procファイルシステム</strong> に擬似的なファイルとして書き込んでくれています。 (man:proc(5))</p>
+<p>大抵はこれが <code>/proc</code> にマウントされているはずです。 各プロセスの情報は <code>/proc/${PID}/</code> ディレクトリ下に生成され、ファイルディスクリプターの 情報は <code>/proc/${PID}/fd</code> ディレクトリ下に生成されます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> /proc/<span class="va">$$</span>/fd</span></code></pre></div>
+</div>
+<table>
+<tbody>
+<tr class="odd">
+<td>0</td>
+</tr>
+<tr class="even">
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<h1 id="参考">参考</h1>
+<ul>
+<li><a href="https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09">passの修正コミット</a></li>
+<li><a href="https://github.com/archlinux/svntogit-community/blob/packages/pass/trunk/PKGBUILD">passの正式なURL取得元のPKGBUILD</a></li>
+<li><a href="http://mama.indstate.edu/users/ice/tree/changes.html">treeのCHANGELOG</a></li>
+<li><a href="https://www.archlinux.jp/packages/extra/x86_64/tree/">treeの正式なURL取得元のarchlinuxのパッケージページ</a></li>
+</ul>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-02-05-emacs-leaf-custom-use-backquote-to-generate-list-value</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-02-05-emacs-leaf-custom-use-backquote-to-generate-list-value.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-02-05-emacs-leaf-custom-use-backquote-to-generate-list-value.html</id>
+    <published>2022-02-05T00:00:00Z</published>
+    <updated>2022-02-05T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>[leaf]:customで動的に生成したリストを使う</h1>
+  <div class="ui list">
+    <div class="item">Posted on February  5, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on February  5, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a>
+  
+</div>
+
+<p><a href="https://github.com/conao3/leaf.el">conao3/leaf.el</a>に於いて、動的な値を <code>:custom</code> キーワードに与えるにはバッククォートを使う必要があります。 (<a href="https://qiita.com/conao3/items/347d7e472afd0c58fbd7#変数の変更について">conao3さんのQiita記事 「Emacs入門から始めるleaf.el入門」</a>にも記載があります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(leaf foo
+  :custom
+  `(foo-variable . ,(+ 3 3)))
+</code></pre>
+</div>
+<p>(backquoteについては <a href="info:elisp#Backquote">info:elisp#Backquote</a> を参照すると良いと思います。)</p>
+<p>先の事例では、リストではない値を割り当てていましたが、リストを割り当てる場合は 少しトリッキーになります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode" data-results="value raw replace"><code>`(org-agenda-list . &#39;,(directory-files &quot;~/Documents/org&quot; ))
+</code></pre>
+</div>
+<p>(org-agenda-list quote (foo.org bar.org))</p>
+<p>Org babelで実行して <code>RESULTS</code> を見てみると変な感じがしますが、動いているぽい。 <code>'</code> でクォートしてあげないと、完全に一つのリストになってしまいます。 これの理屈としては、恐らくバッククォートを用いたことで以下のように展開され:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(org-agenda-list . (&quot;path1&quot; . (&quot;path2&quot; . nil)))
+</code></pre>
+</div>
+<p>これはつまりリストの構成と同じなのでくっついてしまうんでしょうね。</p>
+<p>ちなみに、CDRがリストならDotted pair表示にはならないらしい (<a href="info:elisp#Dotted Pair Notation">info:elisp#Dotted Pair Notation</a>より) のでDotted pairの表示じゃないのは正常なようです。</p>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>When printing a list, the dotted pair notation is only used if the CDR of a cons cell is not a list.</p>
+</blockquote>
+</div>
+<p>まぁ普通のリストになっちゃうからそれはそうだよねっていう。</p>
+<h1 id="まだわからないこと">まだわからないこと</h1>
+<ul>
+<li><code>(org-agenda-files quote ("path1" "path2"))</code> と続いているが、なぜ <code>quote</code> がそこにあって動くのか？</li>
+<li>そもそも dotted Pairじゃなくしたらダメ…?(これはleafの仕様の話になってきます</li>
+</ul>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-01-29-gtk-shrink-window-region-after-expanding-it</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-01-29-gtk-shrink-window-region-after-expanding-it.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-01-29-gtk-shrink-window-region-after-expanding-it.html</id>
+    <published>2022-01-29T00:00:00Z</published>
+    <updated>2022-01-29T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>[GTK] Expandされたウィンドウを縮小させる</h1>
+  <div class="ui list">
+    <div class="item">Posted on January 29, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January 30, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;gtk&#39;." href="/tags/gtk.html" class="ui tag label">gtk</a><a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a><a title="All pages tagged &#39;gui&#39;." href="/tags/gui.html" class="ui tag label">gui</a>
+  
+</div>
+
+<p>Gtkでは、WindowやWidgetのサイズを小さめにしておき、 子要素が必要とする大きさが大きくなった際に必要に応じて拡張することができます。</p>
+<p>子要素が大きくなる時は自動的に拡張されますが、 逆に小さくなる時はこれが行われません。</p>
+<p>基本的にはそこまで問題がないのかもしれませんが、これが気になる時があります。</p>
+<h1 id="解決したい問題">解決したい問題</h1>
+<p><a href="https://github.com/elkowar/eww">elkowar/eww</a>というウィジェットアプリケーションがあります。 プリミティブで用意されているウィジェットを組み合わせることで色々なウィジェットを 定義できるのですが、そのプリミティブの中に "Revealer" というものがあります。</p>
+<p>これは Gtkにあるウィジェット<a href="https://docs.gtk.org/gtk3/class.Revealer.html">Revealer</a>であり、子要素を アニメーションによって表示したり隠したりすることができます。 Revealerを使った例が以下です。スライドアニメーションを用いて、 画面に出たり入ったりするウィジェットを作成することができました。</p>
+<p><a href="https://youtu.be/mYKXHcgTyo0">https://youtu.be/mYKXHcgTyo0</a></p>
+<p>しかしこれには一つ問題があります。</p>
+<p>上の動画では背景を透明にしているので気付きづらいのですが、 Revealerでスライドした時それを囲うウィンドウ自体の領域は動かず残ったままなのです!</p>
+<p><a href="https://youtu.be/3bU_D-JGisk">https://youtu.be/3bU_D-JGisk</a></p>
+<p>この動画で赤色がウィンドウ全体、青色がRevealer(を格納しているBox)です。 Revealerが右側に仕舞われた後も赤色のウィンドウが残っているのがわかるでしょうか。 この部分は透明にしたとしてもこのウィジェットとして判定されるので、 この下にあるものをクリックとかが出来なくなります。困った…</p>
+<h1 id="この問題の原因">この問題の原因</h1>
+<p>ウィジェットのサイズが <a href="https://docs.gtk.org/gtk3/method.Widget.set_size_request.html"><code>Widget.set_size_request</code></a>で設定されている時、 子要素の大きさがそれ以上になった場合は大きくなります。</p>
+<p>しかし、小さくなった際はそのまま残ります。</p>
+<p>そのため、Revealerが出てきた時は広がりますが仕舞った際はウィンドウはそのまま残ります。</p>
+<h1 id="解決策">解決策</h1>
+<p>端的に言うと、 <strong>自動的にサイズを縮小するものはありません</strong> (少なくとも調べた限りでは)。 替わりに、 <strong>ウィンドウの <code>resize</code> と「自動拡大」する特徴を組合せる</strong> ことが必要になります。</p>
+<p>以下の2ステップです:</p>
+<ol>
+<li>ウィンドウのサイズを最小(1,1)まで <code>resize</code> する</li>
+<li>Gtkクンが、子要素のサイズにぴったり合うように自動的に拡大してくれる</li>
+</ol>
+<p>見てわかる通り2はGtkがやってくれるので、ユーザー側でやるのは1の <code>resize</code> だけになります。 Widgetは <code>window</code> をプロパティとして所持しているので、それの <code>resize</code> を呼んであげます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>window<span class="op">.</span>gtk_window<span class="op">.</span>resize(<span class="dv">1</span><span class="op">,</span><span class="dv">1</span>)<span class="op">;</span></span></code></pre></div>
+</div>
+<h2 id="具体的な処置">具体的な処置</h2>
+<p>Revealerの状態が変更された時に <code>resize</code> を実行できれば良いのですが、 残念ながらその状態の変更に関するSignalは存在しません。 なので、Revealerの状態が変更される可能性のある時にresizeを呼んであげます。</p>
+<p>今回はEwwが扱っている全てのウィンドウに対してこれを実行したいので、 openされているWindow全てのウィンドウで <code>resize</code> を実行してあげます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>DaemonCommand::UpdateVars(mappings) =&gt; {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    for (var_name, new_value) in mappings {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a> self.update_global_state(var_name, new_value);</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>     +     for (_, _window) in self.open_windows.clone() {</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>     +         _window.gtk_window.resize(1,1);</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>     +     }</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<p><a href="https://github.com/Cj-bc/eww/commit/4109bbd601a777e25bdbbc6383ff42893181ed4a">実際に使っているコミットはこちら</a></p>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-01-27-linux-get-list-of-mounted-filesystems</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-01-27-linux-get-list-of-mounted-filesystems.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-01-27-linux-get-list-of-mounted-filesystems.html</id>
+    <published>2022-01-27T00:00:00Z</published>
+    <updated>2022-01-27T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>archlinuxで本当にマウントされているファイルシステムの一覧を得る</h1>
+  <div class="ui list">
+    <div class="item">Posted on January 27, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January 27, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged &#39;filesystem&#39;." href="/tags/filesystem.html" class="ui tag label">filesystem</a><a title="All pages tagged &#39;proc&#39;." href="/tags/proc.html" class="ui tag label">proc</a><a title="All pages tagged &#39;kernel&#39;." href="/tags/kernel.html" class="ui tag label">kernel</a>
+  
+</div>
+
+<p>マウントされているファイルシステムを知るために、 今迄 <code>lsblk -f</code> を使っていたが、これでは全て表示されないことを知ってしまった。</p>
+<p>全て表示するには <code>/proc/mounts</code> を参照した方が良い。 <code>proc</code> 自身はカーネルのデータ構造へのインターフェースを提供する 仮想ファイルシステム(man:proc より)で、</p>
+<p>その中でも <code>/proc/mounts</code> はマウントされているものの情報を提供してくれている。</p>
+<p>このファイルのフォーマットはfstabで使用されているものと同じなのでそちらを参照すること。 (今回は、何がマウントされているかを知りたかっただけなので詳しくは触れない)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /proc/mounts</span></code></pre></div>
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-01-26-elisp-time-related-functions</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-01-26-elisp-time-related-functions.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-01-26-elisp-time-related-functions.html</id>
+    <published>2022-01-26T00:00:00Z</published>
+    <updated>2022-01-26T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>時間関連のElisp関数</h1>
+  <div class="ui list">
+    <div class="item">Posted on January 26, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January 26, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
+  
+</div>
+
+<p>時間に関連するElisp関数達</p>
+<h1 id="ビルトイン関数群 ( src/timefns.c )">ビルトイン関数群 ( <code>src/timefns.c</code> )</h1>
+<p>エポック秒 (1970年1月1日0時0分0秒からの経過時間) で時間を 扱います。 基本的には <code>format-time-string</code> を用いて変換することになります。</p>
+<h2 id="format-time-string"><code>format-time-string</code></h2>
+<p>help:format-time-string 指定したフォーマットで時間を文字列にしてくれる関数。</p>
+<h2 id="current-time"><code>current-time</code></h2>
+<p>help:current-time 現在の時間を返します</p>
+<h2 id="time-add"><code>time-add</code></h2>
+<p>help:time-add</p>
+<p>時間を加算してくれます。負数を足せば減算できます。 足す値のフォーマットは <code>current-time</code> で使われているものと同じで ちょっと分かりづらいですが、 <a href="https://github.com/org-roam/org-roam/blob/445e3594b25c1c29dd269e99cb0cc958ed3f28b0/extensions/org-roam-dailies.el#L157">org-roam-dailes.elで使われている箇所</a>を参考にすると、 1日足し引きするには <code>86400</code> を足し引きすればよさそうです。</p>
+<p>n日足すには:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>     (defun nth-day (n)
+&quot;Return nth day from today&quot;
+(time-add (* n 86400) nil))
+</code></pre>
+</div>
+<h1 id="calendar">calendar</h1>
+<p>曜日等を扱うことができます。</p>
+<h2 id="calendar-nth-named-day"><code>calendar-nth-named-day</code></h2>
+<p>help:calendar-nth-named-day</p>
+<p>「特定の日付の前後の特定の曜日」を返すことができます。 曜日は数値で指定され、 0が日曜日、1が月曜日…となっていきます (参考: help:calendar-week-start-day)</p>
+<p>例えば、今日2022年1月26日の次の日曜日を取得するには</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode" data-export="both" data-results="raw"><code>(calendar-nth-named-day 1 0 1 2022 26)
+</code></pre>
+</div>
+<p>(1 30 2022)</p>
+<p>となります</p>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-01-06-haskell-trap-of-foldl1</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-01-06-haskell-trap-of-foldl1.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-01-06-haskell-trap-of-foldl1.html</id>
+    <published>2022-01-06T00:00:00Z</published>
+    <updated>2022-01-06T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>foldl1/foldr1のワナ – Foldableが空だと死ぬ</h1>
+  <div class="ui list">
+    <div class="item">Posted on January  6, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January  9, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;fold&#39;." href="/tags/fold.html" class="ui tag label">fold</a>
+  
+</div>
+
+<p>当たり前といえば当たり前だけど、気付くのに数十分くらいはかかってしまったのでメモ</p>
+<p><code>foldl1</code> / <code>foldr1</code> はそれぞれ <code>foldl</code> / <code>foldr</code> の亜種で、後者が初期Accumlatorを 指定した後に対象の <code>Foldable</code> を渡す必要がある一方、 <code>1</code> が付いているシリーズは 対象の <code>Foldable</code> から初期Accumlatorを取得する。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">foldl1</span><span class="ot"> ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">foldr1</span><span class="ot"> ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">foldl</span><span class="ot">  ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">foldr</span><span class="ot">  ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span></code></pre></div>
+</div>
+<p>で、 <code>1</code> シリーズを使用するのであれば <strong>対象の <code>Foldable</code> が空にならないように確認する</strong> 必要がある。 もし空であった場合、 <code>Prelude.foldr1</code> であれば</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> Prelude.foldr1 <span class="fu">const</span> []</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">***</span> <span class="dt">Exception</span><span class="op">:</span> Prelude.foldr1<span class="op">:</span> empty list</span></code></pre></div>
+</div>
+<p>というエラーが出る。 ちなみに <code>vector</code> パッケージの <code>Data.Vector.foldr1</code> も同じような問題がある。 その場合のエラーメッセージはこんな感じ</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+shell
+</div>
+<pre class="shell SourceCode"><code>brick3D: ./Data/Vector/Fusion/Stream/Monadic.hs:929 (foldl1M): empty stream
+CallStack (from HasCallStack):
+  error, called at ./Data/Vector/Internal/Check.hs:87:5 in vector-0.12.3.0-DdzviVbdPFECkUuJzBxnHY:Data.Vector.Internal.Check
+</code></pre>
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-01-04-android-retrofit2-api-declaration-should-not-start-with-slash</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-01-04-android-retrofit2-api-declaration-should-not-start-with-slash.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-01-04-android-retrofit2-api-declaration-should-not-start-with-slash.html</id>
+    <published>2022-01-04T00:00:00Z</published>
+    <updated>2022-01-04T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>Retrofit2のAPI定義はスラッシュで始めない</h1>
+  <div class="ui list">
+    <div class="item">Posted on January  4, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January  4, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;android&#39;." href="/tags/android.html" class="ui tag label">android</a><a title="All pages tagged &#39;retrofit2&#39;." href="/tags/retrofit2.html" class="ui tag label">retrofit2</a><a title="All pages tagged &#39;kotlin&#39;." href="/tags/kotlin.html" class="ui tag label">kotlin</a>
+  
+</div>
+
+<p><a href="https://square.github.io/retrofit/">retrofit</a>を使用してAPIを叩く際、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+kotlin
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>   <span class="kw">import</span> <span class="im">retrofit2</span><span class="op">.</span><span class="im">Call</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">import</span> <span class="im">retrofit2</span><span class="op">.</span><span class="im">http</span><span class="op">.</span><span class="im">GET</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>   <span class="kw">public</span> <span class="kw">interface</span> MyApi <span class="op">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">@GET</span><span class="op">(</span><span class="st">&quot;endpoint/example&quot;</span><span class="op">)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> abstract <span class="kw">fun</span> <span class="fu">exampleGet</span><span class="op">():</span> <span class="dt">Call</span><span class="op">&lt;</span><span class="dt">ExampleResponse</span><span class="op">&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>// <span class="fu">ExampleResponse</span>はどこかで定義されているものとする</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>   }</span></code></pre></div>
+</div>
+<p>とかするわけなんですが、この <code>@GET</code> に与えるパスの先頭に <code>/</code> をつけてはいけない。 そうするとHTTP Status Code 404を吐かれてしまう。 代わりに、 <code>retrofit2.Retrofit.Builder()</code> の <code>baseUrl</code> に渡すURLの末尾に <code>/</code> をつける。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+kotlin
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ダメ</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">@GET</span><span class="op">(</span><span class="st">&quot;/endpoint/example&quot;</span><span class="op">)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> abstract <span class="kw">fun</span> <span class="fu">exampleGet</span><span class="op">():</span> <span class="dt">Call</span><span class="op">&lt;</span><span class="dt">ExampleResponse</span><span class="op">&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>// <span class="fu">OK</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>@<span class="fu">GET</span><span class="op">(</span>&quot;<span class="va">endpoint</span>/<span class="va">example</span>&quot;<span class="op">)</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="fu">abstract</span> <span class="kw">fun</span> <span class="fu">exampleGet</span><span class="op">():</span> <span class="dt">Call</span><span class="op">&lt;</span><span class="dt">ExampleResponse</span><span class="op">&gt;</span></span></code></pre></div>
+</div>
+<h1 id="おまけ: baseUrlにslashなし&amp;API宣言にslashありは動かない">おまけ: baseUrlにslashなし&amp;API宣言にslashありは動かない</h1>
+<p>最終的に同じになりそうだから試してみたが、エラーが出て駄目でした。 baseUrlはslashで終わらないといけないらしい。</p>
+<div class="line-block">java.lang.IllegalArgumentException: baseUrl must end in /: <a href="https://misskey.io/api">https://misskey.io/api</a></div>
+]]></summary>
+</entry>
+<entry>
+    <title>2021-12-30-math-how-to-rasterize-line-with-begin-and-end-vertices-to-ascii-art</title>
+    <link href="https://cj-bc.github.io/blog/posts/2021-12-30-math-how-to-rasterize-line-with-begin-and-end-vertices-to-ascii-art.html" />
+    <id>https://cj-bc.github.io/blog/posts/2021-12-30-math-how-to-rasterize-line-with-begin-and-end-vertices-to-ascii-art.html</id>
+    <published>2021-12-30T00:00:00Z</published>
+    <updated>2021-12-30T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>直線をAAにラスタライズする</h1>
+  <div class="ui list">
+    <div class="item">Posted on December 30, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on December 30, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;math&#39;." href="/tags/math.html" class="ui tag label">math</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;AA&#39;." href="/tags/AA.html" class="ui tag label">AA</a>
+  
+</div>
+
+<p><a href="https://github.com/Cj-bc/brick-3d">Cj-bc/brick-3d</a> を作成している間、「二つの頂点を結ぶ直線をAAに落としこむ」作業が 必要になったのでメモ。 今回は二つの頂点は平面上にあるものとして扱いますが、他の次元でも同じだと思います。</p>
+<div class="tldr">
+<ul>
+<li>二つの頂点を結ぶ直線の式は $ + t( - ) $ ( <span class="math inline"><em>t</em> ∈ [0..1]</span> )</li>
+<li>tが0の時は <span class="math inline">$\vec{begin}$</span> 、1の時は <span class="math inline">$\vec{end}$</span> になる</li>
+<li>tをよしなな感覚で0~1の間で取ってやり、それを一つめに示した式に入れる</li>
+</ul>
+</div>
+<h1 id="前提知識">前提知識</h1>
+<ul>
+<li>ベクトルについてちょっと</li>
+<li>媒介変数</li>
+</ul>
+<h1 id="ベクトルと媒介変数を用いた直線の式">ベクトルと媒介変数を用いた直線の式</h1>
+<p>まず直線の式を考えます。二つの頂点は位置ベクトルとして捉えます。 この二点を <span class="math inline">$\vec{begin}$</span> と <span class="math inline">$\vec{end}$</span> とおくことにすると、 この2点間を結ぶベクトル <span class="math inline"><em>v⃗</em></span> の式は</p>
+<p>となります。</p>
+<p><img src="file:///images/vector-v-explained.png" class="ui rounded image" /></p>
+<p>これはベクトルなので実数を掛けることができ、 0をかけると長さ0のベクトル、1を掛けるとそのままのベクトルが出来ます。</p>
+<p>そこで、媒介変数 <span class="math inline"><em>t</em></span> を0から1の間の数を持たせてやると、 これは <span class="math inline"><em>v⃗</em></span> 上の点を表す式(=線分の式)になります。</p>
+<p>このベクトルは位置ベクトルではないため空間上のどこに存在しても良い状態なので、 ベクトルの開始地点を <span class="math inline">$\vec{begin}$</span> に移してあげます。</p>
+<p>これで直線の式になります。</p>
+<h1 id="直線の式からその上にある頂点を計算する">直線の式からその上にある頂点を計算する</h1>
+<p>媒介変数表示の式になっているので、後は <span class="math inline"><em>t</em></span> の値を少しずつ ずらしていってあげれば、線分上の頂点が得られます。</p>
+<p>自分のプロジェクトではHaskellで書いていたのでそのまま書かせてもらうと:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Vertex</span> <span class="ot">=</span> (<span class="dt">Flaot</span>, <span class="dt">Float</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- | 先程の「媒介変数で表示した直線の式」</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ot">f ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Vertex</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">-- | 細分化したt。</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">-- Haskellでは, xからyまでの範囲の値のリスト [x..y]</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">-- をFloatで作れないため, 一度Int型で0~100までの値のリストを生成して</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- その全てを100で割っている</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ot">ts ::</span> [<span class="dt">Float</span>]</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">=</span> <span class="fu">fmap</span> (<span class="op">/</span> <span class="dv">100</span>) [<span class="dv">0</span><span class="op">..</span><span class="dv">100</span>]</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">-- | 直線上にある &#39;Vertex&#39; のリスト</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>vertices <span class="ot">=</span> <span class="fu">fmap</span> f ts</span></code></pre></div>
+</div>
+<p>という感じ(実際に使っているコードとは違う)</p>
+<h1 id="おまけ: 実際に使っている部分">おまけ: 実際に使っている部分</h1>
+]]></summary>
+</entry>
+<entry>
+    <title>2021-12-21-qutebrwoser-extend-download-directory-suggestion</title>
+    <link href="https://cj-bc.github.io/blog/posts/2021-12-21-qutebrwoser-extend-download-directory-suggestion.html" />
+    <id>https://cj-bc.github.io/blog/posts/2021-12-21-qutebrwoser-extend-download-directory-suggestion.html</id>
+    <published>2021-12-21T00:00:00Z</published>
+    <updated>2021-12-21T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>Qutebrowserでのダウンロード先ディレクトリをrofiで選べるようにしてみた</h1>
+  <div class="ui list">
+    <div class="item">Posted on December 21, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on December 21, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;qutebrowser&#39;." href="/tags/qutebrowser.html" class="ui tag label">qutebrowser</a><a title="All pages tagged &#39;rofi&#39;." href="/tags/rofi.html" class="ui tag label">rofi</a>
+  
+</div>
+
+<p>Qutebrowserでは、ファイルをダウンロードする際に保存先を選ぶポップアップ？が出てくる。 しかし、これは前回使用したパスしかないし、タブキーでの補完もあまり上手く動かない(補完しようとすると 一つ上の階層を選択したりする)しで使い勝手があまりよくなかった。</p>
+<p>私は、保存先がいくつかあってそれを使い分けるタイプなので、いっそのこと最初に表示する保存先の候補を リストから選択できるようにしよう、と思い立った。 Qutebrowserでも絞り込みとかはできるが、なんか挙動がいまいちに感じていたので、それならrofiを使ってやろう と思い立ったのがきっかけ。</p>
+<h1 id="どう動くのか">どう動くのか</h1>
+<p><a href="https://www.youtube.com/watch?v=XX9JRI-8QQw">ゆーちゅーぶってヤツにデモ動画を上げてみた</a>のでそちらを参照してほしい。 主には、今迄通りダウンロードをしようとするとrofiが(dmenuモードで)立ち上がり、 一つ選択したらそれが・選択されなかった場合は元のqutebrowserのアルゴリズムで選ばれたパスが ダウンロード先として表示される。</p>
+<h1 id="技術的詳解">技術的詳解</h1>
+<p>詳解ってほどでもないけど…</p>
+<p>qutebrowserのブラウザに関連する処理は <code>qutebrowser/browser</code> に集められている。 その中でもダウンロードに関係するのは <code>qutebrowser/browser/downloads.py</code> である。 一目瞭然なので。 ここのうち、パスを割り出すのに使っている部分が <code>download_dir</code> なので ここに処理を挟み込んだ。</p>
+<h2 id="Rofiを呼び出す際の注意点">Rofiを呼び出す際の注意点</h2>
+<ul>
+<li>標準入力に渡すファイルオブジェクトは <strong>必ず <code>seek(0)</code> すること</strong>
+<ul>
+<li>これを怠ると、読み込みのポインタがファイルの最後にあるので何も読めない</li>
+</ul></li>
+<li><code>tempfile.TemporaryFile</code> には <code>mode="w+"</code> オプション引数を付けてあげる
+<ul>
+<li>そうじゃないとバイナリを期待される。まぁどちらでも良いのかもだけどバイナリではないので。</li>
+</ul></li>
+<li><code>rofi -dmenu</code> の標準出力を <code>CompletedProcess.stdout</code> から取得すると、末尾に改行文字( <code>\n</code> )を含む
+<ul>
+<li>外してあげないと表示がうまくいかない。空白があるように見えた。</li>
+</ul></li>
+</ul>
+<h2 id="Qutebrowserに新しい設定を組込む">Qutebrowserに新しい設定を組込む</h2>
+<p>この実装では <code>downloads.location.favorite_paths</code> という新しい設定項目を 追加している。 これは、 <code>qutebrowser/config/configdata.yml</code> というYAMLファイルをいじるだけで良い (少なくともそれで動いている、公式の情報を元にしていないため何かしら足りない可能性はある)</p>
+]]></summary>
+</entry>
+
+</feed>

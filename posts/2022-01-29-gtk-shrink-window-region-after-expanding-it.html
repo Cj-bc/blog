@@ -45,7 +45,7 @@
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged 'gtk'." href="../tags/gtk.html" class="ui tag label">gtk</a><a title="All pages tagged 'rust'." href="../tags/rust.html" class="ui tag label">rust</a><a title="All pages tagged 'gui'." href="../tags/gui.html" class="ui tag label">gui</a>
   
 </div>
 
@@ -76,7 +76,7 @@
 <div class="ui top right attached label">
 rust
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>window<span class="op">.</span>gtk_window<span class="op">.</span>resize(<span class="dv">1</span><span class="op">,</span><span class="dv">1</span>)<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>window<span class="op">.</span>gtk_window<span class="op">.</span>resize(<span class="dv">1</span><span class="op">,</span><span class="dv">1</span>)<span class="op">;</span></span></code></pre></div>
 </div>
 <h2 id="具体的な処置">具体的な処置</h2>
 <p>Revealerの状態が変更された時に <code>resize</code> を実行できれば良いのですが、 残念ながらその状態の変更に関するSignalは存在しません。 なので、Revealerの状態が変更される可能性のある時にresizeを呼んであげます。</p>
@@ -85,14 +85,14 @@ rust
 <div class="ui top right attached label">
 diff
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>DaemonCommand::UpdateVars(mappings) =&gt; {</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    for (var_name, new_value) in mappings {</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a> self.update_global_state(var_name, new_value);</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    }</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>     +     for (_, _window) in self.open_windows.clone() {</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>     +         _window.gtk_window.resize(1,1);</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>     +     }</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>DaemonCommand::UpdateVars(mappings) =&gt; {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    for (var_name, new_value) in mappings {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a> self.update_global_state(var_name, new_value);</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>     +     for (_, _window) in self.open_windows.clone() {</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>     +         _window.gtk_window.resize(1,1);</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>     +     }</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <p><a href="https://github.com/Cj-bc/eww/commit/4109bbd601a777e25bdbbc6383ff42893181ed4a">実際に使っているコミットはこちら</a></p>
 

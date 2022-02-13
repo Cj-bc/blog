@@ -28,7 +28,7 @@
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged &#39;android&#39;." href="/tags/android.html" class="ui tag label">android</a><a title="All pages tagged &#39;viewbinding&#39;." href="/tags/viewbinding.html" class="ui tag label">viewbinding</a>
   
 </div>
 
@@ -39,23 +39,23 @@
 <div class="ui top right attached label">
 kotlin
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>   <span class="kw">class</span> MyFragment: <span class="dt">Fragment</span>() {</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">override</span> <span class="kw">fun</span> <span class="fu">onCreateView</span>(</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    <span class="va">inflater</span>: <span class="dt">LayoutInflater</span>, <span class="va">container</span>: <span class="dt">ViewGroup?</span>,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="va">savedInstanceState</span>: <span class="dt">Bundle?</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>): <span class="dt">View?</span> {</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    <span class="kw">val</span> <span class="va">view</span>: View? = inflater.inflate(R.layout.fragment_mine, container, <span class="kw">false</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>    <span class="kw">val</span> <span class="va">binding</span> = MyBinding.inflate(inflator)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>    binding.myButton.setOnClickListener { view -&gt;</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>           <span class="co">// Do some action</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>    }</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>    <span class="kw">return</span> view</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>}</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>   }</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">class</span> MyFragment<span class="op">:</span> <span class="dt">Fragment</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">override</span> <span class="kw">fun</span> <span class="fu">onCreateView</span><span class="op">(</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">inflater</span><span class="op">:</span> <span class="dt">LayoutInflater</span><span class="op">,</span> <span class="va">container</span><span class="op">:</span> <span class="dt">ViewGroup</span><span class="op">?,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">savedInstanceState</span><span class="op">:</span> <span class="dt">Bundle</span><span class="op">?</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">):</span> <span class="dt">View</span><span class="op">?</span> <span class="op">{</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">view</span><span class="op">:</span> View<span class="op">?</span> <span class="op">=</span> inflater<span class="op">.</span>inflate<span class="op">(</span>R<span class="op">.</span>layout<span class="op">.</span>fragment_mine<span class="op">,</span> container<span class="op">,</span> <span class="kw">false</span><span class="op">)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">binding</span> <span class="op">=</span> MyBinding<span class="op">.</span>inflate<span class="op">(</span>inflator<span class="op">)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    binding<span class="op">.</span>myButton<span class="op">.</span>setOnClickListener <span class="op">{</span> view <span class="op">-&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>           <span class="co">// Do some action</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> view</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>   <span class="op">}</span></span></code></pre></div>
 </div>
 <p>でも、実行して <code>myButon</code> を押してみても一向に反応しない。 他のレイアウトだとか何だとかをいじってみたりしたけど変わらず…</p>
 <h1 id="原因">原因</h1>
@@ -67,24 +67,24 @@ kotlin
 <div class="ui top right attached label">
 diff
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a> class MyFragment: Fragment() {</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>   override fun onCreateView(</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>inflater: LayoutInflater, container: ViewGroup?,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>savedInstanceState: Bundle?</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>   ): View? {</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a> - 	     val view: View? = inflater.inflate(R.layout.fragment_mine, container, false)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>val binding = MyBinding.inflate(inflator)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>binding.myButton.setOnClickListener { view -&gt;</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>       // Do some action</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>}</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a> - 	     return view</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a> +	     return binding.root</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>   }</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a> }</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a> class MyFragment: Fragment() {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>   override fun onCreateView(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>inflater: LayoutInflater, container: ViewGroup?,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>savedInstanceState: Bundle?</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>   ): View? {</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a> - 	     val view: View? = inflater.inflate(R.layout.fragment_mine, container, false)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>val binding = MyBinding.inflate(inflator)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>binding.myButton.setOnClickListener { view -&gt;</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>       // Do some action</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a> - 	     return view</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a> +	     return binding.root</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>   }</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a> }</span></code></pre></div>
 </div>
 ]]></summary>
 </entry>
@@ -107,7 +107,7 @@ diff
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged &#39;pass&#39;." href="/tags/pass.html" class="ui tag label">pass</a><a title="All pages tagged &#39;tool&#39;." href="/tags/tool.html" class="ui tag label">tool</a>
   
 </div>
 
@@ -152,7 +152,7 @@ diff
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">pass</span> <span class="op">3&gt;</span><span class="kw">&amp;</span><span class="ex">-</span></span></code></pre></div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pass</span> <span class="dv">3</span><span class="op">&gt;&amp;</span>-</span></code></pre></div>
 </div>
 <p>とすることで、passプロセスのファイルディスクリプタ3番を閉じることができます。 passを使用する何らかのスクリプトを書いている場合、当面はこうするのがよさそうです。</p>
 <h1 id="おまけ: &gt;&amp;- の意味">おまけ: <code>&gt;&amp;-</code> の意味</h1>
@@ -165,7 +165,7 @@ bash
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">ls</span> /proc/<span class="va">$$</span>/fd</span></code></pre></div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> /proc/<span class="va">$$</span>/fd</span></code></pre></div>
 </div>
 <table>
 <tbody>
@@ -208,7 +208,7 @@ bash
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a>
   
 </div>
 
@@ -274,7 +274,7 @@ elisp
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged &#39;gtk&#39;." href="/tags/gtk.html" class="ui tag label">gtk</a><a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a><a title="All pages tagged &#39;gui&#39;." href="/tags/gui.html" class="ui tag label">gui</a>
   
 </div>
 
@@ -305,7 +305,7 @@ elisp
 <div class="ui top right attached label">
 rust
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>window<span class="op">.</span>gtk_window<span class="op">.</span>resize(<span class="dv">1</span><span class="op">,</span><span class="dv">1</span>)<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>window<span class="op">.</span>gtk_window<span class="op">.</span>resize(<span class="dv">1</span><span class="op">,</span><span class="dv">1</span>)<span class="op">;</span></span></code></pre></div>
 </div>
 <h2 id="具体的な処置">具体的な処置</h2>
 <p>Revealerの状態が変更された時に <code>resize</code> を実行できれば良いのですが、 残念ながらその状態の変更に関するSignalは存在しません。 なので、Revealerの状態が変更される可能性のある時にresizeを呼んであげます。</p>
@@ -314,14 +314,14 @@ rust
 <div class="ui top right attached label">
 diff
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>DaemonCommand::UpdateVars(mappings) =&gt; {</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    for (var_name, new_value) in mappings {</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a> self.update_global_state(var_name, new_value);</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    }</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>     +     for (_, _window) in self.open_windows.clone() {</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>     +         _window.gtk_window.resize(1,1);</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>     +     }</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>DaemonCommand::UpdateVars(mappings) =&gt; {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    for (var_name, new_value) in mappings {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a> self.update_global_state(var_name, new_value);</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>     +     for (_, _window) in self.open_windows.clone() {</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>     +         _window.gtk_window.resize(1,1);</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>     +     }</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <p><a href="https://github.com/Cj-bc/eww/commit/4109bbd601a777e25bdbbc6383ff42893181ed4a">実際に使っているコミットはこちら</a></p>
 ]]></summary>
@@ -345,7 +345,7 @@ diff
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged &#39;filesystem&#39;." href="/tags/filesystem.html" class="ui tag label">filesystem</a><a title="All pages tagged &#39;proc&#39;." href="/tags/proc.html" class="ui tag label">proc</a><a title="All pages tagged &#39;kernel&#39;." href="/tags/kernel.html" class="ui tag label">kernel</a>
   
 </div>
 
@@ -357,7 +357,7 @@ diff
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">cat</span> /proc/mounts</span></code></pre></div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /proc/mounts</span></code></pre></div>
 </div>
 ]]></summary>
 </entry>
@@ -380,7 +380,7 @@ bash
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
   
 </div>
 
@@ -440,7 +440,7 @@ elisp
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;fold&#39;." href="/tags/fold.html" class="ui tag label">fold</a>
   
 </div>
 
@@ -450,19 +450,19 @@ elisp
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">foldl1</span><span class="ot"> ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="fu">foldr1</span><span class="ot"> ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="fu">foldl</span><span class="ot">  ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="fu">foldr</span><span class="ot">  ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">foldl1</span><span class="ot"> ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">foldr1</span><span class="ot"> ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">foldl</span><span class="ot">  ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">foldr</span><span class="ot">  ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span></code></pre></div>
 </div>
 <p>で、 <code>1</code> シリーズを使用するのであれば <strong>対象の <code>Foldable</code> が空にならないように確認する</strong> 必要がある。 もし空であった場合、 <code>Prelude.foldr1</code> であれば</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="op">&gt;</span> Prelude.foldr1 <span class="fu">const</span> []</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="op">***</span> <span class="dt">Exception</span><span class="op">:</span> Prelude.foldr1<span class="op">:</span> empty list</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> Prelude.foldr1 <span class="fu">const</span> []</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">***</span> <span class="dt">Exception</span><span class="op">:</span> Prelude.foldr1<span class="op">:</span> empty list</span></code></pre></div>
 </div>
 <p>というエラーが出る。 ちなみに <code>vector</code> パッケージの <code>Data.Vector.foldr1</code> も同じような問題がある。 その場合のエラーメッセージはこんな感じ</p>
 <div class="ui segment">
@@ -495,7 +495,7 @@ CallStack (from HasCallStack):
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged &#39;android&#39;." href="/tags/android.html" class="ui tag label">android</a><a title="All pages tagged &#39;retrofit2&#39;." href="/tags/retrofit2.html" class="ui tag label">retrofit2</a><a title="All pages tagged &#39;kotlin&#39;." href="/tags/kotlin.html" class="ui tag label">kotlin</a>
   
 </div>
 
@@ -504,27 +504,27 @@ CallStack (from HasCallStack):
 <div class="ui top right attached label">
 kotlin
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>   <span class="kw">import</span> <span class="im">retrofit2.Call</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>   <span class="kw">import</span> <span class="im">retrofit2.http.GET</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>   <span class="kw">public</span> <span class="kw">interface</span> MyApi {</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="at">@GET</span>(<span class="st">&quot;endpoint/example&quot;</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="kw">public</span> abstract <span class="kw">fun</span> <span class="fu">exampleGet</span>(): <span class="dt">Call</span>&lt;<span class="dt">ExampleResponse</span>&gt;</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>// <span class="fu">ExampleResponse</span>はどこかで定義されているものとする</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>   }</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>   <span class="kw">import</span> <span class="im">retrofit2</span><span class="op">.</span><span class="im">Call</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">import</span> <span class="im">retrofit2</span><span class="op">.</span><span class="im">http</span><span class="op">.</span><span class="im">GET</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>   <span class="kw">public</span> <span class="kw">interface</span> MyApi <span class="op">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">@GET</span><span class="op">(</span><span class="st">&quot;endpoint/example&quot;</span><span class="op">)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> abstract <span class="kw">fun</span> <span class="fu">exampleGet</span><span class="op">():</span> <span class="dt">Call</span><span class="op">&lt;</span><span class="dt">ExampleResponse</span><span class="op">&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>// <span class="fu">ExampleResponse</span>はどこかで定義されているものとする</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>   }</span></code></pre></div>
 </div>
 <p>とかするわけなんですが、この <code>@GET</code> に与えるパスの先頭に <code>/</code> をつけてはいけない。 そうするとHTTP Status Code 404を吐かれてしまう。 代わりに、 <code>retrofit2.Retrofit.Builder()</code> の <code>baseUrl</code> に渡すURLの末尾に <code>/</code> をつける。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 kotlin
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co">// ダメ</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="at">@GET</span>(<span class="st">&quot;/endpoint/example&quot;</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="kw">public</span> abstract <span class="kw">fun</span> <span class="fu">exampleGet</span>(): <span class="dt">Call</span>&lt;<span class="dt">ExampleResponse</span>&gt;</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>// <span class="fu">OK</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>@<span class="fu">GET</span>(&quot;<span class="va">endpoint</span>/<span class="va">example</span>&quot;)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="kw">public</span> <span class="fu">abstract</span> <span class="kw">fun</span> <span class="fu">exampleGet</span>(): <span class="dt">Call</span>&lt;<span class="dt">ExampleResponse</span>&gt;</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ダメ</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">@GET</span><span class="op">(</span><span class="st">&quot;/endpoint/example&quot;</span><span class="op">)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> abstract <span class="kw">fun</span> <span class="fu">exampleGet</span><span class="op">():</span> <span class="dt">Call</span><span class="op">&lt;</span><span class="dt">ExampleResponse</span><span class="op">&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>// <span class="fu">OK</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>@<span class="fu">GET</span><span class="op">(</span>&quot;<span class="va">endpoint</span>/<span class="va">example</span>&quot;<span class="op">)</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="fu">abstract</span> <span class="kw">fun</span> <span class="fu">exampleGet</span><span class="op">():</span> <span class="dt">Call</span><span class="op">&lt;</span><span class="dt">ExampleResponse</span><span class="op">&gt;</span></span></code></pre></div>
 </div>
 <h1 id="おまけ: baseUrlにslashなし&amp;API宣言にslashありは動かない">おまけ: baseUrlにslashなし&amp;API宣言にslashありは動かない</h1>
 <p>最終的に同じになりそうだから試してみたが、エラーが出て駄目でした。 baseUrlはslashで終わらないといけないらしい。</p>
@@ -550,7 +550,7 @@ kotlin
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged &#39;math&#39;." href="/tags/math.html" class="ui tag label">math</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;AA&#39;." href="/tags/AA.html" class="ui tag label">AA</a>
   
 </div>
 
@@ -582,20 +582,20 @@ kotlin
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Vertex</span> <span class="ot">=</span> (<span class="dt">Flaot</span>, <span class="dt">Float</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="co">-- | 先程の「媒介変数で表示した直線の式」</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="ot">f ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Vertex</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="co">-- | 細分化したt。</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="co">-- Haskellでは, xからyまでの範囲の値のリスト [x..y]</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="co">-- をFloatで作れないため, 一度Int型で0~100までの値のリストを生成して</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="co">-- その全てを100で割っている</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a><span class="ot">ts ::</span> [<span class="dt">Float</span>]</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>ts <span class="ot">=</span> <span class="fu">fmap</span> (<span class="op">/</span> <span class="dv">100</span>) [<span class="dv">0</span><span class="op">..</span><span class="dv">100</span>]</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a><span class="co">-- | 直線上にある &#39;Vertex&#39; のリスト</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>vertices <span class="ot">=</span> <span class="fu">fmap</span> f ts</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Vertex</span> <span class="ot">=</span> (<span class="dt">Flaot</span>, <span class="dt">Float</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- | 先程の「媒介変数で表示した直線の式」</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ot">f ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Vertex</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">-- | 細分化したt。</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">-- Haskellでは, xからyまでの範囲の値のリスト [x..y]</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">-- をFloatで作れないため, 一度Int型で0~100までの値のリストを生成して</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- その全てを100で割っている</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ot">ts ::</span> [<span class="dt">Float</span>]</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">=</span> <span class="fu">fmap</span> (<span class="op">/</span> <span class="dv">100</span>) [<span class="dv">0</span><span class="op">..</span><span class="dv">100</span>]</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">-- | 直線上にある &#39;Vertex&#39; のリスト</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>vertices <span class="ot">=</span> <span class="fu">fmap</span> f ts</span></code></pre></div>
 </div>
 <p>という感じ(実際に使っているコードとは違う)</p>
 <h1 id="おまけ: 実際に使っている部分">おまけ: 実際に使っている部分</h1>
@@ -620,7 +620,7 @@ haskell
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged &#39;qutebrowser&#39;." href="/tags/qutebrowser.html" class="ui tag label">qutebrowser</a><a title="All pages tagged &#39;rofi&#39;." href="/tags/rofi.html" class="ui tag label">rofi</a>
   
 </div>
 

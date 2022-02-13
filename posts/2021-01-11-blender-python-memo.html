@@ -45,7 +45,7 @@
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged 'blender'." href="../tags/blender.html" class="ui tag label">blender</a><a title="All pages tagged 'python'." href="../tags/python.html" class="ui tag label">python</a>
   
 </div>
 
@@ -57,35 +57,35 @@ Blenderは、Addonが追加されるとクラスなどを登録するために=r
 <div class="ui top right attached label">
 python
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co"># アドオン有効化時の処理</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">def</span> register():</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="cf">for</span> cls <span class="kw">in</span> classes:</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>        bpy.utils.register_class(cls)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    bpy.types.TOPBAR_MT_file_import.append(menu_import)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    bpy.types.TOPBAR_MT_file_export.append(menu_export)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    bpy.types.VIEW3D_MT_armature_add.append(add_armature)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    <span class="co"># bpy.types.VIEW3D_MT_mesh_add.append(make_mesh)</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>    bpy.app.handlers.load_post.append(add_shaders)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># アドオン有効化時の処理</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> register():</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> cls <span class="kw">in</span> classes:</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        bpy.utils.register_class(cls)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    bpy.types.TOPBAR_MT_file_import.append(menu_import)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    bpy.types.TOPBAR_MT_file_export.append(menu_export)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    bpy.types.VIEW3D_MT_armature_add.append(add_armature)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># bpy.types.VIEW3D_MT_mesh_add.append(make_mesh)</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    bpy.app.handlers.load_post.append(add_shaders)</span></code></pre></div>
 </div>
 <p>明らかに=bpy.app.handlers.load<sub>post</sub>.append(add<sub>shaders</sub>)=が怪しい。というか、=add<sub>shaders</sub>=という わかりやすい名前があるので間違い無くここで追加している。 ということで=add<sub>shaders</sub>=を見てみると (<a href="https://github.com/saturday06/VRM_IMPORTER_for_Blender/blob/a14835bfbc573a1d8f2be2a74ed198da46a573e4/__init__.py#L245-L253">githubで確認する</a>)</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 python
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="at">@persistent</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">def</span> add_shaders(<span class="va">self</span>):</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>    filedir <span class="op">=</span> os.path.join(</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>        os.path.dirname(<span class="va">__file__</span>), <span class="st">&quot;resources&quot;</span>, <span class="st">&quot;material_node_groups.blend&quot;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    )</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>    <span class="cf">with</span> bpy.data.libraries.load(filedir, link<span class="op">=</span><span class="va">False</span>) <span class="im">as</span> (data_from, data_to):</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>        <span class="cf">for</span> nt <span class="kw">in</span> data_from.node_groups:</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>            <span class="cf">if</span> nt <span class="kw">not</span> <span class="kw">in</span> bpy.data.node_groups:</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>                data_to.node_groups.append(nt)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">@persistent</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add_shaders(<span class="va">self</span>):</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    filedir <span class="op">=</span> os.path.join(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        os.path.dirname(<span class="va">__file__</span>), <span class="st">&quot;resources&quot;</span>, <span class="st">&quot;material_node_groups.blend&quot;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> bpy.data.libraries.load(filedir, link<span class="op">=</span><span class="va">False</span>) <span class="im">as</span> (data_from, data_to):</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> nt <span class="kw">in</span> data_from.node_groups:</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> nt <span class="kw">not</span> <span class="kw">in</span> bpy.data.node_groups:</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                data_to.node_groups.append(nt)</span></code></pre></div>
 </div>
 <h2 id="実際にshaderを追加している部分">実際にshaderを追加している部分</h2>
 <p>このコードである。そして、読めば字の如くだが、レポジトリにある=resources/material<sub>nodegroups</sub>.blend= にある=node<sub>groups</sub>=の中でBlenderに存在していないものがあれば =data<sub>to</sub>.node<sub>groups</sub>.append()=して追加している。<br />
-結論から言うと<a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code>node_groups</code></a>は nodeで表現されるもの(オブジェクト？)、つまり=Shading=/=Textures=/=Compositin=に関わるものの集合である。 (<a href="https://docs.blender.org/api/current/bpy.types.NodeTree.html#bpy.types.NodeTree">公式doc</a>)<br />
-type()によると、=bpy.data=は=bpy.types.BlendData=であるので、=node<sub>groups</sub>=は <a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code>bpy.types.BlendData.node_groups</code></a> である。 ここで、なんとなく=bpy.data=を見てみると=bpy.data.node<sub>groups</sub>=に追加されてることがわかる。</p>
+結論から言うと<a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code class="verbatim">node_groups</code></a>は nodeで表現されるもの(オブジェクト？)、つまり=Shading=/=Textures=/=Compositin=に関わるものの集合である。 (<a href="https://docs.blender.org/api/current/bpy.types.NodeTree.html#bpy.types.NodeTree">公式doc</a>)<br />
+type()によると、=bpy.data=は=bpy.types.BlendData=であるので、=node<sub>groups</sub>=は <a href="https://docs.blender.org/api/current/bpy.types.BlendData.html?highlight=node_groups#bpy.types.BlendData.node_groups"><code class="verbatim">bpy.types.BlendData.node_groups</code></a> である。 ここで、なんとなく=bpy.data=を見てみると=bpy.data.node<sub>groups</sub>=に追加されてることがわかる。</p>
 <details>
 
 <summary>
@@ -93,11 +93,11 @@ type()によると、=bpy.data=は=bpy.types.BlendData=であるので、=node<s
 <p>=bpy.data.node<sub>groups</sub>=までたどり着く道のりメモ(でもよくわからなくて落書き)</p>
 </summary>
 
-<p>=data<sub>to</sub>=は<a href="https://docs.blender.org/api/current/bpy.types.BlendDataLibraries.html#bpy.types.BlendDataLibraries.load"><code>bpy.data.libraries.load</code></a>から返されている。 =bpy.data=が<a href="https://docs.blender.org/api/current/bpy.types.BlendData.html"><code>BlendData</code></a>のインスタンスであることから =bpy.data.libraries.load=は<a href="https://docs.blender.org/api/current/bpy.types.BlendDataLibraries.html#bpy.types.BlendDataLibraries.load"><code>BlendDataLibraries.load</code></a>である。</p>
+<p>=data<sub>to</sub>=は<a href="https://docs.blender.org/api/current/bpy.types.BlendDataLibraries.html#bpy.types.BlendDataLibraries.load"><code class="verbatim">bpy.data.libraries.load</code></a>から返されている。 =bpy.data=が<a href="https://docs.blender.org/api/current/bpy.types.BlendData.html"><code class="verbatim">BlendData</code></a>のインスタンスであることから =bpy.data.libraries.load=は<a href="https://docs.blender.org/api/current/bpy.types.BlendDataLibraries.html#bpy.types.BlendDataLibraries.load"><code class="verbatim">BlendDataLibraries.load</code></a>である。</p>
 <p>…で、なんとなく=bpy.data=を見る、に戻る</p>
 </details>
 
-<p><code>node_groups=の中で入力を受け付けてるものなら</code>.inputs=にある。 今回でいうと、=MToon=マテリアルにある=NomalmapTexture=というtypoを直したいので、 =bpy.data.node<sub>groups</sub>['MToon<sub>unversioned</sub>'].input['NomalmapTexture']=を参照する</p>
+<p><code class="verbatim">node_groups=の中で入力を受け付けてるものなら</code>.inputs=にある。 今回でいうと、=MToon=マテリアルにある=NomalmapTexture=というtypoを直したいので、 =bpy.data.node<sub>groups</sub>['MToon<sub>unversioned</sub>'].input['NomalmapTexture']=を参照する</p>
 <h1 id="今行き詰まっている問題">今行き詰まっている問題</h1>
 <h2 id="bpy_prop_collectionに追加できない">bpy<sub>propcollectionに追加できない</sub></h2>
 <p>これをtypoが直った=bpy.data.node<sub>groups</sub>['MToon<sub>unversioned</sub>'].input['NormalmapTexture']=に変えたいのだけど、 どうやら=input['NomalmapTexture']=の型である=bpy<sub>propcollection</sub>=がC実装なようで、普段のpythonのようにはいかない。 具体的にいうと</p>
@@ -105,7 +105,7 @@ type()によると、=bpy.data=は=bpy.types.BlendData=であるので、=node<s
 <div class="ui top right attached label">
 python
 </div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>bpy.data.node_groups[<span class="st">'MToon_unversioned'</span>].<span class="bu">input</span>[<span class="st">'NormalmapTexture'</span>] <span class="op">=</span> bpy.data.node_groups[<span class="st">'MToon_unversioned'</span>].<span class="bu">input</span>[<span class="st">'NomalmapTexture'</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>bpy.data.node_groups[<span class="st">'MToon_unversioned'</span>].<span class="bu">input</span>[<span class="st">'NormalmapTexture'</span>] <span class="op">=</span> bpy.data.node_groups[<span class="st">'MToon_unversioned'</span>].<span class="bu">input</span>[<span class="st">'NomalmapTexture'</span>]</span></code></pre></div>
 </div>
 <p>では以下のようにエラーを吐かれてうまくいかない。</p>
 <div class="ui segment">
@@ -121,7 +121,7 @@ TypeError: bpy_prop_collection[key]: invalid key, must be a string or an int, no
 </div>
 <ol>
 <li><p>試したこと</p>
-<p><a href="https://docs.blender.org/api/current/bpy.types.bpy_prop_collection.html?highlight=bpy_prop_collection#bpy.types.bpy_prop_collection"><code>bpy_prop_collection</code></a>のドキュメントと=dir(mtoonNode.inputs[0])=を読んでみた所、 ドキュメントには書かれていなかったけど=move=と=new=があった。</p>
+<p><a href="https://docs.blender.org/api/current/bpy.types.bpy_prop_collection.html?highlight=bpy_prop_collection#bpy.types.bpy_prop_collection"><code class="verbatim">bpy_prop_collection</code></a>のドキュメントと=dir(mtoonNode.inputs[0])=を読んでみた所、 ドキュメントには書かれていなかったけど=move=と=new=があった。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 example
@@ -136,7 +136,7 @@ example
 </div>
 <p>それぞれの挙動を試してみたが、どっちもうまく動かず…というか挙動がわからなかった</p>
 <ol>
-<li><p><code>new()</code></p>
+<li><p><code class="verbatim">new()</code></p>
 <details>
 
 <summary>
