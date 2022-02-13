@@ -17,7 +17,6 @@ import           Data.List (isPrefixOf)
 import           MyBlog.Contexts
 import           MyBlog.Pandoc
 import qualified MyBlog.MetaData as MD
-import Hakyll (rulesExtraDependencies, tagsRules)
 --------------------------------------------------------------------------------
 
 blogName :: String
@@ -60,11 +59,6 @@ modifySourceUrl item = do
         fixSourceDist fn = withUrls $ \x -> if isSourceUrl x then fixSourceDist' fn x else x
         fixSourceDist' fn x = "/images/" ++ fn ++ (drop (length prefix) x)
 
-forEachTag :: Tags -> (String -> Pattern -> Rules ()) -> Rules ()
-forEachTag tags rules =
-    forM_ (tagsMap tags) $ \(tag, identifiers) ->
-        rulesExtraDependencies [tagsDependency tags] $
-            rules tag $ fromList identifiers
 
 type Renderer = FeedConfiguration -> Context String -> [Item String] -> Compiler (Item String)
 
@@ -101,23 +95,8 @@ main = hakyll $ do
         route $ constRoute "css/myCustom.css"
         compile copyFileCompiler
 
-    tags <- compile $ buildTagsWith (flip loadSnapshotBody "tags") "posts/*" (fromCapture "tags/*.html")
 
-    tagsRules tags $ \tag pattern -> do
-        let title = "タグ \"" ++ tag ++ "\" がつけられた投稿"
-        route idRoute
-        compile $ do
-            posts <- recentFirst =<< loadAll pattern
-            let ctx = constField "title" title
-                      <> constField "atomFeedUrl" (tagAtomFeedUrl tag)
-                      <> constField "rssFeedUrl"  (tagRssFeedUrl tag)
-                      <> postListCtx tags posts
-                      <> defaultContext'
 
-            makeItem ""
-                >>= loadAndApplyTemplate "templates/tag.html" ctx
-                >>= loadAndApplyTemplate "templates/default.html" ctx
-                >>= relativizeUrls
 
     match "posts/*" $ do
         route $ setExtension "html"
@@ -130,8 +109,8 @@ main = hakyll $ do
             saveSnapshot "title" ( Item currentIdentifier titleMetadata)
             saveSnapshot "tags" (fmap T.unpack . view MD.tags <$> metadataSet)
             tags <- buildTagsWith (flip loadSnapshotBody "tags") "posts/*" (fromCapture "tags/*.html")
-            let ctx = constField "title" titleMetadata <> postCtx tags
 
+            let ctx  = constField "title" titleMetadata <> postCtx
             -- pandocCompilerWithTransform  def myPandocTransform
             return (writePandocWith def pandocData)
               >>= saveSnapshot "raw content"
@@ -146,12 +125,11 @@ main = hakyll $ do
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
             tags <- buildTagsWith (flip loadSnapshotBody "tags") "posts/*" (fromCapture "tags/*.html")
-            rulesExtraDependencies [tagsRules tags]
 
             -- TODO: listFieldを元にして, 各postにContextも独自に適用できるフィールドを生成する
             -- id:6da7268f-a417-436f-ab64-8aaef1373dbe
             let archiveCtx =
-                    postListCtx tags posts `mappend`
+                    postListCtx posts `mappend`
                     constField "title" "Archives"            `mappend`
                     defaultContext'
 
@@ -166,22 +144,13 @@ main = hakyll $ do
             posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots "posts/*" "content"
             renderer feedConfiguration feedCtx posts
 
-    forEachTag tags $ \tag pattern -> do
-        createFeeds (tagFeedUrlBase <> "/" <> tag <> ".xml") $ \renderer -> do
-            route idRoute
-            compile $ do
-                posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots pattern "content"
-                renderer feedConfiguration feedCtx posts
-    -- }}}
-
-
     match "index.html" $ do
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAll "posts/*"
             tags <- buildTagsWith (flip loadSnapshotBody "tags") "posts/*" (fromCapture "tags/*.html")
             let indexCtx =
-                    postListCtx tags posts `mappend`
+                    postListCtx posts `mappend`
                     constField "title" ""                    `mappend`
                     defaultContext'
 
