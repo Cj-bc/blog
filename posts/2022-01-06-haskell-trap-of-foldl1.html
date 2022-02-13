@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- foldl1/foldr1のワナ – Foldableが空だと死ぬ</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+        <div id="content" class="ui text container segment">
+            <div class="ui center aligned icon header">
+  <h1>foldl1/foldr1のワナ – Foldableが空だと死ぬ</h1>
+  <div class="ui list">
+    <div class="item">Posted on January  6, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January  9, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged 'haskell'." href="../tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged 'fold'." href="../tags/fold.html" class="ui tag label">fold</a>
+  
+</div>
+
+<p>当たり前といえば当たり前だけど、気付くのに数十分くらいはかかってしまったのでメモ</p>
+<p><code>foldl1</code> / <code>foldr1</code> はそれぞれ <code>foldl</code> / <code>foldr</code> の亜種で、後者が初期Accumlatorを 指定した後に対象の <code>Foldable</code> を渡す必要がある一方、 <code>1</code> が付いているシリーズは 対象の <code>Foldable</code> から初期Accumlatorを取得する。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">foldl1</span><span class="ot"> ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">foldr1</span><span class="ot"> ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">foldl</span><span class="ot">  ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">foldr</span><span class="ot">  ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span></code></pre></div>
+</div>
+<p>で、 <code>1</code> シリーズを使用するのであれば <strong>対象の <code>Foldable</code> が空にならないように確認する</strong> 必要がある。 もし空であった場合、 <code>Prelude.foldr1</code> であれば</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> Prelude.foldr1 <span class="fu">const</span> []</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">***</span> <span class="dt">Exception</span><span class="op">:</span> Prelude.foldr1<span class="op">:</span> empty list</span></code></pre></div>
+</div>
+<p>というエラーが出る。 ちなみに <code>vector</code> パッケージの <code>Data.Vector.foldr1</code> も同じような問題がある。 その場合のエラーメッセージはこんな感じ</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+shell
+</div>
+<pre class="shell SourceCode"><code>brick3D: ./Data/Vector/Fusion/Stream/Monadic.hs:929 (foldl1M): empty stream
+CallStack (from HasCallStack):
+  error, called at ./Data/Vector/Internal/Check.hs:87:5 in vector-0.12.3.0-DdzviVbdPFECkUuJzBxnHY:Data.Vector.Internal.Check
+</code></pre>
+</div>
+
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

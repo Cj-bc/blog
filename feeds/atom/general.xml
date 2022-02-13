@@ -8,1127 +8,646 @@
         <name>Cj-bc a.k.a Cj.BC_SD</name>
         <email>cj.bc-sd@outlook.jp</email>
     </author>
-    <updated>2021-12-02T00:00:00Z</updated>
+    <updated>2022-02-08T00:00:00Z</updated>
     <entry>
-    <title>2021-12-02-blog-migrate-old-blog-posts</title>
-    <link href="https://cj-bc.github.io/blog/posts/2021-12-02-blog-migrate-old-blog-posts.html" />
-    <id>https://cj-bc.github.io/blog/posts/2021-12-02-blog-migrate-old-blog-posts.html</id>
-    <published>2021-12-02T00:00:00Z</published>
-    <updated>2021-12-02T00:00:00Z</updated>
+    <title>2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment.html</id>
+    <published>2022-02-08T00:00:00Z</published>
+    <updated>2022-02-08T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>古い形式のブログ記事を変換するおしごと [WIP]</h1>
+  <h1>ViewBindingでの設定がきちんと反映されていなかった理由がわかった</h1>
   <div class="ui list">
-    <div class="item">Posted on December  2, 2021</div>
+    <div class="item">Posted on February  8, 2022</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on December 25, 2021
+      Updated on February  8, 2022
     </div>
   </div>
     
 </div>
 <div class="info">
   
+  <a title="All pages tagged &#39;android&#39;." href="/tags/android.html" class="ui tag label">android</a><a title="All pages tagged &#39;viewbinding&#39;." href="/tags/viewbinding.html" class="ui tag label">viewbinding</a>
   
-  
 </div>
 
-<h1 id="これまでの遷移">これまでの遷移</h1>
-<table>
-<tbody>
-<tr class="odd">
-<td>blog以前</td>
-<td>Qiita flavored markdownでQiitaに投稿</td>
-</tr>
-<tr class="even">
-<td>一番初めの時期(<a href="https://cj-bc.github.io/blog/posts/2020-08-02-helloHakylly.html">2020/08/02</a><code>[[https://cj-bc.github.io/blog/posts/2021-01-19-after-effect-markers.html][2021/01/19]]) | markdown+pandoc拡張(メタデータをyamlで管理) |
-   | org移行期([[https://cj-bc.github.io/blog/posts/2021-01-31-org-file-test.html][2021/01/31]]</code> <a href="https://cj-bc.github.io/blog/posts/2021-05-19-emacs-org-roam-setup.html">2021-05-19</a></td>
-<td>Org format(メタデータをyamlで管理</td>
-</tr>
-<tr class="odd">
-<td>現在のフォーマット(<a href="https://cj-bc.github.io/blog/posts/2021-07-24-diary-allelosphere-vol1.html">2021/07/24</a>~)</td>
-<td>Org format(メタデータをPropertyで管理)</td>
-</tr>
-</tbody>
-</table>
-<h1 id="なぜ移行するのか">なぜ移行するのか</h1>
-<p>複数のフォーマットに対応したHakyllコードをかくのが そろそろ辛くなってきたからです。 特に、メタデータの取り扱い周りが厄介なのです。</p>
-<p>Pandocでは、独自の構文としてメタデータを YAML フォーマットのヘッダーに保存することができます。 昔はこれを使っていたのですが、 Emacs+Org mode の構成で投稿を作成する際、それらをプロパティとして 扱えたら便利だなと感じるようになりました。</p>
-<p>プロパティとして扱える利点としては、例えば現在の投稿にある <code>BLOG_POST_PROGRESS</code> を <code>org-agenda</code> から見ることによって、 作成中の投稿の一覧を容易に作成することができます。 これは、org modeの機能の一つであるプロパティを用いているからできること であって、pandocのYAML構文を用いようとしたらまた新しいプログラムを 書く必要がでてきます。それは面倒だし非効率なので、 今迄YAMLメタデータとして仕舞っていたデータも プロパティとして保存するように変更しました。</p>
-<p>それに伴い、タイトルの取得の方法等も変わって昔の方法は使えなくなりました。 どちらにも対応することは不可能ではないでしょうが、 正直もう昔の方法を利用することは無いであろうこと・今後のメンテナンス性を 考えると非効率であることから、完全な移行をするに至りました。</p>
-<h1 data-header-args=":results raw :noweb yes" id="移行スクリプト">移行スクリプト</h1>
-<h2 id="技術選定">技術選定</h2>
-<p>今回使っていくのは</p>
-<ul>
-<li><a href="https://pandoc.org/">pandoc</a></li>
-<li><a href="https://www.nushell.sh/">nushell</a></li>
-<li>awk</li>
-<li>bash</li>
-</ul>
-<p>です</p>
-<p>以下のコード内で、便宜上コードブロックの言語を <code>sh</code> にしていますが、 一部は実際はnushellのスクリプトです。 (Emacs上でOrg babelで実行する際は、 <code>:shbang #!/bin/nu</code> の効果で nushellのスクリプトとして実行されます。)</p>
-<ol>
-<li><p>pandoc</p>
-<p>いわずと知れたフォーマット変換(等)ツール。 今回、markdown→org formatの変換を必要とするファイルもあるため必須です。 又、整形にも使います。</p></li>
-<li><p>nushell</p>
-<p>言わずと知れた‥というにはまだ早いので紹介します。 nushellは、色々な新しい面を持ちますが、今回の目的にそった紹介をする のであればデータ型を持つシェルです。 内部にリストやテーブル・日付型・サイズ型等色々な型を持つほか、 CVSやINI, TOML, ICS, XML, そして今回の本命YAML等のデータを 取り込むんことができます。</p>
-<p>今回はこのYAMLを取り込めるという機能を目的に採用しました。 YAML形式で保存されているメタデータの取り出しから、それを新しいHeadingに 整形する部分までかnushellの役割です。</p>
-<ol>
-<li><p>経緯</p>
-<p>とりあえずpandocを使うことは決定していましたが、 実はpandoc単体(フィルターなし)では「その内容を参照して あれこれする」ことができません。 というか、そういうニーズを満たすためのものがフィルターなんですが…</p>
-<p>でもフィルター書くのはちょっと面倒なんだよね… 今はYAML形式のメタデータの情報を使いたいだけなので、 テキスト処理ならawkなりsedなりあるし わざわざフィルター書く程のものでもないように感じます。</p>
-<p>なので、手軽にYAMLを使えるnushellを使ってみることにしました。</p></li>
-</ol></li>
-<li><p>awk</p>
-<p>文字列処理ならsedかawkでしょ、ということで使用。 今回は、記事からYAML形式のメタデータ部分を取得するために使用します。</p></li>
-<li><p>bash</p>
-<p>nushellで全てを書こうとしたのですが、いかんせん新しいプロジェクトなので 未だ使い勝手が整ってなかったり出来無いことがあったりします。</p>
-<p>私がnushellに慣れていない、というのもありますが、 テキストを読み込んだ時に謎にTableにされてしまい、それを頑張ってテキストに戻して… みたいなことをやるのに疲れてしまいました。 ということで、nushellの得意な部分はnushellに任せて、他の処理は手慣れたbashで 行おうということになりました。</p></li>
-</ol>
-<h2 id="1. YAML部分を取り出す">1. YAML部分を取り出す</h2>
-<p>ここは単純なテキスト処理なのでawkを使います。(もっと良い方法があれば教えてください)</p>
-<p>メタデータは <code>---</code> と <code>---</code> で囲まれているので、 「 <code>---</code> の次の行から次に <code>---</code> がくるまで」を出力します。</p>
+<p>分かる人が見ればすぐ分かる凡ミスなのだけど、結構時間掛かってしまったので 置いておきます。</p>
+<h1 id="問題">問題</h1>
+<p>以下のようなコードを書いていました。 ViewBindingを用いて、 <code>myButton</code> が押された時に実行される <code>OnClickListener</code> を 設定しているものです。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-awk
+kotlin
 </div>
-<div class="sourceCode" id="extract-yaml-metadata" data-in-file="./2021-01-03-fomantic-ui.md" data-results="raw" wrap="SRC yaml"><pre class="sourceCode awk SourceCode"><code class="sourceCode awk"><span id="extract-yaml-metadata-1"><a href="#extract-yaml-metadata-1" aria-hidden="true"></a>   <span class="cf">BEGIN</span> { inside<span class="op">=</span><span class="dv">0</span>; }</span>
-<span id="extract-yaml-metadata-2"><a href="#extract-yaml-metadata-2" aria-hidden="true"></a>   <span class="ot">/</span><span class="ss">---</span><span class="ot">/</span> {<span class="cf">if</span> (inside <span class="op">==</span> <span class="dv">0</span>) { inside<span class="op">=</span><span class="dv">1</span>; }</span>
-<span id="extract-yaml-metadata-3"><a href="#extract-yaml-metadata-3" aria-hidden="true"></a><span class="cf">else</span> { inside<span class="op">=</span><span class="dv">0</span>; };</span>
-<span id="extract-yaml-metadata-4"><a href="#extract-yaml-metadata-4" aria-hidden="true"></a><span class="kw">next</span>;</span>
-<span id="extract-yaml-metadata-5"><a href="#extract-yaml-metadata-5" aria-hidden="true"></a>   }</span>
-<span id="extract-yaml-metadata-6"><a href="#extract-yaml-metadata-6" aria-hidden="true"></a>   { <span class="cf">if</span> (inside <span class="op">==</span> <span class="dv">1</span>) { <span class="kw">print</span> <span class="dt">$0</span>; }; }</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">class</span> MyFragment<span class="op">:</span> <span class="dt">Fragment</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">override</span> <span class="kw">fun</span> <span class="fu">onCreateView</span><span class="op">(</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">inflater</span><span class="op">:</span> <span class="dt">LayoutInflater</span><span class="op">,</span> <span class="va">container</span><span class="op">:</span> <span class="dt">ViewGroup</span><span class="op">?,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">savedInstanceState</span><span class="op">:</span> <span class="dt">Bundle</span><span class="op">?</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">):</span> <span class="dt">View</span><span class="op">?</span> <span class="op">{</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">view</span><span class="op">:</span> View<span class="op">?</span> <span class="op">=</span> inflater<span class="op">.</span>inflate<span class="op">(</span>R<span class="op">.</span>layout<span class="op">.</span>fragment_mine<span class="op">,</span> container<span class="op">,</span> <span class="kw">false</span><span class="op">)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">binding</span> <span class="op">=</span> MyBinding<span class="op">.</span>inflate<span class="op">(</span>inflator<span class="op">)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    binding<span class="op">.</span>myButton<span class="op">.</span>setOnClickListener <span class="op">{</span> view <span class="op">-&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>           <span class="co">// Do some action</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> view</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>   <span class="op">}</span></span></code></pre></div>
 </div>
+<p>でも、実行して <code>myButon</code> を押してみても一向に反応しない。 他のレイアウトだとか何だとかをいじってみたりしたけど変わらず…</p>
+<h1 id="原因">原因</h1>
+<p>初めから <a href="https://developer.android.com/topic/libraries/view-binding?hl=ja">フラグメントでビューバインディングを使用する</a>を読んでおけばよかったはなしではある。</p>
+<p>凄く単純な話で、 <strong>戻り値として <code>binding.root</code> を返す必要があります!!!!!!</strong></p>
+<p>今だと <code>inflater.inflate</code> で作成したViewを返していて、それには <code>OnClickListener</code> が設定 されていないんですね。 なので呼び出されるはずもないという。なるほど~~~!!!!</p>
+<p>と、いうことで結果的にはこうすれば良いのでした:</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-yaml
+diff
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode yaml SourceCode"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">title</span><span class="kw">:</span><span class="at"> ブログの見た目を整える</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="fu">author</span><span class="kw">:</span><span class="at"> Cj-bc</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="fu">tags</span><span class="kw">:</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> hakyll</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> ブログ</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> haskell</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="fu">date</span><span class="kw">:</span><span class="at"> Jan 03, 2021</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a> class MyFragment: Fragment() {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>   override fun onCreateView(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>inflater: LayoutInflater, container: ViewGroup?,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>savedInstanceState: Bundle?</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>   ): View? {</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a> - 	     val view: View? = inflater.inflate(R.layout.fragment_mine, container, false)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>val binding = MyBinding.inflate(inflator)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>binding.myButton.setOnClickListener { view -&gt;</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>       // Do some action</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a> - 	     return view</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a> +	     return binding.root</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>   }</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a> }</span></code></pre></div>
 </div>
-<h2 id="2. Yaml部分からメタデータを取得する">2. Yaml部分からメタデータを取得する</h2>
-<p>先程のawkスクリプトを適用してあげて…</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="bu">let</span> target = (if (<span class="va">$nu</span>.env <span class="kw">|</span> <span class="kw">select</span> <span class="ex">TARGET</span> <span class="kw">|</span> <span class="ex">empty?</span>) <span class="dt">{&quot;&quot;}</span> <span class="dt">{</span><span class="va">$nu</span><span class="dt">.env.TARGET}</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">if</span> <span class="kw">(</span><span class="va">$target</span> <span class="kw">|</span> <span class="ex">empty?</span><span class="kw">)</span> <span class="kw">{</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>^<span class="ex">echo</span> <span class="st">&quot;usage: TARGET=&lt;TARGET_FILENAME&gt; blog-migration-script--createHeader.nu&quot;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="bu">exit</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="kw">}</span> {}</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="bu">let</span> metadata = (awk <span class="st">&#39;</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="st">&lt;&lt;extract-yaml-metadata&gt;&gt;</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="st">&#39;</span> <span class="va">$target</span> <span class="kw">|</span> <span class="ex">from</span> yaml)</span></code></pre></div>
-</div>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb3" data-org-language="sh" data-tangle="no" data-shebang="#!/bin/nu"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="op">&lt;&lt;migration-script&gt;&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>echo <span class="va">$metadata</span></span></code></pre></div>
-</div>
-<p>─────────────────────────────────────────────────────────────────────── 0 ブログの見た目を整える Cj-bc [table 3 rows] Jan 03, 2021</p>
-<h2 id="3. メタデータを加工して新しいヘッダーを作成する">3. メタデータを加工して新しいヘッダーを作成する</h2>
-<p>さて、これで投稿のタイトルと諸々のデータは取れるようになりました。 あとはこれを加工して、新しいヘッダーを作成します。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb4" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>   <span class="op">&lt;&lt;nu-getAuthor&gt;&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>   &lt;&lt;nu-formatTags<span class="op">&gt;&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>   &lt;&lt;nu-formatDate<span class="op">&gt;&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>   echo $&quot;* (<span class="va">$metadata</span>.title)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>:PROPERTIES:</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>:DATE: (formatDate <span class="va">$metadata</span>)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>:TAGS: (<span class="va">$metadata</span>.tags | reduce -f &#39;:&#39; { <span class="va">$acc</span> + <span class="va">$it</span> + &#39;:&#39; })</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>:AUTHOR: (getAuthor <span class="va">$metadata</span>)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>:BLOG_POST_KIND: Memo</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>:BLOG_POST_PROGRESS: Published</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a>:BLOG_POST_STATUS: Normal</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a>:END:</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a>   &quot;</span></code></pre></div>
-</div>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb5" data-org-language="sh" data-tangle="no"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="op">&lt;&lt;migration-script&gt;&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>echo <span class="va">$newHeading</span></span></code></pre></div>
-</div>
-<ul>
-<li>ブログの見た目を整える</li>
-</ul>
-<ol>
-<li><p>タグをOrg形式に変換する</p>
-<p>org形式のタグはタグ名を <code>:</code> で囲んだものになります。 タグ名はメタデータ内にリストとして持っているので、nushellの <code>reduce</code> コマンドで整形します。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb6" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>   <span class="ex">def</span> formatTags [tags: table] {</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="va">$tags</span> <span class="kw">|</span> <span class="ex">reduce</span> -f <span class="st">&#39;:&#39;</span> { <span class="va">$acc</span> + <span class="va">$it</span> + <span class="st">&#39;:&#39;</span> }</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>   }</span></code></pre></div>
-</div>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb7" data-org-language="sh" data-tangle="no"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="op">&lt;&lt;nu-formatTags&gt;&gt;</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>formatTags <span class="va">$metadata</span>.tags</span></code></pre></div>
-</div>
-<p>:hakyll:ブログ:haskell:</p></li>
-<li><p>記事の日付を変換する</p>
-<p>昔のフォーマットでは <code>月 日, 年</code> となっているので、これを org形式の <code>[年-月-日 曜日]</code> に変換します。</p>
-<p>最初は nushell の <code>parse</code> コマンドでパースしてうんたら…って 考えていたけれど、曜日を出す方法や月番号周りの変換に悩んでいました。 で、その間に GNU coreutils の <code>date</code> コマンド(nushellは組込みで <code>date</code> コマンド持っているが、そっちではない)が全ての仕事を出来そうだとわかったので こちらでやることにしました。</p>
-<p>GNU coreutilsの <code>date</code> コマンドはデフォルトでは現在時刻を吐きますが、 <code>--date</code> オプションに文字列を渡してあげることで別の日付にすることが可能です。 このオプションに元の文字列をセットして、それをorg形式にフォーマットしなおします。</p>
-<p>nushellでは、前述の通りそれ自体が提供している <code>date</code> コマンドが存在し、 GNU coreutilsの <code>date</code> コマンドはそのままでは使用することができません。 そのため、<a href="https://www.nushell.sh/book/escaping.html">nushell bookの"Escaping to the System"</a>を参考にコマンド名の前に <code>^</code> を付けることでnushell独自のコマンドを呼び出さず、GNU coreutilsの <code>date</code> コマンドを呼びだします。</p>
-<p>尚、GNU coreutilsの <code>date</code> コマンドは環境変数 <code>LANG</code> に応じて曜日名の 出力などを変化させます。ここでは英語表記になってほしいので <code>LANG=C</code> にしています。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb8" data-org-language="sh" data-tangle="no" data-noweb-ref="nu-formatDate"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>   <span class="ex">def</span> formatDate [metadata] {</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a><span class="va">LANG=</span>C ^<span class="ex">date</span> --date <span class="st">$&quot;(</span><span class="va">$metadata</span><span class="st">.date)&quot;</span> +[%Y-%m-%d %a] <span class="kw">|</span> <span class="fu">tr</span> -d <span class="st">&#39;\n&#39;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>   }</span></code></pre></div>
-</div>
-<p>"[2021-01-03 Sun]"</p></li>
-<li><p>デフォルトの筆者を設定する</p>
-<p>いくつかの記事はAUTHORが記載されていないので、 その場合はデフォルト値を使うようにしてあげます。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb9" data-org-language="sh" data-tangle="no" data-noweb-ref="nu-getAuthor"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>    <span class="ex">def</span> getAuthor [metadata] {</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>    <span class="kw">if</span> <span class="kw">(</span><span class="va">$metadata</span> <span class="kw">|</span> <span class="kw">select</span> <span class="ex">author</span> <span class="kw">|</span> <span class="ex">empty?</span><span class="kw">)</span> <span class="kw">{</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="st">&quot;Cj-bc&quot;</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>    <span class="kw">}</span> <span class="kw">{</span> <span class="va">$metadata</span><span class="ex">.author</span> <span class="kw">}</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a>    }</span></code></pre></div>
-</div></li>
-</ol>
-<h2 id="4. 元の記事を一段階下げる">4. 元の記事を一段階下げる</h2>
-<p>さて、今迄作ってきたheadingを、元の記事と組合せる前段階をします。 トップレベル(level1)のheadingは一つだけであってほしいので、 元の記事のレベルを一段階下げます。これはpandocを用いて行うことができます。</p>
-<p>但し、その前にYAMLヘッダーを取り除いてあげます。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-awk
-</div>
-<div class="sourceCode" id="cb10" data-in-file="./2021-05-14-haskell-make-Ixed-instance.org" wrap="src org" data-noweb-ref="awk-trim-yaml-header"><pre class="sourceCode awk SourceCode"><code class="sourceCode awk"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>     <span class="cf">BEGIN</span> { inside<span class="op">=</span><span class="dv">0</span>; }</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>     <span class="ot">/</span><span class="ss">---</span><span class="ot">/</span> {<span class="cf">if</span> (inside <span class="op">==</span> <span class="dv">0</span>) { inside<span class="op">=</span><span class="dv">1</span>; }</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a><span class="cf">else</span> { inside<span class="op">=</span><span class="dv">2</span>; };</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="kw">next</span>;</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a>     }</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a>     { <span class="cf">if</span> (inside <span class="op">==</span> <span class="dv">2</span>) { <span class="kw">print</span> <span class="dt">$0</span>; }; }</span></code></pre></div>
-</div>
-<div class="ui segment">
-<div class="ui top right attached label">
-org
-</div>
-<pre class="org SourceCode"><code>
-     * ~Ixed~ とは
-
-     数学的解説はわかりませんごめんなさい。誰か補足があれば [[https://github.com/Cj-bc/blog][blogのレポジトリ]] にissueでも残してください()
-     Haskellなのでとりあえず hoogleを参照します。
-     ~Ixed~ の定義は以下の通りです
-
-     #+begin_src haskell
-class Ixed m where
-  -- |
-  -- /NB:/ Setting the value of this &#39;Traversal&#39; will only set the value in
-  -- &#39;at&#39; if it is already present.
-  --
-  -- If you want to be able to insert /missing/ values, you want &#39;at&#39;.
-  --
-  -- &gt;&gt;&gt; Seq.fromList [a,b,c,d] &amp; ix 2 %~ f
-  -- fromList [a,b,f c,d]
-  --
-  -- &gt;&gt;&gt; Seq.fromList [a,b,c,d] &amp; ix 2 .~ e
-  -- fromList [a,b,e,d]
-  --
-  -- &gt;&gt;&gt; Seq.fromList [a,b,c,d] ^? ix 2
-  -- Just c
-  --
-  -- &gt;&gt;&gt; Seq.fromList [] ^? ix 2
-  -- Nothing
-  ix :: Index m -&gt; Traversal&#39; m (IxValue m)
-  default ix :: At m =&gt; Index m -&gt; Traversal&#39; m (IxValue m)
-  ix = ixAt
-  {-# INLINE ix #-}
-     #+end_src
-
-     ~Ixed~ は =Lens= の提供する型の一つで、 ~Map~ のような型の値に対して
-     値を ~traverse~ するシンプルな ~Traversal~ を提供するものです。
-
-     簡潔に言うと、
-     *リスト等の要素にLensでアクセスできるようにするやつ*
-     みたいなざっくりとした理解をしています。
-
-
-     また、これに関連するオープンな型ファミリーとして ~Index~ と ~IxValue~ があります
-
-     #+begin_src haskell
-type family Index (s :: *) :: *
-
--- | This provides a common notion of a value at an index that is shared by both &#39;Ixed&#39; and &#39;At&#39;.
-type family IxValue (m :: *) :: *
-     #+end_src
-
-     ~Ixed~ において、 ~Index~ はインデックスの型、 ~IxValue~ はそこに格納されている
-     値の型です。
-
-     * 作る
-
-     とりあえず作り始めます。
-
-     前提として、今回~Ixed~のインスタンスを作るのは以下の型です。
-     元のファイルは [[https://github.com/Cj-bc/playground/blob/0fb982f28f7ab0444ffd2ad59eacc3cd904b99ba/haskell/hit-n-blow/src/HitNBlow/Type.hs#L15-20][Cj-bc/playground -- hit-n-blow]] で使われているものです。
-
-     #+begin_src haskell
--- | Represents each Pin
-data Pin = Red | Blue | Green | White | Purple deriving (Show)
-
--- | One Set of Pins that user will guess 
-data Lane = Lane (Maybe Pin) (Maybe Pin) (Maybe Pin) (Maybe Pin) (Maybe Pin)
-    deriving (Show)
-     #+end_src
-
-
-
-     ~Ixed~ の定義に特に制限がかかれていないので、 ~ix~ を定義することにします。
-     そのために、 ~ix~ で使用される ~Index~ と ~IxValue~ を定義することにします。
-
-     ** Index
- ~Index~ はあまり説明がありませんが、型の情報からすると恐らく「添字に使う型」
- の定義であろうと推測が出来ます。
- (名前が ~Index~ であること、 ~ix~ において最初に取ること等。又、
- 既にあるインスタンスを確認するのも良い方法だと思います。)
-
- ~Lane~ において添字は ~Int~ です。
-
- #+begin_src haskell
-   type instance Index Lane = Int
- #+end_src
-
-     ** IxValue
- 同様ですが、今度はそれぞれの中身の型を定義します。
-
- #+begin_src haskell
-   type instance IxValue Lane = Maybe Pin
- #+end_src
-
-     ** Ixed
- ~Ixed~ 本体に行きます!!
-
- ~ix~ の型は
-
- #+begin_src haskell
-   ix :: Index m -&gt; Traversal&#39; m (IxValue m)
- #+end_src
-
- で、今回は ~m~ が ~Lane~ なので具体的な型にすると
-
- #+begin_src haskell
-   ix :: Int -&gt; Traversal&#39; Lane (Maybe Pin)
- #+end_src
-
- ということになります。
-
- で、 ~Lens~ 少ししか分からんので一つ疑問が浮かびます
-
- *&gt;&gt;&gt;&gt;&gt; ~Traversal&#39;~ ってナニよ!!!!! &lt;&lt;&lt;&lt;&lt;*
-
-     ** Traversal&#39; ってナニよ!
-
- はい。名前は知ってるけど使い方良く分からずに放置してた子ですね。
- 定義によると
-
- #+begin_src haskell
-   type Traversal&#39; s a = Traversal s s a a
-
-   type Traversal s t a b = forall f. Applicative f =&gt; (a -&gt; f b) -&gt; s -&gt; f t
- #+end_src
-
- ついでなので [[https://hackage.haskell.org/package/lens-5.0.1/docs/Control-Lens-Type.html#t:Traversal][~Traversal~]] の定義も載せておきました。
- ~Lens~ と同じように、実体はただの関数ですね。
-
- ~Lens~ よりも制限の緩い型で ~Traversable~ の型関数である ~traverse~ の一般化らしいです。
- しっかりと理解はしていないが、まぁ型を考えれば作れてしまうのでとりあえずは
- ふんわりと掴んだ状態で作ってみます。
-
- あ、ちなみに ~Traversal&#39;~ は単純に、値の更新等した時に型が変化しないものですね。
-
- 参考:
-
- - [[https://fumieval.hatenablog.com/entry/2015/07/14/223329][lensパッケージのオプティクス(弱い順) -- モナドとわたしとコモナド]]
-
-     ** ~ix~ を作る
- さて、 ~Traversal&#39;~ がわかったので ~ix~ を作れ(る気がし)ます。
- ~Traversal&#39;~ を置き換えてみると:
-
- #+begin_src haskell
-   ix :: Int -&gt; Traversa&#39; Lane (Maybe Pin)
-   ix :: Int -&gt; Traversal Lane Lane (Maybe Pin) (Maybe Pin)
-   ix :: Int -&gt; (forall f. Applicative f =&gt; (Maybe Pin -&gt; f (Maybe Pin) -&gt; Lane -&gt; f Lane
- #+end_src
-
- となります(forallの位置は少し自信がないけど多分あってる)
-
- ~Int~ は元々 ~Index m~ だった部分なので、今興味のあるインデックス(に該当する数字)が来るのがわかります。
-
- 又、元の ~Traversal&#39;~ の部分も要は「中身( ~Maybe Pin~ )に作用する関数を受け取り、作用させた
- 結果を返す」わけなので、その通りに実装します。
-
- #+begin_src haskell
-   instance Ixed Lane where
-     ix 1 = \g l@(Lane a b c d e) -&gt; Lane &lt;$&gt; g a &lt;*&gt; b &lt;*&gt; c &lt;*&gt; d &lt;*&gt; e
-     ix 2 = \g l@(Lane a b c d e) -&gt; Lane a &lt;$&gt; g b &lt;*&gt; c &lt;*&gt; d &lt;*&gt; e
-     ix 3 = \g l@(Lane a b c d e) -&gt; Lane a b &lt;$&gt; g c &lt;*&gt; d &lt;*&gt; e
-     ix 4 = \g l@(Lane a b c d e) -&gt; Lane a b c &lt;$&gt; g d &lt;*&gt; e
-     ix 5 = \g l@(Lane a b c d e) -&gt; Lane a b c d &lt;$&gt; g e
-     ix _ = \_ l -&gt; pure l
- #+end_src
-
- 多分動いた!!
-</code></pre>
-</div>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="pandocを用いたheadingレベル下げの例" data-org-language="sh" data-shbang="#!/bin/bash" data-tangle="no"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="pandocを用いたheadingレベル下げの例-1"><a href="#pandocを用いたheadingレベル下げの例-1" aria-hidden="true"></a>     <span class="ex">pandoc</span> -f org --shift-heading-level-by=1 -t org <span class="op">&lt;(</span><span class="bu">echo</span> <span class="st">&quot;</span></span>
-<span id="pandocを用いたheadingレベル下げの例-2"><a href="#pandocを用いたheadingレベル下げの例-2" aria-hidden="true"></a><span class="st">     * Leve1 header example</span></span>
-<span id="pandocを用いたheadingレベル下げの例-3"><a href="#pandocを用いたheadingレベル下げの例-3" aria-hidden="true"></a><span class="st">hello!</span></span>
-<span id="pandocを用いたheadingレベル下げの例-4"><a href="#pandocを用いたheadingレベル下げの例-4" aria-hidden="true"></a></span>
-<span id="pandocを用いたheadingレベル下げの例-5"><a href="#pandocを用いたheadingレベル下げの例-5" aria-hidden="true"></a><span class="st">     ** Inner level2 header</span></span>
-<span id="pandocを用いたheadingレベル下げの例-6"><a href="#pandocを用いたheadingレベル下げの例-6" aria-hidden="true"></a><span class="st">     &quot;</span><span class="op">)</span></span>
-<span id="pandocを用いたheadingレベル下げの例-7"><a href="#pandocを用いたheadingレベル下げの例-7" aria-hidden="true"></a></span></code></pre></div>
-</div>
-<p>** Leve1 header example</p>
-<p>hello!</p>
-<p><strong>*</strong> Inner level2 header</p>
-<h2 id="5. 3.と4.を組み合わせる">5. 3.と4.を組み合わせる</h2>
-<p>ここからはbashを使います。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb12" data-org-language="sh" data-shebang="#!/bin/bash"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>   [[ <span class="ex">-z</span> <span class="va">$1</span> ]] <span class="kw">&amp;&amp;</span> <span class="kw">{</span> <span class="bu">echo</span> <span class="st">&quot;usage: migration-script.sh TARGETFILE&quot;</span><span class="kw">;</span> <span class="bu">exit</span><span class="kw">;</span> <span class="kw">}</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>   <span class="va">target=$1</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a>   <span class="va">extensions=(</span>emoji task_lists</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a> <span class="ex">backtick_code_blocks</span> fenced_code_attributes</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a> <span class="ex">header_attributes</span> raw_html</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a>)</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true"></a>   <span class="kw">function</span><span class="fu"> formatExtension()</span> <span class="kw">{</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true"></a><span class="bu">echo</span> <span class="st">&quot;+</span><span class="va">${extensions[@]}</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="fu">tr</span> <span class="st">&#39; &#39;</span> <span class="st">&#39;+&#39;</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true"></a>   <span class="kw">}</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true"></a></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true"></a>   <span class="va">format=$(filename=($(</span><span class="bu">echo</span> <span class="va">$target</span> <span class="kw">|</span> <span class="fu">tr</span> -s <span class="st">&#39;.&#39;</span> <span class="st">&#39; &#39;</span><span class="va">))</span>;</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true"></a>     <span class="kw">case</span> <span class="st">&quot;</span><span class="va">${filename[-1]}</span><span class="st">&quot;</span><span class="kw"> in</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true"></a>  <span class="st">&quot;md&quot;</span><span class="kw">)</span> <span class="bu">echo</span> <span class="st">&quot;markdown</span><span class="va">$(</span><span class="ex">formatExtension</span><span class="va">)</span><span class="st">&quot;</span><span class="kw">;;</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true"></a>  <span class="ex">*</span>) <span class="bu">echo</span> <span class="st">&quot;org&quot;</span><span class="kw">;;</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true"></a>     <span class="kw">esac</span></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true"></a>  <span class="va">)</span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true"></a></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true"></a>   <span class="fu">cat</span> <span class="op">&lt;(</span><span class="va">TARGET=$target</span> <span class="ex">./blog-migration-script--createHeader.nu</span><span class="op">)</span> <span class="op">&lt;(</span><span class="fu">awk</span> <span class="st">&#39;</span></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true"></a><span class="st">   &lt;&lt;awk-trim-yaml-header&gt;&gt;</span></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true"></a><span class="st">   &#39;</span> <span class="va">$target</span> <span class="kw">|</span> <span class="ex">pandoc</span> -f <span class="st">&quot;</span><span class="va">${format}</span><span class="st">&quot;</span> --shift-heading-level-by=1 -t org<span class="op">)</span></span></code></pre></div>
-</div>
-<p>usage: migration-script.sh TARGETFILE</p>
-<ol>
-<li><p>ここでnushellを使わなかった理由</p>
-<p>nushellの <code>echo</code> はListで出力してくるので、 GNU coreutilsの <code>echo</code> を使います。 又、 <code>^echo $newHeading (pandoc...)</code> だと <code>$newHeading</code> と <code>(pandoc...)</code> の間に改行が作成されず、 <code>$newHeading</code> の後ろに空行を追加して おいてもなんか消されてしまうので以下のような方法を取っています。</p></li>
-</ol>
-<h2 id="7. 全ファイルに対して実行する">7. 全ファイルに対して実行する</h2>
-<p>あとはこれを全てのファイルに対して実行してあげれば良いわけです! <em>これまでの遷移</em>から、 2021/05/19以前の投稿が古いフォーマットを使用している ことがわかるので、それ以前のファイルのみを探し出します。</p>
-<p>この取得はちょっと面倒で、昔のファイルでも最近変更していたりするので <code>find</code> コマンドが使えません( <code>-newer</code> 系を使いたいが、一定の日付より前のみに 変更しているという根拠はない)。 しかし、私のブログは(ありがたいことに)ファイル名が日付で始まっているので、それをglob展開して取得することにします。</p>
-<p>そしてその各ファイルに先程のスクリプトを適用してあげて、変形します。</p>
-<ol>
-<li><p>まずはGit管理されているファイルに実行する</p>
-<p>ただ、念の為にまずはGitにコミットされているファイルのみを対象にします。コミットさえされていれば失敗しても大丈夫なので… Gitに認識されていないファイルは <code class="sourceCode bash" data-org-language="sh"><span class="fu">git</span> status --short FILENAME</code> が <code>?? &lt;ファイル名&gt;</code> となるので、それを使って 判定します。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb13" data-org-language="sh" wrap="accordion"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a>   <span class="kw">function</span><span class="fu"> filter</span> <span class="kw">{</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="bu">local</span> <span class="va">filterFunction=$1</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a><span class="kw">while</span> <span class="bu">read</span> <span class="va">candidate</span>; <span class="kw">do</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a>    <span class="va">$filterFunction</span> <span class="st">&quot;</span><span class="va">$candidate</span><span class="st">&quot;</span> <span class="kw">\</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a>      <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$candidate</span><span class="st">&quot;</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a><span class="kw">done</span> <span class="op">&lt;</span> <span class="op">&lt;(</span><span class="fu">cat</span> /dev/stdin<span class="op">)</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true"></a>   <span class="kw">}</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true"></a></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true"></a>   <span class="kw">function</span><span class="fu"> map</span> <span class="kw">{</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true"></a><span class="bu">local</span> <span class="va">f=$1</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true"></a><span class="kw">while</span> <span class="bu">read</span> <span class="va">target</span>; <span class="kw">do</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true"></a>    <span class="va">$f</span> <span class="st">&quot;</span><span class="va">$target</span><span class="st">&quot;</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true"></a><span class="kw">done</span> <span class="op">&lt;</span> <span class="op">&lt;(</span><span class="fu">cat</span> /dev/stdin<span class="op">)</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true"></a>   <span class="kw">}</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true"></a></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true"></a>   <span class="kw">function</span><span class="fu"> filterGitKnownFile</span> <span class="kw">{</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true"></a><span class="bu">local</span> <span class="va">filename=$1</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true"></a></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true"></a><span class="bu">local</span> <span class="va">gitStatusResult=</span><span class="st">&quot;</span><span class="va">$(</span><span class="fu">git</span> status --short <span class="va">$filename)</span><span class="st">&quot;</span> </span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true"></a><span class="kw">[[</span> <span class="ot">!</span> <span class="st">&quot;</span><span class="va">$gitStatusResult</span><span class="st">&quot;</span><span class="kw"> ]]</span></span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true"></a>   <span class="kw">}</span></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true"></a></span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true"></a>   <span class="kw">function</span><span class="fu"> convertFile</span> <span class="kw">{</span></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true"></a><span class="bu">local</span> <span class="va">target=$1</span></span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true"></a><span class="ex">./migration-script.sh</span> <span class="va">$target</span> <span class="op">&gt;</span> <span class="va">${target}</span>.new</span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true"></a><span class="fu">mv</span> <span class="va">${target}</span>.new <span class="va">$target</span></span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true"></a>   <span class="kw">}</span></span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true"></a></span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true"></a>   <span class="kw">set</span> <span class="ex">-e</span></span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true"></a>   <span class="fu">ls</span> 2020-* 2021-0<span class="dt">{1,2,3,4}</span>* <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;\(md\|org\)$&quot;</span> <span class="kw">|</span> <span class="ex">filter</span> <span class="st">&quot;filterGitKnownFile&quot;</span>  <span class="kw">|</span> <span class="ex">map</span> convertFile</span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true"></a>   <span class="ex">convertFile</span> 2021-05-04-xmonad-use-stack-for-compile.org</span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true"></a>   <span class="ex">convertFile</span> 2021-05-10-xmonad-list-of-layouts.org </span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true"></a></span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true"></a>   <span class="bu">echo</span> <span class="st">&quot;Finished!&quot;</span></span></code></pre></div>
-</div>
-<div class="accordion">
-<p>Finished!</p>
-</div></li>
-</ol>
-<h2 id="8.">8.</h2>
 ]]></summary>
 </entry>
 <entry>
-    <title>2021-11-27-qutebrowser-you-should-set-locale-properly-to-upload-files</title>
-    <link href="https://cj-bc.github.io/blog/posts/2021-11-27-qutebrowser-you-should-set-locale-properly-to-upload-files.html" />
-    <id>https://cj-bc.github.io/blog/posts/2021-11-27-qutebrowser-you-should-set-locale-properly-to-upload-files.html</id>
-    <published>2021-11-27T00:00:00Z</published>
-    <updated>2021-11-27T00:00:00Z</updated>
+    <title>2022-02-07-pass-command-is-affected-by-tree-version-2</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-02-07-pass-command-is-affected-by-tree-version-2.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-02-07-pass-command-is-affected-by-tree-version-2.html</id>
+    <published>2022-02-07T00:00:00Z</published>
+    <updated>2022-02-07T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>qutebrowserでファイルのアップロードができないのはLANGのせいかもしれない</h1>
+  <h1>passコマンドが最近上手く動かなくなった時の対処法[tree v2.0.0関連]</h1>
   <div class="ui list">
-    <div class="item">Posted on November 27, 2021</div>
+    <div class="item">Posted on February  7, 2022</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on November 29, 2021
+      Updated on February  7, 2022
     </div>
   </div>
     
 </div>
 <div class="info">
   
-  
-  
-</div>
-
-<p>Qutebrowserでファイルアップロードする時、パスにUTF-8文字列が入っている場合 <code>LANG</code> が <code>ja_JP.UTF-8</code> じゃないと上手くアップロードできないことがあった。 少なくともGoogle Driveで確認済。</p>
-<p>なのできちんと <code>LANG</code> 設定しましょうね。</p>
-]]></summary>
-</entry>
-<entry>
-    <title>2021-11-22-blog-import-all-qiita-posts-to-my-blog</title>
-    <link href="https://cj-bc.github.io/blog/posts/2021-11-22-blog-import-all-qiita-posts-to-my-blog.html" />
-    <id>https://cj-bc.github.io/blog/posts/2021-11-22-blog-import-all-qiita-posts-to-my-blog.html</id>
-    <published>2021-11-22T00:00:00Z</published>
-    <updated>2021-11-22T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>Qiitaの記事を全部引っ越ししている [WIP]</h1>
-  <div class="ui list">
-    <div class="item">Posted on November 22, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on November 29, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  
+  <a title="All pages tagged &#39;pass&#39;." href="/tags/pass.html" class="ui tag label">pass</a><a title="All pages tagged &#39;tool&#39;." href="/tags/tool.html" class="ui tag label">tool</a>
   
 </div>
 
-<p>長らくの間私は <a href="https://qiita.com/Cj-bc">Qiita</a>に記事を書いていましたが、今や自分のページを持つに 至りました。</p>
-<p>依然技術系の記事は別に出しても良いのですが、とりあえず このブログには全ての記事を載せておきたかったのでQiitaの記事を引っ越して こようと思います。</p>
-<h1 id="行いたいこと">行いたいこと</h1>
+<p><a href="https://git.zx2c4.com/password-store/about/">pass</a>コマンドは内部で<a href="http://mama.indstate.edu/users/ice/tree/">tree</a>コマンドを使用しています。 このところ、treeコマンドの使用変更によってpassコマンドが上手く動かなくなったので その原因と対処法について書き残しておきます。</p>
 <ul>
-<li>Qiitaにある全ての記事を、ほぼそのまま持ってくる
-<ul>
-<li>メタ情報(投稿日時やタグなど)はできるだけ保持する</li>
-<li>(管理上の都合で)org文書にコンバートする</li>
-</ul></li>
-<li>画像データもローカルに保存しなおす</li>
+<li>tree v2.0.0 から、FD 3が開いていると標準出力の替わりにそちらにデータをJSONで流すよ</li>
+<li>今迄通りの挙動をさせるには、 <code>3&gt;&amp;-</code> 等でFD 3を閉じてあげる必要があるよ</li>
+<li><a href="https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09">passはこれに対処済み</a>だけどまだリリースされてないのでユーザーサイドでは使えないよ</li>
+<li>現状passを呼び出す際は必ず <code>pass 3&gt;&amp;-</code> としておけば対策できるよ</li>
 </ul>
-<h1 id="注意すること">注意すること</h1>
-<ul>
-<li>URIエンコードされているものはデコードする</li>
-</ul>
-<h1 id="使うもの">使うもの</h1>
-<dl>
-<dt><a href="https://qiita.com/api/v2/docs">Qiita API v2</a></dt>
-<dd>あたり前だがQiitaのAPI。「特定のユーザーの公開記事」なら認証なしで引っ張ってこれる
-</dd>
-<dt><a href="https://www.nushell.sh/">nushell</a></dt>
-<dd>Rust製の、データの扱いに長けたシェル。JSONを素で扱えて楽なので使用する。
-</dd>
-<dt>node.js</dt>
-<dd>いわずもがな。Qiita APIが、コンテンツをURIエンコードして返してくるのでデコードするのに使う
-</dd>
-</dl>
-<h1 id="作業">作業</h1>
-<h2 id="TODO 1. Qiitaから情報を取得する"><span class="todo TODO">TODO</span> 1. Qiitaから情報を取得する</h2>
-<p>まずはQiitaから情報を引っ張ってきます。 これは <code>/users/:user_id/items</code> エンドポイントを使用します。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">curl</span> https://qiita.com/api/v2/users/Cj-bc/items</span></code></pre></div>
-</div>
-<p>これで、指定したユーザーの投稿のリストが取得できます。 各投稿はディクショナリで、そのキーの完全なリストは<a href="https://qiita.com/api/v2/docs#投稿">Qiita APIドキュメントの「投稿」</a>に記載されています。</p>
-<p>ここでは、今回使うものとして以下のキーを紹介します:</p>
-<dl>
-<dt><code>body</code></dt>
-<dd><strong>Markdown形式で</strong> 表現された本文を保持します。 これは <strong>URLエンコードされています</strong> 。
-</dd>
-<dt><code>created_at</code></dt>
-<dd>この投稿が作成された日時です。ISO8601形式で秒数まで記載されています。
-</dd>
-<dt><code>title</code></dt>
-<dd>その投稿のタイトルです。
-</dd>
-</dl>
-<p>これらのキーの値を用いて:</p>
-<ol>
-<li>APIからデータを取得</li>
-<li><em>本文を <code>body</code> から取得</em></li>
-<li><code>created_at</code> と <code>title</code> からファイル名を構築する</li>
-<li>そのファイルに本文を保存する</li>
-</ol>
-<p>という処理がしたい。 これを何を用いてやるか…という話なのですが、ここで「JSONデータを扱いやすい」という理由でnushellが出てきます。</p>
-<p>最初はjqとか使おうとしてたけど、</p>
-<ul>
-<li>そもそもjqはあまり知らない</li>
-<li>ファイル名を構築してそこへのリダイレクトが出来なさそう(少なくとも知らない)</li>
-<li>文字列に他の処理をかけたい場合がある</li>
-</ul>
-<p>というのでjqではなくnushellにしました。</p>
-<ol>
-<li><p>1. APIからデータを取得</p>
-<p>nushellでは、ビルトインの <code>fetch</code> コマンドで HTTPの <code>GET</code> リクエストを送信できます。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-nu
-</div>
-<pre class="nu SourceCode"><code>fetch https://qiita.com/api/v2/users/Cj-bc/items
-</code></pre>
-</div>
-<p>こうすると、JSONをnushellのtableに変換して返してくれます。</p></li>
-<li><p>2. 本文を <code>body</code> から取得</p>
-<p>このAPIは、「投稿のリスト」を返してくるので、それぞれに対してbodyを取得してあげる。</p>
-<dl>
-<dt><code>each</code></dt>
-<dd>標準入力にリストを取り、その各要素に対してコードブロックを適用します
-</dd>
-<dt><code>{}</code></dt>
-<dd>コードブロックです。この中の <code>$it</code> は、このコードブロックに渡されるパラメーターを示します。
-</dd>
-<dt><code>{|x| }</code></dt>
-<dd>コードブロックは名前付きでも定義することができます。この場合、 <code>$it</code> の変わりに <code>$x</code> を同じ意味で使用できます。(ついでの解説)
-</dd>
-</dl>
-<div class="ui segment">
-<div class="ui top right attached label">
-nu
-</div>
-<pre class="nu SourceCode"><code>fetch https://qiita.com/api/v2/users/Cj-bc/items | each {$it.body}
-</code></pre>
-</div></li>
-<li><p><span class="todo TODO">TODO</span> 3. <code>created_at</code> と <code>title</code> からファイル名を構築する</p>
-<p>現在、ブログ記事のファイル名は <code>&lt;日付&gt;-&lt;タイトル&gt;</code> のケバブケースになっている。 なのでこの形に合うように整形する。</p>
-<dl>
-<dt><code>$"&lt;text&gt;"</code></dt>
-<dd><code>$</code> から始まる文字列は、文字列埋め込みです。 <code>()</code> で囲んであげた部分を式として評価し、文字列に埋め込みます。
-</dd>
-<dt><code>str substring &lt;range&gt;</code></dt>
-<dd>指定の範囲のスライスを作成します。
-</dd>
-<dt><code>str kebab-case</code></dt>
-<dd>標準入力で来た文字列をケバブケースに変換します。
-</dd>
-</dl>
-<div class="ui segment">
-<div class="ui top right attached label">
-nu
-</div>
-<pre class="nu SourceCode"><code>fetch https://qiita.com/api/v2/users/Cj-bc/items | each {$&quot;($it.created_at | str substring [0,10])-($it.title | str kebab-case).md&quot;}
-</code></pre>
-</div></li>
-</ol>
-<h2 id="TODO 2. HTMLエンコードを外す"><span class="todo TODO">TODO</span> 2. HTMLエンコードを外す</h2>
-<p>APIから取得した <code>body</code> は HTMLエンコードされている(e.g. <code>-&gt;</code> が <code>-&amp;gt;</code> になるなど) ので、これをデコードしてあげます。</p>
-<div class="waring">
-<p><em>HTML エンコード</em> と <em>URI エンコード</em> は(異なります。</p>
-</div>
-<p>多分色々な方法が色々な言語にあると思いますが、 一番最初に思い付いた簡単かつ確実なのはnodeを使うことだったのでそうします。 <code>decodeURI</code> (<a href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/decodeURI">参考</a>) 使えばよさそう。</p>
-<dl>
-<dt><code>console.log</code></dt>
-<dd>標準出力に出力するために使用します
-</dd>
-<dt><code>fs.readFileSync("/dev/stdin", "utf8")</code></dt>
-<dd>標準入力から読むために使用します
-</dd>
-<dt><code>decodeURI</code></dt>
-<dd>URIエンコードをデコードする関数です。
-</dd>
-</dl>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb5" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ex">node</span> -e <span class="st">&#39;console.log(encodeURI(&quot;https://qiita/てすともーど!!!&gt;&quot;))&#39;</span> <span class="kw">|</span> <span class="ex">node</span> -e <span class="st">&#39;console.log(decodeURI(fs.readFileSync(&quot;/dev/stdin&quot;, &quot;utf8&quot;)))&#39;</span></span></code></pre></div>
-</div>
-<div class="ui segment">
-<div class="ui top right attached label">
-example
-</div>
-<pre class="example SourceCode"><code>https://qiita/てすともーど!!!&gt;
-</code></pre>
-</div>
-<h2 id="TODO 3. ファイルに保存する"><span class="todo TODO">TODO</span> 3. ファイルに保存する</h2>
-<p><code>save</code> で標準入力からきたものをファイルに保存できます。 つかったものだけ</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb7" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="ex">fetch</span> https://qiita.com/api/v2/users/Cj-bc/items?per_page=86 <span class="kw">|</span> <span class="ex">each</span> { <span class="va">$it</span>.body <span class="kw">|</span> <span class="ex">save</span> <span class="st">$&quot;(</span><span class="va">$it</span><span class="st">.created_at | str substring [0 10])-(</span><span class="va">$it</span><span class="st">.title|str kebab-case).md&quot;</span> }</span></code></pre></div>
-</div>
-<p><a href="https://qiita.com/saba_can00/items/02ff28a16a0d312a5259">https://qiita.com/saba_can00/items/02ff28a16a0d312a5259</a></p>
-]]></summary>
-</entry>
-<entry>
-    <title>2021-11-18-emacs-display-line-numbers-type</title>
-    <link href="https://cj-bc.github.io/blog/posts/2021-11-18-emacs-display-line-numbers-type.html" />
-    <id>https://cj-bc.github.io/blog/posts/2021-11-18-emacs-display-line-numbers-type.html</id>
-    <published>2021-11-18T00:00:00Z</published>
-    <updated>2021-11-18T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>行番号を表示するdisplay-line-numbers-modeの表示形式について</h1>
-  <div class="ui list">
-    <div class="item">Posted on November 18, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on November 18, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  
-  
-</div>
-
-<p>help:display-line-numbers-mode は、 行番号をWindowの左側に表示してくれるモード。 (help:linum-mode も似たような効果があるが、 help:display-line-numbers-mode の方がカスタマイズ出来るので こちらを使っている。</p>
-<p>表示形式は help:display-line-numbers-type を設定することで 変更できる。</p>
-<table>
-<tbody>
-<tr class="odd">
-<td><code>t</code></td>
-<td>絶対的(absolute)な行数を表示する</td>
-</tr>
-<tr class="even">
-<td><code>relative</code></td>
-<td>現在の行からの相対的な行数を表示する</td>
-</tr>
-<tr class="odd">
-<td><code>visible</code></td>
-<td>現在の行から、「見た目上の行数」を表示する</td>
-</tr>
-</tbody>
-</table>
-<p><code>visible</code> は例えば、evilユーザーかつ何かしらの ナローイングしてる時に便利。</p>
-<p>Normal modeで他の行を見にいきたい時、 <code>&lt;相対的な行数&gt;k</code> / <code>&lt;相対的な行数&gt;j</code> とかすると思うのだけど、 これはナローイングされている内部は見にいかずに「見た目上の行数」 を基にして動作するため、 <code>visible</code> にしていると便利</p>
-]]></summary>
-</entry>
-<entry>
-    <title>2021-11-15-xmonad-order-of-managehook</title>
-    <link href="https://cj-bc.github.io/blog/posts/2021-11-15-xmonad-order-of-managehook.html" />
-    <id>https://cj-bc.github.io/blog/posts/2021-11-15-xmonad-order-of-managehook.html</id>
-    <published>2021-11-15T00:00:00Z</published>
-    <updated>2021-11-15T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>XMonadのManageHook表記順番について</h1>
-  <div class="ui list">
-    <div class="item">Posted on November 15, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on November 15, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  
-  
-</div>
-
-<p><a href="https://hackage.haskell.org/package/xmonad-0.17.0/docs/XMonad-Core.html#t:ManageHook">ManageHook</a> は、XMonadの重要な要素の一つで、ウィンドウ毎に 設定をしたり <a href="https://hackage.haskell.org/package/xmonad-0.17.0/docs/XMonad-Core.html#t:X">Xモナド</a> のアクションを実行したりするためのもの。</p>
-<h1 id="やりたかったこと">やりたかったこと</h1>
-<p>条件に一致するウィンドウをFloat化し、レイアウトを調節する。</p>
-<h1 id="ポイント: 順序に気をつける">ポイント: 順序に気をつける</h1>
-<p>ポイントは、 <strong><a href="https://hackage.haskell.org/package/xmonad-0.17.0/docs/XMonad-Core.html#t:ManageHook">ManageHook</a>の中身に<a href="https://hackage.haskell.org/package/base-4.16.0.0/docs/Data-Monoid.html#t:Endo">Endo</a>が使われている</strong> ことです。 Endoは、関数のモノイドを提供するためのラッパーで、これは 結合に <code>.</code> (関数合成)を用います。 (参考: <a href="https://blog.miz-ar.info/2019/02/monoid-for-haskellers/#_a_-gt_a_Endo">Haskellerのためのモノイド完全ガイド</a>)</p>
-<p>これはつまり、二つの <code>ManageHook</code> <code>a ::ManageHook</code> / <code>b ::ManageHook</code> があった場合、これをモノイドとして結合 (e.g. <code>a &lt;&gt; b</code>) した 際の実行順序は後ろからかけた方(例の場合は <code>b</code>) が先に実行されるということです。</p>
-<p>なので、「Float化してからレイアウト調整する」のであれば 先にFloatさせる = 先に <code>doFloat</code> する</p>
-<p>眠いのでちょっとあとでまた整理するかもzzz</p>
-]]></summary>
-</entry>
-<entry>
-    <title>2021-11-03-learnt-about-clean-architecture</title>
-    <link href="https://cj-bc.github.io/blog/posts/2021-11-03-learnt-about-clean-architecture.html" />
-    <id>https://cj-bc.github.io/blog/posts/2021-11-03-learnt-about-clean-architecture.html</id>
-    <published>2021-11-03T00:00:00Z</published>
-    <updated>2021-11-03T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>クリーンアーキテクチャーについて少し学んだ</h1>
-  <div class="ui list">
-    <div class="item">Posted on November  3, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on November  4, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  
-  
-</div>
-
-<p>今迄あまり設計というものに触れてきていなかったのだけど、今回初めて「クリーンアーキテクチャ」という概念を少し学んだ。 実をいうと SOLID原則すら触れていなかった。名前は知ってたけどねぇ…</p>
-<p>関数型を使ってることが多いのもあるけど、古いものと考えていた節は正直ある。 いざ触れてみるとやっぱり為になることが多いねぇ…</p>
-<p><a href="https://github.com/Cj-bc/3dShell">Cj-bc/3dShell</a>の設計に悩んだ挙句、部分的に考え方を取り入れてみている。</p>
-<p>以下は、調べている間に感じたことの個人的なメモで <strong>技術的に但しいかは保証できない</strong> ので注意。 何かしら「これは違うぞ!!」というのがあれば、 <a href="https://twitter.com/Cj-bc">Twitter</a>にでも直接直リプライ等で指摘していただけるとありがたいです</p>
-<h1 id="クリーンアーキテクチャについて軽いメモ">クリーンアーキテクチャについて軽いメモ</h1>
-<ul>
-<li>クリーンアーキテクチャは「こうやって作ると良い設計になる」というだけであり、別段正解の使い方が一つあるわけではない</li>
-<li>サンプル実装もあるにはあるがあくまでサンプル
-<ul>
-<li>別にもっと層があっても少なくてもいい</li>
-</ul></li>
-<li>アーキテクチャはそれぞれの事例に合わせて作るべき</li>
-<li>SOLID原則をつきつめるとこれになる感じがある。</li>
-<li>Onion Architectureや<a href="https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)">Hexagonal architecure</a>等の共通点を取り出した(ような)もの
-<ul>
-<li>なので図式には共通点が色々ある</li>
-</ul></li>
-<li>永続化の仕組みやフロントエンド、入力の取得方法等を個別のクラスに切り分けることができるので、パーツ毎の作成が楽
-<ul>
-<li>「DB決まってないけどフロント作って!」みたいな無茶ぶりができる</li>
-<li>テストする時にMockにいれかえたり等できる。</li>
-</ul></li>
-<li>インターフェースを介したやりとりには <code>DTO</code> (Data Transfer Object) を作成して行う
-<ul>
-<li>ただDBとのやりとりに <code>DTO</code> 使ってない例が結構あるのでそこの匙加減わからんなぁ</li>
-</ul></li>
-</ul>
-<h2 id="大事な要素">大事な要素</h2>
-<ul>
-<li><strong>「ドメイン・ビジネスロジックを守る」</strong> のが何よりも大事</li>
-<li>外から内側への依存</li>
-<li>インターフェースを用いることにより、「具象」ではなく「抽象」への依存にする</li>
-</ul>
-<h1 id="参考">参考</h1>
-<ul>
-<li><a href="https://qiita.com/nrslib/items/a5f902c4defc83bd46b8#humble-view">実装クリーンアーキテクチャ – @nrslib qiita.com</a></li>
-<li><a href="https://ja.wikipedia.org/wiki/SOLID">wiki:SOLID</a></li>
-<li><a href="https://gist.github.com/mpppk/609d592f25cab9312654b39f1b357c60">クリーンアーキテクチャ完全に理解した – @mpppk github.com</a></li>
-</ul>
-]]></summary>
-</entry>
-<entry>
-    <title>2021-10-15-emacs-package-making-evil-textobj-parameter</title>
-    <link href="https://cj-bc.github.io/blog/posts/2021-10-15-emacs-package-making-evil-textobj-parameter.html" />
-    <id>https://cj-bc.github.io/blog/posts/2021-10-15-emacs-package-making-evil-textobj-parameter.html</id>
-    <published>2021-10-15T00:00:00Z</published>
-    <updated>2021-10-15T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>evil-textobj-parameterを作成中です</h1>
-  <div class="ui list">
-    <div class="item">Posted on October 15, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on November 29, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  
-  
-</div>
-
-<p><a href="https://github.com/sgur/vim-textobj-parameter">sgur/vim-textobj-parameter</a>のevil版である<a href="https://github.com/Cj-bc/evil-textobj-parameter">Cj-bc/evil-textobj-parameter</a> を <del>作っています。</del> 完成しました!</p>
-<h1 id="基本的な仕様">基本的な仕様</h1>
-<ul>
-<li>キーバインドは提供していないので、 <code>define-key</code> で設定してください。</li>
-<li><code>i2,</code> はないですが、それ以外はオリジナルと同じ挙動にしようとしています。</li>
-</ul>
-<h1 id="現状">現状</h1>
-<h2 id="出来ること">出来ること</h2>
-<ul>
-<li>Inner textobjectは動きます</li>
-<li>Outer textobjectは最後のパラメーター以外の時は動きます</li>
-</ul>
-<h2 id="出来無いこと・欠けていること">出来無いこと・欠けていること</h2>
-<ul>
-<li><del>適切なライセンスの表記</del>
-<ul>
-<li><a href="https://github.com/Cj-bc/evil-textobj-parameter/commit/c4f62be46b062289b27ad55fedbe3a71e048c37d">MPLに設定されました</a></li>
-</ul></li>
-<li><del>Outer textobjectが、最後のパラメーターの上にカーソルがある状態で使うとうまく動きません。これの修正</del>
-<ul>
-<li>修正済</li>
-</ul></li>
-<li>内部処理、多分 <code>evil-common</code> とかを上手く使えばもっとよく書ける</li>
-</ul>
-<p>—-</p>
-<p>とりあえず適当な報告まで</p>
-]]></summary>
-</entry>
-<entry>
-    <title>2021-10-14-elisp-how-to-write-package</title>
-    <link href="https://cj-bc.github.io/blog/posts/2021-10-14-elisp-how-to-write-package.html" />
-    <id>https://cj-bc.github.io/blog/posts/2021-10-14-elisp-how-to-write-package.html</id>
-    <published>2021-10-14T00:00:00Z</published>
-    <updated>2021-10-14T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>Elispパッケージを書く際の諸メモ</h1>
-  <div class="ui list">
-    <div class="item">Posted on October 14, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on October 15, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  
-  
-</div>
-
-<p>初めて<a href="https://github.com/Cj-bc/evil-textobj-parameter">きちんとしたElispパッケージ</a>を作成しているので、パッケージとして書く 場合の注意点とか。</p>
-<h1 id="参考リンク">参考リンク</h1>
-<dl>
-<dt><a href="info:elisp#Packaging">info:elisp#Packaging</a></dt>
-<dd>ほぼほぼ全てここに書いてある
-</dd>
-<dt><a href="info:elisp#Tips">info:elisp#Tips</a></dt>
-<dd>コメントの書き方のTipsとか
-</dd>
-</dl>
-<h1 id="ヘッダーのテキスト作成">ヘッダーのテキスト作成</h1>
-<p>Elispファイルは大体同じようなコメント行があるが、 どうやらメタ情報を書いていたりして形式があるらしい。</p>
-<ul>
-<li><a href="info:elisp#Library Headers">info:elisp#Library Headers</a></li>
-</ul>
-<p>以下は<a href="info:elisp#Library Headers">上記リンク</a>にある、コメントの一例</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>;;; foo.el --- Support for the Foo programming language  -*- lexical-binding: t; -*-
-
-;; Copyright (C) 2010-2021 Your Name
-
-;; Author: Your Name &lt;yourname@example.com&gt;
-;; Maintainer: Someone Else &lt;someone@example.com&gt;
-;; Created: 14 Jul 2010
-;; Keywords: languages
-;; URL: https://example.com/foo
-
-;; This file is not part of GNU Emacs.
-
-</code></pre>
-</div>
-<h2 id="最初の行">最初の行</h2>
-<p>一番最初の行は特定のフォーマットになっている必要がある。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>;;; FILENAME --- DESCRIPTION  -*- lexical-binding: t; -*-
-</code></pre>
-</div>
-<h2 id="ヘッダーコメント">ヘッダーコメント</h2>
-<table>
-<tbody>
-<tr class="odd">
-<td><code>Author</code></td>
-<td>作者の名前とメアド。複数いる場合は、次の行に <code>;;</code> とタブ(若しくは最低2つ以上のスペース)を置いた後に書く</td>
-</tr>
-<tr class="even">
-<td><code>Maintainer</code></td>
-<td>現状メンテナンス(バグレポートの対処とか)する人。書式は <code>Author</code> と同じで、省略された場合 <code>Author</code> になる。</td>
-</tr>
-<tr class="odd">
-<td><code>Created</code></td>
-<td>オプショナル。ファイルが最初に作られた日の記録、歴史上の興味以上の意味はない。</td>
-</tr>
-<tr class="even">
-<td><code>Version</code></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h2 id="フッターコメント">フッターコメント</h2>
-<p>ファイルの区切りを明示することで、ファイルの全体を持っているかがわかる。</p>
-<p>(正直「一部の欠けたファイル」になることって今もうないと思うので 必要性はあんまりわからないな？？？)</p>
-]]></summary>
-</entry>
-<entry>
-    <title>2021-09-17-xmobar-reason-utf8-wasnt-rendered</title>
-    <link href="https://cj-bc.github.io/blog/posts/2021-09-17-xmobar-reason-utf8-wasnt-rendered.html" />
-    <id>https://cj-bc.github.io/blog/posts/2021-09-17-xmobar-reason-utf8-wasnt-rendered.html</id>
-    <published>2021-09-17T00:00:00Z</published>
-    <updated>2021-09-17T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>xmobarでwithutf8してるのにUTF8出来なかった理由</h1>
-  <div class="ui list">
-    <div class="item">Posted on September 17, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on September 17, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  
-  
-</div>
-
+<h1 id="原因">原因</h1>
+<p>treeの2.0.0リリースにて入った破壊的変更が原因です。</p>
+<p><a href="http://mama.indstate.edu/users/ice/tree/changes.html">treeのCHANGELOG</a>から引用させてもらうと</p>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
-<p><code>LANG</code> の設定を確認して。 <code>bashrc</code> 等で設定していても、xmonadから呼び出される場合は それらは反映されない。</p>
-<p>xmobarを呼び出している場所でそのまま設定できる 詳しい方法は以下</p>
+<p>Output un-indented JSON on file descriptor 3 ("stddata") automatically if file descriptor 3 is present (currently Linux only.) Maybe switch to BSON.</p>
 </blockquote>
 </div>
-<p>xmobarは、ビルド時のフラグ <code>with_utf8</code> を付けることで UTF-8文字列を扱えるようになる。 そしてこのフラグはデフォルトで <code>True</code> (=有効)なので、特に 何もしなくても使えるはずだった。</p>
-<p>が、上手くいかなかった。</p>
-<h1 id="試したが上手くいかなかったこと">試したが上手くいかなかったこと</h1>
+<p>ざっくりと訳すと「Linuxに於いては、File Descriptor 3が開いている場合はそこに整形されていないJSON を書き込むようになりました。BSONになるかもしれない」とのことです。</p>
+<p>pass自体も普通に使っていれば問題ないのですが、 <code>git credential</code> を呼んだ際はどうしてか 沢山ファイルディスクリプタが使用されます。</p>
+<p>私の環境下では以下のファイルディスクリプタが開いていました</p>
 <ul>
-<li>xmobarのビルドフラグの確認
-<ul>
-<li>archlinuxユーザーなので<a href="https://github.com/archlinux/svntogit-community/blob/packages/xmobar/trunk/PKGBUILD">PKGBUILD</a>を確認したがフラグは全て有効になっている</li>
-</ul></li>
-<li>フォントの確認
-<ul>
-<li>普段使いのフォントなので、日本語は対応しているはず</li>
-</ul></li>
+<li>0 (標準入力)</li>
+<li>1 (標準出力)</li>
+<li>2 (標準エラー出力)</li>
+<li>255</li>
+<li>3</li>
+<li>4</li>
+<li>5</li>
+<li>6</li>
 </ul>
-<h1 id="判明した原因">判明した原因</h1>
-<p>bashからではなくxmonadから起動していた影響で 環境変数が伝搬されておらず、 <code>LANG=ja_JP.UTF-8</code> でない環境で 実行されていた。</p>
-<p>証拠に、ターミナルから <code class="sourceCode bash" data-org-language="sh"><span class="va">LANG=</span>C <span class="ex">xmobar</span></code> と実行してみると 日本語が表示できなくなった。</p>
-<h1 id="解決策">解決策</h1>
-<h2 id="XMonad.Hooks.DynamicLogを使用している場合"><a href="https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Hooks-DynamicLog.html">XMonad.Hooks.DynamicLog</a>を使用している場合</h2>
-<p>多分大半がこちらなのではないか…??</p>
-<p>とは思うんだけど時間がない&amp;&amp;私やってないので割愛、 <a href="https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/src/XMonad.Hooks.DynamicLog.html#xmobar">xmobar</a>関数の定義を少し弄ってあげた以下のような関数を作れば動くはず。 理由は [[* <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html">XMonad.Hooks.StatusBar</a> を使用している場合]] を参照。</p>
+<p>そう、ここで3番があったんですね…</p>
+<h1 id="対策">対策</h1>
+<p>必要なのは、treeコマンドのファイルディスクリプタの3番を閉じるだけです。</p>
+<h2 id="上流で行われている対策">上流で行われている対策</h2>
+<p>実はpassではこれに対して対策が取られており、<a href="https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09">commit:eea24967</a>にてコミットされています。</p>
+<p><strong>しかし</strong> 、2022/02/07現在ではこれはまだリリースされていないためエンドユーザーは使用できません。 (まぁgitでmasterから取って来て使うことは勿論出来ますが)</p>
+<p>はやいとこリリースされてほしい…</p>
+<h2 id="現状できること">現状できること</h2>
+<p>passを呼び出す際にfd 3を塞ぎます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-haskell
+bash
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>xmobar&#39; conf <span class="ot">=</span> statusbar <span class="st">&quot;LANG=ja_JP.UTF-8 xmobar&quot;</span> xmobarPP toggleStructsKey conf</span></code></pre></div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pass</span> <span class="dv">3</span><span class="op">&gt;&amp;</span>-</span></code></pre></div>
 </div>
-<h2 id="XMonad.Hooks.StatusBar を使用している場合"><a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html">XMonad.Hooks.StatusBar</a> を使用している場合</h2>
-<p>実はこちらの方が新しいらしく、もう <a href="https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Hooks-DynamicLog.html">DynamicLog</a> は推奨されていないのだそうだ。</p>
-<p><strong>知るか!!!!!</strong></p>
-<p>と怒鳴ってもしかたないのだけど怒鳴られても仕方ない事情もある。 (それはそれで別で書こう。 )</p>
-<p>さて。 <code>StatusBar</code> を使用している場合、 <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#t:StatusBarConfig">StatusBarConfig</a> 型の 値を使っているはず。 今はみんなここで <code class="sourceCode haskell">statusBarProp <span class="st">&quot;xmobar&quot;</span> (<span class="fu">pure</span> xmobarPP)</code> とかしているのではないだろうか。</p>
-<p>ここを以下のように書き換えればよい:</p>
+<p>とすることで、passプロセスのファイルディスクリプタ3番を閉じることができます。 passを使用する何らかのスクリプトを書いている場合、当面はこうするのがよさそうです。</p>
+<h1 id="おまけ: &gt;&amp;- の意味">おまけ: <code>&gt;&amp;-</code> の意味</h1>
+<p>元は <code>[n]&gt;&amp;word</code> という形です。 <code>n</code> で指定された、出力のファイルディスクリプターを <code>word</code> で指定された番号の ファイルディスクリプターに複製します。 そして、 <strong>もし <code>word</code> が <code>-</code> であるなら</strong> 指定したファイルディスクリプターを閉じます。</p>
+<p>man:bash(1) <em>Redirection</em> 節の <em>Duplicating File Descriptors</em> に説明があります。</p>
+<h1 id="おまけ2: あるプログラムが開いているファイルデイスクリプターの一覧を取得する">おまけ2: あるプログラムが開いているファイルデイスクリプターの一覧を取得する</h1>
+<p>Linuxでは、カーネルがあらゆる情報を <strong>procファイルシステム</strong> に擬似的なファイルとして書き込んでくれています。 (man:proc(5))</p>
+<p>大抵はこれが <code>/proc</code> にマウントされているはずです。 各プロセスの情報は <code>/proc/${PID}/</code> ディレクトリ下に生成され、ファイルディスクリプターの 情報は <code>/proc/${PID}/fd</code> ディレクトリ下に生成されます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-haskell
+bash
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>statusBarProp <span class="st">&quot;LANG=ja_JP.UTF-8 xmobar&quot;</span> (<span class="fu">pure</span> xmobarPP)</span></code></pre></div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> /proc/<span class="va">$$</span>/fd</span></code></pre></div>
 </div>
-<p>そう、 <em>先頭に <code>LANG=ja_JP.UTF-8</code> を付け加えるだけ</em> である。 かんたん!!</p>
-<ol>
-<li><p>仕組み</p>
-<p>実は <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#v:statusBarProp">statusBarProp</a> の中を見てみても分かりづらいのだが、 <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#t:StatusBarConfig">StatusBarConfig</a> から読み解くとわかる。</p>
-<p><code>StatusBarConfig</code> では、 <code>sbStartUpHook</code> を使って 「ステータスバーを起動する <code>X ()</code> アクション」を定義している。</p>
-<p><code>statusBarProp</code> 関数にて引数に取った文字列 ( <code>LANG=ja_JP.UTF-8 xmobar</code> なり <code>xmobar</code> なり)は <code>statusBarProp</code> → <code>statusBarPropTo</code> → <code>statusBarGeneric</code> → <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#v:spawnStatusBar">spawnStatusBar</a> とそのまま受け渡されていき、</p>
-<p>そこから<a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-Core.html#v:spawnPID">spawnPID</a>へと渡される。 そしてこの中では <a href="https://hackage.haskell.org/package/unix-2.7.2.2/docs/System-Posix-Process.html#v:executeFile">executeFile</a> に <strong>なんと <code>/bin/sh -c</code> の引数として</strong> 渡され、最終的に <code>execv</code> システムコールによって実行される。</p>
-<p>ここが大事で、 <em>shの上で実行される</em> ことによって環境変数を その場で設定したりといったシェルの機能を使うことができる。</p></li>
-</ol>
+<table>
+<tbody>
+<tr class="odd">
+<td>0</td>
+</tr>
+<tr class="even">
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<h1 id="参考">参考</h1>
+<ul>
+<li><a href="https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09">passの修正コミット</a></li>
+<li><a href="https://github.com/archlinux/svntogit-community/blob/packages/pass/trunk/PKGBUILD">passの正式なURL取得元のPKGBUILD</a></li>
+<li><a href="http://mama.indstate.edu/users/ice/tree/changes.html">treeのCHANGELOG</a></li>
+<li><a href="https://www.archlinux.jp/packages/extra/x86_64/tree/">treeの正式なURL取得元のarchlinuxのパッケージページ</a></li>
+</ul>
 ]]></summary>
 </entry>
 <entry>
-    <title>2021-09-12-akihabara-wado-first-try</title>
-    <link href="https://cj-bc.github.io/blog/posts/2021-09-12-akihabara-wado-first-try.html" />
-    <id>https://cj-bc.github.io/blog/posts/2021-09-12-akihabara-wado-first-try.html</id>
-    <published>2021-09-12T00:00:00Z</published>
-    <updated>2021-09-12T00:00:00Z</updated>
+    <title>2022-02-05-emacs-leaf-custom-use-backquote-to-generate-list-value</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-02-05-emacs-leaf-custom-use-backquote-to-generate-list-value.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-02-05-emacs-leaf-custom-use-backquote-to-generate-list-value.html</id>
+    <published>2022-02-05T00:00:00Z</published>
+    <updated>2022-02-05T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>秋葉原和堂に行ってきた</h1>
+  <h1>[leaf]:customで動的に生成したリストを使う</h1>
   <div class="ui list">
-    <div class="item">Posted on September 12, 2021</div>
+    <div class="item">Posted on February  5, 2022</div>
     <div class="item">
       <i class="history icon"></i>
-      Updated on September 12, 2021
+      Updated on February  5, 2022
     </div>
   </div>
     
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a>
   
 </div>
 
-<p>今日は仕事が早めに終わったので、折角だからどこかで御飯食べて帰ろ~と 思った矢先に思い出したのが秋葉原和堂だった。 秋葉原和堂は存在こそ知っていたものの、その雰囲気と</p>
-<p>—</p>
-<p>意を決して階段を降りる。 そもそも地下なことも把握していなかった。 階段を降りつつ、最初で最後の踊り場で下を見てみると、そこには重い両開きの 扉が一つ。</p>
-<p>「ドア」ではなく「扉」がもっともふさわしいと思うような、 「この世俗と奥の空間を区切る」ような雰囲気のある扉だった。</p>
-<p>この扉の前で、既に少し雰囲気に圧倒されている。 扉の装飾も綺麗で、この身で触れることも躊躇うような美しさと重さのある 雰囲気を漂わせていた。</p>
-<p>まだ引き返すこともできる。 まだ、ここなら取り止めることもできる。</p>
-<p>そんな感情すらよぎる程に雰囲気に圧倒されていた。</p>
-<p>先程もした気がするのだが、ここでもまた意を決して右側の扉に手をあてて、 力を入れ、ついにこの秋葉原和堂に踏み入れた。</p>
-<p>扉を開けた先、すぐに目に飛び込んできたのは豪華な、それでいてもうるさくなくもの静かな 威厳のあるソファと絨毯だった。</p>
-<p>誰が座るわけでもなくそこに置いてあったそれらは、恐らく装飾の一つにすぎないのだろうなと思うが ここの世界観・雰囲気を物語るには十分だった。</p>
-<p>そこに目を引かれるのもつかの間、左手側に受付が見える。 店員さんが二名。</p>
-<p>受付にはAirPayだとか様々なお土産・コラボグッズだとか近代的なものが置いてあるにも かかわらず「大正」の雰囲気に上手いこと溶け込んでいた。</p>
-<p>店員さん方の服装も、大正時代にあったものと近しいのかは分からないけれどとても 綺麗で、溶け込んでいた。</p>
-<p>~~</p>
-<p>店員さんに関して一つ言えば、髪色を染めている方が何人もいらっしゃったにも係らず 服装やお店の雰囲気から少しも逸脱せずに溶け込んでいたのが本当に驚いた。</p>
-<p>秋葉原和堂のツイッターに掲げられている「『大正浪漫』と『調合』がコンセプト」、 まさにこれを体現しているなと今特に思う。</p>
-<p>~~</p>
-<p>事前にTwitterやサイト等で色々と見ているものの「ご利用は始めて」なので 受付の店員さんに頼み方等を教わる。</p>
-<p>ベル若しくは備え付けのQRコードから注文が可能らしい。 「大正」と「令和」のコンビネーション…調合…調合ってそういう意味なのか 分からないけど。</p>
-<p>受付でカフェを選択し、メニューを受け取ってフロアへ進む。 進むといっても横を向いたらもうその場所なのである。 そちらを向いた瞬間に、一瞬固まってしまった。</p>
-<p>今迄散々TwitterやInstagramで拝見させて頂いていた景色とはいえ、 実際に目の当たりにすると何だろうな、雰囲気が凄い違う。 本当に異世界に来たような、ここだけ時の流れが違うような、 非日常感がとても強い光景だった。 タイムトリップしたような気分になった。</p>
-<p>なんとこの時はたまたまカフェ側には他のお客様がいらっしゃらなかったので、 自由に席は選び放題だった。とりあえず、壁を背にできるソファに座る。</p>
-<p>とても、良い…</p>
-<p>座って一息付き、テーブルの上を見渡してみると見付かるのが先程話にあったベルとQRコード。 QRコードは紙に印刷されていたが、ベルは本格的に「ベル」だった。 「ベルの音がなる機械」ではなく「ベル」だった。</p>
-<p>そのベルは、正直初めて見たかもしれない…というくらいに想像通りの「ベル」で、中にある長い 部分が結構長かった。そしてここにも素敵な装飾…</p>
-<p>メニューを開こうとして、メニューの表面の文様が見えたがこれもとても綺麗に出来ている。 なんだろう、実際には見たことがないが昔の本にありそうな装飾。 金色で縁取られ、花のような蔦のような模様が並んでいる。 綺麗…</p>
-<p>綺麗なのはいいんだが、私は頼むものを決める必要がある。ずいぶんと(特に紅茶の種類で)悩んだ末、 料理はナポリタンで紅茶は「この料理にあう紅茶お勧めありますか？」にすることにした。</p>
-<p>— 眠い。ので書きたい所先に書く —</p>
-<p>清算を終え、和堂の扉に手をかける。 …ここから外の世界へ戻るのには少し時間が必要だった。 でも出なければならない。なぜならここはお店の入口なので…</p>
-<p>少し躊躇ってから、覚悟をつけてえいっと開けて外に出た。 そして外に出たのと同時に「令和現代日本」に帰ってきたのを感じた。 よくも悪くも私の本来生きている世界線。</p>
-<p>最初はここから「秋葉原和堂」の世界へ入るのに躊躇していたけれど、 最後にはこちらに戻ってくるのを躊躇するようになってしまっていた。 かかっていた曲といい、内装といい、メニューといい、店員さんといい、 普段とはとても異なった世界だったけれど謎に安心感と落ち着きを感じていた。</p>
-<p>普段大体この仕事終わりは精神的に相当疲れていて、家に帰ってからもすぐ疲れて寝て しまうことが多かった。 が、今日は秋葉原和堂のおかげで大分精神が楽。居心地の良さ、緊張の解れよう、リラックスさが 半端じゃない。 「また一週間頑張るか~~!!」という気力すら湧いてきた。</p>
-<p>普段から通うには少し御高いけれども、一ヶ月に1回とか自分のご褒美として秋葉原和堂に来るのが良いのかも しれない、と感じた。</p>
-<p>あとがき</p>
-<p>あと眠いながら書いてるので誤字脱字諸々すまん頭がまわらない。 でも当日中にどうしても記録しておきたかった…</p>
+<p><a href="https://github.com/conao3/leaf.el">conao3/leaf.el</a>に於いて、動的な値を <code>:custom</code> キーワードに与えるにはバッククォートを使う必要があります。 (<a href="https://qiita.com/conao3/items/347d7e472afd0c58fbd7#変数の変更について">conao3さんのQiita記事 「Emacs入門から始めるleaf.el入門」</a>にも記載があります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(leaf foo
+  :custom
+  `(foo-variable . ,(+ 3 3)))
+</code></pre>
+</div>
+<p>(backquoteについては <a href="info:elisp#Backquote">info:elisp#Backquote</a> を参照すると良いと思います。)</p>
+<p>先の事例では、リストではない値を割り当てていましたが、リストを割り当てる場合は 少しトリッキーになります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode" data-results="value raw replace"><code>`(org-agenda-list . &#39;,(directory-files &quot;~/Documents/org&quot; ))
+</code></pre>
+</div>
+<p>(org-agenda-list quote (foo.org bar.org))</p>
+<p>Org babelで実行して <code>RESULTS</code> を見てみると変な感じがしますが、動いているぽい。 <code>'</code> でクォートしてあげないと、完全に一つのリストになってしまいます。 これの理屈としては、恐らくバッククォートを用いたことで以下のように展開され:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(org-agenda-list . (&quot;path1&quot; . (&quot;path2&quot; . nil)))
+</code></pre>
+</div>
+<p>これはつまりリストの構成と同じなのでくっついてしまうんでしょうね。</p>
+<p>ちなみに、CDRがリストならDotted pair表示にはならないらしい (<a href="info:elisp#Dotted Pair Notation">info:elisp#Dotted Pair Notation</a>より) のでDotted pairの表示じゃないのは正常なようです。</p>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>When printing a list, the dotted pair notation is only used if the CDR of a cons cell is not a list.</p>
+</blockquote>
+</div>
+<p>まぁ普通のリストになっちゃうからそれはそうだよねっていう。</p>
+<h1 id="まだわからないこと">まだわからないこと</h1>
+<ul>
+<li><code>(org-agenda-files quote ("path1" "path2"))</code> と続いているが、なぜ <code>quote</code> がそこにあって動くのか？</li>
+<li>そもそも dotted Pairじゃなくしたらダメ…?(これはleafの仕様の話になってきます</li>
+</ul>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-01-29-gtk-shrink-window-region-after-expanding-it</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-01-29-gtk-shrink-window-region-after-expanding-it.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-01-29-gtk-shrink-window-region-after-expanding-it.html</id>
+    <published>2022-01-29T00:00:00Z</published>
+    <updated>2022-01-29T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>[GTK] Expandされたウィンドウを縮小させる</h1>
+  <div class="ui list">
+    <div class="item">Posted on January 29, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January 30, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;gtk&#39;." href="/tags/gtk.html" class="ui tag label">gtk</a><a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a><a title="All pages tagged &#39;gui&#39;." href="/tags/gui.html" class="ui tag label">gui</a>
+  
+</div>
+
+<p>Gtkでは、WindowやWidgetのサイズを小さめにしておき、 子要素が必要とする大きさが大きくなった際に必要に応じて拡張することができます。</p>
+<p>子要素が大きくなる時は自動的に拡張されますが、 逆に小さくなる時はこれが行われません。</p>
+<p>基本的にはそこまで問題がないのかもしれませんが、これが気になる時があります。</p>
+<h1 id="解決したい問題">解決したい問題</h1>
+<p><a href="https://github.com/elkowar/eww">elkowar/eww</a>というウィジェットアプリケーションがあります。 プリミティブで用意されているウィジェットを組み合わせることで色々なウィジェットを 定義できるのですが、そのプリミティブの中に "Revealer" というものがあります。</p>
+<p>これは Gtkにあるウィジェット<a href="https://docs.gtk.org/gtk3/class.Revealer.html">Revealer</a>であり、子要素を アニメーションによって表示したり隠したりすることができます。 Revealerを使った例が以下です。スライドアニメーションを用いて、 画面に出たり入ったりするウィジェットを作成することができました。</p>
+<p><a href="https://youtu.be/mYKXHcgTyo0">https://youtu.be/mYKXHcgTyo0</a></p>
+<p>しかしこれには一つ問題があります。</p>
+<p>上の動画では背景を透明にしているので気付きづらいのですが、 Revealerでスライドした時それを囲うウィンドウ自体の領域は動かず残ったままなのです!</p>
+<p><a href="https://youtu.be/3bU_D-JGisk">https://youtu.be/3bU_D-JGisk</a></p>
+<p>この動画で赤色がウィンドウ全体、青色がRevealer(を格納しているBox)です。 Revealerが右側に仕舞われた後も赤色のウィンドウが残っているのがわかるでしょうか。 この部分は透明にしたとしてもこのウィジェットとして判定されるので、 この下にあるものをクリックとかが出来なくなります。困った…</p>
+<h1 id="この問題の原因">この問題の原因</h1>
+<p>ウィジェットのサイズが <a href="https://docs.gtk.org/gtk3/method.Widget.set_size_request.html"><code>Widget.set_size_request</code></a>で設定されている時、 子要素の大きさがそれ以上になった場合は大きくなります。</p>
+<p>しかし、小さくなった際はそのまま残ります。</p>
+<p>そのため、Revealerが出てきた時は広がりますが仕舞った際はウィンドウはそのまま残ります。</p>
+<h1 id="解決策">解決策</h1>
+<p>端的に言うと、 <strong>自動的にサイズを縮小するものはありません</strong> (少なくとも調べた限りでは)。 替わりに、 <strong>ウィンドウの <code>resize</code> と「自動拡大」する特徴を組合せる</strong> ことが必要になります。</p>
+<p>以下の2ステップです:</p>
+<ol>
+<li>ウィンドウのサイズを最小(1,1)まで <code>resize</code> する</li>
+<li>Gtkクンが、子要素のサイズにぴったり合うように自動的に拡大してくれる</li>
+</ol>
+<p>見てわかる通り2はGtkがやってくれるので、ユーザー側でやるのは1の <code>resize</code> だけになります。 Widgetは <code>window</code> をプロパティとして所持しているので、それの <code>resize</code> を呼んであげます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>window<span class="op">.</span>gtk_window<span class="op">.</span>resize(<span class="dv">1</span><span class="op">,</span><span class="dv">1</span>)<span class="op">;</span></span></code></pre></div>
+</div>
+<h2 id="具体的な処置">具体的な処置</h2>
+<p>Revealerの状態が変更された時に <code>resize</code> を実行できれば良いのですが、 残念ながらその状態の変更に関するSignalは存在しません。 なので、Revealerの状態が変更される可能性のある時にresizeを呼んであげます。</p>
+<p>今回はEwwが扱っている全てのウィンドウに対してこれを実行したいので、 openされているWindow全てのウィンドウで <code>resize</code> を実行してあげます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>DaemonCommand::UpdateVars(mappings) =&gt; {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    for (var_name, new_value) in mappings {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a> self.update_global_state(var_name, new_value);</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>     +     for (_, _window) in self.open_windows.clone() {</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>     +         _window.gtk_window.resize(1,1);</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>     +     }</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<p><a href="https://github.com/Cj-bc/eww/commit/4109bbd601a777e25bdbbc6383ff42893181ed4a">実際に使っているコミットはこちら</a></p>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-01-27-linux-get-list-of-mounted-filesystems</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-01-27-linux-get-list-of-mounted-filesystems.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-01-27-linux-get-list-of-mounted-filesystems.html</id>
+    <published>2022-01-27T00:00:00Z</published>
+    <updated>2022-01-27T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>archlinuxで本当にマウントされているファイルシステムの一覧を得る</h1>
+  <div class="ui list">
+    <div class="item">Posted on January 27, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January 27, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged &#39;filesystem&#39;." href="/tags/filesystem.html" class="ui tag label">filesystem</a><a title="All pages tagged &#39;proc&#39;." href="/tags/proc.html" class="ui tag label">proc</a><a title="All pages tagged &#39;kernel&#39;." href="/tags/kernel.html" class="ui tag label">kernel</a>
+  
+</div>
+
+<p>マウントされているファイルシステムを知るために、 今迄 <code>lsblk -f</code> を使っていたが、これでは全て表示されないことを知ってしまった。</p>
+<p>全て表示するには <code>/proc/mounts</code> を参照した方が良い。 <code>proc</code> 自身はカーネルのデータ構造へのインターフェースを提供する 仮想ファイルシステム(man:proc より)で、</p>
+<p>その中でも <code>/proc/mounts</code> はマウントされているものの情報を提供してくれている。</p>
+<p>このファイルのフォーマットはfstabで使用されているものと同じなのでそちらを参照すること。 (今回は、何がマウントされているかを知りたかっただけなので詳しくは触れない)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /proc/mounts</span></code></pre></div>
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-01-26-elisp-time-related-functions</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-01-26-elisp-time-related-functions.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-01-26-elisp-time-related-functions.html</id>
+    <published>2022-01-26T00:00:00Z</published>
+    <updated>2022-01-26T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>時間関連のElisp関数</h1>
+  <div class="ui list">
+    <div class="item">Posted on January 26, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January 26, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
+  
+</div>
+
+<p>時間に関連するElisp関数達</p>
+<h1 id="ビルトイン関数群 ( src/timefns.c )">ビルトイン関数群 ( <code>src/timefns.c</code> )</h1>
+<p>エポック秒 (1970年1月1日0時0分0秒からの経過時間) で時間を 扱います。 基本的には <code>format-time-string</code> を用いて変換することになります。</p>
+<h2 id="format-time-string"><code>format-time-string</code></h2>
+<p>help:format-time-string 指定したフォーマットで時間を文字列にしてくれる関数。</p>
+<h2 id="current-time"><code>current-time</code></h2>
+<p>help:current-time 現在の時間を返します</p>
+<h2 id="time-add"><code>time-add</code></h2>
+<p>help:time-add</p>
+<p>時間を加算してくれます。負数を足せば減算できます。 足す値のフォーマットは <code>current-time</code> で使われているものと同じで ちょっと分かりづらいですが、 <a href="https://github.com/org-roam/org-roam/blob/445e3594b25c1c29dd269e99cb0cc958ed3f28b0/extensions/org-roam-dailies.el#L157">org-roam-dailes.elで使われている箇所</a>を参考にすると、 1日足し引きするには <code>86400</code> を足し引きすればよさそうです。</p>
+<p>n日足すには:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>     (defun nth-day (n)
+&quot;Return nth day from today&quot;
+(time-add (* n 86400) nil))
+</code></pre>
+</div>
+<h1 id="calendar">calendar</h1>
+<p>曜日等を扱うことができます。</p>
+<h2 id="calendar-nth-named-day"><code>calendar-nth-named-day</code></h2>
+<p>help:calendar-nth-named-day</p>
+<p>「特定の日付の前後の特定の曜日」を返すことができます。 曜日は数値で指定され、 0が日曜日、1が月曜日…となっていきます (参考: help:calendar-week-start-day)</p>
+<p>例えば、今日2022年1月26日の次の日曜日を取得するには</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode" data-export="both" data-results="raw"><code>(calendar-nth-named-day 1 0 1 2022 26)
+</code></pre>
+</div>
+<p>(1 30 2022)</p>
+<p>となります</p>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-01-06-haskell-trap-of-foldl1</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-01-06-haskell-trap-of-foldl1.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-01-06-haskell-trap-of-foldl1.html</id>
+    <published>2022-01-06T00:00:00Z</published>
+    <updated>2022-01-06T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>foldl1/foldr1のワナ – Foldableが空だと死ぬ</h1>
+  <div class="ui list">
+    <div class="item">Posted on January  6, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January  9, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;fold&#39;." href="/tags/fold.html" class="ui tag label">fold</a>
+  
+</div>
+
+<p>当たり前といえば当たり前だけど、気付くのに数十分くらいはかかってしまったのでメモ</p>
+<p><code>foldl1</code> / <code>foldr1</code> はそれぞれ <code>foldl</code> / <code>foldr</code> の亜種で、後者が初期Accumlatorを 指定した後に対象の <code>Foldable</code> を渡す必要がある一方、 <code>1</code> が付いているシリーズは 対象の <code>Foldable</code> から初期Accumlatorを取得する。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">foldl1</span><span class="ot"> ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">foldr1</span><span class="ot"> ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">foldl</span><span class="ot">  ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">foldr</span><span class="ot">  ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span></code></pre></div>
+</div>
+<p>で、 <code>1</code> シリーズを使用するのであれば <strong>対象の <code>Foldable</code> が空にならないように確認する</strong> 必要がある。 もし空であった場合、 <code>Prelude.foldr1</code> であれば</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> Prelude.foldr1 <span class="fu">const</span> []</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">***</span> <span class="dt">Exception</span><span class="op">:</span> Prelude.foldr1<span class="op">:</span> empty list</span></code></pre></div>
+</div>
+<p>というエラーが出る。 ちなみに <code>vector</code> パッケージの <code>Data.Vector.foldr1</code> も同じような問題がある。 その場合のエラーメッセージはこんな感じ</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+shell
+</div>
+<pre class="shell SourceCode"><code>brick3D: ./Data/Vector/Fusion/Stream/Monadic.hs:929 (foldl1M): empty stream
+CallStack (from HasCallStack):
+  error, called at ./Data/Vector/Internal/Check.hs:87:5 in vector-0.12.3.0-DdzviVbdPFECkUuJzBxnHY:Data.Vector.Internal.Check
+</code></pre>
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-01-04-android-retrofit2-api-declaration-should-not-start-with-slash</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-01-04-android-retrofit2-api-declaration-should-not-start-with-slash.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-01-04-android-retrofit2-api-declaration-should-not-start-with-slash.html</id>
+    <published>2022-01-04T00:00:00Z</published>
+    <updated>2022-01-04T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>Retrofit2のAPI定義はスラッシュで始めない</h1>
+  <div class="ui list">
+    <div class="item">Posted on January  4, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on January  4, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;android&#39;." href="/tags/android.html" class="ui tag label">android</a><a title="All pages tagged &#39;retrofit2&#39;." href="/tags/retrofit2.html" class="ui tag label">retrofit2</a><a title="All pages tagged &#39;kotlin&#39;." href="/tags/kotlin.html" class="ui tag label">kotlin</a>
+  
+</div>
+
+<p><a href="https://square.github.io/retrofit/">retrofit</a>を使用してAPIを叩く際、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+kotlin
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>   <span class="kw">import</span> <span class="im">retrofit2</span><span class="op">.</span><span class="im">Call</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">import</span> <span class="im">retrofit2</span><span class="op">.</span><span class="im">http</span><span class="op">.</span><span class="im">GET</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>   <span class="kw">public</span> <span class="kw">interface</span> MyApi <span class="op">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">@GET</span><span class="op">(</span><span class="st">&quot;endpoint/example&quot;</span><span class="op">)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> abstract <span class="kw">fun</span> <span class="fu">exampleGet</span><span class="op">():</span> <span class="dt">Call</span><span class="op">&lt;</span><span class="dt">ExampleResponse</span><span class="op">&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>// <span class="fu">ExampleResponse</span>はどこかで定義されているものとする</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>   }</span></code></pre></div>
+</div>
+<p>とかするわけなんですが、この <code>@GET</code> に与えるパスの先頭に <code>/</code> をつけてはいけない。 そうするとHTTP Status Code 404を吐かれてしまう。 代わりに、 <code>retrofit2.Retrofit.Builder()</code> の <code>baseUrl</code> に渡すURLの末尾に <code>/</code> をつける。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+kotlin
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ダメ</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">@GET</span><span class="op">(</span><span class="st">&quot;/endpoint/example&quot;</span><span class="op">)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> abstract <span class="kw">fun</span> <span class="fu">exampleGet</span><span class="op">():</span> <span class="dt">Call</span><span class="op">&lt;</span><span class="dt">ExampleResponse</span><span class="op">&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>// <span class="fu">OK</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>@<span class="fu">GET</span><span class="op">(</span>&quot;<span class="va">endpoint</span>/<span class="va">example</span>&quot;<span class="op">)</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="fu">abstract</span> <span class="kw">fun</span> <span class="fu">exampleGet</span><span class="op">():</span> <span class="dt">Call</span><span class="op">&lt;</span><span class="dt">ExampleResponse</span><span class="op">&gt;</span></span></code></pre></div>
+</div>
+<h1 id="おまけ: baseUrlにslashなし&amp;API宣言にslashありは動かない">おまけ: baseUrlにslashなし&amp;API宣言にslashありは動かない</h1>
+<p>最終的に同じになりそうだから試してみたが、エラーが出て駄目でした。 baseUrlはslashで終わらないといけないらしい。</p>
+<div class="line-block">java.lang.IllegalArgumentException: baseUrl must end in /: <a href="https://misskey.io/api">https://misskey.io/api</a></div>
+]]></summary>
+</entry>
+<entry>
+    <title>2021-12-30-math-how-to-rasterize-line-with-begin-and-end-vertices-to-ascii-art</title>
+    <link href="https://cj-bc.github.io/blog/posts/2021-12-30-math-how-to-rasterize-line-with-begin-and-end-vertices-to-ascii-art.html" />
+    <id>https://cj-bc.github.io/blog/posts/2021-12-30-math-how-to-rasterize-line-with-begin-and-end-vertices-to-ascii-art.html</id>
+    <published>2021-12-30T00:00:00Z</published>
+    <updated>2021-12-30T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>直線をAAにラスタライズする</h1>
+  <div class="ui list">
+    <div class="item">Posted on December 30, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on December 30, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;math&#39;." href="/tags/math.html" class="ui tag label">math</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;AA&#39;." href="/tags/AA.html" class="ui tag label">AA</a>
+  
+</div>
+
+<p><a href="https://github.com/Cj-bc/brick-3d">Cj-bc/brick-3d</a> を作成している間、「二つの頂点を結ぶ直線をAAに落としこむ」作業が 必要になったのでメモ。 今回は二つの頂点は平面上にあるものとして扱いますが、他の次元でも同じだと思います。</p>
+<div class="tldr">
+<ul>
+<li>二つの頂点を結ぶ直線の式は $ + t( - ) $ ( <span class="math inline"><em>t</em> ∈ [0..1]</span> )</li>
+<li>tが0の時は <span class="math inline">$\vec{begin}$</span> 、1の時は <span class="math inline">$\vec{end}$</span> になる</li>
+<li>tをよしなな感覚で0~1の間で取ってやり、それを一つめに示した式に入れる</li>
+</ul>
+</div>
+<h1 id="前提知識">前提知識</h1>
+<ul>
+<li>ベクトルについてちょっと</li>
+<li>媒介変数</li>
+</ul>
+<h1 id="ベクトルと媒介変数を用いた直線の式">ベクトルと媒介変数を用いた直線の式</h1>
+<p>まず直線の式を考えます。二つの頂点は位置ベクトルとして捉えます。 この二点を <span class="math inline">$\vec{begin}$</span> と <span class="math inline">$\vec{end}$</span> とおくことにすると、 この2点間を結ぶベクトル <span class="math inline"><em>v⃗</em></span> の式は</p>
+<p>となります。</p>
+<p><img src="file:///images/vector-v-explained.png" class="ui rounded image" /></p>
+<p>これはベクトルなので実数を掛けることができ、 0をかけると長さ0のベクトル、1を掛けるとそのままのベクトルが出来ます。</p>
+<p>そこで、媒介変数 <span class="math inline"><em>t</em></span> を0から1の間の数を持たせてやると、 これは <span class="math inline"><em>v⃗</em></span> 上の点を表す式(=線分の式)になります。</p>
+<p>このベクトルは位置ベクトルではないため空間上のどこに存在しても良い状態なので、 ベクトルの開始地点を <span class="math inline">$\vec{begin}$</span> に移してあげます。</p>
+<p>これで直線の式になります。</p>
+<h1 id="直線の式からその上にある頂点を計算する">直線の式からその上にある頂点を計算する</h1>
+<p>媒介変数表示の式になっているので、後は <span class="math inline"><em>t</em></span> の値を少しずつ ずらしていってあげれば、線分上の頂点が得られます。</p>
+<p>自分のプロジェクトではHaskellで書いていたのでそのまま書かせてもらうと:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Vertex</span> <span class="ot">=</span> (<span class="dt">Flaot</span>, <span class="dt">Float</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- | 先程の「媒介変数で表示した直線の式」</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ot">f ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Vertex</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">-- | 細分化したt。</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">-- Haskellでは, xからyまでの範囲の値のリスト [x..y]</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">-- をFloatで作れないため, 一度Int型で0~100までの値のリストを生成して</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- その全てを100で割っている</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ot">ts ::</span> [<span class="dt">Float</span>]</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>ts <span class="ot">=</span> <span class="fu">fmap</span> (<span class="op">/</span> <span class="dv">100</span>) [<span class="dv">0</span><span class="op">..</span><span class="dv">100</span>]</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">-- | 直線上にある &#39;Vertex&#39; のリスト</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>vertices <span class="ot">=</span> <span class="fu">fmap</span> f ts</span></code></pre></div>
+</div>
+<p>という感じ(実際に使っているコードとは違う)</p>
+<h1 id="おまけ: 実際に使っている部分">おまけ: 実際に使っている部分</h1>
+]]></summary>
+</entry>
+<entry>
+    <title>2021-12-21-qutebrwoser-extend-download-directory-suggestion</title>
+    <link href="https://cj-bc.github.io/blog/posts/2021-12-21-qutebrwoser-extend-download-directory-suggestion.html" />
+    <id>https://cj-bc.github.io/blog/posts/2021-12-21-qutebrwoser-extend-download-directory-suggestion.html</id>
+    <published>2021-12-21T00:00:00Z</published>
+    <updated>2021-12-21T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
+  <h1>Qutebrowserでのダウンロード先ディレクトリをrofiで選べるようにしてみた</h1>
+  <div class="ui list">
+    <div class="item">Posted on December 21, 2021</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on December 21, 2021
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;qutebrowser&#39;." href="/tags/qutebrowser.html" class="ui tag label">qutebrowser</a><a title="All pages tagged &#39;rofi&#39;." href="/tags/rofi.html" class="ui tag label">rofi</a>
+  
+</div>
+
+<p>Qutebrowserでは、ファイルをダウンロードする際に保存先を選ぶポップアップ？が出てくる。 しかし、これは前回使用したパスしかないし、タブキーでの補完もあまり上手く動かない(補完しようとすると 一つ上の階層を選択したりする)しで使い勝手があまりよくなかった。</p>
+<p>私は、保存先がいくつかあってそれを使い分けるタイプなので、いっそのこと最初に表示する保存先の候補を リストから選択できるようにしよう、と思い立った。 Qutebrowserでも絞り込みとかはできるが、なんか挙動がいまいちに感じていたので、それならrofiを使ってやろう と思い立ったのがきっかけ。</p>
+<h1 id="どう動くのか">どう動くのか</h1>
+<p><a href="https://www.youtube.com/watch?v=XX9JRI-8QQw">ゆーちゅーぶってヤツにデモ動画を上げてみた</a>のでそちらを参照してほしい。 主には、今迄通りダウンロードをしようとするとrofiが(dmenuモードで)立ち上がり、 一つ選択したらそれが・選択されなかった場合は元のqutebrowserのアルゴリズムで選ばれたパスが ダウンロード先として表示される。</p>
+<h1 id="技術的詳解">技術的詳解</h1>
+<p>詳解ってほどでもないけど…</p>
+<p>qutebrowserのブラウザに関連する処理は <code>qutebrowser/browser</code> に集められている。 その中でもダウンロードに関係するのは <code>qutebrowser/browser/downloads.py</code> である。 一目瞭然なので。 ここのうち、パスを割り出すのに使っている部分が <code>download_dir</code> なので ここに処理を挟み込んだ。</p>
+<h2 id="Rofiを呼び出す際の注意点">Rofiを呼び出す際の注意点</h2>
+<ul>
+<li>標準入力に渡すファイルオブジェクトは <strong>必ず <code>seek(0)</code> すること</strong>
+<ul>
+<li>これを怠ると、読み込みのポインタがファイルの最後にあるので何も読めない</li>
+</ul></li>
+<li><code>tempfile.TemporaryFile</code> には <code>mode="w+"</code> オプション引数を付けてあげる
+<ul>
+<li>そうじゃないとバイナリを期待される。まぁどちらでも良いのかもだけどバイナリではないので。</li>
+</ul></li>
+<li><code>rofi -dmenu</code> の標準出力を <code>CompletedProcess.stdout</code> から取得すると、末尾に改行文字( <code>\n</code> )を含む
+<ul>
+<li>外してあげないと表示がうまくいかない。空白があるように見えた。</li>
+</ul></li>
+</ul>
+<h2 id="Qutebrowserに新しい設定を組込む">Qutebrowserに新しい設定を組込む</h2>
+<p>この実装では <code>downloads.location.favorite_paths</code> という新しい設定項目を 追加している。 これは、 <code>qutebrowser/config/configdata.yml</code> というYAMLファイルをいじるだけで良い (少なくともそれで動いている、公式の情報を元にしていないため何かしら足りない可能性はある)</p>
 ]]></summary>
 </entry>
 

@@ -45,7 +45,7 @@
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged 'python'." href="../tags/python.html" class="ui tag label">python</a><a title="All pages tagged 'blender'." href="../tags/blender.html" class="ui tag label">blender</a><a title="All pages tagged 'vrm'." href="../tags/vrm.html" class="ui tag label">vrm</a><a title="All pages tagged 'VRM_IMPORTER_for_Blender'." href="../tags/VRM_IMPORTER_for_Blender.html" class="ui tag label">VRM_IMPORTER_for_Blender</a>
   
 </div>
 
@@ -109,7 +109,7 @@ example
 </code></pre>
 </div>
 <h1 id="バグの原因">バグの原因</h1>
-<p><code>importer/blend_model.py:449</code> で <code>bpy.data.node_groups[shader_node_group_name]</code> を取ってきているところが原因。</p>
+<p><code class="verbatim">importer/blend_model.py:449</code> で <code>bpy.data.node_groups[shader_node_group_name]</code> を取ってきているところが原因。</p>
 <p><code>bpy.data.node_groups</code> はblendfile内にある <code>node_groups</code> を保持しており、 既に「古いバージョンで読み込まれたVRM」がある場合 <code>bpy.data.node_groups["MToon_unversioned"]</code> は 「古いバージョンの <code>MToon_unversioned</code> 」=typoが含まれたものを返してしまう。</p>
 <p>そうすると、 <code>node_group_create</code> から返されたのちに <code>.inputs["Normalmap"]</code> が読まれた際に存在せずにクラッシュしてしまう。</p>
 <h1 id="解決方法">解決方法</h1>

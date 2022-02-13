@@ -45,31 +45,31 @@
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged 'xmonad'." href="../tags/xmonad.html" class="ui tag label">xmonad</a><a title="All pages tagged 'haskell'." href="../tags/haskell.html" class="ui tag label">haskell</a>
   
 </div>
 
-<p>xmonadのレイアウトは、 <code>LayoutClass</code> のインスタンスであることが条件になっており、逆にいうと様々な型によって個別に実装されている。</p>
+<p>xmonadのレイアウトは、 <code class="verbatim">LayoutClass</code> のインスタンスであることが条件になっており、逆にいうと様々な型によって個別に実装されている。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">LayoutClass</span><span class="ot"> ::</span> (<span class="op">*</span> <span class="ot">-&gt;</span> <span class="op">*</span>) <span class="ot">-&gt;</span> <span class="op">*</span> <span class="ot">-&gt;</span> <span class="dt">Constraint</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">class</span> <span class="dt">Show</span> (layout a) <span class="ot">=&gt;</span> <span class="dt">LayoutClass</span> layout a <span class="kw">where</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>      <span class="op">...</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">LayoutClass</span> <span class="dt">Tall</span> a <span class="kw">where</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>      <span class="op">...</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">LayoutClass</span> <span class="dt">Full</span> a</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="op">...</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">LayoutClass</span><span class="ot"> ::</span> (<span class="op">*</span> <span class="ot">-&gt;</span> <span class="op">*</span>) <span class="ot">-&gt;</span> <span class="op">*</span> <span class="ot">-&gt;</span> <span class="dt">Constraint</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Show</span> (layout a) <span class="ot">=&gt;</span> <span class="dt">LayoutClass</span> layout a <span class="kw">where</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>      <span class="op">...</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">LayoutClass</span> <span class="dt">Tall</span> a <span class="kw">where</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>      <span class="op">...</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">LayoutClass</span> <span class="dt">Full</span> a</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span></code></pre></div>
 </div>
 <p>これはつまり、以下のようなことが出来ないことになる</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ot">alist ::</span> <span class="dt">LayoutClass</span> layout a <span class="ot">=&gt;</span> [layout a]</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>alist <span class="ot">=</span> [<span class="dt">Full</span>, <span class="dt">Tall</span> def def def]</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">alist ::</span> <span class="dt">LayoutClass</span> layout a <span class="ot">=&gt;</span> [layout a]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>alist <span class="ot">=</span> [<span class="dt">Full</span>, <span class="dt">Tall</span> def def def]</span></code></pre></div>
 </div>
 <p>これは以下のようなエラーになる</p>
 <div class="ui segment">
@@ -101,7 +101,7 @@ example
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ot">alist ::</span> [<span class="kw">forall</span> l a<span class="op">.</span> (<span class="dt">LayoutClass</span> l a) <span class="ot">=&gt;</span> l a]</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">alist ::</span> [<span class="kw">forall</span> l a<span class="op">.</span> (<span class="dt">LayoutClass</span> l a) <span class="ot">=&gt;</span> l a]</span></code></pre></div>
 </div>
 <h2 id="解法">解法</h2>
 <p><a href="https://hackage.haskell.org/package/xmonad-0.15/docs/src/XMonad.Core.html#Layout">XMonad.Core.Layout</a>を使う。</p>
@@ -109,7 +109,7 @@ haskell
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ot">alist ::</span> [<span class="dt">Layout</span> <span class="dt">Window</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ot">alist ::</span> [<span class="dt">Layout</span> <span class="dt">Window</span>]</span></code></pre></div>
 </div>
 <p>なら大丈夫</p>
 <p>参考までに</p>
@@ -117,7 +117,7 @@ haskell
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Layout</span> a <span class="ot">=</span> <span class="kw">forall</span> l<span class="op">.</span> (<span class="dt">LayoutClass</span> l a, <span class="dt">Read</span> (l a)) <span class="ot">=&gt;</span> <span class="dt">Layout</span> (l a)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Layout</span> a <span class="ot">=</span> <span class="kw">forall</span> l<span class="op">.</span> (<span class="dt">LayoutClass</span> l a, <span class="dt">Read</span> (l a)) <span class="ot">=&gt;</span> <span class="dt">Layout</span> (l a)</span></code></pre></div>
 </div>
 
         </div>

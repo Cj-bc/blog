@@ -45,7 +45,7 @@
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged 'ssh'." href="../tags/ssh.html" class="ui tag label">ssh</a><a title="All pages tagged 'github'." href="../tags/github.html" class="ui tag label">github</a>
   
 </div>
 
@@ -58,7 +58,7 @@
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
 <p>The following SSH key was added to your account:</p>
-<p>&lt;:区切りの二文字の英数字が並んでいる文字列(<code>\([[:alnum:]]{2}:\)\+</code>)(正規表現は自信ない)&gt;</p>
+<p>&lt;:区切りの二文字の英数字が並んでいる文字列(<code class="verbatim">\([[:alnum:]]{2}:\)\+</code>)(正規表現は自信ない)&gt;</p>
 <p>If you believe this key was added in error, you can remove the key and disable access at the following location:</p>
 <p><a href="https://github.com/settings/keys">https://github.com/settings/keys</a></p>
 </blockquote>
@@ -72,11 +72,11 @@
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co"># ssh-agentが立ち上がっていなければ、以下のコマンドで立ち上げます</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>$ <span class="bu">eval</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">ssh-agent</span> -s<span class="va">)</span><span class="st">&quot;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>$ <span class="fu">ssh-add</span> -l -E md5</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="op">&gt;</span> <span class="op">&lt;</span><span class="ex">md5</span>ハッシュ<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ssh-agentが立ち上がっていなければ、以下のコマンドで立ち上げます</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> eval <span class="st">&quot;</span><span class="va">$(</span><span class="fu">ssh-agent</span> <span class="at">-s</span><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ssh-add <span class="at">-l</span> <span class="at">-E</span> md5</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="op">&lt;</span>md5ハッシュ<span class="op">&gt;</span></span></code></pre></div>
 </div>
 <p>これが一致すれば大丈夫</p>
 <h2 id="githubの設定画面から確認する">Githubの設定画面から確認する</h2>
@@ -87,8 +87,8 @@ bash
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>$ <span class="fu">ssh-add</span> -l -E sha256</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="op">&gt;</span> <span class="op">&lt;</span><span class="ex">sha256</span>ハッシュ<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ssh-add <span class="at">-l</span> <span class="at">-E</span> sha256</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="op">&lt;</span>sha256ハッシュ<span class="op">&gt;</span></span></code></pre></div>
 </div>
 <p>ここで出てきたハッシュを比較すれば良いです。</p>
 

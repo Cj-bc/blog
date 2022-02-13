@@ -52,7 +52,7 @@
 <p>公式ページ: <a href="https://clangd.llvm.org/installation">https://clangd.llvm.org/installation</a></p>
 <div class="tldr">
 <ul>
-<li>同じディレクトリに <code>compile_flags.txt</code> ファイルを作れ</li>
+<li>同じディレクトリに <code class="verbatim">compile_flags.txt</code> ファイルを作れ</li>
 <li>一行に一フラグずつ書け</li>
 </ul>
 </div>
@@ -61,7 +61,7 @@
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>$ <span class="fu">clang</span> foo.cc</span></code></pre></div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> clang foo.cc</span></code></pre></div>
 </div>
 <p>とビルドされるものと解釈して動きます。 これだと大体のプログラムはフラグが足りないため、 フラグを設定する方法が2通り用意されています。</p>
 <ul>
@@ -70,7 +70,7 @@ bash
 </ul>
 <h1 id="compile_commands.json: ビルドツールを使用する場合"><code>compile_commands.json</code>: ビルドツールを使用する場合</h1>
 <p>プロジェクトの中にある各ファイルのコンパイルコマンドを定義できます。 これは基本的にはツールによって生成されます。</p>
-<p><code>clangd</code> は、今編集しているファイルの親ディレクトリに このファイルを探しにいきます。</p>
+<p><code class="verbatim">clangd</code> は、今編集しているファイルの親ディレクトリに このファイルを探しにいきます。</p>
 <p>下に2つの例を上げていますが、これ以外のツールでも生成出来るものがあるそうです。</p>
 <p>参考: <a href="https://clang.llvm.org/docs/JSONCompilationDatabase.html">compile<sub>commands</sub>.jsonの仕様</a></p>
 <h2 id="CMakeを使っている場合">CMakeを使っている場合</h2>
@@ -78,7 +78,7 @@ bash
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">cmake</span> -DCMAKE_EXPORT_COMPILE_COMMANDS=1</span></code></pre></div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cmake</span> <span class="at">-DCMAKE_EXPORT_COMPILE_COMMANDS</span><span class="op">=</span>1</span></code></pre></div>
 </div>
 <p>とすることで、ビルドディレクトリに <code>compile_commands.json</code> を 出力します。 プロジェクトルートとは異なる場合であった場合は手動で (シムリンクorコピーすることで)移動する必要があります。</p>
 <h2 id="他のビルドツールを使っている場合">他のビルドツールを使っている場合</h2>
@@ -87,7 +87,7 @@ bash
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="ex">bear</span> -- &lt;&lt;使用しているビルドコマンド&gt;&gt;</span></code></pre></div>
+<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">bear</span> <span class="at">--</span> <span class="op">&lt;&lt;使用しているビルドコマンド&gt;&gt;</span></span></code></pre></div>
 </div>
 <p>とすることで、生成できます。 仕組み的には、ビルドコマンドで普通にビルドし、そのログから コンパイラの呼び出しを特定&amp; <code>compile_commands.json</code> を作るようです。</p>
 <p>(READMEを雑に読んだ程度の知識)</p>
@@ -100,14 +100,14 @@ bash
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb4" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="fu">clang</span> <span class="va">$(</span><span class="ex">pkg-config</span> --cflags gtk4<span class="va">)</span> -o somefile somefile.c <span class="va">$(</span><span class="ex">pkg-config</span> --libs gtk4<span class="va">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clang</span> <span class="va">$(</span><span class="ex">pkg-config</span> <span class="at">--cflags</span> gtk4<span class="va">)</span> <span class="at">-o</span> somefile somefile.c <span class="va">$(</span><span class="ex">pkg-config</span> <span class="at">--libs</span> gtk4<span class="va">)</span></span></code></pre></div>
 </div>
 <p>以下のようにしてあげれば良いでしょう。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb5" data-org-language="sh" data-resuts="outputs raw"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ex">pkg-config</span> --cflags --libs gtk4 <span class="kw">|</span> <span class="fu">tr</span> <span class="st">' '</span> <span class="st">'\n'</span></span></code></pre></div>
+<div class="sourceCode" id="cb5" data-org-language="sh" data-resuts="outputs raw"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pkg-config</span> <span class="at">--cflags</span> <span class="at">--libs</span> gtk4 <span class="kw">|</span> <span class="fu">tr</span> <span class="st">' '</span> <span class="st">'\n'</span></span></code></pre></div>
 </div>
 <table>
 <tbody>

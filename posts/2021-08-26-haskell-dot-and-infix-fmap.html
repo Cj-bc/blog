@@ -45,7 +45,7 @@
 </div>
 <div class="info">
   
-  
+  <a title="All pages tagged 'haskell'." href="../tags/haskell.html" class="ui tag label">haskell</a>
   
 </div>
 
@@ -54,11 +54,11 @@
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">infixr</span> <span class="dv">9</span> <span class="op">.</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="ot">(.) ::</span> (b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> c</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="kw">infixl</span> <span class="dv">4</span> <span class="op">&lt;$&gt;</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="ot">(&lt;$&gt;) ::</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">infixr</span> <span class="dv">9</span> <span class="op">.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ot">(.) ::</span> (b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> c</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">infixl</span> <span class="dv">4</span> <span class="op">&lt;$&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ot">(&lt;$&gt;) ::</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b</span></code></pre></div>
 </div>
 <p>…でもたまに分からなくなるよ。</p>
 <h1 id="考えたいケース">考えたいケース</h1>
@@ -67,17 +67,17 @@ haskell
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>(<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]</span></code></pre></div>
 </div>
 <p>でも以下のように書くと、 <strong>"Why NOT?"</strong> とか言って書き換えを提案されるよ!</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">&lt;$&gt;</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="co">-- why not</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">&lt;$&gt;</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- why not</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]</span></code></pre></div>
 </div>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
@@ -90,7 +90,7 @@ haskell
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]</span></code></pre></div>
 </div>
 <p>解釈を考えるあるよ。基本的に左から読まれるわけだけど(ほんとか？)、 今回は中置演算子で繋がれているので <code>infix</code> の値を確認するよ。</p>
 <p><code>infix</code> は、 <em>値が大きければ大きい程優先される</em> 。 冒頭でも書いたけど、 <code class="sourceCode haskell">(<span class="op">.</span>)</code> は <code>infix 9</code> で <code class="sourceCode haskell">(<span class="op">&lt;$&gt;</span>)</code> は <code>infix 4</code> 。</p>
@@ -99,36 +99,36 @@ haskell
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>((<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>)) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>((<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>)) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]</span></code></pre></div>
 </div>
 <p>こうだね。 今度はそれぞれの型を考えてみるよ。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>)<span class="ot"> ::</span> <span class="dt">Num</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>(<span class="op">+</span> <span class="dv">1</span>)<span class="ot"> ::</span> <span class="dt">Num</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="ot">(.) ::</span> (b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> c</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span><span class="ot"> ::</span> <span class="dt">Num</span> a' <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a') <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a'</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>)<span class="ot"> ::</span> <span class="dt">Num</span> a' <span class="ot">=&gt;</span> a' <span class="ot">-&gt;</span> a'</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>(<span class="op">*</span> <span class="dv">2</span>)<span class="ot"> ::</span> <span class="dt">Num</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>(<span class="op">+</span> <span class="dv">1</span>)<span class="ot"> ::</span> <span class="dt">Num</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ot">(.) ::</span> (b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> c</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span><span class="ot"> ::</span> <span class="dt">Num</span> a' <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a') <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a'</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>)<span class="ot"> ::</span> <span class="dt">Num</span> a' <span class="ot">=&gt;</span> a' <span class="ot">-&gt;</span> a'</span></code></pre></div>
 </div>
 <p>これを <code>&lt;$&gt;</code> と一緒にしてみると</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>)<span class="ot"> ::</span> <span class="dt">Num</span> a' <span class="ot">=&gt;</span> a' <span class="ot">-&gt;</span> a'</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="ot">(&lt;$&gt;) ::</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span><span class="ot"> ::</span> (<span class="dt">Num</span> a', <span class="dt">Functor</span> f) <span class="ot">=&gt;</span> f a' <span class="ot">-&gt;</span> f a'</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>)<span class="ot"> ::</span> <span class="dt">Num</span> a' <span class="ot">=&gt;</span> a' <span class="ot">-&gt;</span> a'</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ot">(&lt;$&gt;) ::</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span><span class="ot"> ::</span> (<span class="dt">Num</span> a', <span class="dt">Functor</span> f) <span class="ot">=&gt;</span> f a' <span class="ot">-&gt;</span> f a'</span></code></pre></div>
 </div>
 <p>なるほど。ここで晴れて <code>[1..5]</code> を適用できる。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]<span class="ot"> ::</span> <span class="dt">Num</span> a' <span class="ot">=&gt;</span> [a']</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]<span class="ot"> ::</span> <span class="dt">Num</span> a' <span class="ot">=&gt;</span> [a']</span></code></pre></div>
 </div>
 <p>わーい!</p>
 <h1 id="まとめ(?)">まとめ(?)</h1>
