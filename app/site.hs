@@ -1,5 +1,7 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
+import qualified Data.Map as M
+import           Data.Maybe (fromMaybe)
 import           Data.Monoid (mappend)
 import           Hakyll
 import           Text.Pandoc.Options (ReaderOptions(..), Extension(..), extensionsFromList)
@@ -99,6 +101,28 @@ main = hakyll $ do
     -- Tag pages that the name is in this list will be generated 
     tagNameList <- fmap T.unpack . splitTextBy (== '\n') <$> preprocess (Shelly.shelly $ Shelly.bash "./scripts/gen-tagslist.sh" [])
 
+    -- Create tag pages
+    sequence . flip fmap tagNameList $ \tagString ->
+      create [fromCapture "tags/*.html" tagString] $ do
+        route idRoute
+        compile $ do
+          -- Get list of tags for each post
+          tagsList <- loadAllSnapshots "posts/*.org" "tags" :: Compiler [Item [String]]
+          -- 'tagsMap' below is almost same as Hakyll.Web.Tags.tagsMap,
+          -- But I don't convert it into List.
+          let tagsMap = foldl (M.unionWith (++)) mempty (f <$> tagsList) :: M.Map String [Identifier]
+              f (Item ident tagStrings) = M.fromList $ zip tagStrings $ repeat [ident]
+              taggedPostIds = fromMaybe [] $ M.lookup tagString tagsMap
+
+          posts <- sequence $ load <$> taggedPostIds 
+
+          let ctx = constField "title" "tag page"
+                    <> postListCtx posts
+                    <> defaultContext'
+          makeItem ""
+            >>= loadAndApplyTemplate "templates/tag.html" ctx
+            >>= loadAndApplyTemplate "templates/default.html" ctx
+            >>= relativizeUrls
 
 
     match "posts/*" $ do

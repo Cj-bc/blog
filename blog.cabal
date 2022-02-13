@@ -28,5 +28,5 @@ executable blog
                        attoparsec,
                        text,
                        blaze-html,
-                       microlens-platform
-
+                       microlens-platform,
+                       containers
