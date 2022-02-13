@@ -35,6 +35,8 @@ tagAtomFeedUrl tag = atomFeedUrlBase <> tagFeedUrlBase <> "/" <> tag <> ".xml"
 tagRssFeedUrl  tag = rssFeedUrlBase  <> tagFeedUrlBase <> "/" <> tag <> ".xml"
 
 
+postsPattern = "posts/*.org"
+
 pandocMarkdownCfg :: ReaderOptions
 pandocMarkdownCfg = def { readerExtensions = extensionsFromList [Ext_emoji, Ext_task_lists
                                                                 , Ext_backtick_code_blocks, Ext_fenced_code_attributes
@@ -125,7 +127,7 @@ main = hakyll $ do
             >>= relativizeUrls
 
 
-    match "posts/*" $ do
+    match postsPattern $ do
         route $ setExtension "html"
         compile $ do
             originalPostData <- getResourceBody >>= readPandocWith pandocMarkdownCfg
@@ -137,7 +139,7 @@ main = hakyll $ do
 
             -- Store tags of this Post in snapshot
             saveSnapshot "tags" (fmap T.unpack . view MD.tags <$> metadataSet)
-            tags <- buildTagsWith (flip loadSnapshotBody "tags") "posts/*" (fromCapture "tags/*.html")
+            tags <- buildTagsWith (flip loadSnapshotBody "tags") postsPattern (fromCapture "tags/*.html")
 
             let ctx  = constField "title" titleMetadata <> postCtx
             -- pandocCompilerWithTransform  def myPandocTransform
@@ -152,8 +154,8 @@ main = hakyll $ do
     create ["archive.html"] $ do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
-            tags <- buildTagsWith (flip loadSnapshotBody "tags") "posts/*" (fromCapture "tags/*.html")
+            posts <- recentFirst =<< loadAll postsPattern
+            tags <- buildTagsWith (flip loadSnapshotBody "tags") postsPattern (fromCapture "tags/*.html")
 
             -- TODO: listFieldを元にして, 各postにContextも独自に適用できるフィールドを生成する
             -- id:6da7268f-a417-436f-ab64-8aaef1373dbe
@@ -170,14 +172,14 @@ main = hakyll $ do
     createFeeds "/general.xml" $ \renderer -> do
         route idRoute
         compile $ do
-            posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots "posts/*" "content"
+            posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots postsPattern "content"
             renderer feedConfiguration feedCtx posts
 
     match "index.html" $ do
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
-            tags <- buildTagsWith (flip loadSnapshotBody "tags") "posts/*" (fromCapture "tags/*.html")
+            posts <- recentFirst =<< loadAll postsPattern
+            tags <- buildTagsWith (flip loadSnapshotBody "tags") postsPattern (fromCapture "tags/*.html")
             let indexCtx =
                     postListCtx posts `mappend`
                     constField "title" ""                    `mappend`
