@@ -27,5 +27,6 @@ executable blog
                        shelly,
                        attoparsec,
                        text,
-                       blaze-html
-
+                       blaze-html,
+                       microlens-platform,
+                       containers
