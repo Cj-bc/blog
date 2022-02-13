@@ -9,6 +9,10 @@ import qualified Text.Blaze.Html5.Attributes as A
 import qualified Text.Blaze.Html5 as H
 import              Shelly
 
+import Control.Monad (forM)
+import Data.Maybe (catMaybes)
+import           Text.Blaze.Html.Renderer.String (renderHtml)
+
 defaultContext' :: Context String
 defaultContext' = constField "highlightjsTheme" "night-owl"
                 <> defaultContext
@@ -16,10 +20,10 @@ defaultContext' = constField "highlightjsTheme" "night-owl"
 dateFormat :: T.Text
 dateFormat = "%B %e, %Y"
 
-postCtx :: Tags -> Context String
-postCtx tags =
+postCtx :: Context String
+postCtx =
     dateField "date" (T.unpack dateFormat)
-    <> tagsFieldWithFomanticClassName "tags" tags
+    <> tagsFieldWithFomanticClassName "tags"
     <> updateDataField
     <> teaserField "teaser" "raw content"
     <> thumbnailField
@@ -53,7 +57,7 @@ thumbnailField = constField "thumbnail" "hard hat"
 --
 -- TODO: support some Fomantic UI's variations?
 --       I want to make this not only for Fomantic but also for other customizations
-tagsFieldWithFomanticClassName = tagsFieldWith getTags simpleRenderLink' mconcat -- I don't know what is good function that alter mconcat.
+tagsFieldWithFomanticClassName = tagsFieldWith' (flip loadSnapshotBody "tags") simpleRenderLink' mconcat -- I don't know what is good function that alter mconcat.
     where
         -- | This function is copied and have some modification:
         --   source: https://hackage.haskell.org/package/hakyll-4.13.4.1/docs/src/Hakyll.Web.Tags.html
@@ -65,13 +69,35 @@ tagsFieldWithFomanticClassName = tagsFieldWith getTags simpleRenderLink' mconcat
                 ! A.class_ "ui tag label"
                 $ toHtml tag
 
+-- | Render tags with links with custom functions to get tags and to
+-- render links
+tagsFieldWith' :: (Identifier -> Compiler [String])
+              -- ^ Get the tags
+              -> (String -> (Maybe FilePath) -> Maybe H.Html)
+              -- ^ Render link for one tag
+              -> ([H.Html] -> H.Html)
+              -- ^ Concatenate tag links
+              -> String
+              -- ^ Destination field
+              -> Context a
+              -- ^ Resulting context
+tagsFieldWith' getTags' renderLink cat key = field key $ \item -> do
+    tags' <- getTags' $ itemIdentifier item
+    links <- forM tags' $ \tag -> do
+        route' <- getRoute $ fromCapture "tags/*.html" tag
+        return $ renderLink tag route'
+
+    return $ renderHtml $ cat $ catMaybes $ links
+
+
+  
 feedCtx = dateField "date" (T.unpack dateFormat)
           <> bodyField "description"
           <> defaultContext'
 
 -- | Common Contexts for pages that holds post list
-postListCtx :: Tags -> [Item String] -> Context b
-postListCtx tags posts = listField "posts" (titleSnapshotField "title" <> postCtx tags) (return posts)
+postListCtx :: [Item String] -> Context b
+postListCtx posts = listField "posts" (titleSnapshotField "title" <> postCtx) (return posts)
 
 -- | スナップショットに仕舞ってあるタイトルを取り出して使う
 titleSnapshotField :: String -> Context String
