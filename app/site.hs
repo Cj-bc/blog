@@ -119,6 +119,8 @@ main = hakyll $ do
           posts <- sequence $ load <$> taggedPostIds 
 
           let ctx = constField "title" "tag page"
+                    <> constField "atomFeedUrl" (tagAtomFeedUrl tagString)
+                    <> constField "rssFeedUrl" (tagRssFeedUrl tagString)
                     <> postListCtx posts
                     <> defaultContext'
           makeItem ""
@@ -126,6 +128,12 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/default.html" ctx
             >>= relativizeUrls
 
+    sequence . flip fmap tagNameList $ \tagName ->
+      createFeeds (mconcat [tagFeedUrlBase, "/", tagName, ".xml"]) $ \renderer -> do
+        route idRoute
+        compile $ do
+          posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots postsPattern "content"
+          renderer feedConfiguration feedCtx posts
 
     match postsPattern $ do
         route $ setExtension "html"
