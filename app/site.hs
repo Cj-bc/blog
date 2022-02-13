@@ -3,7 +3,7 @@
 import           Data.Monoid (mappend)
 import           Hakyll
 import           Text.Pandoc.Options (ReaderOptions(..), Extension(..), extensionsFromList)
-import           Text.Pandoc.Shared (stringify)
+import           Text.Pandoc.Shared (stringify, splitTextBy)
 import           Text.Pandoc.Definition (docTitle, Pandoc(Pandoc))
 import           Data.Default (def)
 import qualified Data.Text as T
@@ -11,6 +11,7 @@ import           Control.Monad (forM_)
 import           Lens.Micro.Platform ((^.), view)
 import           Hakyll.Web.Html (withUrls)
 import           Hakyll.Core.Compiler (getResourceFilePath)
+import qualified Shelly as Shelly
 import           System.FilePath.Posix (takeBaseName)
 import           Data.List (isPrefixOf)
 
@@ -95,6 +96,8 @@ main = hakyll $ do
         route $ constRoute "css/myCustom.css"
         compile copyFileCompiler
 
+    -- Tag pages that the name is in this list will be generated 
+    tagNameList <- fmap T.unpack . splitTextBy (== '\n') <$> preprocess (Shelly.shelly $ Shelly.bash "./scripts/gen-tagslist.sh" [])
 
 
 
