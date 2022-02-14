@@ -3,6 +3,7 @@ module MyBlog.Contexts where
 import              Hakyll
 import              Hakyll.Web.Tags (Tags)
 import              Hakyll.Web.Meta.OpenGraph (openGraphField)
+import              Hakyll.Web.Meta.TwitterCard (twitterCardField)
 import qualified    Data.Attoparsec.Text as P
 import qualified Data.Text as T
 import Text.Blaze.Html (toHtml, toValue, (!))
@@ -25,6 +26,7 @@ postCtx :: Context String
 postCtx =
     dateField "date" (T.unpack dateFormat)
     <> openGraphField "opengraph" ogpContext
+    <> twitterCardField "twitterCard" ogpContext
     <> tagsFieldWithFomanticClassName "tags"
     <> updateDataField
     <> teaserField "teaser" "raw content"
