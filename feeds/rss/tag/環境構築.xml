@@ -7,8 +7,200 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Tue, 08 Feb 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Mon, 14 Feb 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-02-14-hakyll-retrive-org-file-property-drawer-in-compiler</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-02-14-hakyll-retrive-org-file-property-drawer-in-compiler.html</link>
+    <description><![CDATA[<div class="ui center aligned icon header">
+  <h1>hakyllでOrgのPROPERTIESドロワーの情報を使う方法</h1>
+  <div class="ui list">
+    <div class="item">Posted on February 14, 2022</div>
+    <div class="item">
+      <i class="history icon"></i>
+      Updated on February 14, 2022
+    </div>
+  </div>
+    
+</div>
+<div class="info">
+  
+  <a title="All pages tagged &#39;hakyll&#39;." href="/tags/hakyll.html" class="ui tag label">hakyll</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;blog&#39;." href="/tags/blog.html" class="ui tag label">blog</a>
+  
+</div>
+
+<p>解決方法が知りたい場合 <span class="spurious-link" target="*解決方法"><em>*解決方法</em></span>まで飛ばして下さい。</p>
+<p>私のこのブログでも使っているので参考までに: <a href="https://github.com/Cj-bc/blog/tree/source">Cj-bc/blog</a></p>
+<ul>
+<li><strong>Hakyllの提供している <code>Metadata</code> は使わない</strong> よ</li>
+<li>Postを処理する <code>Rules</code> 内でpandocを用いて取り出し、 <code>saveSnapshot</code> するよ</li>
+</ul>
+<h1 id="Hakyllのメタデータとは">Hakyllのメタデータとは</h1>
+<p>Hakyllでは、作者やタイトル・タグ等のデータを "メタデータ"として特別なフォーマットを用いて扱います。</p>
+<p>デフォルトでは</p>
+<ul>
+<li>Yamlヘッダー形式</li>
+<li>対応する <code>.metadata</code> ファイルからの読み込み</li>
+</ul>
+<p>の2種類の方法により収集され、テンプレートの中で例えば</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+html
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode html SourceCode"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;h1&gt;</span>$title$<span class="kw">&lt;/h1&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;h2&gt;</span>Author: $author$<span class="kw">&lt;/h2&gt;</span></span></code></pre></div>
+</div>
+<p>のようにして使用されることになります。</p>
+<h1 id="問題点">問題点</h1>
+<p>Orgファイル(他のファイル形式でも)では、元々メタデータ用の 構文を持っています。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+org
+</div>
+<pre class="org SourceCode"><code>#+TITLE: タイトルのメタデータです
+</code></pre>
+</div>
+<p>とする形式(<strong>この記事では扱いません!!!</strong>)と</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+org
+</div>
+<pre class="org SourceCode"><code>* 見出し
+  :PROPERTIES:
+  :AUTHOR: Cj.bc-sd
+  :END:
+</code></pre>
+</div>
+<p>とするプロパティを用いる形式の二つです。</p>
+<p>特にOrg文書はOrg-modeとの連携が大事になり、出来ることならそれ自体の 形式を使いたいわけです。</p>
+<p>しかし、残念ながら <strong>後から <code>Metadata</code> を更新する方法はなさそう</strong> です。 そのため、 上記の情報等を Org propertiesから読み込むことができません。</p>
+<h2 id="余談: 書き換えられない証拠">余談: 書き換えられない証拠</h2>
+<p><code>Metadata</code> を扱える型クラス <code>MonadMetadata</code> の<a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Compiler.Internal.html#line-207"> <code>Compiler</code> インスタンス</a>を見てみると、 <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Compiler.Internal.html#compilerGetMetadata"> <code>compilerGetMetadata</code> </a> &gt; <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.MetadataCache.html#resourceMetadata"> <code>resourceMetadata</code> </a> &gt; <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.MetadataCache.html#load"> <code>load</code> (<code>Compiler</code> の loadとは別)</a> &gt; <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.Metadata.html#loadMetadata"> <code>loadMetadata</code> </a> &gt; の中で、色々な関数において直接 ファイルを読み込んでパースしているのがわかります。</p>
+<h1 id="解決方法">解決方法</h1>
+<p>orgファイルを読み込む時にPandocのデータ型から取り出し、 <code>Snapshot</code> に仕舞っておくという手法を取ります。</p>
+<h2 id="1. 投稿の内容を Pandoc 型として取得する">1. 投稿の内容を <code>Pandoc</code> 型として取得する</h2>
+<p><a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:pandocCompiler"> <code>pandocCompiler</code> </a> を使うと <code>String</code> 型に変換されてしまいメタデータが消えるため、 <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:readPandoc"> <code>readPandoc</code> </a>若しくは<a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:readPandocWith"> <code>readPandocWith</code> </a>を使います。(オプションを変更したい場合は <code>readPandocWith</code> の方を使います。)</p>
+<p><a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Core-Compiler.html#v:getResourceBody"> <code>getResourceBody</code> </a>を用いることで、今処理しているファイルの中身が取れるのでそれを <code>readPandoc</code> に渡します。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>     match <span class="st">&quot;posts/*.org&quot;</span> <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>route idRoute</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>compiler <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- ↓ここの行のこと</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  postPandoc <span class="ot">&lt;-</span> getResourceBody <span class="op">&gt;&gt;=</span> readPandoc</span></code></pre></div>
+</div>
+<h2 id="2. Pandoc からProperties drawerの情報を取り出す">2. <code>Pandoc</code> からProperties drawerの情報を取り出す</h2>
+<p>PROPERTIES drawerに入っている情報は、 該当のheadlineのAttributeとして保存されます。 <a href="https://hackage.haskell.org/package/pandoc-types-1.22.1/docs/Text-Pandoc-Definition.html#t:Pandoc"> <code>Pandoc</code> </a>の <code>Meta</code> <strong>ではない</strong> ので注意してください。</p>
+<p>Org文章でいうHeadlineは、Pandocでは<a href="https://hackage.haskell.org/package/pandoc-types-1.22.1/docs/Text-Pandoc-Definition.html#t:Block"> <code>Block</code> </a>の <code>Header</code> に あたります。この中の <code>Attr</code> にkey-value Pairとして格納されています。</p>
+<p>以下は実装からの引用(一部抜粋):</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>   <span class="co">-- | Block element.</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">data</span> <span class="dt">Block</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- | Header - level (integer) and text (inlines)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="dt">Header</span> <span class="dt">Int</span> <span class="dt">Attr</span> [<span class="dt">Inline</span>]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>   <span class="co">-- | Attributes: identifier, classes, key-value pairs</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>   <span class="kw">type</span> <span class="dt">Attr</span> <span class="ot">=</span> (<span class="dt">Text</span>, [<span class="dt">Text</span>], [(<span class="dt">Text</span>, <span class="dt">Text</span>)])</span></code></pre></div>
+</div>
+<p>具体的には、先程の <code>postPandoc</code> の中身を調べていくことになります。</p>
+<p>私は、各投稿の最初には必ずLevel1のheadlineが来るようにしているので Level1の <code>Header</code> が来ることを期待して取り出す処理をかきます。</p>
+<p>様々な状況に対応させたい場合、ここはもう少し丁寧にやった方が良いと思います。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>   match <span class="st">&quot;posts/*.org&quot;</span> <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>route idRoute</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>compiler <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  (<span class="dt">Pandoc</span> _ blocks) <span class="ot">&lt;-</span> getResourceBody <span class="op">&gt;&gt;=</span> readPandoc</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> properties <span class="ot">=</span> <span class="kw">case</span> blocks <span class="kw">of</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>       (<span class="dt">Header</span> <span class="dv">1</span> (_<span class="op">:</span>_<span class="op">:</span>kv) _) <span class="ot">-&gt;</span> kv</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>       _ <span class="ot">-&gt;</span> [] </span></code></pre></div>
+</div>
+<h2 id="3. お目当ての情報を取り出す">3. お目当ての情報を取り出す</h2>
+<p>先程作った <code>properties</code> 変数(<code>properties :: [(Text, Text)]</code>)は <code>(プロパティ名, プロパティの値)</code> という構造になっているので、 必要なプロパティを取り出します。 今回は例として、 <code>AUTHOR</code> を取り出すことにします。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>    match <span class="st">&quot;posts/*.org&quot;</span> <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a> route idRoute</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a> compiler <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>   (<span class="dt">Pandoc</span> _ blocks) <span class="ot">&lt;-</span> getResourceBody <span class="op">&gt;&gt;=</span> readPandoc</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>   <span class="kw">let</span> properties     <span class="ot">=</span> <span class="kw">case</span> blocks <span class="kw">of</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>     (<span class="dt">Header</span> <span class="dv">1</span> (_<span class="op">:</span>_<span class="op">:</span>kv) _) <span class="ot">-&gt;</span> kv</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>     _ <span class="ot">-&gt;</span> [] </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>authorProperty <span class="ot">=</span> fromMaybe <span class="st">&quot;著者不明&quot;</span> <span class="op">$</span> <span class="fu">lookup</span> <span class="st">&quot;AUTHOR&quot;</span> properties</span></code></pre></div>
+</div>
+<h2 id="4. Snapshotに仕舞っておく">4. Snapshotに仕舞っておく</h2>
+<p><code>Snapshot</code> に仕舞っておくことで、 後に他の <code>Compiler</code> や <code>Context</code> の中から使用することができます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>    match <span class="st">&quot;posts/*.org&quot;</span> <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a> route idRoute</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a> compiler <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>   (<span class="dt">Pandoc</span> _ blocks) <span class="ot">&lt;-</span> getResourceBody <span class="op">&gt;&gt;=</span> readPandoc</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>   <span class="kw">let</span> properties     <span class="ot">=</span> <span class="kw">case</span> blocks <span class="kw">of</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>     (<span class="dt">Header</span> <span class="dv">1</span> (_<span class="op">:</span>_<span class="op">:</span>kv) _) <span class="ot">-&gt;</span> kv</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>     _ <span class="ot">-&gt;</span> [] </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>authorProperty <span class="ot">=</span> fromMaybe <span class="st">&quot;著者不明&quot;</span> <span class="op">$</span> <span class="fu">lookup</span> <span class="st">&quot;AUTHOR&quot;</span> properties</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>   saveSnapshot <span class="st">&quot;title&quot;</span> <span class="op">=&lt;&lt;</span> makeItem authorProperty</span></code></pre></div>
+</div>
+<h2 id="5. 他の場所から使う(別の Compiler 編)">5. 他の場所から使う(別の <code>Compiler</code> 編)</h2>
+<p>上記のステップの後、別のCompilerモナドからtitleプロパティの値を使うことができるようになりました。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>loadSnapshotBody <span class="st">&quot;&quot;</span> <span class="st">&quot;title&quot;</span></span></code></pre></div>
+</div>
+<h2 id="6. 他の場所から使う(Context 編)">6. 他の場所から使う(<code>Context</code> 編)</h2>
+<p>実はこれが一番やりたかったことでした。 Contextの中から <code>loadSnapshotBody</code> で読み込むことで <code>Identifier</code> 毎に違う値を取り出すことができるため、 <code>listField</code> を使う際に各要素毎に違う値を持たせることができます。</p>
+<p>そのためには <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Template-Context.html#v:field"> <code>field</code> </a>関数を直接使います。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ot">titleField&#39; ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Context</span> <span class="dt">String</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>titleField&#39; key <span class="ot">=</span> field key <span class="op">$</span> \item <span class="ot">-&gt;</span> loadSnapshotBody (itemIdentifier item) <span class="st">&quot;title&quot;</span></span></code></pre></div>
+</div>
+<p>これで、与えられたキーに対して"title"というSnapshotの値を入れこむことができるようになりました。</p>
+<p><code>listField</code> で使う例はこんな感じです(<a href="https://github.com/Cj-bc/blog/blob/189a4d6df236c3155d098d870fc36ac9e4fc13b5/MyBlog/Contexts.hs#L98-L100">このブログのコード</a>だったりします):</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- | Common Contexts for pages that holds post list</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ot">postListCtx ::</span> [<span class="dt">Item</span> <span class="dt">String</span>] <span class="ot">-&gt;</span> <span class="dt">Context</span> b</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>postListCtx posts <span class="ot">=</span> listField <span class="st">&quot;posts&quot;</span> (titleField&#39; <span class="st">&quot;title&quot;</span> <span class="op">&lt;&gt;</span> postCtx) (<span class="fu">return</span> posts)</span></code></pre></div>
+</div>
+<h1 id="参考情報">参考情報</h1>
+<p>実は、メタデータの収集元については他にも困っている人がそれなりに いるようで、Githubにissueがいくつか立っています。</p>
+<dl>
+<dt><a href="https://github.com/jaspervdj/hakyll/issues/529">#529</a></dt>
+<dd>メタデータのパーサーを指定できるようにしたいよというissue
+</dd>
+<dt><a href="https://github.com/jaspervdj/hakyll/issues/700">#700</a></dt>
+<dd><code>#+TITLE</code> 形式のメタデータを読み込む方法についての議論issue (walkaroundあり)
+</dd>
+<dt><a href="https://github.com/jaspervdj/hakyll/issues/643">#643</a></dt>
+<dd>Pandocがメタデータとしてパースした情報を使えるようにしたいというissue
+</dd>
+</dl>
+]]></description>
+    <pubDate>Mon, 14 Feb 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-02-14-hakyll-retrive-org-file-property-drawer-in-compiler.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment</title>
     <link>https://cj-bc.github.io/blog/posts/2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment.html</link>
     <description><![CDATA[<div class="ui center aligned icon header">
@@ -598,55 +790,6 @@ haskell
 ]]></description>
     <pubDate>Thu, 30 Dec 2021 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2021-12-30-math-how-to-rasterize-line-with-begin-and-end-vertices-to-ascii-art.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2021-12-21-qutebrwoser-extend-download-directory-suggestion</title>
-    <link>https://cj-bc.github.io/blog/posts/2021-12-21-qutebrwoser-extend-download-directory-suggestion.html</link>
-    <description><![CDATA[<div class="ui center aligned icon header">
-  <h1>Qutebrowserでのダウンロード先ディレクトリをrofiで選べるようにしてみた</h1>
-  <div class="ui list">
-    <div class="item">Posted on December 21, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on December 21, 2021
-    </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;qutebrowser&#39;." href="/tags/qutebrowser.html" class="ui tag label">qutebrowser</a><a title="All pages tagged &#39;rofi&#39;." href="/tags/rofi.html" class="ui tag label">rofi</a>
-  
-</div>
-
-<p>Qutebrowserでは、ファイルをダウンロードする際に保存先を選ぶポップアップ？が出てくる。 しかし、これは前回使用したパスしかないし、タブキーでの補完もあまり上手く動かない(補完しようとすると 一つ上の階層を選択したりする)しで使い勝手があまりよくなかった。</p>
-<p>私は、保存先がいくつかあってそれを使い分けるタイプなので、いっそのこと最初に表示する保存先の候補を リストから選択できるようにしよう、と思い立った。 Qutebrowserでも絞り込みとかはできるが、なんか挙動がいまいちに感じていたので、それならrofiを使ってやろう と思い立ったのがきっかけ。</p>
-<h1 id="どう動くのか">どう動くのか</h1>
-<p><a href="https://www.youtube.com/watch?v=XX9JRI-8QQw">ゆーちゅーぶってヤツにデモ動画を上げてみた</a>のでそちらを参照してほしい。 主には、今迄通りダウンロードをしようとするとrofiが(dmenuモードで)立ち上がり、 一つ選択したらそれが・選択されなかった場合は元のqutebrowserのアルゴリズムで選ばれたパスが ダウンロード先として表示される。</p>
-<h1 id="技術的詳解">技術的詳解</h1>
-<p>詳解ってほどでもないけど…</p>
-<p>qutebrowserのブラウザに関連する処理は <code>qutebrowser/browser</code> に集められている。 その中でもダウンロードに関係するのは <code>qutebrowser/browser/downloads.py</code> である。 一目瞭然なので。 ここのうち、パスを割り出すのに使っている部分が <code>download_dir</code> なので ここに処理を挟み込んだ。</p>
-<h2 id="Rofiを呼び出す際の注意点">Rofiを呼び出す際の注意点</h2>
-<ul>
-<li>標準入力に渡すファイルオブジェクトは <strong>必ず <code>seek(0)</code> すること</strong>
-<ul>
-<li>これを怠ると、読み込みのポインタがファイルの最後にあるので何も読めない</li>
-</ul></li>
-<li><code>tempfile.TemporaryFile</code> には <code>mode="w+"</code> オプション引数を付けてあげる
-<ul>
-<li>そうじゃないとバイナリを期待される。まぁどちらでも良いのかもだけどバイナリではないので。</li>
-</ul></li>
-<li><code>rofi -dmenu</code> の標準出力を <code>CompletedProcess.stdout</code> から取得すると、末尾に改行文字( <code>\n</code> )を含む
-<ul>
-<li>外してあげないと表示がうまくいかない。空白があるように見えた。</li>
-</ul></li>
-</ul>
-<h2 id="Qutebrowserに新しい設定を組込む">Qutebrowserに新しい設定を組込む</h2>
-<p>この実装では <code>downloads.location.favorite_paths</code> という新しい設定項目を 追加している。 これは、 <code>qutebrowser/config/configdata.yml</code> というYAMLファイルをいじるだけで良い (少なくともそれで動いている、公式の情報を元にしていないため何かしら足りない可能性はある)</p>
-]]></description>
-    <pubDate>Tue, 21 Dec 2021 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2021-12-21-qutebrwoser-extend-download-directory-suggestion.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
