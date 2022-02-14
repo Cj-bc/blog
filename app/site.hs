@@ -13,7 +13,7 @@ import           Control.Monad (forM_)
 import           Lens.Micro.Platform ((^.), view)
 import           Hakyll.Web.Html (withUrls)
 import           Hakyll.Core.Compiler (getResourceFilePath)
-import qualified Shelly as Shelly
+import qualified Shelly
 import           System.FilePath.Posix (takeBaseName)
 import           Data.List (isPrefixOf)
 
@@ -116,7 +116,7 @@ main = hakyll $ do
               f (Item ident tagStrings) = M.fromList $ zip tagStrings $ repeat [ident]
               taggedPostIds = fromMaybe [] $ M.lookup tagString tagsMap
 
-          posts <- recentFirst =<< (sequence $ load <$> taggedPostIds) 
+          posts <- recentFirst =<< sequence (load <$> taggedPostIds)
 
           let ctx = constField "title" "tag page"
                     <> constField "atomFeedUrl" (tagAtomFeedUrl tagString)
@@ -146,12 +146,11 @@ main = hakyll $ do
 
             -- Store tags of this Post in snapshot
             saveSnapshot "tags" (fmap T.unpack . view MD.tags <$> metadataSet)
-            tags <- buildTagsWith (flip loadSnapshotBody "tags") postsPattern (fromCapture "tags/*.html")
+            tags <- buildTagsWith (`loadSnapshotBody` "tags") postsPattern (fromCapture "tags/*.html")
 
             let ctx  = constField "title" titleMetadata <> postCtx
             -- pandocCompilerWithTransform  def myPandocTransform
-            return (writePandocWith def pandocData)
-              >>= saveSnapshot "raw content"
+            saveSnapshot "raw content" (writePandocWith def pandocData)
               >>= loadAndApplyTemplate "templates/post.html" ctx
               >>= saveSnapshot "content"
               >>= loadAndApplyTemplate "templates/default.html" ctx
@@ -162,7 +161,7 @@ main = hakyll $ do
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAll postsPattern
-            tags <- buildTagsWith (flip loadSnapshotBody "tags") postsPattern (fromCapture "tags/*.html")
+            tags <- buildTagsWith (`loadSnapshotBody` "tags") postsPattern (fromCapture "tags/*.html")
 
             -- TODO: listFieldを元にして, 各postにContextも独自に適用できるフィールドを生成する
             -- id:6da7268f-a417-436f-ab64-8aaef1373dbe
@@ -186,7 +185,7 @@ main = hakyll $ do
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAll postsPattern
-            tags <- buildTagsWith (flip loadSnapshotBody "tags") postsPattern (fromCapture "tags/*.html")
+            tags <- buildTagsWith (`loadSnapshotBody` "tags") postsPattern (fromCapture "tags/*.html")
             let indexCtx =
                     postListCtx posts `mappend`
                     constField "title" ""                    `mappend`
