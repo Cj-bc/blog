@@ -2,6 +2,7 @@
 module MyBlog.Contexts where
 import              Hakyll
 import              Hakyll.Web.Tags (Tags)
+import              Hakyll.Web.Meta.OpenGraph (openGraphField)
 import qualified    Data.Attoparsec.Text as P
 import qualified Data.Text as T
 import Text.Blaze.Html (toHtml, toValue, (!))
@@ -23,11 +24,17 @@ dateFormat = "%B %e, %Y"
 postCtx :: Context String
 postCtx =
     dateField "date" (T.unpack dateFormat)
+    <> openGraphField "opengraph" ogpContext
     <> tagsFieldWithFomanticClassName "tags"
     <> updateDataField
     <> teaserField "teaser" "raw content"
     <> thumbnailField
     <> defaultContext'
+  where
+    ogpContext = titleSnapshotField "title" -- We need this because 'defaultContext'' doesn't contain proper title
+                 <> field "og-description" (\item -> take 100 <$> loadSnapshotBody (itemIdentifier item) "raw content")
+                 <> constField  "root"   "https://cj-bc.github.io/blog"
+                 <> defaultContext'
 
 updateDataField :: Context String
 updateDataField = field "updated" $ \item -> do
