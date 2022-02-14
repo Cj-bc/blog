@@ -1,0 +1,207 @@
+* hakyllでOrgのPROPERTIESドロワーの情報を使う方法
+  :PROPERTIES:
+  :DATE: [2022-02-14 Mon 10:53]
+  :TAGS: :hakyll:haskell:blog:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2022-02-14 Mon 10:54]--[2022-02-14 Mon 13:04] =>  2:10
+  :END:
+
+  解決方法が知りたい場合 [[*解決方法]]まで飛ばして下さい。
+  
+  私のこのブログでも使っているので参考までに: [[https://github.com/Cj-bc/blog/tree/source][Cj-bc/blog]]
+  
+  #+NAME: Tl;Dr
+  + *Hakyllの提供している ~Metadata~ は使わない* よ
+  + Postを処理する ~Rules~ 内でpandocを用いて取り出し、 ~saveSnapshot~ するよ
+     
+** Hakyllのメタデータとは
+   Hakyllでは、作者やタイトル・タグ等のデータを
+   "メタデータ"として特別なフォーマットを用いて扱います。
+
+   デフォルトでは
+
+   + Yamlヘッダー形式
+   + 対応する ~.metadata~ ファイルからの読み込み
+
+
+  の2種類の方法により収集され、テンプレートの中で例えば
+
+  #+begin_src html
+    <h1>$title$</h1>
+    <h2>Author: $author$</h2>
+  #+end_src
+
+  のようにして使用されることになります。
+
+** 問題点
+
+   Orgファイル(他のファイル形式でも)では、元々メタデータ用の
+   構文を持っています。
+
+   #+begin_src org
+     ,#+TITLE: タイトルのメタデータです
+   #+end_src
+   
+   とする形式(*この記事では扱いません!!!*)と
+
+   #+begin_src org
+     ,* 見出し
+       :PROPERTIES:
+       :AUTHOR: Cj.bc-sd
+       :END:
+   #+end_src
+
+   とするプロパティを用いる形式の二つです。
+
+   特にOrg文書はOrg-modeとの連携が大事になり、出来ることならそれ自体の
+   形式を使いたいわけです。
+
+   
+   しかし、残念ながら *後から ~Metadata~ を更新する方法はなさそう* です。
+   そのため、 上記の情報等を Org propertiesから読み込むことができません。
+
+
+*** 余談: 書き換えられない証拠
+   
+   ~Metadata~ を扱える型クラス ~MonadMetadata~ の[[https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Compiler.Internal.html#line-207][ ~Compiler~ インスタンス]]を見てみると、
+   [[https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Compiler.Internal.html#compilerGetMetadata][ ~compilerGetMetadata~ ]] > [[https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.MetadataCache.html#resourceMetadata][ ~resourceMetadata~ ]] > [[https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.MetadataCache.html#load][ ~load~ (~Compiler~ の loadとは別)]]
+    > [[https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.Metadata.html#loadMetadata][ ~loadMetadata~ ]] > の中で、色々な関数において直接
+    ファイルを読み込んでパースしているのがわかります。
+
+** 解決方法
+   orgファイルを読み込む時にPandocのデータ型から取り出し、 ~Snapshot~ に仕舞っておくという手法を取ります。
+
+*** 1. 投稿の内容を ~Pandoc~ 型として取得する
+
+    [[https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:pandocCompiler][ ~pandocCompiler~ ]] を使うと ~String~ 型に変換されてしまいメタデータが消えるため、
+    [[https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:readPandoc][ ~readPandoc~ ]]若しくは[[https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:readPandocWith][ ~readPandocWith~ ]]を使います。(オプションを変更したい場合は
+     ~readPandocWith~ の方を使います。)
+
+
+     [[https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Core-Compiler.html#v:getResourceBody][ ~getResourceBody~ ]]を用いることで、今処理しているファイルの中身が取れるのでそれを
+      ~readPandoc~ に渡します。
+      
+     #+begin_src haskell
+       match "posts/*.org" $ do
+	 route idRoute
+	 compiler $ do
+	   -- ↓ここの行のこと
+	   postPandoc <- getResourceBody >>= readPandoc
+     #+end_src     
+
+*** 2. ~Pandoc~ からProperties drawerの情報を取り出す
+    PROPERTIES drawerに入っている情報は、
+    該当のheadlineのAttributeとして保存されます。
+    [[https://hackage.haskell.org/package/pandoc-types-1.22.1/docs/Text-Pandoc-Definition.html#t:Pandoc][ ~Pandoc~ ]]の ~Meta~ *ではない* ので注意してください。
+
+    Org文章でいうHeadlineは、Pandocでは[[https://hackage.haskell.org/package/pandoc-types-1.22.1/docs/Text-Pandoc-Definition.html#t:Block][ ~Block~ ]]の ~Header~ に
+    あたります。この中の ~Attr~ にkey-value Pairとして格納されています。
+
+    
+    以下は実装からの引用(一部抜粋):
+    #+begin_src haskell
+      -- | Block element.
+      data Block
+	  = ...
+	  -- | Header - level (integer) and text (inlines)
+	  | Header Int Attr [Inline]
+
+      -- | Attributes: identifier, classes, key-value pairs
+      type Attr = (Text, [Text], [(Text, Text)])
+    #+end_src
+
+
+    具体的には、先程の ~postPandoc~ の中身を調べていくことになります。
+
+    私は、各投稿の最初には必ずLevel1のheadlineが来るようにしているので
+    Level1の ~Header~ が来ることを期待して取り出す処理をかきます。
+
+    様々な状況に対応させたい場合、ここはもう少し丁寧にやった方が良いと思います。
+
+    #+begin_src haskell
+      match "posts/*.org" $ do
+	  route idRoute
+	  compiler $ do
+	    (Pandoc _ blocks) <- getResourceBody >>= readPandoc
+	    let properties = case blocks of
+			       (Header 1 (_:_:kv) _) -> kv
+			       _ -> [] 
+    #+end_src
+
+*** 3. お目当ての情報を取り出す
+    先程作った ~properties~ 変数(~properties :: [(Text, Text)]~)は
+    ~(プロパティ名, プロパティの値)~ という構造になっているので、
+    必要なプロパティを取り出します。
+    今回は例として、 ~AUTHOR~ を取り出すことにします。
+    
+    #+begin_src haskell
+      match "posts/*.org" $ do
+	  route idRoute
+	  compiler $ do
+	    (Pandoc _ blocks) <- getResourceBody >>= readPandoc
+	    let properties     = case blocks of
+				   (Header 1 (_:_:kv) _) -> kv
+				   _ -> [] 
+		authorProperty = fromMaybe "著者不明" $ lookup "AUTHOR" properties
+    #+end_src
+    
+*** 4. Snapshotに仕舞っておく
+    ~Snapshot~ に仕舞っておくことで、
+    後に他の ~Compiler~ や ~Context~ の中から使用することができます。
+    
+    #+begin_src haskell
+      match "posts/*.org" $ do
+	  route idRoute
+	  compiler $ do
+	    (Pandoc _ blocks) <- getResourceBody >>= readPandoc
+	    let properties     = case blocks of
+				   (Header 1 (_:_:kv) _) -> kv
+				   _ -> [] 
+		authorProperty = fromMaybe "著者不明" $ lookup "AUTHOR" properties
+
+	    saveSnapshot "title" =<< makeItem authorProperty
+    #+end_src
+
+*** 5. 他の場所から使う(別の ~Compiler~ 編)
+    上記のステップの後、別のCompilerモナドからtitleプロパティの値を使うことができるようになりました。
+
+    #+begin_src haskell
+      loadSnapshotBody "" "title"
+    #+end_src
+
+*** 6. 他の場所から使う(~Context~ 編)
+    実はこれが一番やりたかったことでした。
+    Contextの中から ~loadSnapshotBody~ で読み込むことで
+    ~Identifier~ 毎に違う値を取り出すことができるため、
+    ~listField~ を使う際に各要素毎に違う値を持たせることができます。
+
+    
+    そのためには [[https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Template-Context.html#v:field][ ~field~ ]]関数を直接使います。
+    
+    #+begin_src haskell
+      titleField' :: String -> Context String
+      titleField' key = field key $ \item -> loadSnapshotBody (itemIdentifier item) "title"
+    #+end_src
+
+    これで、与えられたキーに対して"title"というSnapshotの値を入れこむことができるようになりました。
+
+    ~listField~ で使う例はこんな感じです([[https://github.com/Cj-bc/blog/blob/189a4d6df236c3155d098d870fc36ac9e4fc13b5/MyBlog/Contexts.hs#L98-L100][このブログのコード]]だったりします):
+
+    #+begin_src haskell
+      -- | Common Contexts for pages that holds post list
+      postListCtx :: [Item String] -> Context b
+      postListCtx posts = listField "posts" (titleField' "title" <> postCtx) (return posts)
+    #+end_src
+
+** 参考情報
+   実は、メタデータの収集元については他にも困っている人がそれなりに
+   いるようで、Githubにissueがいくつか立っています。
+
+
+   + [[https://github.com/jaspervdj/hakyll/issues/529][#529]] :: メタデータのパーサーを指定できるようにしたいよというissue
+   + [[https://github.com/jaspervdj/hakyll/issues/700][#700]] :: ~#+TITLE~ 形式のメタデータを読み込む方法についての議論issue (walkaroundあり)
+   + [[https://github.com/jaspervdj/hakyll/issues/643][#643]] :: Pandocがメタデータとしてパースした情報を使えるようにしたいというissue
