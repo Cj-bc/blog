@@ -116,7 +116,7 @@ main = hakyll $ do
               f (Item ident tagStrings) = M.fromList $ zip tagStrings $ repeat [ident]
               taggedPostIds = fromMaybe [] $ M.lookup tagString tagsMap
 
-          posts <- sequence $ load <$> taggedPostIds 
+          posts <- recentFirst =<< (sequence $ load <$> taggedPostIds) 
 
           let ctx = constField "title" "tag page"
                     <> constField "atomFeedUrl" (tagAtomFeedUrl tagString)
