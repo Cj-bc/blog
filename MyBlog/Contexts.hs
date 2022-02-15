@@ -15,6 +15,12 @@ import Control.Monad (forM)
 import Data.Maybe (catMaybes)
 import           Text.Blaze.Html.Renderer.String (renderHtml)
 
+profileContext :: Context String
+profileContext = constField "profileCard" "true"
+                 <> constField "name" "Cj.BC_SD"
+                 <> constField "profilePic" "https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4"
+                 <> constField "description" "This is me"
+  
 defaultContext' :: Context String
 defaultContext' = constField "highlightjsTheme" "night-owl"
                 <> defaultContext
@@ -31,6 +37,7 @@ postCtx =
     <> updateDataField
     <> teaserField "teaser" "raw content"
     <> thumbnailField
+    <> profileContext
     <> defaultContext'
   where
     ogpContext = titleSnapshotField "title" -- We need this because 'defaultContext'' doesn't contain proper title
