@@ -60,7 +60,7 @@ parseDate = do
 --
 -- TODO: retrieve thumbnail from post itself(using 'functionField')
 thumbnailField :: Context String
-thumbnailField = constField "thumbnail" "hard hat"
+thumbnailField = constField "thumbnail" "newspaper massive icon"
 
 -- | Almost same as 'tagsField', but this will give each tags class name for Fomantic-UI
 --
