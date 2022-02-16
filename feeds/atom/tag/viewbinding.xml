@@ -15,24 +15,27 @@
     <id>https://cj-bc.github.io/blog/posts/2022-02-14-hakyll-retrive-org-file-property-drawer-in-compiler.html</id>
     <published>2022-02-14T00:00:00Z</published>
     <updated>2022-02-14T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>hakyllでOrgのPROPERTIESドロワーの情報を使う方法</h1>
-  <div class="ui list">
-    <div class="item">Posted on February 14, 2022</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on February 14, 2022
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>hakyllでOrgのPROPERTIESドロワーの情報を使う方法</h1>
     </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;hakyll&#39;." href="/tags/hakyll.html" class="ui tag label">hakyll</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;blog&#39;." href="/tags/blog.html" class="ui tag label">blog</a>
-  
-</div>
+      <div class="meta ui list">
+	<div class="item">Posted on February 14, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on February 14, 2022
+	</div>
 
-<p>解決方法が知りたい場合 <span class="spurious-link" target="*解決方法"><em>*解決方法</em></span>まで飛ばして下さい。</p>
+	
+
+	
+	<a title="All pages tagged &#39;hakyll&#39;." href="/tags/hakyll.html" class="ui tag label">hakyll</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;blog&#39;." href="/tags/blog.html" class="ui tag label">blog</a>
+	
+      </div>
+
+    <div class="description">
+      <p>解決方法が知りたい場合 <span class="spurious-link" target="*解決方法"><em>*解決方法</em></span>まで飛ばして下さい。</p>
 <p>私のこのブログでも使っているので参考までに: <a href="https://github.com/Cj-bc/blog/tree/source">Cj-bc/blog</a></p>
 <ul>
 <li><strong>Hakyllの提供している <code>Metadata</code> は使わない</strong> よ</li>
@@ -199,6 +202,11 @@ haskell
 <dd>Pandocがメタデータとしてパースした情報を使えるようにしたいというissue
 </dd>
 </dl>
+    </div>
+  </div>
+  
+
+</div>
 ]]></summary>
 </entry>
 <entry>
@@ -207,24 +215,27 @@ haskell
     <id>https://cj-bc.github.io/blog/posts/2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment.html</id>
     <published>2022-02-08T00:00:00Z</published>
     <updated>2022-02-08T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>ViewBindingでの設定がきちんと反映されていなかった理由がわかった</h1>
-  <div class="ui list">
-    <div class="item">Posted on February  8, 2022</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on February  8, 2022
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>ViewBindingでの設定がきちんと反映されていなかった理由がわかった</h1>
     </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;android&#39;." href="/tags/android.html" class="ui tag label">android</a><a title="All pages tagged &#39;viewbinding&#39;." href="/tags/viewbinding.html" class="ui tag label">viewbinding</a>
-  
-</div>
+      <div class="meta ui list">
+	<div class="item">Posted on February  8, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on February  8, 2022
+	</div>
 
-<p>分かる人が見ればすぐ分かる凡ミスなのだけど、結構時間掛かってしまったので 置いておきます。</p>
+	
+
+	
+	<a title="All pages tagged &#39;android&#39;." href="/tags/android.html" class="ui tag label">android</a><a title="All pages tagged &#39;viewbinding&#39;." href="/tags/viewbinding.html" class="ui tag label">viewbinding</a>
+	
+      </div>
+
+    <div class="description">
+      <p>分かる人が見ればすぐ分かる凡ミスなのだけど、結構時間掛かってしまったので 置いておきます。</p>
 <h1 id="問題">問題</h1>
 <p>以下のようなコードを書いていました。 ViewBindingを用いて、 <code>myButton</code> が押された時に実行される <code>OnClickListener</code> を 設定しているものです。</p>
 <div class="ui segment">
@@ -278,6 +289,11 @@ diff
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>   }</span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a> }</span></code></pre></div>
 </div>
+    </div>
+  </div>
+  
+
+</div>
 ]]></summary>
 </entry>
 <entry>
@@ -286,24 +302,27 @@ diff
     <id>https://cj-bc.github.io/blog/posts/2022-02-07-pass-command-is-affected-by-tree-version-2.html</id>
     <published>2022-02-07T00:00:00Z</published>
     <updated>2022-02-07T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>passコマンドが最近上手く動かなくなった時の対処法[tree v2.0.0関連]</h1>
-  <div class="ui list">
-    <div class="item">Posted on February  7, 2022</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on February  7, 2022
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>passコマンドが最近上手く動かなくなった時の対処法[tree v2.0.0関連]</h1>
     </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;pass&#39;." href="/tags/pass.html" class="ui tag label">pass</a><a title="All pages tagged &#39;tool&#39;." href="/tags/tool.html" class="ui tag label">tool</a>
-  
-</div>
+      <div class="meta ui list">
+	<div class="item">Posted on February  7, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on February  7, 2022
+	</div>
 
-<p><a href="https://git.zx2c4.com/password-store/about/">pass</a>コマンドは内部で<a href="http://mama.indstate.edu/users/ice/tree/">tree</a>コマンドを使用しています。 このところ、treeコマンドの使用変更によってpassコマンドが上手く動かなくなったので その原因と対処法について書き残しておきます。</p>
+	
+
+	
+	<a title="All pages tagged &#39;pass&#39;." href="/tags/pass.html" class="ui tag label">pass</a><a title="All pages tagged &#39;tool&#39;." href="/tags/tool.html" class="ui tag label">tool</a>
+	
+      </div>
+
+    <div class="description">
+      <p><a href="https://git.zx2c4.com/password-store/about/">pass</a>コマンドは内部で<a href="http://mama.indstate.edu/users/ice/tree/">tree</a>コマンドを使用しています。 このところ、treeコマンドの使用変更によってpassコマンドが上手く動かなくなったので その原因と対処法について書き残しておきます。</p>
 <ul>
 <li>tree v2.0.0 から、FD 3が開いていると標準出力の替わりにそちらにデータをJSONで流すよ</li>
 <li>今迄通りの挙動をさせるには、 <code>3&gt;&amp;-</code> 等でFD 3を閉じてあげる必要があるよ</li>
@@ -379,6 +398,11 @@ bash
 <li><a href="http://mama.indstate.edu/users/ice/tree/changes.html">treeのCHANGELOG</a></li>
 <li><a href="https://www.archlinux.jp/packages/extra/x86_64/tree/">treeの正式なURL取得元のarchlinuxのパッケージページ</a></li>
 </ul>
+    </div>
+  </div>
+  
+
+</div>
 ]]></summary>
 </entry>
 <entry>
@@ -387,24 +411,27 @@ bash
     <id>https://cj-bc.github.io/blog/posts/2022-02-05-emacs-leaf-custom-use-backquote-to-generate-list-value.html</id>
     <published>2022-02-05T00:00:00Z</published>
     <updated>2022-02-05T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>[leaf]:customで動的に生成したリストを使う</h1>
-  <div class="ui list">
-    <div class="item">Posted on February  5, 2022</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on February  5, 2022
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>[leaf]:customで動的に生成したリストを使う</h1>
     </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a>
-  
-</div>
+      <div class="meta ui list">
+	<div class="item">Posted on February  5, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on February  5, 2022
+	</div>
 
-<p><a href="https://github.com/conao3/leaf.el">conao3/leaf.el</a>に於いて、動的な値を <code>:custom</code> キーワードに与えるにはバッククォートを使う必要があります。 (<a href="https://qiita.com/conao3/items/347d7e472afd0c58fbd7#変数の変更について">conao3さんのQiita記事 「Emacs入門から始めるleaf.el入門」</a>にも記載があります。</p>
+	
+
+	
+	<a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a>
+	
+      </div>
+
+    <div class="description">
+      <p><a href="https://github.com/conao3/leaf.el">conao3/leaf.el</a>に於いて、動的な値を <code>:custom</code> キーワードに与えるにはバッククォートを使う必要があります。 (<a href="https://qiita.com/conao3/items/347d7e472afd0c58fbd7#変数の変更について">conao3さんのQiita記事 「Emacs入門から始めるleaf.el入門」</a>にも記載があります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -445,6 +472,11 @@ elisp
 <li><code>(org-agenda-files quote ("path1" "path2"))</code> と続いているが、なぜ <code>quote</code> がそこにあって動くのか？</li>
 <li>そもそも dotted Pairじゃなくしたらダメ…?(これはleafの仕様の話になってきます</li>
 </ul>
+    </div>
+  </div>
+  
+
+</div>
 ]]></summary>
 </entry>
 <entry>
@@ -453,24 +485,27 @@ elisp
     <id>https://cj-bc.github.io/blog/posts/2022-01-29-gtk-shrink-window-region-after-expanding-it.html</id>
     <published>2022-01-29T00:00:00Z</published>
     <updated>2022-01-29T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>[GTK] Expandされたウィンドウを縮小させる</h1>
-  <div class="ui list">
-    <div class="item">Posted on January 29, 2022</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on January 30, 2022
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>[GTK] Expandされたウィンドウを縮小させる</h1>
     </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;gtk&#39;." href="/tags/gtk.html" class="ui tag label">gtk</a><a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a><a title="All pages tagged &#39;gui&#39;." href="/tags/gui.html" class="ui tag label">gui</a>
-  
-</div>
+      <div class="meta ui list">
+	<div class="item">Posted on January 29, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on January 30, 2022
+	</div>
 
-<p>Gtkでは、WindowやWidgetのサイズを小さめにしておき、 子要素が必要とする大きさが大きくなった際に必要に応じて拡張することができます。</p>
+	
+
+	
+	<a title="All pages tagged &#39;gtk&#39;." href="/tags/gtk.html" class="ui tag label">gtk</a><a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a><a title="All pages tagged &#39;gui&#39;." href="/tags/gui.html" class="ui tag label">gui</a>
+	
+      </div>
+
+    <div class="description">
+      <p>Gtkでは、WindowやWidgetのサイズを小さめにしておき、 子要素が必要とする大きさが大きくなった際に必要に応じて拡張することができます。</p>
 <p>子要素が大きくなる時は自動的に拡張されますが、 逆に小さくなる時はこれが行われません。</p>
 <p>基本的にはそこまで問題がないのかもしれませんが、これが気になる時があります。</p>
 <h1 id="解決したい問題">解決したい問題</h1>
@@ -516,6 +551,11 @@ diff
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <p><a href="https://github.com/Cj-bc/eww/commit/4109bbd601a777e25bdbbc6383ff42893181ed4a">実際に使っているコミットはこちら</a></p>
+    </div>
+  </div>
+  
+
+</div>
 ]]></summary>
 </entry>
 <entry>
@@ -524,24 +564,27 @@ diff
     <id>https://cj-bc.github.io/blog/posts/2022-01-27-linux-get-list-of-mounted-filesystems.html</id>
     <published>2022-01-27T00:00:00Z</published>
     <updated>2022-01-27T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>archlinuxで本当にマウントされているファイルシステムの一覧を得る</h1>
-  <div class="ui list">
-    <div class="item">Posted on January 27, 2022</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on January 27, 2022
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>archlinuxで本当にマウントされているファイルシステムの一覧を得る</h1>
     </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged &#39;filesystem&#39;." href="/tags/filesystem.html" class="ui tag label">filesystem</a><a title="All pages tagged &#39;proc&#39;." href="/tags/proc.html" class="ui tag label">proc</a><a title="All pages tagged &#39;kernel&#39;." href="/tags/kernel.html" class="ui tag label">kernel</a>
-  
-</div>
+      <div class="meta ui list">
+	<div class="item">Posted on January 27, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on January 27, 2022
+	</div>
 
-<p>マウントされているファイルシステムを知るために、 今迄 <code>lsblk -f</code> を使っていたが、これでは全て表示されないことを知ってしまった。</p>
+	
+
+	
+	<a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged &#39;filesystem&#39;." href="/tags/filesystem.html" class="ui tag label">filesystem</a><a title="All pages tagged &#39;proc&#39;." href="/tags/proc.html" class="ui tag label">proc</a><a title="All pages tagged &#39;kernel&#39;." href="/tags/kernel.html" class="ui tag label">kernel</a>
+	
+      </div>
+
+    <div class="description">
+      <p>マウントされているファイルシステムを知るために、 今迄 <code>lsblk -f</code> を使っていたが、これでは全て表示されないことを知ってしまった。</p>
 <p>全て表示するには <code>/proc/mounts</code> を参照した方が良い。 <code>proc</code> 自身はカーネルのデータ構造へのインターフェースを提供する 仮想ファイルシステム(man:proc より)で、</p>
 <p>その中でも <code>/proc/mounts</code> はマウントされているものの情報を提供してくれている。</p>
 <p>このファイルのフォーマットはfstabで使用されているものと同じなのでそちらを参照すること。 (今回は、何がマウントされているかを知りたかっただけなので詳しくは触れない)</p>
@@ -551,6 +594,11 @@ bash
 </div>
 <div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /proc/mounts</span></code></pre></div>
 </div>
+    </div>
+  </div>
+  
+
+</div>
 ]]></summary>
 </entry>
 <entry>
@@ -559,24 +607,27 @@ bash
     <id>https://cj-bc.github.io/blog/posts/2022-01-26-elisp-time-related-functions.html</id>
     <published>2022-01-26T00:00:00Z</published>
     <updated>2022-01-26T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>時間関連のElisp関数</h1>
-  <div class="ui list">
-    <div class="item">Posted on January 26, 2022</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on January 26, 2022
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>時間関連のElisp関数</h1>
     </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
-  
-</div>
+      <div class="meta ui list">
+	<div class="item">Posted on January 26, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on January 26, 2022
+	</div>
 
-<p>時間に関連するElisp関数達</p>
+	
+
+	
+	<a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
+	
+      </div>
+
+    <div class="description">
+      <p>時間に関連するElisp関数達</p>
 <h1 id="ビルトイン関数群 ( src/timefns.c )">ビルトイン関数群 ( <code>src/timefns.c</code> )</h1>
 <p>エポック秒 (1970年1月1日0時0分0秒からの経過時間) で時間を 扱います。 基本的には <code>format-time-string</code> を用いて変換することになります。</p>
 <h2 id="format-time-string"><code>format-time-string</code></h2>
@@ -611,6 +662,11 @@ elisp
 </div>
 <p>(1 30 2022)</p>
 <p>となります</p>
+    </div>
+  </div>
+  
+
+</div>
 ]]></summary>
 </entry>
 <entry>
@@ -619,24 +675,27 @@ elisp
     <id>https://cj-bc.github.io/blog/posts/2022-01-06-haskell-trap-of-foldl1.html</id>
     <published>2022-01-06T00:00:00Z</published>
     <updated>2022-01-06T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>foldl1/foldr1のワナ – Foldableが空だと死ぬ</h1>
-  <div class="ui list">
-    <div class="item">Posted on January  6, 2022</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on January  9, 2022
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>foldl1/foldr1のワナ – Foldableが空だと死ぬ</h1>
     </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;fold&#39;." href="/tags/fold.html" class="ui tag label">fold</a>
-  
-</div>
+      <div class="meta ui list">
+	<div class="item">Posted on January  6, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on January  9, 2022
+	</div>
 
-<p>当たり前といえば当たり前だけど、気付くのに数十分くらいはかかってしまったのでメモ</p>
+	
+
+	
+	<a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;fold&#39;." href="/tags/fold.html" class="ui tag label">fold</a>
+	
+      </div>
+
+    <div class="description">
+      <p>当たり前といえば当たり前だけど、気付くのに数十分くらいはかかってしまったのでメモ</p>
 <p><code>foldl1</code> / <code>foldr1</code> はそれぞれ <code>foldl</code> / <code>foldr</code> の亜種で、後者が初期Accumlatorを 指定した後に対象の <code>Foldable</code> を渡す必要がある一方、 <code>1</code> が付いているシリーズは 対象の <code>Foldable</code> から初期Accumlatorを取得する。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -666,6 +725,11 @@ CallStack (from HasCallStack):
   error, called at ./Data/Vector/Internal/Check.hs:87:5 in vector-0.12.3.0-DdzviVbdPFECkUuJzBxnHY:Data.Vector.Internal.Check
 </code></pre>
 </div>
+    </div>
+  </div>
+  
+
+</div>
 ]]></summary>
 </entry>
 <entry>
@@ -674,24 +738,27 @@ CallStack (from HasCallStack):
     <id>https://cj-bc.github.io/blog/posts/2022-01-04-android-retrofit2-api-declaration-should-not-start-with-slash.html</id>
     <published>2022-01-04T00:00:00Z</published>
     <updated>2022-01-04T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>Retrofit2のAPI定義はスラッシュで始めない</h1>
-  <div class="ui list">
-    <div class="item">Posted on January  4, 2022</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on January  4, 2022
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>Retrofit2のAPI定義はスラッシュで始めない</h1>
     </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;android&#39;." href="/tags/android.html" class="ui tag label">android</a><a title="All pages tagged &#39;retrofit2&#39;." href="/tags/retrofit2.html" class="ui tag label">retrofit2</a><a title="All pages tagged &#39;kotlin&#39;." href="/tags/kotlin.html" class="ui tag label">kotlin</a>
-  
-</div>
+      <div class="meta ui list">
+	<div class="item">Posted on January  4, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on January  4, 2022
+	</div>
 
-<p><a href="https://square.github.io/retrofit/">retrofit</a>を使用してAPIを叩く際、</p>
+	
+
+	
+	<a title="All pages tagged &#39;android&#39;." href="/tags/android.html" class="ui tag label">android</a><a title="All pages tagged &#39;retrofit2&#39;." href="/tags/retrofit2.html" class="ui tag label">retrofit2</a><a title="All pages tagged &#39;kotlin&#39;." href="/tags/kotlin.html" class="ui tag label">kotlin</a>
+	
+      </div>
+
+    <div class="description">
+      <p><a href="https://square.github.io/retrofit/">retrofit</a>を使用してAPIを叩く際、</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 kotlin
@@ -721,6 +788,11 @@ kotlin
 <h1 id="おまけ: baseUrlにslashなし&amp;API宣言にslashありは動かない">おまけ: baseUrlにslashなし&amp;API宣言にslashありは動かない</h1>
 <p>最終的に同じになりそうだから試してみたが、エラーが出て駄目でした。 baseUrlはslashで終わらないといけないらしい。</p>
 <div class="line-block">java.lang.IllegalArgumentException: baseUrl must end in /: <a href="https://misskey.io/api">https://misskey.io/api</a></div>
+    </div>
+  </div>
+  
+
+</div>
 ]]></summary>
 </entry>
 <entry>
@@ -729,24 +801,27 @@ kotlin
     <id>https://cj-bc.github.io/blog/posts/2021-12-30-math-how-to-rasterize-line-with-begin-and-end-vertices-to-ascii-art.html</id>
     <published>2021-12-30T00:00:00Z</published>
     <updated>2021-12-30T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="ui center aligned icon header">
-  <h1>直線をAAにラスタライズする</h1>
-  <div class="ui list">
-    <div class="item">Posted on December 30, 2021</div>
-    <div class="item">
-      <i class="history icon"></i>
-      Updated on December 30, 2021
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>直線をAAにラスタライズする</h1>
     </div>
-  </div>
-    
-</div>
-<div class="info">
-  
-  <a title="All pages tagged &#39;math&#39;." href="/tags/math.html" class="ui tag label">math</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;AA&#39;." href="/tags/AA.html" class="ui tag label">AA</a>
-  
-</div>
+      <div class="meta ui list">
+	<div class="item">Posted on December 30, 2021</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on December 30, 2021
+	</div>
 
-<p><a href="https://github.com/Cj-bc/brick-3d">Cj-bc/brick-3d</a> を作成している間、「二つの頂点を結ぶ直線をAAに落としこむ」作業が 必要になったのでメモ。 今回は二つの頂点は平面上にあるものとして扱いますが、他の次元でも同じだと思います。</p>
+	
+
+	
+	<a title="All pages tagged &#39;math&#39;." href="/tags/math.html" class="ui tag label">math</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;AA&#39;." href="/tags/AA.html" class="ui tag label">AA</a>
+	
+      </div>
+
+    <div class="description">
+      <p><a href="https://github.com/Cj-bc/brick-3d">Cj-bc/brick-3d</a> を作成している間、「二つの頂点を結ぶ直線をAAに落としこむ」作業が 必要になったのでメモ。 今回は二つの頂点は平面上にあるものとして扱いますが、他の次元でも同じだと思います。</p>
 <div class="tldr">
 <ul>
 <li>二つの頂点を結ぶ直線の式は $ + t( - ) $ ( <span class="math inline"><em>t</em> ∈ [0..1]</span> )</li>
@@ -791,6 +866,11 @@ haskell
 </div>
 <p>という感じ(実際に使っているコードとは違う)</p>
 <h1 id="おまけ: 実際に使っている部分">おまけ: 実際に使っている部分</h1>
+    </div>
+  </div>
+  
+
+</div>
 ]]></summary>
 </entry>
 
