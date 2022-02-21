@@ -1,0 +1,51 @@
+* paccacheでキャッシュ削除する
+  :PROPERTIES:
+  :DATE: [2022-02-21 Mon 18:16]
+  :TAGS: :archlinux:
+  :BLOG_POST_KIND: Memo
+  :BLOG_POST_PROGRESS: Published
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  :END:
+  
+  気が付いたら、pacmanのパッケージのキャッシュが大変な容量食っていた。
+
+  #+begin_src sh :results raw
+    du -sh /var/cache/pacman/pkg
+  #+end_src
+
+  #+RESULTS:
+  13G	/var/cache/pacman/pkg
+  
+  13ギガバイト...流石に食べすぎ...
+
+  [[https://wiki.archlinux.jp/index.php/Pacman#.E3.83.91.E3.83.83.E3.82.B1.E3.83.BC.E3.82.B8.E3.82.AD.E3.83.A3.E3.83.83.E3.82.B7.E3.83.A5.E3.81.AE.E5.89.8A.E9.99.A4][archwiki -- pacman]]にある「パッケージキャッシュの削除に従ってやってみる。
+  ツールを使うことが推奨されていたので、今回は該当パッケージ aur:pacman-contrib を入れて
+  ~paccache~ を使ってみる。
+
+  
+  #+begin_src sh
+    sudo pacman -S pacman-contrib
+  #+end_src
+
+
+  #+begin_src sh
+    paccache -r
+  #+end_src
+
+  #+RESULTS:
+  ==> Privilege escalation required
+  [sudo] me のパスワード:
+
+  ==> finished: 1647 packages removed (disk space saved: 6.28 GiB)
+
+  #+begin_src sh :results raw
+    du -sh /var/cache/pacman/pkg
+  #+end_src
+
+  #+RESULTS:
+  6.4G	/var/cache/pacman/pkg
+  
+
+  大分減った
