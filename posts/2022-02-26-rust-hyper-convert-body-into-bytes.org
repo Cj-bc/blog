@@ -1,0 +1,25 @@
+* HttpのリクエストからBodyをBytesで取り出す
+  :PROPERTIES:
+  :DATE: [2022-02-26 Sat 21:43]
+  :TAGS: :rust:hyper:http:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2022-02-26 Sat 21:49]--[2022-02-26 Sat 22:27] =>  0:38
+  :END:
+  
+  [[https://docs.rs/crate/hyper/0.13.8][Hyper]]の[[https://docs.rs/hyper/0.13.8/hyper/body/struct.Body.html][Body]]を[[https://docs.rs/hyper/0.13.8/hyper/body/struct.Bytes.html][Bytes]]に変換する方法について、何気に調べるの苦労したのでメモ。
+
+
+  ~hyper::body~ に用意されている [[https://docs.rs/hyper/0.13.8/hyper/body/fn.to_bytes.html][to_bytes]]関数を使えばよい。
+
+  HttpのRequrestからBodyは [[https://docs.rs/http/0.2.1/http/request/struct.Request.html#method.into_body][ ~into_body~ ]]で取れるので、それを ~to_bytes~ に与えてあげる。
+  つまり:
+
+  #+begin_src rust
+    let bytes_body: Bytes = hyper::body::to_bytes(req.into_body())
+  #+end_src
+
+
