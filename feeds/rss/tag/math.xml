@@ -7,8 +7,50 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/math.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Mon, 21 Feb 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Sat, 26 Feb 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-02-26-rust-hyper-convert-body-into-bytes</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-02-26-rust-hyper-convert-body-into-bytes.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>HttpのリクエストからBodyをBytesで取り出す</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on February 26, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on February 27, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a><a title="All pages tagged &#39;hyper&#39;." href="/tags/hyper.html" class="ui tag label">hyper</a><a title="All pages tagged &#39;http&#39;." href="/tags/http.html" class="ui tag label">http</a>
+	
+      </div>
+
+    <div class="description">
+      <p><a href="https://docs.rs/crate/hyper/0.13.8">Hyper</a>の<a href="https://docs.rs/hyper/0.13.8/hyper/body/struct.Body.html">Body</a>を<a href="https://docs.rs/hyper/0.13.8/hyper/body/struct.Bytes.html">Bytes</a>に変換する方法について、何気に調べるの苦労したのでメモ。</p>
+<p><code>hyper::body</code> に用意されている <a href="https://docs.rs/hyper/0.13.8/hyper/body/fn.to_bytes.html">to<sub>bytes</sub></a>関数を使えばよい。</p>
+<p>HttpのRequrestからBodyは <a href="https://docs.rs/http/0.2.1/http/request/struct.Request.html#method.into_body"> <code>into_body</code> </a>で取れるので、それを <code>to_bytes</code> に与えてあげる。 つまり:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> bytes_body<span class="op">:</span> Bytes <span class="op">=</span> <span class="pp">hyper::body::</span>to_bytes(req<span class="op">.</span>into_body())</span></code></pre></div>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Sat, 26 Feb 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-02-26-rust-hyper-convert-body-into-bytes.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-02-21-archlinux-use-paccache</title>
     <link>https://cj-bc.github.io/blog/posts/2022-02-21-archlinux-use-paccache.html</link>
     <description><![CDATA[<div id="body-content">
@@ -794,69 +836,6 @@ CallStack (from HasCallStack):
 ]]></description>
     <pubDate>Thu, 06 Jan 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-01-06-haskell-trap-of-foldl1.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-01-04-android-retrofit2-api-declaration-should-not-start-with-slash</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-01-04-android-retrofit2-api-declaration-should-not-start-with-slash.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content">
-    <div class="ui center aligned icon header">
-      <h1>Retrofit2のAPI定義はスラッシュで始めない</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on January  4, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on January  4, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;android&#39;." href="/tags/android.html" class="ui tag label">android</a><a title="All pages tagged &#39;retrofit2&#39;." href="/tags/retrofit2.html" class="ui tag label">retrofit2</a><a title="All pages tagged &#39;kotlin&#39;." href="/tags/kotlin.html" class="ui tag label">kotlin</a>
-	
-      </div>
-
-    <div class="description">
-      <p><a href="https://square.github.io/retrofit/">retrofit</a>を使用してAPIを叩く際、</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-kotlin
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>   <span class="kw">import</span> <span class="im">retrofit2</span><span class="op">.</span><span class="im">Call</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">import</span> <span class="im">retrofit2</span><span class="op">.</span><span class="im">http</span><span class="op">.</span><span class="im">GET</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>   <span class="kw">public</span> <span class="kw">interface</span> MyApi <span class="op">{</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">@GET</span><span class="op">(</span><span class="st">&quot;endpoint/example&quot;</span><span class="op">)</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> abstract <span class="kw">fun</span> <span class="fu">exampleGet</span><span class="op">():</span> <span class="dt">Call</span><span class="op">&lt;</span><span class="dt">ExampleResponse</span><span class="op">&gt;</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>// <span class="fu">ExampleResponse</span>はどこかで定義されているものとする</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>   }</span></code></pre></div>
-</div>
-<p>とかするわけなんですが、この <code>@GET</code> に与えるパスの先頭に <code>/</code> をつけてはいけない。 そうするとHTTP Status Code 404を吐かれてしまう。 代わりに、 <code>retrofit2.Retrofit.Builder()</code> の <code>baseUrl</code> に渡すURLの末尾に <code>/</code> をつける。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-kotlin
-</div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ダメ</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">@GET</span><span class="op">(</span><span class="st">&quot;/endpoint/example&quot;</span><span class="op">)</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> abstract <span class="kw">fun</span> <span class="fu">exampleGet</span><span class="op">():</span> <span class="dt">Call</span><span class="op">&lt;</span><span class="dt">ExampleResponse</span><span class="op">&gt;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>// <span class="fu">OK</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>@<span class="fu">GET</span><span class="op">(</span>&quot;<span class="va">endpoint</span>/<span class="va">example</span>&quot;<span class="op">)</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="fu">abstract</span> <span class="kw">fun</span> <span class="fu">exampleGet</span><span class="op">():</span> <span class="dt">Call</span><span class="op">&lt;</span><span class="dt">ExampleResponse</span><span class="op">&gt;</span></span></code></pre></div>
-</div>
-<h1 id="おまけ: baseUrlにslashなし&amp;API宣言にslashありは動かない">おまけ: baseUrlにslashなし&amp;API宣言にslashありは動かない</h1>
-<p>最終的に同じになりそうだから試してみたが、エラーが出て駄目でした。 baseUrlはslashで終わらないといけないらしい。</p>
-<div class="line-block">java.lang.IllegalArgumentException: baseUrl must end in /: <a href="https://misskey.io/api">https://misskey.io/api</a></div>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Tue, 04 Jan 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-01-04-android-retrofit2-api-declaration-should-not-start-with-slash.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 

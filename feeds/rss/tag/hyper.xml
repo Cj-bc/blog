@@ -1,0 +1,843 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>CLI! CLI! CLI!</title>
+        <link>https://cj-bc.github.io/blog</link>
+        <description><![CDATA[Cj-bc's personal blog posts.]]></description>
+        <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/hyper.xml" rel="self"
+                   type="application/rss+xml" />
+        <lastBuildDate>Sat, 26 Feb 2022 00:00:00 UT</lastBuildDate>
+        <item>
+    <title>2022-02-26-rust-hyper-convert-body-into-bytes</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-02-26-rust-hyper-convert-body-into-bytes.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>HttpのリクエストからBodyをBytesで取り出す</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on February 26, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on February 27, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a><a title="All pages tagged &#39;hyper&#39;." href="/tags/hyper.html" class="ui tag label">hyper</a><a title="All pages tagged &#39;http&#39;." href="/tags/http.html" class="ui tag label">http</a>
+	
+      </div>
+
+    <div class="description">
+      <p><a href="https://docs.rs/crate/hyper/0.13.8">Hyper</a>の<a href="https://docs.rs/hyper/0.13.8/hyper/body/struct.Body.html">Body</a>を<a href="https://docs.rs/hyper/0.13.8/hyper/body/struct.Bytes.html">Bytes</a>に変換する方法について、何気に調べるの苦労したのでメモ。</p>
+<p><code>hyper::body</code> に用意されている <a href="https://docs.rs/hyper/0.13.8/hyper/body/fn.to_bytes.html">to<sub>bytes</sub></a>関数を使えばよい。</p>
+<p>HttpのRequrestからBodyは <a href="https://docs.rs/http/0.2.1/http/request/struct.Request.html#method.into_body"> <code>into_body</code> </a>で取れるので、それを <code>to_bytes</code> に与えてあげる。 つまり:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> bytes_body<span class="op">:</span> Bytes <span class="op">=</span> <span class="pp">hyper::body::</span>to_bytes(req<span class="op">.</span>into_body())</span></code></pre></div>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Sat, 26 Feb 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-02-26-rust-hyper-convert-body-into-bytes.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2022-02-21-archlinux-use-paccache</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-02-21-archlinux-use-paccache.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>paccacheでキャッシュ削除する</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on February 21, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on February 21, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a>
+	
+      </div>
+
+    <div class="description">
+      <p>気が付いたら、pacmanのパッケージのキャッシュが大変な容量食っていた。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh" data-results="raw"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">du</span> <span class="at">-sh</span> /var/cache/pacman/pkg</span></code></pre></div>
+</div>
+<p>13G	/var/cache/pacman/pkg</p>
+<p>13ギガバイト…流石に食べすぎ…</p>
+<p><a href="https://wiki.archlinux.jp/index.php/Pacman#.E3.83.91.E3.83.83.E3.82.B1.E3.83.BC.E3.82.B8.E3.82.AD.E3.83.A3.E3.83.83.E3.82.B7.E3.83.A5.E3.81.AE.E5.89.8A.E9.99.A4">archwiki – pacman</a>にある「パッケージキャッシュの削除に従ってやってみる。 ツールを使うことが推奨されていたので、今回は該当パッケージ aur:pacman-contrib を入れて <code>paccache</code> を使ってみる。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> pacman <span class="at">-S</span> pacman-contrib</span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">paccache</span> <span class="at">-r</span></span></code></pre></div>
+</div>
+<p>==&gt; Privilege escalation required [sudo] me のパスワード:</p>
+<p>==&gt; finished: 1647 packages removed (disk space saved: 6.28 GiB)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb4" data-org-language="sh" data-results="raw"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">du</span> <span class="at">-sh</span> /var/cache/pacman/pkg</span></code></pre></div>
+</div>
+<p>6.4G	/var/cache/pacman/pkg</p>
+<p>大分減った</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Mon, 21 Feb 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-02-21-archlinux-use-paccache.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2022-02-14-hakyll-retrive-org-file-property-drawer-in-compiler</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-02-14-hakyll-retrive-org-file-property-drawer-in-compiler.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>hakyllでOrgのPROPERTIESドロワーの情報を使う方法</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on February 14, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on February 14, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;hakyll&#39;." href="/tags/hakyll.html" class="ui tag label">hakyll</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;blog&#39;." href="/tags/blog.html" class="ui tag label">blog</a>
+	
+      </div>
+
+    <div class="description">
+      <p>解決方法が知りたい場合 <span class="spurious-link" target="*解決方法"><em>*解決方法</em></span>まで飛ばして下さい。</p>
+<p>私のこのブログでも使っているので参考までに: <a href="https://github.com/Cj-bc/blog/tree/source">Cj-bc/blog</a></p>
+<ul>
+<li><strong>Hakyllの提供している <code>Metadata</code> は使わない</strong> よ</li>
+<li>Postを処理する <code>Rules</code> 内でpandocを用いて取り出し、 <code>saveSnapshot</code> するよ</li>
+</ul>
+<h1 id="Hakyllのメタデータとは">Hakyllのメタデータとは</h1>
+<p>Hakyllでは、作者やタイトル・タグ等のデータを "メタデータ"として特別なフォーマットを用いて扱います。</p>
+<p>デフォルトでは</p>
+<ul>
+<li>Yamlヘッダー形式</li>
+<li>対応する <code>.metadata</code> ファイルからの読み込み</li>
+</ul>
+<p>の2種類の方法により収集され、テンプレートの中で例えば</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+html
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode html SourceCode"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;h1&gt;</span>$title$<span class="kw">&lt;/h1&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;h2&gt;</span>Author: $author$<span class="kw">&lt;/h2&gt;</span></span></code></pre></div>
+</div>
+<p>のようにして使用されることになります。</p>
+<h1 id="問題点">問題点</h1>
+<p>Orgファイル(他のファイル形式でも)では、元々メタデータ用の 構文を持っています。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+org
+</div>
+<pre class="org SourceCode"><code>#+TITLE: タイトルのメタデータです
+</code></pre>
+</div>
+<p>とする形式(<strong>この記事では扱いません!!!</strong>)と</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+org
+</div>
+<pre class="org SourceCode"><code>* 見出し
+  :PROPERTIES:
+  :AUTHOR: Cj.bc-sd
+  :END:
+</code></pre>
+</div>
+<p>とするプロパティを用いる形式の二つです。</p>
+<p>特にOrg文書はOrg-modeとの連携が大事になり、出来ることならそれ自体の 形式を使いたいわけです。</p>
+<p>しかし、残念ながら <strong>後から <code>Metadata</code> を更新する方法はなさそう</strong> です。 そのため、 上記の情報等を Org propertiesから読み込むことができません。</p>
+<h2 id="余談: 書き換えられない証拠">余談: 書き換えられない証拠</h2>
+<p><code>Metadata</code> を扱える型クラス <code>MonadMetadata</code> の<a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Compiler.Internal.html#line-207"> <code>Compiler</code> インスタンス</a>を見てみると、 <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Compiler.Internal.html#compilerGetMetadata"> <code>compilerGetMetadata</code> </a> &gt; <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.MetadataCache.html#resourceMetadata"> <code>resourceMetadata</code> </a> &gt; <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.MetadataCache.html#load"> <code>load</code> (<code>Compiler</code> の loadとは別)</a> &gt; <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.Metadata.html#loadMetadata"> <code>loadMetadata</code> </a> &gt; の中で、色々な関数において直接 ファイルを読み込んでパースしているのがわかります。</p>
+<h1 id="解決方法">解決方法</h1>
+<p>orgファイルを読み込む時にPandocのデータ型から取り出し、 <code>Snapshot</code> に仕舞っておくという手法を取ります。</p>
+<h2 id="1. 投稿の内容を Pandoc 型として取得する">1. 投稿の内容を <code>Pandoc</code> 型として取得する</h2>
+<p><a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:pandocCompiler"> <code>pandocCompiler</code> </a> を使うと <code>String</code> 型に変換されてしまいメタデータが消えるため、 <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:readPandoc"> <code>readPandoc</code> </a>若しくは<a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:readPandocWith"> <code>readPandocWith</code> </a>を使います。(オプションを変更したい場合は <code>readPandocWith</code> の方を使います。)</p>
+<p><a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Core-Compiler.html#v:getResourceBody"> <code>getResourceBody</code> </a>を用いることで、今処理しているファイルの中身が取れるのでそれを <code>readPandoc</code> に渡します。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>     match <span class="st">&quot;posts/*.org&quot;</span> <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>route idRoute</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>compiler <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- ↓ここの行のこと</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  postPandoc <span class="ot">&lt;-</span> getResourceBody <span class="op">&gt;&gt;=</span> readPandoc</span></code></pre></div>
+</div>
+<h2 id="2. Pandoc からProperties drawerの情報を取り出す">2. <code>Pandoc</code> からProperties drawerの情報を取り出す</h2>
+<p>PROPERTIES drawerに入っている情報は、 該当のheadlineのAttributeとして保存されます。 <a href="https://hackage.haskell.org/package/pandoc-types-1.22.1/docs/Text-Pandoc-Definition.html#t:Pandoc"> <code>Pandoc</code> </a>の <code>Meta</code> <strong>ではない</strong> ので注意してください。</p>
+<p>Org文章でいうHeadlineは、Pandocでは<a href="https://hackage.haskell.org/package/pandoc-types-1.22.1/docs/Text-Pandoc-Definition.html#t:Block"> <code>Block</code> </a>の <code>Header</code> に あたります。この中の <code>Attr</code> にkey-value Pairとして格納されています。</p>
+<p>以下は実装からの引用(一部抜粋):</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>   <span class="co">-- | Block element.</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">data</span> <span class="dt">Block</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- | Header - level (integer) and text (inlines)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="dt">Header</span> <span class="dt">Int</span> <span class="dt">Attr</span> [<span class="dt">Inline</span>]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>   <span class="co">-- | Attributes: identifier, classes, key-value pairs</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>   <span class="kw">type</span> <span class="dt">Attr</span> <span class="ot">=</span> (<span class="dt">Text</span>, [<span class="dt">Text</span>], [(<span class="dt">Text</span>, <span class="dt">Text</span>)])</span></code></pre></div>
+</div>
+<p>具体的には、先程の <code>postPandoc</code> の中身を調べていくことになります。</p>
+<p>私は、各投稿の最初には必ずLevel1のheadlineが来るようにしているので Level1の <code>Header</code> が来ることを期待して取り出す処理をかきます。</p>
+<p>様々な状況に対応させたい場合、ここはもう少し丁寧にやった方が良いと思います。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>   match <span class="st">&quot;posts/*.org&quot;</span> <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>route idRoute</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>compiler <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  (<span class="dt">Pandoc</span> _ blocks) <span class="ot">&lt;-</span> getResourceBody <span class="op">&gt;&gt;=</span> readPandoc</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> properties <span class="ot">=</span> <span class="kw">case</span> blocks <span class="kw">of</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>       (<span class="dt">Header</span> <span class="dv">1</span> (_<span class="op">:</span>_<span class="op">:</span>kv) _) <span class="ot">-&gt;</span> kv</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>       _ <span class="ot">-&gt;</span> [] </span></code></pre></div>
+</div>
+<h2 id="3. お目当ての情報を取り出す">3. お目当ての情報を取り出す</h2>
+<p>先程作った <code>properties</code> 変数(<code>properties :: [(Text, Text)]</code>)は <code>(プロパティ名, プロパティの値)</code> という構造になっているので、 必要なプロパティを取り出します。 今回は例として、 <code>AUTHOR</code> を取り出すことにします。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>    match <span class="st">&quot;posts/*.org&quot;</span> <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a> route idRoute</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a> compiler <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>   (<span class="dt">Pandoc</span> _ blocks) <span class="ot">&lt;-</span> getResourceBody <span class="op">&gt;&gt;=</span> readPandoc</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>   <span class="kw">let</span> properties     <span class="ot">=</span> <span class="kw">case</span> blocks <span class="kw">of</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>     (<span class="dt">Header</span> <span class="dv">1</span> (_<span class="op">:</span>_<span class="op">:</span>kv) _) <span class="ot">-&gt;</span> kv</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>     _ <span class="ot">-&gt;</span> [] </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>authorProperty <span class="ot">=</span> fromMaybe <span class="st">&quot;著者不明&quot;</span> <span class="op">$</span> <span class="fu">lookup</span> <span class="st">&quot;AUTHOR&quot;</span> properties</span></code></pre></div>
+</div>
+<h2 id="4. Snapshotに仕舞っておく">4. Snapshotに仕舞っておく</h2>
+<p><code>Snapshot</code> に仕舞っておくことで、 後に他の <code>Compiler</code> や <code>Context</code> の中から使用することができます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>    match <span class="st">&quot;posts/*.org&quot;</span> <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a> route idRoute</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a> compiler <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>   (<span class="dt">Pandoc</span> _ blocks) <span class="ot">&lt;-</span> getResourceBody <span class="op">&gt;&gt;=</span> readPandoc</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>   <span class="kw">let</span> properties     <span class="ot">=</span> <span class="kw">case</span> blocks <span class="kw">of</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>     (<span class="dt">Header</span> <span class="dv">1</span> (_<span class="op">:</span>_<span class="op">:</span>kv) _) <span class="ot">-&gt;</span> kv</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>     _ <span class="ot">-&gt;</span> [] </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>authorProperty <span class="ot">=</span> fromMaybe <span class="st">&quot;著者不明&quot;</span> <span class="op">$</span> <span class="fu">lookup</span> <span class="st">&quot;AUTHOR&quot;</span> properties</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>   saveSnapshot <span class="st">&quot;title&quot;</span> <span class="op">=&lt;&lt;</span> makeItem authorProperty</span></code></pre></div>
+</div>
+<h2 id="5. 他の場所から使う(別の Compiler 編)">5. 他の場所から使う(別の <code>Compiler</code> 編)</h2>
+<p>上記のステップの後、別のCompilerモナドからtitleプロパティの値を使うことができるようになりました。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>loadSnapshotBody <span class="st">&quot;&quot;</span> <span class="st">&quot;title&quot;</span></span></code></pre></div>
+</div>
+<h2 id="6. 他の場所から使う(Context 編)">6. 他の場所から使う(<code>Context</code> 編)</h2>
+<p>実はこれが一番やりたかったことでした。 Contextの中から <code>loadSnapshotBody</code> で読み込むことで <code>Identifier</code> 毎に違う値を取り出すことができるため、 <code>listField</code> を使う際に各要素毎に違う値を持たせることができます。</p>
+<p>そのためには <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Template-Context.html#v:field"> <code>field</code> </a>関数を直接使います。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ot">titleField&#39; ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Context</span> <span class="dt">String</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>titleField&#39; key <span class="ot">=</span> field key <span class="op">$</span> \item <span class="ot">-&gt;</span> loadSnapshotBody (itemIdentifier item) <span class="st">&quot;title&quot;</span></span></code></pre></div>
+</div>
+<p>これで、与えられたキーに対して"title"というSnapshotの値を入れこむことができるようになりました。</p>
+<p><code>listField</code> で使う例はこんな感じです(<a href="https://github.com/Cj-bc/blog/blob/189a4d6df236c3155d098d870fc36ac9e4fc13b5/MyBlog/Contexts.hs#L98-L100">このブログのコード</a>だったりします):</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- | Common Contexts for pages that holds post list</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ot">postListCtx ::</span> [<span class="dt">Item</span> <span class="dt">String</span>] <span class="ot">-&gt;</span> <span class="dt">Context</span> b</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>postListCtx posts <span class="ot">=</span> listField <span class="st">&quot;posts&quot;</span> (titleField&#39; <span class="st">&quot;title&quot;</span> <span class="op">&lt;&gt;</span> postCtx) (<span class="fu">return</span> posts)</span></code></pre></div>
+</div>
+<h1 id="参考情報">参考情報</h1>
+<p>実は、メタデータの収集元については他にも困っている人がそれなりに いるようで、Githubにissueがいくつか立っています。</p>
+<dl>
+<dt><a href="https://github.com/jaspervdj/hakyll/issues/529">#529</a></dt>
+<dd>メタデータのパーサーを指定できるようにしたいよというissue
+</dd>
+<dt><a href="https://github.com/jaspervdj/hakyll/issues/700">#700</a></dt>
+<dd><code>#+TITLE</code> 形式のメタデータを読み込む方法についての議論issue (walkaroundあり)
+</dd>
+<dt><a href="https://github.com/jaspervdj/hakyll/issues/643">#643</a></dt>
+<dd>Pandocがメタデータとしてパースした情報を使えるようにしたいというissue
+</dd>
+</dl>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Mon, 14 Feb 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-02-14-hakyll-retrive-org-file-property-drawer-in-compiler.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>ViewBindingでの設定がきちんと反映されていなかった理由がわかった</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on February  8, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on February  8, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;android&#39;." href="/tags/android.html" class="ui tag label">android</a><a title="All pages tagged &#39;viewbinding&#39;." href="/tags/viewbinding.html" class="ui tag label">viewbinding</a>
+	
+      </div>
+
+    <div class="description">
+      <p>分かる人が見ればすぐ分かる凡ミスなのだけど、結構時間掛かってしまったので 置いておきます。</p>
+<h1 id="問題">問題</h1>
+<p>以下のようなコードを書いていました。 ViewBindingを用いて、 <code>myButton</code> が押された時に実行される <code>OnClickListener</code> を 設定しているものです。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+kotlin
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">class</span> MyFragment<span class="op">:</span> <span class="dt">Fragment</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">override</span> <span class="kw">fun</span> <span class="fu">onCreateView</span><span class="op">(</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">inflater</span><span class="op">:</span> <span class="dt">LayoutInflater</span><span class="op">,</span> <span class="va">container</span><span class="op">:</span> <span class="dt">ViewGroup</span><span class="op">?,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">savedInstanceState</span><span class="op">:</span> <span class="dt">Bundle</span><span class="op">?</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">):</span> <span class="dt">View</span><span class="op">?</span> <span class="op">{</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">view</span><span class="op">:</span> View<span class="op">?</span> <span class="op">=</span> inflater<span class="op">.</span>inflate<span class="op">(</span>R<span class="op">.</span>layout<span class="op">.</span>fragment_mine<span class="op">,</span> container<span class="op">,</span> <span class="kw">false</span><span class="op">)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">binding</span> <span class="op">=</span> MyBinding<span class="op">.</span>inflate<span class="op">(</span>inflator<span class="op">)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    binding<span class="op">.</span>myButton<span class="op">.</span>setOnClickListener <span class="op">{</span> view <span class="op">-&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>           <span class="co">// Do some action</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> view</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>   <span class="op">}</span></span></code></pre></div>
+</div>
+<p>でも、実行して <code>myButon</code> を押してみても一向に反応しない。 他のレイアウトだとか何だとかをいじってみたりしたけど変わらず…</p>
+<h1 id="原因">原因</h1>
+<p>初めから <a href="https://developer.android.com/topic/libraries/view-binding?hl=ja">フラグメントでビューバインディングを使用する</a>を読んでおけばよかったはなしではある。</p>
+<p>凄く単純な話で、 <strong>戻り値として <code>binding.root</code> を返す必要があります!!!!!!</strong></p>
+<p>今だと <code>inflater.inflate</code> で作成したViewを返していて、それには <code>OnClickListener</code> が設定 されていないんですね。 なので呼び出されるはずもないという。なるほど~~~!!!!</p>
+<p>と、いうことで結果的にはこうすれば良いのでした:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a> class MyFragment: Fragment() {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>   override fun onCreateView(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>inflater: LayoutInflater, container: ViewGroup?,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>savedInstanceState: Bundle?</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>   ): View? {</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a> - 	     val view: View? = inflater.inflate(R.layout.fragment_mine, container, false)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>val binding = MyBinding.inflate(inflator)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>binding.myButton.setOnClickListener { view -&gt;</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>       // Do some action</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a> - 	     return view</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a> +	     return binding.root</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>   }</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a> }</span></code></pre></div>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Tue, 08 Feb 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2022-02-07-pass-command-is-affected-by-tree-version-2</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-02-07-pass-command-is-affected-by-tree-version-2.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>passコマンドが最近上手く動かなくなった時の対処法[tree v2.0.0関連]</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on February  7, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on February  7, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;pass&#39;." href="/tags/pass.html" class="ui tag label">pass</a><a title="All pages tagged &#39;tool&#39;." href="/tags/tool.html" class="ui tag label">tool</a>
+	
+      </div>
+
+    <div class="description">
+      <p><a href="https://git.zx2c4.com/password-store/about/">pass</a>コマンドは内部で<a href="http://mama.indstate.edu/users/ice/tree/">tree</a>コマンドを使用しています。 このところ、treeコマンドの使用変更によってpassコマンドが上手く動かなくなったので その原因と対処法について書き残しておきます。</p>
+<ul>
+<li>tree v2.0.0 から、FD 3が開いていると標準出力の替わりにそちらにデータをJSONで流すよ</li>
+<li>今迄通りの挙動をさせるには、 <code>3&gt;&amp;-</code> 等でFD 3を閉じてあげる必要があるよ</li>
+<li><a href="https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09">passはこれに対処済み</a>だけどまだリリースされてないのでユーザーサイドでは使えないよ</li>
+<li>現状passを呼び出す際は必ず <code>pass 3&gt;&amp;-</code> としておけば対策できるよ</li>
+</ul>
+<h1 id="原因">原因</h1>
+<p>treeの2.0.0リリースにて入った破壊的変更が原因です。</p>
+<p><a href="http://mama.indstate.edu/users/ice/tree/changes.html">treeのCHANGELOG</a>から引用させてもらうと</p>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>Output un-indented JSON on file descriptor 3 ("stddata") automatically if file descriptor 3 is present (currently Linux only.) Maybe switch to BSON.</p>
+</blockquote>
+</div>
+<p>ざっくりと訳すと「Linuxに於いては、File Descriptor 3が開いている場合はそこに整形されていないJSON を書き込むようになりました。BSONになるかもしれない」とのことです。</p>
+<p>pass自体も普通に使っていれば問題ないのですが、 <code>git credential</code> を呼んだ際はどうしてか 沢山ファイルディスクリプタが使用されます。</p>
+<p>私の環境下では以下のファイルディスクリプタが開いていました</p>
+<ul>
+<li>0 (標準入力)</li>
+<li>1 (標準出力)</li>
+<li>2 (標準エラー出力)</li>
+<li>255</li>
+<li>3</li>
+<li>4</li>
+<li>5</li>
+<li>6</li>
+</ul>
+<p>そう、ここで3番があったんですね…</p>
+<h1 id="対策">対策</h1>
+<p>必要なのは、treeコマンドのファイルディスクリプタの3番を閉じるだけです。</p>
+<h2 id="上流で行われている対策">上流で行われている対策</h2>
+<p>実はpassではこれに対して対策が取られており、<a href="https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09">commit:eea24967</a>にてコミットされています。</p>
+<p><strong>しかし</strong> 、2022/02/07現在ではこれはまだリリースされていないためエンドユーザーは使用できません。 (まぁgitでmasterから取って来て使うことは勿論出来ますが)</p>
+<p>はやいとこリリースされてほしい…</p>
+<h2 id="現状できること">現状できること</h2>
+<p>passを呼び出す際にfd 3を塞ぎます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pass</span> <span class="dv">3</span><span class="op">&gt;&amp;</span>-</span></code></pre></div>
+</div>
+<p>とすることで、passプロセスのファイルディスクリプタ3番を閉じることができます。 passを使用する何らかのスクリプトを書いている場合、当面はこうするのがよさそうです。</p>
+<h1 id="おまけ: &gt;&amp;- の意味">おまけ: <code>&gt;&amp;-</code> の意味</h1>
+<p>元は <code>[n]&gt;&amp;word</code> という形です。 <code>n</code> で指定された、出力のファイルディスクリプターを <code>word</code> で指定された番号の ファイルディスクリプターに複製します。 そして、 <strong>もし <code>word</code> が <code>-</code> であるなら</strong> 指定したファイルディスクリプターを閉じます。</p>
+<p>man:bash(1) <em>Redirection</em> 節の <em>Duplicating File Descriptors</em> に説明があります。</p>
+<h1 id="おまけ2: あるプログラムが開いているファイルデイスクリプターの一覧を取得する">おまけ2: あるプログラムが開いているファイルデイスクリプターの一覧を取得する</h1>
+<p>Linuxでは、カーネルがあらゆる情報を <strong>procファイルシステム</strong> に擬似的なファイルとして書き込んでくれています。 (man:proc(5))</p>
+<p>大抵はこれが <code>/proc</code> にマウントされているはずです。 各プロセスの情報は <code>/proc/${PID}/</code> ディレクトリ下に生成され、ファイルディスクリプターの 情報は <code>/proc/${PID}/fd</code> ディレクトリ下に生成されます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> /proc/<span class="va">$$</span>/fd</span></code></pre></div>
+</div>
+<table>
+<tbody>
+<tr class="odd">
+<td>0</td>
+</tr>
+<tr class="even">
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<h1 id="参考">参考</h1>
+<ul>
+<li><a href="https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09">passの修正コミット</a></li>
+<li><a href="https://github.com/archlinux/svntogit-community/blob/packages/pass/trunk/PKGBUILD">passの正式なURL取得元のPKGBUILD</a></li>
+<li><a href="http://mama.indstate.edu/users/ice/tree/changes.html">treeのCHANGELOG</a></li>
+<li><a href="https://www.archlinux.jp/packages/extra/x86_64/tree/">treeの正式なURL取得元のarchlinuxのパッケージページ</a></li>
+</ul>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Mon, 07 Feb 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-02-07-pass-command-is-affected-by-tree-version-2.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2022-02-05-emacs-leaf-custom-use-backquote-to-generate-list-value</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-02-05-emacs-leaf-custom-use-backquote-to-generate-list-value.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>[leaf]:customで動的に生成したリストを使う</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on February  5, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on February  5, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a>
+	
+      </div>
+
+    <div class="description">
+      <p><a href="https://github.com/conao3/leaf.el">conao3/leaf.el</a>に於いて、動的な値を <code>:custom</code> キーワードに与えるにはバッククォートを使う必要があります。 (<a href="https://qiita.com/conao3/items/347d7e472afd0c58fbd7#変数の変更について">conao3さんのQiita記事 「Emacs入門から始めるleaf.el入門」</a>にも記載があります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(leaf foo
+  :custom
+  `(foo-variable . ,(+ 3 3)))
+</code></pre>
+</div>
+<p>(backquoteについては <a href="info:elisp#Backquote">info:elisp#Backquote</a> を参照すると良いと思います。)</p>
+<p>先の事例では、リストではない値を割り当てていましたが、リストを割り当てる場合は 少しトリッキーになります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode" data-results="value raw replace"><code>`(org-agenda-list . &#39;,(directory-files &quot;~/Documents/org&quot; ))
+</code></pre>
+</div>
+<p>(org-agenda-list quote (foo.org bar.org))</p>
+<p>Org babelで実行して <code>RESULTS</code> を見てみると変な感じがしますが、動いているぽい。 <code>'</code> でクォートしてあげないと、完全に一つのリストになってしまいます。 これの理屈としては、恐らくバッククォートを用いたことで以下のように展開され:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(org-agenda-list . (&quot;path1&quot; . (&quot;path2&quot; . nil)))
+</code></pre>
+</div>
+<p>これはつまりリストの構成と同じなのでくっついてしまうんでしょうね。</p>
+<p>ちなみに、CDRがリストならDotted pair表示にはならないらしい (<a href="info:elisp#Dotted Pair Notation">info:elisp#Dotted Pair Notation</a>より) のでDotted pairの表示じゃないのは正常なようです。</p>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>When printing a list, the dotted pair notation is only used if the CDR of a cons cell is not a list.</p>
+</blockquote>
+</div>
+<p>まぁ普通のリストになっちゃうからそれはそうだよねっていう。</p>
+<h1 id="まだわからないこと">まだわからないこと</h1>
+<ul>
+<li><code>(org-agenda-files quote ("path1" "path2"))</code> と続いているが、なぜ <code>quote</code> がそこにあって動くのか？</li>
+<li>そもそも dotted Pairじゃなくしたらダメ…?(これはleafの仕様の話になってきます</li>
+</ul>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Sat, 05 Feb 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-02-05-emacs-leaf-custom-use-backquote-to-generate-list-value.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2022-01-29-gtk-shrink-window-region-after-expanding-it</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-01-29-gtk-shrink-window-region-after-expanding-it.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>[GTK] Expandされたウィンドウを縮小させる</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on January 29, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on January 30, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;gtk&#39;." href="/tags/gtk.html" class="ui tag label">gtk</a><a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a><a title="All pages tagged &#39;gui&#39;." href="/tags/gui.html" class="ui tag label">gui</a>
+	
+      </div>
+
+    <div class="description">
+      <p>Gtkでは、WindowやWidgetのサイズを小さめにしておき、 子要素が必要とする大きさが大きくなった際に必要に応じて拡張することができます。</p>
+<p>子要素が大きくなる時は自動的に拡張されますが、 逆に小さくなる時はこれが行われません。</p>
+<p>基本的にはそこまで問題がないのかもしれませんが、これが気になる時があります。</p>
+<h1 id="解決したい問題">解決したい問題</h1>
+<p><a href="https://github.com/elkowar/eww">elkowar/eww</a>というウィジェットアプリケーションがあります。 プリミティブで用意されているウィジェットを組み合わせることで色々なウィジェットを 定義できるのですが、そのプリミティブの中に "Revealer" というものがあります。</p>
+<p>これは Gtkにあるウィジェット<a href="https://docs.gtk.org/gtk3/class.Revealer.html">Revealer</a>であり、子要素を アニメーションによって表示したり隠したりすることができます。 Revealerを使った例が以下です。スライドアニメーションを用いて、 画面に出たり入ったりするウィジェットを作成することができました。</p>
+<p><a href="https://youtu.be/mYKXHcgTyo0">https://youtu.be/mYKXHcgTyo0</a></p>
+<p>しかしこれには一つ問題があります。</p>
+<p>上の動画では背景を透明にしているので気付きづらいのですが、 Revealerでスライドした時それを囲うウィンドウ自体の領域は動かず残ったままなのです!</p>
+<p><a href="https://youtu.be/3bU_D-JGisk">https://youtu.be/3bU_D-JGisk</a></p>
+<p>この動画で赤色がウィンドウ全体、青色がRevealer(を格納しているBox)です。 Revealerが右側に仕舞われた後も赤色のウィンドウが残っているのがわかるでしょうか。 この部分は透明にしたとしてもこのウィジェットとして判定されるので、 この下にあるものをクリックとかが出来なくなります。困った…</p>
+<h1 id="この問題の原因">この問題の原因</h1>
+<p>ウィジェットのサイズが <a href="https://docs.gtk.org/gtk3/method.Widget.set_size_request.html"><code>Widget.set_size_request</code></a>で設定されている時、 子要素の大きさがそれ以上になった場合は大きくなります。</p>
+<p>しかし、小さくなった際はそのまま残ります。</p>
+<p>そのため、Revealerが出てきた時は広がりますが仕舞った際はウィンドウはそのまま残ります。</p>
+<h1 id="解決策">解決策</h1>
+<p>端的に言うと、 <strong>自動的にサイズを縮小するものはありません</strong> (少なくとも調べた限りでは)。 替わりに、 <strong>ウィンドウの <code>resize</code> と「自動拡大」する特徴を組合せる</strong> ことが必要になります。</p>
+<p>以下の2ステップです:</p>
+<ol>
+<li>ウィンドウのサイズを最小(1,1)まで <code>resize</code> する</li>
+<li>Gtkクンが、子要素のサイズにぴったり合うように自動的に拡大してくれる</li>
+</ol>
+<p>見てわかる通り2はGtkがやってくれるので、ユーザー側でやるのは1の <code>resize</code> だけになります。 Widgetは <code>window</code> をプロパティとして所持しているので、それの <code>resize</code> を呼んであげます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>window<span class="op">.</span>gtk_window<span class="op">.</span>resize(<span class="dv">1</span><span class="op">,</span><span class="dv">1</span>)<span class="op">;</span></span></code></pre></div>
+</div>
+<h2 id="具体的な処置">具体的な処置</h2>
+<p>Revealerの状態が変更された時に <code>resize</code> を実行できれば良いのですが、 残念ながらその状態の変更に関するSignalは存在しません。 なので、Revealerの状態が変更される可能性のある時にresizeを呼んであげます。</p>
+<p>今回はEwwが扱っている全てのウィンドウに対してこれを実行したいので、 openされているWindow全てのウィンドウで <code>resize</code> を実行してあげます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>DaemonCommand::UpdateVars(mappings) =&gt; {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    for (var_name, new_value) in mappings {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a> self.update_global_state(var_name, new_value);</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>     +     for (_, _window) in self.open_windows.clone() {</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>     +         _window.gtk_window.resize(1,1);</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>     +     }</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<p><a href="https://github.com/Cj-bc/eww/commit/4109bbd601a777e25bdbbc6383ff42893181ed4a">実際に使っているコミットはこちら</a></p>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Sat, 29 Jan 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-01-29-gtk-shrink-window-region-after-expanding-it.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2022-01-27-linux-get-list-of-mounted-filesystems</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-01-27-linux-get-list-of-mounted-filesystems.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>archlinuxで本当にマウントされているファイルシステムの一覧を得る</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on January 27, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on January 27, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged &#39;filesystem&#39;." href="/tags/filesystem.html" class="ui tag label">filesystem</a><a title="All pages tagged &#39;proc&#39;." href="/tags/proc.html" class="ui tag label">proc</a><a title="All pages tagged &#39;kernel&#39;." href="/tags/kernel.html" class="ui tag label">kernel</a>
+	
+      </div>
+
+    <div class="description">
+      <p>マウントされているファイルシステムを知るために、 今迄 <code>lsblk -f</code> を使っていたが、これでは全て表示されないことを知ってしまった。</p>
+<p>全て表示するには <code>/proc/mounts</code> を参照した方が良い。 <code>proc</code> 自身はカーネルのデータ構造へのインターフェースを提供する 仮想ファイルシステム(man:proc より)で、</p>
+<p>その中でも <code>/proc/mounts</code> はマウントされているものの情報を提供してくれている。</p>
+<p>このファイルのフォーマットはfstabで使用されているものと同じなのでそちらを参照すること。 (今回は、何がマウントされているかを知りたかっただけなので詳しくは触れない)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /proc/mounts</span></code></pre></div>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Thu, 27 Jan 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-01-27-linux-get-list-of-mounted-filesystems.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2022-01-26-elisp-time-related-functions</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-01-26-elisp-time-related-functions.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>時間関連のElisp関数</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on January 26, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on January 26, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
+	
+      </div>
+
+    <div class="description">
+      <p>時間に関連するElisp関数達</p>
+<h1 id="ビルトイン関数群 ( src/timefns.c )">ビルトイン関数群 ( <code>src/timefns.c</code> )</h1>
+<p>エポック秒 (1970年1月1日0時0分0秒からの経過時間) で時間を 扱います。 基本的には <code>format-time-string</code> を用いて変換することになります。</p>
+<h2 id="format-time-string"><code>format-time-string</code></h2>
+<p>help:format-time-string 指定したフォーマットで時間を文字列にしてくれる関数。</p>
+<h2 id="current-time"><code>current-time</code></h2>
+<p>help:current-time 現在の時間を返します</p>
+<h2 id="time-add"><code>time-add</code></h2>
+<p>help:time-add</p>
+<p>時間を加算してくれます。負数を足せば減算できます。 足す値のフォーマットは <code>current-time</code> で使われているものと同じで ちょっと分かりづらいですが、 <a href="https://github.com/org-roam/org-roam/blob/445e3594b25c1c29dd269e99cb0cc958ed3f28b0/extensions/org-roam-dailies.el#L157">org-roam-dailes.elで使われている箇所</a>を参考にすると、 1日足し引きするには <code>86400</code> を足し引きすればよさそうです。</p>
+<p>n日足すには:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>     (defun nth-day (n)
+&quot;Return nth day from today&quot;
+(time-add (* n 86400) nil))
+</code></pre>
+</div>
+<h1 id="calendar">calendar</h1>
+<p>曜日等を扱うことができます。</p>
+<h2 id="calendar-nth-named-day"><code>calendar-nth-named-day</code></h2>
+<p>help:calendar-nth-named-day</p>
+<p>「特定の日付の前後の特定の曜日」を返すことができます。 曜日は数値で指定され、 0が日曜日、1が月曜日…となっていきます (参考: help:calendar-week-start-day)</p>
+<p>例えば、今日2022年1月26日の次の日曜日を取得するには</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode" data-export="both" data-results="raw"><code>(calendar-nth-named-day 1 0 1 2022 26)
+</code></pre>
+</div>
+<p>(1 30 2022)</p>
+<p>となります</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Wed, 26 Jan 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-01-26-elisp-time-related-functions.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2022-01-06-haskell-trap-of-foldl1</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-01-06-haskell-trap-of-foldl1.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>foldl1/foldr1のワナ – Foldableが空だと死ぬ</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on January  6, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on January  9, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;fold&#39;." href="/tags/fold.html" class="ui tag label">fold</a>
+	
+      </div>
+
+    <div class="description">
+      <p>当たり前といえば当たり前だけど、気付くのに数十分くらいはかかってしまったのでメモ</p>
+<p><code>foldl1</code> / <code>foldr1</code> はそれぞれ <code>foldl</code> / <code>foldr</code> の亜種で、後者が初期Accumlatorを 指定した後に対象の <code>Foldable</code> を渡す必要がある一方、 <code>1</code> が付いているシリーズは 対象の <code>Foldable</code> から初期Accumlatorを取得する。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">foldl1</span><span class="ot"> ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">foldr1</span><span class="ot"> ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">foldl</span><span class="ot">  ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">foldr</span><span class="ot">  ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span></code></pre></div>
+</div>
+<p>で、 <code>1</code> シリーズを使用するのであれば <strong>対象の <code>Foldable</code> が空にならないように確認する</strong> 必要がある。 もし空であった場合、 <code>Prelude.foldr1</code> であれば</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> Prelude.foldr1 <span class="fu">const</span> []</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">***</span> <span class="dt">Exception</span><span class="op">:</span> Prelude.foldr1<span class="op">:</span> empty list</span></code></pre></div>
+</div>
+<p>というエラーが出る。 ちなみに <code>vector</code> パッケージの <code>Data.Vector.foldr1</code> も同じような問題がある。 その場合のエラーメッセージはこんな感じ</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+shell
+</div>
+<pre class="shell SourceCode"><code>brick3D: ./Data/Vector/Fusion/Stream/Monadic.hs:929 (foldl1M): empty stream
+CallStack (from HasCallStack):
+  error, called at ./Data/Vector/Internal/Check.hs:87:5 in vector-0.12.3.0-DdzviVbdPFECkUuJzBxnHY:Data.Vector.Internal.Check
+</code></pre>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Thu, 06 Jan 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-01-06-haskell-trap-of-foldl1.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+
+    </channel>
+</rss>
