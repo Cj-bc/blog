@@ -7,8 +7,95 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/Emacs.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Sat, 26 Feb 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Sun, 27 Feb 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-02-27</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-02-27.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>2022/02/27</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on February 27, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on February 27, 2022
+	</div>
+
+	
+
+	
+	
+	
+      </div>
+
+    <div class="description">
+      <h1 id="出来事">出来事</h1>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=Ev5qzT0VnTo">みあちゃんスプラ大会配信</a></li>
+<li><a href="https://www.youtube.com/watch?v=GTa2HxIsBPM">Kizuna AI last live</a></li>
+<li>AIちゃんスリープ</li>
+<li><a href="https://www.youtube.com/watch?v=v3yWm0Crtaw">ゆあちゃんエルデン24時間耐久(前半)</a></li>
+<li><a href="https://twitter.com/nalgami/status/1497372362857410560?s=20&amp;t=LkmskTlFlhhJ_pjBXMqLYA">POLYGON TAILOR IMPORT最初のFACEATSM BUG MA-1</a>発売日アナウンス、3/1発売</li>
+</ul>
+<h1 id="やったこと">やったこと</h1>
+<ul>
+<li>piping-server-rustにクリップボード連携機能を自分用に作成した
+<ul>
+<li><a href="https://github.com/nwtgck/piping-server-rust">nwtgck/piping-server-rust</a>のコード読んだ</li>
+<li><a href="https://doc.rust-jp.rs/book-ja/">The Rust Programming Language 日本語版</a>の1,3章読んだ</li>
+</ul></li>
+<li>配信見てた</li>
+</ul>
+<h1 id="知ったこと">知ったこと</h1>
+<ul>
+<li>Rustの基礎をちょこっと</li>
+<li><a href="https://docs.rs/crate/clipboard/0.5.0">Rust – Clipboard</a></li>
+<li>Rustで子プロセスを作成するには <code>std::process::Command</code></li>
+<li>子プロセスとの通信は <code>std::process::Stdio</code></li>
+<li>RustでHttpのBody取るには <code>hyper::body::to_bytes</code> が使える</li>
+</ul>
+<h2 id="Rustで子プロセス">Rustで子プロセス</h2>
+<ol>
+<li><p>子プロセスの作成:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/process/struct.Command.html#method.stdin">std::process::Command</a></li>
+<li><a href="https://doc.rust-lang.org/std/process/struct.Command.html#method.spawn">std::process::Command.spawn()</a></li>
+</ul>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> child<span class="op">:</span> Child <span class="op">=</span> <span class="pp">Command::</span>new(<span class="st">&quot;xsel&quot;</span>)<span class="op">.</span>arg(<span class="st">&quot;-xb&quot;</span>)<span class="op">.</span>stdin(<span class="pp">Stdio::</span>piped())<span class="op">.</span>spawn()<span class="op">.</span>expect(<span class="st">&quot;Failed to spawn child process&quot;</span>)</span></code></pre></div>
+</div></li>
+<li><p>パイプへの書き込み</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/process/struct.Child.html">std::process::Child</a></li>
+<li><a href="https://doc.rust-lang.org/std/process/struct.ChildStdin.html">std::process::ChildStdin</a></li>
+</ul>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// takeよくわかってない</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b<span class="op">:</span> Bytes <span class="op">=</span> <span class="co">// </span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>child<span class="op">.</span>stdin<span class="op">.</span>take()<span class="op">.</span>expect(<span class="st">&quot;failed to open stdin&quot;</span>)<span class="op">.</span>write(b)<span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
+</div></li>
+</ol>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Sun, 27 Feb 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-02-27.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-02-26-rust-hyper-convert-body-into-bytes</title>
     <link>https://cj-bc.github.io/blog/posts/2022-02-26-rust-hyper-convert-body-into-bytes.html</link>
     <description><![CDATA[<div id="body-content">
@@ -48,6 +135,51 @@ rust
 ]]></description>
     <pubDate>Sat, 26 Feb 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-02-26-rust-hyper-convert-body-into-bytes.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2022-02-23</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-02-23.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>2022/02/23</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on February 23, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on February 27, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;blog&#39;." href="/tags/blog.html" class="ui tag label">blog</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="やること">やること</h1>
+<h1 id="他にやったこと">他にやったこと</h1>
+<ul>
+<li>ゴ魔乙まぐろなちゃんコラボ進めた、「マグロナ推し」称号まで取った!</li>
+<li>ゴ魔乙ランク100になった</li>
+<li>Blenderアニメーション書き出し</li>
+</ul>
+<h1 id="知ったこと">知ったこと</h1>
+<ul>
+<li>blenderのDriverはpythonコード、NeosVRのDrive nodeと同じようなもの</li>
+<li></li>
+</ul>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Wed, 23 Feb 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-02-23.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 <item>
@@ -705,137 +837,6 @@ bash
 ]]></description>
     <pubDate>Thu, 27 Jan 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-01-27-linux-get-list-of-mounted-filesystems.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-01-26-elisp-time-related-functions</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-01-26-elisp-time-related-functions.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content">
-    <div class="ui center aligned icon header">
-      <h1>時間関連のElisp関数</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on January 26, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on January 26, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
-	
-      </div>
-
-    <div class="description">
-      <p>時間に関連するElisp関数達</p>
-<h1 id="ビルトイン関数群 ( src/timefns.c )">ビルトイン関数群 ( <code>src/timefns.c</code> )</h1>
-<p>エポック秒 (1970年1月1日0時0分0秒からの経過時間) で時間を 扱います。 基本的には <code>format-time-string</code> を用いて変換することになります。</p>
-<h2 id="format-time-string"><code>format-time-string</code></h2>
-<p>help:format-time-string 指定したフォーマットで時間を文字列にしてくれる関数。</p>
-<h2 id="current-time"><code>current-time</code></h2>
-<p>help:current-time 現在の時間を返します</p>
-<h2 id="time-add"><code>time-add</code></h2>
-<p>help:time-add</p>
-<p>時間を加算してくれます。負数を足せば減算できます。 足す値のフォーマットは <code>current-time</code> で使われているものと同じで ちょっと分かりづらいですが、 <a href="https://github.com/org-roam/org-roam/blob/445e3594b25c1c29dd269e99cb0cc958ed3f28b0/extensions/org-roam-dailies.el#L157">org-roam-dailes.elで使われている箇所</a>を参考にすると、 1日足し引きするには <code>86400</code> を足し引きすればよさそうです。</p>
-<p>n日足すには:</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>     (defun nth-day (n)
-&quot;Return nth day from today&quot;
-(time-add (* n 86400) nil))
-</code></pre>
-</div>
-<h1 id="calendar">calendar</h1>
-<p>曜日等を扱うことができます。</p>
-<h2 id="calendar-nth-named-day"><code>calendar-nth-named-day</code></h2>
-<p>help:calendar-nth-named-day</p>
-<p>「特定の日付の前後の特定の曜日」を返すことができます。 曜日は数値で指定され、 0が日曜日、1が月曜日…となっていきます (参考: help:calendar-week-start-day)</p>
-<p>例えば、今日2022年1月26日の次の日曜日を取得するには</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode" data-export="both" data-results="raw"><code>(calendar-nth-named-day 1 0 1 2022 26)
-</code></pre>
-</div>
-<p>(1 30 2022)</p>
-<p>となります</p>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Wed, 26 Jan 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-01-26-elisp-time-related-functions.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-01-06-haskell-trap-of-foldl1</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-01-06-haskell-trap-of-foldl1.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content">
-    <div class="ui center aligned icon header">
-      <h1>foldl1/foldr1のワナ – Foldableが空だと死ぬ</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on January  6, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on January  9, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;fold&#39;." href="/tags/fold.html" class="ui tag label">fold</a>
-	
-      </div>
-
-    <div class="description">
-      <p>当たり前といえば当たり前だけど、気付くのに数十分くらいはかかってしまったのでメモ</p>
-<p><code>foldl1</code> / <code>foldr1</code> はそれぞれ <code>foldl</code> / <code>foldr</code> の亜種で、後者が初期Accumlatorを 指定した後に対象の <code>Foldable</code> を渡す必要がある一方、 <code>1</code> が付いているシリーズは 対象の <code>Foldable</code> から初期Accumlatorを取得する。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-haskell
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">foldl1</span><span class="ot"> ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">foldr1</span><span class="ot"> ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">foldl</span><span class="ot">  ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">foldr</span><span class="ot">  ::</span> <span class="dt">Foldable</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> t a <span class="ot">-&gt;</span> a</span></code></pre></div>
-</div>
-<p>で、 <code>1</code> シリーズを使用するのであれば <strong>対象の <code>Foldable</code> が空にならないように確認する</strong> 必要がある。 もし空であった場合、 <code>Prelude.foldr1</code> であれば</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-haskell
-</div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> Prelude.foldr1 <span class="fu">const</span> []</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">***</span> <span class="dt">Exception</span><span class="op">:</span> Prelude.foldr1<span class="op">:</span> empty list</span></code></pre></div>
-</div>
-<p>というエラーが出る。 ちなみに <code>vector</code> パッケージの <code>Data.Vector.foldr1</code> も同じような問題がある。 その場合のエラーメッセージはこんな感じ</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-shell
-</div>
-<pre class="shell SourceCode"><code>brick3D: ./Data/Vector/Fusion/Stream/Monadic.hs:929 (foldl1M): empty stream
-CallStack (from HasCallStack):
-  error, called at ./Data/Vector/Internal/Check.hs:87:5 in vector-0.12.3.0-DdzviVbdPFECkUuJzBxnHY:Data.Vector.Internal.Check
-</code></pre>
-</div>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Thu, 06 Jan 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-01-06-haskell-trap-of-foldl1.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
