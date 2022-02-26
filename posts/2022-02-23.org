@@ -1,0 +1,17 @@
+* 2022/02/23
+  :PROPERTIES:
+  :DATE: [2022-02-23 Wed 18:03]
+  :TAGS: :blog:
+  :BLOG_POST_KIND: Diary
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+
+** やること
+** 他にやったこと
+   + ゴ魔乙まぐろなちゃんコラボ進めた、「マグロナ推し」称号まで取った!
+   + ゴ魔乙ランク100になった
+   + Blenderアニメーション書き出し
+** 知ったこと
+   + blenderのDriverはpythonコード、NeosVRのDrive nodeと同じようなもの
+   + 
