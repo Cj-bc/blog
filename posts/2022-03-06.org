@@ -1,0 +1,48 @@
+* 2022/03/06
+  :PROPERTIES:
+  :DATE: [2022-03-06 Sun 21:08]
+  :TAGS: :rust:
+  :BLOG_POST_KIND: Diary
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  
+** やったこと
+** 知ったこと
+*** 型変換には ~as~ キーワードが使える                                 :Rust:
+    型変換には ~try_from().unwrap()~ とか使っていたけれど、
+    実はプリミティブ型なら [[https://doc.rust-lang.org/std/keyword.as.html][ ~as~ キーワード]]である程度出来る。
+    例えば、以下の二つは等価。
+
+    #+begin_src rust
+      u32::try_from(1).unwrap();
+
+      1 as u32
+    #+end_src
+*** Iteratorの中に入ったOptionを外したいならflat_map                                 :Rust:
+    ~impl Iterator<Option<T>>~ を ~impl Iterator<T>~ に変換したい場合、 ~flat_map~ でいける。
+    Haskelでいうところの ~catMaybes :: [Maybe a] -> [a]~ に近い挙動をする。
+
+    元々こうやってたのが
+    
+    #+begin_src rust
+      let texts = vec!["this is", "an", "example"];
+      let v = vec![1,2,3];
+
+      v.map(|idx| texts.get(idx)).filter(|val| val.is_some()).map(|val| val.unwrap())
+    #+end_src
+
+    こう書ける
+
+    #+begin_src rust
+
+      let texts = vec!["this is", "an", "example"];
+      let v = vec![1,2,3];
+      v.filter_map(|idx| texts.get(idx);
+    #+end_src
+*** マイクラのサイト
+
+    https://njf.jp/minecraft/articles/2020-09-13-hoe.html
+
+    新しい仕組みになってからの村周りの情報とかがあってよい。
+** やること
