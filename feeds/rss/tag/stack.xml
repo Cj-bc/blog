@@ -7,8 +7,79 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/stack.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Sun, 27 Feb 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Sun, 06 Mar 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-03-06</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-03-06.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>2022/03/06</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March  6, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March  7, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="やったこと">やったこと</h1>
+<h1 id="知ったこと">知ったこと</h1>
+<h2 id="型変換には as キーワードが使える Rust">型変換には <code>as</code> キーワードが使える <span class="tag" data-tag-name="Rust"><span class="smallcaps">Rust</span></span></h2>
+<p>型変換には <code>try_from().unwrap()</code> とか使っていたけれど、 実はプリミティブ型なら <a href="https://doc.rust-lang.org/std/keyword.as.html"> <code>as</code> キーワード</a>である程度出来る。 例えば、以下の二つは等価。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">u32</span><span class="pp">::</span>try_from(<span class="dv">1</span>)<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="kw">as</span> <span class="dt">u32</span></span></code></pre></div>
+</div>
+<h2 id="Iteratorの中に入ったOptionを外したいならflatmap Rust">Iteratorの中に入ったOptionを外したいならflat<sub>map</sub> <span class="tag" data-tag-name="Rust"><span class="smallcaps">Rust</span></span></h2>
+<p><code>impl Iterator&lt;Option&lt;T&gt;&gt;</code> を <code>impl Iterator&lt;T&gt;</code> に変換したい場合、 <code>flat_map</code> でいける。 Haskelでいうところの <code>catMaybes :: [Maybe a] -&gt; [a]</code> に近い挙動をする。</p>
+<p>元々こうやってたのが</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> texts <span class="op">=</span> <span class="pp">vec!</span>[<span class="st">&quot;this is&quot;</span><span class="op">,</span> <span class="st">&quot;an&quot;</span><span class="op">,</span> <span class="st">&quot;example&quot;</span>]<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> v <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span>]<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>v<span class="op">.</span>map(<span class="op">|</span>idx<span class="op">|</span> texts<span class="op">.</span>get(idx))<span class="op">.</span>filter(<span class="op">|</span>val<span class="op">|</span> val<span class="op">.</span>is_some())<span class="op">.</span>map(<span class="op">|</span>val<span class="op">|</span> val<span class="op">.</span>unwrap())</span></code></pre></div>
+</div>
+<p>こう書ける</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> texts <span class="op">=</span> <span class="pp">vec!</span>[<span class="st">&quot;this is&quot;</span><span class="op">,</span> <span class="st">&quot;an&quot;</span><span class="op">,</span> <span class="st">&quot;example&quot;</span>]<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> v <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span>]<span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>v<span class="op">.</span>filter_map(<span class="op">|</span>idx<span class="op">|</span> texts<span class="op">.</span>get(idx)<span class="op">;</span></span></code></pre></div>
+</div>
+<h2 id="マイクラのサイト">マイクラのサイト</h2>
+<p><a href="https://njf.jp/minecraft/articles/2020-09-13-hoe.html">https://njf.jp/minecraft/articles/2020-09-13-hoe.html</a></p>
+<p>新しい仕組みになってからの村周りの情報とかがあってよい。</p>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Sun, 06 Mar 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-03-06.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-02-27</title>
     <link>https://cj-bc.github.io/blog/posts/2022-02-27.html</link>
     <description><![CDATA[<div id="body-content">
@@ -794,49 +865,6 @@ diff
 ]]></description>
     <pubDate>Sat, 29 Jan 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-01-29-gtk-shrink-window-region-after-expanding-it.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-01-27-linux-get-list-of-mounted-filesystems</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-01-27-linux-get-list-of-mounted-filesystems.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content">
-    <div class="ui center aligned icon header">
-      <h1>archlinuxで本当にマウントされているファイルシステムの一覧を得る</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on January 27, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on January 27, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged &#39;filesystem&#39;." href="/tags/filesystem.html" class="ui tag label">filesystem</a><a title="All pages tagged &#39;proc&#39;." href="/tags/proc.html" class="ui tag label">proc</a><a title="All pages tagged &#39;kernel&#39;." href="/tags/kernel.html" class="ui tag label">kernel</a>
-	
-      </div>
-
-    <div class="description">
-      <p>マウントされているファイルシステムを知るために、 今迄 <code>lsblk -f</code> を使っていたが、これでは全て表示されないことを知ってしまった。</p>
-<p>全て表示するには <code>/proc/mounts</code> を参照した方が良い。 <code>proc</code> 自身はカーネルのデータ構造へのインターフェースを提供する 仮想ファイルシステム(man:proc より)で、</p>
-<p>その中でも <code>/proc/mounts</code> はマウントされているものの情報を提供してくれている。</p>
-<p>このファイルのフォーマットはfstabで使用されているものと同じなのでそちらを参照すること。 (今回は、何がマウントされているかを知りたかっただけなので詳しくは触れない)</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /proc/mounts</span></code></pre></div>
-</div>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Thu, 27 Jan 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-01-27-linux-get-list-of-mounted-filesystems.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
