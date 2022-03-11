@@ -1,0 +1,27 @@
+* 2022/03/11
+  :PROPERTIES:
+  :DATE: [2022-03-11 Fri 17:55]
+  :TAGS: :elisp:
+  :BLOG_POST_KIND: Diary
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  
+
+** やったこと
+   + 散歩にいった(えらい)
+   + [[https://github.com/Cj-bc/dotfiles/blob/master/dotfiles/bin/screenshot][bin/screenshot]]の作成(スクショ用の小さなスクリプト)
+** 知ったこと
+   + [[http://osmo-pim.sourceforge.net/][osmo -- handy personal organizer]]
+     
+*** orgのRadio targetの仕組み
+    Radio target([[info:org#Radio targets]])を作成後、 ~C-c C-c~ すると help:org-activate-target-links が実行され、
+    help:org-target-link-regexp が更新される。
+
+
+    リンクを起動する際は ~C-c C-o~ によって help:org-open-at-point が呼ばれ、
+    help:org-link-open が呼ばれる。
+    Radio Targetの場合、 help:org-link--search-radio-target を呼び、そいつが
+    バッファ内からターゲットを探し出して移動する。
+    
+** やること
