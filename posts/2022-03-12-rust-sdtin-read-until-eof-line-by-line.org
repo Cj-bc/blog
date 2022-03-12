@@ -1,0 +1,43 @@
+* Stdinから一行ずつEOFまで読み込む時気をつけること
+  :PROPERTIES:
+  :DATE: [2022-03-12 Sat 11:57]
+  :TAGS: :rust:
+  :BLOG_POST_KIND: Memo
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2022-03-12 Sat 11:58]--[2022-03-12 Sat 12:10] =>  0:12
+  :END:
+  
+  一行一行読み込みたい場合、恐らく [[https://doc.rust-lang.org/stable/std/io/struct.Stdin.html#method.read_line][std::io::Stdin::read_line]]を使うと思う。
+  これは
+
+  #+begin_src rust
+    pub fn read_line(&self, buf: &mut String) -> Result<usize>
+  #+end_src
+
+  という型を持つが、 *EOFが来た時は ~Ok(0)~ を返す* 。
+  なので、EOFまで一行一行読んで何かしたい場合、
+
+  #+NAME: Okな例
+  #+begin_src rust
+    let mut buf = String::new();
+
+    while let Ok(bytes) = std::io::stdin().read_line(&buf) {
+	if bytes == 0 {
+	    break;
+	}
+	...
+    }
+  #+end_src
+
+
+  として *戻り値が0の場合ループを終了する処理を入れる必要がある* 。
+  私は ~Err()~ でくるかと思ってしまいハマった。なんともな...
+  型を信用しすぎたというか...ドキュメント読んでなかったというか...
+  (本体のドキュメントにないんだもん気付かんわ!!!)
+  
+
+** 参考資料
+   + [[https://doc.rust-lang.org/stable/std/io/trait.BufRead.html#method.read_line][std::io::BufRead::read_line]]
