@@ -7,8 +7,113 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/blog.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Sun, 06 Mar 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Sat, 12 Mar 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-03-12-rust-sdtin-read-until-eof-line-by-line</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-03-12-rust-sdtin-read-until-eof-line-by-line.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>Stdinから一行ずつEOFまで読み込む時気をつけること</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 12, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 12, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a>
+	
+      </div>
+
+    <div class="description">
+      <p>一行一行読み込みたい場合、恐らく <a href="https://doc.rust-lang.org/stable/std/io/struct.Stdin.html#method.read_line">std::io::Stdin::read<sub>line</sub></a>を使うと思う。 これは</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> read_line(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> buf<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">String</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;</span></span></code></pre></div>
+</div>
+<p>という型を持つが、 <strong>EOFが来た時は <code>Ok(0)</code> を返す</strong> 。 なので、EOFまで一行一行読んで何かしたい場合、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="Okな例"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="Okな例-1"><a href="#Okな例-1" aria-hidden="true" tabindex="-1"></a>   <span class="kw">let</span> <span class="kw">mut</span> buf <span class="op">=</span> <span class="dt">String</span><span class="pp">::</span>new()<span class="op">;</span></span>
+<span id="Okな例-2"><a href="#Okな例-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="Okな例-3"><a href="#Okな例-3" aria-hidden="true" tabindex="-1"></a>   <span class="kw">while</span> <span class="kw">let</span> <span class="cn">Ok</span>(bytes) <span class="op">=</span> <span class="pp">std::io::</span>stdin()<span class="op">.</span>read_line(<span class="op">&amp;</span>buf) <span class="op">{</span></span>
+<span id="Okな例-4"><a href="#Okな例-4" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> bytes <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="Okな例-5"><a href="#Okな例-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">break</span><span class="op">;</span></span>
+<span id="Okな例-6"><a href="#Okな例-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="Okな例-7"><a href="#Okな例-7" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span>
+<span id="Okな例-8"><a href="#Okな例-8" aria-hidden="true" tabindex="-1"></a>   <span class="op">}</span></span></code></pre></div>
+</div>
+<p>として <strong>戻り値が0の場合ループを終了する処理を入れる必要がある</strong> 。 私は <code>Err()</code> でくるかと思ってしまいハマった。なんともな… 型を信用しすぎたというか…ドキュメント読んでなかったというか… (本体のドキュメントにないんだもん気付かんわ!!!)</p>
+<h1 id="参考資料">参考資料</h1>
+<ul>
+<li><a href="https://doc.rust-lang.org/stable/std/io/trait.BufRead.html#method.read_line">std::io::BufRead::read<sub>line</sub></a></li>
+</ul>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Sat, 12 Mar 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-03-12-rust-sdtin-read-until-eof-line-by-line.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2022-03-11</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-03-11.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>2022/03/11</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 11, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 11, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="やったこと">やったこと</h1>
+<ul>
+<li>散歩にいった(えらい)</li>
+<li><a href="https://github.com/Cj-bc/dotfiles/blob/master/dotfiles/bin/screenshot">bin/screenshot</a>の作成(スクショ用の小さなスクリプト)</li>
+</ul>
+<h1 id="知ったこと">知ったこと</h1>
+<ul>
+<li><a href="http://osmo-pim.sourceforge.net/">osmo – handy personal organizer</a></li>
+</ul>
+<h2 id="orgのRadio targetの仕組み">orgのRadio targetの仕組み</h2>
+<p>Radio target(<a href="info:org#Radio targets">info:org#Radio targets</a>)を作成後、 <code>C-c C-c</code> すると help:org-activate-target-links が実行され、 help:org-target-link-regexp が更新される。</p>
+<p>リンクを起動する際は <code>C-c C-o</code> によって help:org-open-at-point が呼ばれ、 help:org-link-open が呼ばれる。 Radio Targetの場合、 help:org-link–search-radio-target を呼び、そいつが バッファ内からターゲットを探し出して移動する。</p>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Fri, 11 Mar 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-03-11.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-03-06</title>
     <link>https://cj-bc.github.io/blog/posts/2022-03-06.html</link>
     <description><![CDATA[<div id="body-content">
@@ -712,159 +817,6 @@ bash
 ]]></description>
     <pubDate>Mon, 07 Feb 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-02-07-pass-command-is-affected-by-tree-version-2.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-02-05-emacs-leaf-custom-use-backquote-to-generate-list-value</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-02-05-emacs-leaf-custom-use-backquote-to-generate-list-value.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content">
-    <div class="ui center aligned icon header">
-      <h1>[leaf]:customで動的に生成したリストを使う</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on February  5, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on February  5, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a>
-	
-      </div>
-
-    <div class="description">
-      <p><a href="https://github.com/conao3/leaf.el">conao3/leaf.el</a>に於いて、動的な値を <code>:custom</code> キーワードに与えるにはバッククォートを使う必要があります。 (<a href="https://qiita.com/conao3/items/347d7e472afd0c58fbd7#変数の変更について">conao3さんのQiita記事 「Emacs入門から始めるleaf.el入門」</a>にも記載があります。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>(leaf foo
-  :custom
-  `(foo-variable . ,(+ 3 3)))
-</code></pre>
-</div>
-<p>(backquoteについては <a href="info:elisp#Backquote">info:elisp#Backquote</a> を参照すると良いと思います。)</p>
-<p>先の事例では、リストではない値を割り当てていましたが、リストを割り当てる場合は 少しトリッキーになります。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode" data-results="value raw replace"><code>`(org-agenda-list . &#39;,(directory-files &quot;~/Documents/org&quot; ))
-</code></pre>
-</div>
-<p>(org-agenda-list quote (foo.org bar.org))</p>
-<p>Org babelで実行して <code>RESULTS</code> を見てみると変な感じがしますが、動いているぽい。 <code>'</code> でクォートしてあげないと、完全に一つのリストになってしまいます。 これの理屈としては、恐らくバッククォートを用いたことで以下のように展開され:</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>(org-agenda-list . (&quot;path1&quot; . (&quot;path2&quot; . nil)))
-</code></pre>
-</div>
-<p>これはつまりリストの構成と同じなのでくっついてしまうんでしょうね。</p>
-<p>ちなみに、CDRがリストならDotted pair表示にはならないらしい (<a href="info:elisp#Dotted Pair Notation">info:elisp#Dotted Pair Notation</a>より) のでDotted pairの表示じゃないのは正常なようです。</p>
-<div class="ui piled segment" style="z-index: 0">
-<blockquote>
-<p>When printing a list, the dotted pair notation is only used if the CDR of a cons cell is not a list.</p>
-</blockquote>
-</div>
-<p>まぁ普通のリストになっちゃうからそれはそうだよねっていう。</p>
-<h1 id="まだわからないこと">まだわからないこと</h1>
-<ul>
-<li><code>(org-agenda-files quote ("path1" "path2"))</code> と続いているが、なぜ <code>quote</code> がそこにあって動くのか？</li>
-<li>そもそも dotted Pairじゃなくしたらダメ…?(これはleafの仕様の話になってきます</li>
-</ul>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Sat, 05 Feb 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-02-05-emacs-leaf-custom-use-backquote-to-generate-list-value.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-01-29-gtk-shrink-window-region-after-expanding-it</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-01-29-gtk-shrink-window-region-after-expanding-it.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content">
-    <div class="ui center aligned icon header">
-      <h1>[GTK] Expandされたウィンドウを縮小させる</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on January 29, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on January 30, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;gtk&#39;." href="/tags/gtk.html" class="ui tag label">gtk</a><a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a><a title="All pages tagged &#39;gui&#39;." href="/tags/gui.html" class="ui tag label">gui</a>
-	
-      </div>
-
-    <div class="description">
-      <p>Gtkでは、WindowやWidgetのサイズを小さめにしておき、 子要素が必要とする大きさが大きくなった際に必要に応じて拡張することができます。</p>
-<p>子要素が大きくなる時は自動的に拡張されますが、 逆に小さくなる時はこれが行われません。</p>
-<p>基本的にはそこまで問題がないのかもしれませんが、これが気になる時があります。</p>
-<h1 id="解決したい問題">解決したい問題</h1>
-<p><a href="https://github.com/elkowar/eww">elkowar/eww</a>というウィジェットアプリケーションがあります。 プリミティブで用意されているウィジェットを組み合わせることで色々なウィジェットを 定義できるのですが、そのプリミティブの中に "Revealer" というものがあります。</p>
-<p>これは Gtkにあるウィジェット<a href="https://docs.gtk.org/gtk3/class.Revealer.html">Revealer</a>であり、子要素を アニメーションによって表示したり隠したりすることができます。 Revealerを使った例が以下です。スライドアニメーションを用いて、 画面に出たり入ったりするウィジェットを作成することができました。</p>
-<p><a href="https://youtu.be/mYKXHcgTyo0">https://youtu.be/mYKXHcgTyo0</a></p>
-<p>しかしこれには一つ問題があります。</p>
-<p>上の動画では背景を透明にしているので気付きづらいのですが、 Revealerでスライドした時それを囲うウィンドウ自体の領域は動かず残ったままなのです!</p>
-<p><a href="https://youtu.be/3bU_D-JGisk">https://youtu.be/3bU_D-JGisk</a></p>
-<p>この動画で赤色がウィンドウ全体、青色がRevealer(を格納しているBox)です。 Revealerが右側に仕舞われた後も赤色のウィンドウが残っているのがわかるでしょうか。 この部分は透明にしたとしてもこのウィジェットとして判定されるので、 この下にあるものをクリックとかが出来なくなります。困った…</p>
-<h1 id="この問題の原因">この問題の原因</h1>
-<p>ウィジェットのサイズが <a href="https://docs.gtk.org/gtk3/method.Widget.set_size_request.html"><code>Widget.set_size_request</code></a>で設定されている時、 子要素の大きさがそれ以上になった場合は大きくなります。</p>
-<p>しかし、小さくなった際はそのまま残ります。</p>
-<p>そのため、Revealerが出てきた時は広がりますが仕舞った際はウィンドウはそのまま残ります。</p>
-<h1 id="解決策">解決策</h1>
-<p>端的に言うと、 <strong>自動的にサイズを縮小するものはありません</strong> (少なくとも調べた限りでは)。 替わりに、 <strong>ウィンドウの <code>resize</code> と「自動拡大」する特徴を組合せる</strong> ことが必要になります。</p>
-<p>以下の2ステップです:</p>
-<ol>
-<li>ウィンドウのサイズを最小(1,1)まで <code>resize</code> する</li>
-<li>Gtkクンが、子要素のサイズにぴったり合うように自動的に拡大してくれる</li>
-</ol>
-<p>見てわかる通り2はGtkがやってくれるので、ユーザー側でやるのは1の <code>resize</code> だけになります。 Widgetは <code>window</code> をプロパティとして所持しているので、それの <code>resize</code> を呼んであげます。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-rust
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>window<span class="op">.</span>gtk_window<span class="op">.</span>resize(<span class="dv">1</span><span class="op">,</span><span class="dv">1</span>)<span class="op">;</span></span></code></pre></div>
-</div>
-<h2 id="具体的な処置">具体的な処置</h2>
-<p>Revealerの状態が変更された時に <code>resize</code> を実行できれば良いのですが、 残念ながらその状態の変更に関するSignalは存在しません。 なので、Revealerの状態が変更される可能性のある時にresizeを呼んであげます。</p>
-<p>今回はEwwが扱っている全てのウィンドウに対してこれを実行したいので、 openされているWindow全てのウィンドウで <code>resize</code> を実行してあげます。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-diff
-</div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>DaemonCommand::UpdateVars(mappings) =&gt; {</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    for (var_name, new_value) in mappings {</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a> self.update_global_state(var_name, new_value);</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>     +     for (_, _window) in self.open_windows.clone() {</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>     +         _window.gtk_window.resize(1,1);</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>     +     }</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-</div>
-<p><a href="https://github.com/Cj-bc/eww/commit/4109bbd601a777e25bdbbc6383ff42893181ed4a">実際に使っているコミットはこちら</a></p>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Sat, 29 Jan 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-01-29-gtk-shrink-window-region-after-expanding-it.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- Stdinから一行ずつEOFまで読み込む時気をつけること</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2022-03-12-rust-sdtin-read-until-eof-line-by-line.html" /><meta property="og:title" content="Stdinから一行ずつEOFまで読み込む時気をつけること" /><meta property="og:description" content="<p>一行一行読み込みたい場合、恐らく <a href=" https: doc.rust-lang.org stable std io struct.Stdin.html#method.read_l" />
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>Stdinから一行ずつEOFまで読み込む時気をつけること</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 12, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 12, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged 'rust'." href="../tags/rust.html" class="ui tag label">rust</a>
+	
+      </div>
+
+    <div class="description">
+      <p>一行一行読み込みたい場合、恐らく <a href="https://doc.rust-lang.org/stable/std/io/struct.Stdin.html#method.read_line">std::io::Stdin::read<sub>line</sub></a>を使うと思う。 これは</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> read_line(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> buf<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">String</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;</span></span></code></pre></div>
+</div>
+<p>という型を持つが、 <strong>EOFが来た時は <code>Ok(0)</code> を返す</strong> 。 なので、EOFまで一行一行読んで何かしたい場合、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="Okな例"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="Okな例-1"><a href="#Okな例-1" aria-hidden="true" tabindex="-1"></a>   <span class="kw">let</span> <span class="kw">mut</span> buf <span class="op">=</span> <span class="dt">String</span><span class="pp">::</span>new()<span class="op">;</span></span>
+<span id="Okな例-2"><a href="#Okな例-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="Okな例-3"><a href="#Okな例-3" aria-hidden="true" tabindex="-1"></a>   <span class="kw">while</span> <span class="kw">let</span> <span class="cn">Ok</span>(bytes) <span class="op">=</span> <span class="pp">std::io::</span>stdin()<span class="op">.</span>read_line(<span class="op">&amp;</span>buf) <span class="op">{</span></span>
+<span id="Okな例-4"><a href="#Okな例-4" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> bytes <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="Okな例-5"><a href="#Okな例-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">break</span><span class="op">;</span></span>
+<span id="Okな例-6"><a href="#Okな例-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="Okな例-7"><a href="#Okな例-7" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span>
+<span id="Okな例-8"><a href="#Okな例-8" aria-hidden="true" tabindex="-1"></a>   <span class="op">}</span></span></code></pre></div>
+</div>
+<p>として <strong>戻り値が0の場合ループを終了する処理を入れる必要がある</strong> 。 私は <code>Err()</code> でくるかと思ってしまいハマった。なんともな… 型を信用しすぎたというか…ドキュメント読んでなかったというか… (本体のドキュメントにないんだもん気付かんわ!!!)</p>
+<h1 id="参考資料">参考資料</h1>
+<ul>
+<li><a href="https://doc.rust-lang.org/stable/std/io/trait.BufRead.html#method.read_line">std::io::BufRead::read<sub>line</sub></a></li>
+</ul>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
