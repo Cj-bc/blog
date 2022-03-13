@@ -7,8 +7,109 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/blog.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Sat, 12 Mar 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Sun, 13 Mar 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>アプリケーション毎のオーディオレベルを調整する</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 13, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 13, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;pulseAudio&#39;." href="/tags/pulseAudio.html" class="ui tag label">pulseAudio</a><a title="All pages tagged &#39;linux&#39;." href="/tags/linux.html" class="ui tag label">linux</a><a title="All pages tagged &#39;環境構築&#39;." href="/tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89.html" class="ui tag label">環境構築</a>
+	
+      </div>
+
+    <div class="description">
+      <p>PulseAudioを使用している際、たまにアプリケーション毎の 音量バランスがバグる(過剰な表現)時がある。</p>
+<p>私の環境では、qutebrowserの音量が異常に小さくZoomやShotcutの 音量が異常にデカくなっており、Zoom会議に参加しながら共有された YouTubeの動画を見ることができない等の問題がありました。</p>
+<h1 id="原因">原因</h1>
+<p><code class="verbatim">sink-input</code> のVolumeが小さくなっていることがあります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pactl</span> list sink-inputs</span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Sink Input #37
+ Driver: protocol-native.c
+ Owner Module: 11
+ Client: 124102
+ Sink: 0
+ Sample Specification: s16le 2ch 48000Hz
+ Channel Map: front-left,front-right
+ Format: pcm, format.sample_format = &quot;\&quot;s16le\&quot;&quot;  format.rate = &quot;48000&quot;  format.channels = &quot;2&quot;  format.channel_map = &quot;\&quot;front-left,front-right\&quot;&quot;
+ Corked: no
+ Mute: no
+ Volume: front-left: 65536 / 100% / 0.00 dB,   front-right: 65536 / 100% / 0.00 dB
+         balance 0.00
+ Buffer Latency: 131813 usec
+ Sink Latency: 100186 usec
+ Resample method: speex-float-1
+ Properties:
+  media.name = &quot;Audio Stream&quot;
+  application.name = &quot;shotcut&quot;
+  native-protocol.peer = &quot;UNIX socket client&quot;
+  native-protocol.version = &quot;35&quot;
+  application.process.id = &quot;882662&quot;
+  application.process.user = &quot;me&quot;
+  application.process.host = &quot;myHost&quot;
+  application.process.binary = &quot;shotcut&quot;
+  application.language = &quot;C&quot;
+  window.x11.display = &quot;:0&quot;
+  application.process.machine_id = &quot;&lt;省略&gt;&quot;
+  application.process.session_id = &quot;2&quot;
+  module-stream-restore.id = &quot;sink-input-by-application-name:shotcut&quot;
+
+</code></pre>
+</div>
+<p>この中の <code>Volume:</code> に表示されているのが、各Sink inputのボリュームです。 100%より小さい場合、100%にした方が良いかもしれません。 注意点として、 <strong>実際に音を鳴らしているなど音声が流れているないし流れる状態にある</strong> 必要があります。 そうでない場合、Sink inputの一覧に表示されません。</p>
+<h1 id="解決方法">解決方法</h1>
+<p>該当の <code class="verbatim">sink-input</code> のボリュームを100%にしてあげます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pactl</span> set-sink-input-volume <span class="op">&lt;</span>ID<span class="op">&gt;</span> 100%</span></code></pre></div>
+</div>
+<p>SinkのIDは、先程の <code>pactl list sink-inputs</code> の冒頭にある</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Sink Input #37
+</code></pre>
+</div>
+<p>の#以降の数字で、この例だと37です。</p>
+<h1 id="解説">解説</h1>
+<p>PulseAudioでは、全てのアプリケーションは "client" としてサーバーに接続されます。 そして各アプリケーションに於いて何かしら音声が流れると、新しい <code class="verbatim">sink-input</code> が作成 されて登録されます。ここから、音声が <code class="verbatim">sink</code> に渡って音が鳴るわけです。</p>
+<p>この <code class="verbatim">sink-input</code> にはそれぞれにボリュームが設定されているので、そこを調節してあげると アプリケーション間のボリューム調整ができます。</p>
+<p>PulseAudioの仕組み等については、<a href="https://gavv.github.io/articles/pulseaudio-under-the-hood/#sound-processing">Pulseaudio under the hood</a>というブログ記事が、 公式で紹介されているほど詳しいです。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Sun, 13 Mar 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-03-12-rust-sdtin-read-until-eof-line-by-line</title>
     <link>https://cj-bc.github.io/blog/posts/2022-03-12-rust-sdtin-read-until-eof-line-by-line.html</link>
     <description><![CDATA[<div id="body-content">
@@ -708,115 +809,6 @@ diff
 ]]></description>
     <pubDate>Tue, 08 Feb 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-02-07-pass-command-is-affected-by-tree-version-2</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-02-07-pass-command-is-affected-by-tree-version-2.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content">
-    <div class="ui center aligned icon header">
-      <h1>passコマンドが最近上手く動かなくなった時の対処法[tree v2.0.0関連]</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on February  7, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on February  7, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;pass&#39;." href="/tags/pass.html" class="ui tag label">pass</a><a title="All pages tagged &#39;tool&#39;." href="/tags/tool.html" class="ui tag label">tool</a>
-	
-      </div>
-
-    <div class="description">
-      <p><a href="https://git.zx2c4.com/password-store/about/">pass</a>コマンドは内部で<a href="http://mama.indstate.edu/users/ice/tree/">tree</a>コマンドを使用しています。 このところ、treeコマンドの使用変更によってpassコマンドが上手く動かなくなったので その原因と対処法について書き残しておきます。</p>
-<ul>
-<li>tree v2.0.0 から、FD 3が開いていると標準出力の替わりにそちらにデータをJSONで流すよ</li>
-<li>今迄通りの挙動をさせるには、 <code>3&gt;&amp;-</code> 等でFD 3を閉じてあげる必要があるよ</li>
-<li><a href="https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09">passはこれに対処済み</a>だけどまだリリースされてないのでユーザーサイドでは使えないよ</li>
-<li>現状passを呼び出す際は必ず <code>pass 3&gt;&amp;-</code> としておけば対策できるよ</li>
-</ul>
-<h1 id="原因">原因</h1>
-<p>treeの2.0.0リリースにて入った破壊的変更が原因です。</p>
-<p><a href="http://mama.indstate.edu/users/ice/tree/changes.html">treeのCHANGELOG</a>から引用させてもらうと</p>
-<div class="ui piled segment" style="z-index: 0">
-<blockquote>
-<p>Output un-indented JSON on file descriptor 3 ("stddata") automatically if file descriptor 3 is present (currently Linux only.) Maybe switch to BSON.</p>
-</blockquote>
-</div>
-<p>ざっくりと訳すと「Linuxに於いては、File Descriptor 3が開いている場合はそこに整形されていないJSON を書き込むようになりました。BSONになるかもしれない」とのことです。</p>
-<p>pass自体も普通に使っていれば問題ないのですが、 <code>git credential</code> を呼んだ際はどうしてか 沢山ファイルディスクリプタが使用されます。</p>
-<p>私の環境下では以下のファイルディスクリプタが開いていました</p>
-<ul>
-<li>0 (標準入力)</li>
-<li>1 (標準出力)</li>
-<li>2 (標準エラー出力)</li>
-<li>255</li>
-<li>3</li>
-<li>4</li>
-<li>5</li>
-<li>6</li>
-</ul>
-<p>そう、ここで3番があったんですね…</p>
-<h1 id="対策">対策</h1>
-<p>必要なのは、treeコマンドのファイルディスクリプタの3番を閉じるだけです。</p>
-<h2 id="上流で行われている対策">上流で行われている対策</h2>
-<p>実はpassではこれに対して対策が取られており、<a href="https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09">commit:eea24967</a>にてコミットされています。</p>
-<p><strong>しかし</strong> 、2022/02/07現在ではこれはまだリリースされていないためエンドユーザーは使用できません。 (まぁgitでmasterから取って来て使うことは勿論出来ますが)</p>
-<p>はやいとこリリースされてほしい…</p>
-<h2 id="現状できること">現状できること</h2>
-<p>passを呼び出す際にfd 3を塞ぎます。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pass</span> <span class="dv">3</span><span class="op">&gt;&amp;</span>-</span></code></pre></div>
-</div>
-<p>とすることで、passプロセスのファイルディスクリプタ3番を閉じることができます。 passを使用する何らかのスクリプトを書いている場合、当面はこうするのがよさそうです。</p>
-<h1 id="おまけ: &gt;&amp;- の意味">おまけ: <code>&gt;&amp;-</code> の意味</h1>
-<p>元は <code>[n]&gt;&amp;word</code> という形です。 <code>n</code> で指定された、出力のファイルディスクリプターを <code>word</code> で指定された番号の ファイルディスクリプターに複製します。 そして、 <strong>もし <code>word</code> が <code>-</code> であるなら</strong> 指定したファイルディスクリプターを閉じます。</p>
-<p>man:bash(1) <em>Redirection</em> 節の <em>Duplicating File Descriptors</em> に説明があります。</p>
-<h1 id="おまけ2: あるプログラムが開いているファイルデイスクリプターの一覧を取得する">おまけ2: あるプログラムが開いているファイルデイスクリプターの一覧を取得する</h1>
-<p>Linuxでは、カーネルがあらゆる情報を <strong>procファイルシステム</strong> に擬似的なファイルとして書き込んでくれています。 (man:proc(5))</p>
-<p>大抵はこれが <code>/proc</code> にマウントされているはずです。 各プロセスの情報は <code>/proc/${PID}/</code> ディレクトリ下に生成され、ファイルディスクリプターの 情報は <code>/proc/${PID}/fd</code> ディレクトリ下に生成されます。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> /proc/<span class="va">$$</span>/fd</span></code></pre></div>
-</div>
-<table>
-<tbody>
-<tr class="odd">
-<td>0</td>
-</tr>
-<tr class="even">
-<td>1</td>
-</tr>
-<tr class="odd">
-<td>2</td>
-</tr>
-</tbody>
-</table>
-<h1 id="参考">参考</h1>
-<ul>
-<li><a href="https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09">passの修正コミット</a></li>
-<li><a href="https://github.com/archlinux/svntogit-community/blob/packages/pass/trunk/PKGBUILD">passの正式なURL取得元のPKGBUILD</a></li>
-<li><a href="http://mama.indstate.edu/users/ice/tree/changes.html">treeのCHANGELOG</a></li>
-<li><a href="https://www.archlinux.jp/packages/extra/x86_64/tree/">treeの正式なURL取得元のarchlinuxのパッケージページ</a></li>
-</ul>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Mon, 07 Feb 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-02-07-pass-command-is-affected-by-tree-version-2.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 

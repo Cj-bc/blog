@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"
-    xmlns:dc="http://purl.org/dc/elements/1.1/">
-    <channel>
-        <title>CLI! CLI! CLI!</title>
-        <link>https://cj-bc.github.io/blog</link>
-        <description><![CDATA[Cj-bc's personal blog posts.]]></description>
-        <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/AA.xml" rel="self"
-                   type="application/rss+xml" />
-        <lastBuildDate>Sun, 13 Mar 2022 00:00:00 UT</lastBuildDate>
-        <item>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>CLI! CLI! CLI!</title>
+    <link href="https://cj-bc.github.io/blog/feeds/atom/tag/pulseAudio.xml" rel="self" />
+    <link href="https://cj-bc.github.io/blog" />
+    <id>https://cj-bc.github.io/blog/feeds/atom/tag/pulseAudio.xml</id>
+    <author>
+        <name>Cj-bc a.k.a Cj.BC_SD</name>
+        <email>cj.bc-sd@outlook.jp</email>
+    </author>
+    <updated>2022-03-13T00:00:00Z</updated>
+    <entry>
     <title>2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html</link>
-    <description><![CDATA[<div id="body-content">
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html</id>
+    <published>2022-03-13T00:00:00Z</published>
+    <updated>2022-03-13T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
   <div class="content">
     <div class="ui center aligned icon header">
       <h1>アプリケーション毎のオーディオレベルを調整する</h1>
@@ -104,15 +108,15 @@ bash
   
 
 </div>
-]]></description>
-    <pubDate>Sun, 13 Mar 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
+]]></summary>
+</entry>
+<entry>
     <title>2022-03-12-rust-sdtin-read-until-eof-line-by-line</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-03-12-rust-sdtin-read-until-eof-line-by-line.html</link>
-    <description><![CDATA[<div id="body-content">
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-12-rust-sdtin-read-until-eof-line-by-line.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-12-rust-sdtin-read-until-eof-line-by-line.html</id>
+    <published>2022-03-12T00:00:00Z</published>
+    <updated>2022-03-12T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
   <div class="content">
     <div class="ui center aligned icon header">
       <h1>Stdinから一行ずつEOFまで読み込む時気をつけること</h1>
@@ -163,15 +167,15 @@ rust
   
 
 </div>
-]]></description>
-    <pubDate>Sat, 12 Mar 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-03-12-rust-sdtin-read-until-eof-line-by-line.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
+]]></summary>
+</entry>
+<entry>
     <title>2022-03-11</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-03-11.html</link>
-    <description><![CDATA[<div id="body-content">
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-11.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-11.html</id>
+    <published>2022-03-11T00:00:00Z</published>
+    <updated>2022-03-11T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
   <div class="content">
     <div class="ui center aligned icon header">
       <h1>2022/03/11</h1>
@@ -209,15 +213,15 @@ rust
   
 
 </div>
-]]></description>
-    <pubDate>Fri, 11 Mar 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-03-11.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
+]]></summary>
+</entry>
+<entry>
     <title>2022-03-06</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-03-06.html</link>
-    <description><![CDATA[<div id="body-content">
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-06.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-06.html</id>
+    <published>2022-03-06T00:00:00Z</published>
+    <updated>2022-03-06T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
   <div class="content">
     <div class="ui center aligned icon header">
       <h1>2022/03/06</h1>
@@ -280,15 +284,15 @@ rust
   
 
 </div>
-]]></description>
-    <pubDate>Sun, 06 Mar 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-03-06.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
+]]></summary>
+</entry>
+<entry>
     <title>2022-02-27</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-02-27.html</link>
-    <description><![CDATA[<div id="body-content">
+    <link href="https://cj-bc.github.io/blog/posts/2022-02-27.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-02-27.html</id>
+    <published>2022-02-27T00:00:00Z</published>
+    <updated>2022-02-27T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
   <div class="content">
     <div class="ui center aligned icon header">
       <h1>2022/02/27</h1>
@@ -367,15 +371,15 @@ rust
   
 
 </div>
-]]></description>
-    <pubDate>Sun, 27 Feb 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-02-27.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
+]]></summary>
+</entry>
+<entry>
     <title>2022-02-26-rust-hyper-convert-body-into-bytes</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-02-26-rust-hyper-convert-body-into-bytes.html</link>
-    <description><![CDATA[<div id="body-content">
+    <link href="https://cj-bc.github.io/blog/posts/2022-02-26-rust-hyper-convert-body-into-bytes.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-02-26-rust-hyper-convert-body-into-bytes.html</id>
+    <published>2022-02-26T00:00:00Z</published>
+    <updated>2022-02-26T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
   <div class="content">
     <div class="ui center aligned icon header">
       <h1>HttpのリクエストからBodyをBytesで取り出す</h1>
@@ -409,15 +413,15 @@ rust
   
 
 </div>
-]]></description>
-    <pubDate>Sat, 26 Feb 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-02-26-rust-hyper-convert-body-into-bytes.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
+]]></summary>
+</entry>
+<entry>
     <title>2022-02-23</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-02-23.html</link>
-    <description><![CDATA[<div id="body-content">
+    <link href="https://cj-bc.github.io/blog/posts/2022-02-23.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-02-23.html</id>
+    <published>2022-02-23T00:00:00Z</published>
+    <updated>2022-02-23T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
   <div class="content">
     <div class="ui center aligned icon header">
       <h1>2022/02/23</h1>
@@ -454,15 +458,15 @@ rust
   
 
 </div>
-]]></description>
-    <pubDate>Wed, 23 Feb 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-02-23.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
+]]></summary>
+</entry>
+<entry>
     <title>2022-02-21-archlinux-use-paccache</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-02-21-archlinux-use-paccache.html</link>
-    <description><![CDATA[<div id="body-content">
+    <link href="https://cj-bc.github.io/blog/posts/2022-02-21-archlinux-use-paccache.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-02-21-archlinux-use-paccache.html</id>
+    <published>2022-02-21T00:00:00Z</published>
+    <updated>2022-02-21T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
   <div class="content">
     <div class="ui center aligned icon header">
       <h1>paccacheでキャッシュ削除する</h1>
@@ -519,15 +523,15 @@ bash
   
 
 </div>
-]]></description>
-    <pubDate>Mon, 21 Feb 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-02-21-archlinux-use-paccache.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
+]]></summary>
+</entry>
+<entry>
     <title>2022-02-14-hakyll-retrive-org-file-property-drawer-in-compiler</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-02-14-hakyll-retrive-org-file-property-drawer-in-compiler.html</link>
-    <description><![CDATA[<div id="body-content">
+    <link href="https://cj-bc.github.io/blog/posts/2022-02-14-hakyll-retrive-org-file-property-drawer-in-compiler.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-02-14-hakyll-retrive-org-file-property-drawer-in-compiler.html</id>
+    <published>2022-02-14T00:00:00Z</published>
+    <updated>2022-02-14T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
   <div class="content">
     <div class="ui center aligned icon header">
       <h1>hakyllでOrgのPROPERTIESドロワーの情報を使う方法</h1>
@@ -719,15 +723,15 @@ haskell
   
 
 </div>
-]]></description>
-    <pubDate>Mon, 14 Feb 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-02-14-hakyll-retrive-org-file-property-drawer-in-compiler.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
+]]></summary>
+</entry>
+<entry>
     <title>2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment.html</link>
-    <description><![CDATA[<div id="body-content">
+    <link href="https://cj-bc.github.io/blog/posts/2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment.html</id>
+    <published>2022-02-08T00:00:00Z</published>
+    <updated>2022-02-08T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
   <div class="content">
     <div class="ui center aligned icon header">
       <h1>ViewBindingでの設定がきちんと反映されていなかった理由がわかった</h1>
@@ -806,11 +810,7 @@ diff
   
 
 </div>
-]]></description>
-    <pubDate>Tue, 08 Feb 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
+]]></summary>
+</entry>
 
-    </channel>
-</rss>
+</feed>
