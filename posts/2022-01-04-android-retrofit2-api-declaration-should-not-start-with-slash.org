@@ -3,7 +3,7 @@
   :DATE: [2022-01-04 Tue 14:20]
   :TAGS: :android:retrofit2:kotlin:
   :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
   :LOGBOOK:

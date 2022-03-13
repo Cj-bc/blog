@@ -3,7 +3,7 @@
   :DATE: [2021-08-19 Thu 21:21]
   :TAGS: :haskell:
   :BLOG_POST_KIND: HowTo
-  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
   :LOGBOOK:

@@ -3,7 +3,7 @@
   :DATE: [2022-02-23 Wed 18:03]
   :TAGS: :blog:
   :BLOG_POST_KIND: Diary
-  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
 

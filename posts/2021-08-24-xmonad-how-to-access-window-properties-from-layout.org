@@ -3,7 +3,7 @@
   :DATE: [2021-08-24 Tue 14:58]
   :TAGS: :xmonad:
   :BLOG_POST_KIND: HowTo
-  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
   :LOGBOOK:

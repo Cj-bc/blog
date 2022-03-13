@@ -3,7 +3,7 @@
   :DATE: [2021-02-21 Sun]
   :TAGS: :python:環境構築:
   :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
 ** 環境

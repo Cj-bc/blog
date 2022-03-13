@@ -4,7 +4,7 @@
   :DATE: [2020-10-18 Sun 14:25]
   :TAGS: :unity:inputSystem:
   :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
   

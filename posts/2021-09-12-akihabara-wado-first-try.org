@@ -3,7 +3,7 @@
   :DATE: [2021-09-12 Sun 23:47]
   :TAGS: :Akihabara_Wado:
   :BLOG_POST_KIND: Diary
-  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
   :LOGBOOK:

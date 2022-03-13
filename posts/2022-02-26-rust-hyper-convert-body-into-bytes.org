@@ -3,7 +3,7 @@
   :DATE: [2022-02-26 Sat 21:43]
   :TAGS: :rust:hyper:http:
   :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
   :LOGBOOK:

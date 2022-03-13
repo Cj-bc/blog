@@ -3,7 +3,7 @@
   :DATE: [2021-09-17 Fri 16:31]
   :TAGS: :xmobar:
   :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
   :LOGBOOK:

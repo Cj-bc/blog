@@ -3,7 +3,7 @@
   :DATE: [2021-09-08 Wed 12:49]
   :TAGS: :homebrew: :dfinity: :Internet computer:
   :BLOG_POST_KIND: Advertisment
-  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
   :LOGBOOK:

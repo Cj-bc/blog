@@ -3,7 +3,7 @@
   :DATE: [2022-02-05 Sat 11:46]
   :TAGS: :emacs:elisp:
   :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
   :LOGBOOK:

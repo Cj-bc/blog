@@ -3,7 +3,7 @@
   :DATE: [2021-10-14 Thu 23:45]
   :TAGS: :emacs:
   :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
   :LOGBOOK:
