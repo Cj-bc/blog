@@ -1,0 +1,96 @@
+* アプリケーション毎のオーディオレベルを調整する
+  :PROPERTIES:
+  :DATE: [2022-03-13 Sun 11:54]
+  :TAGS: :pulseAudio:linux:環境構築:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2022-03-13 Sun 13:40]--[2022-03-13 Sun 14:10] =>  0:30
+  CLOCK: [2022-03-13 Sun 11:56]--[2022-03-13 Sun 12:17] =>  0:21
+  :END:
+  
+  PulseAudioを使用している際、たまにアプリケーション毎の
+  音量バランスがバグる(過剰な表現)時がある。
+
+  私の環境では、qutebrowserの音量が異常に小さくZoomやShotcutの
+  音量が異常にデカくなっており、Zoom会議に参加しながら共有された
+  YouTubeの動画を見ることができない等の問題がありました。
+
+  
+** 原因
+   =sink-input= のVolumeが小さくなっていることがあります。
+
+   #+begin_src sh
+     pactl list sink-inputs
+   #+end_src
+
+   #+RESULT:
+   #+begin_src 
+   Sink Input #37
+   	Driver: protocol-native.c
+   	Owner Module: 11
+   	Client: 124102
+   	Sink: 0
+   	Sample Specification: s16le 2ch 48000Hz
+   	Channel Map: front-left,front-right
+   	Format: pcm, format.sample_format = "\"s16le\""  format.rate = "48000"  format.channels = "2"  format.channel_map = "\"front-left,front-right\""
+   	Corked: no
+   	Mute: no
+   	Volume: front-left: 65536 / 100% / 0.00 dB,   front-right: 65536 / 100% / 0.00 dB
+   	        balance 0.00
+   	Buffer Latency: 131813 usec
+   	Sink Latency: 100186 usec
+   	Resample method: speex-float-1
+   	Properties:
+   		media.name = "Audio Stream"
+   		application.name = "shotcut"
+   		native-protocol.peer = "UNIX socket client"
+   		native-protocol.version = "35"
+   		application.process.id = "882662"
+   		application.process.user = "me"
+   		application.process.host = "myHost"
+   		application.process.binary = "shotcut"
+   		application.language = "C"
+   		window.x11.display = ":0"
+   		application.process.machine_id = "<省略>"
+   		application.process.session_id = "2"
+   		module-stream-restore.id = "sink-input-by-application-name:shotcut"
+
+   #+end_src
+
+   この中の ~Volume:~ に表示されているのが、各Sink inputのボリュームです。
+   100%より小さい場合、100%にした方が良いかもしれません。
+   注意点として、 *実際に音を鳴らしているなど音声が流れているないし流れる状態にある* 必要があります。
+   そうでない場合、Sink inputの一覧に表示されません。
+
+** 解決方法
+
+   該当の =sink-input= のボリュームを100%にしてあげます。
+   
+   #+begin_src sh
+     pactl set-sink-input-volume <ID> 100%
+   #+end_src
+
+   SinkのIDは、先程の ~pactl list sink-inputs~ の冒頭にある
+
+   #+begin_src 
+   Sink Input #37
+   #+end_src
+
+   の#以降の数字で、この例だと37です。
+
+** 解説
+   PulseAudioでは、全てのアプリケーションは "client" としてサーバーに接続されます。
+   そして各アプリケーションに於いて何かしら音声が流れると、新しい =sink-input= が作成
+   されて登録されます。ここから、音声が =sink= に渡って音が鳴るわけです。
+
+   この =sink-input= にはそれぞれにボリュームが設定されているので、そこを調節してあげると
+   アプリケーション間のボリューム調整ができます。
+
+   
+   PulseAudioの仕組み等については、[[https://gavv.github.io/articles/pulseaudio-under-the-hood/#sound-processing][Pulseaudio under the hood]]というブログ記事が、
+   公式で紹介されているほど詳しいです。
+   
+   
