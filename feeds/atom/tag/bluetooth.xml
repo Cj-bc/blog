@@ -1,0 +1,829 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>CLI! CLI! CLI!</title>
+    <link href="https://cj-bc.github.io/blog/feeds/atom/tag/bluetooth.xml" rel="self" />
+    <link href="https://cj-bc.github.io/blog" />
+    <id>https://cj-bc.github.io/blog/feeds/atom/tag/bluetooth.xml</id>
+    <author>
+        <name>Cj-bc a.k.a Cj.BC_SD</name>
+        <email>cj.bc-sd@outlook.jp</email>
+    </author>
+    <updated>2022-03-14T00:00:00Z</updated>
+    <entry>
+    <title>2022-03-14-linux-fix-audio-environments</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-14-linux-fix-audio-environments.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-14-linux-fix-audio-environments.html</id>
+    <published>2022-03-14T00:00:00Z</published>
+    <updated>2022-03-14T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>音声周りの環境改善をした</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 14, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 14, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged &#39;環境構築&#39;." href="/tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89.html" class="ui tag label">環境構築</a><a title="All pages tagged &#39;pulseaudio&#39;." href="/tags/pulseaudio.html" class="ui tag label">pulseaudio</a><a title="All pages tagged &#39;bluetooth&#39;." href="/tags/bluetooth.html" class="ui tag label">bluetooth</a>
+	
+      </div>
+
+    <div class="description">
+      <p>実はこの環境は音声周りの環境が大分悪くて、 普段はYouTubeなどはこの環境からは利用していない。</p>
+<p>今回暇だったので、せっかくなので直してみることにする。</p>
+<h1 id="元々あった問題">元々あった問題</h1>
+<h2 id="アプリケーション毎の音量差が激しすぎる">アプリケーション毎の音量差が激しすぎる</h2>
+<p>ブラウザで流しているYouTubeの音が聞こえる程度の音量にすると、 通知が爆音でガチビビるという現象がありました。 逆に通知の音量程度にすると、YouTubeの音が全く聞こえません。</p>
+<p>ちなみに、通知の音量程度にした時にPulseAudioの音量ゲージが100% なのでブラウザ側の音量が小さいのが問題です。</p>
+<h2 id="Air Podsを接続して聞くと音がガビガビになる">Air Podsを接続して聞くと音がガビガビになる</h2>
+<p>昔はきちんと聞こえていた(と思う)のですが、いつからか ガビガビで聞けたものじゃなくなりました。</p>
+<h1 id="今回やったこと">今回やったこと</h1>
+<h2 id="1. ブラウザの sink-input の音量を調節した">1. ブラウザの <code>sink-input</code> の音量を調節した</h2>
+<p>詳しくは<a href="https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html">前回書いたブログ</a>を参照。</p>
+<p>ブラウザの音量めっっっちゃ小さくされてた(10%だった) のでそれを100%に戻したところ、 良いバランスになった</p>
+<h2 id="2. Air PodsのBluetoothプロファイルを修正した">2. Air PodsのBluetoothプロファイルを修正した</h2>
+<p>前に、音質周りについてプロファイルの問題うんたらと見た ことがあったな~と思ったのでそこ辺りを検索。</p>
+<p>その結果 <a href="https://zenn.dev/noraworld/articles/pulseaudio-bluetooth#設定の変更">Raspberry Pi に複数の Bluetooth デバイスを接続して同時に音を流す – noraworld</a> を発見、どうやら音声通話用プロファイルと音楽用プロファイルが別に存在するらしい。</p>
+<div id="ここで扱われるBluetoothプロファイルの一覧">
+<table>
+<thead>
+<tr class="header">
+<th>用途</th>
+<th>略称</th>
+<th>正式名称</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>音声通話用</td>
+<td>HFP</td>
+<td>Hands-Free Profile</td>
+</tr>
+<tr class="even">
+<td>音楽用</td>
+<td>A2DP</td>
+<td>Advanced Audio Distribution Profile</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>(ちなみに本当に一覧が見たければ<a href="https://www.bluetooth.com/specifications/specs/">bluetooth公式のページに</a>存在する)</p>
+<p><code>pactl list sinks</code> でSinkの一覧を表示した際、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>   シンク #1
+状態: RUNNING
+名前: bluez_sink.74_65_0C_F0_90_23.handsfree_head_unit
+説明: Air Pods
+ドライバー: module-bluez5-device.c
+サンプル仕様: s16le 1ch 16000Hz
+チャンネルマップ: mono
+       ...
+ボリューム: mono: 65536 / 100%
+        バランス 0.00
+ベースボリューム: 65536 / 100%
+       ...
+プロパティー:
+ bluetooth.protocol = &quot;handsfree_head_unit&quot;
+ bluetooth.codec = &quot;mSBC&quot;
+ device.intended_roles = &quot;phone&quot;
+               ...
+</code></pre>
+</div>
+<p>プロパティーの下に <code>bluetooth.protocol = "handsfree_head_unit"</code> とあるので HFPになってるらしいことがわかる。 また、チャンネルマップが <code>mono</code> であることからこれはおそらくモノラル音源になっている ことがわかる。</p>
+<p>またこれはあまり詳しくないので間違っているかもしれないが、 サンプル数も1ch 16000Hzとかなり低めになっていることがわかる。 (参考までに、パソコン本体のサンプル仕様は 2ch 44100Hzだった)</p>
+<p>ということでこれをA2DPに切り替える。 今回はpavucontrolを使って切り替えた。</p>
+<p>pavucontrolを起動したら <code class="verbatim">configure</code> タブを開き、そこに表示された BluetoothヘッドホンのProfileを <code>A2DP</code> に変更する。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html</id>
+    <published>2022-03-13T00:00:00Z</published>
+    <updated>2022-03-13T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>アプリケーション毎のオーディオレベルを調整する</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 13, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 13, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;pulseAudio&#39;." href="/tags/pulseAudio.html" class="ui tag label">pulseAudio</a><a title="All pages tagged &#39;linux&#39;." href="/tags/linux.html" class="ui tag label">linux</a><a title="All pages tagged &#39;環境構築&#39;." href="/tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89.html" class="ui tag label">環境構築</a>
+	
+      </div>
+
+    <div class="description">
+      <p>PulseAudioを使用している際、たまにアプリケーション毎の 音量バランスがバグる(過剰な表現)時がある。</p>
+<p>私の環境では、qutebrowserの音量が異常に小さくZoomやShotcutの 音量が異常にデカくなっており、Zoom会議に参加しながら共有された YouTubeの動画を見ることができない等の問題がありました。</p>
+<h1 id="原因">原因</h1>
+<p><code class="verbatim">sink-input</code> のVolumeが小さくなっていることがあります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pactl</span> list sink-inputs</span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Sink Input #37
+ Driver: protocol-native.c
+ Owner Module: 11
+ Client: 124102
+ Sink: 0
+ Sample Specification: s16le 2ch 48000Hz
+ Channel Map: front-left,front-right
+ Format: pcm, format.sample_format = &quot;\&quot;s16le\&quot;&quot;  format.rate = &quot;48000&quot;  format.channels = &quot;2&quot;  format.channel_map = &quot;\&quot;front-left,front-right\&quot;&quot;
+ Corked: no
+ Mute: no
+ Volume: front-left: 65536 / 100% / 0.00 dB,   front-right: 65536 / 100% / 0.00 dB
+         balance 0.00
+ Buffer Latency: 131813 usec
+ Sink Latency: 100186 usec
+ Resample method: speex-float-1
+ Properties:
+  media.name = &quot;Audio Stream&quot;
+  application.name = &quot;shotcut&quot;
+  native-protocol.peer = &quot;UNIX socket client&quot;
+  native-protocol.version = &quot;35&quot;
+  application.process.id = &quot;882662&quot;
+  application.process.user = &quot;me&quot;
+  application.process.host = &quot;myHost&quot;
+  application.process.binary = &quot;shotcut&quot;
+  application.language = &quot;C&quot;
+  window.x11.display = &quot;:0&quot;
+  application.process.machine_id = &quot;&lt;省略&gt;&quot;
+  application.process.session_id = &quot;2&quot;
+  module-stream-restore.id = &quot;sink-input-by-application-name:shotcut&quot;
+
+</code></pre>
+</div>
+<p>この中の <code>Volume:</code> に表示されているのが、各Sink inputのボリュームです。 100%より小さい場合、100%にした方が良いかもしれません。 注意点として、 <strong>実際に音を鳴らしているなど音声が流れているないし流れる状態にある</strong> 必要があります。 そうでない場合、Sink inputの一覧に表示されません。</p>
+<h1 id="解決方法">解決方法</h1>
+<p>該当の <code class="verbatim">sink-input</code> のボリュームを100%にしてあげます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pactl</span> set-sink-input-volume <span class="op">&lt;</span>ID<span class="op">&gt;</span> 100%</span></code></pre></div>
+</div>
+<p>SinkのIDは、先程の <code>pactl list sink-inputs</code> の冒頭にある</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Sink Input #37
+</code></pre>
+</div>
+<p>の#以降の数字で、この例だと37です。</p>
+<h1 id="解説">解説</h1>
+<p>PulseAudioでは、全てのアプリケーションは "client" としてサーバーに接続されます。 そして各アプリケーションに於いて何かしら音声が流れると、新しい <code class="verbatim">sink-input</code> が作成 されて登録されます。ここから、音声が <code class="verbatim">sink</code> に渡って音が鳴るわけです。</p>
+<p>この <code class="verbatim">sink-input</code> にはそれぞれにボリュームが設定されているので、そこを調節してあげると アプリケーション間のボリューム調整ができます。</p>
+<p>PulseAudioの仕組み等については、<a href="https://gavv.github.io/articles/pulseaudio-under-the-hood/#sound-processing">Pulseaudio under the hood</a>というブログ記事が、 公式で紹介されているほど詳しいです。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-03-12-rust-sdtin-read-until-eof-line-by-line</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-12-rust-sdtin-read-until-eof-line-by-line.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-12-rust-sdtin-read-until-eof-line-by-line.html</id>
+    <published>2022-03-12T00:00:00Z</published>
+    <updated>2022-03-12T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>Stdinから一行ずつEOFまで読み込む時気をつけること</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 12, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 13, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a>
+	
+      </div>
+
+    <div class="description">
+      <p>一行一行読み込みたい場合、恐らく <a href="https://doc.rust-lang.org/stable/std/io/struct.Stdin.html#method.read_line">std::io::Stdin::read<sub>line</sub></a>を使うと思う。 これは</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> read_line(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> buf<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">String</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;</span></span></code></pre></div>
+</div>
+<p>という型を持つが、 <strong>EOFが来た時は <code>Ok(0)</code> を返す</strong> 。 なので、EOFまで一行一行読んで何かしたい場合、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="Okな例"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="Okな例-1"><a href="#Okな例-1" aria-hidden="true" tabindex="-1"></a>   <span class="kw">let</span> <span class="kw">mut</span> buf <span class="op">=</span> <span class="dt">String</span><span class="pp">::</span>new()<span class="op">;</span></span>
+<span id="Okな例-2"><a href="#Okな例-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="Okな例-3"><a href="#Okな例-3" aria-hidden="true" tabindex="-1"></a>   <span class="kw">while</span> <span class="kw">let</span> <span class="cn">Ok</span>(bytes) <span class="op">=</span> <span class="pp">std::io::</span>stdin()<span class="op">.</span>read_line(<span class="op">&amp;</span>buf) <span class="op">{</span></span>
+<span id="Okな例-4"><a href="#Okな例-4" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> bytes <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="Okな例-5"><a href="#Okな例-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">break</span><span class="op">;</span></span>
+<span id="Okな例-6"><a href="#Okな例-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="Okな例-7"><a href="#Okな例-7" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span>
+<span id="Okな例-8"><a href="#Okな例-8" aria-hidden="true" tabindex="-1"></a>   <span class="op">}</span></span></code></pre></div>
+</div>
+<p>として <strong>戻り値が0の場合ループを終了する処理を入れる必要がある</strong> 。 私は <code>Err()</code> でくるかと思ってしまいハマった。なんともな… 型を信用しすぎたというか…ドキュメント読んでなかったというか… (本体のドキュメントにないんだもん気付かんわ!!!)</p>
+<h1 id="参考資料">参考資料</h1>
+<ul>
+<li><a href="https://doc.rust-lang.org/stable/std/io/trait.BufRead.html#method.read_line">std::io::BufRead::read<sub>line</sub></a></li>
+</ul>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-03-11</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-11.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-11.html</id>
+    <published>2022-03-11T00:00:00Z</published>
+    <updated>2022-03-11T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>2022/03/11</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 11, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 13, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="やったこと">やったこと</h1>
+<ul>
+<li>散歩にいった(えらい)</li>
+<li><a href="https://github.com/Cj-bc/dotfiles/blob/master/dotfiles/bin/screenshot">bin/screenshot</a>の作成(スクショ用の小さなスクリプト)</li>
+</ul>
+<h1 id="知ったこと">知ったこと</h1>
+<ul>
+<li><a href="http://osmo-pim.sourceforge.net/">osmo – handy personal organizer</a></li>
+</ul>
+<h2 id="orgのRadio targetの仕組み">orgのRadio targetの仕組み</h2>
+<p>Radio target(<a href="info:org#Radio targets">info:org#Radio targets</a>)を作成後、 <code>C-c C-c</code> すると help:org-activate-target-links が実行され、 help:org-target-link-regexp が更新される。</p>
+<p>リンクを起動する際は <code>C-c C-o</code> によって help:org-open-at-point が呼ばれ、 help:org-link-open が呼ばれる。 Radio Targetの場合、 help:org-link–search-radio-target を呼び、そいつが バッファ内からターゲットを探し出して移動する。</p>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-03-06</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-06.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-06.html</id>
+    <published>2022-03-06T00:00:00Z</published>
+    <updated>2022-03-06T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>2022/03/06</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March  6, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 13, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="やったこと">やったこと</h1>
+<h1 id="知ったこと">知ったこと</h1>
+<h2 id="型変換には as キーワードが使える Rust">型変換には <code>as</code> キーワードが使える <span class="tag" data-tag-name="Rust"><span class="smallcaps">Rust</span></span></h2>
+<p>型変換には <code>try_from().unwrap()</code> とか使っていたけれど、 実はプリミティブ型なら <a href="https://doc.rust-lang.org/std/keyword.as.html"> <code>as</code> キーワード</a>である程度出来る。 例えば、以下の二つは等価。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">u32</span><span class="pp">::</span>try_from(<span class="dv">1</span>)<span class="op">.</span>unwrap()<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="kw">as</span> <span class="dt">u32</span></span></code></pre></div>
+</div>
+<h2 id="Iteratorの中に入ったOptionを外したいならflatmap Rust">Iteratorの中に入ったOptionを外したいならflat<sub>map</sub> <span class="tag" data-tag-name="Rust"><span class="smallcaps">Rust</span></span></h2>
+<p><code>impl Iterator&lt;Option&lt;T&gt;&gt;</code> を <code>impl Iterator&lt;T&gt;</code> に変換したい場合、 <code>flat_map</code> でいける。 Haskelでいうところの <code>catMaybes :: [Maybe a] -&gt; [a]</code> に近い挙動をする。</p>
+<p>元々こうやってたのが</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> texts <span class="op">=</span> <span class="pp">vec!</span>[<span class="st">&quot;this is&quot;</span><span class="op">,</span> <span class="st">&quot;an&quot;</span><span class="op">,</span> <span class="st">&quot;example&quot;</span>]<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> v <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span>]<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>v<span class="op">.</span>map(<span class="op">|</span>idx<span class="op">|</span> texts<span class="op">.</span>get(idx))<span class="op">.</span>filter(<span class="op">|</span>val<span class="op">|</span> val<span class="op">.</span>is_some())<span class="op">.</span>map(<span class="op">|</span>val<span class="op">|</span> val<span class="op">.</span>unwrap())</span></code></pre></div>
+</div>
+<p>こう書ける</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> texts <span class="op">=</span> <span class="pp">vec!</span>[<span class="st">&quot;this is&quot;</span><span class="op">,</span> <span class="st">&quot;an&quot;</span><span class="op">,</span> <span class="st">&quot;example&quot;</span>]<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> v <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span>]<span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>v<span class="op">.</span>filter_map(<span class="op">|</span>idx<span class="op">|</span> texts<span class="op">.</span>get(idx)<span class="op">;</span></span></code></pre></div>
+</div>
+<h2 id="マイクラのサイト">マイクラのサイト</h2>
+<p><a href="https://njf.jp/minecraft/articles/2020-09-13-hoe.html">https://njf.jp/minecraft/articles/2020-09-13-hoe.html</a></p>
+<p>新しい仕組みになってからの村周りの情報とかがあってよい。</p>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-02-27</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-02-27.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-02-27.html</id>
+    <published>2022-02-27T00:00:00Z</published>
+    <updated>2022-02-27T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>2022/02/27</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on February 27, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 13, 2022
+	</div>
+
+	
+
+	
+	
+	
+      </div>
+
+    <div class="description">
+      <h1 id="出来事">出来事</h1>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=Ev5qzT0VnTo">みあちゃんスプラ大会配信</a></li>
+<li><a href="https://www.youtube.com/watch?v=GTa2HxIsBPM">Kizuna AI last live</a></li>
+<li>AIちゃんスリープ</li>
+<li><a href="https://www.youtube.com/watch?v=v3yWm0Crtaw">ゆあちゃんエルデン24時間耐久(前半)</a></li>
+<li><a href="https://twitter.com/nalgami/status/1497372362857410560?s=20&amp;t=LkmskTlFlhhJ_pjBXMqLYA">POLYGON TAILOR IMPORT最初のFACEATSM BUG MA-1</a>発売日アナウンス、3/1発売</li>
+</ul>
+<h1 id="やったこと">やったこと</h1>
+<ul>
+<li>piping-server-rustにクリップボード連携機能を自分用に作成した
+<ul>
+<li><a href="https://github.com/nwtgck/piping-server-rust">nwtgck/piping-server-rust</a>のコード読んだ</li>
+<li><a href="https://doc.rust-jp.rs/book-ja/">The Rust Programming Language 日本語版</a>の1,3章読んだ</li>
+</ul></li>
+<li>配信見てた</li>
+</ul>
+<h1 id="知ったこと">知ったこと</h1>
+<ul>
+<li>Rustの基礎をちょこっと</li>
+<li><a href="https://docs.rs/crate/clipboard/0.5.0">Rust – Clipboard</a></li>
+<li>Rustで子プロセスを作成するには <code>std::process::Command</code></li>
+<li>子プロセスとの通信は <code>std::process::Stdio</code></li>
+<li>RustでHttpのBody取るには <code>hyper::body::to_bytes</code> が使える</li>
+</ul>
+<h2 id="Rustで子プロセス">Rustで子プロセス</h2>
+<ol>
+<li><p>子プロセスの作成:</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/process/struct.Command.html#method.stdin">std::process::Command</a></li>
+<li><a href="https://doc.rust-lang.org/std/process/struct.Command.html#method.spawn">std::process::Command.spawn()</a></li>
+</ul>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> child<span class="op">:</span> Child <span class="op">=</span> <span class="pp">Command::</span>new(<span class="st">&quot;xsel&quot;</span>)<span class="op">.</span>arg(<span class="st">&quot;-xb&quot;</span>)<span class="op">.</span>stdin(<span class="pp">Stdio::</span>piped())<span class="op">.</span>spawn()<span class="op">.</span>expect(<span class="st">&quot;Failed to spawn child process&quot;</span>)</span></code></pre></div>
+</div></li>
+<li><p>パイプへの書き込み</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/std/process/struct.Child.html">std::process::Child</a></li>
+<li><a href="https://doc.rust-lang.org/std/process/struct.ChildStdin.html">std::process::ChildStdin</a></li>
+</ul>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// takeよくわかってない</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b<span class="op">:</span> Bytes <span class="op">=</span> <span class="co">// </span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>child<span class="op">.</span>stdin<span class="op">.</span>take()<span class="op">.</span>expect(<span class="st">&quot;failed to open stdin&quot;</span>)<span class="op">.</span>write(b)<span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
+</div></li>
+</ol>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-02-26-rust-hyper-convert-body-into-bytes</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-02-26-rust-hyper-convert-body-into-bytes.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-02-26-rust-hyper-convert-body-into-bytes.html</id>
+    <published>2022-02-26T00:00:00Z</published>
+    <updated>2022-02-26T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>HttpのリクエストからBodyをBytesで取り出す</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on February 26, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 13, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a><a title="All pages tagged &#39;hyper&#39;." href="/tags/hyper.html" class="ui tag label">hyper</a><a title="All pages tagged &#39;http&#39;." href="/tags/http.html" class="ui tag label">http</a>
+	
+      </div>
+
+    <div class="description">
+      <p><a href="https://docs.rs/crate/hyper/0.13.8">Hyper</a>の<a href="https://docs.rs/hyper/0.13.8/hyper/body/struct.Body.html">Body</a>を<a href="https://docs.rs/hyper/0.13.8/hyper/body/struct.Bytes.html">Bytes</a>に変換する方法について、何気に調べるの苦労したのでメモ。</p>
+<p><code>hyper::body</code> に用意されている <a href="https://docs.rs/hyper/0.13.8/hyper/body/fn.to_bytes.html">to<sub>bytes</sub></a>関数を使えばよい。</p>
+<p>HttpのRequrestからBodyは <a href="https://docs.rs/http/0.2.1/http/request/struct.Request.html#method.into_body"> <code>into_body</code> </a>で取れるので、それを <code>to_bytes</code> に与えてあげる。 つまり:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> bytes_body<span class="op">:</span> Bytes <span class="op">=</span> <span class="pp">hyper::body::</span>to_bytes(req<span class="op">.</span>into_body())</span></code></pre></div>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-02-23</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-02-23.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-02-23.html</id>
+    <published>2022-02-23T00:00:00Z</published>
+    <updated>2022-02-23T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>2022/02/23</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on February 23, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 13, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;blog&#39;." href="/tags/blog.html" class="ui tag label">blog</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="やること">やること</h1>
+<h1 id="他にやったこと">他にやったこと</h1>
+<ul>
+<li>ゴ魔乙まぐろなちゃんコラボ進めた、「マグロナ推し」称号まで取った!</li>
+<li>ゴ魔乙ランク100になった</li>
+<li>Blenderアニメーション書き出し</li>
+</ul>
+<h1 id="知ったこと">知ったこと</h1>
+<ul>
+<li>blenderのDriverはpythonコード、NeosVRのDrive nodeと同じようなもの</li>
+<li></li>
+</ul>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-02-21-archlinux-use-paccache</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-02-21-archlinux-use-paccache.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-02-21-archlinux-use-paccache.html</id>
+    <published>2022-02-21T00:00:00Z</published>
+    <updated>2022-02-21T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>paccacheでキャッシュ削除する</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on February 21, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on February 21, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a>
+	
+      </div>
+
+    <div class="description">
+      <p>気が付いたら、pacmanのパッケージのキャッシュが大変な容量食っていた。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh" data-results="raw"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">du</span> <span class="at">-sh</span> /var/cache/pacman/pkg</span></code></pre></div>
+</div>
+<p>13G	/var/cache/pacman/pkg</p>
+<p>13ギガバイト…流石に食べすぎ…</p>
+<p><a href="https://wiki.archlinux.jp/index.php/Pacman#.E3.83.91.E3.83.83.E3.82.B1.E3.83.BC.E3.82.B8.E3.82.AD.E3.83.A3.E3.83.83.E3.82.B7.E3.83.A5.E3.81.AE.E5.89.8A.E9.99.A4">archwiki – pacman</a>にある「パッケージキャッシュの削除に従ってやってみる。 ツールを使うことが推奨されていたので、今回は該当パッケージ aur:pacman-contrib を入れて <code>paccache</code> を使ってみる。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> pacman <span class="at">-S</span> pacman-contrib</span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">paccache</span> <span class="at">-r</span></span></code></pre></div>
+</div>
+<p>==&gt; Privilege escalation required [sudo] me のパスワード:</p>
+<p>==&gt; finished: 1647 packages removed (disk space saved: 6.28 GiB)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb4" data-org-language="sh" data-results="raw"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">du</span> <span class="at">-sh</span> /var/cache/pacman/pkg</span></code></pre></div>
+</div>
+<p>6.4G	/var/cache/pacman/pkg</p>
+<p>大分減った</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-02-14-hakyll-retrive-org-file-property-drawer-in-compiler</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-02-14-hakyll-retrive-org-file-property-drawer-in-compiler.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-02-14-hakyll-retrive-org-file-property-drawer-in-compiler.html</id>
+    <published>2022-02-14T00:00:00Z</published>
+    <updated>2022-02-14T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>hakyllでOrgのPROPERTIESドロワーの情報を使う方法</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on February 14, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 13, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;hakyll&#39;." href="/tags/hakyll.html" class="ui tag label">hakyll</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;blog&#39;." href="/tags/blog.html" class="ui tag label">blog</a>
+	
+      </div>
+
+    <div class="description">
+      <p>解決方法が知りたい場合 <span class="spurious-link" target="*解決方法"><em>*解決方法</em></span>まで飛ばして下さい。</p>
+<p>私のこのブログでも使っているので参考までに: <a href="https://github.com/Cj-bc/blog/tree/source">Cj-bc/blog</a></p>
+<ul>
+<li><strong>Hakyllの提供している <code>Metadata</code> は使わない</strong> よ</li>
+<li>Postを処理する <code>Rules</code> 内でpandocを用いて取り出し、 <code>saveSnapshot</code> するよ</li>
+</ul>
+<h1 id="Hakyllのメタデータとは">Hakyllのメタデータとは</h1>
+<p>Hakyllでは、作者やタイトル・タグ等のデータを "メタデータ"として特別なフォーマットを用いて扱います。</p>
+<p>デフォルトでは</p>
+<ul>
+<li>Yamlヘッダー形式</li>
+<li>対応する <code>.metadata</code> ファイルからの読み込み</li>
+</ul>
+<p>の2種類の方法により収集され、テンプレートの中で例えば</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+html
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode html SourceCode"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;h1&gt;</span>$title$<span class="kw">&lt;/h1&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;h2&gt;</span>Author: $author$<span class="kw">&lt;/h2&gt;</span></span></code></pre></div>
+</div>
+<p>のようにして使用されることになります。</p>
+<h1 id="問題点">問題点</h1>
+<p>Orgファイル(他のファイル形式でも)では、元々メタデータ用の 構文を持っています。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+org
+</div>
+<pre class="org SourceCode"><code>#+TITLE: タイトルのメタデータです
+</code></pre>
+</div>
+<p>とする形式(<strong>この記事では扱いません!!!</strong>)と</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+org
+</div>
+<pre class="org SourceCode"><code>* 見出し
+  :PROPERTIES:
+  :AUTHOR: Cj.bc-sd
+  :END:
+</code></pre>
+</div>
+<p>とするプロパティを用いる形式の二つです。</p>
+<p>特にOrg文書はOrg-modeとの連携が大事になり、出来ることならそれ自体の 形式を使いたいわけです。</p>
+<p>しかし、残念ながら <strong>後から <code>Metadata</code> を更新する方法はなさそう</strong> です。 そのため、 上記の情報等を Org propertiesから読み込むことができません。</p>
+<h2 id="余談: 書き換えられない証拠">余談: 書き換えられない証拠</h2>
+<p><code>Metadata</code> を扱える型クラス <code>MonadMetadata</code> の<a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Compiler.Internal.html#line-207"> <code>Compiler</code> インスタンス</a>を見てみると、 <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Compiler.Internal.html#compilerGetMetadata"> <code>compilerGetMetadata</code> </a> &gt; <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.MetadataCache.html#resourceMetadata"> <code>resourceMetadata</code> </a> &gt; <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.MetadataCache.html#load"> <code>load</code> (<code>Compiler</code> の loadとは別)</a> &gt; <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.Metadata.html#loadMetadata"> <code>loadMetadata</code> </a> &gt; の中で、色々な関数において直接 ファイルを読み込んでパースしているのがわかります。</p>
+<h1 id="解決方法">解決方法</h1>
+<p>orgファイルを読み込む時にPandocのデータ型から取り出し、 <code>Snapshot</code> に仕舞っておくという手法を取ります。</p>
+<h2 id="1. 投稿の内容を Pandoc 型として取得する">1. 投稿の内容を <code>Pandoc</code> 型として取得する</h2>
+<p><a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:pandocCompiler"> <code>pandocCompiler</code> </a> を使うと <code>String</code> 型に変換されてしまいメタデータが消えるため、 <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:readPandoc"> <code>readPandoc</code> </a>若しくは<a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:readPandocWith"> <code>readPandocWith</code> </a>を使います。(オプションを変更したい場合は <code>readPandocWith</code> の方を使います。)</p>
+<p><a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Core-Compiler.html#v:getResourceBody"> <code>getResourceBody</code> </a>を用いることで、今処理しているファイルの中身が取れるのでそれを <code>readPandoc</code> に渡します。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>     match <span class="st">&quot;posts/*.org&quot;</span> <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>route idRoute</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>compiler <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- ↓ここの行のこと</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  postPandoc <span class="ot">&lt;-</span> getResourceBody <span class="op">&gt;&gt;=</span> readPandoc</span></code></pre></div>
+</div>
+<h2 id="2. Pandoc からProperties drawerの情報を取り出す">2. <code>Pandoc</code> からProperties drawerの情報を取り出す</h2>
+<p>PROPERTIES drawerに入っている情報は、 該当のheadlineのAttributeとして保存されます。 <a href="https://hackage.haskell.org/package/pandoc-types-1.22.1/docs/Text-Pandoc-Definition.html#t:Pandoc"> <code>Pandoc</code> </a>の <code>Meta</code> <strong>ではない</strong> ので注意してください。</p>
+<p>Org文章でいうHeadlineは、Pandocでは<a href="https://hackage.haskell.org/package/pandoc-types-1.22.1/docs/Text-Pandoc-Definition.html#t:Block"> <code>Block</code> </a>の <code>Header</code> に あたります。この中の <code>Attr</code> にkey-value Pairとして格納されています。</p>
+<p>以下は実装からの引用(一部抜粋):</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>   <span class="co">-- | Block element.</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">data</span> <span class="dt">Block</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- | Header - level (integer) and text (inlines)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">|</span> <span class="dt">Header</span> <span class="dt">Int</span> <span class="dt">Attr</span> [<span class="dt">Inline</span>]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>   <span class="co">-- | Attributes: identifier, classes, key-value pairs</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>   <span class="kw">type</span> <span class="dt">Attr</span> <span class="ot">=</span> (<span class="dt">Text</span>, [<span class="dt">Text</span>], [(<span class="dt">Text</span>, <span class="dt">Text</span>)])</span></code></pre></div>
+</div>
+<p>具体的には、先程の <code>postPandoc</code> の中身を調べていくことになります。</p>
+<p>私は、各投稿の最初には必ずLevel1のheadlineが来るようにしているので Level1の <code>Header</code> が来ることを期待して取り出す処理をかきます。</p>
+<p>様々な状況に対応させたい場合、ここはもう少し丁寧にやった方が良いと思います。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>   match <span class="st">&quot;posts/*.org&quot;</span> <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>route idRoute</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>compiler <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  (<span class="dt">Pandoc</span> _ blocks) <span class="ot">&lt;-</span> getResourceBody <span class="op">&gt;&gt;=</span> readPandoc</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> properties <span class="ot">=</span> <span class="kw">case</span> blocks <span class="kw">of</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>       (<span class="dt">Header</span> <span class="dv">1</span> (_<span class="op">:</span>_<span class="op">:</span>kv) _) <span class="ot">-&gt;</span> kv</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>       _ <span class="ot">-&gt;</span> [] </span></code></pre></div>
+</div>
+<h2 id="3. お目当ての情報を取り出す">3. お目当ての情報を取り出す</h2>
+<p>先程作った <code>properties</code> 変数(<code>properties :: [(Text, Text)]</code>)は <code>(プロパティ名, プロパティの値)</code> という構造になっているので、 必要なプロパティを取り出します。 今回は例として、 <code>AUTHOR</code> を取り出すことにします。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>    match <span class="st">&quot;posts/*.org&quot;</span> <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a> route idRoute</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a> compiler <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>   (<span class="dt">Pandoc</span> _ blocks) <span class="ot">&lt;-</span> getResourceBody <span class="op">&gt;&gt;=</span> readPandoc</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>   <span class="kw">let</span> properties     <span class="ot">=</span> <span class="kw">case</span> blocks <span class="kw">of</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>     (<span class="dt">Header</span> <span class="dv">1</span> (_<span class="op">:</span>_<span class="op">:</span>kv) _) <span class="ot">-&gt;</span> kv</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>     _ <span class="ot">-&gt;</span> [] </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>authorProperty <span class="ot">=</span> fromMaybe <span class="st">&quot;著者不明&quot;</span> <span class="op">$</span> <span class="fu">lookup</span> <span class="st">&quot;AUTHOR&quot;</span> properties</span></code></pre></div>
+</div>
+<h2 id="4. Snapshotに仕舞っておく">4. Snapshotに仕舞っておく</h2>
+<p><code>Snapshot</code> に仕舞っておくことで、 後に他の <code>Compiler</code> や <code>Context</code> の中から使用することができます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>    match <span class="st">&quot;posts/*.org&quot;</span> <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a> route idRoute</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a> compiler <span class="op">$</span> <span class="kw">do</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>   (<span class="dt">Pandoc</span> _ blocks) <span class="ot">&lt;-</span> getResourceBody <span class="op">&gt;&gt;=</span> readPandoc</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>   <span class="kw">let</span> properties     <span class="ot">=</span> <span class="kw">case</span> blocks <span class="kw">of</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>     (<span class="dt">Header</span> <span class="dv">1</span> (_<span class="op">:</span>_<span class="op">:</span>kv) _) <span class="ot">-&gt;</span> kv</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>     _ <span class="ot">-&gt;</span> [] </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>authorProperty <span class="ot">=</span> fromMaybe <span class="st">&quot;著者不明&quot;</span> <span class="op">$</span> <span class="fu">lookup</span> <span class="st">&quot;AUTHOR&quot;</span> properties</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>   saveSnapshot <span class="st">&quot;title&quot;</span> <span class="op">=&lt;&lt;</span> makeItem authorProperty</span></code></pre></div>
+</div>
+<h2 id="5. 他の場所から使う(別の Compiler 編)">5. 他の場所から使う(別の <code>Compiler</code> 編)</h2>
+<p>上記のステップの後、別のCompilerモナドからtitleプロパティの値を使うことができるようになりました。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>loadSnapshotBody <span class="st">&quot;&quot;</span> <span class="st">&quot;title&quot;</span></span></code></pre></div>
+</div>
+<h2 id="6. 他の場所から使う(Context 編)">6. 他の場所から使う(<code>Context</code> 編)</h2>
+<p>実はこれが一番やりたかったことでした。 Contextの中から <code>loadSnapshotBody</code> で読み込むことで <code>Identifier</code> 毎に違う値を取り出すことができるため、 <code>listField</code> を使う際に各要素毎に違う値を持たせることができます。</p>
+<p>そのためには <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Template-Context.html#v:field"> <code>field</code> </a>関数を直接使います。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ot">titleField&#39; ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Context</span> <span class="dt">String</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>titleField&#39; key <span class="ot">=</span> field key <span class="op">$</span> \item <span class="ot">-&gt;</span> loadSnapshotBody (itemIdentifier item) <span class="st">&quot;title&quot;</span></span></code></pre></div>
+</div>
+<p>これで、与えられたキーに対して"title"というSnapshotの値を入れこむことができるようになりました。</p>
+<p><code>listField</code> で使う例はこんな感じです(<a href="https://github.com/Cj-bc/blog/blob/189a4d6df236c3155d098d870fc36ac9e4fc13b5/MyBlog/Contexts.hs#L98-L100">このブログのコード</a>だったりします):</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+haskell
+</div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- | Common Contexts for pages that holds post list</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ot">postListCtx ::</span> [<span class="dt">Item</span> <span class="dt">String</span>] <span class="ot">-&gt;</span> <span class="dt">Context</span> b</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>postListCtx posts <span class="ot">=</span> listField <span class="st">&quot;posts&quot;</span> (titleField&#39; <span class="st">&quot;title&quot;</span> <span class="op">&lt;&gt;</span> postCtx) (<span class="fu">return</span> posts)</span></code></pre></div>
+</div>
+<h1 id="参考情報">参考情報</h1>
+<p>実は、メタデータの収集元については他にも困っている人がそれなりに いるようで、Githubにissueがいくつか立っています。</p>
+<dl>
+<dt><a href="https://github.com/jaspervdj/hakyll/issues/529">#529</a></dt>
+<dd>メタデータのパーサーを指定できるようにしたいよというissue
+</dd>
+<dt><a href="https://github.com/jaspervdj/hakyll/issues/700">#700</a></dt>
+<dd><code>#+TITLE</code> 形式のメタデータを読み込む方法についての議論issue (walkaroundあり)
+</dd>
+<dt><a href="https://github.com/jaspervdj/hakyll/issues/643">#643</a></dt>
+<dd>Pandocがメタデータとしてパースした情報を使えるようにしたいというissue
+</dd>
+</dl>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+
+</feed>

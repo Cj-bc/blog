@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- 音声周りの環境改善をした</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2022-03-14-linux-fix-audio-environments.html" /><meta property="og:title" content="音声周りの環境改善をした" /><meta property="og:description" content="<p>実はこの環境は音声周りの環境が大分悪くて、 普段はYouTubeなどはこの環境からは利用していない。</p>
+<p>今回暇だったので、せっかくなので直してみることにする。</p>
+<h1 id=" />
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>音声周りの環境改善をした</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 14, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 14, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged 'archlinux'." href="../tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged '環境構築'." href="../tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89.html" class="ui tag label">環境構築</a><a title="All pages tagged 'pulseaudio'." href="../tags/pulseaudio.html" class="ui tag label">pulseaudio</a><a title="All pages tagged 'bluetooth'." href="../tags/bluetooth.html" class="ui tag label">bluetooth</a>
+	
+      </div>
+
+    <div class="description">
+      <p>実はこの環境は音声周りの環境が大分悪くて、 普段はYouTubeなどはこの環境からは利用していない。</p>
+<p>今回暇だったので、せっかくなので直してみることにする。</p>
+<h1 id="元々あった問題">元々あった問題</h1>
+<h2 id="アプリケーション毎の音量差が激しすぎる">アプリケーション毎の音量差が激しすぎる</h2>
+<p>ブラウザで流しているYouTubeの音が聞こえる程度の音量にすると、 通知が爆音でガチビビるという現象がありました。 逆に通知の音量程度にすると、YouTubeの音が全く聞こえません。</p>
+<p>ちなみに、通知の音量程度にした時にPulseAudioの音量ゲージが100% なのでブラウザ側の音量が小さいのが問題です。</p>
+<h2 id="Air Podsを接続して聞くと音がガビガビになる">Air Podsを接続して聞くと音がガビガビになる</h2>
+<p>昔はきちんと聞こえていた(と思う)のですが、いつからか ガビガビで聞けたものじゃなくなりました。</p>
+<h1 id="今回やったこと">今回やったこと</h1>
+<h2 id="1. ブラウザの sink-input の音量を調節した">1. ブラウザの <code>sink-input</code> の音量を調節した</h2>
+<p>詳しくは<a href="https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html">前回書いたブログ</a>を参照。</p>
+<p>ブラウザの音量めっっっちゃ小さくされてた(10%だった) のでそれを100%に戻したところ、 良いバランスになった</p>
+<h2 id="2. Air PodsのBluetoothプロファイルを修正した">2. Air PodsのBluetoothプロファイルを修正した</h2>
+<p>前に、音質周りについてプロファイルの問題うんたらと見た ことがあったな~と思ったのでそこ辺りを検索。</p>
+<p>その結果 <a href="https://zenn.dev/noraworld/articles/pulseaudio-bluetooth#設定の変更">Raspberry Pi に複数の Bluetooth デバイスを接続して同時に音を流す – noraworld</a> を発見、どうやら音声通話用プロファイルと音楽用プロファイルが別に存在するらしい。</p>
+<div id="ここで扱われるBluetoothプロファイルの一覧">
+<table>
+<thead>
+<tr class="header">
+<th>用途</th>
+<th>略称</th>
+<th>正式名称</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>音声通話用</td>
+<td>HFP</td>
+<td>Hands-Free Profile</td>
+</tr>
+<tr class="even">
+<td>音楽用</td>
+<td>A2DP</td>
+<td>Advanced Audio Distribution Profile</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>(ちなみに本当に一覧が見たければ<a href="https://www.bluetooth.com/specifications/specs/">bluetooth公式のページに</a>存在する)</p>
+<p><code>pactl list sinks</code> でSinkの一覧を表示した際、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>   シンク #1
+状態: RUNNING
+名前: bluez_sink.74_65_0C_F0_90_23.handsfree_head_unit
+説明: Air Pods
+ドライバー: module-bluez5-device.c
+サンプル仕様: s16le 1ch 16000Hz
+チャンネルマップ: mono
+       ...
+ボリューム: mono: 65536 / 100%
+        バランス 0.00
+ベースボリューム: 65536 / 100%
+       ...
+プロパティー:
+ bluetooth.protocol = &quot;handsfree_head_unit&quot;
+ bluetooth.codec = &quot;mSBC&quot;
+ device.intended_roles = &quot;phone&quot;
+               ...
+</code></pre>
+</div>
+<p>プロパティーの下に <code>bluetooth.protocol = "handsfree_head_unit"</code> とあるので HFPになってるらしいことがわかる。 また、チャンネルマップが <code>mono</code> であることからこれはおそらくモノラル音源になっている ことがわかる。</p>
+<p>またこれはあまり詳しくないので間違っているかもしれないが、 サンプル数も1ch 16000Hzとかなり低めになっていることがわかる。 (参考までに、パソコン本体のサンプル仕様は 2ch 44100Hzだった)</p>
+<p>ということでこれをA2DPに切り替える。 今回はpavucontrolを使って切り替えた。</p>
+<p>pavucontrolを起動したら <code class="verbatim">configure</code> タブを開き、そこに表示された BluetoothヘッドホンのProfileを <code>A2DP</code> に変更する。</p>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

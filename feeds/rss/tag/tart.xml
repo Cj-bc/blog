@@ -7,8 +7,108 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/tart.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Sun, 13 Mar 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Mon, 14 Mar 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-03-14-linux-fix-audio-environments</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-03-14-linux-fix-audio-environments.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>音声周りの環境改善をした</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 14, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 14, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged &#39;環境構築&#39;." href="/tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89.html" class="ui tag label">環境構築</a><a title="All pages tagged &#39;pulseaudio&#39;." href="/tags/pulseaudio.html" class="ui tag label">pulseaudio</a><a title="All pages tagged &#39;bluetooth&#39;." href="/tags/bluetooth.html" class="ui tag label">bluetooth</a>
+	
+      </div>
+
+    <div class="description">
+      <p>実はこの環境は音声周りの環境が大分悪くて、 普段はYouTubeなどはこの環境からは利用していない。</p>
+<p>今回暇だったので、せっかくなので直してみることにする。</p>
+<h1 id="元々あった問題">元々あった問題</h1>
+<h2 id="アプリケーション毎の音量差が激しすぎる">アプリケーション毎の音量差が激しすぎる</h2>
+<p>ブラウザで流しているYouTubeの音が聞こえる程度の音量にすると、 通知が爆音でガチビビるという現象がありました。 逆に通知の音量程度にすると、YouTubeの音が全く聞こえません。</p>
+<p>ちなみに、通知の音量程度にした時にPulseAudioの音量ゲージが100% なのでブラウザ側の音量が小さいのが問題です。</p>
+<h2 id="Air Podsを接続して聞くと音がガビガビになる">Air Podsを接続して聞くと音がガビガビになる</h2>
+<p>昔はきちんと聞こえていた(と思う)のですが、いつからか ガビガビで聞けたものじゃなくなりました。</p>
+<h1 id="今回やったこと">今回やったこと</h1>
+<h2 id="1. ブラウザの sink-input の音量を調節した">1. ブラウザの <code>sink-input</code> の音量を調節した</h2>
+<p>詳しくは<a href="https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html">前回書いたブログ</a>を参照。</p>
+<p>ブラウザの音量めっっっちゃ小さくされてた(10%だった) のでそれを100%に戻したところ、 良いバランスになった</p>
+<h2 id="2. Air PodsのBluetoothプロファイルを修正した">2. Air PodsのBluetoothプロファイルを修正した</h2>
+<p>前に、音質周りについてプロファイルの問題うんたらと見た ことがあったな~と思ったのでそこ辺りを検索。</p>
+<p>その結果 <a href="https://zenn.dev/noraworld/articles/pulseaudio-bluetooth#設定の変更">Raspberry Pi に複数の Bluetooth デバイスを接続して同時に音を流す – noraworld</a> を発見、どうやら音声通話用プロファイルと音楽用プロファイルが別に存在するらしい。</p>
+<div id="ここで扱われるBluetoothプロファイルの一覧">
+<table>
+<thead>
+<tr class="header">
+<th>用途</th>
+<th>略称</th>
+<th>正式名称</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>音声通話用</td>
+<td>HFP</td>
+<td>Hands-Free Profile</td>
+</tr>
+<tr class="even">
+<td>音楽用</td>
+<td>A2DP</td>
+<td>Advanced Audio Distribution Profile</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>(ちなみに本当に一覧が見たければ<a href="https://www.bluetooth.com/specifications/specs/">bluetooth公式のページに</a>存在する)</p>
+<p><code>pactl list sinks</code> でSinkの一覧を表示した際、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>   シンク #1
+状態: RUNNING
+名前: bluez_sink.74_65_0C_F0_90_23.handsfree_head_unit
+説明: Air Pods
+ドライバー: module-bluez5-device.c
+サンプル仕様: s16le 1ch 16000Hz
+チャンネルマップ: mono
+       ...
+ボリューム: mono: 65536 / 100%
+        バランス 0.00
+ベースボリューム: 65536 / 100%
+       ...
+プロパティー:
+ bluetooth.protocol = &quot;handsfree_head_unit&quot;
+ bluetooth.codec = &quot;mSBC&quot;
+ device.intended_roles = &quot;phone&quot;
+               ...
+</code></pre>
+</div>
+<p>プロパティーの下に <code>bluetooth.protocol = "handsfree_head_unit"</code> とあるので HFPになってるらしいことがわかる。 また、チャンネルマップが <code>mono</code> であることからこれはおそらくモノラル音源になっている ことがわかる。</p>
+<p>またこれはあまり詳しくないので間違っているかもしれないが、 サンプル数も1ch 16000Hzとかなり低めになっていることがわかる。 (参考までに、パソコン本体のサンプル仕様は 2ch 44100Hzだった)</p>
+<p>ということでこれをA2DPに切り替える。 今回はpavucontrolを使って切り替えた。</p>
+<p>pavucontrolを起動したら <code class="verbatim">configure</code> タブを開き、そこに表示された BluetoothヘッドホンのProfileを <code>A2DP</code> に変更する。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Mon, 14 Mar 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-03-14-linux-fix-audio-environments.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application</title>
     <link>https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html</link>
     <description><![CDATA[<div id="body-content">
@@ -121,7 +221,7 @@ bash
 	<div class="item">Posted on March 12, 2022</div>
 	<div class="item">
 	  <i class="history icon"></i>
-	  Updated on March 12, 2022
+	  Updated on March 13, 2022
 	</div>
 
 	
@@ -180,7 +280,7 @@ rust
 	<div class="item">Posted on March 11, 2022</div>
 	<div class="item">
 	  <i class="history icon"></i>
-	  Updated on March 11, 2022
+	  Updated on March 13, 2022
 	</div>
 
 	
@@ -226,7 +326,7 @@ rust
 	<div class="item">Posted on March  6, 2022</div>
 	<div class="item">
 	  <i class="history icon"></i>
-	  Updated on March  7, 2022
+	  Updated on March 13, 2022
 	</div>
 
 	
@@ -297,7 +397,7 @@ rust
 	<div class="item">Posted on February 27, 2022</div>
 	<div class="item">
 	  <i class="history icon"></i>
-	  Updated on February 27, 2022
+	  Updated on March 13, 2022
 	</div>
 
 	
@@ -384,7 +484,7 @@ rust
 	<div class="item">Posted on February 26, 2022</div>
 	<div class="item">
 	  <i class="history icon"></i>
-	  Updated on February 27, 2022
+	  Updated on March 13, 2022
 	</div>
 
 	
@@ -426,7 +526,7 @@ rust
 	<div class="item">Posted on February 23, 2022</div>
 	<div class="item">
 	  <i class="history icon"></i>
-	  Updated on February 27, 2022
+	  Updated on March 13, 2022
 	</div>
 
 	
@@ -536,7 +636,7 @@ bash
 	<div class="item">Posted on February 14, 2022</div>
 	<div class="item">
 	  <i class="history icon"></i>
-	  Updated on February 14, 2022
+	  Updated on March 13, 2022
 	</div>
 
 	
@@ -722,93 +822,6 @@ haskell
 ]]></description>
     <pubDate>Mon, 14 Feb 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-02-14-hakyll-retrive-org-file-property-drawer-in-compiler.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content">
-    <div class="ui center aligned icon header">
-      <h1>ViewBindingでの設定がきちんと反映されていなかった理由がわかった</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on February  8, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on February  8, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;android&#39;." href="/tags/android.html" class="ui tag label">android</a><a title="All pages tagged &#39;viewbinding&#39;." href="/tags/viewbinding.html" class="ui tag label">viewbinding</a>
-	
-      </div>
-
-    <div class="description">
-      <p>分かる人が見ればすぐ分かる凡ミスなのだけど、結構時間掛かってしまったので 置いておきます。</p>
-<h1 id="問題">問題</h1>
-<p>以下のようなコードを書いていました。 ViewBindingを用いて、 <code>myButton</code> が押された時に実行される <code>OnClickListener</code> を 設定しているものです。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-kotlin
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode kotlin SourceCode"><code class="sourceCode kotlin"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">class</span> MyFragment<span class="op">:</span> <span class="dt">Fragment</span><span class="op">()</span> <span class="op">{</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">override</span> <span class="kw">fun</span> <span class="fu">onCreateView</span><span class="op">(</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="va">inflater</span><span class="op">:</span> <span class="dt">LayoutInflater</span><span class="op">,</span> <span class="va">container</span><span class="op">:</span> <span class="dt">ViewGroup</span><span class="op">?,</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">savedInstanceState</span><span class="op">:</span> <span class="dt">Bundle</span><span class="op">?</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="op">):</span> <span class="dt">View</span><span class="op">?</span> <span class="op">{</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">view</span><span class="op">:</span> View<span class="op">?</span> <span class="op">=</span> inflater<span class="op">.</span>inflate<span class="op">(</span>R<span class="op">.</span>layout<span class="op">.</span>fragment_mine<span class="op">,</span> container<span class="op">,</span> <span class="kw">false</span><span class="op">)</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">val</span> <span class="va">binding</span> <span class="op">=</span> MyBinding<span class="op">.</span>inflate<span class="op">(</span>inflator<span class="op">)</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    binding<span class="op">.</span>myButton<span class="op">.</span>setOnClickListener <span class="op">{</span> view <span class="op">-&gt;</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>           <span class="co">// Do some action</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> view</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>   <span class="op">}</span></span></code></pre></div>
-</div>
-<p>でも、実行して <code>myButon</code> を押してみても一向に反応しない。 他のレイアウトだとか何だとかをいじってみたりしたけど変わらず…</p>
-<h1 id="原因">原因</h1>
-<p>初めから <a href="https://developer.android.com/topic/libraries/view-binding?hl=ja">フラグメントでビューバインディングを使用する</a>を読んでおけばよかったはなしではある。</p>
-<p>凄く単純な話で、 <strong>戻り値として <code>binding.root</code> を返す必要があります!!!!!!</strong></p>
-<p>今だと <code>inflater.inflate</code> で作成したViewを返していて、それには <code>OnClickListener</code> が設定 されていないんですね。 なので呼び出されるはずもないという。なるほど~~~!!!!</p>
-<p>と、いうことで結果的にはこうすれば良いのでした:</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-diff
-</div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a> class MyFragment: Fragment() {</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>   override fun onCreateView(</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>inflater: LayoutInflater, container: ViewGroup?,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>savedInstanceState: Bundle?</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>   ): View? {</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a> - 	     val view: View? = inflater.inflate(R.layout.fragment_mine, container, false)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>val binding = MyBinding.inflate(inflator)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>binding.myButton.setOnClickListener { view -&gt;</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>       // Do some action</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a> - 	     return view</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a> +	     return binding.root</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>   }</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a> }</span></code></pre></div>
-</div>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Tue, 08 Feb 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-02-08-android-solved-viewbinding-doesnt-work-well-with-fragment.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
