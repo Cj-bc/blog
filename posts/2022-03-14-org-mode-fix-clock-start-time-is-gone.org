@@ -1,0 +1,75 @@
+* "Clock start time is gone" エラーを解消する
+  :PROPERTIES:
+  :DATE: [2022-03-14 Mon 16:39]
+  :TAGS: :elisp:emacs:org-mode:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2022-03-14 Mon 16:39]--[2022-03-14 Mon 16:46] =>  0:07
+  :END:
+  
+  Org captureから戻る時とか、たまに
+
+  #+begin_quote
+  Clock start time is gone
+  #+end_quote
+
+  とか言われて戻れないことがあります。
+  この時の対処法についてです。
+  
+  
+** 原因: ~org-clock-marker~ がずれている
+   これは珍しい事例なのでは？と思うのですが、
+   最後の =Clock-in= した場所を保持している ~org-clock-marker~ が
+   ずれている場合があります。
+    
+
+   このマーカーは、 ~CLOCK: ~ 等の行の先頭に位置する必要がありますが、
+   私の見た環境では ~:LOGBOOK:~ の行に存在していました。
+   この場合、 =org-clock.el= の以下の部分で弾かれてエラーになってしまいます。
+
+    
+   #+begin_src elisp
+     (if (and (looking-at (concat "[ \t]*" org-keyword-time-regexp))
+			(equal (match-string 1) org-clock-string))
+		   (setq ts (match-string 2))
+		 (if fail-quietly (throw 'exit nil) (error "Clock start time is gone")))
+   #+end_src
+    
+   [[file:/usr/share/emacs/27.2/lisp/org/org-clock.el.gz::if (and (looking-at (concat "\[ \t\]*" org-keyword-time-regexp)][source code(オフライン用)]]
+
+** 解決策: マーカーをずらす
+
+   凄く愚直ですがまぁ。
+   help:move-marker でマーカーを動かせるので、それを使用します。
+   
+   マーカーは ~CLOCK:~ の行の最初にある必要があるので、まずはそこの
+   位置を調べる必要があります。
+   カーソルの位置を調べる方法は何かありそうではありますが、
+   今回はマーカーを置きたい位置にカーソルを置き、そこのtext Propertyを調べます。
+
+   #+begin_src elisp
+     (describe-text-properties)
+   #+end_src
+
+   そうすると、以下のように表示されます。この場合位置は ~1411~ ということになります。
+   
+   #+begin_src 
+   Text content at position 1411:
+   
+   
+   There are text properties here:
+     fontified            t
+   
+   [back]
+   #+end_src
+   
+   で、その番号を ~new-pt~ と仮置きすると、
+
+   #+begin_src elisp
+     (move-marker org-clock-marker new-pt)
+   #+end_src
+
+   で設定しなおせます。
