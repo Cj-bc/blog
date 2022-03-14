@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- "Clock start time is gone" エラーを解消する</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2022-03-14-org-mode-fix-clock-start-time-is-gone.html" /><meta property="og:title" content Clock start time is gone" エラーを解消する" /><meta property="og:description" content="<p>Org captureから戻る時とか、たまに</p>
+<div class=" ui piled segment" style="z-index: 0">
+<blockquote>
+<p>Cloc" />
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>"Clock start time is gone" エラーを解消する</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 14, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 14, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged 'elisp'." href="../tags/elisp.html" class="ui tag label">elisp</a><a title="All pages tagged 'emacs'." href="../tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged 'org-mode'." href="../tags/org-mode.html" class="ui tag label">org-mode</a>
+	
+      </div>
+
+    <div class="description">
+      <p>Org captureから戻る時とか、たまに</p>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>Clock start time is gone</p>
+</blockquote>
+</div>
+<p>とか言われて戻れないことがあります。 この時の対処法についてです。</p>
+<h1 id="原因: org-clock-marker がずれている">原因: <code>org-clock-marker</code> がずれている</h1>
+<p>これは珍しい事例なのでは？と思うのですが、 最後の <code class="verbatim">Clock-in</code> した場所を保持している <code>org-clock-marker</code> が ずれている場合があります。</p>
+<p>このマーカーは、 <code>CLOCK: ~ 等の行の先頭に位置する必要がありますが、
+   私の見た環境では ~:LOGBOOK:</code> の行に存在していました。 この場合、 <code class="verbatim">org-clock.el</code> の以下の部分で弾かれてエラーになってしまいます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>  (if (and (looking-at (concat &quot;[ \t]*&quot; org-keyword-time-regexp))
+(equal (match-string 1) org-clock-string))
+  (setq ts (match-string 2))
+(if fail-quietly (throw 'exit nil) (error &quot;Clock start time is gone&quot;)))
+</code></pre>
+</div>
+<p>[[<a href="file:/usr/share/emacs/27.2/lisp/org/org-clock.el.gz">file:/usr/share/emacs/27.2/lisp/org/org-clock.el.gz</a>::if (and (looking-at (concat "<span class="math display">$$ \t$$</span>*" org-keyword-time-regexp)][source code(オフライン用)]]</p>
+<h1 id="解決策: マーカーをずらす">解決策: マーカーをずらす</h1>
+<p>凄く愚直ですがまぁ。 help:move-marker でマーカーを動かせるので、それを使用します。</p>
+<p>マーカーは <code>CLOCK:</code> の行の最初にある必要があるので、まずはそこの 位置を調べる必要があります。 カーソルの位置を調べる方法は何かありそうではありますが、 今回はマーカーを置きたい位置にカーソルを置き、そこのtext Propertyを調べます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(describe-text-properties)
+</code></pre>
+</div>
+<p>そうすると、以下のように表示されます。この場合位置は <code>1411</code> ということになります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Text content at position 1411:
+
+
+There are text properties here:
+  fontified            t
+
+[back]
+</code></pre>
+</div>
+<p>で、その番号を <code>new-pt</code> と仮置きすると、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(move-marker org-clock-marker new-pt)
+</code></pre>
+</div>
+<p>で設定しなおせます。</p>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
