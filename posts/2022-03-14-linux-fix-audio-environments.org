@@ -1,0 +1,94 @@
+* 音声周りの環境改善をした
+  :PROPERTIES:
+  :DATE: [2022-03-14 Mon 10:51]
+  :TAGS: :archlinux:環境構築:pulseaudio:bluetooth:
+  :BLOG_POST_KIND: Memo
+  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2022-03-14 Mon 10:54]--[2022-03-14 Mon 12:00] =>  1:06
+  :END:
+  
+  実はこの環境は音声周りの環境が大分悪くて、
+  普段はYouTubeなどはこの環境からは利用していない。
+
+  今回暇だったので、せっかくなので直してみることにする。
+  
+** 元々あった問題
+   
+*** アプリケーション毎の音量差が激しすぎる
+    ブラウザで流しているYouTubeの音が聞こえる程度の音量にすると、
+    通知が爆音でガチビビるという現象がありました。
+    逆に通知の音量程度にすると、YouTubeの音が全く聞こえません。
+
+    ちなみに、通知の音量程度にした時にPulseAudioの音量ゲージが100%
+    なのでブラウザ側の音量が小さいのが問題です。
+    
+*** Air Podsを接続して聞くと音がガビガビになる
+    昔はきちんと聞こえていた(と思う)のですが、いつからか
+    ガビガビで聞けたものじゃなくなりました。
+    
+** 今回やったこと
+*** 1. ブラウザの ~sink-input~ の音量を調節した
+    詳しくは[[https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html][前回書いたブログ]]を参照。
+
+    ブラウザの音量めっっっちゃ小さくされてた(10%だった)
+    のでそれを100%に戻したところ、
+    良いバランスになった
+
+*** 2. Air PodsのBluetoothプロファイルを修正した
+    前に、音質周りについてプロファイルの問題うんたらと見た
+    ことがあったな~と思ったのでそこ辺りを検索。
+
+    その結果
+    [[https://zenn.dev/noraworld/articles/pulseaudio-bluetooth#設定の変更][Raspberry Pi に複数の Bluetooth デバイスを接続して同時に音を流す -- noraworld]]
+    を発見、どうやら音声通話用プロファイルと音楽用プロファイルが別に存在するらしい。
+
+    
+    #+NAME: ここで扱われるBluetoothプロファイルの一覧
+    | 用途       | 略称 | 正式名称                            |
+    |------------+------+-------------------------------------|
+    | 音声通話用 | HFP  | Hands-Free Profile                  |
+    | 音楽用     | A2DP | Advanced Audio Distribution Profile |
+
+    (ちなみに本当に一覧が見たければ[[https://www.bluetooth.com/specifications/specs/][bluetooth公式のページに]]存在する)
+    
+    ~pactl list sinks~ でSinkの一覧を表示した際、
+
+
+    #+begin_src 
+    シンク #1
+	状態: RUNNING
+	名前: bluez_sink.74_65_0C_F0_90_23.handsfree_head_unit
+	説明: Air Pods
+	ドライバー: module-bluez5-device.c
+	サンプル仕様: s16le 1ch 16000Hz
+	チャンネルマップ: mono
+        ...
+	ボリューム: mono: 65536 / 100%
+	        バランス 0.00
+	ベースボリューム: 65536 / 100%
+        ...
+	プロパティー:
+		bluetooth.protocol = "handsfree_head_unit"
+		bluetooth.codec = "mSBC"
+		device.intended_roles = "phone"
+                ...
+    #+end_src
+
+    プロパティーの下に ~bluetooth.protocol = "handsfree_head_unit"~ とあるので
+    HFPになってるらしいことがわかる。
+    また、チャンネルマップが ~mono~ であることからこれはおそらくモノラル音源になっている
+    ことがわかる。
+    
+    またこれはあまり詳しくないので間違っているかもしれないが、
+    サンプル数も1ch 16000Hzとかなり低めになっていることがわかる。
+    (参考までに、パソコン本体のサンプル仕様は 2ch 44100Hzだった)
+
+
+    ということでこれをA2DPに切り替える。
+    今回はpavucontrolを使って切り替えた。
+    
+    pavucontrolを起動したら =configure= タブを開き、そこに表示された
+    BluetoothヘッドホンのProfileを ~A2DP~ に変更する。
