@@ -3,7 +3,7 @@
   :DATE: [2022-03-14 Mon 10:51]
   :TAGS: :archlinux:環境構築:pulseaudio:bluetooth:
   :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
   :LOGBOOK:
