@@ -1,0 +1,63 @@
+* 2022/03/18
+  :PROPERTIES:
+  :DATE: [2022-03-18 Fri 12:05]
+  :TAGS: :環境構築:
+  :BLOG_POST_KIND: Diary
+  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_STATUS: Normal
+  :END:
+  
+
+** やったこと
+*** stack-staticのインストール(前日の続き)
+    [[https://aur.archlinux.org/packages/stack-static][stac-staticのAURページ]]より[[https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=stack-static][PKGBUILD]]を見てみたところ、
+    新しいGPGキー (フィンガープリント: ~C5705533DA4F78D8664B5DC0575159689BEFB442~)
+    の読み込みをしていた。
+    このキーが何者だかわからなくって怖いので、
+    色々調べてみる。
+
+    
+    [[https://docs.haskellstack.org/en/stable/SIGNING_KEY/][haskellstack.orgのドキュメント]]によると、
+    全てのリリースはそれをビルドした人の鍵によって
+    署名されており、それらの鍵は KeyID ~0x575159689BEFB442~
+    によって署名されているとのこと(きちんと各自確認してほしい)
+
+    
+    で、実際のGithub release(例えば[[https://github.com/commercialhaskell/stack/releases/tag/v2.7.5][v2.7.5]])を見てみると、
+    最近はEmanuel Borsboomさんによって署名されていることがわかり、
+    彼のKey IDは ~65101FF31C5C154D~ である。
+    
+    
+    issueを調べてみると、 Emanuelさんのキーは以下の二つの場所で
+    署名されているとのこと([[https://github.com/commercialhaskell/stack/issues/5122#issuecomment-591424040][ソース]])
+
+    + pool.sks-keyservers.net
+    + pgp.mit.edu
+
+
+    このうち、sks-keyservers.netはどうやら完全に落ちているようで
+    通信不可能だったため、 pgp.mit.eduから読み込んでみることにした。
+    
+    
+
+*** キーサーバーからGPGキーの取り込みが上手くいかない
+    うまくいったわ。[[https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html][別途記事にした]]
+    これを元にstack-staticを明日入れる
+    
+** 知ったこと
+   
+*** SKS keyserversは落ちている
+    sks-keyservers.netもpool.sks-keyservers.netもどちらも
+    pingもwhoisも通らない。
+
+    https://twitter.com/Cj_bc_sd/status/1504612612281344000?s=20&t=PEdWvA4ytQxDokG7Ci8wGQ
+
+    [[https://github.com/SKS-keyserver/sks-keyserver/issues/88][SKS-Keyserverのissue]]によると、[[https://lists.gnupg.org/pipermail/gnupg-users/2021-June/065261.html][メーリングリスト]]で法的理由により閉鎖したとの報告が
+    あったとのこと。
+
+    + [[https://github.com/mono/mono/issues/21121][mono/mono #21121]]
+    + [[https://code.firstlook.media/the-death-of-sks-pgp-keyservers-and-how-first-look-media-is-handling-it][The Death of SKS PGP Keyservers, and How First Look Media is Handling It]]
+
+*** thee, thou
+    you; object form of thou; used when speaking to one person
+** やること
