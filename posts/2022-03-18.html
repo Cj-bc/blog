@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- 2022/03/18</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2022-03-18.html" /><meta property="og:title" content="2022/03/18" /><meta property="og:description" content="<h1 id=" やったこと">やったこと</h1>
+<h2 id="stack-staticのインストール(前日の続き)">stack-staticのインストール(前日の続き)</h2>
+<p><a "></a>
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>2022/03/18</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 18, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 19, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged '環境構築'." href="../tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89.html" class="ui tag label">環境構築</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="やったこと">やったこと</h1>
+<h2 id="stack-staticのインストール(前日の続き)">stack-staticのインストール(前日の続き)</h2>
+<p><a href="https://aur.archlinux.org/packages/stack-static">stac-staticのAURページ</a>より<a href="https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=stack-static">PKGBUILD</a>を見てみたところ、 新しいGPGキー (フィンガープリント: <code>C5705533DA4F78D8664B5DC0575159689BEFB442</code>) の読み込みをしていた。 このキーが何者だかわからなくって怖いので、 色々調べてみる。</p>
+<p><a href="https://docs.haskellstack.org/en/stable/SIGNING_KEY/">haskellstack.orgのドキュメント</a>によると、 全てのリリースはそれをビルドした人の鍵によって 署名されており、それらの鍵は KeyID <code>0x575159689BEFB442</code> によって署名されているとのこと(きちんと各自確認してほしい)</p>
+<p>で、実際のGithub release(例えば<a href="https://github.com/commercialhaskell/stack/releases/tag/v2.7.5">v2.7.5</a>)を見てみると、 最近はEmanuel Borsboomさんによって署名されていることがわかり、 彼のKey IDは <code>65101FF31C5C154D</code> である。</p>
+<p>issueを調べてみると、 Emanuelさんのキーは以下の二つの場所で 署名されているとのこと(<a href="https://github.com/commercialhaskell/stack/issues/5122#issuecomment-591424040">ソース</a>)</p>
+<ul>
+<li>pool.sks-keyservers.net</li>
+<li>pgp.mit.edu</li>
+</ul>
+<p>このうち、sks-keyservers.netはどうやら完全に落ちているようで 通信不可能だったため、 pgp.mit.eduから読み込んでみることにした。</p>
+<h2 id="キーサーバーからGPGキーの取り込みが上手くいかない">キーサーバーからGPGキーの取り込みが上手くいかない</h2>
+<p>うまくいったわ。<a href="https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html">別途記事にした</a> これを元にstack-staticを明日入れる</p>
+<h1 id="知ったこと">知ったこと</h1>
+<h2 id="SKS keyserversは落ちている">SKS keyserversは落ちている</h2>
+<p>sks-keyservers.netもpool.sks-keyservers.netもどちらも pingもwhoisも通らない。</p>
+<p><a href="https://twitter.com/Cj_bc_sd/status/1504612612281344000?s=20&amp;t=PEdWvA4ytQxDokG7Ci8wGQ">https://twitter.com/Cj_bc_sd/status/1504612612281344000?s=20&amp;t=PEdWvA4ytQxDokG7Ci8wGQ</a></p>
+<p><a href="https://github.com/SKS-keyserver/sks-keyserver/issues/88">SKS-Keyserverのissue</a>によると、<a href="https://lists.gnupg.org/pipermail/gnupg-users/2021-June/065261.html">メーリングリスト</a>で法的理由により閉鎖したとの報告が あったとのこと。</p>
+<ul>
+<li><a href="https://github.com/mono/mono/issues/21121">mono/mono #21121</a></li>
+<li><a href="https://code.firstlook.media/the-death-of-sks-pgp-keyservers-and-how-first-look-media-is-handling-it">The Death of SKS PGP Keyservers, and How First Look Media is Handling It</a></li>
+</ul>
+<h2 id="thee, thou">thee, thou</h2>
+<p>you; object form of thou; used when speaking to one person</p>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

@@ -10,6 +10,64 @@
     </author>
     <updated>2022-03-18T00:00:00Z</updated>
     <entry>
+    <title>2022-03-18</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-18.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-18.html</id>
+    <published>2022-03-18T00:00:00Z</published>
+    <updated>2022-03-18T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>2022/03/18</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 18, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 19, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;環境構築&#39;." href="/tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89.html" class="ui tag label">環境構築</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="やったこと">やったこと</h1>
+<h2 id="stack-staticのインストール(前日の続き)">stack-staticのインストール(前日の続き)</h2>
+<p><a href="https://aur.archlinux.org/packages/stack-static">stac-staticのAURページ</a>より<a href="https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=stack-static">PKGBUILD</a>を見てみたところ、 新しいGPGキー (フィンガープリント: <code>C5705533DA4F78D8664B5DC0575159689BEFB442</code>) の読み込みをしていた。 このキーが何者だかわからなくって怖いので、 色々調べてみる。</p>
+<p><a href="https://docs.haskellstack.org/en/stable/SIGNING_KEY/">haskellstack.orgのドキュメント</a>によると、 全てのリリースはそれをビルドした人の鍵によって 署名されており、それらの鍵は KeyID <code>0x575159689BEFB442</code> によって署名されているとのこと(きちんと各自確認してほしい)</p>
+<p>で、実際のGithub release(例えば<a href="https://github.com/commercialhaskell/stack/releases/tag/v2.7.5">v2.7.5</a>)を見てみると、 最近はEmanuel Borsboomさんによって署名されていることがわかり、 彼のKey IDは <code>65101FF31C5C154D</code> である。</p>
+<p>issueを調べてみると、 Emanuelさんのキーは以下の二つの場所で 署名されているとのこと(<a href="https://github.com/commercialhaskell/stack/issues/5122#issuecomment-591424040">ソース</a>)</p>
+<ul>
+<li>pool.sks-keyservers.net</li>
+<li>pgp.mit.edu</li>
+</ul>
+<p>このうち、sks-keyservers.netはどうやら完全に落ちているようで 通信不可能だったため、 pgp.mit.eduから読み込んでみることにした。</p>
+<h2 id="キーサーバーからGPGキーの取り込みが上手くいかない">キーサーバーからGPGキーの取り込みが上手くいかない</h2>
+<p>うまくいったわ。<a href="https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html">別途記事にした</a> これを元にstack-staticを明日入れる</p>
+<h1 id="知ったこと">知ったこと</h1>
+<h2 id="SKS keyserversは落ちている">SKS keyserversは落ちている</h2>
+<p>sks-keyservers.netもpool.sks-keyservers.netもどちらも pingもwhoisも通らない。</p>
+<p><a href="https://twitter.com/Cj_bc_sd/status/1504612612281344000?s=20&amp;t=PEdWvA4ytQxDokG7Ci8wGQ">https://twitter.com/Cj_bc_sd/status/1504612612281344000?s=20&amp;t=PEdWvA4ytQxDokG7Ci8wGQ</a></p>
+<p><a href="https://github.com/SKS-keyserver/sks-keyserver/issues/88">SKS-Keyserverのissue</a>によると、<a href="https://lists.gnupg.org/pipermail/gnupg-users/2021-June/065261.html">メーリングリスト</a>で法的理由により閉鎖したとの報告が あったとのこと。</p>
+<ul>
+<li><a href="https://github.com/mono/mono/issues/21121">mono/mono #21121</a></li>
+<li><a href="https://code.firstlook.media/the-death-of-sks-pgp-keyservers-and-how-first-look-media-is-handling-it">The Death of SKS PGP Keyservers, and How First Look Media is Handling It</a></li>
+</ul>
+<h2 id="thee, thou">thee, thou</h2>
+<p>you; object form of thou; used when speaking to one person</p>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>2022-03-18-gpg-stuggled-to-search-key-from-keyserver</title>
     <link href="https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html" />
     <id>https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html</id>
@@ -724,48 +782,6 @@ rust
 </div></li>
 </ol>
 <h1 id="やること">やること</h1>
-    </div>
-  </div>
-  
-
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>2022-02-26-rust-hyper-convert-body-into-bytes</title>
-    <link href="https://cj-bc.github.io/blog/posts/2022-02-26-rust-hyper-convert-body-into-bytes.html" />
-    <id>https://cj-bc.github.io/blog/posts/2022-02-26-rust-hyper-convert-body-into-bytes.html</id>
-    <published>2022-02-26T00:00:00Z</published>
-    <updated>2022-02-26T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div id="body-content">
-  <div class="content">
-    <div class="ui center aligned icon header">
-      <h1>HttpのリクエストからBodyをBytesで取り出す</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on February 26, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on March 13, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a><a title="All pages tagged &#39;hyper&#39;." href="/tags/hyper.html" class="ui tag label">hyper</a><a title="All pages tagged &#39;http&#39;." href="/tags/http.html" class="ui tag label">http</a>
-	
-      </div>
-
-    <div class="description">
-      <p><a href="https://docs.rs/crate/hyper/0.13.8">Hyper</a>の<a href="https://docs.rs/hyper/0.13.8/hyper/body/struct.Body.html">Body</a>を<a href="https://docs.rs/hyper/0.13.8/hyper/body/struct.Bytes.html">Bytes</a>に変換する方法について、何気に調べるの苦労したのでメモ。</p>
-<p><code>hyper::body</code> に用意されている <a href="https://docs.rs/hyper/0.13.8/hyper/body/fn.to_bytes.html">to<sub>bytes</sub></a>関数を使えばよい。</p>
-<p>HttpのRequrestからBodyは <a href="https://docs.rs/http/0.2.1/http/request/struct.Request.html#method.into_body"> <code>into_body</code> </a>で取れるので、それを <code>to_bytes</code> に与えてあげる。 つまり:</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-rust
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> bytes_body<span class="op">:</span> Bytes <span class="op">=</span> <span class="pp">hyper::body::</span>to_bytes(req<span class="op">.</span>into_body())</span></code></pre></div>
-</div>
     </div>
   </div>
   
