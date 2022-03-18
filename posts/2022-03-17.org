@@ -3,7 +3,7 @@
   :DATE: [2022-03-17 Thu 11:46]
   :TAGS: :haskell:stack:archlinux:
   :BLOG_POST_KIND: Diary
-  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
   
