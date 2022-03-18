@@ -1,0 +1,141 @@
+* ~gpg --search-keys~ がうまくいかなかったので調べる
+  :PROPERTIES:
+  :DATE: [2022-03-18 Fri 14:16]
+  :TAGS: :gpg:
+  :BLOG_POST_KIND: Memo
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2022-03-18 Fri 17:07]--[2022-03-18 Fri 18:08] =>  1:01
+  CLOCK: [2022-03-18 Fri 15:07]--[2022-03-18 Fri 16:15] =>  1:08
+  CLOCK: [2022-03-18 Fri 14:17]--[2022-03-18 Fri 14:39] =>  0:22
+  CLOCK: [2022-03-18 Fri 14:17]--[2022-03-18 Fri 14:17] =>  0:00
+  :END:
+  
+** 状況
+   stackの署名キーを引いてくるために、 ~--search-keywords~ を
+   してみたところエラーが起きた。
+   
+   #+begin_src sh
+     gpg --search-keys 65101FF31C5C154D
+   #+end_src
+
+   #+RESULTS:
+   gpg: error searching keyserver: Server indicated a failure
+   gpg: keyserver search failed: Server indicated a failure
+
+** 原因: DNSリゾルバが適切に設定されていなかった
+   らしい。 *systemd-resolvedを使用している場合* 注意が必要そう。
+
+   具体的には、
+   *GnuPGはドメイン名解決のために ~/etc/resolv.conf~ を参照するが
+   systemd-resolvedは ~/etc/resolv.conf~ を参照も設定もしない*
+
+   
+   なので、ドメイン名解決のための設定を何もしていない状況になっていた。
+
+   
+   実は [[https://wiki.archlinux.jp/index.php/Systemd-resolved#DNS][archwikiのsystemd-resolvedページに記載がある]]のでそれに従い、
+   
+   #+begin_src sh
+     # 私の場合は元から /etc/resolve.conf が
+     # 空だったので削除しているが、必要に応じて
+     # なんかして
+     rm /etc/resolv.conf
+     ln -s /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+   #+end_src
+   
+   としてリンクを作成した。
+
+   この後 ~gpgconf --reload~ で設定を読み直したら動くようになった!
+
+** 過去の調べ物
+
+   とりあえず色々調べたけど、
+   結論今回は関係なかったものたち。
+   まぁ状況によっては役立つかもなので残しておく。
+   
+*** dirmngr 2.1.17時代のバグの話
+    これは無関係だった。dirmngrの昔のバージョンにて、
+    全ての操作が出来無いバグがあったらしい。わぁぉ。
+
+    + https://bbs.archlinux.org/viewtopic.php?id=220996
+    + https://dev.gnupg.org/T2889
+
+*** コードリーディングで原因探し
+    とりあえずもうちょい確信に迫りたかったので、
+    えいやって [[https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=summary][gnupgのgitレポジトリ]]cloneしてきて読んだ。
+
+    ~gpg --debug-all --search-keys <key_id>~ が出力した
+    エラーメッセージ "Try again later" をとりあえずgrepする。
+
+
+    けどみつからん。
+
+    実は実際は[[https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=src/err-codes.h.in;hb=32dad4e4135f0bdc436ed684da753d4b0cdb0ea1#l334][libgpg-error]]の中にエラーメッセージが定義されており、
+    そちらを探すと以下のコードが見付かる。
+
+    #+NAME: src/err-codes.h.in:334
+    #+begin_src c
+      312     GPG_ERR_TRY_LATER               Try again later
+    #+end_src
+    
+    これだけだとわからないが、 /まぁ多分これ定数だろうという推測/
+    のもと今度は ~GPG_ERR_TRY_LATER~ を(今度こそ) gnupgのコードベースで
+    grepしてみる。
+    と、一箇所だけ見付かる:
+
+    #+begin_src sh :wrap src c
+      find . -regex '.*\.c\|.*\.h' -exec grep 'GPG_ERR_TRY_LATER' {} \+
+    #+end_src
+
+    #+RESULTS:
+    #+begin_src c
+      ./dirmngr/dns-stuff.c:    case TRY_AGAIN:      ec = GPG_ERR_TRY_LATER; break;
+    #+end_src
+
+    これは ~get_h_errno_as_gpg_error~ 関数であり、
+    説明によると ~H_ERRNO~ をgpgで使用されるエラーコードに直してくれるらしい。
+
+
+    ...まぁとりあえず使用例を追う。と、 [[https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=blob;f=dirmngr/dns-stuff.c;h=0edbc0442e05086c5785a2efb75292e526291319;hb=HEAD][dirmngr/dns-stuff.c]]の中に2箇所あるがどちらも
+    ~res_query~ を呼んだ結果によって使用されている。
+
+
+    #+NAME: getsrv_standard()
+    #+begin_src c
+      ...
+      r = res_query (name, C_IN, T_SRV, answer, sizeof res.ans);
+      my_protect ();
+      if (r < 0)
+	return get_h_errno_as_gpg_error ();
+
+      ...
+    #+end_src
+
+    #+NAME: get_dns_cname_standard()
+    #+begin_src c
+      ...
+      r = res_query (name, C_IN, T_CERT, answer, sizeof res.ans);
+      my_protect ();
+      if (r < 0)
+	return get_h_errno_as_gpg_error ();
+      ...
+    #+end_src
+
+    
+    で、じゃぁこいつが何か...?と思ってgrepしてみると
+    定義がない。実はこいつはresolverで定義されており、manページを
+    引くことができる[[https://man.archlinux.org/man/res_query.3][res_query(3)]]
+
+
+    Cだとこういうのたまに見掛けるので面白いね。
+
+    で、芋蔓式にわかるのだけれど ~h_errno~ も [[https://man.archlinux.org/man/gethostbyname.3][gethostbyname(3)]]に定義されている。
+    
+    なので、あとはそこを追えばよさそう!!!
+
+
+    ...なのだけど、この段階になって先に述べた解決方法が
+    判明してしまったのでここまでで打ち切り。
