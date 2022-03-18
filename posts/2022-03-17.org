@@ -1,0 +1,46 @@
+* 2022/03/17
+  :PROPERTIES:
+  :DATE: [2022-03-17 Thu 11:46]
+  :TAGS: :haskell:stack:archlinux:
+  :BLOG_POST_KIND: Diary
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  
+
+** やったこと
+   全体的には、家にいる間は ~stack-static~ にふりまわされてた
+   
+*** stackを ~stack-static~ に変えようとしている
+    今迄stackは公式レポジトリのものを使っていたが、グローバルにhaskell
+    パッケージを導入する必要があるのがちょっと嫌だった。
+
+    今朝、 ~pacman -Syu~ した所、依存パッケージの ~haskell-cryptonite-conduit~
+    の関係でstackが使えなくなった。
+    
+    そもそもグローバルにインストールしてるのがあまり好きではないので、
+    Archlinux-jpで存在を教わった、AURの ~stack-static~ に変えようとしている...のだけど
+    結構てこずっている。
+
+*** ~yay -Sc~
+    容量空ける為に走らせたところ、空き容量2GB→8.5GBと大幅に増えた。
+    やったね!
+
+*** 散歩した
+    散歩した。ついでに、お弁当を買って公園で御飯を食べるなどした。
+    前から気になってたお店で買ったのだけど、思った以上に美味しくてとてもハッピー...!
+
+    
+    御飯食べて、近くにカフェがあったので珈琲買って飲んだ。
+    結構長いこと外におったな今日は。
+    
+** 知ったこと
+   
+*** Archlinuxのパッケージが、pkgrelのみアップデートされている現象について
+    Archlinux-jpで聞いた所リンクを貰った、まだ理解しきれてないのでとりあえずここに。
+
+    
+    https://www.reddit.com/r/archlinux/comments/7qtx37/why_do_haskellbased_software_upgrades_require_a/
+
+    
+** やること
