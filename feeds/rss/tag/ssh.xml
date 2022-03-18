@@ -7,8 +7,178 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/ssh.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Mon, 14 Mar 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Fri, 18 Mar 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-03-18-gpg-stuggled-to-search-key-from-keyserver</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>gpg --search-keys がうまくいかなかったので調べる</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 18, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 18, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;gpg&#39;." href="/tags/gpg.html" class="ui tag label">gpg</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="状況">状況</h1>
+<p>stackの署名キーを引いてくるために、 <code>--search-keywords</code> を してみたところエラーが起きた。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gpg</span> <span class="at">--search-keys</span> 65101FF31C5C154D</span></code></pre></div>
+</div>
+<p>gpg: error searching keyserver: Server indicated a failure gpg: keyserver search failed: Server indicated a failure</p>
+<h1 id="原因: DNSリゾルバが適切に設定されていなかった">原因: DNSリゾルバが適切に設定されていなかった</h1>
+<p>らしい。 <strong>systemd-resolvedを使用している場合</strong> 注意が必要そう。</p>
+<p>具体的には、 <strong>GnuPGはドメイン名解決のために <code>/etc/resolv.conf</code> を参照するが systemd-resolvedは <code>/etc/resolv.conf</code> を参照も設定もしない</strong></p>
+<p>なので、ドメイン名解決のための設定を何もしていない状況になっていた。</p>
+<p>実は <a href="https://wiki.archlinux.jp/index.php/Systemd-resolved#DNS">archwikiのsystemd-resolvedページに記載がある</a>のでそれに従い、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 私の場合は元から /etc/resolve.conf が</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 空だったので削除しているが、必要に応じて</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># なんかして</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> /etc/resolv.conf</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf</span></code></pre></div>
+</div>
+<p>としてリンクを作成した。</p>
+<p>この後 <code>gpgconf --reload</code> で設定を読み直したら動くようになった!</p>
+<h1 id="過去の調べ物">過去の調べ物</h1>
+<p>とりあえず色々調べたけど、 結論今回は関係なかったものたち。 まぁ状況によっては役立つかもなので残しておく。</p>
+<h2 id="dirmngr 2.1.17時代のバグの話">dirmngr 2.1.17時代のバグの話</h2>
+<p>これは無関係だった。dirmngrの昔のバージョンにて、 全ての操作が出来無いバグがあったらしい。わぁぉ。</p>
+<ul>
+<li><a href="https://bbs.archlinux.org/viewtopic.php?id=220996">https://bbs.archlinux.org/viewtopic.php?id=220996</a></li>
+<li><a href="https://dev.gnupg.org/T2889">https://dev.gnupg.org/T2889</a></li>
+</ul>
+<h2 id="コードリーディングで原因探し">コードリーディングで原因探し</h2>
+<p>とりあえずもうちょい確信に迫りたかったので、 えいやって <a href="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=summary">gnupgのgitレポジトリ</a>cloneしてきて読んだ。</p>
+<p><code>gpg --debug-all --search-keys &lt;key_id&gt;</code> が出力した エラーメッセージ "Try again later" をとりあえずgrepする。</p>
+<p>けどみつからん。</p>
+<p>実は実際は<a href="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=src/err-codes.h.in;hb=32dad4e4135f0bdc436ed684da753d4b0cdb0ea1#l334">libgpg-error</a>の中にエラーメッセージが定義されており、 そちらを探すと以下のコードが見付かる。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="src/err-codes.h.in:334"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="src/err-codes.h.in:334-1"><a href="#src/err-codes.h.in:334-1" aria-hidden="true" tabindex="-1"></a><span class="dv">312</span>     GPG_ERR_TRY_LATER               Try again later</span></code></pre></div>
+</div>
+<p>これだけだとわからないが、 <em>まぁ多分これ定数だろうという推測</em> のもと今度は <code>GPG_ERR_TRY_LATER</code> を(今度こそ) gnupgのコードベースで grepしてみる。 と、一箇所だけ見付かる:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb3" data-org-language="sh" wrap="src c"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-regex</span> <span class="st">&#39;.*\.c\|.*\.h&#39;</span> <span class="at">-exec</span> grep <span class="st">&#39;GPG_ERR_TRY_LATER&#39;</span> {} <span class="dt">\+</span></span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">./</span>dirmngr<span class="op">/</span>dns<span class="op">-</span>stuff<span class="op">.</span>c<span class="op">:</span>    <span class="cf">case</span> TRY_AGAIN<span class="op">:</span>      ec <span class="op">=</span> GPG_ERR_TRY_LATER<span class="op">;</span> <span class="cf">break</span><span class="op">;</span></span></code></pre></div>
+</div>
+<p>これは <code>get_h_errno_as_gpg_error</code> 関数であり、 説明によると <code>H_ERRNO</code> をgpgで使用されるエラーコードに直してくれるらしい。</p>
+<p>…まぁとりあえず使用例を追う。と、 <a href="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=blob;f=dirmngr/dns-stuff.c;h=0edbc0442e05086c5785a2efb75292e526291319;hb=HEAD">dirmngr/dns-stuff.c</a>の中に2箇所あるがどちらも <code>res_query</code> を呼んだ結果によって使用されている。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="getsrv_standard()"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="getsrv_standard()-1"><a href="#getsrv_standard()-1" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span>
+<span id="getsrv_standard()-2"><a href="#getsrv_standard()-2" aria-hidden="true" tabindex="-1"></a>     r <span class="op">=</span> res_query <span class="op">(</span>name<span class="op">,</span> C_IN<span class="op">,</span> T_SRV<span class="op">,</span> answer<span class="op">,</span> <span class="kw">sizeof</span> res<span class="op">.</span>ans<span class="op">);</span></span>
+<span id="getsrv_standard()-3"><a href="#getsrv_standard()-3" aria-hidden="true" tabindex="-1"></a>     my_protect <span class="op">();</span></span>
+<span id="getsrv_standard()-4"><a href="#getsrv_standard()-4" aria-hidden="true" tabindex="-1"></a>     <span class="cf">if</span> <span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="getsrv_standard()-5"><a href="#getsrv_standard()-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> get_h_errno_as_gpg_error <span class="op">();</span></span>
+<span id="getsrv_standard()-6"><a href="#getsrv_standard()-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="getsrv_standard()-7"><a href="#getsrv_standard()-7" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="get_dns_cname_standard()"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="get_dns_cname_standard()-1"><a href="#get_dns_cname_standard()-1" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span>
+<span id="get_dns_cname_standard()-2"><a href="#get_dns_cname_standard()-2" aria-hidden="true" tabindex="-1"></a>     r <span class="op">=</span> res_query <span class="op">(</span>name<span class="op">,</span> C_IN<span class="op">,</span> T_CERT<span class="op">,</span> answer<span class="op">,</span> <span class="kw">sizeof</span> res<span class="op">.</span>ans<span class="op">);</span></span>
+<span id="get_dns_cname_standard()-3"><a href="#get_dns_cname_standard()-3" aria-hidden="true" tabindex="-1"></a>     my_protect <span class="op">();</span></span>
+<span id="get_dns_cname_standard()-4"><a href="#get_dns_cname_standard()-4" aria-hidden="true" tabindex="-1"></a>     <span class="cf">if</span> <span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="get_dns_cname_standard()-5"><a href="#get_dns_cname_standard()-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> get_h_errno_as_gpg_error <span class="op">();</span></span>
+<span id="get_dns_cname_standard()-6"><a href="#get_dns_cname_standard()-6" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span></code></pre></div>
+</div>
+<p>で、じゃぁこいつが何か…?と思ってgrepしてみると 定義がない。実はこいつはresolverで定義されており、manページを 引くことができる<a href="https://man.archlinux.org/man/res_query.3">res<sub>query</sub>(3)</a></p>
+<p>Cだとこういうのたまに見掛けるので面白いね。</p>
+<p>で、芋蔓式にわかるのだけれど <code>h_errno</code> も <a href="https://man.archlinux.org/man/gethostbyname.3">gethostbyname(3)</a>に定義されている。</p>
+<p>なので、あとはそこを追えばよさそう!!!</p>
+<p>…なのだけど、この段階になって先に述べた解決方法が 判明してしまったのでここまでで打ち切り。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Fri, 18 Mar 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2022-03-17</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-03-17.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>2022/03/17</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 17, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 18, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;stack&#39;." href="/tags/stack.html" class="ui tag label">stack</a><a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="やったこと">やったこと</h1>
+<p>全体的には、家にいる間は <code>stack-static</code> にふりまわされてた</p>
+<h2 id="stackを stack-static に変えようとしている">stackを <code>stack-static</code> に変えようとしている</h2>
+<p>今迄stackは公式レポジトリのものを使っていたが、グローバルにhaskell パッケージを導入する必要があるのがちょっと嫌だった。</p>
+<p>今朝、 <code>pacman -Syu</code> した所、依存パッケージの <code>haskell-cryptonite-conduit</code> の関係でstackが使えなくなった。</p>
+<p>そもそもグローバルにインストールしてるのがあまり好きではないので、 Archlinux-jpで存在を教わった、AURの <code>stack-static</code> に変えようとしている…のだけど 結構てこずっている。</p>
+<h2 id="yay -Sc"><code>yay -Sc</code></h2>
+<p>容量空ける為に走らせたところ、空き容量2GB→8.5GBと大幅に増えた。 やったね!</p>
+<h2 id="散歩した">散歩した</h2>
+<p>散歩した。ついでに、お弁当を買って公園で御飯を食べるなどした。 前から気になってたお店で買ったのだけど、思った以上に美味しくてとてもハッピー…!</p>
+<p>御飯食べて、近くにカフェがあったので珈琲買って飲んだ。 結構長いこと外におったな今日は。</p>
+<h1 id="知ったこと">知ったこと</h1>
+<h2 id="Archlinuxのパッケージが、pkgrelのみアップデートされている現象について">Archlinuxのパッケージが、pkgrelのみアップデートされている現象について</h2>
+<p>Archlinux-jpで聞いた所リンクを貰った、まだ理解しきれてないのでとりあえずここに。</p>
+<p><a href="https://www.reddit.com/r/archlinux/comments/7qtx37/why_do_haskellbased_software_upgrades_require_a/">https://www.reddit.com/r/archlinux/comments/7qtx37/why_do_haskellbased_software_upgrades_require_a/</a></p>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Thu, 17 Mar 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-03-17.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-03-14-org-mode-fix-clock-start-time-is-gone</title>
     <link>https://cj-bc.github.io/blog/posts/2022-03-14-org-mode-fix-clock-start-time-is-gone.html</link>
     <description><![CDATA[<div id="body-content">
@@ -600,116 +770,6 @@ rust
 ]]></description>
     <pubDate>Sat, 26 Feb 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-02-26-rust-hyper-convert-body-into-bytes.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-02-23</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-02-23.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content">
-    <div class="ui center aligned icon header">
-      <h1>2022/02/23</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on February 23, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on March 13, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;blog&#39;." href="/tags/blog.html" class="ui tag label">blog</a>
-	
-      </div>
-
-    <div class="description">
-      <h1 id="やること">やること</h1>
-<h1 id="他にやったこと">他にやったこと</h1>
-<ul>
-<li>ゴ魔乙まぐろなちゃんコラボ進めた、「マグロナ推し」称号まで取った!</li>
-<li>ゴ魔乙ランク100になった</li>
-<li>Blenderアニメーション書き出し</li>
-</ul>
-<h1 id="知ったこと">知ったこと</h1>
-<ul>
-<li>blenderのDriverはpythonコード、NeosVRのDrive nodeと同じようなもの</li>
-<li></li>
-</ul>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Wed, 23 Feb 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-02-23.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-02-21-archlinux-use-paccache</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-02-21-archlinux-use-paccache.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content">
-    <div class="ui center aligned icon header">
-      <h1>paccacheでキャッシュ削除する</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on February 21, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on February 21, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a>
-	
-      </div>
-
-    <div class="description">
-      <p>気が付いたら、pacmanのパッケージのキャッシュが大変な容量食っていた。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb1" data-org-language="sh" data-results="raw"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">du</span> <span class="at">-sh</span> /var/cache/pacman/pkg</span></code></pre></div>
-</div>
-<p>13G	/var/cache/pacman/pkg</p>
-<p>13ギガバイト…流石に食べすぎ…</p>
-<p><a href="https://wiki.archlinux.jp/index.php/Pacman#.E3.83.91.E3.83.83.E3.82.B1.E3.83.BC.E3.82.B8.E3.82.AD.E3.83.A3.E3.83.83.E3.82.B7.E3.83.A5.E3.81.AE.E5.89.8A.E9.99.A4">archwiki – pacman</a>にある「パッケージキャッシュの削除に従ってやってみる。 ツールを使うことが推奨されていたので、今回は該当パッケージ aur:pacman-contrib を入れて <code>paccache</code> を使ってみる。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> pacman <span class="at">-S</span> pacman-contrib</span></code></pre></div>
-</div>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">paccache</span> <span class="at">-r</span></span></code></pre></div>
-</div>
-<p>==&gt; Privilege escalation required [sudo] me のパスワード:</p>
-<p>==&gt; finished: 1647 packages removed (disk space saved: 6.28 GiB)</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb4" data-org-language="sh" data-results="raw"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">du</span> <span class="at">-sh</span> /var/cache/pacman/pkg</span></code></pre></div>
-</div>
-<p>6.4G	/var/cache/pacman/pkg</p>
-<p>大分減った</p>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Mon, 21 Feb 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-02-21-archlinux-use-paccache.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 

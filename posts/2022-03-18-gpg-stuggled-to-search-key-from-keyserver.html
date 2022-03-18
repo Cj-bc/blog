@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- gpg --search-keys がうまくいかなかったので調べる</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html" /><meta property="og:title" content="gpg --search-keys がうまくいかなかったので調べる" /><meta property="og:description" content="<h1 id=" 状況">状況</h1>
+<p>stackの署名キーを引いてくるために、 <code>--search-keywords</code> を してみたところエラーが起きた。</p>
+<di"></di">
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>gpg --search-keys がうまくいかなかったので調べる</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 18, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 18, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged 'gpg'." href="../tags/gpg.html" class="ui tag label">gpg</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="状況">状況</h1>
+<p>stackの署名キーを引いてくるために、 <code>--search-keywords</code> を してみたところエラーが起きた。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gpg</span> <span class="at">--search-keys</span> 65101FF31C5C154D</span></code></pre></div>
+</div>
+<p>gpg: error searching keyserver: Server indicated a failure gpg: keyserver search failed: Server indicated a failure</p>
+<h1 id="原因: DNSリゾルバが適切に設定されていなかった">原因: DNSリゾルバが適切に設定されていなかった</h1>
+<p>らしい。 <strong>systemd-resolvedを使用している場合</strong> 注意が必要そう。</p>
+<p>具体的には、 <strong>GnuPGはドメイン名解決のために <code>/etc/resolv.conf</code> を参照するが systemd-resolvedは <code>/etc/resolv.conf</code> を参照も設定もしない</strong></p>
+<p>なので、ドメイン名解決のための設定を何もしていない状況になっていた。</p>
+<p>実は <a href="https://wiki.archlinux.jp/index.php/Systemd-resolved#DNS">archwikiのsystemd-resolvedページに記載がある</a>のでそれに従い、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 私の場合は元から /etc/resolve.conf が</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 空だったので削除しているが、必要に応じて</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># なんかして</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> /etc/resolv.conf</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf</span></code></pre></div>
+</div>
+<p>としてリンクを作成した。</p>
+<p>この後 <code>gpgconf --reload</code> で設定を読み直したら動くようになった!</p>
+<h1 id="過去の調べ物">過去の調べ物</h1>
+<p>とりあえず色々調べたけど、 結論今回は関係なかったものたち。 まぁ状況によっては役立つかもなので残しておく。</p>
+<h2 id="dirmngr 2.1.17時代のバグの話">dirmngr 2.1.17時代のバグの話</h2>
+<p>これは無関係だった。dirmngrの昔のバージョンにて、 全ての操作が出来無いバグがあったらしい。わぁぉ。</p>
+<ul>
+<li><a href="https://bbs.archlinux.org/viewtopic.php?id=220996">https://bbs.archlinux.org/viewtopic.php?id=220996</a></li>
+<li><a href="https://dev.gnupg.org/T2889">https://dev.gnupg.org/T2889</a></li>
+</ul>
+<h2 id="コードリーディングで原因探し">コードリーディングで原因探し</h2>
+<p>とりあえずもうちょい確信に迫りたかったので、 えいやって <a href="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=summary">gnupgのgitレポジトリ</a>cloneしてきて読んだ。</p>
+<p><code>gpg --debug-all --search-keys &lt;key_id&gt;</code> が出力した エラーメッセージ "Try again later" をとりあえずgrepする。</p>
+<p>けどみつからん。</p>
+<p>実は実際は<a href="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=src/err-codes.h.in;hb=32dad4e4135f0bdc436ed684da753d4b0cdb0ea1#l334">libgpg-error</a>の中にエラーメッセージが定義されており、 そちらを探すと以下のコードが見付かる。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="src/err-codes.h.in:334"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="src/err-codes.h.in:334-1"><a href="#src/err-codes.h.in:334-1" aria-hidden="true" tabindex="-1"></a><span class="dv">312</span>     GPG_ERR_TRY_LATER               Try again later</span></code></pre></div>
+</div>
+<p>これだけだとわからないが、 <em>まぁ多分これ定数だろうという推測</em> のもと今度は <code>GPG_ERR_TRY_LATER</code> を(今度こそ) gnupgのコードベースで grepしてみる。 と、一箇所だけ見付かる:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb3" data-org-language="sh" wrap="src c"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-regex</span> <span class="st">'.*\.c\|.*\.h'</span> <span class="at">-exec</span> grep <span class="st">'GPG_ERR_TRY_LATER'</span> {} <span class="dt">\+</span></span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">./</span>dirmngr<span class="op">/</span>dns<span class="op">-</span>stuff<span class="op">.</span>c<span class="op">:</span>    <span class="cf">case</span> TRY_AGAIN<span class="op">:</span>      ec <span class="op">=</span> GPG_ERR_TRY_LATER<span class="op">;</span> <span class="cf">break</span><span class="op">;</span></span></code></pre></div>
+</div>
+<p>これは <code>get_h_errno_as_gpg_error</code> 関数であり、 説明によると <code>H_ERRNO</code> をgpgで使用されるエラーコードに直してくれるらしい。</p>
+<p>…まぁとりあえず使用例を追う。と、 <a href="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=blob;f=dirmngr/dns-stuff.c;h=0edbc0442e05086c5785a2efb75292e526291319;hb=HEAD">dirmngr/dns-stuff.c</a>の中に2箇所あるがどちらも <code>res_query</code> を呼んだ結果によって使用されている。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="getsrv_standard()"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="getsrv_standard()-1"><a href="#getsrv_standard()-1" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span>
+<span id="getsrv_standard()-2"><a href="#getsrv_standard()-2" aria-hidden="true" tabindex="-1"></a>     r <span class="op">=</span> res_query <span class="op">(</span>name<span class="op">,</span> C_IN<span class="op">,</span> T_SRV<span class="op">,</span> answer<span class="op">,</span> <span class="kw">sizeof</span> res<span class="op">.</span>ans<span class="op">);</span></span>
+<span id="getsrv_standard()-3"><a href="#getsrv_standard()-3" aria-hidden="true" tabindex="-1"></a>     my_protect <span class="op">();</span></span>
+<span id="getsrv_standard()-4"><a href="#getsrv_standard()-4" aria-hidden="true" tabindex="-1"></a>     <span class="cf">if</span> <span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="getsrv_standard()-5"><a href="#getsrv_standard()-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> get_h_errno_as_gpg_error <span class="op">();</span></span>
+<span id="getsrv_standard()-6"><a href="#getsrv_standard()-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="getsrv_standard()-7"><a href="#getsrv_standard()-7" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="get_dns_cname_standard()"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="get_dns_cname_standard()-1"><a href="#get_dns_cname_standard()-1" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span>
+<span id="get_dns_cname_standard()-2"><a href="#get_dns_cname_standard()-2" aria-hidden="true" tabindex="-1"></a>     r <span class="op">=</span> res_query <span class="op">(</span>name<span class="op">,</span> C_IN<span class="op">,</span> T_CERT<span class="op">,</span> answer<span class="op">,</span> <span class="kw">sizeof</span> res<span class="op">.</span>ans<span class="op">);</span></span>
+<span id="get_dns_cname_standard()-3"><a href="#get_dns_cname_standard()-3" aria-hidden="true" tabindex="-1"></a>     my_protect <span class="op">();</span></span>
+<span id="get_dns_cname_standard()-4"><a href="#get_dns_cname_standard()-4" aria-hidden="true" tabindex="-1"></a>     <span class="cf">if</span> <span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="get_dns_cname_standard()-5"><a href="#get_dns_cname_standard()-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> get_h_errno_as_gpg_error <span class="op">();</span></span>
+<span id="get_dns_cname_standard()-6"><a href="#get_dns_cname_standard()-6" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span></code></pre></div>
+</div>
+<p>で、じゃぁこいつが何か…?と思ってgrepしてみると 定義がない。実はこいつはresolverで定義されており、manページを 引くことができる<a href="https://man.archlinux.org/man/res_query.3">res<sub>query</sub>(3)</a></p>
+<p>Cだとこういうのたまに見掛けるので面白いね。</p>
+<p>で、芋蔓式にわかるのだけれど <code>h_errno</code> も <a href="https://man.archlinux.org/man/gethostbyname.3">gethostbyname(3)</a>に定義されている。</p>
+<p>なので、あとはそこを追えばよさそう!!!</p>
+<p>…なのだけど、この段階になって先に述べた解決方法が 判明してしまったのでここまでで打ち切り。</p>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
