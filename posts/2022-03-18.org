@@ -3,7 +3,7 @@
   :DATE: [2022-03-18 Fri 12:05]
   :TAGS: :環境構築:
   :BLOG_POST_KIND: Diary
-  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
   
