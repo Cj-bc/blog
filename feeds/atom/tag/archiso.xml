@@ -1,0 +1,1019 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>CLI! CLI! CLI!</title>
+    <link href="https://cj-bc.github.io/blog/feeds/atom/tag/archiso.xml" rel="self" />
+    <link href="https://cj-bc.github.io/blog" />
+    <id>https://cj-bc.github.io/blog/feeds/atom/tag/archiso.xml</id>
+    <author>
+        <name>Cj-bc a.k.a Cj.BC_SD</name>
+        <email>cj.bc-sd@outlook.jp</email>
+    </author>
+    <updated>2022-03-31T00:00:00Z</updated>
+    <entry>
+    <title>2022-03-31-archiso-create-x-enabled-archiso</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-31-archiso-create-x-enabled-archiso.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-31-archiso-create-x-enabled-archiso.html</id>
+    <published>2022-03-31T00:00:00Z</published>
+    <updated>2022-03-31T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>X環境を含んだarchsioイメージを作成する</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 31, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on April  1, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged &#39;archiso&#39;." href="/tags/archiso.html" class="ui tag label">archiso</a>
+	
+      </div>
+
+    <div class="description">
+      <p>基本は<a href="https://wiki.archlinux.jp/index.php/Archiso#USB">wiki</a>に従って作業します。 正直思った以上にやること少なかったので、この記事はwikiのまとめ的メモになります。</p>
+<p>やったこと全部書いているつもりではあるけど、今回は後から纏めなおしたので何か欠けている 可能性があります。</p>
+<p>実際に使っているものはこちら: <a href="https://github.com/Cj-bc/dotfiles/tree/master/dotfiles/archiso">Cj-bc/dotfiles/dotfiles/archiso</a></p>
+<h1 id="パッケージの追加">パッケージの追加</h1>
+<p><code>packages.x86_64</code> にパッケージを追加。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/packages.x86_64 b/dotfiles/archiso/packages.x86_64</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>index aaf2416..2bbce38 100644</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/packages.x86_64</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/packages.x86_64</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -119,3 +119,10 @@ wvdial</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a> xfsprogs</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a> xl2tpd</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a> zsh</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="va">+xorg-server</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="va">+lightdm</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="va">+lightdm-gtk-greeter</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="va">+xterm</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="va">+xmonad</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="va">+linux-surface</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="va">+gparted</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>\ No newline at end of file</span></code></pre></div>
+</div>
+<p>WMやDMは好みのものを使って大丈夫だと思います。 私はメイン環境と合わせてLightDM+XMonadにしてあります。</p>
+<h1 id="レポジトリの追加">レポジトリの追加</h1>
+<p>linux-surfaceを使いたいのでレポジトリを追加する</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/pacman.conf b/dotfiles/archiso/pacman.conf</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>index 5ee6c1e..2ba1626 100644</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/pacman.conf</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/pacman.conf</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -30,7 +30,7 @@ Architecture = auto</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a> # Misc options</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a> #UseSyslog</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">-#Color</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="va">+Color</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a> #NoProgressBar</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a> # We cannot check disk space from within a chroot environment</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a> #CheckSpace</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -99,3 +99,7 @@ Include = /etc/pacman.d/mirrorlist</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a> #[custom]</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a> #SigLevel = Optional TrustAll</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a> #Server = file:///home/custompkgs</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="va">+</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="va">+[linux-surface]</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="va">+SigLevel = Optional TrustAll</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="va">+Server = https://pkg.surfacelinux.com/arch/</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>\ No newline at end of file</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
+</div>
+<h1 id="メタデータの編集">メタデータの編集</h1>
+<p>ついでなのでメタデータもちょっと書き換えておきました。 後々識別しやすい…かな?</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/profiledef.sh b/dotfiles/archiso/profiledef.sh</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>index 5feb205..7ce4a85 100644</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/profiledef.sh</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/profiledef.sh</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -1,9 +1,9 @@</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a> #!/usr/bin/env bash</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a> # shellcheck disable=SC2034</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="st">-iso_name=&quot;archlinux&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="va">+iso_name=&quot;archlinux-x&quot;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a> iso_label=&quot;ARCH_$(date +%Y%m)&quot;</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="st">-iso_publisher=&quot;Arch Linux &lt;https://archlinux.org&gt;&quot;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="va">+iso_publisher=&quot;Cj.bc-sd &lt;cj.bc-sd@outlook.jp&gt;&quot;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a> iso_application=&quot;Arch Linux Live/Rescue CD&quot;</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a> iso_version=&quot;$(date +%Y.%m.%d)&quot;</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a> install_dir=&quot;arch&quot;</span></code></pre></div>
+</div>
+<h1 id="デフォルトでXが起動するように設定">デフォルトでXが起動するように設定</h1>
+<p>systemdのUnitにsymlinkを貼ります。 これは <code>systemctl enable</code> がするのと同じ挙動です。</p>
+<h2 id="古い手法について">古い手法について</h2>
+<p>Wikiには <code>customize_airootfs.sh</code> の編集をする方法も記載されていますが、 これはもうdeprecatedとなっています</p>
+<p>(参考: <a href="https://gitlab.archlinux.org/archlinux/archiso/-/blob/master/CHANGELOG.rst">バージョン51のCHANGELOG</a>)</p>
+<p>実行したら怒られたログ↓</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>[mkarchiso] WARNING: customize_airootfs.sh is deprecated! Support for it will be removed in a future archiso version.
+</code></pre>
+</div>
+<h1 id="mkarchisoする">mkarchisoする</h1>
+<p>あとはやるだけ。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb5" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> workdir out</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">mkarchiso</span> <span class="at">-v</span> <span class="at">-w</span> workdir <span class="at">-o</span> out .</span></code></pre></div>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th>オプション</th>
+<th>解説</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-v</code></td>
+<td>verbose。ログの出力をします</td>
+</tr>
+<tr class="even">
+<td><code>-w workdir</code></td>
+<td>作業ディレクトリの設定をします</td>
+</tr>
+<tr class="odd">
+<td><code>-o out</code></td>
+<td>最終的に出来上がったisoファイルを格納するディレクトリの設定をします</td>
+</tr>
+</tbody>
+</table>
+<p>ちょっと時間(とストレージ)食うので待つ。 うちの環境では 5GBくらい要求されたので気をつけてとのこと。</p>
+<h1 id="できたisoを焼く">できたisoを焼く</h1>
+<p><a href="https://wiki.archlinux.jp/index.php/USB_インストールメディア#dd_を使う">USBインストールメディアを作成するwiki</a>に従って焼く。 今回はddを使う。各パラメーターについては各自確認してから焼いてほしい。 あぶないので。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb6" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dd bs=4M if=out/archlinux-x-2022.04.01-x86_64.iso of=/dev/sda status=progress <span class="kw">&amp;&amp;</span> <span class="fu">sync</span></span></code></pre></div>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-03-18</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-18.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-18.html</id>
+    <published>2022-03-18T00:00:00Z</published>
+    <updated>2022-03-18T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>2022/03/18</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 18, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 19, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;環境構築&#39;." href="/tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89.html" class="ui tag label">環境構築</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="やったこと">やったこと</h1>
+<h2 id="stack-staticのインストール(前日の続き)">stack-staticのインストール(前日の続き)</h2>
+<p><a href="https://aur.archlinux.org/packages/stack-static">stac-staticのAURページ</a>より<a href="https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=stack-static">PKGBUILD</a>を見てみたところ、 新しいGPGキー (フィンガープリント: <code>C5705533DA4F78D8664B5DC0575159689BEFB442</code>) の読み込みをしていた。 このキーが何者だかわからなくって怖いので、 色々調べてみる。</p>
+<p><a href="https://docs.haskellstack.org/en/stable/SIGNING_KEY/">haskellstack.orgのドキュメント</a>によると、 全てのリリースはそれをビルドした人の鍵によって 署名されており、それらの鍵は KeyID <code>0x575159689BEFB442</code> によって署名されているとのこと(きちんと各自確認してほしい)</p>
+<p>で、実際のGithub release(例えば<a href="https://github.com/commercialhaskell/stack/releases/tag/v2.7.5">v2.7.5</a>)を見てみると、 最近はEmanuel Borsboomさんによって署名されていることがわかり、 彼のKey IDは <code>65101FF31C5C154D</code> である。</p>
+<p>issueを調べてみると、 Emanuelさんのキーは以下の二つの場所で 署名されているとのこと(<a href="https://github.com/commercialhaskell/stack/issues/5122#issuecomment-591424040">ソース</a>)</p>
+<ul>
+<li>pool.sks-keyservers.net</li>
+<li>pgp.mit.edu</li>
+</ul>
+<p>このうち、sks-keyservers.netはどうやら完全に落ちているようで 通信不可能だったため、 pgp.mit.eduから読み込んでみることにした。</p>
+<h2 id="キーサーバーからGPGキーの取り込みが上手くいかない">キーサーバーからGPGキーの取り込みが上手くいかない</h2>
+<p>うまくいったわ。<a href="https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html">別途記事にした</a> これを元にstack-staticを明日入れる</p>
+<h1 id="知ったこと">知ったこと</h1>
+<h2 id="SKS keyserversは落ちている">SKS keyserversは落ちている</h2>
+<p>sks-keyservers.netもpool.sks-keyservers.netもどちらも pingもwhoisも通らない。</p>
+<p><a href="https://twitter.com/Cj_bc_sd/status/1504612612281344000?s=20&amp;t=PEdWvA4ytQxDokG7Ci8wGQ">https://twitter.com/Cj_bc_sd/status/1504612612281344000?s=20&amp;t=PEdWvA4ytQxDokG7Ci8wGQ</a></p>
+<p><a href="https://github.com/SKS-keyserver/sks-keyserver/issues/88">SKS-Keyserverのissue</a>によると、<a href="https://lists.gnupg.org/pipermail/gnupg-users/2021-June/065261.html">メーリングリスト</a>で法的理由により閉鎖したとの報告が あったとのこと。</p>
+<ul>
+<li><a href="https://github.com/mono/mono/issues/21121">mono/mono #21121</a></li>
+<li><a href="https://code.firstlook.media/the-death-of-sks-pgp-keyservers-and-how-first-look-media-is-handling-it">The Death of SKS PGP Keyservers, and How First Look Media is Handling It</a></li>
+</ul>
+<h2 id="thee, thou">thee, thou</h2>
+<p>you; object form of thou; used when speaking to one person</p>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-03-18-gpg-stuggled-to-search-key-from-keyserver</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html</id>
+    <published>2022-03-18T00:00:00Z</published>
+    <updated>2022-03-18T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>gpg --search-keys がうまくいかなかったので調べる</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 18, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 18, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;gpg&#39;." href="/tags/gpg.html" class="ui tag label">gpg</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="状況">状況</h1>
+<p>stackの署名キーを引いてくるために、 <code>--search-keywords</code> を してみたところエラーが起きた。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gpg</span> <span class="at">--search-keys</span> 65101FF31C5C154D</span></code></pre></div>
+</div>
+<p>gpg: error searching keyserver: Server indicated a failure gpg: keyserver search failed: Server indicated a failure</p>
+<h1 id="原因: DNSリゾルバが適切に設定されていなかった">原因: DNSリゾルバが適切に設定されていなかった</h1>
+<p>らしい。 <strong>systemd-resolvedを使用している場合</strong> 注意が必要そう。</p>
+<p>具体的には、 <strong>GnuPGはドメイン名解決のために <code>/etc/resolv.conf</code> を参照するが systemd-resolvedは <code>/etc/resolv.conf</code> を参照も設定もしない</strong></p>
+<p>なので、ドメイン名解決のための設定を何もしていない状況になっていた。</p>
+<p>実は <a href="https://wiki.archlinux.jp/index.php/Systemd-resolved#DNS">archwikiのsystemd-resolvedページに記載がある</a>のでそれに従い、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 私の場合は元から /etc/resolve.conf が</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 空だったので削除しているが、必要に応じて</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># なんかして</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> /etc/resolv.conf</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf</span></code></pre></div>
+</div>
+<p>としてリンクを作成した。</p>
+<p>この後 <code>gpgconf --reload</code> で設定を読み直したら動くようになった!</p>
+<h1 id="過去の調べ物">過去の調べ物</h1>
+<p>とりあえず色々調べたけど、 結論今回は関係なかったものたち。 まぁ状況によっては役立つかもなので残しておく。</p>
+<h2 id="dirmngr 2.1.17時代のバグの話">dirmngr 2.1.17時代のバグの話</h2>
+<p>これは無関係だった。dirmngrの昔のバージョンにて、 全ての操作が出来無いバグがあったらしい。わぁぉ。</p>
+<ul>
+<li><a href="https://bbs.archlinux.org/viewtopic.php?id=220996">https://bbs.archlinux.org/viewtopic.php?id=220996</a></li>
+<li><a href="https://dev.gnupg.org/T2889">https://dev.gnupg.org/T2889</a></li>
+</ul>
+<h2 id="コードリーディングで原因探し">コードリーディングで原因探し</h2>
+<p>とりあえずもうちょい確信に迫りたかったので、 えいやって <a href="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=summary">gnupgのgitレポジトリ</a>cloneしてきて読んだ。</p>
+<p><code>gpg --debug-all --search-keys &lt;key_id&gt;</code> が出力した エラーメッセージ "Try again later" をとりあえずgrepする。</p>
+<p>けどみつからん。</p>
+<p>実は実際は<a href="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=src/err-codes.h.in;hb=32dad4e4135f0bdc436ed684da753d4b0cdb0ea1#l334">libgpg-error</a>の中にエラーメッセージが定義されており、 そちらを探すと以下のコードが見付かる。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="src/err-codes.h.in:334"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="src/err-codes.h.in:334-1"><a href="#src/err-codes.h.in:334-1" aria-hidden="true" tabindex="-1"></a><span class="dv">312</span>     GPG_ERR_TRY_LATER               Try again later</span></code></pre></div>
+</div>
+<p>これだけだとわからないが、 <em>まぁ多分これ定数だろうという推測</em> のもと今度は <code>GPG_ERR_TRY_LATER</code> を(今度こそ) gnupgのコードベースで grepしてみる。 と、一箇所だけ見付かる:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb3" data-org-language="sh" wrap="src c"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-regex</span> <span class="st">&#39;.*\.c\|.*\.h&#39;</span> <span class="at">-exec</span> grep <span class="st">&#39;GPG_ERR_TRY_LATER&#39;</span> {} <span class="dt">\+</span></span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">./</span>dirmngr<span class="op">/</span>dns<span class="op">-</span>stuff<span class="op">.</span>c<span class="op">:</span>    <span class="cf">case</span> TRY_AGAIN<span class="op">:</span>      ec <span class="op">=</span> GPG_ERR_TRY_LATER<span class="op">;</span> <span class="cf">break</span><span class="op">;</span></span></code></pre></div>
+</div>
+<p>これは <code>get_h_errno_as_gpg_error</code> 関数であり、 説明によると <code>H_ERRNO</code> をgpgで使用されるエラーコードに直してくれるらしい。</p>
+<p>…まぁとりあえず使用例を追う。と、 <a href="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=blob;f=dirmngr/dns-stuff.c;h=0edbc0442e05086c5785a2efb75292e526291319;hb=HEAD">dirmngr/dns-stuff.c</a>の中に2箇所あるがどちらも <code>res_query</code> を呼んだ結果によって使用されている。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="getsrv_standard()"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="getsrv_standard()-1"><a href="#getsrv_standard()-1" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span>
+<span id="getsrv_standard()-2"><a href="#getsrv_standard()-2" aria-hidden="true" tabindex="-1"></a>     r <span class="op">=</span> res_query <span class="op">(</span>name<span class="op">,</span> C_IN<span class="op">,</span> T_SRV<span class="op">,</span> answer<span class="op">,</span> <span class="kw">sizeof</span> res<span class="op">.</span>ans<span class="op">);</span></span>
+<span id="getsrv_standard()-3"><a href="#getsrv_standard()-3" aria-hidden="true" tabindex="-1"></a>     my_protect <span class="op">();</span></span>
+<span id="getsrv_standard()-4"><a href="#getsrv_standard()-4" aria-hidden="true" tabindex="-1"></a>     <span class="cf">if</span> <span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="getsrv_standard()-5"><a href="#getsrv_standard()-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> get_h_errno_as_gpg_error <span class="op">();</span></span>
+<span id="getsrv_standard()-6"><a href="#getsrv_standard()-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="getsrv_standard()-7"><a href="#getsrv_standard()-7" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="get_dns_cname_standard()"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="get_dns_cname_standard()-1"><a href="#get_dns_cname_standard()-1" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span>
+<span id="get_dns_cname_standard()-2"><a href="#get_dns_cname_standard()-2" aria-hidden="true" tabindex="-1"></a>     r <span class="op">=</span> res_query <span class="op">(</span>name<span class="op">,</span> C_IN<span class="op">,</span> T_CERT<span class="op">,</span> answer<span class="op">,</span> <span class="kw">sizeof</span> res<span class="op">.</span>ans<span class="op">);</span></span>
+<span id="get_dns_cname_standard()-3"><a href="#get_dns_cname_standard()-3" aria-hidden="true" tabindex="-1"></a>     my_protect <span class="op">();</span></span>
+<span id="get_dns_cname_standard()-4"><a href="#get_dns_cname_standard()-4" aria-hidden="true" tabindex="-1"></a>     <span class="cf">if</span> <span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="get_dns_cname_standard()-5"><a href="#get_dns_cname_standard()-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> get_h_errno_as_gpg_error <span class="op">();</span></span>
+<span id="get_dns_cname_standard()-6"><a href="#get_dns_cname_standard()-6" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span></code></pre></div>
+</div>
+<p>で、じゃぁこいつが何か…?と思ってgrepしてみると 定義がない。実はこいつはresolverで定義されており、manページを 引くことができる<a href="https://man.archlinux.org/man/res_query.3">res<sub>query</sub>(3)</a></p>
+<p>Cだとこういうのたまに見掛けるので面白いね。</p>
+<p>で、芋蔓式にわかるのだけれど <code>h_errno</code> も <a href="https://man.archlinux.org/man/gethostbyname.3">gethostbyname(3)</a>に定義されている。</p>
+<p>なので、あとはそこを追えばよさそう!!!</p>
+<p>…なのだけど、この段階になって先に述べた解決方法が 判明してしまったのでここまでで打ち切り。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-03-17</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-17.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-17.html</id>
+    <published>2022-03-17T00:00:00Z</published>
+    <updated>2022-03-17T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>2022/03/17</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 17, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 18, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;stack&#39;." href="/tags/stack.html" class="ui tag label">stack</a><a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="やったこと">やったこと</h1>
+<p>全体的には、家にいる間は <code>stack-static</code> にふりまわされてた</p>
+<h2 id="stackを stack-static に変えようとしている">stackを <code>stack-static</code> に変えようとしている</h2>
+<p>今迄stackは公式レポジトリのものを使っていたが、グローバルにhaskell パッケージを導入する必要があるのがちょっと嫌だった。</p>
+<p>今朝、 <code>pacman -Syu</code> した所、依存パッケージの <code>haskell-cryptonite-conduit</code> の関係でstackが使えなくなった。</p>
+<p>そもそもグローバルにインストールしてるのがあまり好きではないので、 Archlinux-jpで存在を教わった、AURの <code>stack-static</code> に変えようとしている…のだけど 結構てこずっている。</p>
+<h2 id="yay -Sc"><code>yay -Sc</code></h2>
+<p>容量空ける為に走らせたところ、空き容量2GB→8.5GBと大幅に増えた。 やったね!</p>
+<h2 id="散歩した">散歩した</h2>
+<p>散歩した。ついでに、お弁当を買って公園で御飯を食べるなどした。 前から気になってたお店で買ったのだけど、思った以上に美味しくてとてもハッピー…!</p>
+<p>御飯食べて、近くにカフェがあったので珈琲買って飲んだ。 結構長いこと外におったな今日は。</p>
+<h1 id="知ったこと">知ったこと</h1>
+<h2 id="Archlinuxのパッケージが、pkgrelのみアップデートされている現象について">Archlinuxのパッケージが、pkgrelのみアップデートされている現象について</h2>
+<p>Archlinux-jpで聞いた所リンクを貰った、まだ理解しきれてないのでとりあえずここに。</p>
+<p><a href="https://www.reddit.com/r/archlinux/comments/7qtx37/why_do_haskellbased_software_upgrades_require_a/">https://www.reddit.com/r/archlinux/comments/7qtx37/why_do_haskellbased_software_upgrades_require_a/</a></p>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-03-16-environment-thinking-about-knowledge-management-system</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-16-environment-thinking-about-knowledge-management-system.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-16-environment-thinking-about-knowledge-management-system.html</id>
+    <published>2022-03-16T00:00:00Z</published>
+    <updated>2022-03-16T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>ノートの取り方と関連ソフトウェアについての考察</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 16, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on April  1, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;note&#39;." href="/tags/note.html" class="ui tag label">note</a><a title="All pages tagged &#39;ナレッジベース&#39;." href="/tags/%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9.html" class="ui tag label">ナレッジベース</a>
+	
+      </div>
+
+    <div class="description">
+      <p>世の中には知識を保存するための色々な手法があり、 それぞれ役割が違っていたりする。 ノートを取る際にどうするのが良いか長らく迷っているので、 一旦今の考えを纏めようと思う。</p>
+<p>又、今回は「知識保存の手法」だけにフォーカスするので、 例えば「章をどう構築するか」みたいな話は別の話題とする。</p>
+<h1 id="最終的にやりたいこと">最終的にやりたいこと</h1>
+<p>今回は「講義や研修・勉強会等の最中にノートを取る」ことを目的とする。 そのノートはそのご見返しをして、纏め直すとする。 この場合、やりたいことは</p>
+<ul>
+<li>後で見返した時にわかりやすい</li>
+<li>(特に講義)日毎、少なくとも学期毎の区切りが明確にわかる</li>
+<li>資料との関連付けが出来る</li>
+<li>あまり時間を掛けずに書ける</li>
+</ul>
+<ul>
+<li>すぐに関連する知識等を検索できる</li>
+<li>参照しやすい</li>
+</ul>
+<p>キーボードドリブンがいいとか、そこらへんはあるけど それは本質ではないので今は除外</p>
+<h1 id="存在するソフトウェア・手法">存在するソフトウェア・手法</h1>
+<p>ナレッジベース等と呼ばれるものはいくつかある。 とりあえずアプリケーション名として書き出す</p>
+<ul>
+<li>Plain Text</li>
+<li>Wiki</li>
+<li>Roam research</li>
+<li>Obsidian</li>
+<li>Notion</li>
+<li>Evernote</li>
+<li>Scrapbox</li>
+<li>Delite</li>
+</ul>
+<p>これらは、情報の蓄積の仕方によっていくつかに分類できると思う。 (さらに細かくわけられるが、とりあえず大まかに)</p>
+<h2 id="紙のノート継承系">紙のノート継承系</h2>
+<p>特にそれ自身で特殊な構造を持たず、 紙に書いていたノートを拡張するような形のアプリケーション。 検索性やレンダリング等を進化させたかんじ。</p>
+<p>Plain Text, Evernoteなど</p>
+<h2 id="知識集約系">知識集約系</h2>
+<p>何か一つのトピックに対して、 纏まった知識を集約していくアプリケーション。 具体的な「とあるモノ」についての知識が欲しい時は有用。</p>
+<p>Wiki, Scrapboxなど</p>
+<h2 id="思考集約系">思考集約系</h2>
+<p>「考えたこと」「本・Podcast・動画・記事等を見ていて知ったこと」など を都度メモし、それを後に纏めたりするもの。</p>
+<p>Roam Research, Obsidian, Deliteなど</p>
+<h1 id="それぞれの利点・欠点">それぞれの利点・欠点</h1>
+<h2 id="紙のノート継承系">紙のノート継承系</h2>
+<div id="要件">
+<table>
+<tbody>
+<tr class="odd">
+<td>後で見返した時にわかりやすい?</td>
+<td>(場合による)</td>
+</tr>
+<tr class="even">
+<td>(特に講義)日毎、少なくとも学期毎の区切りが明確にわかる?</td>
+<td>O</td>
+</tr>
+<tr class="odd">
+<td>資料との関連付けが出来る?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>あまり時間を掛けずに書ける?</td>
+<td>O</td>
+</tr>
+<tr class="odd">
+<td>すぐに関連する知識等を検索できる?</td>
+<td>X</td>
+</tr>
+<tr class="even">
+<td>参照しやすい?</td>
+<td>X</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol>
+<li><p>利点</p>
+<ul>
+<li>今迄紙で取っていたノートの取り方をそのまま継承できる。</li>
+<li>元々フォーマットを持っていた場合や、ノート取るのに慣れている場合一番直感的</li>
+<li>いつノートを取ったか、同じ時間に他のどんな情報を取得していたかがわかりやすい。</li>
+</ul>
+<p>(私はあまりノートをうまく取れていなかったためあてはまらず)</p></li>
+<li><p>欠点</p>
+<ul>
+<li>何をするにも自由!!!</li>
+<li>自由であるがあまり、何かしら統一基準がない場合はゴチャりそう。</li>
+</ul>
+<p>結局は「中身をどう構築するか」による。</p></li>
+</ol>
+<h2 id="知識集約系">知識集約系</h2>
+<div id="要件">
+<table>
+<tbody>
+<tr class="odd">
+<td>後で見返した時にわかりやすい?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>(特に講義)日毎、少なくとも学期毎の区切りが明確にわかる?</td>
+<td>X</td>
+</tr>
+<tr class="odd">
+<td>資料との関連付けが出来る?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>あまり時間を掛けずに書ける?</td>
+<td>X (纏まった情報にする必要)</td>
+</tr>
+<tr class="odd">
+<td>すぐに関連する知識等を検索できる?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>参照しやすい?</td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol>
+<li><p>利点</p>
+<ul>
+<li>なにかしら「これについて知りたい!」という時、大体イッパツで分かる。</li>
+<li>関連した項目について探す手間がない。</li>
+<li>項目が明確なので、リンクを貼りやすい</li>
+</ul></li>
+<li><p>欠点</p>
+<ul>
+<li>複数のトピックにまたがるものについて、どこに書くべきか明瞭ではない。 (例えば「vimからEmacsへの移行の仕方」)</li>
+<li>一つのポストが長くなりがち。</li>
+<li>「この講義の間にとったノート」というのが分散してしまう
+<ul>
+<li>日付ベースの記事を別に書いて、そこからリンクさせるのはあり</li>
+<li>それってWikiの役割ではなくないか？という疑問</li>
+</ul></li>
+<li>きちんと使い易くするためには、それなりに時間を掛ける必要がでてくる</li>
+</ul></li>
+</ol>
+<h2 id="思考集約系">思考集約系</h2>
+<div id="要件">
+<table>
+<tbody>
+<tr class="odd">
+<td>後で見返した時にわかりやすい?</td>
+<td>X</td>
+</tr>
+<tr class="even">
+<td>(特に講義)日毎、少なくとも学期毎の区切りが明確にわかる?</td>
+<td>X</td>
+</tr>
+<tr class="odd">
+<td>資料との関連付けが出来る?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>あまり時間を掛けずに書ける?</td>
+<td>O</td>
+</tr>
+<tr class="odd">
+<td>すぐに関連する知識等を検索できる?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>参照しやすい?</td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol>
+<li><p>利点</p>
+<ul>
+<li>そもそものワークフローとして「見返す」という行動があるので、 ノート整理をしやすい</li>
+<li>「~の仕方」みたいなアイデア系のことも書き易い</li>
+</ul></li>
+<li><p>欠点</p>
+<ul>
+<li>あくまでも「アイデアやアウトプットに使う」のがメインの目的なので、 知識を永続的に保管しておくのとは少し方向性が違う気がする</li>
+<li>(特にZettelkasten法の場合)アイデアを小さく纏めるのが良いので、 一つのノートに知識をつめこめない</li>
+<li>(個人的な問題として)どういう区切りで情報を分ければいいのかがわからない</li>
+</ul></li>
+</ol>
+<h1 id="現在使っている手法">現在使っている手法</h1>
+<p>現在は用途によって複合的に使い分けている。</p>
+<p>ノート自体には、<a href="https://github.com/Cj-bc/dotfiles/blob/master/dotfiles/emacs/emacs.d/lib/ol-notes.el">自作したパッケージ</a>で「紙のノート継承系」のものを使っている。 これは、知識集約系も思考集約系も試したが上手くいかなかったのでとりあえず、 という側面が強い。</p>
+<p>ちなみに <em>振り返りをしたり整理したりをあまりしてない</em> のが多分結構問題点。</p>
+<h1 id="改善案">改善案</h1>
+<p><strong>きちんと見直す時間を取った上で</strong> Roamを取る。</p>
+<p>運用方針をきちんと立てておく必要がある気がした。 (メモ的に取る→一日の終わりに復習してpermanent noteを書く→wikiにリンク、など)</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-03-14-org-mode-fix-clock-start-time-is-gone</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-14-org-mode-fix-clock-start-time-is-gone.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-14-org-mode-fix-clock-start-time-is-gone.html</id>
+    <published>2022-03-14T00:00:00Z</published>
+    <updated>2022-03-14T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>"Clock start time is gone" エラーを解消する</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 14, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 14, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;org-mode&#39;." href="/tags/org-mode.html" class="ui tag label">org-mode</a>
+	
+      </div>
+
+    <div class="description">
+      <p>Org captureから戻る時とか、たまに</p>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>Clock start time is gone</p>
+</blockquote>
+</div>
+<p>とか言われて戻れないことがあります。 この時の対処法についてです。</p>
+<h1 id="原因: org-clock-marker がずれている">原因: <code>org-clock-marker</code> がずれている</h1>
+<p>これは珍しい事例なのでは？と思うのですが、 最後の <code class="verbatim">Clock-in</code> した場所を保持している <code>org-clock-marker</code> が ずれている場合があります。</p>
+<p>このマーカーは、 <code>CLOCK: ~ 等の行の先頭に位置する必要がありますが、
+   私の見た環境では ~:LOGBOOK:</code> の行に存在していました。 この場合、 <code class="verbatim">org-clock.el</code> の以下の部分で弾かれてエラーになってしまいます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>  (if (and (looking-at (concat &quot;[ \t]*&quot; org-keyword-time-regexp))
+(equal (match-string 1) org-clock-string))
+  (setq ts (match-string 2))
+(if fail-quietly (throw &#39;exit nil) (error &quot;Clock start time is gone&quot;)))
+</code></pre>
+</div>
+<p>[[<a href="file:/usr/share/emacs/27.2/lisp/org/org-clock.el.gz">file:/usr/share/emacs/27.2/lisp/org/org-clock.el.gz</a>::if (and (looking-at (concat "<span class="math display">$$ \t$$</span>*" org-keyword-time-regexp)][source code(オフライン用)]]</p>
+<h1 id="解決策: マーカーをずらす">解決策: マーカーをずらす</h1>
+<p>凄く愚直ですがまぁ。 help:move-marker でマーカーを動かせるので、それを使用します。</p>
+<p>マーカーは <code>CLOCK:</code> の行の最初にある必要があるので、まずはそこの 位置を調べる必要があります。 カーソルの位置を調べる方法は何かありそうではありますが、 今回はマーカーを置きたい位置にカーソルを置き、そこのtext Propertyを調べます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(describe-text-properties)
+</code></pre>
+</div>
+<p>そうすると、以下のように表示されます。この場合位置は <code>1411</code> ということになります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Text content at position 1411:
+
+
+There are text properties here:
+  fontified            t
+
+[back]
+</code></pre>
+</div>
+<p>で、その番号を <code>new-pt</code> と仮置きすると、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(move-marker org-clock-marker new-pt)
+</code></pre>
+</div>
+<p>で設定しなおせます。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-03-14-linux-fix-audio-environments</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-14-linux-fix-audio-environments.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-14-linux-fix-audio-environments.html</id>
+    <published>2022-03-14T00:00:00Z</published>
+    <updated>2022-03-14T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>音声周りの環境改善をした</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 14, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 14, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged &#39;環境構築&#39;." href="/tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89.html" class="ui tag label">環境構築</a><a title="All pages tagged &#39;pulseaudio&#39;." href="/tags/pulseaudio.html" class="ui tag label">pulseaudio</a><a title="All pages tagged &#39;bluetooth&#39;." href="/tags/bluetooth.html" class="ui tag label">bluetooth</a>
+	
+      </div>
+
+    <div class="description">
+      <p>実はこの環境は音声周りの環境が大分悪くて、 普段はYouTubeなどはこの環境からは利用していない。</p>
+<p>今回暇だったので、せっかくなので直してみることにする。</p>
+<h1 id="元々あった問題">元々あった問題</h1>
+<h2 id="アプリケーション毎の音量差が激しすぎる">アプリケーション毎の音量差が激しすぎる</h2>
+<p>ブラウザで流しているYouTubeの音が聞こえる程度の音量にすると、 通知が爆音でガチビビるという現象がありました。 逆に通知の音量程度にすると、YouTubeの音が全く聞こえません。</p>
+<p>ちなみに、通知の音量程度にした時にPulseAudioの音量ゲージが100% なのでブラウザ側の音量が小さいのが問題です。</p>
+<h2 id="Air Podsを接続して聞くと音がガビガビになる">Air Podsを接続して聞くと音がガビガビになる</h2>
+<p>昔はきちんと聞こえていた(と思う)のですが、いつからか ガビガビで聞けたものじゃなくなりました。</p>
+<h1 id="今回やったこと">今回やったこと</h1>
+<h2 id="1. ブラウザの sink-input の音量を調節した">1. ブラウザの <code>sink-input</code> の音量を調節した</h2>
+<p>詳しくは<a href="https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html">前回書いたブログ</a>を参照。</p>
+<p>ブラウザの音量めっっっちゃ小さくされてた(10%だった) のでそれを100%に戻したところ、 良いバランスになった</p>
+<h2 id="2. Air PodsのBluetoothプロファイルを修正した">2. Air PodsのBluetoothプロファイルを修正した</h2>
+<p>前に、音質周りについてプロファイルの問題うんたらと見た ことがあったな~と思ったのでそこ辺りを検索。</p>
+<p>その結果 <a href="https://zenn.dev/noraworld/articles/pulseaudio-bluetooth#設定の変更">Raspberry Pi に複数の Bluetooth デバイスを接続して同時に音を流す – noraworld</a> を発見、どうやら音声通話用プロファイルと音楽用プロファイルが別に存在するらしい。</p>
+<div id="ここで扱われるBluetoothプロファイルの一覧">
+<table>
+<thead>
+<tr class="header">
+<th>用途</th>
+<th>略称</th>
+<th>正式名称</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>音声通話用</td>
+<td>HFP</td>
+<td>Hands-Free Profile</td>
+</tr>
+<tr class="even">
+<td>音楽用</td>
+<td>A2DP</td>
+<td>Advanced Audio Distribution Profile</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>(ちなみに本当に一覧が見たければ<a href="https://www.bluetooth.com/specifications/specs/">bluetooth公式のページに</a>存在する)</p>
+<p><code>pactl list sinks</code> でSinkの一覧を表示した際、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>   シンク #1
+状態: RUNNING
+名前: bluez_sink.74_65_0C_F0_90_23.handsfree_head_unit
+説明: Air Pods
+ドライバー: module-bluez5-device.c
+サンプル仕様: s16le 1ch 16000Hz
+チャンネルマップ: mono
+       ...
+ボリューム: mono: 65536 / 100%
+        バランス 0.00
+ベースボリューム: 65536 / 100%
+       ...
+プロパティー:
+ bluetooth.protocol = &quot;handsfree_head_unit&quot;
+ bluetooth.codec = &quot;mSBC&quot;
+ device.intended_roles = &quot;phone&quot;
+               ...
+</code></pre>
+</div>
+<p>プロパティーの下に <code>bluetooth.protocol = "handsfree_head_unit"</code> とあるので HFPになってるらしいことがわかる。 また、チャンネルマップが <code>mono</code> であることからこれはおそらくモノラル音源になっている ことがわかる。</p>
+<p>またこれはあまり詳しくないので間違っているかもしれないが、 サンプル数も1ch 16000Hzとかなり低めになっていることがわかる。 (参考までに、パソコン本体のサンプル仕様は 2ch 44100Hzだった)</p>
+<p>ということでこれをA2DPに切り替える。 今回はpavucontrolを使って切り替えた。</p>
+<p>pavucontrolを起動したら <code class="verbatim">configure</code> タブを開き、そこに表示された BluetoothヘッドホンのProfileを <code>A2DP</code> に変更する。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html</id>
+    <published>2022-03-13T00:00:00Z</published>
+    <updated>2022-03-13T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>アプリケーション毎のオーディオレベルを調整する</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 13, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 13, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;pulseAudio&#39;." href="/tags/pulseAudio.html" class="ui tag label">pulseAudio</a><a title="All pages tagged &#39;linux&#39;." href="/tags/linux.html" class="ui tag label">linux</a><a title="All pages tagged &#39;環境構築&#39;." href="/tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89.html" class="ui tag label">環境構築</a>
+	
+      </div>
+
+    <div class="description">
+      <p>PulseAudioを使用している際、たまにアプリケーション毎の 音量バランスがバグる(過剰な表現)時がある。</p>
+<p>私の環境では、qutebrowserの音量が異常に小さくZoomやShotcutの 音量が異常にデカくなっており、Zoom会議に参加しながら共有された YouTubeの動画を見ることができない等の問題がありました。</p>
+<h1 id="原因">原因</h1>
+<p><code class="verbatim">sink-input</code> のVolumeが小さくなっていることがあります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pactl</span> list sink-inputs</span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Sink Input #37
+ Driver: protocol-native.c
+ Owner Module: 11
+ Client: 124102
+ Sink: 0
+ Sample Specification: s16le 2ch 48000Hz
+ Channel Map: front-left,front-right
+ Format: pcm, format.sample_format = &quot;\&quot;s16le\&quot;&quot;  format.rate = &quot;48000&quot;  format.channels = &quot;2&quot;  format.channel_map = &quot;\&quot;front-left,front-right\&quot;&quot;
+ Corked: no
+ Mute: no
+ Volume: front-left: 65536 / 100% / 0.00 dB,   front-right: 65536 / 100% / 0.00 dB
+         balance 0.00
+ Buffer Latency: 131813 usec
+ Sink Latency: 100186 usec
+ Resample method: speex-float-1
+ Properties:
+  media.name = &quot;Audio Stream&quot;
+  application.name = &quot;shotcut&quot;
+  native-protocol.peer = &quot;UNIX socket client&quot;
+  native-protocol.version = &quot;35&quot;
+  application.process.id = &quot;882662&quot;
+  application.process.user = &quot;me&quot;
+  application.process.host = &quot;myHost&quot;
+  application.process.binary = &quot;shotcut&quot;
+  application.language = &quot;C&quot;
+  window.x11.display = &quot;:0&quot;
+  application.process.machine_id = &quot;&lt;省略&gt;&quot;
+  application.process.session_id = &quot;2&quot;
+  module-stream-restore.id = &quot;sink-input-by-application-name:shotcut&quot;
+
+</code></pre>
+</div>
+<p>この中の <code>Volume:</code> に表示されているのが、各Sink inputのボリュームです。 100%より小さい場合、100%にした方が良いかもしれません。 注意点として、 <strong>実際に音を鳴らしているなど音声が流れているないし流れる状態にある</strong> 必要があります。 そうでない場合、Sink inputの一覧に表示されません。</p>
+<h1 id="解決方法">解決方法</h1>
+<p>該当の <code class="verbatim">sink-input</code> のボリュームを100%にしてあげます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pactl</span> set-sink-input-volume <span class="op">&lt;</span>ID<span class="op">&gt;</span> 100%</span></code></pre></div>
+</div>
+<p>SinkのIDは、先程の <code>pactl list sink-inputs</code> の冒頭にある</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Sink Input #37
+</code></pre>
+</div>
+<p>の#以降の数字で、この例だと37です。</p>
+<h1 id="解説">解説</h1>
+<p>PulseAudioでは、全てのアプリケーションは "client" としてサーバーに接続されます。 そして各アプリケーションに於いて何かしら音声が流れると、新しい <code class="verbatim">sink-input</code> が作成 されて登録されます。ここから、音声が <code class="verbatim">sink</code> に渡って音が鳴るわけです。</p>
+<p>この <code class="verbatim">sink-input</code> にはそれぞれにボリュームが設定されているので、そこを調節してあげると アプリケーション間のボリューム調整ができます。</p>
+<p>PulseAudioの仕組み等については、<a href="https://gavv.github.io/articles/pulseaudio-under-the-hood/#sound-processing">Pulseaudio under the hood</a>というブログ記事が、 公式で紹介されているほど詳しいです。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-03-12-rust-sdtin-read-until-eof-line-by-line</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-12-rust-sdtin-read-until-eof-line-by-line.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-12-rust-sdtin-read-until-eof-line-by-line.html</id>
+    <published>2022-03-12T00:00:00Z</published>
+    <updated>2022-03-12T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>Stdinから一行ずつEOFまで読み込む時気をつけること</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 12, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 13, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a>
+	
+      </div>
+
+    <div class="description">
+      <p>一行一行読み込みたい場合、恐らく <a href="https://doc.rust-lang.org/stable/std/io/struct.Stdin.html#method.read_line">std::io::Stdin::read<sub>line</sub></a>を使うと思う。 これは</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> read_line(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> buf<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">String</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;</span></span></code></pre></div>
+</div>
+<p>という型を持つが、 <strong>EOFが来た時は <code>Ok(0)</code> を返す</strong> 。 なので、EOFまで一行一行読んで何かしたい場合、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+rust
+</div>
+<div class="sourceCode" id="Okな例"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="Okな例-1"><a href="#Okな例-1" aria-hidden="true" tabindex="-1"></a>   <span class="kw">let</span> <span class="kw">mut</span> buf <span class="op">=</span> <span class="dt">String</span><span class="pp">::</span>new()<span class="op">;</span></span>
+<span id="Okな例-2"><a href="#Okな例-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="Okな例-3"><a href="#Okな例-3" aria-hidden="true" tabindex="-1"></a>   <span class="kw">while</span> <span class="kw">let</span> <span class="cn">Ok</span>(bytes) <span class="op">=</span> <span class="pp">std::io::</span>stdin()<span class="op">.</span>read_line(<span class="op">&amp;</span>buf) <span class="op">{</span></span>
+<span id="Okな例-4"><a href="#Okな例-4" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> bytes <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="Okな例-5"><a href="#Okな例-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">break</span><span class="op">;</span></span>
+<span id="Okな例-6"><a href="#Okな例-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="Okな例-7"><a href="#Okな例-7" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span>
+<span id="Okな例-8"><a href="#Okな例-8" aria-hidden="true" tabindex="-1"></a>   <span class="op">}</span></span></code></pre></div>
+</div>
+<p>として <strong>戻り値が0の場合ループを終了する処理を入れる必要がある</strong> 。 私は <code>Err()</code> でくるかと思ってしまいハマった。なんともな… 型を信用しすぎたというか…ドキュメント読んでなかったというか… (本体のドキュメントにないんだもん気付かんわ!!!)</p>
+<h1 id="参考資料">参考資料</h1>
+<ul>
+<li><a href="https://doc.rust-lang.org/stable/std/io/trait.BufRead.html#method.read_line">std::io::BufRead::read<sub>line</sub></a></li>
+</ul>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-03-11</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-11.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-11.html</id>
+    <published>2022-03-11T00:00:00Z</published>
+    <updated>2022-03-11T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>2022/03/11</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 11, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 13, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="やったこと">やったこと</h1>
+<ul>
+<li>散歩にいった(えらい)</li>
+<li><a href="https://github.com/Cj-bc/dotfiles/blob/master/dotfiles/bin/screenshot">bin/screenshot</a>の作成(スクショ用の小さなスクリプト)</li>
+</ul>
+<h1 id="知ったこと">知ったこと</h1>
+<ul>
+<li><a href="http://osmo-pim.sourceforge.net/">osmo – handy personal organizer</a></li>
+</ul>
+<h2 id="orgのRadio targetの仕組み">orgのRadio targetの仕組み</h2>
+<p>Radio target(<a href="info:org#Radio targets">info:org#Radio targets</a>)を作成後、 <code>C-c C-c</code> すると help:org-activate-target-links が実行され、 help:org-target-link-regexp が更新される。</p>
+<p>リンクを起動する際は <code>C-c C-o</code> によって help:org-open-at-point が呼ばれ、 help:org-link-open が呼ばれる。 Radio Targetの場合、 help:org-link–search-radio-target を呼び、そいつが バッファ内からターゲットを探し出して移動する。</p>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+
+</feed>

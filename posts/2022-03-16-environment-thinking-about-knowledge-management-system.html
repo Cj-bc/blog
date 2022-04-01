@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- ノートの取り方と関連ソフトウェアについての考察</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2022-03-16-environment-thinking-about-knowledge-management-system.html" /><meta property="og:title" content="ノートの取り方と関連ソフトウェアについての考察" /><meta property="og:description" content="<p>世の中には知識を保存するための色々な手法があり、 それぞれ役割が違っていたりする。 ノートを取る際にどうするのが良いか長らく迷っているので、 一旦今の考えを纏めようと思う。</p>
+<p>又、今" />
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>ノートの取り方と関連ソフトウェアについての考察</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 16, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on April  1, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged 'note'." href="../tags/note.html" class="ui tag label">note</a><a title="All pages tagged 'ナレッジベース'." href="../tags/%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9.html" class="ui tag label">ナレッジベース</a>
+	
+      </div>
+
+    <div class="description">
+      <p>世の中には知識を保存するための色々な手法があり、 それぞれ役割が違っていたりする。 ノートを取る際にどうするのが良いか長らく迷っているので、 一旦今の考えを纏めようと思う。</p>
+<p>又、今回は「知識保存の手法」だけにフォーカスするので、 例えば「章をどう構築するか」みたいな話は別の話題とする。</p>
+<h1 id="最終的にやりたいこと">最終的にやりたいこと</h1>
+<p>今回は「講義や研修・勉強会等の最中にノートを取る」ことを目的とする。 そのノートはそのご見返しをして、纏め直すとする。 この場合、やりたいことは</p>
+<ul>
+<li>後で見返した時にわかりやすい</li>
+<li>(特に講義)日毎、少なくとも学期毎の区切りが明確にわかる</li>
+<li>資料との関連付けが出来る</li>
+<li>あまり時間を掛けずに書ける</li>
+</ul>
+<ul>
+<li>すぐに関連する知識等を検索できる</li>
+<li>参照しやすい</li>
+</ul>
+<p>キーボードドリブンがいいとか、そこらへんはあるけど それは本質ではないので今は除外</p>
+<h1 id="存在するソフトウェア・手法">存在するソフトウェア・手法</h1>
+<p>ナレッジベース等と呼ばれるものはいくつかある。 とりあえずアプリケーション名として書き出す</p>
+<ul>
+<li>Plain Text</li>
+<li>Wiki</li>
+<li>Roam research</li>
+<li>Obsidian</li>
+<li>Notion</li>
+<li>Evernote</li>
+<li>Scrapbox</li>
+<li>Delite</li>
+</ul>
+<p>これらは、情報の蓄積の仕方によっていくつかに分類できると思う。 (さらに細かくわけられるが、とりあえず大まかに)</p>
+<h2 id="紙のノート継承系">紙のノート継承系</h2>
+<p>特にそれ自身で特殊な構造を持たず、 紙に書いていたノートを拡張するような形のアプリケーション。 検索性やレンダリング等を進化させたかんじ。</p>
+<p>Plain Text, Evernoteなど</p>
+<h2 id="知識集約系">知識集約系</h2>
+<p>何か一つのトピックに対して、 纏まった知識を集約していくアプリケーション。 具体的な「とあるモノ」についての知識が欲しい時は有用。</p>
+<p>Wiki, Scrapboxなど</p>
+<h2 id="思考集約系">思考集約系</h2>
+<p>「考えたこと」「本・Podcast・動画・記事等を見ていて知ったこと」など を都度メモし、それを後に纏めたりするもの。</p>
+<p>Roam Research, Obsidian, Deliteなど</p>
+<h1 id="それぞれの利点・欠点">それぞれの利点・欠点</h1>
+<h2 id="紙のノート継承系">紙のノート継承系</h2>
+<div id="要件">
+<table>
+<tbody>
+<tr class="odd">
+<td>後で見返した時にわかりやすい?</td>
+<td>(場合による)</td>
+</tr>
+<tr class="even">
+<td>(特に講義)日毎、少なくとも学期毎の区切りが明確にわかる?</td>
+<td>O</td>
+</tr>
+<tr class="odd">
+<td>資料との関連付けが出来る?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>あまり時間を掛けずに書ける?</td>
+<td>O</td>
+</tr>
+<tr class="odd">
+<td>すぐに関連する知識等を検索できる?</td>
+<td>X</td>
+</tr>
+<tr class="even">
+<td>参照しやすい?</td>
+<td>X</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol>
+<li><p>利点</p>
+<ul>
+<li>今迄紙で取っていたノートの取り方をそのまま継承できる。</li>
+<li>元々フォーマットを持っていた場合や、ノート取るのに慣れている場合一番直感的</li>
+<li>いつノートを取ったか、同じ時間に他のどんな情報を取得していたかがわかりやすい。</li>
+</ul>
+<p>(私はあまりノートをうまく取れていなかったためあてはまらず)</p></li>
+<li><p>欠点</p>
+<ul>
+<li>何をするにも自由!!!</li>
+<li>自由であるがあまり、何かしら統一基準がない場合はゴチャりそう。</li>
+</ul>
+<p>結局は「中身をどう構築するか」による。</p></li>
+</ol>
+<h2 id="知識集約系">知識集約系</h2>
+<div id="要件">
+<table>
+<tbody>
+<tr class="odd">
+<td>後で見返した時にわかりやすい?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>(特に講義)日毎、少なくとも学期毎の区切りが明確にわかる?</td>
+<td>X</td>
+</tr>
+<tr class="odd">
+<td>資料との関連付けが出来る?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>あまり時間を掛けずに書ける?</td>
+<td>X (纏まった情報にする必要)</td>
+</tr>
+<tr class="odd">
+<td>すぐに関連する知識等を検索できる?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>参照しやすい?</td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol>
+<li><p>利点</p>
+<ul>
+<li>なにかしら「これについて知りたい!」という時、大体イッパツで分かる。</li>
+<li>関連した項目について探す手間がない。</li>
+<li>項目が明確なので、リンクを貼りやすい</li>
+</ul></li>
+<li><p>欠点</p>
+<ul>
+<li>複数のトピックにまたがるものについて、どこに書くべきか明瞭ではない。 (例えば「vimからEmacsへの移行の仕方」)</li>
+<li>一つのポストが長くなりがち。</li>
+<li>「この講義の間にとったノート」というのが分散してしまう
+<ul>
+<li>日付ベースの記事を別に書いて、そこからリンクさせるのはあり</li>
+<li>それってWikiの役割ではなくないか？という疑問</li>
+</ul></li>
+<li>きちんと使い易くするためには、それなりに時間を掛ける必要がでてくる</li>
+</ul></li>
+</ol>
+<h2 id="思考集約系">思考集約系</h2>
+<div id="要件">
+<table>
+<tbody>
+<tr class="odd">
+<td>後で見返した時にわかりやすい?</td>
+<td>X</td>
+</tr>
+<tr class="even">
+<td>(特に講義)日毎、少なくとも学期毎の区切りが明確にわかる?</td>
+<td>X</td>
+</tr>
+<tr class="odd">
+<td>資料との関連付けが出来る?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>あまり時間を掛けずに書ける?</td>
+<td>O</td>
+</tr>
+<tr class="odd">
+<td>すぐに関連する知識等を検索できる?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>参照しやすい?</td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol>
+<li><p>利点</p>
+<ul>
+<li>そもそものワークフローとして「見返す」という行動があるので、 ノート整理をしやすい</li>
+<li>「~の仕方」みたいなアイデア系のことも書き易い</li>
+</ul></li>
+<li><p>欠点</p>
+<ul>
+<li>あくまでも「アイデアやアウトプットに使う」のがメインの目的なので、 知識を永続的に保管しておくのとは少し方向性が違う気がする</li>
+<li>(特にZettelkasten法の場合)アイデアを小さく纏めるのが良いので、 一つのノートに知識をつめこめない</li>
+<li>(個人的な問題として)どういう区切りで情報を分ければいいのかがわからない</li>
+</ul></li>
+</ol>
+<h1 id="現在使っている手法">現在使っている手法</h1>
+<p>現在は用途によって複合的に使い分けている。</p>
+<p>ノート自体には、<a href="https://github.com/Cj-bc/dotfiles/blob/master/dotfiles/emacs/emacs.d/lib/ol-notes.el">自作したパッケージ</a>で「紙のノート継承系」のものを使っている。 これは、知識集約系も思考集約系も試したが上手くいかなかったのでとりあえず、 という側面が強い。</p>
+<p>ちなみに <em>振り返りをしたり整理したりをあまりしてない</em> のが多分結構問題点。</p>
+<h1 id="改善案">改善案</h1>
+<p><strong>きちんと見直す時間を取った上で</strong> Roamを取る。</p>
+<p>運用方針をきちんと立てておく必要がある気がした。 (メモ的に取る→一日の終わりに復習してpermanent noteを書く→wikiにリンク、など)</p>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

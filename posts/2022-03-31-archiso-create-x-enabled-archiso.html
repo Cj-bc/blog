@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- X環境を含んだarchsioイメージを作成する</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2022-03-31-archiso-create-x-enabled-archiso.html" /><meta property="og:title" content="X環境を含んだarchsioイメージを作成する" /><meta property="og:description" content="<p>基本は<a href=" https: wiki.archlinux.jp index.php Archiso#USB">wiki</a>に従って作業します。 正直思った以上にやること少なかった" />
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+          <div class="item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+            <a href="../" class="item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>X環境を含んだarchsioイメージを作成する</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 31, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on April  1, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged 'archlinux'." href="../tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged 'archiso'." href="../tags/archiso.html" class="ui tag label">archiso</a>
+	
+      </div>
+
+    <div class="description">
+      <p>基本は<a href="https://wiki.archlinux.jp/index.php/Archiso#USB">wiki</a>に従って作業します。 正直思った以上にやること少なかったので、この記事はwikiのまとめ的メモになります。</p>
+<p>やったこと全部書いているつもりではあるけど、今回は後から纏めなおしたので何か欠けている 可能性があります。</p>
+<p>実際に使っているものはこちら: <a href="https://github.com/Cj-bc/dotfiles/tree/master/dotfiles/archiso">Cj-bc/dotfiles/dotfiles/archiso</a></p>
+<h1 id="パッケージの追加">パッケージの追加</h1>
+<p><code>packages.x86_64</code> にパッケージを追加。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/packages.x86_64 b/dotfiles/archiso/packages.x86_64</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>index aaf2416..2bbce38 100644</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/packages.x86_64</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/packages.x86_64</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -119,3 +119,10 @@ wvdial</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a> xfsprogs</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a> xl2tpd</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a> zsh</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="va">+xorg-server</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="va">+lightdm</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="va">+lightdm-gtk-greeter</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="va">+xterm</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="va">+xmonad</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="va">+linux-surface</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="va">+gparted</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>\ No newline at end of file</span></code></pre></div>
+</div>
+<p>WMやDMは好みのものを使って大丈夫だと思います。 私はメイン環境と合わせてLightDM+XMonadにしてあります。</p>
+<h1 id="レポジトリの追加">レポジトリの追加</h1>
+<p>linux-surfaceを使いたいのでレポジトリを追加する</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/pacman.conf b/dotfiles/archiso/pacman.conf</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>index 5ee6c1e..2ba1626 100644</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/pacman.conf</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/pacman.conf</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -30,7 +30,7 @@ Architecture = auto</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a> # Misc options</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a> #UseSyslog</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">-#Color</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="va">+Color</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a> #NoProgressBar</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a> # We cannot check disk space from within a chroot environment</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a> #CheckSpace</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -99,3 +99,7 @@ Include = /etc/pacman.d/mirrorlist</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a> #[custom]</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a> #SigLevel = Optional TrustAll</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a> #Server = file:///home/custompkgs</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="va">+</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="va">+[linux-surface]</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="va">+SigLevel = Optional TrustAll</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="va">+Server = https://pkg.surfacelinux.com/arch/</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>\ No newline at end of file</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
+</div>
+<h1 id="メタデータの編集">メタデータの編集</h1>
+<p>ついでなのでメタデータもちょっと書き換えておきました。 後々識別しやすい…かな?</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/profiledef.sh b/dotfiles/archiso/profiledef.sh</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>index 5feb205..7ce4a85 100644</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/profiledef.sh</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/profiledef.sh</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -1,9 +1,9 @@</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a> #!/usr/bin/env bash</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a> # shellcheck disable=SC2034</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="st">-iso_name=&quot;archlinux&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="va">+iso_name=&quot;archlinux-x&quot;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a> iso_label=&quot;ARCH_$(date +%Y%m)&quot;</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="st">-iso_publisher=&quot;Arch Linux &lt;https://archlinux.org&gt;&quot;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="va">+iso_publisher=&quot;Cj.bc-sd &lt;cj.bc-sd@outlook.jp&gt;&quot;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a> iso_application=&quot;Arch Linux Live/Rescue CD&quot;</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a> iso_version=&quot;$(date +%Y.%m.%d)&quot;</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a> install_dir=&quot;arch&quot;</span></code></pre></div>
+</div>
+<h1 id="デフォルトでXが起動するように設定">デフォルトでXが起動するように設定</h1>
+<p>systemdのUnitにsymlinkを貼ります。 これは <code>systemctl enable</code> がするのと同じ挙動です。</p>
+<h2 id="古い手法について">古い手法について</h2>
+<p>Wikiには <code>customize_airootfs.sh</code> の編集をする方法も記載されていますが、 これはもうdeprecatedとなっています</p>
+<p>(参考: <a href="https://gitlab.archlinux.org/archlinux/archiso/-/blob/master/CHANGELOG.rst">バージョン51のCHANGELOG</a>)</p>
+<p>実行したら怒られたログ↓</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>[mkarchiso] WARNING: customize_airootfs.sh is deprecated! Support for it will be removed in a future archiso version.
+</code></pre>
+</div>
+<h1 id="mkarchisoする">mkarchisoする</h1>
+<p>あとはやるだけ。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb5" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> workdir out</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">mkarchiso</span> <span class="at">-v</span> <span class="at">-w</span> workdir <span class="at">-o</span> out .</span></code></pre></div>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th>オプション</th>
+<th>解説</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-v</code></td>
+<td>verbose。ログの出力をします</td>
+</tr>
+<tr class="even">
+<td><code>-w workdir</code></td>
+<td>作業ディレクトリの設定をします</td>
+</tr>
+<tr class="odd">
+<td><code>-o out</code></td>
+<td>最終的に出来上がったisoファイルを格納するディレクトリの設定をします</td>
+</tr>
+</tbody>
+</table>
+<p>ちょっと時間(とストレージ)食うので待つ。 うちの環境では 5GBくらい要求されたので気をつけてとのこと。</p>
+<h1 id="できたisoを焼く">できたisoを焼く</h1>
+<p><a href="https://wiki.archlinux.jp/index.php/USB_インストールメディア#dd_を使う">USBインストールメディアを作成するwiki</a>に従って焼く。 今回はddを使う。各パラメーターについては各自確認してから焼いてほしい。 あぶないので。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb6" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dd bs=4M if=out/archlinux-x-2022.04.01-x86_64.iso of=/dev/sda status=progress <span class="kw">&amp;&amp;</span> <span class="fu">sync</span></span></code></pre></div>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

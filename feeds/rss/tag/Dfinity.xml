@@ -7,8 +7,174 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/Dfinity.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Fri, 18 Mar 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Thu, 31 Mar 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-03-31-archiso-create-x-enabled-archiso</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-03-31-archiso-create-x-enabled-archiso.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>X環境を含んだarchsioイメージを作成する</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 31, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on April  1, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged &#39;archiso&#39;." href="/tags/archiso.html" class="ui tag label">archiso</a>
+	
+      </div>
+
+    <div class="description">
+      <p>基本は<a href="https://wiki.archlinux.jp/index.php/Archiso#USB">wiki</a>に従って作業します。 正直思った以上にやること少なかったので、この記事はwikiのまとめ的メモになります。</p>
+<p>やったこと全部書いているつもりではあるけど、今回は後から纏めなおしたので何か欠けている 可能性があります。</p>
+<p>実際に使っているものはこちら: <a href="https://github.com/Cj-bc/dotfiles/tree/master/dotfiles/archiso">Cj-bc/dotfiles/dotfiles/archiso</a></p>
+<h1 id="パッケージの追加">パッケージの追加</h1>
+<p><code>packages.x86_64</code> にパッケージを追加。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/packages.x86_64 b/dotfiles/archiso/packages.x86_64</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>index aaf2416..2bbce38 100644</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/packages.x86_64</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/packages.x86_64</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -119,3 +119,10 @@ wvdial</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a> xfsprogs</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a> xl2tpd</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a> zsh</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="va">+xorg-server</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="va">+lightdm</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="va">+lightdm-gtk-greeter</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="va">+xterm</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="va">+xmonad</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="va">+linux-surface</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="va">+gparted</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>\ No newline at end of file</span></code></pre></div>
+</div>
+<p>WMやDMは好みのものを使って大丈夫だと思います。 私はメイン環境と合わせてLightDM+XMonadにしてあります。</p>
+<h1 id="レポジトリの追加">レポジトリの追加</h1>
+<p>linux-surfaceを使いたいのでレポジトリを追加する</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/pacman.conf b/dotfiles/archiso/pacman.conf</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>index 5ee6c1e..2ba1626 100644</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/pacman.conf</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/pacman.conf</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -30,7 +30,7 @@ Architecture = auto</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a> # Misc options</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a> #UseSyslog</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">-#Color</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="va">+Color</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a> #NoProgressBar</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a> # We cannot check disk space from within a chroot environment</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a> #CheckSpace</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -99,3 +99,7 @@ Include = /etc/pacman.d/mirrorlist</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a> #[custom]</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a> #SigLevel = Optional TrustAll</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a> #Server = file:///home/custompkgs</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="va">+</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="va">+[linux-surface]</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="va">+SigLevel = Optional TrustAll</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="va">+Server = https://pkg.surfacelinux.com/arch/</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>\ No newline at end of file</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
+</div>
+<h1 id="メタデータの編集">メタデータの編集</h1>
+<p>ついでなのでメタデータもちょっと書き換えておきました。 後々識別しやすい…かな?</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/profiledef.sh b/dotfiles/archiso/profiledef.sh</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>index 5feb205..7ce4a85 100644</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/profiledef.sh</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/profiledef.sh</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -1,9 +1,9 @@</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a> #!/usr/bin/env bash</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a> # shellcheck disable=SC2034</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="st">-iso_name=&quot;archlinux&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="va">+iso_name=&quot;archlinux-x&quot;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a> iso_label=&quot;ARCH_$(date +%Y%m)&quot;</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="st">-iso_publisher=&quot;Arch Linux &lt;https://archlinux.org&gt;&quot;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="va">+iso_publisher=&quot;Cj.bc-sd &lt;cj.bc-sd@outlook.jp&gt;&quot;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a> iso_application=&quot;Arch Linux Live/Rescue CD&quot;</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a> iso_version=&quot;$(date +%Y.%m.%d)&quot;</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a> install_dir=&quot;arch&quot;</span></code></pre></div>
+</div>
+<h1 id="デフォルトでXが起動するように設定">デフォルトでXが起動するように設定</h1>
+<p>systemdのUnitにsymlinkを貼ります。 これは <code>systemctl enable</code> がするのと同じ挙動です。</p>
+<h2 id="古い手法について">古い手法について</h2>
+<p>Wikiには <code>customize_airootfs.sh</code> の編集をする方法も記載されていますが、 これはもうdeprecatedとなっています</p>
+<p>(参考: <a href="https://gitlab.archlinux.org/archlinux/archiso/-/blob/master/CHANGELOG.rst">バージョン51のCHANGELOG</a>)</p>
+<p>実行したら怒られたログ↓</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>[mkarchiso] WARNING: customize_airootfs.sh is deprecated! Support for it will be removed in a future archiso version.
+</code></pre>
+</div>
+<h1 id="mkarchisoする">mkarchisoする</h1>
+<p>あとはやるだけ。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb5" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> workdir out</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">mkarchiso</span> <span class="at">-v</span> <span class="at">-w</span> workdir <span class="at">-o</span> out .</span></code></pre></div>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th>オプション</th>
+<th>解説</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-v</code></td>
+<td>verbose。ログの出力をします</td>
+</tr>
+<tr class="even">
+<td><code>-w workdir</code></td>
+<td>作業ディレクトリの設定をします</td>
+</tr>
+<tr class="odd">
+<td><code>-o out</code></td>
+<td>最終的に出来上がったisoファイルを格納するディレクトリの設定をします</td>
+</tr>
+</tbody>
+</table>
+<p>ちょっと時間(とストレージ)食うので待つ。 うちの環境では 5GBくらい要求されたので気をつけてとのこと。</p>
+<h1 id="できたisoを焼く">できたisoを焼く</h1>
+<p><a href="https://wiki.archlinux.jp/index.php/USB_インストールメディア#dd_を使う">USBインストールメディアを作成するwiki</a>に従って焼く。 今回はddを使う。各パラメーターについては各自確認してから焼いてほしい。 あぶないので。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb6" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dd bs=4M if=out/archlinux-x-2022.04.01-x86_64.iso of=/dev/sda status=progress <span class="kw">&amp;&amp;</span> <span class="fu">sync</span></span></code></pre></div>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Thu, 31 Mar 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-03-31-archiso-create-x-enabled-archiso.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-03-18</title>
     <link>https://cj-bc.github.io/blog/posts/2022-03-18.html</link>
     <description><![CDATA[<div id="body-content">
@@ -234,6 +400,224 @@ c
 ]]></description>
     <pubDate>Thu, 17 Mar 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-03-17.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2022-03-16-environment-thinking-about-knowledge-management-system</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-03-16-environment-thinking-about-knowledge-management-system.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content">
+    <div class="ui center aligned icon header">
+      <h1>ノートの取り方と関連ソフトウェアについての考察</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 16, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on April  1, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;note&#39;." href="/tags/note.html" class="ui tag label">note</a><a title="All pages tagged &#39;ナレッジベース&#39;." href="/tags/%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9.html" class="ui tag label">ナレッジベース</a>
+	
+      </div>
+
+    <div class="description">
+      <p>世の中には知識を保存するための色々な手法があり、 それぞれ役割が違っていたりする。 ノートを取る際にどうするのが良いか長らく迷っているので、 一旦今の考えを纏めようと思う。</p>
+<p>又、今回は「知識保存の手法」だけにフォーカスするので、 例えば「章をどう構築するか」みたいな話は別の話題とする。</p>
+<h1 id="最終的にやりたいこと">最終的にやりたいこと</h1>
+<p>今回は「講義や研修・勉強会等の最中にノートを取る」ことを目的とする。 そのノートはそのご見返しをして、纏め直すとする。 この場合、やりたいことは</p>
+<ul>
+<li>後で見返した時にわかりやすい</li>
+<li>(特に講義)日毎、少なくとも学期毎の区切りが明確にわかる</li>
+<li>資料との関連付けが出来る</li>
+<li>あまり時間を掛けずに書ける</li>
+</ul>
+<ul>
+<li>すぐに関連する知識等を検索できる</li>
+<li>参照しやすい</li>
+</ul>
+<p>キーボードドリブンがいいとか、そこらへんはあるけど それは本質ではないので今は除外</p>
+<h1 id="存在するソフトウェア・手法">存在するソフトウェア・手法</h1>
+<p>ナレッジベース等と呼ばれるものはいくつかある。 とりあえずアプリケーション名として書き出す</p>
+<ul>
+<li>Plain Text</li>
+<li>Wiki</li>
+<li>Roam research</li>
+<li>Obsidian</li>
+<li>Notion</li>
+<li>Evernote</li>
+<li>Scrapbox</li>
+<li>Delite</li>
+</ul>
+<p>これらは、情報の蓄積の仕方によっていくつかに分類できると思う。 (さらに細かくわけられるが、とりあえず大まかに)</p>
+<h2 id="紙のノート継承系">紙のノート継承系</h2>
+<p>特にそれ自身で特殊な構造を持たず、 紙に書いていたノートを拡張するような形のアプリケーション。 検索性やレンダリング等を進化させたかんじ。</p>
+<p>Plain Text, Evernoteなど</p>
+<h2 id="知識集約系">知識集約系</h2>
+<p>何か一つのトピックに対して、 纏まった知識を集約していくアプリケーション。 具体的な「とあるモノ」についての知識が欲しい時は有用。</p>
+<p>Wiki, Scrapboxなど</p>
+<h2 id="思考集約系">思考集約系</h2>
+<p>「考えたこと」「本・Podcast・動画・記事等を見ていて知ったこと」など を都度メモし、それを後に纏めたりするもの。</p>
+<p>Roam Research, Obsidian, Deliteなど</p>
+<h1 id="それぞれの利点・欠点">それぞれの利点・欠点</h1>
+<h2 id="紙のノート継承系">紙のノート継承系</h2>
+<div id="要件">
+<table>
+<tbody>
+<tr class="odd">
+<td>後で見返した時にわかりやすい?</td>
+<td>(場合による)</td>
+</tr>
+<tr class="even">
+<td>(特に講義)日毎、少なくとも学期毎の区切りが明確にわかる?</td>
+<td>O</td>
+</tr>
+<tr class="odd">
+<td>資料との関連付けが出来る?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>あまり時間を掛けずに書ける?</td>
+<td>O</td>
+</tr>
+<tr class="odd">
+<td>すぐに関連する知識等を検索できる?</td>
+<td>X</td>
+</tr>
+<tr class="even">
+<td>参照しやすい?</td>
+<td>X</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol>
+<li><p>利点</p>
+<ul>
+<li>今迄紙で取っていたノートの取り方をそのまま継承できる。</li>
+<li>元々フォーマットを持っていた場合や、ノート取るのに慣れている場合一番直感的</li>
+<li>いつノートを取ったか、同じ時間に他のどんな情報を取得していたかがわかりやすい。</li>
+</ul>
+<p>(私はあまりノートをうまく取れていなかったためあてはまらず)</p></li>
+<li><p>欠点</p>
+<ul>
+<li>何をするにも自由!!!</li>
+<li>自由であるがあまり、何かしら統一基準がない場合はゴチャりそう。</li>
+</ul>
+<p>結局は「中身をどう構築するか」による。</p></li>
+</ol>
+<h2 id="知識集約系">知識集約系</h2>
+<div id="要件">
+<table>
+<tbody>
+<tr class="odd">
+<td>後で見返した時にわかりやすい?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>(特に講義)日毎、少なくとも学期毎の区切りが明確にわかる?</td>
+<td>X</td>
+</tr>
+<tr class="odd">
+<td>資料との関連付けが出来る?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>あまり時間を掛けずに書ける?</td>
+<td>X (纏まった情報にする必要)</td>
+</tr>
+<tr class="odd">
+<td>すぐに関連する知識等を検索できる?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>参照しやすい?</td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol>
+<li><p>利点</p>
+<ul>
+<li>なにかしら「これについて知りたい!」という時、大体イッパツで分かる。</li>
+<li>関連した項目について探す手間がない。</li>
+<li>項目が明確なので、リンクを貼りやすい</li>
+</ul></li>
+<li><p>欠点</p>
+<ul>
+<li>複数のトピックにまたがるものについて、どこに書くべきか明瞭ではない。 (例えば「vimからEmacsへの移行の仕方」)</li>
+<li>一つのポストが長くなりがち。</li>
+<li>「この講義の間にとったノート」というのが分散してしまう
+<ul>
+<li>日付ベースの記事を別に書いて、そこからリンクさせるのはあり</li>
+<li>それってWikiの役割ではなくないか？という疑問</li>
+</ul></li>
+<li>きちんと使い易くするためには、それなりに時間を掛ける必要がでてくる</li>
+</ul></li>
+</ol>
+<h2 id="思考集約系">思考集約系</h2>
+<div id="要件">
+<table>
+<tbody>
+<tr class="odd">
+<td>後で見返した時にわかりやすい?</td>
+<td>X</td>
+</tr>
+<tr class="even">
+<td>(特に講義)日毎、少なくとも学期毎の区切りが明確にわかる?</td>
+<td>X</td>
+</tr>
+<tr class="odd">
+<td>資料との関連付けが出来る?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>あまり時間を掛けずに書ける?</td>
+<td>O</td>
+</tr>
+<tr class="odd">
+<td>すぐに関連する知識等を検索できる?</td>
+<td>O</td>
+</tr>
+<tr class="even">
+<td>参照しやすい?</td>
+<td>O</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol>
+<li><p>利点</p>
+<ul>
+<li>そもそものワークフローとして「見返す」という行動があるので、 ノート整理をしやすい</li>
+<li>「~の仕方」みたいなアイデア系のことも書き易い</li>
+</ul></li>
+<li><p>欠点</p>
+<ul>
+<li>あくまでも「アイデアやアウトプットに使う」のがメインの目的なので、 知識を永続的に保管しておくのとは少し方向性が違う気がする</li>
+<li>(特にZettelkasten法の場合)アイデアを小さく纏めるのが良いので、 一つのノートに知識をつめこめない</li>
+<li>(個人的な問題として)どういう区切りで情報を分ければいいのかがわからない</li>
+</ul></li>
+</ol>
+<h1 id="現在使っている手法">現在使っている手法</h1>
+<p>現在は用途によって複合的に使い分けている。</p>
+<p>ノート自体には、<a href="https://github.com/Cj-bc/dotfiles/blob/master/dotfiles/emacs/emacs.d/lib/ol-notes.el">自作したパッケージ</a>で「紙のノート継承系」のものを使っている。 これは、知識集約系も思考集約系も試したが上手くいかなかったのでとりあえず、 という側面が強い。</p>
+<p>ちなみに <em>振り返りをしたり整理したりをあまりしてない</em> のが多分結構問題点。</p>
+<h1 id="改善案">改善案</h1>
+<p><strong>きちんと見直す時間を取った上で</strong> Roamを取る。</p>
+<p>運用方針をきちんと立てておく必要がある気がした。 (メモ的に取る→一日の終わりに復習してpermanent noteを書く→wikiにリンク、など)</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Wed, 16 Mar 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-03-16-environment-thinking-about-knowledge-management-system.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 <item>
@@ -628,164 +1012,6 @@ rust
 ]]></description>
     <pubDate>Fri, 11 Mar 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-03-11.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-03-06</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-03-06.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content">
-    <div class="ui center aligned icon header">
-      <h1>2022/03/06</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on March  6, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on March 13, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a>
-	
-      </div>
-
-    <div class="description">
-      <h1 id="やったこと">やったこと</h1>
-<h1 id="知ったこと">知ったこと</h1>
-<h2 id="型変換には as キーワードが使える Rust">型変換には <code>as</code> キーワードが使える <span class="tag" data-tag-name="Rust"><span class="smallcaps">Rust</span></span></h2>
-<p>型変換には <code>try_from().unwrap()</code> とか使っていたけれど、 実はプリミティブ型なら <a href="https://doc.rust-lang.org/std/keyword.as.html"> <code>as</code> キーワード</a>である程度出来る。 例えば、以下の二つは等価。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-rust
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">u32</span><span class="pp">::</span>try_from(<span class="dv">1</span>)<span class="op">.</span>unwrap()<span class="op">;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="kw">as</span> <span class="dt">u32</span></span></code></pre></div>
-</div>
-<h2 id="Iteratorの中に入ったOptionを外したいならflatmap Rust">Iteratorの中に入ったOptionを外したいならflat<sub>map</sub> <span class="tag" data-tag-name="Rust"><span class="smallcaps">Rust</span></span></h2>
-<p><code>impl Iterator&lt;Option&lt;T&gt;&gt;</code> を <code>impl Iterator&lt;T&gt;</code> に変換したい場合、 <code>flat_map</code> でいける。 Haskelでいうところの <code>catMaybes :: [Maybe a] -&gt; [a]</code> に近い挙動をする。</p>
-<p>元々こうやってたのが</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-rust
-</div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> texts <span class="op">=</span> <span class="pp">vec!</span>[<span class="st">&quot;this is&quot;</span><span class="op">,</span> <span class="st">&quot;an&quot;</span><span class="op">,</span> <span class="st">&quot;example&quot;</span>]<span class="op">;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> v <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span>]<span class="op">;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>v<span class="op">.</span>map(<span class="op">|</span>idx<span class="op">|</span> texts<span class="op">.</span>get(idx))<span class="op">.</span>filter(<span class="op">|</span>val<span class="op">|</span> val<span class="op">.</span>is_some())<span class="op">.</span>map(<span class="op">|</span>val<span class="op">|</span> val<span class="op">.</span>unwrap())</span></code></pre></div>
-</div>
-<p>こう書ける</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-rust
-</div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> texts <span class="op">=</span> <span class="pp">vec!</span>[<span class="st">&quot;this is&quot;</span><span class="op">,</span> <span class="st">&quot;an&quot;</span><span class="op">,</span> <span class="st">&quot;example&quot;</span>]<span class="op">;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> v <span class="op">=</span> <span class="pp">vec!</span>[<span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span>]<span class="op">;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>v<span class="op">.</span>filter_map(<span class="op">|</span>idx<span class="op">|</span> texts<span class="op">.</span>get(idx)<span class="op">;</span></span></code></pre></div>
-</div>
-<h2 id="マイクラのサイト">マイクラのサイト</h2>
-<p><a href="https://njf.jp/minecraft/articles/2020-09-13-hoe.html">https://njf.jp/minecraft/articles/2020-09-13-hoe.html</a></p>
-<p>新しい仕組みになってからの村周りの情報とかがあってよい。</p>
-<h1 id="やること">やること</h1>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Sun, 06 Mar 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-03-06.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-02-27</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-02-27.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content">
-    <div class="ui center aligned icon header">
-      <h1>2022/02/27</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on February 27, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on March 13, 2022
-	</div>
-
-	
-
-	
-	
-	
-      </div>
-
-    <div class="description">
-      <h1 id="出来事">出来事</h1>
-<ul>
-<li><a href="https://www.youtube.com/watch?v=Ev5qzT0VnTo">みあちゃんスプラ大会配信</a></li>
-<li><a href="https://www.youtube.com/watch?v=GTa2HxIsBPM">Kizuna AI last live</a></li>
-<li>AIちゃんスリープ</li>
-<li><a href="https://www.youtube.com/watch?v=v3yWm0Crtaw">ゆあちゃんエルデン24時間耐久(前半)</a></li>
-<li><a href="https://twitter.com/nalgami/status/1497372362857410560?s=20&amp;t=LkmskTlFlhhJ_pjBXMqLYA">POLYGON TAILOR IMPORT最初のFACEATSM BUG MA-1</a>発売日アナウンス、3/1発売</li>
-</ul>
-<h1 id="やったこと">やったこと</h1>
-<ul>
-<li>piping-server-rustにクリップボード連携機能を自分用に作成した
-<ul>
-<li><a href="https://github.com/nwtgck/piping-server-rust">nwtgck/piping-server-rust</a>のコード読んだ</li>
-<li><a href="https://doc.rust-jp.rs/book-ja/">The Rust Programming Language 日本語版</a>の1,3章読んだ</li>
-</ul></li>
-<li>配信見てた</li>
-</ul>
-<h1 id="知ったこと">知ったこと</h1>
-<ul>
-<li>Rustの基礎をちょこっと</li>
-<li><a href="https://docs.rs/crate/clipboard/0.5.0">Rust – Clipboard</a></li>
-<li>Rustで子プロセスを作成するには <code>std::process::Command</code></li>
-<li>子プロセスとの通信は <code>std::process::Stdio</code></li>
-<li>RustでHttpのBody取るには <code>hyper::body::to_bytes</code> が使える</li>
-</ul>
-<h2 id="Rustで子プロセス">Rustで子プロセス</h2>
-<ol>
-<li><p>子プロセスの作成:</p>
-<ul>
-<li><a href="https://doc.rust-lang.org/std/process/struct.Command.html#method.stdin">std::process::Command</a></li>
-<li><a href="https://doc.rust-lang.org/std/process/struct.Command.html#method.spawn">std::process::Command.spawn()</a></li>
-</ul>
-<div class="ui segment">
-<div class="ui top right attached label">
-rust
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> child<span class="op">:</span> Child <span class="op">=</span> <span class="pp">Command::</span>new(<span class="st">&quot;xsel&quot;</span>)<span class="op">.</span>arg(<span class="st">&quot;-xb&quot;</span>)<span class="op">.</span>stdin(<span class="pp">Stdio::</span>piped())<span class="op">.</span>spawn()<span class="op">.</span>expect(<span class="st">&quot;Failed to spawn child process&quot;</span>)</span></code></pre></div>
-</div></li>
-<li><p>パイプへの書き込み</p>
-<ul>
-<li><a href="https://doc.rust-lang.org/std/process/struct.Child.html">std::process::Child</a></li>
-<li><a href="https://doc.rust-lang.org/std/process/struct.ChildStdin.html">std::process::ChildStdin</a></li>
-</ul>
-<div class="ui segment">
-<div class="ui top right attached label">
-rust
-</div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// takeよくわかってない</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> b<span class="op">:</span> Bytes <span class="op">=</span> <span class="co">// </span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>child<span class="op">.</span>stdin<span class="op">.</span>take()<span class="op">.</span>expect(<span class="st">&quot;failed to open stdin&quot;</span>)<span class="op">.</span>write(b)<span class="op">;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
-</div></li>
-</ol>
-<h1 id="やること">やること</h1>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Sun, 27 Feb 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-02-27.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
