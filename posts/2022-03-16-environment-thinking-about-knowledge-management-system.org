@@ -3,7 +3,7 @@
   :DATE: [2022-03-16 Wed 15:12]
   :TAGS: :note:ナレッジベース:
   :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: WIP
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
   :LOGBOOK:
