@@ -1,0 +1,144 @@
+* X環境を含んだarchsioイメージを作成する
+  :PROPERTIES:
+  :DATE: [2022-03-31 Thu 17:54]
+  :TAGS: :archlinux:archiso:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2022-03-31 Thu 17:55]--[2022-03-31 Thu 17:56] =>  0:01
+  :END:
+  
+  
+  基本は[[https://wiki.archlinux.jp/index.php/Archiso#USB][wiki]]に従って作業します。
+  正直思った以上にやること少なかったので、この記事はwikiのまとめ的メモになります。
+  
+  やったこと全部書いているつもりではあるけど、今回は後から纏めなおしたので何か欠けている
+  可能性があります。
+
+
+  実際に使っているものはこちら: [[https://github.com/Cj-bc/dotfiles/tree/master/dotfiles/archiso][Cj-bc/dotfiles/dotfiles/archiso]]
+  
+** パッケージの追加
+
+   ~packages.x86_64~ にパッケージを追加。
+
+   #+begin_src diff
+     diff --git a/dotfiles/archiso/packages.x86_64 b/dotfiles/archiso/packages.x86_64
+     index aaf2416..2bbce38 100644
+     --- a/dotfiles/archiso/packages.x86_64
+     +++ b/dotfiles/archiso/packages.x86_64
+     @@ -119,3 +119,10 @@ wvdial
+      xfsprogs
+      xl2tpd
+      zsh
+     +xorg-server
+     +lightdm
+     +lightdm-gtk-greeter
+     +xterm
+     +xmonad
+     +linux-surface
+     +gparted
+     \ No newline at end of file
+   #+end_src
+
+   WMやDMは好みのものを使って大丈夫だと思います。
+   私はメイン環境と合わせてLightDM+XMonadにしてあります。
+
+** レポジトリの追加
+   linux-surfaceを使いたいのでレポジトリを追加する
+    
+   #+begin_src diff
+     diff --git a/dotfiles/archiso/pacman.conf b/dotfiles/archiso/pacman.conf
+     index 5ee6c1e..2ba1626 100644
+     --- a/dotfiles/archiso/pacman.conf
+     +++ b/dotfiles/archiso/pacman.conf
+     @@ -30,7 +30,7 @@ Architecture = auto
+
+      # Misc options
+      #UseSyslog
+     -#Color
+     +Color
+      #NoProgressBar
+      # We cannot check disk space from within a chroot environment
+      #CheckSpace
+     @@ -99,3 +99,7 @@ Include = /etc/pacman.d/mirrorlist
+      #[custom]
+      #SigLevel = Optional TrustAll
+      #Server = file:///home/custompkgs
+     +
+     +[linux-surface]
+     +SigLevel = Optional TrustAll
+     +Server = https://pkg.surfacelinux.com/arch/
+     \ No newline at end of file
+
+   #+end_src
+
+** メタデータの編集
+   ついでなのでメタデータもちょっと書き換えておきました。
+   後々識別しやすい...かな?
+    
+   #+begin_src diff
+     diff --git a/dotfiles/archiso/profiledef.sh b/dotfiles/archiso/profiledef.sh
+     index 5feb205..7ce4a85 100644
+     --- a/dotfiles/archiso/profiledef.sh
+     +++ b/dotfiles/archiso/profiledef.sh
+     @@ -1,9 +1,9 @@
+      #!/usr/bin/env bash
+      # shellcheck disable=SC2034
+
+     -iso_name="archlinux"
+     +iso_name="archlinux-x"
+      iso_label="ARCH_$(date +%Y%m)"
+     -iso_publisher="Arch Linux <https://archlinux.org>"
+     +iso_publisher="Cj.bc-sd <cj.bc-sd@outlook.jp>"
+      iso_application="Arch Linux Live/Rescue CD"
+      iso_version="$(date +%Y.%m.%d)"
+      install_dir="arch"
+   #+end_src
+
+** デフォルトでXが起動するように設定    
+
+   systemdのUnitにsymlinkを貼ります。
+   これは ~systemctl enable~ がするのと同じ挙動です。
+
+*** 古い手法について   
+   Wikiには ~customize_airootfs.sh~ の編集をする方法も記載されていますが、
+   これはもうdeprecatedとなっています
+
+   (参考: [[https://gitlab.archlinux.org/archlinux/archiso/-/blob/master/CHANGELOG.rst][バージョン51のCHANGELOG]])
+
+
+   実行したら怒られたログ↓
+   
+   #+begin_src 
+   [mkarchiso] WARNING: customize_airootfs.sh is deprecated! Support for it will be removed in a future archiso version.
+   #+end_src
+   
+** mkarchisoする
+   あとはやるだけ。
+
+   #+begin_src sh
+     mkdir workdir out
+     mkarchiso -v -w workdir -o out .
+   #+end_src
+
+   | オプション   | 解説                                                                |
+   |--------------+---------------------------------------------------------------------|
+   | ~-v~         | verbose。ログの出力をします                                         |
+   | ~-w workdir~ | 作業ディレクトリの設定をします                                      |
+   | ~-o out~     | 最終的に出来上がったisoファイルを格納するディレクトリの設定をします |
+
+
+   ちょっと時間(とストレージ)食うので待つ。
+   うちの環境では 5GBくらい要求されたので気をつけてとのこと。
+** できたisoを焼く
+
+   [[https://wiki.archlinux.jp/index.php/USB_インストールメディア#dd_を使う][USBインストールメディアを作成するwiki]]に従って焼く。
+   今回はddを使う。各パラメーターについては各自確認してから焼いてほしい。
+   あぶないので。
+   
+   #+begin_src sh
+     sudo dd bs=4M if=out/archlinux-x-2022.04.01-x86_64.iso of=/dev/sda status=progress && sync
+   #+end_src
