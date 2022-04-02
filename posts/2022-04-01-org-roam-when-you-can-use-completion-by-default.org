@@ -1,0 +1,59 @@
+* org roam標準で補完が効く条件
+  :PROPERTIES:
+  :DATE: [2022-04-01 Fri 23:44]
+  :TAGS: :emacs:org-roam:org:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  :LOGBOOK:
+  CLOCK: [2022-04-01 Fri 23:54]--[2022-04-02 Sat 00:05] =>  0:11
+  CLOCK: [2022-04-01 Fri 23:45]--[2022-04-01 Fri 23:54] =>  0:09
+  :END:
+  
+  [[info:org-roam#Completion][info:org-roam#Completion]]にあるように、
+  org-roamは標準で補完機能を持っています。
+  
+  が、自分の環境では上手く動かなかったので原因を探った際のメモ。
+
+** Tl;Dr: 
+   デフォルトでは、help:org-roam-db-autosync-mode を有効にした状態で、
+   ファイルからバッファーを読み込んだ際に有効化される。
+   
+   *help:org-roam-completion-everywhere ですらこの条件が必要* なので注意。
+
+   えと、
+** 詳しく
+*** org-roamが提供する補完機能の概要
+
+    org-roamは、help:completion-at-point を用いた補完機能を提供しています。
+    又、company-modeも別途対応している模様です。
+
+*** 実際の仕組み
+    そもそものcompletion-at-pointの仕組みについては割愛しますが
+    簡単に必要なことだけを書くと、補完に使用する関数を ~completion-at-point-functions~
+    変数から取得して補完を行います。
+
+   
+    なので、 ~completion-at-point~ を使用した補完の際は、その変数をいじっている所を探しにいけば良いということになります。
+    org-roamでもこの ~completion-at-point-functions~ に関数を追加しています。
+
+
+    + [[file:~/.emacs.d/elpa/org-roam-20220319.1902/org-roam-node.el::defun org-roam--register-completion-functions-h (][org-roam--register-completion-functions-h]]で help:completion-at-point-functions を設定している
+      + ~org-roam--register-completion-functions-h~ は help:org-roam-find-file-hook に追加されている
+	+ help:org-roam-find-file-hook は help:org-roam-db-autosync--setup-file-h から実行される
+	  + help:org-roam-db-autosync--setup-file-h は help:org-roam-db-autosync-mode を有効にした時に help:find-file-hook に
+	    追加される
+	    + help:find-file-hook はファイルからバッファーが読み込まれた際に実行される
+
+    よって、 help:org-roam-db-autosync-mode を有効にしていない限りは同期されない。
+    まぁそれはそうか。
+
+** 手動で設定する方法
+
+   db-syncはしなくていいけど補完は使えるようになってほしい、という場合
+   help:org-roam--register-completion-functions-h を手動で実行すれば良いです。
+
+   #+begin_src elisp
+     (org-roam--register-completion-functions-h)
+   #+end_src
