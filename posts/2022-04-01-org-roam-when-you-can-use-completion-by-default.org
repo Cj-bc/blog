@@ -22,7 +22,6 @@
    
    *help:org-roam-completion-everywhere ですらこの条件が必要* なので注意。
 
-   えと、
 ** 詳しく
 *** org-roamが提供する補完機能の概要
 
