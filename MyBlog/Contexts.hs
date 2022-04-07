@@ -40,7 +40,7 @@ postCtx =
     <> profileContext
     <> defaultContext'
   where
-    ogpContext = titleSnapshotField "title" -- We need this because 'defaultContext'' doesn't contain proper title
+    ogpContext = snapshotField "title" -- We need this because 'defaultContext'' doesn't contain proper title
                  <> field "og-description" (\item -> take 100 <$> loadSnapshotBody (itemIdentifier item) "raw content")
                  <> constField  "root"   "https://cj-bc.github.io/blog"
                  <> defaultContext'
@@ -113,8 +113,8 @@ feedCtx = dateField "date" (T.unpack dateFormat)
 
 -- | Common Contexts for pages that holds post list
 postListCtx :: [Item String] -> Context b
-postListCtx posts = listField "posts" (titleSnapshotField "title" <> postCtx) (return posts)
+postListCtx posts = listField "posts" (snapshotField "title" <> postCtx) (return posts)
 
--- | スナップショットに仕舞ってあるタイトルを取り出して使う
-titleSnapshotField :: String -> Context String
-titleSnapshotField fName = field fName $ \item -> loadSnapshotBody (itemIdentifier item) "title"
+-- | 指定したスナップショットに仕舞ってある文字列を取り出して使う
+snapshotField :: String -> Context String 
+snapshotField fName = field fName $ \item -> (show <$> loadSnapshotBody (itemIdentifier item) fName)
