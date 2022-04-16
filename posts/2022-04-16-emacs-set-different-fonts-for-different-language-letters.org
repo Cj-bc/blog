@@ -3,7 +3,7 @@
   :DATE: [2022-04-16 Sat 10:41]
   :TAGS: :emacs:
   :BLOG_POST_KIND: HowTo
-  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
 :LOGBOOK:
