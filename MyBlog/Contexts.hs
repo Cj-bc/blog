@@ -116,5 +116,7 @@ postListCtx :: [Item String] -> Context b
 postListCtx posts = listField "posts" (snapshotField "title" <> postCtx) (return posts)
 
 -- | 指定したスナップショットに仕舞ってある文字列を取り出して使う
+-- 
+-- **仕舞ってある値の型が 'String' である必要がある**
 snapshotField :: String -> Context String 
-snapshotField fName = field fName $ \item -> (show <$> loadSnapshotBody (itemIdentifier item) fName)
+snapshotField fName = field fName $ \item -> loadSnapshotBody (itemIdentifier item) fName
