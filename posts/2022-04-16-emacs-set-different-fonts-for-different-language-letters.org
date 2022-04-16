@@ -1,0 +1,76 @@
+* 複数のフォントを自然言語毎に使い分ける
+  :PROPERTIES:
+  :DATE: [2022-04-16 Sat 10:41]
+  :TAGS: :emacs:
+  :BLOG_POST_KIND: HowTo
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+:LOGBOOK:
+CLOCK: [2022-04-16 Sat 10:44]--[2022-04-16 Sat 11:08] =>  0:24
+CLOCK: [2022-04-16 Sat 10:42]--[2022-04-16 Sat 10:42] =>  0:00
+:END:
+
+複数の自然言語(特に母国語と英語以外)を使うようになると、
+普段使いのフォントではカバーできない文字が出てくると思います。
+
+Emacsでは、どうやら文字毎に使用するフォントを設定することができるようなので
+その設定をしてみることにします。
+
+
+今回は例として、韓国語のハングルを使えるようにしたいと思います。
+
+** 1. フォントを取得してインストールする
+これは各自ディストリビューションで異なると思います。
+
+私のarchlinux環境では、 ~/usr/share/fonts~ か ~$HOME/.local/share/fonts~
+以下にフォントファイルを仕舞えば良いようです。
+(詳しくは [[https://wiki.archlinux.jp/index.php/フォント設定][archwiki -- フォント設定]]を参照)
+
+
+もしかしたらパッケージにもあるかもしれません。
+
+私はGoogle Fontsで調べてきて、簡単なPKGBUILD(archlinuxのパッケージを
+作成するために使用するファイル)を書いてパッケージ化してインストールしました。
+
+** 2. ~set-fontset-font~ 関数でフォントを適用する
+文字毎にフォントを適用できると書きましたが、勿論範囲指定もできます。
+
+*** 一つの文字だけ
+
+一つの文字だけならば、その文字をcharacterとして使用します。
+Elispで特定のcharacterを表現するには、そのcharacterの頭に ~?~ を
+つけてあげれば良いので、
+例えば'ㅣ'という文字だけに適用したければ:
+
+#+begin_src elisp
+  (set-fontset-font t ?ㅣ "NanumGothic")
+#+end_src
+
+とします。
+
+*** 特定のScriptのみ
+
+正直Scriptとは何ぞや、というのはあんまりわからんです...
+info覗いてもあまり解説がなかったので、一般的な用語なのかも
+しれません(若しくは見付けられていないか)
+
+とりいそぎ、Emacsに認識されているScriptの一覧は ~script-representative-chars~
+という変数に格納されているのでそれを確認します (help:script-representative-chars)
+
+そうすると、今回の場合 ~hangul~ という使えそうなシンボルがあるので
+これを用いることにします。
+シンボルは、単純にシンボルとして渡してあげれば良いです。
+
+#+begin_src elisp
+  (set-fontset-font t 'hangul "NanumGothic")
+#+end_src
+
+#+RESULTS:
+
+
+** 参考資料
++ [[https://qiita.com/kawabata@github/items/2c4b0b689834c9c193aa][Emacs で全世界の文字を表示・編集可能にする。 - Qiita]]
++ help:set-fontset-font
++ [[info:Emacs#Defining Fontsets]]
+
