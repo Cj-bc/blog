@@ -7,12 +7,82 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/mps-youtube.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Fri, 01 Apr 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Sat, 16 Apr 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-04-16-emacs-set-different-fonts-for-different-language-letters</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-04-16-emacs-set-different-fonts-for-different-language-letters.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>複数のフォントを自然言語毎に使い分ける</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on April 16, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on April 16, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
+	
+      </div>
+
+    <div class="description">
+      <p>複数の自然言語(特に母国語と英語以外)を使うようになると、 普段使いのフォントではカバーできない文字が出てくると思います。</p>
+<p>Emacsでは、どうやら文字毎に使用するフォントを設定することができるようなので その設定をしてみることにします。</p>
+<p>今回は例として、韓国語のハングルを使えるようにしたいと思います。</p>
+<h1 id="1. フォントを取得してインストールする">1. フォントを取得してインストールする</h1>
+<p>これは各自ディストリビューションで異なると思います。</p>
+<p>私のarchlinux環境では、 <code>/usr/share/fonts</code> か <code>$HOME/.local/share/fonts</code> 以下にフォントファイルを仕舞えば良いようです。 (詳しくは <a href="https://wiki.archlinux.jp/index.php/フォント設定">archwiki – フォント設定</a>を参照)</p>
+<p>もしかしたらパッケージにもあるかもしれません。</p>
+<p>私はGoogle Fontsで調べてきて、簡単なPKGBUILD(archlinuxのパッケージを 作成するために使用するファイル)を書いてパッケージ化してインストールしました。</p>
+<h1 id="2. set-fontset-font 関数でフォントを適用する">2. <code>set-fontset-font</code> 関数でフォントを適用する</h1>
+<p>文字毎にフォントを適用できると書きましたが、勿論範囲指定もできます。</p>
+<h2 id="一つの文字だけ">一つの文字だけ</h2>
+<p>一つの文字だけならば、その文字をcharacterとして使用します。 Elispで特定のcharacterを表現するには、そのcharacterの頭に <code>?</code> を つけてあげれば良いので、 例えば'ㅣ'という文字だけに適用したければ:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(set-fontset-font t ?ㅣ &quot;NanumGothic&quot;)
+</code></pre>
+</div>
+<p>とします。</p>
+<h2 id="特定のScriptのみ">特定のScriptのみ</h2>
+<p>正直Scriptとは何ぞや、というのはあんまりわからんです… info覗いてもあまり解説がなかったので、一般的な用語なのかも しれません(若しくは見付けられていないか)</p>
+<p>とりいそぎ、Emacsに認識されているScriptの一覧は <code>script-representative-chars</code> という変数に格納されているのでそれを確認します (help:script-representative-chars)</p>
+<p>そうすると、今回の場合 <code>hangul</code> という使えそうなシンボルがあるので これを用いることにします。 シンボルは、単純にシンボルとして渡してあげれば良いです。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(set-fontset-font t &#39;hangul &quot;NanumGothic&quot;)
+</code></pre>
+</div>
+<h1 id="参考資料">参考資料</h1>
+<ul>
+<li><a href="https://qiita.com/kawabata@github/items/2c4b0b689834c9c193aa">Emacs で全世界の文字を表示・編集可能にする。 - Qiita</a></li>
+<li>help:set-fontset-font</li>
+<li><a href="info:Emacs#Defining Fontsets">info:Emacs#Defining Fontsets</a></li>
+</ul>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Sat, 16 Apr 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-04-16-emacs-set-different-fonts-for-different-language-letters.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-04-01-org-roam-when-you-can-use-completion-by-default</title>
     <link>https://cj-bc.github.io/blog/posts/2022-04-01-org-roam-when-you-can-use-completion-by-default.html</link>
     <description><![CDATA[<div id="body-content">
-  <div class="content">
+  <div class="content of Memo">
     <div class="ui center aligned icon header">
       <h1>org roam標準で補完が効く条件</h1>
     </div>
@@ -79,7 +149,7 @@ elisp
     <title>2022-03-31-archiso-create-x-enabled-archiso</title>
     <link>https://cj-bc.github.io/blog/posts/2022-03-31-archiso-create-x-enabled-archiso.html</link>
     <description><![CDATA[<div id="body-content">
-  <div class="content">
+  <div class="content of Memo">
     <div class="ui center aligned icon header">
       <h1>X環境を含んだarchsioイメージを作成する</h1>
     </div>
@@ -245,7 +315,7 @@ bash
     <title>2022-03-18</title>
     <link>https://cj-bc.github.io/blog/posts/2022-03-18.html</link>
     <description><![CDATA[<div id="body-content">
-  <div class="content">
+  <div class="content of Memo">
     <div class="ui center aligned icon header">
       <h1>2022/03/18</h1>
     </div>
@@ -303,7 +373,7 @@ bash
     <title>2022-03-18-gpg-stuggled-to-search-key-from-keyserver</title>
     <link>https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html</link>
     <description><![CDATA[<div id="body-content">
-  <div class="content">
+  <div class="content of Memo">
     <div class="ui center aligned icon header">
       <h1>gpg --search-keys がうまくいかなかったので調べる</h1>
     </div>
@@ -424,7 +494,7 @@ c
     <title>2022-03-17</title>
     <link>https://cj-bc.github.io/blog/posts/2022-03-17.html</link>
     <description><![CDATA[<div id="body-content">
-  <div class="content">
+  <div class="content of Memo">
     <div class="ui center aligned icon header">
       <h1>2022/03/17</h1>
     </div>
@@ -473,7 +543,7 @@ c
     <title>2022-03-16-environment-thinking-about-knowledge-management-system</title>
     <link>https://cj-bc.github.io/blog/posts/2022-03-16-environment-thinking-about-knowledge-management-system.html</link>
     <description><![CDATA[<div id="body-content">
-  <div class="content">
+  <div class="content of Memo">
     <div class="ui center aligned icon header">
       <h1>ノートの取り方と関連ソフトウェアについての考察</h1>
     </div>
@@ -691,7 +761,7 @@ c
     <title>2022-03-14-org-mode-fix-clock-start-time-is-gone</title>
     <link>https://cj-bc.github.io/blog/posts/2022-03-14-org-mode-fix-clock-start-time-is-gone.html</link>
     <description><![CDATA[<div id="body-content">
-  <div class="content">
+  <div class="content of Memo">
     <div class="ui center aligned icon header">
       <h1>"Clock start time is gone" エラーを解消する</h1>
     </div>
@@ -779,7 +849,7 @@ elisp
     <title>2022-03-14-linux-fix-audio-environments</title>
     <link>https://cj-bc.github.io/blog/posts/2022-03-14-linux-fix-audio-environments.html</link>
     <description><![CDATA[<div id="body-content">
-  <div class="content">
+  <div class="content of Memo">
     <div class="ui center aligned icon header">
       <h1>音声周りの環境改善をした</h1>
     </div>
@@ -879,7 +949,7 @@ elisp
     <title>2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application</title>
     <link>https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html</link>
     <description><![CDATA[<div id="body-content">
-  <div class="content">
+  <div class="content of Memo">
     <div class="ui center aligned icon header">
       <h1>アプリケーション毎のオーディオレベルを調整する</h1>
     </div>
@@ -974,65 +1044,6 @@ bash
 ]]></description>
     <pubDate>Sun, 13 Mar 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-03-12-rust-sdtin-read-until-eof-line-by-line</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-03-12-rust-sdtin-read-until-eof-line-by-line.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content">
-    <div class="ui center aligned icon header">
-      <h1>Stdinから一行ずつEOFまで読み込む時気をつけること</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on March 12, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on March 13, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;rust&#39;." href="/tags/rust.html" class="ui tag label">rust</a>
-	
-      </div>
-
-    <div class="description">
-      <p>一行一行読み込みたい場合、恐らく <a href="https://doc.rust-lang.org/stable/std/io/struct.Stdin.html#method.read_line">std::io::Stdin::read<sub>line</sub></a>を使うと思う。 これは</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-rust
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">pub</span> <span class="kw">fn</span> read_line(<span class="op">&amp;</span><span class="kw">self</span><span class="op">,</span> buf<span class="op">:</span> <span class="op">&amp;</span><span class="kw">mut</span> <span class="dt">String</span>) <span class="op">-&gt;</span> <span class="dt">Result</span><span class="op">&lt;</span><span class="dt">usize</span><span class="op">&gt;</span></span></code></pre></div>
-</div>
-<p>という型を持つが、 <strong>EOFが来た時は <code>Ok(0)</code> を返す</strong> 。 なので、EOFまで一行一行読んで何かしたい場合、</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-rust
-</div>
-<div class="sourceCode" id="Okな例"><pre class="sourceCode rust SourceCode"><code class="sourceCode rust"><span id="Okな例-1"><a href="#Okな例-1" aria-hidden="true" tabindex="-1"></a>   <span class="kw">let</span> <span class="kw">mut</span> buf <span class="op">=</span> <span class="dt">String</span><span class="pp">::</span>new()<span class="op">;</span></span>
-<span id="Okな例-2"><a href="#Okな例-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="Okな例-3"><a href="#Okな例-3" aria-hidden="true" tabindex="-1"></a>   <span class="kw">while</span> <span class="kw">let</span> <span class="cn">Ok</span>(bytes) <span class="op">=</span> <span class="pp">std::io::</span>stdin()<span class="op">.</span>read_line(<span class="op">&amp;</span>buf) <span class="op">{</span></span>
-<span id="Okな例-4"><a href="#Okな例-4" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> bytes <span class="op">==</span> <span class="dv">0</span> <span class="op">{</span></span>
-<span id="Okな例-5"><a href="#Okな例-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">break</span><span class="op">;</span></span>
-<span id="Okな例-6"><a href="#Okな例-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
-<span id="Okな例-7"><a href="#Okな例-7" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span>
-<span id="Okな例-8"><a href="#Okな例-8" aria-hidden="true" tabindex="-1"></a>   <span class="op">}</span></span></code></pre></div>
-</div>
-<p>として <strong>戻り値が0の場合ループを終了する処理を入れる必要がある</strong> 。 私は <code>Err()</code> でくるかと思ってしまいハマった。なんともな… 型を信用しすぎたというか…ドキュメント読んでなかったというか… (本体のドキュメントにないんだもん気付かんわ!!!)</p>
-<h1 id="参考資料">参考資料</h1>
-<ul>
-<li><a href="https://doc.rust-lang.org/stable/std/io/trait.BufRead.html#method.read_line">std::io::BufRead::read<sub>line</sub></a></li>
-</ul>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Sat, 12 Mar 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-03-12-rust-sdtin-read-until-eof-line-by-line.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 

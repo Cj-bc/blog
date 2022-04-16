@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- Elispパッケージを書く際の諸メモ</title>
+        <title>CLI! CLI! CLI! -- 複数のフォントを自然言語毎に使い分ける</title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -21,7 +21,8 @@
         <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
 
 	  
-	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2021-10-14-elisp-how-to-write-package.html" /><meta property="og:title" content="Elispパッケージを書く際の諸メモ" /><meta property="og:description" content="<p>初めて<a href=" https: github.com Cj-bc evil-textobj-parameter">きちんとしたElispパッケージ</a>を作成しているので、パッケージと" />
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2022-04-16-emacs-set-different-fonts-for-different-language-letters.html" /><meta property="og:title" content="複数のフォントを自然言語毎に使い分ける" /><meta property="og:description" content="<p>複数の自然言語(特に母国語と英語以外)を使うようになると、 普段使いのフォントではカバーできない文字が出てくると思います。</p>
+<p>Emacsでは、どうやら文字毎に使用するフォントを設定す" />
 	  
 	  
 	  <meta name="twitter:card" content="summary" />
@@ -92,13 +93,13 @@
 	      <div id="body-content">
   <div class="content of Memo">
     <div class="ui center aligned icon header">
-      <h1>Elispパッケージを書く際の諸メモ</h1>
+      <h1>複数のフォントを自然言語毎に使い分ける</h1>
     </div>
       <div class="meta ui list">
-	<div class="item">Posted on October 14, 2021</div>
+	<div class="item">Posted on April 16, 2022</div>
 	<div class="item">
 	  <i class="history icon"></i>
-	  Updated on March 13, 2022
+	  Updated on April 16, 2022
 	</div>
 
 	
@@ -109,73 +110,43 @@
       </div>
 
     <div class="description">
-      <p>初めて<a href="https://github.com/Cj-bc/evil-textobj-parameter">きちんとしたElispパッケージ</a>を作成しているので、パッケージとして書く 場合の注意点とか。</p>
-<h1 id="参考リンク">参考リンク</h1>
-<dl>
-<dt><a href="info:elisp#Packaging">info:elisp#Packaging</a></dt>
-<dd>ほぼほぼ全てここに書いてある
-</dd>
-<dt><a href="info:elisp#Tips">info:elisp#Tips</a></dt>
-<dd>コメントの書き方のTipsとか
-</dd>
-</dl>
-<h1 id="ヘッダーのテキスト作成">ヘッダーのテキスト作成</h1>
-<p>Elispファイルは大体同じようなコメント行があるが、 どうやらメタ情報を書いていたりして形式があるらしい。</p>
+      <p>複数の自然言語(特に母国語と英語以外)を使うようになると、 普段使いのフォントではカバーできない文字が出てくると思います。</p>
+<p>Emacsでは、どうやら文字毎に使用するフォントを設定することができるようなので その設定をしてみることにします。</p>
+<p>今回は例として、韓国語のハングルを使えるようにしたいと思います。</p>
+<h1 id="1. フォントを取得してインストールする">1. フォントを取得してインストールする</h1>
+<p>これは各自ディストリビューションで異なると思います。</p>
+<p>私のarchlinux環境では、 <code>/usr/share/fonts</code> か <code>$HOME/.local/share/fonts</code> 以下にフォントファイルを仕舞えば良いようです。 (詳しくは <a href="https://wiki.archlinux.jp/index.php/フォント設定">archwiki – フォント設定</a>を参照)</p>
+<p>もしかしたらパッケージにもあるかもしれません。</p>
+<p>私はGoogle Fontsで調べてきて、簡単なPKGBUILD(archlinuxのパッケージを 作成するために使用するファイル)を書いてパッケージ化してインストールしました。</p>
+<h1 id="2. set-fontset-font 関数でフォントを適用する">2. <code>set-fontset-font</code> 関数でフォントを適用する</h1>
+<p>文字毎にフォントを適用できると書きましたが、勿論範囲指定もできます。</p>
+<h2 id="一つの文字だけ">一つの文字だけ</h2>
+<p>一つの文字だけならば、その文字をcharacterとして使用します。 Elispで特定のcharacterを表現するには、そのcharacterの頭に <code>?</code> を つけてあげれば良いので、 例えば'ㅣ'という文字だけに適用したければ:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(set-fontset-font t ?ㅣ &quot;NanumGothic&quot;)
+</code></pre>
+</div>
+<p>とします。</p>
+<h2 id="特定のScriptのみ">特定のScriptのみ</h2>
+<p>正直Scriptとは何ぞや、というのはあんまりわからんです… info覗いてもあまり解説がなかったので、一般的な用語なのかも しれません(若しくは見付けられていないか)</p>
+<p>とりいそぎ、Emacsに認識されているScriptの一覧は <code>script-representative-chars</code> という変数に格納されているのでそれを確認します (help:script-representative-chars)</p>
+<p>そうすると、今回の場合 <code>hangul</code> という使えそうなシンボルがあるので これを用いることにします。 シンボルは、単純にシンボルとして渡してあげれば良いです。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(set-fontset-font t 'hangul &quot;NanumGothic&quot;)
+</code></pre>
+</div>
+<h1 id="参考資料">参考資料</h1>
 <ul>
-<li><a href="info:elisp#Library Headers">info:elisp#Library Headers</a></li>
+<li><a href="https://qiita.com/kawabata@github/items/2c4b0b689834c9c193aa">Emacs で全世界の文字を表示・編集可能にする。 - Qiita</a></li>
+<li>help:set-fontset-font</li>
+<li><a href="info:Emacs#Defining Fontsets">info:Emacs#Defining Fontsets</a></li>
 </ul>
-<p>以下は<a href="info:elisp#Library Headers">上記リンク</a>にある、コメントの一例</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>;;; foo.el --- Support for the Foo programming language  -*- lexical-binding: t; -*-
-
-;; Copyright (C) 2010-2021 Your Name
-
-;; Author: Your Name &lt;yourname@example.com&gt;
-;; Maintainer: Someone Else &lt;someone@example.com&gt;
-;; Created: 14 Jul 2010
-;; Keywords: languages
-;; URL: https://example.com/foo
-
-;; This file is not part of GNU Emacs.
-
-</code></pre>
-</div>
-<h2 id="最初の行">最初の行</h2>
-<p>一番最初の行は特定のフォーマットになっている必要がある。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>;;; FILENAME --- DESCRIPTION  -*- lexical-binding: t; -*-
-</code></pre>
-</div>
-<h2 id="ヘッダーコメント">ヘッダーコメント</h2>
-<table>
-<tbody>
-<tr class="odd">
-<td><code>Author</code></td>
-<td>作者の名前とメアド。複数いる場合は、次の行に <code>;;</code> とタブ(若しくは最低2つ以上のスペース)を置いた後に書く</td>
-</tr>
-<tr class="even">
-<td><code>Maintainer</code></td>
-<td>現状メンテナンス(バグレポートの対処とか)する人。書式は <code>Author</code> と同じで、省略された場合 <code>Author</code> になる。</td>
-</tr>
-<tr class="odd">
-<td><code>Created</code></td>
-<td>オプショナル。ファイルが最初に作られた日の記録、歴史上の興味以上の意味はない。</td>
-</tr>
-<tr class="even">
-<td><code>Version</code></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h2 id="フッターコメント">フッターコメント</h2>
-<p>ファイルの区切りを明示することで、ファイルの全体を持っているかがわかる。</p>
-<p>(正直「一部の欠けたファイル」になることって今もうないと思うので 必要性はあんまりわからないな？？？)</p>
     </div>
   </div>
   
