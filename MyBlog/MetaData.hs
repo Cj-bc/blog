@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings, TemplateHaskell #-}
+{-# LANGUAGE OverloadedStrings, TemplateHaskell, DeriveGeneric #-}
 module MyBlog.MetaData where
 import Lens.Micro.Platform (makeLenses, set, (.~), (&))
 import Data.Foldable (fold)
@@ -6,15 +6,19 @@ import Data.Default (Default(..))
 import Text.Pandoc.Shared (safeRead, splitTextBy)
 import Text.Pandoc.Definition
 import Data.Text (Text)
+import Data.Binary (Binary)
+import GHC.Generics (Generic)
 
 data PostKind = Memo | Diary | Knowledge | Advertisment | Translation | HowTo
-              deriving (Read, Show, Eq)
+              deriving (Read, Show, Eq, Generic)
 
 instance Semigroup PostKind where
   _ <> p' = p'
 
 instance Monoid PostKind where
   mempty = Memo
+
+instance Binary PostKind
 
 data PostStatus = Normal | Accuracy | Outdated | Archive
                 deriving (Read, Show, Eq, Ord)

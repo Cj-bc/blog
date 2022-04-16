@@ -29,4 +29,5 @@ executable blog
                        text,
                        blaze-html,
                        microlens-platform,
-                       containers
+                       containers,
+                       binary
