@@ -14,6 +14,7 @@ import              Shelly
 import Control.Monad (forM)
 import Data.Maybe (catMaybes)
 import           Text.Blaze.Html.Renderer.String (renderHtml)
+import MyBlog.MetaData (PostKind)
 
 profileContext :: Context String
 profileContext = constField "profileCard" "true"
@@ -36,6 +37,7 @@ postCtx =
     <> tagsFieldWithFomanticClassName "tags"
     <> updateDataField
     <> teaserField "teaser" "raw content"
+    <> field "kind" (\item -> show <$> (loadSnapshotBody (itemIdentifier item) "kind" :: Compiler PostKind))
     <> thumbnailField
     <> profileContext
     <> defaultContext'
@@ -118,5 +120,7 @@ postListCtx posts = listField "posts" (snapshotField "title" <> postCtx) (return
 -- | 指定したスナップショットに仕舞ってある文字列を取り出して使う
 -- 
 -- **仕舞ってある値の型が 'String' である必要がある**
+--
+-- その他の型を扱う場合, 'postCtx' の "kind" のFieldが参考になる
 snapshotField :: String -> Context String 
 snapshotField fName = field fName $ \item -> loadSnapshotBody (itemIdentifier item) fName

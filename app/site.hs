@@ -146,6 +146,7 @@ main = hakyll $ do
 
             -- Store tags of this Post in snapshot
             saveSnapshot "tags" (fmap T.unpack . view MD.tags <$> metadataSet)
+            saveSnapshot "kind" (view MD.kind <$> metadataSet)
             tags <- buildTagsWith (`loadSnapshotBody` "tags") postsPattern (fromCapture "tags/*.html")
 
             let ctx  = constField "title" titleMetadata <> postCtx
