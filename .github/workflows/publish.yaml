@@ -26,6 +26,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           cache: 'npm'
+          cache-dependency-path: css/package-lock.json
       - name: run publish
         run: |
           git config user.name github-actions
