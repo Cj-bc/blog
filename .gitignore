@@ -5,7 +5,7 @@ css/*
 !css/semantic.json
 !css/semantic.min.css
 !css/themes
-!css/theme.config
+!css/src
 # Created by https://www.gitignore.io/api/haskell
 
 ### Haskell ###
