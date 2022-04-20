@@ -5,7 +5,7 @@
         <title>CLI! CLI! CLI!</title>
         <link>https://cj-bc.github.io/blog</link>
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
-        <atom:link href="https://cj-bc.github.io/blog/feeds/rss/general.xml" rel="self"
+        <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/fomantic-ui.xml" rel="self"
                    type="application/rss+xml" />
         <lastBuildDate>Thu, 21 Apr 2022 00:00:00 UT</lastBuildDate>
         <item>
