@@ -1,0 +1,33 @@
+* Fomantic-UIで'site'に別ディレクトリを使用する際の注意点
+  :PROPERTIES:
+  :DATE: [2022-04-21 Thu 00:26]
+  :TAGS: :fomantic-ui:blog:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+:LOGBOOK:
+CLOCK: [2022-04-21 Thu 00:27]--[2022-04-21 Thu 00:32] =>  0:05
+:END:
+  
+  ~semantic.json~ の部分だけ変えたらよさそうに思うが、
+  ~theme.config~ も変える必要があるので注意。
+
+  #+NAME: ~semantic.json~ の変更場所
+  #+begin_src javascript
+    {
+      "base": ".",
+      "paths": {
+	"source": {
+	    ...
+	  "site": "src/site",
+	    ...
+  #+end_src
+
+  #+NAME: ~theme.config~ の変更場所
+  #+begin_src conf-javaprop
+
+    /* Path to site override folder */
+    @siteFolder  : 'src/site';
+  #+end_src
+
