@@ -3,19 +3,23 @@ NPX := $(shell which npx)
 GULP := $(NPX) gulp
 
 # ---------- File dependencies ----------
+
 css/node_modules:
 	cd css && npm install
 
-fomantic-ui: css/node_modules
-	cd css && $(GULP) build
+css/node_modules/fomantic-ui/src/theme.config: css/node_modules css/src/theme.config
+	cp css/src/theme.config css/node_modules/fomantic-ui/src/theme.config
 
-css/dist/semantic.min.css: fomantic-ui
+css/node_modules/fomantic-ui/semantic.json: css/node_modules css/semantic.json
+	cp css/semantic.json css/node_modules/fomantic-ui/semantic.json
 
-css/dist/semantic.min.js: fomantic-ui
+fomantic-ui-configs: css/node_modules/fomantic-ui/semantic.json css/node_modules/fomantic-ui/src/theme.config
 
+fomantic-ui: fomantic-ui-configs
+	cd css/node_modules/fomantic-ui && $(GULP) build
 
 # ---------- Commands ----------
-build: css/dist/semantic.min.css css/dist/semantic.min.js
+build: fomantic-ui
 	stack build
 	stack exec blog rebuild
 

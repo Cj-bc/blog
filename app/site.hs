@@ -84,16 +84,16 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
-    match "css/dist/semantic.min.css" $ do
+    match "css/node_modules/fomantic-ui/dist/semantic.min.css" $ do
         route $ constRoute "css/semantic.min.css"
         compile copyFileCompiler
 
-    match "css/dist/semantic.min.js" $ do
+    match "css/node_modules/fomantic-ui/dist/semantic.min.js" $ do
         route $ constRoute "js/semantic.min.js"
         compile copyFileCompiler
 
-    match "css/dist/themes/**" $ do
-        route $ gsubRoute "dist/" (const "")
+    match "css/node_modules/fomantic-ui/dist/themes/**" $ do
+        route $ gsubRoute "node_modules/fomantic-ui/dist/" (const "")
         compile copyFileCompiler
 
     match "css/myCustom.css" $ do
