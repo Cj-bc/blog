@@ -3,7 +3,7 @@
   :DATE: [2022-04-21 Thu 00:26]
   :TAGS: :fomantic-ui:blog:
   :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
 :LOGBOOK:
