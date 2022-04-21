@@ -1,0 +1,15 @@
+/*******************************
+         Site Overrides
+*******************************/
+
+@media only screen and (max-width: @largestMobileScreen) {
+    .ui.menu > [class*="computer only"].item:not(.mobile) {
+	display: none !important;
+    }
+}
+
+@media only screen and (min-width: @computerBreakpoint) and (max-width: @largestSmallMonitor) {
+    .ui.menu > [class*="mobile only"].item:not(.computer) {
+	display: none !important;
+    }
+}
