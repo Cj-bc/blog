@@ -8,7 +8,7 @@
     }
 }
 
-@media only screen and (min-width: @computerBreakpoint) and (max-width: @largestSmallMonitor) {
+@media only screen and (min-width: @computerBreakpoint) {
     .ui.menu > [class*="mobile only"].item:not(.computer) {
 	display: none !important;
     }
