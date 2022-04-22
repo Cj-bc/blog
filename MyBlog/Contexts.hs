@@ -39,6 +39,7 @@ postCtx =
     <> teaserField "teaser" "raw content"
     <> field "kind" (\item -> show <$> (loadSnapshotBody (itemIdentifier item) "kind" :: Compiler PostKind))
     <> thumbnailField
+    <> constField "isPost" "true"
     <> profileContext
     <> defaultContext'
   where
