@@ -1,0 +1,43 @@
+* ElispのHash Tableのキーの一意性確認のための方法について
+  :PROPERTIES:
+  :DATE: [2022-05-02 Mon 22:45]
+  :TAGS: :elisp:emacs:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+:LOGBOOK:
+CLOCK: [2022-05-02 Mon 22:46]--[2022-05-02 Mon 23:16] =>  0:30
+:END:
+  
+** Hash Tableの種類
+elispにおいてHash Tableは一つではあるが、キーを比較するための方法は
+複数存在する ([[help:make-hash-table]])
+
+そして、この比較する方法の違いを把握してないと「何故これが重複して存在するの!？」
+みたいなことになるので気をつける必要がある。
+
+一応ユーザーが自分で実装することもできるそうだが
+([[info:elisp#Defining Hash][elisp#Defining Hash]]の help:define-hash-table-test を参照)、
+今回はそれは含めない。
+
+情報源は [[info:elisp#Creating Hash][elisp#Creating Hash]]
+*** ~eql~ (デフォルト)
+数字(float若しくはinteger)は ~equal~ で等しければ同じと判断され、
+*他のオブジェクトは全て等しくなることはない* (!)
+
+*** ~equal~
+~equal~ によって判定される。
+
+*** ~eq~
+異なるLispオブジェクトは同じになることはない。
+
+** 「こういう時は？」
+*** キーに文字列を使いたい
+*デフォルトの ~eql~ では決して等しくならない*
+~'equal~ にする
+
+#+begin_src elisp
+  (make-hash-table :test 'equal)
+#+end_src
+
