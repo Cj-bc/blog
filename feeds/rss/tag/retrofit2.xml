@@ -7,8 +7,62 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/retrofit2.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Thu, 21 Apr 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Mon, 02 May 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-05-02-elisp-hashtable-key-comparison-method</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-05-02-elisp-hashtable-key-comparison-method.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>ElispのHash Tableのキーの一意性確認のための方法について</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on May  2, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on May  4, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="Hash Tableの種類">Hash Tableの種類</h1>
+<p>elispにおいてHash Tableは一つではあるが、キーを比較するための方法は 複数存在する (<a href="help:make-hash-table">help:make-hash-table</a>)</p>
+<p>そして、この比較する方法の違いを把握してないと「何故これが重複して存在するの!？」 みたいなことになるので気をつける必要がある。</p>
+<p>一応ユーザーが自分で実装することもできるそうだが (<a href="info:elisp#Defining Hash">elisp#Defining Hash</a>の help:define-hash-table-test を参照)、 今回はそれは含めない。</p>
+<p>情報源は <a href="info:elisp#Creating Hash">elisp#Creating Hash</a></p>
+<h2 id="eql (デフォルト)"><code>eql</code> (デフォルト)</h2>
+<p>数字(float若しくはinteger)は <code>equal</code> で等しければ同じと判断され、 <strong>他のオブジェクトは全て等しくなることはない</strong> (!)</p>
+<h2 id="equal"><code>equal</code></h2>
+<p><code>equal</code> によって判定される。</p>
+<h2 id="eq"><code>eq</code></h2>
+<p>異なるLispオブジェクトは同じになることはない。</p>
+<h1 id="「こういう時は？」">「こういう時は？」</h1>
+<h2 id="キーに文字列を使いたい">キーに文字列を使いたい</h2>
+<p><strong>デフォルトの <code>eql</code> では決して等しくならない</strong> <code>'equal</code> にする</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(make-hash-table :test &#39;equal)
+</code></pre>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Mon, 02 May 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-05-02-elisp-hashtable-key-comparison-method.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-04-21-fomantic-ui-use-custom-site-directory</title>
     <link>https://cj-bc.github.io/blog/posts/2022-04-21-fomantic-ui-use-custom-site-directory.html</link>
     <description><![CDATA[<div id="body-content">
@@ -898,106 +952,6 @@ elisp
 ]]></description>
     <pubDate>Mon, 14 Mar 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-03-14-org-mode-fix-clock-start-time-is-gone.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-03-14-linux-fix-audio-environments</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-03-14-linux-fix-audio-environments.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>音声周りの環境改善をした</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on March 14, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on March 14, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged &#39;環境構築&#39;." href="/tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89.html" class="ui tag label">環境構築</a><a title="All pages tagged &#39;pulseaudio&#39;." href="/tags/pulseaudio.html" class="ui tag label">pulseaudio</a><a title="All pages tagged &#39;bluetooth&#39;." href="/tags/bluetooth.html" class="ui tag label">bluetooth</a>
-	
-      </div>
-
-    <div class="description">
-      <p>実はこの環境は音声周りの環境が大分悪くて、 普段はYouTubeなどはこの環境からは利用していない。</p>
-<p>今回暇だったので、せっかくなので直してみることにする。</p>
-<h1 id="元々あった問題">元々あった問題</h1>
-<h2 id="アプリケーション毎の音量差が激しすぎる">アプリケーション毎の音量差が激しすぎる</h2>
-<p>ブラウザで流しているYouTubeの音が聞こえる程度の音量にすると、 通知が爆音でガチビビるという現象がありました。 逆に通知の音量程度にすると、YouTubeの音が全く聞こえません。</p>
-<p>ちなみに、通知の音量程度にした時にPulseAudioの音量ゲージが100% なのでブラウザ側の音量が小さいのが問題です。</p>
-<h2 id="Air Podsを接続して聞くと音がガビガビになる">Air Podsを接続して聞くと音がガビガビになる</h2>
-<p>昔はきちんと聞こえていた(と思う)のですが、いつからか ガビガビで聞けたものじゃなくなりました。</p>
-<h1 id="今回やったこと">今回やったこと</h1>
-<h2 id="1. ブラウザの sink-input の音量を調節した">1. ブラウザの <code>sink-input</code> の音量を調節した</h2>
-<p>詳しくは<a href="https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html">前回書いたブログ</a>を参照。</p>
-<p>ブラウザの音量めっっっちゃ小さくされてた(10%だった) のでそれを100%に戻したところ、 良いバランスになった</p>
-<h2 id="2. Air PodsのBluetoothプロファイルを修正した">2. Air PodsのBluetoothプロファイルを修正した</h2>
-<p>前に、音質周りについてプロファイルの問題うんたらと見た ことがあったな~と思ったのでそこ辺りを検索。</p>
-<p>その結果 <a href="https://zenn.dev/noraworld/articles/pulseaudio-bluetooth#設定の変更">Raspberry Pi に複数の Bluetooth デバイスを接続して同時に音を流す – noraworld</a> を発見、どうやら音声通話用プロファイルと音楽用プロファイルが別に存在するらしい。</p>
-<div id="ここで扱われるBluetoothプロファイルの一覧">
-<table>
-<thead>
-<tr class="header">
-<th>用途</th>
-<th>略称</th>
-<th>正式名称</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>音声通話用</td>
-<td>HFP</td>
-<td>Hands-Free Profile</td>
-</tr>
-<tr class="even">
-<td>音楽用</td>
-<td>A2DP</td>
-<td>Advanced Audio Distribution Profile</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>(ちなみに本当に一覧が見たければ<a href="https://www.bluetooth.com/specifications/specs/">bluetooth公式のページに</a>存在する)</p>
-<p><code>pactl list sinks</code> でSinkの一覧を表示した際、</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-
-</div>
-<pre class="SourceCode"><code>   シンク #1
-状態: RUNNING
-名前: bluez_sink.74_65_0C_F0_90_23.handsfree_head_unit
-説明: Air Pods
-ドライバー: module-bluez5-device.c
-サンプル仕様: s16le 1ch 16000Hz
-チャンネルマップ: mono
-       ...
-ボリューム: mono: 65536 / 100%
-        バランス 0.00
-ベースボリューム: 65536 / 100%
-       ...
-プロパティー:
- bluetooth.protocol = &quot;handsfree_head_unit&quot;
- bluetooth.codec = &quot;mSBC&quot;
- device.intended_roles = &quot;phone&quot;
-               ...
-</code></pre>
-</div>
-<p>プロパティーの下に <code>bluetooth.protocol = "handsfree_head_unit"</code> とあるので HFPになってるらしいことがわかる。 また、チャンネルマップが <code>mono</code> であることからこれはおそらくモノラル音源になっている ことがわかる。</p>
-<p>またこれはあまり詳しくないので間違っているかもしれないが、 サンプル数も1ch 16000Hzとかなり低めになっていることがわかる。 (参考までに、パソコン本体のサンプル仕様は 2ch 44100Hzだった)</p>
-<p>ということでこれをA2DPに切り替える。 今回はpavucontrolを使って切り替えた。</p>
-<p>pavucontrolを起動したら <code class="verbatim">configure</code> タブを開き、そこに表示された BluetoothヘッドホンのProfileを <code>A2DP</code> に変更する。</p>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Mon, 14 Mar 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-03-14-linux-fix-audio-environments.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
