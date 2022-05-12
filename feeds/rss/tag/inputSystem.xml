@@ -7,8 +7,48 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/inputSystem.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Mon, 02 May 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Fri, 13 May 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-05-13-emacs-magit-how-to-stage-piece-of-hunk</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-05-13-emacs-magit-how-to-stage-piece-of-hunk.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>MagitでTigみたいに行単位ステージを行う</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on May 13, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on May 13, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;magit&#39;." href="/tags/magit.html" class="ui tag label">magit</a><a title="All pages tagged &#39;tig&#39;." href="/tags/tig.html" class="ui tag label">tig</a>
+	
+      </div>
+
+    <div class="description">
+      <p>元々Emacsに来る前は<a href="https://github.com/jonas/tig">tig</a>を愛用しており、Emacsに乗り換えて Magitに大体移行した後も、いくつかの機能に於いてはtigを用いていた。</p>
+<p>その一つがハンクより細かい行単位でのステージ(とアンステージ)だ。</p>
+<p>が、 <a href="info:magit#Staging and Unstaging"><a href="info:magit#Staging">info:magit#Staging</a> and Unstaging</a>を見ていた所、実はMagitでも デフォルトで出来ることがわかったのでメモしておく。</p>
+<h1 id="やり方">やり方</h1>
+<p>まず help:magit-status で普通にMagitバッファを開く (デフォルトでは <code>C-x g</code> にアサインされている)</p>
+<p>ステージ若しくはアンステージしたい行をリージョンで選択し、 通常通り <code>s</code> 若しくは <code>u</code> でステージ・アンステージ処理をするだけ。</p>
+<p>尚、 <strong>Magitではevil-modeはデフォルトでは機能しない</strong> ようなので、従来の Emacsのリージョン開始コマンドを使う必要がある。 リージョンを開始するには help:set-mark-command (デフォルトでは <code>C-@</code>) を使う。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Fri, 13 May 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-05-13-emacs-magit-how-to-stage-piece-of-hunk.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-05-02-elisp-hashtable-key-comparison-method</title>
     <link>https://cj-bc.github.io/blog/posts/2022-05-02-elisp-hashtable-key-comparison-method.html</link>
     <description><![CDATA[<div id="body-content">
@@ -864,94 +904,6 @@ c
 ]]></description>
     <pubDate>Wed, 16 Mar 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-03-16-environment-thinking-about-knowledge-management-system.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-03-14-org-mode-fix-clock-start-time-is-gone</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-03-14-org-mode-fix-clock-start-time-is-gone.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>"Clock start time is gone" エラーを解消する</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on March 14, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on March 14, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;org-mode&#39;." href="/tags/org-mode.html" class="ui tag label">org-mode</a>
-	
-      </div>
-
-    <div class="description">
-      <p>Org captureから戻る時とか、たまに</p>
-<div class="ui piled segment" style="z-index: 0">
-<blockquote>
-<p>Clock start time is gone</p>
-</blockquote>
-</div>
-<p>とか言われて戻れないことがあります。 この時の対処法についてです。</p>
-<h1 id="原因: org-clock-marker がずれている">原因: <code>org-clock-marker</code> がずれている</h1>
-<p>これは珍しい事例なのでは？と思うのですが、 最後の <code class="verbatim">Clock-in</code> した場所を保持している <code>org-clock-marker</code> が ずれている場合があります。</p>
-<p>このマーカーは、 <code>CLOCK: ~ 等の行の先頭に位置する必要がありますが、
-   私の見た環境では ~:LOGBOOK:</code> の行に存在していました。 この場合、 <code class="verbatim">org-clock.el</code> の以下の部分で弾かれてエラーになってしまいます。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>  (if (and (looking-at (concat &quot;[ \t]*&quot; org-keyword-time-regexp))
-(equal (match-string 1) org-clock-string))
-  (setq ts (match-string 2))
-(if fail-quietly (throw &#39;exit nil) (error &quot;Clock start time is gone&quot;)))
-</code></pre>
-</div>
-<p>[[<a href="file:/usr/share/emacs/27.2/lisp/org/org-clock.el.gz">file:/usr/share/emacs/27.2/lisp/org/org-clock.el.gz</a>::if (and (looking-at (concat "<span class="math display">$$ \t$$</span>*" org-keyword-time-regexp)][source code(オフライン用)]]</p>
-<h1 id="解決策: マーカーをずらす">解決策: マーカーをずらす</h1>
-<p>凄く愚直ですがまぁ。 help:move-marker でマーカーを動かせるので、それを使用します。</p>
-<p>マーカーは <code>CLOCK:</code> の行の最初にある必要があるので、まずはそこの 位置を調べる必要があります。 カーソルの位置を調べる方法は何かありそうではありますが、 今回はマーカーを置きたい位置にカーソルを置き、そこのtext Propertyを調べます。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>(describe-text-properties)
-</code></pre>
-</div>
-<p>そうすると、以下のように表示されます。この場合位置は <code>1411</code> ということになります。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-
-</div>
-<pre class="SourceCode"><code>Text content at position 1411:
-
-
-There are text properties here:
-  fontified            t
-
-[back]
-</code></pre>
-</div>
-<p>で、その番号を <code>new-pt</code> と仮置きすると、</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>(move-marker org-clock-marker new-pt)
-</code></pre>
-</div>
-<p>で設定しなおせます。</p>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Mon, 14 Mar 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-03-14-org-mode-fix-clock-start-time-is-gone.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
