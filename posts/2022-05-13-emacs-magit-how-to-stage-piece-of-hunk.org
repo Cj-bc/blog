@@ -3,7 +3,7 @@
   :DATE: [2022-05-13 Fri 00:48]
   :TAGS: :emacs:magit:tig:
   :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
 :LOGBOOK:
