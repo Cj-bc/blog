@@ -1,0 +1,31 @@
+* MagitでTigみたいに行単位ステージを行う
+  :PROPERTIES:
+  :DATE: [2022-05-13 Fri 00:48]
+  :TAGS: :emacs:magit:tig:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+:LOGBOOK:
+CLOCK: [2022-05-13 Fri 00:48]--[2022-05-13 Fri 01:12] =>  0:24
+:END:
+  
+元々Emacsに来る前は[[https://github.com/jonas/tig][tig]]を愛用しており、Emacsに乗り換えて
+Magitに大体移行した後も、いくつかの機能に於いてはtigを用いていた。
+
+その一つがハンクより細かい行単位でのステージ(とアンステージ)だ。
+
+が、 [[info:magit#Staging and Unstaging][info:magit#Staging and Unstaging]]を見ていた所、実はMagitでも
+デフォルトで出来ることがわかったのでメモしておく。
+
+** やり方
+
+まず help:magit-status で普通にMagitバッファを開く
+(デフォルトでは ~C-x g~ にアサインされている)
+
+ステージ若しくはアンステージしたい行をリージョンで選択し、
+通常通り ~s~ 若しくは ~u~ でステージ・アンステージ処理をするだけ。
+
+尚、 *Magitではevil-modeはデフォルトでは機能しない* ようなので、従来の
+Emacsのリージョン開始コマンドを使う必要がある。
+リージョンを開始するには help:set-mark-command (デフォルトでは ~C-@~) を使う。
