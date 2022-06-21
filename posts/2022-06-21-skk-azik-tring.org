@@ -1,0 +1,179 @@
+* DDSKKでAZIKを始めてみた
+  :PROPERTIES:
+  :DATE: [2022-06-21 Tue 14:24]
+  :TAGS: :skk:日本語入力:azik:emacs:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+:LOGBOOK:
+CLOCK: [2022-06-21 Tue 16:27]--[2022-06-21 Tue 17:00] =>  0:33
+CLOCK: [2022-06-21 Tue 14:25]--[2022-06-21 Tue 14:28] =>  0:03
+:END:
+  
+ 長らくDDSKKを使った日本語入力をしてきたが、そろそろかなり慣れてきたので
+ AZIKも導入してみる。
+ 
+** 導入手順
+導入手順はとても簡単で、とりあえず info:skk#AZIK を読めばことたりる。
+が、まぁ
+
+*** 1. AZIKを有効にする
+
+#+begin_src elisp
+  (setq skk-use-azik t)
+#+end_src
+
+を ~/.skk.el~ に書き込む。
+
+*** 2. DDSKKを再起動する
+変数を設定しただけでは反映されないようなので、
+~skk-restart~ (help:skk-restart) で再起動をかける。
+** 使ってみた感想
+導入してから1日ほど使ってみた。
+主な用途はテキストファイルの記述、この記事と+3000文字くらい書いたくらい。
+
+
+使い始めた最初は結構戸惑った。というか今もそう。
+
+慣れたら便利そうだなとは感じた。
+慣れるまでやっぱり時間がかかる。特に、「っ」の入力と「ん」の入力で詰まる。
+
+例えば
+#+begin_src 
+  使って
+#+end_src
+
+と打ちたい場合、今の自分のDDSKK+AZIK環境では
+
+#+begin_src
+ TukaXtute 
+#+end_src
+
+と打つのだが、従来通り
+
+#+begin_src 
+  Tukatte
+#+end_src
+
+と打ってしまうことがある。(ちなみにそうすると ~つかたちえ~ となる)
+*** 良い所
+AZIKを使い込んでの評価はまだ出来無いが、
+とりあえず始めるにあたっての評価ということで。
+
+**** 基本の配列が変わらない
+まず、「基本は普段通りの配列」であることは本当に嬉しい。
+これのお影で、普通にAZIKにしたまま普段使いが出来る。
+
+そうじゃなかったら長期休暇でもない限り試そうと思えんて...
+
+
+特に、キー配列すら大体JIS配列のみみたいな現代では、
+あまり異なりすぎるインプットメゾットに切り替えることが難しい。
+他の環境を使い辛くなるからだ。
+
+このAZIKくらいなら、まぁ他の環境での作業の時もそこまで作業に支障が出ないだろうと思える。
+**** 少しづつ試せる
+基本の配列が変わらないことにも影響されるが、少しずつ機能を試すことが出来る。
+一気に覚えようとすると結構タフなのでありがたい。
+
+今は「;」による「っ」の入力と、「◯ん」の入力(kzで「かん」とか) を試している
+**** 意外とそれなりに情報がある
+意外とインターネットには情報がある。少し調べると色んなブログがまぁあるし、
+そもそも公式ページが詳しいのでそれで事足りる。今の所。
+
+*** 困った所
+今少し試してみていて、気になる部分をば。幾つかは解決策があるし幾つかはない。
+**** ~shi~ で「し」が打てない
+これは私の困った日本語入力のクセみたいな所がある。
+私は何故か分からないが「し」の入力だけ「shi」と打ってきていた。
+が、AZIKではこの入力では「すうい」となってしまう。
+
+
+ちなみにこの文章で出てくる「し」も大体最初「すうい」と入力してしまって書き直している。
+今の「してしまって」とか地獄だ。ぴぇ。
+
+まぁ、これは「si」で打てた方がどちらにせよ短いし慣らそうと思う。
+**** ~sticky-shift~ の設定をしてると変換のタイミングで「っ」を素直に打てない
+AZIKでは、「;」で「っ」を入力する。
+しかし、DDSKKでは
+
+#+begin_src elisp
+  (setq skk-sticky-key ";")
+#+end_src
+
+とかしているとDDSKKの変換モード中で送り仮名入力に移ってしまう。
+(そして初心者だった頃にこれを設定していた私は気付かずに暫く苦労した)
+
+
+なので、DDSKK+AZIKにしたい民は
+
+#+begin_src elisp
+  (setq skk-sticky-key nil)
+#+end_src
+
+とかして無効化するか、他のキーに割り当てしなおす必要がある。
+
+ちなみに私は今の今まで存在に気付いておらず使われてなかったので素直に消した。
+**** かな入力モードの状態で ~+~ が打てない
+恐らく、ハード的にはJIS配列・内部的にはUS配列とかいう
+特殊なキーボードの使い方をしているのが原因だろうけど、
+かなモードで ~+~ を打つと、変換モードになって「っ」が入力されてしまう。
+
+
+これはSKKのみの時には見られなかった挙動で、試しに ~skk-use-azik~ を ~nil~ にして
+みると無くなるのでAZIKのせいなのは確定だろう。
+
+
+実装を追ってみると、どうやら help:skk-azik-keyboard-type が
+~jp106~ 若しくは ~jp-pc98~ の際には help:skk-set-henkan-point-key に ~?+~ が
+追加されるらしい。([[https://github.com/skk-dev/ddskk/blob/master/skk-azik.el#L540-L549][skk-dev/ddskk -- skk-azik.el#L540-L549]])
+
+#+begin_src elisp
+  ((eq skk-azik-keyboard-type 'jp106)
+        (setq skk-set-henkan-point-key
+              (append '(?+) skk-set-henkan-point-key))
+        (setq skk-downcase-alist
+              (append '((?+ . ?\;)) skk-downcase-alist))
+        (setq skk-azik-keyboard-specific-additional-rom-kana-rule-list
+              '(("@" nil skk-toggle-characters)
+                ("x@" nil skk-today)
+                ("`" nil skk-set-henkan-point-subr)
+                (":" nil "ー"))))
+#+end_src
+
+help:skk-azik-keyboard-type はデフォルトでは ~jp106~ 、今確認しても手元のは ~jp106~
+なので、このコードは実行されているはずで、 ~?+~ が
+help:skk-set-henkan-point-key に入っているはずなので確認してみる。
+
+#+begin_src elisp
+  (seq-find (lambda (x) (eq ?+ x)) skk-set-henkan-point-key)
+#+end_src
+
+#+RESULTS:
+: 43
+
+入ってるのがわかる。
+これを削除してみると
+
+#+begin_src elisp
+  (setq skk-set-henkan-point-key (seq-remove (lambda (x) (eq ?+ x)) skk-set-henkan-point-key))
+#+end_src
+
+困った挙動が無くなった。
+
+
+しかし他の設定も見ると上手く自分の環境に適応する ~skk-azik-keyboard-type~ が
+ないため、ここは後で自分で少し書き換えようかと思う。
+
+** その他Tips
+*** DDSKKの何かと機能が競合して使い辛い!
+まず何の機能が競合しているのかを把握する必要がある。
+当たり前だけど。
+
+その際、 help:describe-key を使ってもあまり上手くいかない
+(全て help:skk-insert と言われてしまう)。
+
+~info~ を引く人ならば [[info:skk#キー索引]] を使うのが良い。
+
+
