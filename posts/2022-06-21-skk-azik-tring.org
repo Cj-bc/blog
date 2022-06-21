@@ -3,7 +3,7 @@
   :DATE: [2022-06-21 Tue 14:24]
   :TAGS: :skk:日本語入力:azik:emacs:
   :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
 :LOGBOOK:
