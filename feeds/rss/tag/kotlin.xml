@@ -7,8 +7,229 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/kotlin.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Fri, 13 May 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Tue, 21 Jun 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-06-21-skk-azik-tring</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-06-21-skk-azik-tring.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>DDSKKでAZIKを始めてみた</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on June 21, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on June 22, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;skk&#39;." href="/tags/skk.html" class="ui tag label">skk</a><a title="All pages tagged &#39;日本語入力&#39;." href="/tags/%E6%97%A5%E6%9C%AC%E8%AA%9E%E5%85%A5%E5%8A%9B.html" class="ui tag label">日本語入力</a><a title="All pages tagged &#39;azik&#39;." href="/tags/azik.html" class="ui tag label">azik</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
+	
+      </div>
+
+    <div class="description">
+      <p>長らくDDSKKを使った日本語入力をしてきたが、そろそろかなり慣れてきたので AZIKも導入してみる。</p>
+<h1 id="導入手順">導入手順</h1>
+<p>導入手順はとても簡単で、とりあえず <a href="info:skk#AZIK">info:skk#AZIK</a> を読めばことたりる。 が、まぁ</p>
+<h2 id="1. AZIKを有効にする">1. AZIKを有効にする</h2>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(setq skk-use-azik t)
+</code></pre>
+</div>
+<p>を <code>/.skk.el</code> に書き込む。</p>
+<h2 id="2. DDSKKを再起動する">2. DDSKKを再起動する</h2>
+<p>変数を設定しただけでは反映されないようなので、 <code>skk-restart</code> (help:skk-restart) で再起動をかける。</p>
+<h1 id="使ってみた感想">使ってみた感想</h1>
+<p>導入してから1日ほど使ってみた。 主な用途はテキストファイルの記述、この記事と+3000文字くらい書いたくらい。</p>
+<p>使い始めた最初は結構戸惑った。というか今もそう。</p>
+<p>慣れたら便利そうだなとは感じた。 慣れるまでやっぱり時間がかかる。特に、「っ」の入力と「ん」の入力で詰まる。</p>
+<p>例えば</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>使って
+</code></pre>
+</div>
+<p>と打ちたい場合、今の自分のDDSKK+AZIK環境では</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>TukaXtute 
+</code></pre>
+</div>
+<p>と打つのだが、従来通り</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Tukatte
+</code></pre>
+</div>
+<p>と打ってしまうことがある。(ちなみにそうすると <code>つかたちえ</code> となる)</p>
+<h2 id="良い所">良い所</h2>
+<p>AZIKを使い込んでの評価はまだ出来無いが、 とりあえず始めるにあたっての評価ということで。</p>
+<ol>
+<li><p>基本の配列が変わらない</p>
+<p>まず、「基本は普段通りの配列」であることは本当に嬉しい。 これのお影で、普通にAZIKにしたまま普段使いが出来る。</p>
+<p>そうじゃなかったら長期休暇でもない限り試そうと思えんて…</p>
+<p>特に、キー配列すら大体JIS配列のみみたいな現代では、 あまり異なりすぎるインプットメゾットに切り替えることが難しい。 他の環境を使い辛くなるからだ。</p>
+<p>このAZIKくらいなら、まぁ他の環境での作業の時もそこまで作業に支障が出ないだろうと思える。</p></li>
+<li><p>少しづつ試せる</p>
+<p>基本の配列が変わらないことにも影響されるが、少しずつ機能を試すことが出来る。 一気に覚えようとすると結構タフなのでありがたい。</p>
+<p>今は「;」による「っ」の入力と、「◯ん」の入力(kzで「かん」とか) を試している</p></li>
+<li><p>意外とそれなりに情報がある</p>
+<p>意外とインターネットには情報がある。少し調べると色んなブログがまぁあるし、 そもそも公式ページが詳しいのでそれで事足りる。今の所。</p></li>
+</ol>
+<h2 id="困った所">困った所</h2>
+<p>今少し試してみていて、気になる部分をば。幾つかは解決策があるし幾つかはない。</p>
+<ol>
+<li><p><code>shi</code> で「し」が打てない</p>
+<p>これは私の困った日本語入力のクセみたいな所がある。 私は何故か分からないが「し」の入力だけ「shi」と打ってきていた。 が、AZIKではこの入力では「すうい」となってしまう。</p>
+<p>ちなみにこの文章で出てくる「し」も大体最初「すうい」と入力してしまって書き直している。 今の「してしまって」とか地獄だ。ぴぇ。</p>
+<p>まぁ、これは「si」で打てた方がどちらにせよ短いし慣らそうと思う。</p></li>
+<li><p><code>sticky-shift</code> の設定をしてると変換のタイミングで「っ」を素直に打てない</p>
+<p>AZIKでは、「;」で「っ」を入力する。 しかし、DDSKKでは</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(setq skk-sticky-key &quot;;&quot;)
+</code></pre>
+</div>
+<p>とかしているとDDSKKの変換モード中で送り仮名入力に移ってしまう。 (そして初心者だった頃にこれを設定していた私は気付かずに暫く苦労した)</p>
+<p>なので、DDSKK+AZIKにしたい民は</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(setq skk-sticky-key nil)
+</code></pre>
+</div>
+<p>とかして無効化するか、他のキーに割り当てしなおす必要がある。</p>
+<p>ちなみに私は今の今まで存在に気付いておらず使われてなかったので素直に消した。</p></li>
+<li><p>かな入力モードの状態で <code>+</code> が打てない</p>
+<p>恐らく、ハード的にはJIS配列・内部的にはUS配列とかいう 特殊なキーボードの使い方をしているのが原因だろうけど、 かなモードで <code>+</code> を打つと、変換モードになって「っ」が入力されてしまう。</p>
+<p>これはSKKのみの時には見られなかった挙動で、試しに <code>skk-use-azik</code> を <code>nil</code> にして みると無くなるのでAZIKのせいなのは確定だろう。</p>
+<p>実装を追ってみると、どうやら help:skk-azik-keyboard-type が <code>jp106</code> 若しくは <code>jp-pc98</code> の際には help:skk-set-henkan-point-key に <code>?+</code> が 追加されるらしい。(<a href="https://github.com/skk-dev/ddskk/blob/master/skk-azik.el#L540-L549">skk-dev/ddskk – skk-azik.el#L540-L549</a>)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>((eq skk-azik-keyboard-type &#39;jp106)
+      (setq skk-set-henkan-point-key
+            (append &#39;(?+) skk-set-henkan-point-key))
+      (setq skk-downcase-alist
+            (append &#39;((?+ . ?\;)) skk-downcase-alist))
+      (setq skk-azik-keyboard-specific-additional-rom-kana-rule-list
+            &#39;((&quot;@&quot; nil skk-toggle-characters)
+              (&quot;x@&quot; nil skk-today)
+              (&quot;`&quot; nil skk-set-henkan-point-subr)
+              (&quot;:&quot; nil &quot;ー&quot;))))
+</code></pre>
+</div>
+<p>help:skk-azik-keyboard-type はデフォルトでは <code>jp106</code> 、今確認しても手元のは <code>jp106</code> なので、このコードは実行されているはずで、 <code>?+</code> が help:skk-set-henkan-point-key に入っているはずなので確認してみる。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(seq-find (lambda (x) (eq ?+ x)) skk-set-henkan-point-key)
+</code></pre>
+</div>
+<p>入ってるのがわかる。 これを削除してみると</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(setq skk-set-henkan-point-key (seq-remove (lambda (x) (eq ?+ x)) skk-set-henkan-point-key))
+</code></pre>
+</div>
+<p>困った挙動が無くなった。</p>
+<p>しかし他の設定も見ると上手く自分の環境に適応する <code>skk-azik-keyboard-type</code> が ないため、ここは後で自分で少し書き換えようかと思う。</p></li>
+</ol>
+<h1 id="その他Tips">その他Tips</h1>
+<h2 id="DDSKKの何かと機能が競合して使い辛い!">DDSKKの何かと機能が競合して使い辛い!</h2>
+<p>まず何の機能が競合しているのかを把握する必要がある。 当たり前だけど。</p>
+<p>その際、 help:describe-key を使ってもあまり上手くいかない (全て help:skk-insert と言われてしまう)。</p>
+<p><code>info</code> を引く人ならば <a href="info:skk#キー索引">info:skk#キー索引</a> を使うのが良い。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Tue, 21 Jun 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-06-21-skk-azik-tring.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2022-05-16-thought-about-yukkuri-related-trademark</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-05-16-thought-about-yukkuri-related-trademark.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>最近話題のゆっくりに関連した商標に関しての考え</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on May 16, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on June 22, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;商標法&#39;." href="/tags/%E5%95%86%E6%A8%99%E6%B3%95.html" class="ui tag label">商標法</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="始めに">始めに</h1>
+<p>私は法律の専門家ではありません。知財法に関してちょこっとだけ齧りましたが、 ほんとにちょこっとだけです。</p>
+<p>ここで書かれていることは個人的な考えであり、 一応対応する法律等は明記するものの間違っている可能性があります。</p>
+<p>又、ここでの知識は知的財産管理技能検定3級公式テキスト改訂11版を 主に元としています。</p>
+<h1 id="例の問題">例の問題</h1>
+<p>5/15、YouTubeチャンネル「柚葉 / Yuzuha」さんが、 「 ゆっくり茶番劇」という文字商標を取得したことを<a href="https://twitter.com/Yuzuha_YouTube/status/1525607600250712064?s=20&amp;t=JDWJ3zpE2P4Biw8Kkd_SwQ">twitterで公開</a>しました。</p>
+<p>そしてそれに伴い、使用料10万円を請求するとのことで話題になりました。</p>
+<p>詳しくは<a href="https://nlab.itmedia.co.jp/nl/articles/2205/15/news045.html">ねとらぼさんの記事</a> 等を確認してもらえると良いかと思います。</p>
+<h1 id="私の考え">私の考え</h1>
+<h2 id="Q. 第三者が勝手に商標を登録することは可能なのか？">Q. 第三者が勝手に商標を登録することは可能なのか？</h2>
+<p>可能だと思います。 商標は法人でも自然人でも登録可能であり、要件も満たしていれば問題がないです。 登録の要件は<a href="https://elaws.e-gov.go.jp/document?lawid=334AC0000000127">商標法</a>3条で定義されており、知的財産管理技能検定3級公式テキスト改訂11版 を参考にして簡単に纏めると以下のようになります:</p>
+<ul>
+<li>自己の業務に係る商品等に使用すること</li>
+<li>識別力を有すること</li>
+</ul>
+<p>「自己の業務に係る」という点に於いて、柚葉さんのYouTubeを見てみると (一応)「ゆっくり茶番劇」という名称を使っているので、 これは満たしていると判断されるかもしれません。</p>
+<p>識別力については謎な所で、個人的には「識別力はない」のではないか？と考えています。</p>
+<p>例えば、YouTubeで「視聴回数順」のソートで軽く検索かけてみた所16件あり、 恐らく文化圏的にニコニコの方にもっとあるであろうことを考えると 少なくともこの界隈内で識別するのは難しいと言わざるを得ません。</p>
+<p>が、まぁ一部の界隈だけというのもまた事実ではありますね…そういう面 で実体調査をパスしたのかもしれません。</p>
+<h2 id="Q. ここから無効にする方法は？">Q. ここから無効にする方法は？</h2>
+<p>利害関係者であれば「商標登録の無効の審判」を請求することができます。 (<a href="https://elaws.e-gov.go.jp/document?lawid=334AC0000000127">商標法</a>46条)</p>
+<p>今回の場合、「ゆっくり茶番劇」はかなり昔から使われている名称であるため、 「普通名称」として無効を主張できないんかな？と思っています。</p>
+<p>但し、その全てについて「自分が作ったものです」と言われると面倒な気はします… 証明できるもの出せないから出来ないか…?</p>
+<h2 id="Q. 我々がするべきではないことは？">Q. 我々がするべきではないことは？</h2>
+<p><strong>爆破予告・殺害予告・名誉毀損等の行為です</strong></p>
+<p>そもそも、それらのものは許されるべきではない、という事は言わずとも同感していただけると 思います。 それでも、感情的になったあまりそういった手段に走ってしまう人がいるような情報が流れてきます。 これは、逆に訴えられてしまったり自分達にとって不利に働くだけなのでやめて 欲しいなぁと思いながら見ています。</p>
+<p>法に則って行われた手続きには法に則って解決しようねぇ</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Mon, 16 May 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-05-16-thought-about-yukkuri-related-trademark.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-05-13-emacs-magit-how-to-stage-piece-of-hunk</title>
     <link>https://cj-bc.github.io/blog/posts/2022-05-13-emacs-magit-how-to-stage-piece-of-hunk.html</link>
     <description><![CDATA[<div id="body-content">
@@ -637,273 +858,6 @@ c
 ]]></description>
     <pubDate>Fri, 18 Mar 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-03-17</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-03-17.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>2022/03/17</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on March 17, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on March 18, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;stack&#39;." href="/tags/stack.html" class="ui tag label">stack</a><a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a>
-	
-      </div>
-
-    <div class="description">
-      <h1 id="やったこと">やったこと</h1>
-<p>全体的には、家にいる間は <code>stack-static</code> にふりまわされてた</p>
-<h2 id="stackを stack-static に変えようとしている">stackを <code>stack-static</code> に変えようとしている</h2>
-<p>今迄stackは公式レポジトリのものを使っていたが、グローバルにhaskell パッケージを導入する必要があるのがちょっと嫌だった。</p>
-<p>今朝、 <code>pacman -Syu</code> した所、依存パッケージの <code>haskell-cryptonite-conduit</code> の関係でstackが使えなくなった。</p>
-<p>そもそもグローバルにインストールしてるのがあまり好きではないので、 Archlinux-jpで存在を教わった、AURの <code>stack-static</code> に変えようとしている…のだけど 結構てこずっている。</p>
-<h2 id="yay -Sc"><code>yay -Sc</code></h2>
-<p>容量空ける為に走らせたところ、空き容量2GB→8.5GBと大幅に増えた。 やったね!</p>
-<h2 id="散歩した">散歩した</h2>
-<p>散歩した。ついでに、お弁当を買って公園で御飯を食べるなどした。 前から気になってたお店で買ったのだけど、思った以上に美味しくてとてもハッピー…!</p>
-<p>御飯食べて、近くにカフェがあったので珈琲買って飲んだ。 結構長いこと外におったな今日は。</p>
-<h1 id="知ったこと">知ったこと</h1>
-<h2 id="Archlinuxのパッケージが、pkgrelのみアップデートされている現象について">Archlinuxのパッケージが、pkgrelのみアップデートされている現象について</h2>
-<p>Archlinux-jpで聞いた所リンクを貰った、まだ理解しきれてないのでとりあえずここに。</p>
-<p><a href="https://www.reddit.com/r/archlinux/comments/7qtx37/why_do_haskellbased_software_upgrades_require_a/">https://www.reddit.com/r/archlinux/comments/7qtx37/why_do_haskellbased_software_upgrades_require_a/</a></p>
-<h1 id="やること">やること</h1>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Thu, 17 Mar 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-03-17.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-03-16-environment-thinking-about-knowledge-management-system</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-03-16-environment-thinking-about-knowledge-management-system.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>ノートの取り方と関連ソフトウェアについての考察</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on March 16, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on April  1, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;note&#39;." href="/tags/note.html" class="ui tag label">note</a><a title="All pages tagged &#39;ナレッジベース&#39;." href="/tags/%E3%83%8A%E3%83%AC%E3%83%83%E3%82%B8%E3%83%99%E3%83%BC%E3%82%B9.html" class="ui tag label">ナレッジベース</a>
-	
-      </div>
-
-    <div class="description">
-      <p>世の中には知識を保存するための色々な手法があり、 それぞれ役割が違っていたりする。 ノートを取る際にどうするのが良いか長らく迷っているので、 一旦今の考えを纏めようと思う。</p>
-<p>又、今回は「知識保存の手法」だけにフォーカスするので、 例えば「章をどう構築するか」みたいな話は別の話題とする。</p>
-<h1 id="最終的にやりたいこと">最終的にやりたいこと</h1>
-<p>今回は「講義や研修・勉強会等の最中にノートを取る」ことを目的とする。 そのノートはそのご見返しをして、纏め直すとする。 この場合、やりたいことは</p>
-<ul>
-<li>後で見返した時にわかりやすい</li>
-<li>(特に講義)日毎、少なくとも学期毎の区切りが明確にわかる</li>
-<li>資料との関連付けが出来る</li>
-<li>あまり時間を掛けずに書ける</li>
-</ul>
-<ul>
-<li>すぐに関連する知識等を検索できる</li>
-<li>参照しやすい</li>
-</ul>
-<p>キーボードドリブンがいいとか、そこらへんはあるけど それは本質ではないので今は除外</p>
-<h1 id="存在するソフトウェア・手法">存在するソフトウェア・手法</h1>
-<p>ナレッジベース等と呼ばれるものはいくつかある。 とりあえずアプリケーション名として書き出す</p>
-<ul>
-<li>Plain Text</li>
-<li>Wiki</li>
-<li>Roam research</li>
-<li>Obsidian</li>
-<li>Notion</li>
-<li>Evernote</li>
-<li>Scrapbox</li>
-<li>Delite</li>
-</ul>
-<p>これらは、情報の蓄積の仕方によっていくつかに分類できると思う。 (さらに細かくわけられるが、とりあえず大まかに)</p>
-<h2 id="紙のノート継承系">紙のノート継承系</h2>
-<p>特にそれ自身で特殊な構造を持たず、 紙に書いていたノートを拡張するような形のアプリケーション。 検索性やレンダリング等を進化させたかんじ。</p>
-<p>Plain Text, Evernoteなど</p>
-<h2 id="知識集約系">知識集約系</h2>
-<p>何か一つのトピックに対して、 纏まった知識を集約していくアプリケーション。 具体的な「とあるモノ」についての知識が欲しい時は有用。</p>
-<p>Wiki, Scrapboxなど</p>
-<h2 id="思考集約系">思考集約系</h2>
-<p>「考えたこと」「本・Podcast・動画・記事等を見ていて知ったこと」など を都度メモし、それを後に纏めたりするもの。</p>
-<p>Roam Research, Obsidian, Deliteなど</p>
-<h1 id="それぞれの利点・欠点">それぞれの利点・欠点</h1>
-<h2 id="紙のノート継承系">紙のノート継承系</h2>
-<div id="要件">
-<table>
-<tbody>
-<tr class="odd">
-<td>後で見返した時にわかりやすい?</td>
-<td>(場合による)</td>
-</tr>
-<tr class="even">
-<td>(特に講義)日毎、少なくとも学期毎の区切りが明確にわかる?</td>
-<td>O</td>
-</tr>
-<tr class="odd">
-<td>資料との関連付けが出来る?</td>
-<td>O</td>
-</tr>
-<tr class="even">
-<td>あまり時間を掛けずに書ける?</td>
-<td>O</td>
-</tr>
-<tr class="odd">
-<td>すぐに関連する知識等を検索できる?</td>
-<td>X</td>
-</tr>
-<tr class="even">
-<td>参照しやすい?</td>
-<td>X</td>
-</tr>
-</tbody>
-</table>
-</div>
-<ol>
-<li><p>利点</p>
-<ul>
-<li>今迄紙で取っていたノートの取り方をそのまま継承できる。</li>
-<li>元々フォーマットを持っていた場合や、ノート取るのに慣れている場合一番直感的</li>
-<li>いつノートを取ったか、同じ時間に他のどんな情報を取得していたかがわかりやすい。</li>
-</ul>
-<p>(私はあまりノートをうまく取れていなかったためあてはまらず)</p></li>
-<li><p>欠点</p>
-<ul>
-<li>何をするにも自由!!!</li>
-<li>自由であるがあまり、何かしら統一基準がない場合はゴチャりそう。</li>
-</ul>
-<p>結局は「中身をどう構築するか」による。</p></li>
-</ol>
-<h2 id="知識集約系">知識集約系</h2>
-<div id="要件">
-<table>
-<tbody>
-<tr class="odd">
-<td>後で見返した時にわかりやすい?</td>
-<td>O</td>
-</tr>
-<tr class="even">
-<td>(特に講義)日毎、少なくとも学期毎の区切りが明確にわかる?</td>
-<td>X</td>
-</tr>
-<tr class="odd">
-<td>資料との関連付けが出来る?</td>
-<td>O</td>
-</tr>
-<tr class="even">
-<td>あまり時間を掛けずに書ける?</td>
-<td>X (纏まった情報にする必要)</td>
-</tr>
-<tr class="odd">
-<td>すぐに関連する知識等を検索できる?</td>
-<td>O</td>
-</tr>
-<tr class="even">
-<td>参照しやすい?</td>
-<td>O</td>
-</tr>
-</tbody>
-</table>
-</div>
-<ol>
-<li><p>利点</p>
-<ul>
-<li>なにかしら「これについて知りたい!」という時、大体イッパツで分かる。</li>
-<li>関連した項目について探す手間がない。</li>
-<li>項目が明確なので、リンクを貼りやすい</li>
-</ul></li>
-<li><p>欠点</p>
-<ul>
-<li>複数のトピックにまたがるものについて、どこに書くべきか明瞭ではない。 (例えば「vimからEmacsへの移行の仕方」)</li>
-<li>一つのポストが長くなりがち。</li>
-<li>「この講義の間にとったノート」というのが分散してしまう
-<ul>
-<li>日付ベースの記事を別に書いて、そこからリンクさせるのはあり</li>
-<li>それってWikiの役割ではなくないか？という疑問</li>
-</ul></li>
-<li>きちんと使い易くするためには、それなりに時間を掛ける必要がでてくる</li>
-</ul></li>
-</ol>
-<h2 id="思考集約系">思考集約系</h2>
-<div id="要件">
-<table>
-<tbody>
-<tr class="odd">
-<td>後で見返した時にわかりやすい?</td>
-<td>X</td>
-</tr>
-<tr class="even">
-<td>(特に講義)日毎、少なくとも学期毎の区切りが明確にわかる?</td>
-<td>X</td>
-</tr>
-<tr class="odd">
-<td>資料との関連付けが出来る?</td>
-<td>O</td>
-</tr>
-<tr class="even">
-<td>あまり時間を掛けずに書ける?</td>
-<td>O</td>
-</tr>
-<tr class="odd">
-<td>すぐに関連する知識等を検索できる?</td>
-<td>O</td>
-</tr>
-<tr class="even">
-<td>参照しやすい?</td>
-<td>O</td>
-</tr>
-</tbody>
-</table>
-</div>
-<ol>
-<li><p>利点</p>
-<ul>
-<li>そもそものワークフローとして「見返す」という行動があるので、 ノート整理をしやすい</li>
-<li>「~の仕方」みたいなアイデア系のことも書き易い</li>
-</ul></li>
-<li><p>欠点</p>
-<ul>
-<li>あくまでも「アイデアやアウトプットに使う」のがメインの目的なので、 知識を永続的に保管しておくのとは少し方向性が違う気がする</li>
-<li>(特にZettelkasten法の場合)アイデアを小さく纏めるのが良いので、 一つのノートに知識をつめこめない</li>
-<li>(個人的な問題として)どういう区切りで情報を分ければいいのかがわからない</li>
-</ul></li>
-</ol>
-<h1 id="現在使っている手法">現在使っている手法</h1>
-<p>現在は用途によって複合的に使い分けている。</p>
-<p>ノート自体には、<a href="https://github.com/Cj-bc/dotfiles/blob/master/dotfiles/emacs/emacs.d/lib/ol-notes.el">自作したパッケージ</a>で「紙のノート継承系」のものを使っている。 これは、知識集約系も思考集約系も試したが上手くいかなかったのでとりあえず、 という側面が強い。</p>
-<p>ちなみに <em>振り返りをしたり整理したりをあまりしてない</em> のが多分結構問題点。</p>
-<h1 id="改善案">改善案</h1>
-<p><strong>きちんと見直す時間を取った上で</strong> Roamを取る。</p>
-<p>運用方針をきちんと立てておく必要がある気がした。 (メモ的に取る→一日の終わりに復習してpermanent noteを書く→wikiにリンク、など)</p>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Wed, 16 Mar 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-03-16-environment-thinking-about-knowledge-management-system.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 

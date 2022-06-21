@@ -1,0 +1,865 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>CLI! CLI! CLI!</title>
+    <link href="https://cj-bc.github.io/blog/feeds/atom/tag/azik.xml" rel="self" />
+    <link href="https://cj-bc.github.io/blog" />
+    <id>https://cj-bc.github.io/blog/feeds/atom/tag/azik.xml</id>
+    <author>
+        <name>Cj-bc a.k.a Cj.BC_SD</name>
+        <email>cj.bc-sd@outlook.jp</email>
+    </author>
+    <updated>2022-06-21T00:00:00Z</updated>
+    <entry>
+    <title>2022-06-21-skk-azik-tring</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-06-21-skk-azik-tring.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-06-21-skk-azik-tring.html</id>
+    <published>2022-06-21T00:00:00Z</published>
+    <updated>2022-06-21T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>DDSKKでAZIKを始めてみた</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on June 21, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on June 22, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;skk&#39;." href="/tags/skk.html" class="ui tag label">skk</a><a title="All pages tagged &#39;日本語入力&#39;." href="/tags/%E6%97%A5%E6%9C%AC%E8%AA%9E%E5%85%A5%E5%8A%9B.html" class="ui tag label">日本語入力</a><a title="All pages tagged &#39;azik&#39;." href="/tags/azik.html" class="ui tag label">azik</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
+	
+      </div>
+
+    <div class="description">
+      <p>長らくDDSKKを使った日本語入力をしてきたが、そろそろかなり慣れてきたので AZIKも導入してみる。</p>
+<h1 id="導入手順">導入手順</h1>
+<p>導入手順はとても簡単で、とりあえず <a href="info:skk#AZIK">info:skk#AZIK</a> を読めばことたりる。 が、まぁ</p>
+<h2 id="1. AZIKを有効にする">1. AZIKを有効にする</h2>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(setq skk-use-azik t)
+</code></pre>
+</div>
+<p>を <code>/.skk.el</code> に書き込む。</p>
+<h2 id="2. DDSKKを再起動する">2. DDSKKを再起動する</h2>
+<p>変数を設定しただけでは反映されないようなので、 <code>skk-restart</code> (help:skk-restart) で再起動をかける。</p>
+<h1 id="使ってみた感想">使ってみた感想</h1>
+<p>導入してから1日ほど使ってみた。 主な用途はテキストファイルの記述、この記事と+3000文字くらい書いたくらい。</p>
+<p>使い始めた最初は結構戸惑った。というか今もそう。</p>
+<p>慣れたら便利そうだなとは感じた。 慣れるまでやっぱり時間がかかる。特に、「っ」の入力と「ん」の入力で詰まる。</p>
+<p>例えば</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>使って
+</code></pre>
+</div>
+<p>と打ちたい場合、今の自分のDDSKK+AZIK環境では</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>TukaXtute 
+</code></pre>
+</div>
+<p>と打つのだが、従来通り</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Tukatte
+</code></pre>
+</div>
+<p>と打ってしまうことがある。(ちなみにそうすると <code>つかたちえ</code> となる)</p>
+<h2 id="良い所">良い所</h2>
+<p>AZIKを使い込んでの評価はまだ出来無いが、 とりあえず始めるにあたっての評価ということで。</p>
+<ol>
+<li><p>基本の配列が変わらない</p>
+<p>まず、「基本は普段通りの配列」であることは本当に嬉しい。 これのお影で、普通にAZIKにしたまま普段使いが出来る。</p>
+<p>そうじゃなかったら長期休暇でもない限り試そうと思えんて…</p>
+<p>特に、キー配列すら大体JIS配列のみみたいな現代では、 あまり異なりすぎるインプットメゾットに切り替えることが難しい。 他の環境を使い辛くなるからだ。</p>
+<p>このAZIKくらいなら、まぁ他の環境での作業の時もそこまで作業に支障が出ないだろうと思える。</p></li>
+<li><p>少しづつ試せる</p>
+<p>基本の配列が変わらないことにも影響されるが、少しずつ機能を試すことが出来る。 一気に覚えようとすると結構タフなのでありがたい。</p>
+<p>今は「;」による「っ」の入力と、「◯ん」の入力(kzで「かん」とか) を試している</p></li>
+<li><p>意外とそれなりに情報がある</p>
+<p>意外とインターネットには情報がある。少し調べると色んなブログがまぁあるし、 そもそも公式ページが詳しいのでそれで事足りる。今の所。</p></li>
+</ol>
+<h2 id="困った所">困った所</h2>
+<p>今少し試してみていて、気になる部分をば。幾つかは解決策があるし幾つかはない。</p>
+<ol>
+<li><p><code>shi</code> で「し」が打てない</p>
+<p>これは私の困った日本語入力のクセみたいな所がある。 私は何故か分からないが「し」の入力だけ「shi」と打ってきていた。 が、AZIKではこの入力では「すうい」となってしまう。</p>
+<p>ちなみにこの文章で出てくる「し」も大体最初「すうい」と入力してしまって書き直している。 今の「してしまって」とか地獄だ。ぴぇ。</p>
+<p>まぁ、これは「si」で打てた方がどちらにせよ短いし慣らそうと思う。</p></li>
+<li><p><code>sticky-shift</code> の設定をしてると変換のタイミングで「っ」を素直に打てない</p>
+<p>AZIKでは、「;」で「っ」を入力する。 しかし、DDSKKでは</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(setq skk-sticky-key &quot;;&quot;)
+</code></pre>
+</div>
+<p>とかしているとDDSKKの変換モード中で送り仮名入力に移ってしまう。 (そして初心者だった頃にこれを設定していた私は気付かずに暫く苦労した)</p>
+<p>なので、DDSKK+AZIKにしたい民は</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(setq skk-sticky-key nil)
+</code></pre>
+</div>
+<p>とかして無効化するか、他のキーに割り当てしなおす必要がある。</p>
+<p>ちなみに私は今の今まで存在に気付いておらず使われてなかったので素直に消した。</p></li>
+<li><p>かな入力モードの状態で <code>+</code> が打てない</p>
+<p>恐らく、ハード的にはJIS配列・内部的にはUS配列とかいう 特殊なキーボードの使い方をしているのが原因だろうけど、 かなモードで <code>+</code> を打つと、変換モードになって「っ」が入力されてしまう。</p>
+<p>これはSKKのみの時には見られなかった挙動で、試しに <code>skk-use-azik</code> を <code>nil</code> にして みると無くなるのでAZIKのせいなのは確定だろう。</p>
+<p>実装を追ってみると、どうやら help:skk-azik-keyboard-type が <code>jp106</code> 若しくは <code>jp-pc98</code> の際には help:skk-set-henkan-point-key に <code>?+</code> が 追加されるらしい。(<a href="https://github.com/skk-dev/ddskk/blob/master/skk-azik.el#L540-L549">skk-dev/ddskk – skk-azik.el#L540-L549</a>)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>((eq skk-azik-keyboard-type &#39;jp106)
+      (setq skk-set-henkan-point-key
+            (append &#39;(?+) skk-set-henkan-point-key))
+      (setq skk-downcase-alist
+            (append &#39;((?+ . ?\;)) skk-downcase-alist))
+      (setq skk-azik-keyboard-specific-additional-rom-kana-rule-list
+            &#39;((&quot;@&quot; nil skk-toggle-characters)
+              (&quot;x@&quot; nil skk-today)
+              (&quot;`&quot; nil skk-set-henkan-point-subr)
+              (&quot;:&quot; nil &quot;ー&quot;))))
+</code></pre>
+</div>
+<p>help:skk-azik-keyboard-type はデフォルトでは <code>jp106</code> 、今確認しても手元のは <code>jp106</code> なので、このコードは実行されているはずで、 <code>?+</code> が help:skk-set-henkan-point-key に入っているはずなので確認してみる。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(seq-find (lambda (x) (eq ?+ x)) skk-set-henkan-point-key)
+</code></pre>
+</div>
+<p>入ってるのがわかる。 これを削除してみると</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(setq skk-set-henkan-point-key (seq-remove (lambda (x) (eq ?+ x)) skk-set-henkan-point-key))
+</code></pre>
+</div>
+<p>困った挙動が無くなった。</p>
+<p>しかし他の設定も見ると上手く自分の環境に適応する <code>skk-azik-keyboard-type</code> が ないため、ここは後で自分で少し書き換えようかと思う。</p></li>
+</ol>
+<h1 id="その他Tips">その他Tips</h1>
+<h2 id="DDSKKの何かと機能が競合して使い辛い!">DDSKKの何かと機能が競合して使い辛い!</h2>
+<p>まず何の機能が競合しているのかを把握する必要がある。 当たり前だけど。</p>
+<p>その際、 help:describe-key を使ってもあまり上手くいかない (全て help:skk-insert と言われてしまう)。</p>
+<p><code>info</code> を引く人ならば <a href="info:skk#キー索引">info:skk#キー索引</a> を使うのが良い。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-05-16-thought-about-yukkuri-related-trademark</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-05-16-thought-about-yukkuri-related-trademark.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-05-16-thought-about-yukkuri-related-trademark.html</id>
+    <published>2022-05-16T00:00:00Z</published>
+    <updated>2022-05-16T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>最近話題のゆっくりに関連した商標に関しての考え</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on May 16, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on June 22, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;商標法&#39;." href="/tags/%E5%95%86%E6%A8%99%E6%B3%95.html" class="ui tag label">商標法</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="始めに">始めに</h1>
+<p>私は法律の専門家ではありません。知財法に関してちょこっとだけ齧りましたが、 ほんとにちょこっとだけです。</p>
+<p>ここで書かれていることは個人的な考えであり、 一応対応する法律等は明記するものの間違っている可能性があります。</p>
+<p>又、ここでの知識は知的財産管理技能検定3級公式テキスト改訂11版を 主に元としています。</p>
+<h1 id="例の問題">例の問題</h1>
+<p>5/15、YouTubeチャンネル「柚葉 / Yuzuha」さんが、 「 ゆっくり茶番劇」という文字商標を取得したことを<a href="https://twitter.com/Yuzuha_YouTube/status/1525607600250712064?s=20&amp;t=JDWJ3zpE2P4Biw8Kkd_SwQ">twitterで公開</a>しました。</p>
+<p>そしてそれに伴い、使用料10万円を請求するとのことで話題になりました。</p>
+<p>詳しくは<a href="https://nlab.itmedia.co.jp/nl/articles/2205/15/news045.html">ねとらぼさんの記事</a> 等を確認してもらえると良いかと思います。</p>
+<h1 id="私の考え">私の考え</h1>
+<h2 id="Q. 第三者が勝手に商標を登録することは可能なのか？">Q. 第三者が勝手に商標を登録することは可能なのか？</h2>
+<p>可能だと思います。 商標は法人でも自然人でも登録可能であり、要件も満たしていれば問題がないです。 登録の要件は<a href="https://elaws.e-gov.go.jp/document?lawid=334AC0000000127">商標法</a>3条で定義されており、知的財産管理技能検定3級公式テキスト改訂11版 を参考にして簡単に纏めると以下のようになります:</p>
+<ul>
+<li>自己の業務に係る商品等に使用すること</li>
+<li>識別力を有すること</li>
+</ul>
+<p>「自己の業務に係る」という点に於いて、柚葉さんのYouTubeを見てみると (一応)「ゆっくり茶番劇」という名称を使っているので、 これは満たしていると判断されるかもしれません。</p>
+<p>識別力については謎な所で、個人的には「識別力はない」のではないか？と考えています。</p>
+<p>例えば、YouTubeで「視聴回数順」のソートで軽く検索かけてみた所16件あり、 恐らく文化圏的にニコニコの方にもっとあるであろうことを考えると 少なくともこの界隈内で識別するのは難しいと言わざるを得ません。</p>
+<p>が、まぁ一部の界隈だけというのもまた事実ではありますね…そういう面 で実体調査をパスしたのかもしれません。</p>
+<h2 id="Q. ここから無効にする方法は？">Q. ここから無効にする方法は？</h2>
+<p>利害関係者であれば「商標登録の無効の審判」を請求することができます。 (<a href="https://elaws.e-gov.go.jp/document?lawid=334AC0000000127">商標法</a>46条)</p>
+<p>今回の場合、「ゆっくり茶番劇」はかなり昔から使われている名称であるため、 「普通名称」として無効を主張できないんかな？と思っています。</p>
+<p>但し、その全てについて「自分が作ったものです」と言われると面倒な気はします… 証明できるもの出せないから出来ないか…?</p>
+<h2 id="Q. 我々がするべきではないことは？">Q. 我々がするべきではないことは？</h2>
+<p><strong>爆破予告・殺害予告・名誉毀損等の行為です</strong></p>
+<p>そもそも、それらのものは許されるべきではない、という事は言わずとも同感していただけると 思います。 それでも、感情的になったあまりそういった手段に走ってしまう人がいるような情報が流れてきます。 これは、逆に訴えられてしまったり自分達にとって不利に働くだけなのでやめて 欲しいなぁと思いながら見ています。</p>
+<p>法に則って行われた手続きには法に則って解決しようねぇ</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-05-13-emacs-magit-how-to-stage-piece-of-hunk</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-05-13-emacs-magit-how-to-stage-piece-of-hunk.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-05-13-emacs-magit-how-to-stage-piece-of-hunk.html</id>
+    <published>2022-05-13T00:00:00Z</published>
+    <updated>2022-05-13T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>MagitでTigみたいに行単位ステージを行う</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on May 13, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on May 13, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;magit&#39;." href="/tags/magit.html" class="ui tag label">magit</a><a title="All pages tagged &#39;tig&#39;." href="/tags/tig.html" class="ui tag label">tig</a>
+	
+      </div>
+
+    <div class="description">
+      <p>元々Emacsに来る前は<a href="https://github.com/jonas/tig">tig</a>を愛用しており、Emacsに乗り換えて Magitに大体移行した後も、いくつかの機能に於いてはtigを用いていた。</p>
+<p>その一つがハンクより細かい行単位でのステージ(とアンステージ)だ。</p>
+<p>が、 <a href="info:magit#Staging and Unstaging"><a href="info:magit#Staging">info:magit#Staging</a> and Unstaging</a>を見ていた所、実はMagitでも デフォルトで出来ることがわかったのでメモしておく。</p>
+<h1 id="やり方">やり方</h1>
+<p>まず help:magit-status で普通にMagitバッファを開く (デフォルトでは <code>C-x g</code> にアサインされている)</p>
+<p>ステージ若しくはアンステージしたい行をリージョンで選択し、 通常通り <code>s</code> 若しくは <code>u</code> でステージ・アンステージ処理をするだけ。</p>
+<p>尚、 <strong>Magitではevil-modeはデフォルトでは機能しない</strong> ようなので、従来の Emacsのリージョン開始コマンドを使う必要がある。 リージョンを開始するには help:set-mark-command (デフォルトでは <code>C-@</code>) を使う。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-05-02-elisp-hashtable-key-comparison-method</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-05-02-elisp-hashtable-key-comparison-method.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-05-02-elisp-hashtable-key-comparison-method.html</id>
+    <published>2022-05-02T00:00:00Z</published>
+    <updated>2022-05-02T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>ElispのHash Tableのキーの一意性確認のための方法について</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on May  2, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on May  4, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="Hash Tableの種類">Hash Tableの種類</h1>
+<p>elispにおいてHash Tableは一つではあるが、キーを比較するための方法は 複数存在する (<a href="help:make-hash-table">help:make-hash-table</a>)</p>
+<p>そして、この比較する方法の違いを把握してないと「何故これが重複して存在するの!？」 みたいなことになるので気をつける必要がある。</p>
+<p>一応ユーザーが自分で実装することもできるそうだが (<a href="info:elisp#Defining Hash">elisp#Defining Hash</a>の help:define-hash-table-test を参照)、 今回はそれは含めない。</p>
+<p>情報源は <a href="info:elisp#Creating Hash">elisp#Creating Hash</a></p>
+<h2 id="eql (デフォルト)"><code>eql</code> (デフォルト)</h2>
+<p>数字(float若しくはinteger)は <code>equal</code> で等しければ同じと判断され、 <strong>他のオブジェクトは全て等しくなることはない</strong> (!)</p>
+<h2 id="equal"><code>equal</code></h2>
+<p><code>equal</code> によって判定される。</p>
+<h2 id="eq"><code>eq</code></h2>
+<p>異なるLispオブジェクトは同じになることはない。</p>
+<h1 id="「こういう時は？」">「こういう時は？」</h1>
+<h2 id="キーに文字列を使いたい">キーに文字列を使いたい</h2>
+<p><strong>デフォルトの <code>eql</code> では決して等しくならない</strong> <code>'equal</code> にする</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(make-hash-table :test &#39;equal)
+</code></pre>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-04-21-fomantic-ui-use-custom-site-directory</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-04-21-fomantic-ui-use-custom-site-directory.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-04-21-fomantic-ui-use-custom-site-directory.html</id>
+    <published>2022-04-21T00:00:00Z</published>
+    <updated>2022-04-21T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>Fomantic-UIで'site'に別ディレクトリを使用する際の注意点</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on April 21, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on April 21, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;fomantic-ui&#39;." href="/tags/fomantic-ui.html" class="ui tag label">fomantic-ui</a><a title="All pages tagged &#39;blog&#39;." href="/tags/blog.html" class="ui tag label">blog</a>
+	
+      </div>
+
+    <div class="description">
+      <p><code>semantic.json</code> の部分だけ変えたらよさそうに思うが、 <code>theme.config</code> も変える必要があるので注意。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+javascript
+</div>
+<div class="sourceCode" id="~semantic.json~ の変更場所"><pre class="sourceCode javascript SourceCode"><code class="sourceCode javascript"><span id="~semantic.json~ の変更場所-1"><a href="#~semantic.json~ の変更場所-1" aria-hidden="true" tabindex="-1"></a>   {</span>
+<span id="~semantic.json~ の変更場所-2"><a href="#~semantic.json~ の変更場所-2" aria-hidden="true" tabindex="-1"></a>     <span class="st">&quot;base&quot;</span><span class="op">:</span> <span class="st">&quot;.&quot;</span><span class="op">,</span></span>
+<span id="~semantic.json~ の変更場所-3"><a href="#~semantic.json~ の変更場所-3" aria-hidden="true" tabindex="-1"></a>     <span class="st">&quot;paths&quot;</span><span class="op">:</span> {</span>
+<span id="~semantic.json~ の変更場所-4"><a href="#~semantic.json~ の変更場所-4" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;source&quot;</span><span class="op">:</span> {</span>
+<span id="~semantic.json~ の変更場所-5"><a href="#~semantic.json~ の変更場所-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span>
+<span id="~semantic.json~ の変更場所-6"><a href="#~semantic.json~ の変更場所-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;site&quot;</span><span class="op">:</span> <span class="st">&quot;src/site&quot;</span><span class="op">,</span></span>
+<span id="~semantic.json~ の変更場所-7"><a href="#~semantic.json~ の変更場所-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+conf-javaprop
+</div>
+<pre id="~theme.config~ の変更場所" class="conf-javaprop SourceCode"><code>
+/* Path to site override folder */
+@siteFolder  : &#39;src/site&#39;;
+</code></pre>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-04-16-emacs-set-different-fonts-for-different-language-letters</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-04-16-emacs-set-different-fonts-for-different-language-letters.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-04-16-emacs-set-different-fonts-for-different-language-letters.html</id>
+    <published>2022-04-16T00:00:00Z</published>
+    <updated>2022-04-16T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>複数のフォントを自然言語毎に使い分ける</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on April 16, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on April 16, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
+	
+      </div>
+
+    <div class="description">
+      <p>複数の自然言語(特に母国語と英語以外)を使うようになると、 普段使いのフォントではカバーできない文字が出てくると思います。</p>
+<p>Emacsでは、どうやら文字毎に使用するフォントを設定することができるようなので その設定をしてみることにします。</p>
+<p>今回は例として、韓国語のハングルを使えるようにしたいと思います。</p>
+<h1 id="1. フォントを取得してインストールする">1. フォントを取得してインストールする</h1>
+<p>これは各自ディストリビューションで異なると思います。</p>
+<p>私のarchlinux環境では、 <code>/usr/share/fonts</code> か <code>$HOME/.local/share/fonts</code> 以下にフォントファイルを仕舞えば良いようです。 (詳しくは <a href="https://wiki.archlinux.jp/index.php/フォント設定">archwiki – フォント設定</a>を参照)</p>
+<p>もしかしたらパッケージにもあるかもしれません。</p>
+<p>私はGoogle Fontsで調べてきて、簡単なPKGBUILD(archlinuxのパッケージを 作成するために使用するファイル)を書いてパッケージ化してインストールしました。</p>
+<h1 id="2. set-fontset-font 関数でフォントを適用する">2. <code>set-fontset-font</code> 関数でフォントを適用する</h1>
+<p>文字毎にフォントを適用できると書きましたが、勿論範囲指定もできます。</p>
+<h2 id="一つの文字だけ">一つの文字だけ</h2>
+<p>一つの文字だけならば、その文字をcharacterとして使用します。 Elispで特定のcharacterを表現するには、そのcharacterの頭に <code>?</code> を つけてあげれば良いので、 例えば'ㅣ'という文字だけに適用したければ:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(set-fontset-font t ?ㅣ &quot;NanumGothic&quot;)
+</code></pre>
+</div>
+<p>とします。</p>
+<h2 id="特定のScriptのみ">特定のScriptのみ</h2>
+<p>正直Scriptとは何ぞや、というのはあんまりわからんです… info覗いてもあまり解説がなかったので、一般的な用語なのかも しれません(若しくは見付けられていないか)</p>
+<p>とりいそぎ、Emacsに認識されているScriptの一覧は <code>script-representative-chars</code> という変数に格納されているのでそれを確認します (help:script-representative-chars)</p>
+<p>そうすると、今回の場合 <code>hangul</code> という使えそうなシンボルがあるので これを用いることにします。 シンボルは、単純にシンボルとして渡してあげれば良いです。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(set-fontset-font t &#39;hangul &quot;NanumGothic&quot;)
+</code></pre>
+</div>
+<h1 id="参考資料">参考資料</h1>
+<ul>
+<li><a href="https://qiita.com/kawabata@github/items/2c4b0b689834c9c193aa">Emacs で全世界の文字を表示・編集可能にする。 - Qiita</a></li>
+<li>help:set-fontset-font</li>
+<li><a href="info:Emacs#Defining Fontsets">info:Emacs#Defining Fontsets</a></li>
+</ul>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-04-01-org-roam-when-you-can-use-completion-by-default</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-04-01-org-roam-when-you-can-use-completion-by-default.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-04-01-org-roam-when-you-can-use-completion-by-default.html</id>
+    <published>2022-04-01T00:00:00Z</published>
+    <updated>2022-04-01T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>org roam標準で補完が効く条件</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on April  1, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on April  2, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;org-roam&#39;." href="/tags/org-roam.html" class="ui tag label">org-roam</a><a title="All pages tagged &#39;org&#39;." href="/tags/org.html" class="ui tag label">org</a>
+	
+      </div>
+
+    <div class="description">
+      <p><a href="info:org-roam#Completion"><a href="info:org-roam#Completion">info:org-roam#Completion</a></a>にあるように、 org-roamは標準で補完機能を持っています。</p>
+<p>が、自分の環境では上手く動かなかったので原因を探った際のメモ。</p>
+<h1 id="Tl;Dr:">Tl;Dr:</h1>
+<p>デフォルトでは、help:org-roam-db-autosync-mode を有効にした状態で、 ファイルからバッファーを読み込んだ際に有効化される。</p>
+<p><strong>help:org-roam-completion-everywhere ですらこの条件が必要</strong> なので注意。</p>
+<h1 id="詳しく">詳しく</h1>
+<h2 id="org-roamが提供する補完機能の概要">org-roamが提供する補完機能の概要</h2>
+<p>org-roamは、help:completion-at-point を用いた補完機能を提供しています。 又、company-modeも別途対応している模様です。</p>
+<h2 id="実際の仕組み">実際の仕組み</h2>
+<p>そもそものcompletion-at-pointの仕組みについては割愛しますが 簡単に必要なことだけを書くと、補完に使用する関数を <code>completion-at-point-functions</code> 変数から取得して補完を行います。</p>
+<p>なので、 <code>completion-at-point</code> を使用した補完の際は、その変数をいじっている所を探しにいけば良いということになります。 org-roamでもこの <code>completion-at-point-functions</code> に関数を追加しています。</p>
+<ul>
+<li><a href="~/.emacs.d/elpa/org-roam-20220319.1902/org-roam-node.el::defun org-roam--register-completion-functions-h (">org-roam–register-completion-functions-h</a>で help:completion-at-point-functions を設定している
+<ul>
+<li><code>org-roam--register-completion-functions-h</code> は help:org-roam-find-file-hook に追加されている</li>
+</ul></li>
+</ul>
+<ul>
+<li>help:org-roam-find-file-hook は help:org-roam-db-autosync–setup-file-h から実行される</li>
+<li>help:org-roam-db-autosync–setup-file-h は help:org-roam-db-autosync-mode を有効にした時に help:find-file-hook に 追加される
+<ul>
+<li>help:find-file-hook はファイルからバッファーが読み込まれた際に実行される</li>
+</ul>
+よって、 help:org-roam-db-autosync-mode を有効にしていない限りは同期されない。 まぁそれはそうか。</li>
+</ul>
+<h1 id="手動で設定する方法">手動で設定する方法</h1>
+<p>db-syncはしなくていいけど補完は使えるようになってほしい、という場合 help:org-roam–register-completion-functions-h を手動で実行すれば良いです。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(org-roam--register-completion-functions-h)
+</code></pre>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-03-31-archiso-create-x-enabled-archiso</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-31-archiso-create-x-enabled-archiso.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-31-archiso-create-x-enabled-archiso.html</id>
+    <published>2022-03-31T00:00:00Z</published>
+    <updated>2022-03-31T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>X環境を含んだarchsioイメージを作成する</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 31, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on April  1, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged &#39;archiso&#39;." href="/tags/archiso.html" class="ui tag label">archiso</a>
+	
+      </div>
+
+    <div class="description">
+      <p>基本は<a href="https://wiki.archlinux.jp/index.php/Archiso#USB">wiki</a>に従って作業します。 正直思った以上にやること少なかったので、この記事はwikiのまとめ的メモになります。</p>
+<p>やったこと全部書いているつもりではあるけど、今回は後から纏めなおしたので何か欠けている 可能性があります。</p>
+<p>実際に使っているものはこちら: <a href="https://github.com/Cj-bc/dotfiles/tree/master/dotfiles/archiso">Cj-bc/dotfiles/dotfiles/archiso</a></p>
+<h1 id="パッケージの追加">パッケージの追加</h1>
+<p><code>packages.x86_64</code> にパッケージを追加。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/packages.x86_64 b/dotfiles/archiso/packages.x86_64</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>index aaf2416..2bbce38 100644</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/packages.x86_64</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/packages.x86_64</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -119,3 +119,10 @@ wvdial</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a> xfsprogs</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a> xl2tpd</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a> zsh</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="va">+xorg-server</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="va">+lightdm</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="va">+lightdm-gtk-greeter</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="va">+xterm</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="va">+xmonad</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="va">+linux-surface</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="va">+gparted</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>\ No newline at end of file</span></code></pre></div>
+</div>
+<p>WMやDMは好みのものを使って大丈夫だと思います。 私はメイン環境と合わせてLightDM+XMonadにしてあります。</p>
+<h1 id="レポジトリの追加">レポジトリの追加</h1>
+<p>linux-surfaceを使いたいのでレポジトリを追加する</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/pacman.conf b/dotfiles/archiso/pacman.conf</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>index 5ee6c1e..2ba1626 100644</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/pacman.conf</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/pacman.conf</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -30,7 +30,7 @@ Architecture = auto</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a> # Misc options</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a> #UseSyslog</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">-#Color</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="va">+Color</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a> #NoProgressBar</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a> # We cannot check disk space from within a chroot environment</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a> #CheckSpace</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -99,3 +99,7 @@ Include = /etc/pacman.d/mirrorlist</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a> #[custom]</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a> #SigLevel = Optional TrustAll</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a> #Server = file:///home/custompkgs</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="va">+</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="va">+[linux-surface]</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="va">+SigLevel = Optional TrustAll</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="va">+Server = https://pkg.surfacelinux.com/arch/</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>\ No newline at end of file</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
+</div>
+<h1 id="メタデータの編集">メタデータの編集</h1>
+<p>ついでなのでメタデータもちょっと書き換えておきました。 後々識別しやすい…かな?</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/profiledef.sh b/dotfiles/archiso/profiledef.sh</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>index 5feb205..7ce4a85 100644</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/profiledef.sh</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/profiledef.sh</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -1,9 +1,9 @@</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a> #!/usr/bin/env bash</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a> # shellcheck disable=SC2034</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="st">-iso_name=&quot;archlinux&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="va">+iso_name=&quot;archlinux-x&quot;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a> iso_label=&quot;ARCH_$(date +%Y%m)&quot;</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="st">-iso_publisher=&quot;Arch Linux &lt;https://archlinux.org&gt;&quot;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="va">+iso_publisher=&quot;Cj.bc-sd &lt;cj.bc-sd@outlook.jp&gt;&quot;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a> iso_application=&quot;Arch Linux Live/Rescue CD&quot;</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a> iso_version=&quot;$(date +%Y.%m.%d)&quot;</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a> install_dir=&quot;arch&quot;</span></code></pre></div>
+</div>
+<h1 id="デフォルトでXが起動するように設定">デフォルトでXが起動するように設定</h1>
+<p>systemdのUnitにsymlinkを貼ります。 これは <code>systemctl enable</code> がするのと同じ挙動です。</p>
+<h2 id="古い手法について">古い手法について</h2>
+<p>Wikiには <code>customize_airootfs.sh</code> の編集をする方法も記載されていますが、 これはもうdeprecatedとなっています</p>
+<p>(参考: <a href="https://gitlab.archlinux.org/archlinux/archiso/-/blob/master/CHANGELOG.rst">バージョン51のCHANGELOG</a>)</p>
+<p>実行したら怒られたログ↓</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>[mkarchiso] WARNING: customize_airootfs.sh is deprecated! Support for it will be removed in a future archiso version.
+</code></pre>
+</div>
+<h1 id="mkarchisoする">mkarchisoする</h1>
+<p>あとはやるだけ。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb5" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> workdir out</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">mkarchiso</span> <span class="at">-v</span> <span class="at">-w</span> workdir <span class="at">-o</span> out .</span></code></pre></div>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th>オプション</th>
+<th>解説</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-v</code></td>
+<td>verbose。ログの出力をします</td>
+</tr>
+<tr class="even">
+<td><code>-w workdir</code></td>
+<td>作業ディレクトリの設定をします</td>
+</tr>
+<tr class="odd">
+<td><code>-o out</code></td>
+<td>最終的に出来上がったisoファイルを格納するディレクトリの設定をします</td>
+</tr>
+</tbody>
+</table>
+<p>ちょっと時間(とストレージ)食うので待つ。 うちの環境では 5GBくらい要求されたので気をつけてとのこと。</p>
+<h1 id="できたisoを焼く">できたisoを焼く</h1>
+<p><a href="https://wiki.archlinux.jp/index.php/USB_インストールメディア#dd_を使う">USBインストールメディアを作成するwiki</a>に従って焼く。 今回はddを使う。各パラメーターについては各自確認してから焼いてほしい。 あぶないので。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb6" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dd bs=4M if=out/archlinux-x-2022.04.01-x86_64.iso of=/dev/sda status=progress <span class="kw">&amp;&amp;</span> <span class="fu">sync</span></span></code></pre></div>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-03-18</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-18.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-18.html</id>
+    <published>2022-03-18T00:00:00Z</published>
+    <updated>2022-03-18T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>2022/03/18</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 18, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 19, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;環境構築&#39;." href="/tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89.html" class="ui tag label">環境構築</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="やったこと">やったこと</h1>
+<h2 id="stack-staticのインストール(前日の続き)">stack-staticのインストール(前日の続き)</h2>
+<p><a href="https://aur.archlinux.org/packages/stack-static">stac-staticのAURページ</a>より<a href="https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=stack-static">PKGBUILD</a>を見てみたところ、 新しいGPGキー (フィンガープリント: <code>C5705533DA4F78D8664B5DC0575159689BEFB442</code>) の読み込みをしていた。 このキーが何者だかわからなくって怖いので、 色々調べてみる。</p>
+<p><a href="https://docs.haskellstack.org/en/stable/SIGNING_KEY/">haskellstack.orgのドキュメント</a>によると、 全てのリリースはそれをビルドした人の鍵によって 署名されており、それらの鍵は KeyID <code>0x575159689BEFB442</code> によって署名されているとのこと(きちんと各自確認してほしい)</p>
+<p>で、実際のGithub release(例えば<a href="https://github.com/commercialhaskell/stack/releases/tag/v2.7.5">v2.7.5</a>)を見てみると、 最近はEmanuel Borsboomさんによって署名されていることがわかり、 彼のKey IDは <code>65101FF31C5C154D</code> である。</p>
+<p>issueを調べてみると、 Emanuelさんのキーは以下の二つの場所で 署名されているとのこと(<a href="https://github.com/commercialhaskell/stack/issues/5122#issuecomment-591424040">ソース</a>)</p>
+<ul>
+<li>pool.sks-keyservers.net</li>
+<li>pgp.mit.edu</li>
+</ul>
+<p>このうち、sks-keyservers.netはどうやら完全に落ちているようで 通信不可能だったため、 pgp.mit.eduから読み込んでみることにした。</p>
+<h2 id="キーサーバーからGPGキーの取り込みが上手くいかない">キーサーバーからGPGキーの取り込みが上手くいかない</h2>
+<p>うまくいったわ。<a href="https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html">別途記事にした</a> これを元にstack-staticを明日入れる</p>
+<h1 id="知ったこと">知ったこと</h1>
+<h2 id="SKS keyserversは落ちている">SKS keyserversは落ちている</h2>
+<p>sks-keyservers.netもpool.sks-keyservers.netもどちらも pingもwhoisも通らない。</p>
+<p><a href="https://twitter.com/Cj_bc_sd/status/1504612612281344000?s=20&amp;t=PEdWvA4ytQxDokG7Ci8wGQ">https://twitter.com/Cj_bc_sd/status/1504612612281344000?s=20&amp;t=PEdWvA4ytQxDokG7Ci8wGQ</a></p>
+<p><a href="https://github.com/SKS-keyserver/sks-keyserver/issues/88">SKS-Keyserverのissue</a>によると、<a href="https://lists.gnupg.org/pipermail/gnupg-users/2021-June/065261.html">メーリングリスト</a>で法的理由により閉鎖したとの報告が あったとのこと。</p>
+<ul>
+<li><a href="https://github.com/mono/mono/issues/21121">mono/mono #21121</a></li>
+<li><a href="https://code.firstlook.media/the-death-of-sks-pgp-keyservers-and-how-first-look-media-is-handling-it">The Death of SKS PGP Keyservers, and How First Look Media is Handling It</a></li>
+</ul>
+<h2 id="thee, thou">thee, thou</h2>
+<p>you; object form of thou; used when speaking to one person</p>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-03-18-gpg-stuggled-to-search-key-from-keyserver</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html</id>
+    <published>2022-03-18T00:00:00Z</published>
+    <updated>2022-03-18T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>gpg --search-keys がうまくいかなかったので調べる</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 18, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 18, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;gpg&#39;." href="/tags/gpg.html" class="ui tag label">gpg</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="状況">状況</h1>
+<p>stackの署名キーを引いてくるために、 <code>--search-keywords</code> を してみたところエラーが起きた。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gpg</span> <span class="at">--search-keys</span> 65101FF31C5C154D</span></code></pre></div>
+</div>
+<p>gpg: error searching keyserver: Server indicated a failure gpg: keyserver search failed: Server indicated a failure</p>
+<h1 id="原因: DNSリゾルバが適切に設定されていなかった">原因: DNSリゾルバが適切に設定されていなかった</h1>
+<p>らしい。 <strong>systemd-resolvedを使用している場合</strong> 注意が必要そう。</p>
+<p>具体的には、 <strong>GnuPGはドメイン名解決のために <code>/etc/resolv.conf</code> を参照するが systemd-resolvedは <code>/etc/resolv.conf</code> を参照も設定もしない</strong></p>
+<p>なので、ドメイン名解決のための設定を何もしていない状況になっていた。</p>
+<p>実は <a href="https://wiki.archlinux.jp/index.php/Systemd-resolved#DNS">archwikiのsystemd-resolvedページに記載がある</a>のでそれに従い、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 私の場合は元から /etc/resolve.conf が</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 空だったので削除しているが、必要に応じて</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># なんかして</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> /etc/resolv.conf</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf</span></code></pre></div>
+</div>
+<p>としてリンクを作成した。</p>
+<p>この後 <code>gpgconf --reload</code> で設定を読み直したら動くようになった!</p>
+<h1 id="過去の調べ物">過去の調べ物</h1>
+<p>とりあえず色々調べたけど、 結論今回は関係なかったものたち。 まぁ状況によっては役立つかもなので残しておく。</p>
+<h2 id="dirmngr 2.1.17時代のバグの話">dirmngr 2.1.17時代のバグの話</h2>
+<p>これは無関係だった。dirmngrの昔のバージョンにて、 全ての操作が出来無いバグがあったらしい。わぁぉ。</p>
+<ul>
+<li><a href="https://bbs.archlinux.org/viewtopic.php?id=220996">https://bbs.archlinux.org/viewtopic.php?id=220996</a></li>
+<li><a href="https://dev.gnupg.org/T2889">https://dev.gnupg.org/T2889</a></li>
+</ul>
+<h2 id="コードリーディングで原因探し">コードリーディングで原因探し</h2>
+<p>とりあえずもうちょい確信に迫りたかったので、 えいやって <a href="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=summary">gnupgのgitレポジトリ</a>cloneしてきて読んだ。</p>
+<p><code>gpg --debug-all --search-keys &lt;key_id&gt;</code> が出力した エラーメッセージ "Try again later" をとりあえずgrepする。</p>
+<p>けどみつからん。</p>
+<p>実は実際は<a href="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=src/err-codes.h.in;hb=32dad4e4135f0bdc436ed684da753d4b0cdb0ea1#l334">libgpg-error</a>の中にエラーメッセージが定義されており、 そちらを探すと以下のコードが見付かる。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="src/err-codes.h.in:334"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="src/err-codes.h.in:334-1"><a href="#src/err-codes.h.in:334-1" aria-hidden="true" tabindex="-1"></a><span class="dv">312</span>     GPG_ERR_TRY_LATER               Try again later</span></code></pre></div>
+</div>
+<p>これだけだとわからないが、 <em>まぁ多分これ定数だろうという推測</em> のもと今度は <code>GPG_ERR_TRY_LATER</code> を(今度こそ) gnupgのコードベースで grepしてみる。 と、一箇所だけ見付かる:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb3" data-org-language="sh" wrap="src c"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-regex</span> <span class="st">&#39;.*\.c\|.*\.h&#39;</span> <span class="at">-exec</span> grep <span class="st">&#39;GPG_ERR_TRY_LATER&#39;</span> {} <span class="dt">\+</span></span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">./</span>dirmngr<span class="op">/</span>dns<span class="op">-</span>stuff<span class="op">.</span>c<span class="op">:</span>    <span class="cf">case</span> TRY_AGAIN<span class="op">:</span>      ec <span class="op">=</span> GPG_ERR_TRY_LATER<span class="op">;</span> <span class="cf">break</span><span class="op">;</span></span></code></pre></div>
+</div>
+<p>これは <code>get_h_errno_as_gpg_error</code> 関数であり、 説明によると <code>H_ERRNO</code> をgpgで使用されるエラーコードに直してくれるらしい。</p>
+<p>…まぁとりあえず使用例を追う。と、 <a href="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=blob;f=dirmngr/dns-stuff.c;h=0edbc0442e05086c5785a2efb75292e526291319;hb=HEAD">dirmngr/dns-stuff.c</a>の中に2箇所あるがどちらも <code>res_query</code> を呼んだ結果によって使用されている。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="getsrv_standard()"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="getsrv_standard()-1"><a href="#getsrv_standard()-1" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span>
+<span id="getsrv_standard()-2"><a href="#getsrv_standard()-2" aria-hidden="true" tabindex="-1"></a>     r <span class="op">=</span> res_query <span class="op">(</span>name<span class="op">,</span> C_IN<span class="op">,</span> T_SRV<span class="op">,</span> answer<span class="op">,</span> <span class="kw">sizeof</span> res<span class="op">.</span>ans<span class="op">);</span></span>
+<span id="getsrv_standard()-3"><a href="#getsrv_standard()-3" aria-hidden="true" tabindex="-1"></a>     my_protect <span class="op">();</span></span>
+<span id="getsrv_standard()-4"><a href="#getsrv_standard()-4" aria-hidden="true" tabindex="-1"></a>     <span class="cf">if</span> <span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="getsrv_standard()-5"><a href="#getsrv_standard()-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> get_h_errno_as_gpg_error <span class="op">();</span></span>
+<span id="getsrv_standard()-6"><a href="#getsrv_standard()-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="getsrv_standard()-7"><a href="#getsrv_standard()-7" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="get_dns_cname_standard()"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="get_dns_cname_standard()-1"><a href="#get_dns_cname_standard()-1" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span>
+<span id="get_dns_cname_standard()-2"><a href="#get_dns_cname_standard()-2" aria-hidden="true" tabindex="-1"></a>     r <span class="op">=</span> res_query <span class="op">(</span>name<span class="op">,</span> C_IN<span class="op">,</span> T_CERT<span class="op">,</span> answer<span class="op">,</span> <span class="kw">sizeof</span> res<span class="op">.</span>ans<span class="op">);</span></span>
+<span id="get_dns_cname_standard()-3"><a href="#get_dns_cname_standard()-3" aria-hidden="true" tabindex="-1"></a>     my_protect <span class="op">();</span></span>
+<span id="get_dns_cname_standard()-4"><a href="#get_dns_cname_standard()-4" aria-hidden="true" tabindex="-1"></a>     <span class="cf">if</span> <span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="get_dns_cname_standard()-5"><a href="#get_dns_cname_standard()-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> get_h_errno_as_gpg_error <span class="op">();</span></span>
+<span id="get_dns_cname_standard()-6"><a href="#get_dns_cname_standard()-6" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span></code></pre></div>
+</div>
+<p>で、じゃぁこいつが何か…?と思ってgrepしてみると 定義がない。実はこいつはresolverで定義されており、manページを 引くことができる<a href="https://man.archlinux.org/man/res_query.3">res<sub>query</sub>(3)</a></p>
+<p>Cだとこういうのたまに見掛けるので面白いね。</p>
+<p>で、芋蔓式にわかるのだけれど <code>h_errno</code> も <a href="https://man.archlinux.org/man/gethostbyname.3">gethostbyname(3)</a>に定義されている。</p>
+<p>なので、あとはそこを追えばよさそう!!!</p>
+<p>…なのだけど、この段階になって先に述べた解決方法が 判明してしまったのでここまでで打ち切り。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+
+</feed>
