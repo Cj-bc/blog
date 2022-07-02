@@ -1,0 +1,305 @@
+* WORLDのPythonラッパーpyworldを試す
+  :PROPERTIES:
+  :DATE: [2022-06-30 Thu 18:17]
+  :TAGS: :pyworld:WORLD:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+:LOGBOOK:
+CLOCK: [2022-07-01 Fri 22:25]--[2022-07-01 Fri 23:50] =>  1:25
+CLOCK: [2022-06-30 Thu 18:18]--[2022-06-30 Thu 18:20] =>  0:02
+:END:
+  
+  前々からLinuxで使えるボイチェンが欲しくて、何度かWORLDをおすすめされていたのだけれど
+  C++があまり得意ではないので二の足を踏んでいた。
+  (最初は出来るだけオリジナルを使用したい民なので、pyworldの方はまだ試すつもりがなかった)
+
+  
+  でも、まぁそろそろやる気が出たのでPython版を使ってみる。
+
+
+  ちなみに、Grallion2とかはLinux対応しているらしいので既存のもので良いならそっちの方が良いと
+  思う。
+** 今回の目標
+最終的には自分用のボイチェンを作りたいのでリアルタイム処理を
+したいのだが、とりあえずは音声ファイルを変換するのを出来るようにする。
+** やることの大雑把な流れ
+大雑把な流れとしては、以下の通り。
+
+1. 音声を読み込む
+2. WORLDがモノラルしか受け付けないようなので、チャンネルを分離する
+3. WORLDの関数を用いて、それぞれ要素を分解する
+4. ピッチ・フォルマントをそれぞれいじる
+5. 合成する
+6. 音声を書き出す
+
+** 使用ライブラリ
+音声合成などに関してはpyworldを用いるとして、他の処理に用いるものを。
+
+| 音声変換            | pyworld   |
+| wavファイル読み込み | soundfile |
+
+尚wavファイルの読み込みには ~scipy~ を使うこともできるらしい。
+
+** 環境構築
+グローバルに入れるの嫌だけど、ffi使う都合でC関連のものを
+グローバルに入れなきゃいけなくてめんどくせーー!!のでDockerで環境を閉じ込める。
+ついでに可搬性も手に入るしね。
+
+
+ちなみにnixも試したが、手元の環境で上手く動かせなかったのでDocker。
+
+*** ベースイメージ
+ベースは軽ければ特にこだわりがないので、 ~python:3.9-alpine~ を使う。
+
+pythonのバージョンは、確か3.10だと上手く動かなかったので3.9にした記憶がある。
+ただ、python以外の依存パッケージ系を色々入れてなかったので、その影響だったのかもしれない。
+Dockerイメージ作り直すのが容量的にキツいのでそのまま3.9にしてある。
+
+#+begin_src dockerfile
+  FROM python:3.9-alpine
+#+end_src
+
+*** pyworldの導入
+
+pyworldはC++で書かれたWORLDのラッパーなので、g++を必要とすることに注意。
+最初これに気付かなくて困った。
+#+begin_src dockerfile
+  RUN apk add g++ 
+  RUN pip install pyworld
+#+end_src
+
+*** soundfileの導入
+
+注意点として、 *libsndfile/libffiは dev版を入れる* こと!
+さもなくば、ヘッダファイルがなくて怒られる。
+
+あとbuild-baseもいる。(はず)
+
+#+begin_src dockerfile
+  run apk add libsndfile-dev libffi-dev build-base
+  RUN pip install soundfile
+#+end_src
+
+** コーディング
+*** ボイチェンの基本的なしくみ
+凄い大雑把だが、ボイチェンは声の /ピッチ/ と /フォルマント/ をそれぞれ変換してやることで実装されている。
+
+ピッチが音の高さ、フォルマントが声色と呼ばれているやつだ。
+
+正直ここらへんは専門ではないので、詳しくは調べてほしい。気が向いたらそれ関連の
+リンクについても纏めようと思う。
+
+で、これらのうち、特にフォルマントは簡単に取得できるものではなく、
+「推定」を行う必要がある。
+
+WORLDはここらへんをよしなにしてくれる。
+*** wavファイルの読み込み
+まずは読み込む。
+読み込むといったってpyworldで使える形式でないと意味がないわけなので先にそこを説明する。
+
+pyworldの関数は
+
++ 一次元
++ メモリーレイアウトが 'C'
++ Double型の中身を持つ
+
+~numpy.ndarray~ を要求する。
+これはそれぞれの関数の中の定義でも書かれているが、 [[https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder/blob/130c3abdeaeefc1dae3fdf7d2f2dba61938e58b5/pyworld/pyworld.pyx#L625-L658][wav2worldの実装]] でも書かれている。
+
+なので、 ~numpy.ndarray~ として読み込めるものなら何でも良いだろう。
+
+とりあえず見た範囲では、以下の二つのライブラリが使用例があった。
+
++ [[https://docs.scipy.org/doc/scipy/tutorial/io.html#wav-sound-files-scipy-io-wavfile][scipy.io.wavfile]](使用されている記事: [[https://qiita.com/ohtaman/items/84426cee09c2ba4abc22][音声合成システム WORLD に触れてみる - Qiita]])
++ [[https://pysoundfile.readthedocs.io/en/latest/][pysoundfile]] (使用されている記事: [[https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder/blob/f3c811fb3ce2693b45bd6411c511f60d2d308ed1/demo/demo.py][pyworldのデモコード]])
+
+今回は、デモコードで使われていたという理由から ~pysoundfile~ を採用した。
+
+#+begin_src python
+  soundfile.read("filename")
+#+end_src
+*** チャンネルの分離
+pyworldの関数達は次元数が1の ~ndarray~ しか受け付けないわけだが、
+1チャンネル辺り1次元で作られるため
+元の音源がステレオ以上だと次元が多すぎてエラーを吐かれてしまう。
+
+#+begin_src python
+  >>> pw.wav2world(data, samplerate)
+  Traceback (most recent call last):
+    File "<stdin>", line 1, in <module>
+    File "pyworld/pyworld.pyx", line 654, in pyworld.pyworld.wav2world
+    File "pyworld/pyworld.pyx", line 93, in pyworld.pyworld.dio
+  ValueError: Buffer has wrong number of dimensions (expected 1, got 2)
+#+end_src
+
+なので、音源が2チャンネル以上ある場合は切り分けてあげる必要がある。
+~soundfile~ で読み込んでいる場合、これをするには
+
+#+begin_src python
+  data[:,0]
+#+end_src
+
+のように、二つ目の添字をいじってあげることで取れる。
+ここら辺の説明は面倒なので、というか結構色々あるので調べてみてほしい。
+~numpy.ndarray~ の構造までは知らなくていいと思うが、添字アクセスの仕方を知っていれば
+まぁわかると思う。
+
+
+
+*そしてここで注意*
+
+
+こうして制作したデータは、メモリ上で連続して存在しないため、
+pyworldの関数に渡すことができない。
+そのため、
+
+#+begin_src python
+  data[:,0].copy(order='C')
+#+end_src
+
+として並べ替えてあげる必要がある。
+尚、これについては少し後にもう少しだけ詳しく書いてある。
+
+*** ピッチ・フォルマント推定
+これはもうworldにおまかせ。詳しいことはわからん。
+色々関数があるが、一括で欲しいパラメータを全て取得出来る ~wav2world~ を使用する。
+
+
+#+begin_src python
+  f0, sp, ap = pw.wav2world(data[:,0].copy(order='C'), samplerate)
+#+end_src
+
+*** ピッチ・フォルマントをいじる
+ここは一番手間がかかる所。先程取り出したパラメーターをよしなに変える。
+正直ここは調整の話になってくると思うので、今はよくわからん。[[https://qiita.com/ohtaman/items/84426cee09c2ba4abc22][参考にしていた記事]]にあった所を
+ちょっと弄っている所。
+
+#+begin_src python
+
+  for f in range(converted_sp.shape[1]):
+      converted_sp[:, f] = sp[:, int(f/1.2)]
+
+  converted_f0 = f0*2
+#+end_src
+
+
+*** 合成する
+これももうお任せ、 ~pyworld.synthesize~ に ~pyworld.wav2world~ した時の戻り値(とそれを
+いじったもの)を用いることで合成できる。
+
+#+begin_src python
+  pw.synthesize(converted_f0, converted_sp, ap, samplerate)
+#+end_src
+
+
+*** 書き出し
+書き出しする際は、それぞれ分けていたチャンネルを一つに結合させる必要がある。
+
+~numpy.ndarray~ を結合する関数は色々あるが、とりあえず [[https://numpy.org/doc/stable/reference/generated/numpy.stack.html#numpy.stack][numpy.stack]] を使うと
+簡潔に出来たのでこれでいく。
+
+#+begin_src python
+  np.stack((ch1, ch2), axis=1)
+#+end_src
+
+こうすると、元の形と同じ形式になる。
+
+これを後は書き込む。
+
+#+begin_src python
+  soundfile.write(OUT_FILE, result, samplerate)
+#+end_src
+** 実装の注意点
+*** pyworld.wav2worldはモノラル音源を期待する(らしい)
+実際のドキュメントとか見たわけではないが、2chのwav音源を引数に与えた所
+以下のようなエラーを出された。
+
+#+begin_src
+Traceback (most recent call last):
+File "<stdin>", line 1, in <module>
+File "pyworld/pyworld.pyx", line 654, in pyworld.pyworld.wav2world
+File "pyworld/pyworld.pyx", line 93, in pyworld.pyworld.dio
+ValueError: Buffer has wrong number of dimensions (expected 1, got 2)
+#+end_src
+
+(ちなみにこれはReplでの表記なので実際に出たものとはほんの少し違うと思うが、まぁ大体同じ。)
+
+なので、 _チャンネルをそれぞれ分けて変換する必要がある_ らしい。
+**** チャンネルを分離する
+~soundfile.read()~ で読み込んだデータは、nx2行列
+(多分。2xnだったりする？？numpyの行列表現の順序に自信がない)
+として表現されている。サンプル数がn、チャンネル数が2のデータだ。
+
+これを愚直に取り出すと、以下のようになる
+
+#+begin_src python
+  FILENAME = "入力に使いたいファイル名"
+  data = soundfile.read(FILENAME)
+
+  ch1 = data[:,0]
+#+end_src
+
+しかし、これをそのまま利用しようとすると「C-contiguous」でないため怒られる。
+
+#+begin_src 
+>>> pw.wav2world(data[:,0], samplerate)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "pyworld/pyworld.pyx", line 654, in pyworld.pyworld.wav2world
+  File "pyworld/pyworld.pyx", line 93, in pyworld.pyworld.dio
+ValueError: ndarray is not C-contiguous
+ #+end_src
+
+この原因は、 ~ch1~ が内部構造として非連続的である(？)ことが原因らしい。
+
+ここら辺の情報は色々探したが日本語・英語共に見付けられなかったので、原文をそのまま
+書くと「The data is in a single, C-style contiguous segment.」じゃなかったのが問題だったらしい。
+(情報元は[[https://numpy.org/doc/stable/reference/generated/numpy.ndarray.flags.html][numpy.ndarray.flagsのドキュメント]]の ~C_CONTIGUOUS~ の部分)
+
+
+これは推測だが、恐らく、 ~ch1~ に含まれる値は実際の値をコピーしているのではなく、
+元の ~data~ の中に飛び飛びで存在する値を参照しており、連続的ではないのだと思われる。
+これだとC言語側に渡した時に連続したアドレスから値が取得できないため、問題になってしまうのだろうなと
+感じた。
+
+#+NAME: ~C_CONTIGUOUS~ かどうかの確認方法
+#+begin_src
+  >>> data.flags
+    C_CONTIGUOUS : True
+    F_CONTIGUOUS : False
+    OWNDATA : True
+    WRITEABLE : True
+    ALIGNED : True
+    WRITEBACKIFCOPY : False
+
+  >>> data[:,0].flags
+    C_CONTIGUOUS : False
+    F_CONTIGUOUS : False
+    OWNDATA : False
+    WRITEABLE : True
+    ALIGNED : True
+    WRITEBACKIFCOPY : False
+
+#+end_src
+
+そこで、 ~C_CONTIGUOUS~ に変換していく必要がでてきた。
+
+色々な方法があるのかもしれないが、今回は [[https://numpy.org/doc/stable/reference/generated/numpy.ndarray.copy.html][numpy.ndarray.copy()]] を利用する。
+
+~copy()~ はその ~ndarray~ のコピーを返す関数で、
+パラーメーター引数 ~order~ を設定することでメモリーレイアウト
+(直訳、適切な訳があれば知りたい)を変更できる。デフォルトは ~C~ らしいが、明記しておいた。
+
+#+begin_src python
+  data[:,0].copy(order='C')
+  # これで、きちんと pyworld.wav2world に渡せるレイアウトになる。
+#+end_src
+
+** 参考
+
++ [[https://qiita.com/ohtaman/items/84426cee09c2ba4abc22][音声合成システム WORLD に触れてみる - Qiita]]
++ [[https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder][JeremyCCHsu/Python-Wrapper-for-World-Vocoder]]
++ [[https://stackoverflow.com/questions/26778079/valueerror-ndarray-is-not-c-contiguous-in-cython][python - ValueError: ndarray is not C-contiguous in cython - Stack Overflow]]
+  
