@@ -1,0 +1,136 @@
+* EVMC4U v3.8をUniVRM 0.101.0とUnity 2021.3.1f1でとりあえず動かす
+  :PROPERTIES:
+  :DATE: [2022-07-11 Mon 23:48]
+  :TAGS: :unity:evmc4u:univrm:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+:LOGBOOK:
+CLOCK: [2022-07-14 Thu 23:31]--[2022-07-14 Thu 23:50] =>  0:19
+CLOCK: [2022-07-12 Tue 00:32]--[2022-07-12 Tue 00:51] =>  0:19
+:END:
+  
+** 最初に
+この記事は非公式かつ、EVMC4Uを触って1日目の個人が書いています。
+
+*記事の内容はテストされておらず、公式でサポートされているわけでもありません*
+
+本当に動かすようにした所までなのでまだ見掛けていない不具合がある可能性は
+十分にありますので、もしも参考にされる際はお気をつけ下さい。責任は負えません。
+
+** この記事の目的
++ とりあえずUnity 2021.3.1f1で動くようにする
+  + +(パソコンの容量的にUnityのバージョン増やしたくないので...)+
++ ついでなのでUniVRMもアプデしてみる
+
+** 環境
+| Unity  | 2021.3.1f1                                    |
+| UniVRM | 0.101.0                                       |
+| EVMC4U | ExternalRecieverPack_v3_8(但し少し修正します) |
+
+** やっていき
+まずUnityを立ち上げ Unity 2021.3.1f1の3Dテンプレートでプロジェクトを作成し、
+普通にUniVRMを導入します。
+
+*** UniVRM 0.101.0の読み込み
+今回は UPMを用いて、 ~manifest.json~ を編集することで導入しました。
+個人的にはパッケージは記載して管理する方がすき。
+
+#+begin_src javascript
+  {
+    "dependencies": {
+      ///
+      "com.vrmc.vrmshaders": "https://github.com/vrm-c/UniVRM.git?path=/Assets/VRMShaders#v0.101.0",
+      "com.vrmc.gltf": "https://github.com/vrm-c/UniVRM.git?path=/Assets/UniGLTF#v0.101.0",
+      "com.vrmc.univrm": "https://github.com/vrm-c/UniVRM.git?path=/Assets/VRM#v0.101.0",
+      "com.vrmc.vrm": "https://github.com/vrm-c/UniVRM.git?path=/Assets/VRM10#v0.101.0",
+      ///
+    }
+  }
+#+end_src
+
+これに関しては [[https://github.com/vrm-c/UniVRM/releases/tag/v0.101.0][vrm-c/UniVRMのリリース]]に書いてあるやつです。
+
+*** 修正箇所1: VRMの読み込み時 ~VRMData~ を介する
+UniVRM 0.82あたりでの変更点(らしい)です。
+
+ドキュメント: https://vrm-c.github.io/UniVRM/ja/api/0_82_runtime_import.html
+
++ ~VRMImporterContext~ に渡す前に、 ~GltfData~ を ~GltfData~ に変換する必要が出来た
++ ~VRMImporterContext~ Disposeで破棄する必要が出来た
+
+ので、 ~vrmImporter~ を使ってる辺りを ~using~ で囲みます。
+囲まないタイプの ~using~ もあるらしいけどUnityで使われてるC#のバージョン
+では対応してるんですかね...?調べるの面倒だったのでこちらで。
+
+#+begin_src diff
+    GlbLowLevelParser glbLowLevelParser = new GlbLowLevelParser(null, VRMdata);
+    GltfData gltfData = glbLowLevelParser.Parse();
+  + VRMData vrm = new VRMData(gltfData);
+  - VRMImporterContext vrmImporter = new VRMImporterContext(gltfData);
+  + using (VRMImporterContext vrmImporter = new VRMImporterContext(vrm)( {
+    ...
+  + }
+
+#+end_src
+
+*** 修正箇所2: VRMImporterContext.LoadAsyncが ~IAwaitCaller~ を実装した型を引数に取るように
+ドキュメント: https://vrm-c.github.io/UniVRM/ja/api/0_87_runtime_import.html
+
++ 同期的に読み込む場合は ~ImmediateCaller~ を与える
++ 非同期的に読み込む場合は ~RuntimeOnlyAwaitCaller~ を与える
+
+今回は単純に簡単そうだったので ~ImmediateCaller~ を与えましたが、
+実際にはもうちょい考えた方が良いのかもしれません。
+まぁすぐに ~await~ して待ってるし同じ...?(あまり非同期得意ではない)
+
+#+begin_src diff
+  - RuntimeGltfInstance instance = await vrmImporter.LoadAsync();
+  + RuntimeGltfInstance instance = await vrmImporter.LoadAsync(VRMShaders.ImmediateCaller);
+#+end_src
+
+参考までに、UniVRMのサンプルでは ~m_useAsync~ プロパティで ~IAWaitCaller~ を変えている実装がありました。
+([[https://github.com/vrm-c/UniVRM/blob/2f6b5224b641ea8b7919610e0955a0a810a16c3c/Assets/VRM10_Samples/VRM10Viewer/VRM10ViewerUI.cs#L447][Assets/VRM10_Samples/VRM10Viewer/VRM10ViewerUI.cs#L447]])
+
+#+begin_src csharp
+  awaitCaller: m_useAsync.enabled ? (IAwaitCaller)new RuntimeOnlyAwaitCaller() : (IAwaitCaller)new ImmediateCaller(),
+#+end_src
+
+*** (一旦) おわり!
+おわり!これでとりあえず読み込めるようになります。
+UniVRM 0.101.0 で読み込んだモデルを使い、WaidayoのiPhone版アプリと
+接続して使っていますが全く問題ないです。今の所。
+
+多分だけどUnity 2021にした影響は特になさそうでした。
+まぁ保証は出来無い。
+
+*** 今回対応していないが参考
+とりあえず上記をやれば動くようにはなりましたが、
+他にも本来修正すべき所があるぽいので追記。
+
+
+ちなみに、こうした更新情報については、
+https://vrm-c.github.io/UniVRM/ja/api/index.html で提供されているようです。
+正直[[https://vrm.dev/][vrm.dev]]から分かりやすくリンクされていないのでGithubレポジトリ直接漁ってて見付けました...
+見逃してる人もいそうなのでここに。
+
+
+(ちなみに[[https://vrm.dev/univrm/programming/index.html]]に一応あります。う~ん深いね!)
+
+**** ~GltfData~ も Disposeする必要がある
+
+ドキュメント: https://vrm-c.github.io/UniVRM/ja/api/0_95_dispose.html
+
+
+らしいです。
+今回私は急いでいたので、これなくても動いたのでそのままにしましたが
+お行儀は多分全くよくない。ので修正した方がいいんだと思います。
+
+**** 高レベルAPI
+
+ドキュメント: https://vrm-c.github.io/UniVRM/ja/api/0_95_highlevel.html
+
+よくある用途に対して高レベルAPIが提供されたらしいです。
+多分ここら辺みながら直した方がよかったのかもしれない...?
+
