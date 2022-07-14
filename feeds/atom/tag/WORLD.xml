@@ -1,0 +1,1107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>CLI! CLI! CLI!</title>
+    <link href="https://cj-bc.github.io/blog/feeds/atom/tag/WORLD.xml" rel="self" />
+    <link href="https://cj-bc.github.io/blog" />
+    <id>https://cj-bc.github.io/blog/feeds/atom/tag/WORLD.xml</id>
+    <author>
+        <name>Cj-bc a.k.a Cj.BC_SD</name>
+        <email>cj.bc-sd@outlook.jp</email>
+    </author>
+    <updated>2022-07-11T00:00:00Z</updated>
+    <entry>
+    <title>2022-07-11-evmc4u-with-univrm-0-101-0-and-uniy-2021</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-07-11-evmc4u-with-univrm-0-101-0-and-uniy-2021.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-07-11-evmc4u-with-univrm-0-101-0-and-uniy-2021.html</id>
+    <published>2022-07-11T00:00:00Z</published>
+    <updated>2022-07-11T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>EVMC4U v3.8をUniVRM 0.101.0とUnity 2021.3.1f1でとりあえず動かす</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on July 11, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on July 14, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;unity&#39;." href="/tags/unity.html" class="ui tag label">unity</a><a title="All pages tagged &#39;evmc4u&#39;." href="/tags/evmc4u.html" class="ui tag label">evmc4u</a><a title="All pages tagged &#39;univrm&#39;." href="/tags/univrm.html" class="ui tag label">univrm</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="最初に">最初に</h1>
+<p>この記事は非公式かつ、EVMC4Uを触って1日目の個人が書いています。</p>
+<p><strong>記事の内容はテストされておらず、公式でサポートされているわけでもありません</strong></p>
+<p>本当に動かすようにした所までなのでまだ見掛けていない不具合がある可能性は 十分にありますので、もしも参考にされる際はお気をつけ下さい。責任は負えません。</p>
+<h1 id="この記事の目的">この記事の目的</h1>
+<ul>
+<li>とりあえずUnity 2021.3.1f1で動くようにする
+<ul>
+<li><del>(パソコンの容量的にUnityのバージョン増やしたくないので…)</del></li>
+</ul></li>
+<li>ついでなのでUniVRMもアプデしてみる</li>
+</ul>
+<h1 id="環境">環境</h1>
+<table>
+<tbody>
+<tr class="odd">
+<td>Unity</td>
+<td>2021.3.1f1</td>
+</tr>
+<tr class="even">
+<td>UniVRM</td>
+<td>0.101.0</td>
+</tr>
+<tr class="odd">
+<td>EVMC4U</td>
+<td>ExternalRecieverPack<sub>v38</sub>(但し少し修正します)</td>
+</tr>
+</tbody>
+</table>
+<h1 id="やっていき">やっていき</h1>
+<p>まずUnityを立ち上げ Unity 2021.3.1f1の3Dテンプレートでプロジェクトを作成し、 普通にUniVRMを導入します。</p>
+<h2 id="UniVRM 0.101.0の読み込み">UniVRM 0.101.0の読み込み</h2>
+<p>今回は UPMを用いて、 <code>manifest.json</code> を編集することで導入しました。 個人的にはパッケージは記載して管理する方がすき。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+javascript
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript SourceCode"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;dependencies&quot;</span><span class="op">:</span> {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;com.vrmc.vrmshaders&quot;</span><span class="op">:</span> <span class="st">&quot;https://github.com/vrm-c/UniVRM.git?path=/Assets/VRMShaders#v0.101.0&quot;</span><span class="op">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;com.vrmc.gltf&quot;</span><span class="op">:</span> <span class="st">&quot;https://github.com/vrm-c/UniVRM.git?path=/Assets/UniGLTF#v0.101.0&quot;</span><span class="op">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;com.vrmc.univrm&quot;</span><span class="op">:</span> <span class="st">&quot;https://github.com/vrm-c/UniVRM.git?path=/Assets/VRM#v0.101.0&quot;</span><span class="op">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;com.vrmc.vrm&quot;</span><span class="op">:</span> <span class="st">&quot;https://github.com/vrm-c/UniVRM.git?path=/Assets/VRM10#v0.101.0&quot;</span><span class="op">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<p>これに関しては <a href="https://github.com/vrm-c/UniVRM/releases/tag/v0.101.0">vrm-c/UniVRMのリリース</a>に書いてあるやつです。</p>
+<h2 id="修正箇所1: VRMの読み込み時 VRMData を介する">修正箇所1: VRMの読み込み時 <code>VRMData</code> を介する</h2>
+<p>UniVRM 0.82あたりでの変更点(らしい)です。</p>
+<p>ドキュメント: <a href="https://vrm-c.github.io/UniVRM/ja/api/0_82_runtime_import.html">https://vrm-c.github.io/UniVRM/ja/api/0_82_runtime_import.html</a></p>
+<ul>
+<li><code>VRMImporterContext</code> に渡す前に、 <code>GltfData</code> を <code>GltfData</code> に変換する必要が出来た</li>
+<li><code>VRMImporterContext</code> Disposeで破棄する必要が出来た</li>
+</ul>
+<p>ので、 <code>vrmImporter</code> を使ってる辺りを <code>using</code> で囲みます。 囲まないタイプの <code>using</code> もあるらしいけどUnityで使われてるC#のバージョン では対応してるんですかね…?調べるの面倒だったのでこちらで。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  GlbLowLevelParser glbLowLevelParser = new GlbLowLevelParser(null, VRMdata);</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  GltfData gltfData = glbLowLevelParser.Parse();</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="va">+ VRMData vrm = new VRMData(gltfData);</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="st">- VRMImporterContext vrmImporter = new VRMImporterContext(gltfData);</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="va">+ using (VRMImporterContext vrmImporter = new VRMImporterContext(vrm)( {</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  ...</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="va">+ }</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
+</div>
+<h2 id="修正箇所2: VRMImporterContext.LoadAsyncが IAwaitCaller を実装した型を引数に取るように">修正箇所2: VRMImporterContext.LoadAsyncが <code>IAwaitCaller</code> を実装した型を引数に取るように</h2>
+<p>ドキュメント: <a href="https://vrm-c.github.io/UniVRM/ja/api/0_87_runtime_import.html">https://vrm-c.github.io/UniVRM/ja/api/0_87_runtime_import.html</a></p>
+<ul>
+<li>同期的に読み込む場合は <code>ImmediateCaller</code> を与える</li>
+<li>非同期的に読み込む場合は <code>RuntimeOnlyAwaitCaller</code> を与える</li>
+</ul>
+<p>今回は単純に簡単そうだったので <code>ImmediateCaller</code> を与えましたが、 実際にはもうちょい考えた方が良いのかもしれません。 まぁすぐに <code>await</code> して待ってるし同じ…?(あまり非同期得意ではない)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="st">- RuntimeGltfInstance instance = await vrmImporter.LoadAsync();</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">+ RuntimeGltfInstance instance = await vrmImporter.LoadAsync(VRMShaders.ImmediateCaller);</span></span></code></pre></div>
+</div>
+<p>参考までに、UniVRMのサンプルでは <code>m_useAsync</code> プロパティで <code>IAWaitCaller</code> を変えている実装がありました。 (<a href="https://github.com/vrm-c/UniVRM/blob/2f6b5224b641ea8b7919610e0955a0a810a16c3c/Assets/VRM10_Samples/VRM10Viewer/VRM10ViewerUI.cs#L447">Assets/VRM10<sub>Samples</sub>/VRM10Viewer/VRM10ViewerUI.cs#L447</a>)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+csharp
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode csharp SourceCode"><code class="sourceCode cs"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>awaitCaller<span class="op">:</span> m_useAsync<span class="op">.</span><span class="fu">enabled</span> <span class="op">?</span> <span class="op">(</span>IAwaitCaller<span class="op">)</span><span class="kw">new</span> <span class="fu">RuntimeOnlyAwaitCaller</span><span class="op">()</span> <span class="op">:</span> <span class="op">(</span>IAwaitCaller<span class="op">)</span><span class="kw">new</span> <span class="fu">ImmediateCaller</span><span class="op">(),</span></span></code></pre></div>
+</div>
+<h2 id="(一旦) おわり!">(一旦) おわり!</h2>
+<p>おわり!これでとりあえず読み込めるようになります。 UniVRM 0.101.0 で読み込んだモデルを使い、WaidayoのiPhone版アプリと 接続して使っていますが全く問題ないです。今の所。</p>
+<p>多分だけどUnity 2021にした影響は特になさそうでした。 まぁ保証は出来無い。</p>
+<h2 id="今回対応していないが参考">今回対応していないが参考</h2>
+<p>とりあえず上記をやれば動くようにはなりましたが、 他にも本来修正すべき所があるぽいので追記。</p>
+<p>ちなみに、こうした更新情報については、 <a href="https://vrm-c.github.io/UniVRM/ja/api/index.html">https://vrm-c.github.io/UniVRM/ja/api/index.html</a> で提供されているようです。 正直<a href="https://vrm.dev/">vrm.dev</a>から分かりやすくリンクされていないのでGithubレポジトリ直接漁ってて見付けました… 見逃してる人もいそうなのでここに。</p>
+<p>(ちなみに<a href="https://vrm.dev/univrm/programming/index.html">https://vrm.dev/univrm/programming/index.html</a>に一応あります。う~ん深いね!)</p>
+<ol>
+<li><p><code>GltfData</code> も Disposeする必要がある</p>
+<p>ドキュメント: <a href="https://vrm-c.github.io/UniVRM/ja/api/0_95_dispose.html">https://vrm-c.github.io/UniVRM/ja/api/0_95_dispose.html</a></p>
+<p>らしいです。 今回私は急いでいたので、これなくても動いたのでそのままにしましたが お行儀は多分全くよくない。ので修正した方がいいんだと思います。</p></li>
+<li><p>高レベルAPI</p>
+<p>ドキュメント: <a href="https://vrm-c.github.io/UniVRM/ja/api/0_95_highlevel.html">https://vrm-c.github.io/UniVRM/ja/api/0_95_highlevel.html</a></p>
+<p>よくある用途に対して高レベルAPIが提供されたらしいです。 多分ここら辺みながら直した方がよかったのかもしれない…?</p></li>
+</ol>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-06-30-pyworld-trying</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-06-30-pyworld-trying.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-06-30-pyworld-trying.html</id>
+    <published>2022-06-30T00:00:00Z</published>
+    <updated>2022-06-30T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>WORLDのPythonラッパーpyworldを試す</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on June 30, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on July 14, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;pyworld&#39;." href="/tags/pyworld.html" class="ui tag label">pyworld</a><a title="All pages tagged &#39;WORLD&#39;." href="/tags/WORLD.html" class="ui tag label">WORLD</a>
+	
+      </div>
+
+    <div class="description">
+      <p>前々からLinuxで使えるボイチェンが欲しくて、何度かWORLDをおすすめされていたのだけれど C++があまり得意ではないので二の足を踏んでいた。 (最初は出来るだけオリジナルを使用したい民なので、pyworldの方はまだ試すつもりがなかった)</p>
+<p>でも、まぁそろそろやる気が出たのでPython版を使ってみる。</p>
+<p>ちなみに、Grallion2とかはLinux対応しているらしいので既存のもので良いならそっちの方が良いと 思う。</p>
+<h1 id="今回の目標">今回の目標</h1>
+<p>最終的には自分用のボイチェンを作りたいのでリアルタイム処理を したいのだが、とりあえずは音声ファイルを変換するのを出来るようにする。</p>
+<h1 id="やることの大雑把な流れ">やることの大雑把な流れ</h1>
+<p>大雑把な流れとしては、以下の通り。</p>
+<ol>
+<li>音声を読み込む</li>
+<li>WORLDがモノラルしか受け付けないようなので、チャンネルを分離する</li>
+<li>WORLDの関数を用いて、それぞれ要素を分解する</li>
+<li>ピッチ・フォルマントをそれぞれいじる</li>
+<li>合成する</li>
+<li>音声を書き出す</li>
+</ol>
+<h1 id="使用ライブラリ">使用ライブラリ</h1>
+<p>音声合成などに関してはpyworldを用いるとして、他の処理に用いるものを。</p>
+<table>
+<tbody>
+<tr class="odd">
+<td>音声変換</td>
+<td>pyworld</td>
+</tr>
+<tr class="even">
+<td>wavファイル読み込み</td>
+<td>soundfile</td>
+</tr>
+</tbody>
+</table>
+<p>尚wavファイルの読み込みには <code>scipy</code> を使うこともできるらしい。</p>
+<h1 id="環境構築">環境構築</h1>
+<p>グローバルに入れるの嫌だけど、ffi使う都合でC関連のものを グローバルに入れなきゃいけなくてめんどくせーー!!のでDockerで環境を閉じ込める。 ついでに可搬性も手に入るしね。</p>
+<p>ちなみにnixも試したが、手元の環境で上手く動かせなかったのでDocker。</p>
+<h2 id="ベースイメージ">ベースイメージ</h2>
+<p>ベースは軽ければ特にこだわりがないので、 <code>python:3.9-alpine</code> を使う。</p>
+<p>pythonのバージョンは、確か3.10だと上手く動かなかったので3.9にした記憶がある。 ただ、python以外の依存パッケージ系を色々入れてなかったので、その影響だったのかもしれない。 Dockerイメージ作り直すのが容量的にキツいのでそのまま3.9にしてある。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+dockerfile
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode dockerfile SourceCode"><code class="sourceCode dockerfile"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> python:3.9-alpine</span></code></pre></div>
+</div>
+<h2 id="pyworldの導入">pyworldの導入</h2>
+<p>pyworldはC++で書かれたWORLDのラッパーなので、g++を必要とすることに注意。 最初これに気付かなくて困った。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+dockerfile
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode dockerfile SourceCode"><code class="sourceCode dockerfile"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> apk add g++ </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> pip install pyworld</span></code></pre></div>
+</div>
+<h2 id="soundfileの導入">soundfileの導入</h2>
+<p>注意点として、 <strong>libsndfile/libffiは dev版を入れる</strong> こと! さもなくば、ヘッダファイルがなくて怒られる。</p>
+<p>あとbuild-baseもいる。(はず)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+dockerfile
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode dockerfile SourceCode"><code class="sourceCode dockerfile"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>run apk add libsndfile-dev libffi-dev build-base</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> pip install soundfile</span></code></pre></div>
+</div>
+<h1 id="コーディング">コーディング</h1>
+<h2 id="ボイチェンの基本的なしくみ">ボイチェンの基本的なしくみ</h2>
+<p>凄い大雑把だが、ボイチェンは声の <em>ピッチ</em> と <em>フォルマント</em> をそれぞれ変換してやることで実装されている。</p>
+<p>ピッチが音の高さ、フォルマントが声色と呼ばれているやつだ。</p>
+<p>正直ここらへんは専門ではないので、詳しくは調べてほしい。気が向いたらそれ関連の リンクについても纏めようと思う。</p>
+<p>で、これらのうち、特にフォルマントは簡単に取得できるものではなく、 「推定」を行う必要がある。</p>
+<p>WORLDはここらへんをよしなにしてくれる。</p>
+<h2 id="wavファイルの読み込み">wavファイルの読み込み</h2>
+<p>まずは読み込む。 読み込むといったってpyworldで使える形式でないと意味がないわけなので先にそこを説明する。</p>
+<p>pyworldの関数は</p>
+<ul>
+<li>一次元</li>
+<li>メモリーレイアウトが 'C'</li>
+<li>Double型の中身を持つ</li>
+</ul>
+<p><code>numpy.ndarray</code> を要求する。 これはそれぞれの関数の中の定義でも書かれているが、 <a href="https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder/blob/130c3abdeaeefc1dae3fdf7d2f2dba61938e58b5/pyworld/pyworld.pyx#L625-L658">wav2worldの実装</a> でも書かれている。</p>
+<p>なので、 <code>numpy.ndarray</code> として読み込めるものなら何でも良いだろう。</p>
+<p>とりあえず見た範囲では、以下の二つのライブラリが使用例があった。</p>
+<ul>
+<li><a href="https://docs.scipy.org/doc/scipy/tutorial/io.html#wav-sound-files-scipy-io-wavfile">scipy.io.wavfile</a>(使用されている記事: <a href="https://qiita.com/ohtaman/items/84426cee09c2ba4abc22">音声合成システム WORLD に触れてみる - Qiita</a>)</li>
+<li><a href="https://pysoundfile.readthedocs.io/en/latest/">pysoundfile</a> (使用されている記事: <a href="https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder/blob/f3c811fb3ce2693b45bd6411c511f60d2d308ed1/demo/demo.py">pyworldのデモコード</a>)</li>
+</ul>
+<p>今回は、デモコードで使われていたという理由から <code>pysoundfile</code> を採用した。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>soundfile.read(<span class="st">&quot;filename&quot;</span>)</span></code></pre></div>
+</div>
+<h2 id="チャンネルの分離">チャンネルの分離</h2>
+<p>pyworldの関数達は次元数が1の <code>ndarray</code> しか受け付けないわけだが、 1チャンネル辺り1次元で作られるため 元の音源がステレオ以上だと次元が多すぎてエラーを吐かれてしまう。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> pw.wav2world(data, samplerate)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>Traceback (most recent call last):</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  File <span class="st">&quot;&lt;stdin&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  File <span class="st">&quot;pyworld/pyworld.pyx&quot;</span>, line <span class="dv">654</span>, <span class="kw">in</span> pyworld.pyworld.wav2world</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  File <span class="st">&quot;pyworld/pyworld.pyx&quot;</span>, line <span class="dv">93</span>, <span class="kw">in</span> pyworld.pyworld.dio</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="pp">ValueError</span>: Buffer has wrong number of dimensions (expected <span class="dv">1</span>, got <span class="dv">2</span>)</span></code></pre></div>
+</div>
+<p>なので、音源が2チャンネル以上ある場合は切り分けてあげる必要がある。 <code>soundfile</code> で読み込んでいる場合、これをするには</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data[:,<span class="dv">0</span>]</span></code></pre></div>
+</div>
+<p>のように、二つ目の添字をいじってあげることで取れる。 ここら辺の説明は面倒なので、というか結構色々あるので調べてみてほしい。 <code>numpy.ndarray</code> の構造までは知らなくていいと思うが、添字アクセスの仕方を知っていれば まぁわかると思う。</p>
+<p><strong>そしてここで注意</strong></p>
+<p>こうして制作したデータは、メモリ上で連続して存在しないため、 pyworldの関数に渡すことができない。 そのため、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data[:,<span class="dv">0</span>].copy(order<span class="op">=</span><span class="st">&#39;C&#39;</span>)</span></code></pre></div>
+</div>
+<p>として並べ替えてあげる必要がある。 尚、これについては少し後にもう少しだけ詳しく書いてある。</p>
+<h2 id="ピッチ・フォルマント推定">ピッチ・フォルマント推定</h2>
+<p>これはもうworldにおまかせ。詳しいことはわからん。 色々関数があるが、一括で欲しいパラメータを全て取得出来る <code>wav2world</code> を使用する。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>f0, sp, ap <span class="op">=</span> pw.wav2world(data[:,<span class="dv">0</span>].copy(order<span class="op">=</span><span class="st">&#39;C&#39;</span>), samplerate)</span></code></pre></div>
+</div>
+<h2 id="ピッチ・フォルマントをいじる">ピッチ・フォルマントをいじる</h2>
+<p>ここは一番手間がかかる所。先程取り出したパラメーターをよしなに変える。 正直ここは調整の話になってくると思うので、今はよくわからん。<a href="https://qiita.com/ohtaman/items/84426cee09c2ba4abc22">参考にしていた記事</a>にあった所を ちょっと弄っている所。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="bu">range</span>(converted_sp.shape[<span class="dv">1</span>]):</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    converted_sp[:, f] <span class="op">=</span> sp[:, <span class="bu">int</span>(f<span class="op">/</span><span class="fl">1.2</span>)]</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>converted_f0 <span class="op">=</span> f0<span class="op">*</span><span class="dv">2</span></span></code></pre></div>
+</div>
+<h2 id="合成する">合成する</h2>
+<p>これももうお任せ、 <code>pyworld.synthesize</code> に <code>pyworld.wav2world</code> した時の戻り値(とそれを いじったもの)を用いることで合成できる。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pw.synthesize(converted_f0, converted_sp, ap, samplerate)</span></code></pre></div>
+</div>
+<h2 id="書き出し">書き出し</h2>
+<p>書き出しする際は、それぞれ分けていたチャンネルを一つに結合させる必要がある。</p>
+<p><code>numpy.ndarray</code> を結合する関数は色々あるが、とりあえず <a href="https://numpy.org/doc/stable/reference/generated/numpy.stack.html#numpy.stack">numpy.stack</a> を使うと 簡潔に出来たのでこれでいく。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>np.stack((ch1, ch2), axis<span class="op">=</span><span class="dv">1</span>)</span></code></pre></div>
+</div>
+<p>こうすると、元の形と同じ形式になる。</p>
+<p>これを後は書き込む。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>soundfile.write(OUT_FILE, result, samplerate)</span></code></pre></div>
+</div>
+<h1 id="実装の注意点">実装の注意点</h1>
+<h2 id="pyworld.wav2worldはモノラル音源を期待する(らしい)">pyworld.wav2worldはモノラル音源を期待する(らしい)</h2>
+<p>実際のドキュメントとか見たわけではないが、2chのwav音源を引数に与えた所 以下のようなエラーを出された。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Traceback (most recent call last):
+File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+File &quot;pyworld/pyworld.pyx&quot;, line 654, in pyworld.pyworld.wav2world
+File &quot;pyworld/pyworld.pyx&quot;, line 93, in pyworld.pyworld.dio
+ValueError: Buffer has wrong number of dimensions (expected 1, got 2)
+</code></pre>
+</div>
+<p>(ちなみにこれはReplでの表記なので実際に出たものとはほんの少し違うと思うが、まぁ大体同じ。)</p>
+<p>なので、 <u>チャンネルをそれぞれ分けて変換する必要がある</u> らしい。</p>
+<ol>
+<li><p>チャンネルを分離する</p>
+<p><code>soundfile.read()</code> で読み込んだデータは、nx2行列 (多分。2xnだったりする？？numpyの行列表現の順序に自信がない) として表現されている。サンプル数がn、チャンネル数が2のデータだ。</p>
+<p>これを愚直に取り出すと、以下のようになる</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>FILENAME <span class="op">=</span> <span class="st">&quot;入力に使いたいファイル名&quot;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> soundfile.read(FILENAME)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>ch1 <span class="op">=</span> data[:,<span class="dv">0</span>]</span></code></pre></div>
+</div>
+<p>しかし、これをそのまま利用しようとすると「C-contiguous」でないため怒られる。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>&gt;&gt;&gt; pw.wav2world(data[:,0], samplerate)
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+  File &quot;pyworld/pyworld.pyx&quot;, line 654, in pyworld.pyworld.wav2world
+  File &quot;pyworld/pyworld.pyx&quot;, line 93, in pyworld.pyworld.dio
+ValueError: ndarray is not C-contiguous
+</code></pre>
+</div>
+<p>この原因は、 <code>ch1</code> が内部構造として非連続的である(？)ことが原因らしい。</p>
+<p>ここら辺の情報は色々探したが日本語・英語共に見付けられなかったので、原文をそのまま 書くと「The data is in a single, C-style contiguous segment.」じゃなかったのが問題だったらしい。 (情報元は<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.flags.html">numpy.ndarray.flagsのドキュメント</a>の <code>C_CONTIGUOUS</code> の部分)</p>
+<p>これは推測だが、恐らく、 <code>ch1</code> に含まれる値は実際の値をコピーしているのではなく、 元の <code>data</code> の中に飛び飛びで存在する値を参照しており、連続的ではないのだと思われる。 これだとC言語側に渡した時に連続したアドレスから値が取得できないため、問題になってしまうのだろうなと 感じた。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre id="~C_CONTIGUOUS~ かどうかの確認方法" class="SourceCode"><code>&gt;&gt;&gt; data.flags
+  C_CONTIGUOUS : True
+  F_CONTIGUOUS : False
+  OWNDATA : True
+  WRITEABLE : True
+  ALIGNED : True
+  WRITEBACKIFCOPY : False
+
+&gt;&gt;&gt; data[:,0].flags
+  C_CONTIGUOUS : False
+  F_CONTIGUOUS : False
+  OWNDATA : False
+  WRITEABLE : True
+  ALIGNED : True
+  WRITEBACKIFCOPY : False
+
+</code></pre>
+</div>
+<p>そこで、 <code>C_CONTIGUOUS</code> に変換していく必要がでてきた。</p>
+<p>色々な方法があるのかもしれないが、今回は <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.copy.html">numpy.ndarray.copy()</a> を利用する。</p>
+<p><code>copy()</code> はその <code>ndarray</code> のコピーを返す関数で、 パラーメーター引数 <code>order</code> を設定することでメモリーレイアウト (直訳、適切な訳があれば知りたい)を変更できる。デフォルトは <code>C</code> らしいが、明記しておいた。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>data[:,<span class="dv">0</span>].copy(order<span class="op">=</span><span class="st">&#39;C&#39;</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># これで、きちんと pyworld.wav2world に渡せるレイアウトになる。</span></span></code></pre></div>
+</div></li>
+</ol>
+<h1 id="参考">参考</h1>
+<ul>
+<li><a href="https://qiita.com/ohtaman/items/84426cee09c2ba4abc22">音声合成システム WORLD に触れてみる - Qiita</a></li>
+<li><a href="https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder">JeremyCCHsu/Python-Wrapper-for-World-Vocoder</a></li>
+<li><a href="https://stackoverflow.com/questions/26778079/valueerror-ndarray-is-not-c-contiguous-in-cython">python - ValueError: ndarray is not C-contiguous in cython - Stack Overflow</a></li>
+</ul>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-06-21-skk-azik-tring</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-06-21-skk-azik-tring.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-06-21-skk-azik-tring.html</id>
+    <published>2022-06-21T00:00:00Z</published>
+    <updated>2022-06-21T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>DDSKKでAZIKを始めてみた</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on June 21, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on June 22, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;skk&#39;." href="/tags/skk.html" class="ui tag label">skk</a><a title="All pages tagged &#39;日本語入力&#39;." href="/tags/%E6%97%A5%E6%9C%AC%E8%AA%9E%E5%85%A5%E5%8A%9B.html" class="ui tag label">日本語入力</a><a title="All pages tagged &#39;azik&#39;." href="/tags/azik.html" class="ui tag label">azik</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
+	
+      </div>
+
+    <div class="description">
+      <p>長らくDDSKKを使った日本語入力をしてきたが、そろそろかなり慣れてきたので AZIKも導入してみる。</p>
+<h1 id="導入手順">導入手順</h1>
+<p>導入手順はとても簡単で、とりあえず <a href="info:skk#AZIK">info:skk#AZIK</a> を読めばことたりる。 が、まぁ</p>
+<h2 id="1. AZIKを有効にする">1. AZIKを有効にする</h2>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(setq skk-use-azik t)
+</code></pre>
+</div>
+<p>を <code>/.skk.el</code> に書き込む。</p>
+<h2 id="2. DDSKKを再起動する">2. DDSKKを再起動する</h2>
+<p>変数を設定しただけでは反映されないようなので、 <code>skk-restart</code> (help:skk-restart) で再起動をかける。</p>
+<h1 id="使ってみた感想">使ってみた感想</h1>
+<p>導入してから1日ほど使ってみた。 主な用途はテキストファイルの記述、この記事と+3000文字くらい書いたくらい。</p>
+<p>使い始めた最初は結構戸惑った。というか今もそう。</p>
+<p>慣れたら便利そうだなとは感じた。 慣れるまでやっぱり時間がかかる。特に、「っ」の入力と「ん」の入力で詰まる。</p>
+<p>例えば</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>使って
+</code></pre>
+</div>
+<p>と打ちたい場合、今の自分のDDSKK+AZIK環境では</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>TukaXtute 
+</code></pre>
+</div>
+<p>と打つのだが、従来通り</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Tukatte
+</code></pre>
+</div>
+<p>と打ってしまうことがある。(ちなみにそうすると <code>つかたちえ</code> となる)</p>
+<h2 id="良い所">良い所</h2>
+<p>AZIKを使い込んでの評価はまだ出来無いが、 とりあえず始めるにあたっての評価ということで。</p>
+<ol>
+<li><p>基本の配列が変わらない</p>
+<p>まず、「基本は普段通りの配列」であることは本当に嬉しい。 これのお影で、普通にAZIKにしたまま普段使いが出来る。</p>
+<p>そうじゃなかったら長期休暇でもない限り試そうと思えんて…</p>
+<p>特に、キー配列すら大体JIS配列のみみたいな現代では、 あまり異なりすぎるインプットメゾットに切り替えることが難しい。 他の環境を使い辛くなるからだ。</p>
+<p>このAZIKくらいなら、まぁ他の環境での作業の時もそこまで作業に支障が出ないだろうと思える。</p></li>
+<li><p>少しづつ試せる</p>
+<p>基本の配列が変わらないことにも影響されるが、少しずつ機能を試すことが出来る。 一気に覚えようとすると結構タフなのでありがたい。</p>
+<p>今は「;」による「っ」の入力と、「◯ん」の入力(kzで「かん」とか) を試している</p></li>
+<li><p>意外とそれなりに情報がある</p>
+<p>意外とインターネットには情報がある。少し調べると色んなブログがまぁあるし、 そもそも公式ページが詳しいのでそれで事足りる。今の所。</p></li>
+</ol>
+<h2 id="困った所">困った所</h2>
+<p>今少し試してみていて、気になる部分をば。幾つかは解決策があるし幾つかはない。</p>
+<ol>
+<li><p><code>shi</code> で「し」が打てない</p>
+<p>これは私の困った日本語入力のクセみたいな所がある。 私は何故か分からないが「し」の入力だけ「shi」と打ってきていた。 が、AZIKではこの入力では「すうい」となってしまう。</p>
+<p>ちなみにこの文章で出てくる「し」も大体最初「すうい」と入力してしまって書き直している。 今の「してしまって」とか地獄だ。ぴぇ。</p>
+<p>まぁ、これは「si」で打てた方がどちらにせよ短いし慣らそうと思う。</p></li>
+<li><p><code>sticky-shift</code> の設定をしてると変換のタイミングで「っ」を素直に打てない</p>
+<p>AZIKでは、「;」で「っ」を入力する。 しかし、DDSKKでは</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(setq skk-sticky-key &quot;;&quot;)
+</code></pre>
+</div>
+<p>とかしているとDDSKKの変換モード中で送り仮名入力に移ってしまう。 (そして初心者だった頃にこれを設定していた私は気付かずに暫く苦労した)</p>
+<p>なので、DDSKK+AZIKにしたい民は</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(setq skk-sticky-key nil)
+</code></pre>
+</div>
+<p>とかして無効化するか、他のキーに割り当てしなおす必要がある。</p>
+<p>ちなみに私は今の今まで存在に気付いておらず使われてなかったので素直に消した。</p></li>
+<li><p>かな入力モードの状態で <code>+</code> が打てない</p>
+<p>恐らく、ハード的にはJIS配列・内部的にはUS配列とかいう 特殊なキーボードの使い方をしているのが原因だろうけど、 かなモードで <code>+</code> を打つと、変換モードになって「っ」が入力されてしまう。</p>
+<p>これはSKKのみの時には見られなかった挙動で、試しに <code>skk-use-azik</code> を <code>nil</code> にして みると無くなるのでAZIKのせいなのは確定だろう。</p>
+<p>実装を追ってみると、どうやら help:skk-azik-keyboard-type が <code>jp106</code> 若しくは <code>jp-pc98</code> の際には help:skk-set-henkan-point-key に <code>?+</code> が 追加されるらしい。(<a href="https://github.com/skk-dev/ddskk/blob/master/skk-azik.el#L540-L549">skk-dev/ddskk – skk-azik.el#L540-L549</a>)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>((eq skk-azik-keyboard-type &#39;jp106)
+      (setq skk-set-henkan-point-key
+            (append &#39;(?+) skk-set-henkan-point-key))
+      (setq skk-downcase-alist
+            (append &#39;((?+ . ?\;)) skk-downcase-alist))
+      (setq skk-azik-keyboard-specific-additional-rom-kana-rule-list
+            &#39;((&quot;@&quot; nil skk-toggle-characters)
+              (&quot;x@&quot; nil skk-today)
+              (&quot;`&quot; nil skk-set-henkan-point-subr)
+              (&quot;:&quot; nil &quot;ー&quot;))))
+</code></pre>
+</div>
+<p>help:skk-azik-keyboard-type はデフォルトでは <code>jp106</code> 、今確認しても手元のは <code>jp106</code> なので、このコードは実行されているはずで、 <code>?+</code> が help:skk-set-henkan-point-key に入っているはずなので確認してみる。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(seq-find (lambda (x) (eq ?+ x)) skk-set-henkan-point-key)
+</code></pre>
+</div>
+<p>入ってるのがわかる。 これを削除してみると</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(setq skk-set-henkan-point-key (seq-remove (lambda (x) (eq ?+ x)) skk-set-henkan-point-key))
+</code></pre>
+</div>
+<p>困った挙動が無くなった。</p>
+<p>しかし他の設定も見ると上手く自分の環境に適応する <code>skk-azik-keyboard-type</code> が ないため、ここは後で自分で少し書き換えようかと思う。</p></li>
+</ol>
+<h1 id="その他Tips">その他Tips</h1>
+<h2 id="DDSKKの何かと機能が競合して使い辛い!">DDSKKの何かと機能が競合して使い辛い!</h2>
+<p>まず何の機能が競合しているのかを把握する必要がある。 当たり前だけど。</p>
+<p>その際、 help:describe-key を使ってもあまり上手くいかない (全て help:skk-insert と言われてしまう)。</p>
+<p><code>info</code> を引く人ならば <a href="info:skk#キー索引">info:skk#キー索引</a> を使うのが良い。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-05-16-thought-about-yukkuri-related-trademark</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-05-16-thought-about-yukkuri-related-trademark.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-05-16-thought-about-yukkuri-related-trademark.html</id>
+    <published>2022-05-16T00:00:00Z</published>
+    <updated>2022-05-16T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>最近話題のゆっくりに関連した商標に関しての考え</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on May 16, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on June 22, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;商標法&#39;." href="/tags/%E5%95%86%E6%A8%99%E6%B3%95.html" class="ui tag label">商標法</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="始めに">始めに</h1>
+<p>私は法律の専門家ではありません。知財法に関してちょこっとだけ齧りましたが、 ほんとにちょこっとだけです。</p>
+<p>ここで書かれていることは個人的な考えであり、 一応対応する法律等は明記するものの間違っている可能性があります。</p>
+<p>又、ここでの知識は知的財産管理技能検定3級公式テキスト改訂11版を 主に元としています。</p>
+<h1 id="例の問題">例の問題</h1>
+<p>5/15、YouTubeチャンネル「柚葉 / Yuzuha」さんが、 「 ゆっくり茶番劇」という文字商標を取得したことを<a href="https://twitter.com/Yuzuha_YouTube/status/1525607600250712064?s=20&amp;t=JDWJ3zpE2P4Biw8Kkd_SwQ">twitterで公開</a>しました。</p>
+<p>そしてそれに伴い、使用料10万円を請求するとのことで話題になりました。</p>
+<p>詳しくは<a href="https://nlab.itmedia.co.jp/nl/articles/2205/15/news045.html">ねとらぼさんの記事</a> 等を確認してもらえると良いかと思います。</p>
+<h1 id="私の考え">私の考え</h1>
+<h2 id="Q. 第三者が勝手に商標を登録することは可能なのか？">Q. 第三者が勝手に商標を登録することは可能なのか？</h2>
+<p>可能だと思います。 商標は法人でも自然人でも登録可能であり、要件も満たしていれば問題がないです。 登録の要件は<a href="https://elaws.e-gov.go.jp/document?lawid=334AC0000000127">商標法</a>3条で定義されており、知的財産管理技能検定3級公式テキスト改訂11版 を参考にして簡単に纏めると以下のようになります:</p>
+<ul>
+<li>自己の業務に係る商品等に使用すること</li>
+<li>識別力を有すること</li>
+</ul>
+<p>「自己の業務に係る」という点に於いて、柚葉さんのYouTubeを見てみると (一応)「ゆっくり茶番劇」という名称を使っているので、 これは満たしていると判断されるかもしれません。</p>
+<p>識別力については謎な所で、個人的には「識別力はない」のではないか？と考えています。</p>
+<p>例えば、YouTubeで「視聴回数順」のソートで軽く検索かけてみた所16件あり、 恐らく文化圏的にニコニコの方にもっとあるであろうことを考えると 少なくともこの界隈内で識別するのは難しいと言わざるを得ません。</p>
+<p>が、まぁ一部の界隈だけというのもまた事実ではありますね…そういう面 で実体調査をパスしたのかもしれません。</p>
+<h2 id="Q. ここから無効にする方法は？">Q. ここから無効にする方法は？</h2>
+<p>利害関係者であれば「商標登録の無効の審判」を請求することができます。 (<a href="https://elaws.e-gov.go.jp/document?lawid=334AC0000000127">商標法</a>46条)</p>
+<p>今回の場合、「ゆっくり茶番劇」はかなり昔から使われている名称であるため、 「普通名称」として無効を主張できないんかな？と思っています。</p>
+<p>但し、その全てについて「自分が作ったものです」と言われると面倒な気はします… 証明できるもの出せないから出来ないか…?</p>
+<h2 id="Q. 我々がするべきではないことは？">Q. 我々がするべきではないことは？</h2>
+<p><strong>爆破予告・殺害予告・名誉毀損等の行為です</strong></p>
+<p>そもそも、それらのものは許されるべきではない、という事は言わずとも同感していただけると 思います。 それでも、感情的になったあまりそういった手段に走ってしまう人がいるような情報が流れてきます。 これは、逆に訴えられてしまったり自分達にとって不利に働くだけなのでやめて 欲しいなぁと思いながら見ています。</p>
+<p>法に則って行われた手続きには法に則って解決しようねぇ</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-05-13-emacs-magit-how-to-stage-piece-of-hunk</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-05-13-emacs-magit-how-to-stage-piece-of-hunk.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-05-13-emacs-magit-how-to-stage-piece-of-hunk.html</id>
+    <published>2022-05-13T00:00:00Z</published>
+    <updated>2022-05-13T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>MagitでTigみたいに行単位ステージを行う</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on May 13, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on May 13, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;magit&#39;." href="/tags/magit.html" class="ui tag label">magit</a><a title="All pages tagged &#39;tig&#39;." href="/tags/tig.html" class="ui tag label">tig</a>
+	
+      </div>
+
+    <div class="description">
+      <p>元々Emacsに来る前は<a href="https://github.com/jonas/tig">tig</a>を愛用しており、Emacsに乗り換えて Magitに大体移行した後も、いくつかの機能に於いてはtigを用いていた。</p>
+<p>その一つがハンクより細かい行単位でのステージ(とアンステージ)だ。</p>
+<p>が、 <a href="info:magit#Staging and Unstaging"><a href="info:magit#Staging">info:magit#Staging</a> and Unstaging</a>を見ていた所、実はMagitでも デフォルトで出来ることがわかったのでメモしておく。</p>
+<h1 id="やり方">やり方</h1>
+<p>まず help:magit-status で普通にMagitバッファを開く (デフォルトでは <code>C-x g</code> にアサインされている)</p>
+<p>ステージ若しくはアンステージしたい行をリージョンで選択し、 通常通り <code>s</code> 若しくは <code>u</code> でステージ・アンステージ処理をするだけ。</p>
+<p>尚、 <strong>Magitではevil-modeはデフォルトでは機能しない</strong> ようなので、従来の Emacsのリージョン開始コマンドを使う必要がある。 リージョンを開始するには help:set-mark-command (デフォルトでは <code>C-@</code>) を使う。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-05-02-elisp-hashtable-key-comparison-method</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-05-02-elisp-hashtable-key-comparison-method.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-05-02-elisp-hashtable-key-comparison-method.html</id>
+    <published>2022-05-02T00:00:00Z</published>
+    <updated>2022-05-02T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>ElispのHash Tableのキーの一意性確認のための方法について</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on May  2, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on May  4, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="Hash Tableの種類">Hash Tableの種類</h1>
+<p>elispにおいてHash Tableは一つではあるが、キーを比較するための方法は 複数存在する (<a href="help:make-hash-table">help:make-hash-table</a>)</p>
+<p>そして、この比較する方法の違いを把握してないと「何故これが重複して存在するの!？」 みたいなことになるので気をつける必要がある。</p>
+<p>一応ユーザーが自分で実装することもできるそうだが (<a href="info:elisp#Defining Hash">elisp#Defining Hash</a>の help:define-hash-table-test を参照)、 今回はそれは含めない。</p>
+<p>情報源は <a href="info:elisp#Creating Hash">elisp#Creating Hash</a></p>
+<h2 id="eql (デフォルト)"><code>eql</code> (デフォルト)</h2>
+<p>数字(float若しくはinteger)は <code>equal</code> で等しければ同じと判断され、 <strong>他のオブジェクトは全て等しくなることはない</strong> (!)</p>
+<h2 id="equal"><code>equal</code></h2>
+<p><code>equal</code> によって判定される。</p>
+<h2 id="eq"><code>eq</code></h2>
+<p>異なるLispオブジェクトは同じになることはない。</p>
+<h1 id="「こういう時は？」">「こういう時は？」</h1>
+<h2 id="キーに文字列を使いたい">キーに文字列を使いたい</h2>
+<p><strong>デフォルトの <code>eql</code> では決して等しくならない</strong> <code>'equal</code> にする</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(make-hash-table :test &#39;equal)
+</code></pre>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-04-21-fomantic-ui-use-custom-site-directory</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-04-21-fomantic-ui-use-custom-site-directory.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-04-21-fomantic-ui-use-custom-site-directory.html</id>
+    <published>2022-04-21T00:00:00Z</published>
+    <updated>2022-04-21T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>Fomantic-UIで'site'に別ディレクトリを使用する際の注意点</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on April 21, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on April 21, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;fomantic-ui&#39;." href="/tags/fomantic-ui.html" class="ui tag label">fomantic-ui</a><a title="All pages tagged &#39;blog&#39;." href="/tags/blog.html" class="ui tag label">blog</a>
+	
+      </div>
+
+    <div class="description">
+      <p><code>semantic.json</code> の部分だけ変えたらよさそうに思うが、 <code>theme.config</code> も変える必要があるので注意。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+javascript
+</div>
+<div class="sourceCode" id="~semantic.json~ の変更場所"><pre class="sourceCode javascript SourceCode"><code class="sourceCode javascript"><span id="~semantic.json~ の変更場所-1"><a href="#~semantic.json~ の変更場所-1" aria-hidden="true" tabindex="-1"></a>   {</span>
+<span id="~semantic.json~ の変更場所-2"><a href="#~semantic.json~ の変更場所-2" aria-hidden="true" tabindex="-1"></a>     <span class="st">&quot;base&quot;</span><span class="op">:</span> <span class="st">&quot;.&quot;</span><span class="op">,</span></span>
+<span id="~semantic.json~ の変更場所-3"><a href="#~semantic.json~ の変更場所-3" aria-hidden="true" tabindex="-1"></a>     <span class="st">&quot;paths&quot;</span><span class="op">:</span> {</span>
+<span id="~semantic.json~ の変更場所-4"><a href="#~semantic.json~ の変更場所-4" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;source&quot;</span><span class="op">:</span> {</span>
+<span id="~semantic.json~ の変更場所-5"><a href="#~semantic.json~ の変更場所-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span>
+<span id="~semantic.json~ の変更場所-6"><a href="#~semantic.json~ の変更場所-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;site&quot;</span><span class="op">:</span> <span class="st">&quot;src/site&quot;</span><span class="op">,</span></span>
+<span id="~semantic.json~ の変更場所-7"><a href="#~semantic.json~ の変更場所-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+conf-javaprop
+</div>
+<pre id="~theme.config~ の変更場所" class="conf-javaprop SourceCode"><code>
+/* Path to site override folder */
+@siteFolder  : &#39;src/site&#39;;
+</code></pre>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-04-16-emacs-set-different-fonts-for-different-language-letters</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-04-16-emacs-set-different-fonts-for-different-language-letters.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-04-16-emacs-set-different-fonts-for-different-language-letters.html</id>
+    <published>2022-04-16T00:00:00Z</published>
+    <updated>2022-04-16T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>複数のフォントを自然言語毎に使い分ける</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on April 16, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on April 16, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
+	
+      </div>
+
+    <div class="description">
+      <p>複数の自然言語(特に母国語と英語以外)を使うようになると、 普段使いのフォントではカバーできない文字が出てくると思います。</p>
+<p>Emacsでは、どうやら文字毎に使用するフォントを設定することができるようなので その設定をしてみることにします。</p>
+<p>今回は例として、韓国語のハングルを使えるようにしたいと思います。</p>
+<h1 id="1. フォントを取得してインストールする">1. フォントを取得してインストールする</h1>
+<p>これは各自ディストリビューションで異なると思います。</p>
+<p>私のarchlinux環境では、 <code>/usr/share/fonts</code> か <code>$HOME/.local/share/fonts</code> 以下にフォントファイルを仕舞えば良いようです。 (詳しくは <a href="https://wiki.archlinux.jp/index.php/フォント設定">archwiki – フォント設定</a>を参照)</p>
+<p>もしかしたらパッケージにもあるかもしれません。</p>
+<p>私はGoogle Fontsで調べてきて、簡単なPKGBUILD(archlinuxのパッケージを 作成するために使用するファイル)を書いてパッケージ化してインストールしました。</p>
+<h1 id="2. set-fontset-font 関数でフォントを適用する">2. <code>set-fontset-font</code> 関数でフォントを適用する</h1>
+<p>文字毎にフォントを適用できると書きましたが、勿論範囲指定もできます。</p>
+<h2 id="一つの文字だけ">一つの文字だけ</h2>
+<p>一つの文字だけならば、その文字をcharacterとして使用します。 Elispで特定のcharacterを表現するには、そのcharacterの頭に <code>?</code> を つけてあげれば良いので、 例えば'ㅣ'という文字だけに適用したければ:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(set-fontset-font t ?ㅣ &quot;NanumGothic&quot;)
+</code></pre>
+</div>
+<p>とします。</p>
+<h2 id="特定のScriptのみ">特定のScriptのみ</h2>
+<p>正直Scriptとは何ぞや、というのはあんまりわからんです… info覗いてもあまり解説がなかったので、一般的な用語なのかも しれません(若しくは見付けられていないか)</p>
+<p>とりいそぎ、Emacsに認識されているScriptの一覧は <code>script-representative-chars</code> という変数に格納されているのでそれを確認します (help:script-representative-chars)</p>
+<p>そうすると、今回の場合 <code>hangul</code> という使えそうなシンボルがあるので これを用いることにします。 シンボルは、単純にシンボルとして渡してあげれば良いです。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(set-fontset-font t &#39;hangul &quot;NanumGothic&quot;)
+</code></pre>
+</div>
+<h1 id="参考資料">参考資料</h1>
+<ul>
+<li><a href="https://qiita.com/kawabata@github/items/2c4b0b689834c9c193aa">Emacs で全世界の文字を表示・編集可能にする。 - Qiita</a></li>
+<li>help:set-fontset-font</li>
+<li><a href="info:Emacs#Defining Fontsets">info:Emacs#Defining Fontsets</a></li>
+</ul>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-04-01-org-roam-when-you-can-use-completion-by-default</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-04-01-org-roam-when-you-can-use-completion-by-default.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-04-01-org-roam-when-you-can-use-completion-by-default.html</id>
+    <published>2022-04-01T00:00:00Z</published>
+    <updated>2022-04-01T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>org roam標準で補完が効く条件</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on April  1, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on April  2, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;org-roam&#39;." href="/tags/org-roam.html" class="ui tag label">org-roam</a><a title="All pages tagged &#39;org&#39;." href="/tags/org.html" class="ui tag label">org</a>
+	
+      </div>
+
+    <div class="description">
+      <p><a href="info:org-roam#Completion"><a href="info:org-roam#Completion">info:org-roam#Completion</a></a>にあるように、 org-roamは標準で補完機能を持っています。</p>
+<p>が、自分の環境では上手く動かなかったので原因を探った際のメモ。</p>
+<h1 id="Tl;Dr:">Tl;Dr:</h1>
+<p>デフォルトでは、help:org-roam-db-autosync-mode を有効にした状態で、 ファイルからバッファーを読み込んだ際に有効化される。</p>
+<p><strong>help:org-roam-completion-everywhere ですらこの条件が必要</strong> なので注意。</p>
+<h1 id="詳しく">詳しく</h1>
+<h2 id="org-roamが提供する補完機能の概要">org-roamが提供する補完機能の概要</h2>
+<p>org-roamは、help:completion-at-point を用いた補完機能を提供しています。 又、company-modeも別途対応している模様です。</p>
+<h2 id="実際の仕組み">実際の仕組み</h2>
+<p>そもそものcompletion-at-pointの仕組みについては割愛しますが 簡単に必要なことだけを書くと、補完に使用する関数を <code>completion-at-point-functions</code> 変数から取得して補完を行います。</p>
+<p>なので、 <code>completion-at-point</code> を使用した補完の際は、その変数をいじっている所を探しにいけば良いということになります。 org-roamでもこの <code>completion-at-point-functions</code> に関数を追加しています。</p>
+<ul>
+<li><a href="~/.emacs.d/elpa/org-roam-20220319.1902/org-roam-node.el::defun org-roam--register-completion-functions-h (">org-roam–register-completion-functions-h</a>で help:completion-at-point-functions を設定している
+<ul>
+<li><code>org-roam--register-completion-functions-h</code> は help:org-roam-find-file-hook に追加されている</li>
+</ul></li>
+</ul>
+<ul>
+<li>help:org-roam-find-file-hook は help:org-roam-db-autosync–setup-file-h から実行される</li>
+<li>help:org-roam-db-autosync–setup-file-h は help:org-roam-db-autosync-mode を有効にした時に help:find-file-hook に 追加される
+<ul>
+<li>help:find-file-hook はファイルからバッファーが読み込まれた際に実行される</li>
+</ul>
+よって、 help:org-roam-db-autosync-mode を有効にしていない限りは同期されない。 まぁそれはそうか。</li>
+</ul>
+<h1 id="手動で設定する方法">手動で設定する方法</h1>
+<p>db-syncはしなくていいけど補完は使えるようになってほしい、という場合 help:org-roam–register-completion-functions-h を手動で実行すれば良いです。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(org-roam--register-completion-functions-h)
+</code></pre>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+<entry>
+    <title>2022-03-31-archiso-create-x-enabled-archiso</title>
+    <link href="https://cj-bc.github.io/blog/posts/2022-03-31-archiso-create-x-enabled-archiso.html" />
+    <id>https://cj-bc.github.io/blog/posts/2022-03-31-archiso-create-x-enabled-archiso.html</id>
+    <published>2022-03-31T00:00:00Z</published>
+    <updated>2022-03-31T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>X環境を含んだarchsioイメージを作成する</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 31, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on April  1, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged &#39;archiso&#39;." href="/tags/archiso.html" class="ui tag label">archiso</a>
+	
+      </div>
+
+    <div class="description">
+      <p>基本は<a href="https://wiki.archlinux.jp/index.php/Archiso#USB">wiki</a>に従って作業します。 正直思った以上にやること少なかったので、この記事はwikiのまとめ的メモになります。</p>
+<p>やったこと全部書いているつもりではあるけど、今回は後から纏めなおしたので何か欠けている 可能性があります。</p>
+<p>実際に使っているものはこちら: <a href="https://github.com/Cj-bc/dotfiles/tree/master/dotfiles/archiso">Cj-bc/dotfiles/dotfiles/archiso</a></p>
+<h1 id="パッケージの追加">パッケージの追加</h1>
+<p><code>packages.x86_64</code> にパッケージを追加。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/packages.x86_64 b/dotfiles/archiso/packages.x86_64</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>index aaf2416..2bbce38 100644</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/packages.x86_64</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/packages.x86_64</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -119,3 +119,10 @@ wvdial</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a> xfsprogs</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a> xl2tpd</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a> zsh</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="va">+xorg-server</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="va">+lightdm</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="va">+lightdm-gtk-greeter</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="va">+xterm</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="va">+xmonad</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="va">+linux-surface</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="va">+gparted</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>\ No newline at end of file</span></code></pre></div>
+</div>
+<p>WMやDMは好みのものを使って大丈夫だと思います。 私はメイン環境と合わせてLightDM+XMonadにしてあります。</p>
+<h1 id="レポジトリの追加">レポジトリの追加</h1>
+<p>linux-surfaceを使いたいのでレポジトリを追加する</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/pacman.conf b/dotfiles/archiso/pacman.conf</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>index 5ee6c1e..2ba1626 100644</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/pacman.conf</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/pacman.conf</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -30,7 +30,7 @@ Architecture = auto</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a> # Misc options</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a> #UseSyslog</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">-#Color</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="va">+Color</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a> #NoProgressBar</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a> # We cannot check disk space from within a chroot environment</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a> #CheckSpace</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -99,3 +99,7 @@ Include = /etc/pacman.d/mirrorlist</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a> #[custom]</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a> #SigLevel = Optional TrustAll</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a> #Server = file:///home/custompkgs</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="va">+</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="va">+[linux-surface]</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="va">+SigLevel = Optional TrustAll</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="va">+Server = https://pkg.surfacelinux.com/arch/</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>\ No newline at end of file</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
+</div>
+<h1 id="メタデータの編集">メタデータの編集</h1>
+<p>ついでなのでメタデータもちょっと書き換えておきました。 後々識別しやすい…かな?</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/profiledef.sh b/dotfiles/archiso/profiledef.sh</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>index 5feb205..7ce4a85 100644</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/profiledef.sh</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/profiledef.sh</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -1,9 +1,9 @@</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a> #!/usr/bin/env bash</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a> # shellcheck disable=SC2034</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="st">-iso_name=&quot;archlinux&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="va">+iso_name=&quot;archlinux-x&quot;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a> iso_label=&quot;ARCH_$(date +%Y%m)&quot;</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="st">-iso_publisher=&quot;Arch Linux &lt;https://archlinux.org&gt;&quot;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="va">+iso_publisher=&quot;Cj.bc-sd &lt;cj.bc-sd@outlook.jp&gt;&quot;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a> iso_application=&quot;Arch Linux Live/Rescue CD&quot;</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a> iso_version=&quot;$(date +%Y.%m.%d)&quot;</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a> install_dir=&quot;arch&quot;</span></code></pre></div>
+</div>
+<h1 id="デフォルトでXが起動するように設定">デフォルトでXが起動するように設定</h1>
+<p>systemdのUnitにsymlinkを貼ります。 これは <code>systemctl enable</code> がするのと同じ挙動です。</p>
+<h2 id="古い手法について">古い手法について</h2>
+<p>Wikiには <code>customize_airootfs.sh</code> の編集をする方法も記載されていますが、 これはもうdeprecatedとなっています</p>
+<p>(参考: <a href="https://gitlab.archlinux.org/archlinux/archiso/-/blob/master/CHANGELOG.rst">バージョン51のCHANGELOG</a>)</p>
+<p>実行したら怒られたログ↓</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>[mkarchiso] WARNING: customize_airootfs.sh is deprecated! Support for it will be removed in a future archiso version.
+</code></pre>
+</div>
+<h1 id="mkarchisoする">mkarchisoする</h1>
+<p>あとはやるだけ。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb5" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> workdir out</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">mkarchiso</span> <span class="at">-v</span> <span class="at">-w</span> workdir <span class="at">-o</span> out .</span></code></pre></div>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th>オプション</th>
+<th>解説</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>-v</code></td>
+<td>verbose。ログの出力をします</td>
+</tr>
+<tr class="even">
+<td><code>-w workdir</code></td>
+<td>作業ディレクトリの設定をします</td>
+</tr>
+<tr class="odd">
+<td><code>-o out</code></td>
+<td>最終的に出来上がったisoファイルを格納するディレクトリの設定をします</td>
+</tr>
+</tbody>
+</table>
+<p>ちょっと時間(とストレージ)食うので待つ。 うちの環境では 5GBくらい要求されたので気をつけてとのこと。</p>
+<h1 id="できたisoを焼く">できたisoを焼く</h1>
+<p><a href="https://wiki.archlinux.jp/index.php/USB_インストールメディア#dd_を使う">USBインストールメディアを作成するwiki</a>に従って焼く。 今回はddを使う。各パラメーターについては各自確認してから焼いてほしい。 あぶないので。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb6" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dd bs=4M if=out/archlinux-x-2022.04.01-x86_64.iso of=/dev/sda status=progress <span class="kw">&amp;&amp;</span> <span class="fu">sync</span></span></code></pre></div>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></summary>
+</entry>
+
+</feed>

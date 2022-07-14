@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- EVMC4U v3.8をUniVRM 0.101.0とUnity 2021.3.1f1でとりあえず動かす</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2022-07-11-evmc4u-with-univrm-0-101-0-and-uniy-2021.html" /><meta property="og:title" content="EVMC4U v3.8をUniVRM 0.101.0とUnity 2021.3.1f1でとりあえず動かす" /><meta property="og:description" content="<h1 id=" 最初に">最初に</h1>
+<p>この記事は非公式かつ、EVMC4Uを触って1日目の個人が書いています。</p>
+<p><strong>記事の内容はテストされておらず、公式でサポートさ" />
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+
+	<meta name="viewport" content="width=device-width" />
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+	  
+	  <a href="../" class="mobile only item"><i class="angle left icon"></i></a>
+	  
+          <div class="computer only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+          <div class="mobile only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"></div>
+            <a href="../" class="computer only item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>EVMC4U v3.8をUniVRM 0.101.0とUnity 2021.3.1f1でとりあえず動かす</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on July 11, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on July 14, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged 'unity'." href="../tags/unity.html" class="ui tag label">unity</a><a title="All pages tagged 'evmc4u'." href="../tags/evmc4u.html" class="ui tag label">evmc4u</a><a title="All pages tagged 'univrm'." href="../tags/univrm.html" class="ui tag label">univrm</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="最初に">最初に</h1>
+<p>この記事は非公式かつ、EVMC4Uを触って1日目の個人が書いています。</p>
+<p><strong>記事の内容はテストされておらず、公式でサポートされているわけでもありません</strong></p>
+<p>本当に動かすようにした所までなのでまだ見掛けていない不具合がある可能性は 十分にありますので、もしも参考にされる際はお気をつけ下さい。責任は負えません。</p>
+<h1 id="この記事の目的">この記事の目的</h1>
+<ul>
+<li>とりあえずUnity 2021.3.1f1で動くようにする
+<ul>
+<li><del>(パソコンの容量的にUnityのバージョン増やしたくないので…)</del></li>
+</ul></li>
+<li>ついでなのでUniVRMもアプデしてみる</li>
+</ul>
+<h1 id="環境">環境</h1>
+<table>
+<tbody>
+<tr class="odd">
+<td>Unity</td>
+<td>2021.3.1f1</td>
+</tr>
+<tr class="even">
+<td>UniVRM</td>
+<td>0.101.0</td>
+</tr>
+<tr class="odd">
+<td>EVMC4U</td>
+<td>ExternalRecieverPack<sub>v38</sub>(但し少し修正します)</td>
+</tr>
+</tbody>
+</table>
+<h1 id="やっていき">やっていき</h1>
+<p>まずUnityを立ち上げ Unity 2021.3.1f1の3Dテンプレートでプロジェクトを作成し、 普通にUniVRMを導入します。</p>
+<h2 id="UniVRM 0.101.0の読み込み">UniVRM 0.101.0の読み込み</h2>
+<p>今回は UPMを用いて、 <code>manifest.json</code> を編集することで導入しました。 個人的にはパッケージは記載して管理する方がすき。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+javascript
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript SourceCode"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;dependencies&quot;</span><span class="op">:</span> {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;com.vrmc.vrmshaders&quot;</span><span class="op">:</span> <span class="st">&quot;https://github.com/vrm-c/UniVRM.git?path=/Assets/VRMShaders#v0.101.0&quot;</span><span class="op">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;com.vrmc.gltf&quot;</span><span class="op">:</span> <span class="st">&quot;https://github.com/vrm-c/UniVRM.git?path=/Assets/UniGLTF#v0.101.0&quot;</span><span class="op">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;com.vrmc.univrm&quot;</span><span class="op">:</span> <span class="st">&quot;https://github.com/vrm-c/UniVRM.git?path=/Assets/VRM#v0.101.0&quot;</span><span class="op">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;com.vrmc.vrm&quot;</span><span class="op">:</span> <span class="st">&quot;https://github.com/vrm-c/UniVRM.git?path=/Assets/VRM10#v0.101.0&quot;</span><span class="op">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<p>これに関しては <a href="https://github.com/vrm-c/UniVRM/releases/tag/v0.101.0">vrm-c/UniVRMのリリース</a>に書いてあるやつです。</p>
+<h2 id="修正箇所1: VRMの読み込み時 VRMData を介する">修正箇所1: VRMの読み込み時 <code>VRMData</code> を介する</h2>
+<p>UniVRM 0.82あたりでの変更点(らしい)です。</p>
+<p>ドキュメント: <a href="https://vrm-c.github.io/UniVRM/ja/api/0_82_runtime_import.html">https://vrm-c.github.io/UniVRM/ja/api/0_82_runtime_import.html</a></p>
+<ul>
+<li><code>VRMImporterContext</code> に渡す前に、 <code>GltfData</code> を <code>GltfData</code> に変換する必要が出来た</li>
+<li><code>VRMImporterContext</code> Disposeで破棄する必要が出来た</li>
+</ul>
+<p>ので、 <code>vrmImporter</code> を使ってる辺りを <code>using</code> で囲みます。 囲まないタイプの <code>using</code> もあるらしいけどUnityで使われてるC#のバージョン では対応してるんですかね…?調べるの面倒だったのでこちらで。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  GlbLowLevelParser glbLowLevelParser = new GlbLowLevelParser(null, VRMdata);</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  GltfData gltfData = glbLowLevelParser.Parse();</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="va">+ VRMData vrm = new VRMData(gltfData);</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="st">- VRMImporterContext vrmImporter = new VRMImporterContext(gltfData);</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="va">+ using (VRMImporterContext vrmImporter = new VRMImporterContext(vrm)( {</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  ...</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="va">+ }</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
+</div>
+<h2 id="修正箇所2: VRMImporterContext.LoadAsyncが IAwaitCaller を実装した型を引数に取るように">修正箇所2: VRMImporterContext.LoadAsyncが <code>IAwaitCaller</code> を実装した型を引数に取るように</h2>
+<p>ドキュメント: <a href="https://vrm-c.github.io/UniVRM/ja/api/0_87_runtime_import.html">https://vrm-c.github.io/UniVRM/ja/api/0_87_runtime_import.html</a></p>
+<ul>
+<li>同期的に読み込む場合は <code>ImmediateCaller</code> を与える</li>
+<li>非同期的に読み込む場合は <code>RuntimeOnlyAwaitCaller</code> を与える</li>
+</ul>
+<p>今回は単純に簡単そうだったので <code>ImmediateCaller</code> を与えましたが、 実際にはもうちょい考えた方が良いのかもしれません。 まぁすぐに <code>await</code> して待ってるし同じ…?(あまり非同期得意ではない)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="st">- RuntimeGltfInstance instance = await vrmImporter.LoadAsync();</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">+ RuntimeGltfInstance instance = await vrmImporter.LoadAsync(VRMShaders.ImmediateCaller);</span></span></code></pre></div>
+</div>
+<p>参考までに、UniVRMのサンプルでは <code>m_useAsync</code> プロパティで <code>IAWaitCaller</code> を変えている実装がありました。 (<a href="https://github.com/vrm-c/UniVRM/blob/2f6b5224b641ea8b7919610e0955a0a810a16c3c/Assets/VRM10_Samples/VRM10Viewer/VRM10ViewerUI.cs#L447">Assets/VRM10<sub>Samples</sub>/VRM10Viewer/VRM10ViewerUI.cs#L447</a>)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+csharp
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode csharp SourceCode"><code class="sourceCode cs"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>awaitCaller<span class="op">:</span> m_useAsync<span class="op">.</span><span class="fu">enabled</span> <span class="op">?</span> <span class="op">(</span>IAwaitCaller<span class="op">)</span><span class="kw">new</span> <span class="fu">RuntimeOnlyAwaitCaller</span><span class="op">()</span> <span class="op">:</span> <span class="op">(</span>IAwaitCaller<span class="op">)</span><span class="kw">new</span> <span class="fu">ImmediateCaller</span><span class="op">(),</span></span></code></pre></div>
+</div>
+<h2 id="(一旦) おわり!">(一旦) おわり!</h2>
+<p>おわり!これでとりあえず読み込めるようになります。 UniVRM 0.101.0 で読み込んだモデルを使い、WaidayoのiPhone版アプリと 接続して使っていますが全く問題ないです。今の所。</p>
+<p>多分だけどUnity 2021にした影響は特になさそうでした。 まぁ保証は出来無い。</p>
+<h2 id="今回対応していないが参考">今回対応していないが参考</h2>
+<p>とりあえず上記をやれば動くようにはなりましたが、 他にも本来修正すべき所があるぽいので追記。</p>
+<p>ちなみに、こうした更新情報については、 <a href="https://vrm-c.github.io/UniVRM/ja/api/index.html">https://vrm-c.github.io/UniVRM/ja/api/index.html</a> で提供されているようです。 正直<a href="https://vrm.dev/">vrm.dev</a>から分かりやすくリンクされていないのでGithubレポジトリ直接漁ってて見付けました… 見逃してる人もいそうなのでここに。</p>
+<p>(ちなみに<a href="https://vrm.dev/univrm/programming/index.html">https://vrm.dev/univrm/programming/index.html</a>に一応あります。う~ん深いね!)</p>
+<ol>
+<li><p><code>GltfData</code> も Disposeする必要がある</p>
+<p>ドキュメント: <a href="https://vrm-c.github.io/UniVRM/ja/api/0_95_dispose.html">https://vrm-c.github.io/UniVRM/ja/api/0_95_dispose.html</a></p>
+<p>らしいです。 今回私は急いでいたので、これなくても動いたのでそのままにしましたが お行儀は多分全くよくない。ので修正した方がいいんだと思います。</p></li>
+<li><p>高レベルAPI</p>
+<p>ドキュメント: <a href="https://vrm-c.github.io/UniVRM/ja/api/0_95_highlevel.html">https://vrm-c.github.io/UniVRM/ja/api/0_95_highlevel.html</a></p>
+<p>よくある用途に対して高レベルAPIが提供されたらしいです。 多分ここら辺みながら直した方がよかったのかもしれない…?</p></li>
+</ol>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

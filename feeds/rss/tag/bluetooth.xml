@@ -7,8 +7,429 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/bluetooth.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Tue, 21 Jun 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Mon, 11 Jul 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-07-11-evmc4u-with-univrm-0-101-0-and-uniy-2021</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-07-11-evmc4u-with-univrm-0-101-0-and-uniy-2021.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>EVMC4U v3.8をUniVRM 0.101.0とUnity 2021.3.1f1でとりあえず動かす</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on July 11, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on July 14, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;unity&#39;." href="/tags/unity.html" class="ui tag label">unity</a><a title="All pages tagged &#39;evmc4u&#39;." href="/tags/evmc4u.html" class="ui tag label">evmc4u</a><a title="All pages tagged &#39;univrm&#39;." href="/tags/univrm.html" class="ui tag label">univrm</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="最初に">最初に</h1>
+<p>この記事は非公式かつ、EVMC4Uを触って1日目の個人が書いています。</p>
+<p><strong>記事の内容はテストされておらず、公式でサポートされているわけでもありません</strong></p>
+<p>本当に動かすようにした所までなのでまだ見掛けていない不具合がある可能性は 十分にありますので、もしも参考にされる際はお気をつけ下さい。責任は負えません。</p>
+<h1 id="この記事の目的">この記事の目的</h1>
+<ul>
+<li>とりあえずUnity 2021.3.1f1で動くようにする
+<ul>
+<li><del>(パソコンの容量的にUnityのバージョン増やしたくないので…)</del></li>
+</ul></li>
+<li>ついでなのでUniVRMもアプデしてみる</li>
+</ul>
+<h1 id="環境">環境</h1>
+<table>
+<tbody>
+<tr class="odd">
+<td>Unity</td>
+<td>2021.3.1f1</td>
+</tr>
+<tr class="even">
+<td>UniVRM</td>
+<td>0.101.0</td>
+</tr>
+<tr class="odd">
+<td>EVMC4U</td>
+<td>ExternalRecieverPack<sub>v38</sub>(但し少し修正します)</td>
+</tr>
+</tbody>
+</table>
+<h1 id="やっていき">やっていき</h1>
+<p>まずUnityを立ち上げ Unity 2021.3.1f1の3Dテンプレートでプロジェクトを作成し、 普通にUniVRMを導入します。</p>
+<h2 id="UniVRM 0.101.0の読み込み">UniVRM 0.101.0の読み込み</h2>
+<p>今回は UPMを用いて、 <code>manifest.json</code> を編集することで導入しました。 個人的にはパッケージは記載して管理する方がすき。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+javascript
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode javascript SourceCode"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;dependencies&quot;</span><span class="op">:</span> {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;com.vrmc.vrmshaders&quot;</span><span class="op">:</span> <span class="st">&quot;https://github.com/vrm-c/UniVRM.git?path=/Assets/VRMShaders#v0.101.0&quot;</span><span class="op">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;com.vrmc.gltf&quot;</span><span class="op">:</span> <span class="st">&quot;https://github.com/vrm-c/UniVRM.git?path=/Assets/UniGLTF#v0.101.0&quot;</span><span class="op">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;com.vrmc.univrm&quot;</span><span class="op">:</span> <span class="st">&quot;https://github.com/vrm-c/UniVRM.git?path=/Assets/VRM#v0.101.0&quot;</span><span class="op">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;com.vrmc.vrm&quot;</span><span class="op">:</span> <span class="st">&quot;https://github.com/vrm-c/UniVRM.git?path=/Assets/VRM10#v0.101.0&quot;</span><span class="op">,</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">///</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<p>これに関しては <a href="https://github.com/vrm-c/UniVRM/releases/tag/v0.101.0">vrm-c/UniVRMのリリース</a>に書いてあるやつです。</p>
+<h2 id="修正箇所1: VRMの読み込み時 VRMData を介する">修正箇所1: VRMの読み込み時 <code>VRMData</code> を介する</h2>
+<p>UniVRM 0.82あたりでの変更点(らしい)です。</p>
+<p>ドキュメント: <a href="https://vrm-c.github.io/UniVRM/ja/api/0_82_runtime_import.html">https://vrm-c.github.io/UniVRM/ja/api/0_82_runtime_import.html</a></p>
+<ul>
+<li><code>VRMImporterContext</code> に渡す前に、 <code>GltfData</code> を <code>GltfData</code> に変換する必要が出来た</li>
+<li><code>VRMImporterContext</code> Disposeで破棄する必要が出来た</li>
+</ul>
+<p>ので、 <code>vrmImporter</code> を使ってる辺りを <code>using</code> で囲みます。 囲まないタイプの <code>using</code> もあるらしいけどUnityで使われてるC#のバージョン では対応してるんですかね…?調べるの面倒だったのでこちらで。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  GlbLowLevelParser glbLowLevelParser = new GlbLowLevelParser(null, VRMdata);</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  GltfData gltfData = glbLowLevelParser.Parse();</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="va">+ VRMData vrm = new VRMData(gltfData);</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="st">- VRMImporterContext vrmImporter = new VRMImporterContext(gltfData);</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="va">+ using (VRMImporterContext vrmImporter = new VRMImporterContext(vrm)( {</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  ...</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="va">+ }</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
+</div>
+<h2 id="修正箇所2: VRMImporterContext.LoadAsyncが IAwaitCaller を実装した型を引数に取るように">修正箇所2: VRMImporterContext.LoadAsyncが <code>IAwaitCaller</code> を実装した型を引数に取るように</h2>
+<p>ドキュメント: <a href="https://vrm-c.github.io/UniVRM/ja/api/0_87_runtime_import.html">https://vrm-c.github.io/UniVRM/ja/api/0_87_runtime_import.html</a></p>
+<ul>
+<li>同期的に読み込む場合は <code>ImmediateCaller</code> を与える</li>
+<li>非同期的に読み込む場合は <code>RuntimeOnlyAwaitCaller</code> を与える</li>
+</ul>
+<p>今回は単純に簡単そうだったので <code>ImmediateCaller</code> を与えましたが、 実際にはもうちょい考えた方が良いのかもしれません。 まぁすぐに <code>await</code> して待ってるし同じ…?(あまり非同期得意ではない)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="st">- RuntimeGltfInstance instance = await vrmImporter.LoadAsync();</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">+ RuntimeGltfInstance instance = await vrmImporter.LoadAsync(VRMShaders.ImmediateCaller);</span></span></code></pre></div>
+</div>
+<p>参考までに、UniVRMのサンプルでは <code>m_useAsync</code> プロパティで <code>IAWaitCaller</code> を変えている実装がありました。 (<a href="https://github.com/vrm-c/UniVRM/blob/2f6b5224b641ea8b7919610e0955a0a810a16c3c/Assets/VRM10_Samples/VRM10Viewer/VRM10ViewerUI.cs#L447">Assets/VRM10<sub>Samples</sub>/VRM10Viewer/VRM10ViewerUI.cs#L447</a>)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+csharp
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode csharp SourceCode"><code class="sourceCode cs"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>awaitCaller<span class="op">:</span> m_useAsync<span class="op">.</span><span class="fu">enabled</span> <span class="op">?</span> <span class="op">(</span>IAwaitCaller<span class="op">)</span><span class="kw">new</span> <span class="fu">RuntimeOnlyAwaitCaller</span><span class="op">()</span> <span class="op">:</span> <span class="op">(</span>IAwaitCaller<span class="op">)</span><span class="kw">new</span> <span class="fu">ImmediateCaller</span><span class="op">(),</span></span></code></pre></div>
+</div>
+<h2 id="(一旦) おわり!">(一旦) おわり!</h2>
+<p>おわり!これでとりあえず読み込めるようになります。 UniVRM 0.101.0 で読み込んだモデルを使い、WaidayoのiPhone版アプリと 接続して使っていますが全く問題ないです。今の所。</p>
+<p>多分だけどUnity 2021にした影響は特になさそうでした。 まぁ保証は出来無い。</p>
+<h2 id="今回対応していないが参考">今回対応していないが参考</h2>
+<p>とりあえず上記をやれば動くようにはなりましたが、 他にも本来修正すべき所があるぽいので追記。</p>
+<p>ちなみに、こうした更新情報については、 <a href="https://vrm-c.github.io/UniVRM/ja/api/index.html">https://vrm-c.github.io/UniVRM/ja/api/index.html</a> で提供されているようです。 正直<a href="https://vrm.dev/">vrm.dev</a>から分かりやすくリンクされていないのでGithubレポジトリ直接漁ってて見付けました… 見逃してる人もいそうなのでここに。</p>
+<p>(ちなみに<a href="https://vrm.dev/univrm/programming/index.html">https://vrm.dev/univrm/programming/index.html</a>に一応あります。う~ん深いね!)</p>
+<ol>
+<li><p><code>GltfData</code> も Disposeする必要がある</p>
+<p>ドキュメント: <a href="https://vrm-c.github.io/UniVRM/ja/api/0_95_dispose.html">https://vrm-c.github.io/UniVRM/ja/api/0_95_dispose.html</a></p>
+<p>らしいです。 今回私は急いでいたので、これなくても動いたのでそのままにしましたが お行儀は多分全くよくない。ので修正した方がいいんだと思います。</p></li>
+<li><p>高レベルAPI</p>
+<p>ドキュメント: <a href="https://vrm-c.github.io/UniVRM/ja/api/0_95_highlevel.html">https://vrm-c.github.io/UniVRM/ja/api/0_95_highlevel.html</a></p>
+<p>よくある用途に対して高レベルAPIが提供されたらしいです。 多分ここら辺みながら直した方がよかったのかもしれない…?</p></li>
+</ol>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Mon, 11 Jul 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-07-11-evmc4u-with-univrm-0-101-0-and-uniy-2021.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2022-06-30-pyworld-trying</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-06-30-pyworld-trying.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>WORLDのPythonラッパーpyworldを試す</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on June 30, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on July 14, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;pyworld&#39;." href="/tags/pyworld.html" class="ui tag label">pyworld</a><a title="All pages tagged &#39;WORLD&#39;." href="/tags/WORLD.html" class="ui tag label">WORLD</a>
+	
+      </div>
+
+    <div class="description">
+      <p>前々からLinuxで使えるボイチェンが欲しくて、何度かWORLDをおすすめされていたのだけれど C++があまり得意ではないので二の足を踏んでいた。 (最初は出来るだけオリジナルを使用したい民なので、pyworldの方はまだ試すつもりがなかった)</p>
+<p>でも、まぁそろそろやる気が出たのでPython版を使ってみる。</p>
+<p>ちなみに、Grallion2とかはLinux対応しているらしいので既存のもので良いならそっちの方が良いと 思う。</p>
+<h1 id="今回の目標">今回の目標</h1>
+<p>最終的には自分用のボイチェンを作りたいのでリアルタイム処理を したいのだが、とりあえずは音声ファイルを変換するのを出来るようにする。</p>
+<h1 id="やることの大雑把な流れ">やることの大雑把な流れ</h1>
+<p>大雑把な流れとしては、以下の通り。</p>
+<ol>
+<li>音声を読み込む</li>
+<li>WORLDがモノラルしか受け付けないようなので、チャンネルを分離する</li>
+<li>WORLDの関数を用いて、それぞれ要素を分解する</li>
+<li>ピッチ・フォルマントをそれぞれいじる</li>
+<li>合成する</li>
+<li>音声を書き出す</li>
+</ol>
+<h1 id="使用ライブラリ">使用ライブラリ</h1>
+<p>音声合成などに関してはpyworldを用いるとして、他の処理に用いるものを。</p>
+<table>
+<tbody>
+<tr class="odd">
+<td>音声変換</td>
+<td>pyworld</td>
+</tr>
+<tr class="even">
+<td>wavファイル読み込み</td>
+<td>soundfile</td>
+</tr>
+</tbody>
+</table>
+<p>尚wavファイルの読み込みには <code>scipy</code> を使うこともできるらしい。</p>
+<h1 id="環境構築">環境構築</h1>
+<p>グローバルに入れるの嫌だけど、ffi使う都合でC関連のものを グローバルに入れなきゃいけなくてめんどくせーー!!のでDockerで環境を閉じ込める。 ついでに可搬性も手に入るしね。</p>
+<p>ちなみにnixも試したが、手元の環境で上手く動かせなかったのでDocker。</p>
+<h2 id="ベースイメージ">ベースイメージ</h2>
+<p>ベースは軽ければ特にこだわりがないので、 <code>python:3.9-alpine</code> を使う。</p>
+<p>pythonのバージョンは、確か3.10だと上手く動かなかったので3.9にした記憶がある。 ただ、python以外の依存パッケージ系を色々入れてなかったので、その影響だったのかもしれない。 Dockerイメージ作り直すのが容量的にキツいのでそのまま3.9にしてある。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+dockerfile
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode dockerfile SourceCode"><code class="sourceCode dockerfile"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> python:3.9-alpine</span></code></pre></div>
+</div>
+<h2 id="pyworldの導入">pyworldの導入</h2>
+<p>pyworldはC++で書かれたWORLDのラッパーなので、g++を必要とすることに注意。 最初これに気付かなくて困った。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+dockerfile
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode dockerfile SourceCode"><code class="sourceCode dockerfile"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> apk add g++ </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> pip install pyworld</span></code></pre></div>
+</div>
+<h2 id="soundfileの導入">soundfileの導入</h2>
+<p>注意点として、 <strong>libsndfile/libffiは dev版を入れる</strong> こと! さもなくば、ヘッダファイルがなくて怒られる。</p>
+<p>あとbuild-baseもいる。(はず)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+dockerfile
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode dockerfile SourceCode"><code class="sourceCode dockerfile"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>run apk add libsndfile-dev libffi-dev build-base</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> pip install soundfile</span></code></pre></div>
+</div>
+<h1 id="コーディング">コーディング</h1>
+<h2 id="ボイチェンの基本的なしくみ">ボイチェンの基本的なしくみ</h2>
+<p>凄い大雑把だが、ボイチェンは声の <em>ピッチ</em> と <em>フォルマント</em> をそれぞれ変換してやることで実装されている。</p>
+<p>ピッチが音の高さ、フォルマントが声色と呼ばれているやつだ。</p>
+<p>正直ここらへんは専門ではないので、詳しくは調べてほしい。気が向いたらそれ関連の リンクについても纏めようと思う。</p>
+<p>で、これらのうち、特にフォルマントは簡単に取得できるものではなく、 「推定」を行う必要がある。</p>
+<p>WORLDはここらへんをよしなにしてくれる。</p>
+<h2 id="wavファイルの読み込み">wavファイルの読み込み</h2>
+<p>まずは読み込む。 読み込むといったってpyworldで使える形式でないと意味がないわけなので先にそこを説明する。</p>
+<p>pyworldの関数は</p>
+<ul>
+<li>一次元</li>
+<li>メモリーレイアウトが 'C'</li>
+<li>Double型の中身を持つ</li>
+</ul>
+<p><code>numpy.ndarray</code> を要求する。 これはそれぞれの関数の中の定義でも書かれているが、 <a href="https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder/blob/130c3abdeaeefc1dae3fdf7d2f2dba61938e58b5/pyworld/pyworld.pyx#L625-L658">wav2worldの実装</a> でも書かれている。</p>
+<p>なので、 <code>numpy.ndarray</code> として読み込めるものなら何でも良いだろう。</p>
+<p>とりあえず見た範囲では、以下の二つのライブラリが使用例があった。</p>
+<ul>
+<li><a href="https://docs.scipy.org/doc/scipy/tutorial/io.html#wav-sound-files-scipy-io-wavfile">scipy.io.wavfile</a>(使用されている記事: <a href="https://qiita.com/ohtaman/items/84426cee09c2ba4abc22">音声合成システム WORLD に触れてみる - Qiita</a>)</li>
+<li><a href="https://pysoundfile.readthedocs.io/en/latest/">pysoundfile</a> (使用されている記事: <a href="https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder/blob/f3c811fb3ce2693b45bd6411c511f60d2d308ed1/demo/demo.py">pyworldのデモコード</a>)</li>
+</ul>
+<p>今回は、デモコードで使われていたという理由から <code>pysoundfile</code> を採用した。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>soundfile.read(<span class="st">&quot;filename&quot;</span>)</span></code></pre></div>
+</div>
+<h2 id="チャンネルの分離">チャンネルの分離</h2>
+<p>pyworldの関数達は次元数が1の <code>ndarray</code> しか受け付けないわけだが、 1チャンネル辺り1次元で作られるため 元の音源がステレオ以上だと次元が多すぎてエラーを吐かれてしまう。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> pw.wav2world(data, samplerate)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>Traceback (most recent call last):</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  File <span class="st">&quot;&lt;stdin&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  File <span class="st">&quot;pyworld/pyworld.pyx&quot;</span>, line <span class="dv">654</span>, <span class="kw">in</span> pyworld.pyworld.wav2world</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  File <span class="st">&quot;pyworld/pyworld.pyx&quot;</span>, line <span class="dv">93</span>, <span class="kw">in</span> pyworld.pyworld.dio</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="pp">ValueError</span>: Buffer has wrong number of dimensions (expected <span class="dv">1</span>, got <span class="dv">2</span>)</span></code></pre></div>
+</div>
+<p>なので、音源が2チャンネル以上ある場合は切り分けてあげる必要がある。 <code>soundfile</code> で読み込んでいる場合、これをするには</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data[:,<span class="dv">0</span>]</span></code></pre></div>
+</div>
+<p>のように、二つ目の添字をいじってあげることで取れる。 ここら辺の説明は面倒なので、というか結構色々あるので調べてみてほしい。 <code>numpy.ndarray</code> の構造までは知らなくていいと思うが、添字アクセスの仕方を知っていれば まぁわかると思う。</p>
+<p><strong>そしてここで注意</strong></p>
+<p>こうして制作したデータは、メモリ上で連続して存在しないため、 pyworldの関数に渡すことができない。 そのため、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data[:,<span class="dv">0</span>].copy(order<span class="op">=</span><span class="st">&#39;C&#39;</span>)</span></code></pre></div>
+</div>
+<p>として並べ替えてあげる必要がある。 尚、これについては少し後にもう少しだけ詳しく書いてある。</p>
+<h2 id="ピッチ・フォルマント推定">ピッチ・フォルマント推定</h2>
+<p>これはもうworldにおまかせ。詳しいことはわからん。 色々関数があるが、一括で欲しいパラメータを全て取得出来る <code>wav2world</code> を使用する。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>f0, sp, ap <span class="op">=</span> pw.wav2world(data[:,<span class="dv">0</span>].copy(order<span class="op">=</span><span class="st">&#39;C&#39;</span>), samplerate)</span></code></pre></div>
+</div>
+<h2 id="ピッチ・フォルマントをいじる">ピッチ・フォルマントをいじる</h2>
+<p>ここは一番手間がかかる所。先程取り出したパラメーターをよしなに変える。 正直ここは調整の話になってくると思うので、今はよくわからん。<a href="https://qiita.com/ohtaman/items/84426cee09c2ba4abc22">参考にしていた記事</a>にあった所を ちょっと弄っている所。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> <span class="bu">range</span>(converted_sp.shape[<span class="dv">1</span>]):</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    converted_sp[:, f] <span class="op">=</span> sp[:, <span class="bu">int</span>(f<span class="op">/</span><span class="fl">1.2</span>)]</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>converted_f0 <span class="op">=</span> f0<span class="op">*</span><span class="dv">2</span></span></code></pre></div>
+</div>
+<h2 id="合成する">合成する</h2>
+<p>これももうお任せ、 <code>pyworld.synthesize</code> に <code>pyworld.wav2world</code> した時の戻り値(とそれを いじったもの)を用いることで合成できる。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pw.synthesize(converted_f0, converted_sp, ap, samplerate)</span></code></pre></div>
+</div>
+<h2 id="書き出し">書き出し</h2>
+<p>書き出しする際は、それぞれ分けていたチャンネルを一つに結合させる必要がある。</p>
+<p><code>numpy.ndarray</code> を結合する関数は色々あるが、とりあえず <a href="https://numpy.org/doc/stable/reference/generated/numpy.stack.html#numpy.stack">numpy.stack</a> を使うと 簡潔に出来たのでこれでいく。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>np.stack((ch1, ch2), axis<span class="op">=</span><span class="dv">1</span>)</span></code></pre></div>
+</div>
+<p>こうすると、元の形と同じ形式になる。</p>
+<p>これを後は書き込む。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>soundfile.write(OUT_FILE, result, samplerate)</span></code></pre></div>
+</div>
+<h1 id="実装の注意点">実装の注意点</h1>
+<h2 id="pyworld.wav2worldはモノラル音源を期待する(らしい)">pyworld.wav2worldはモノラル音源を期待する(らしい)</h2>
+<p>実際のドキュメントとか見たわけではないが、2chのwav音源を引数に与えた所 以下のようなエラーを出された。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>Traceback (most recent call last):
+File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+File &quot;pyworld/pyworld.pyx&quot;, line 654, in pyworld.pyworld.wav2world
+File &quot;pyworld/pyworld.pyx&quot;, line 93, in pyworld.pyworld.dio
+ValueError: Buffer has wrong number of dimensions (expected 1, got 2)
+</code></pre>
+</div>
+<p>(ちなみにこれはReplでの表記なので実際に出たものとはほんの少し違うと思うが、まぁ大体同じ。)</p>
+<p>なので、 <u>チャンネルをそれぞれ分けて変換する必要がある</u> らしい。</p>
+<ol>
+<li><p>チャンネルを分離する</p>
+<p><code>soundfile.read()</code> で読み込んだデータは、nx2行列 (多分。2xnだったりする？？numpyの行列表現の順序に自信がない) として表現されている。サンプル数がn、チャンネル数が2のデータだ。</p>
+<p>これを愚直に取り出すと、以下のようになる</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>FILENAME <span class="op">=</span> <span class="st">&quot;入力に使いたいファイル名&quot;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> soundfile.read(FILENAME)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>ch1 <span class="op">=</span> data[:,<span class="dv">0</span>]</span></code></pre></div>
+</div>
+<p>しかし、これをそのまま利用しようとすると「C-contiguous」でないため怒られる。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre class="SourceCode"><code>&gt;&gt;&gt; pw.wav2world(data[:,0], samplerate)
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+  File &quot;pyworld/pyworld.pyx&quot;, line 654, in pyworld.pyworld.wav2world
+  File &quot;pyworld/pyworld.pyx&quot;, line 93, in pyworld.pyworld.dio
+ValueError: ndarray is not C-contiguous
+</code></pre>
+</div>
+<p>この原因は、 <code>ch1</code> が内部構造として非連続的である(？)ことが原因らしい。</p>
+<p>ここら辺の情報は色々探したが日本語・英語共に見付けられなかったので、原文をそのまま 書くと「The data is in a single, C-style contiguous segment.」じゃなかったのが問題だったらしい。 (情報元は<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.flags.html">numpy.ndarray.flagsのドキュメント</a>の <code>C_CONTIGUOUS</code> の部分)</p>
+<p>これは推測だが、恐らく、 <code>ch1</code> に含まれる値は実際の値をコピーしているのではなく、 元の <code>data</code> の中に飛び飛びで存在する値を参照しており、連続的ではないのだと思われる。 これだとC言語側に渡した時に連続したアドレスから値が取得できないため、問題になってしまうのだろうなと 感じた。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+
+</div>
+<pre id="~C_CONTIGUOUS~ かどうかの確認方法" class="SourceCode"><code>&gt;&gt;&gt; data.flags
+  C_CONTIGUOUS : True
+  F_CONTIGUOUS : False
+  OWNDATA : True
+  WRITEABLE : True
+  ALIGNED : True
+  WRITEBACKIFCOPY : False
+
+&gt;&gt;&gt; data[:,0].flags
+  C_CONTIGUOUS : False
+  F_CONTIGUOUS : False
+  OWNDATA : False
+  WRITEABLE : True
+  ALIGNED : True
+  WRITEBACKIFCOPY : False
+
+</code></pre>
+</div>
+<p>そこで、 <code>C_CONTIGUOUS</code> に変換していく必要がでてきた。</p>
+<p>色々な方法があるのかもしれないが、今回は <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.copy.html">numpy.ndarray.copy()</a> を利用する。</p>
+<p><code>copy()</code> はその <code>ndarray</code> のコピーを返す関数で、 パラーメーター引数 <code>order</code> を設定することでメモリーレイアウト (直訳、適切な訳があれば知りたい)を変更できる。デフォルトは <code>C</code> らしいが、明記しておいた。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+python
+</div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>data[:,<span class="dv">0</span>].copy(order<span class="op">=</span><span class="st">&#39;C&#39;</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># これで、きちんと pyworld.wav2world に渡せるレイアウトになる。</span></span></code></pre></div>
+</div></li>
+</ol>
+<h1 id="参考">参考</h1>
+<ul>
+<li><a href="https://qiita.com/ohtaman/items/84426cee09c2ba4abc22">音声合成システム WORLD に触れてみる - Qiita</a></li>
+<li><a href="https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder">JeremyCCHsu/Python-Wrapper-for-World-Vocoder</a></li>
+<li><a href="https://stackoverflow.com/questions/26778079/valueerror-ndarray-is-not-c-contiguous-in-cython">python - ValueError: ndarray is not C-contiguous in cython - Stack Overflow</a></li>
+</ul>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Thu, 30 Jun 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-06-30-pyworld-trying.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-06-21-skk-azik-tring</title>
     <link>https://cj-bc.github.io/blog/posts/2022-06-21-skk-azik-tring.html</link>
     <description><![CDATA[<div id="body-content">
@@ -679,185 +1100,6 @@ bash
 ]]></description>
     <pubDate>Thu, 31 Mar 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-03-31-archiso-create-x-enabled-archiso.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-03-18</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-03-18.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>2022/03/18</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on March 18, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on March 19, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;環境構築&#39;." href="/tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89.html" class="ui tag label">環境構築</a>
-	
-      </div>
-
-    <div class="description">
-      <h1 id="やったこと">やったこと</h1>
-<h2 id="stack-staticのインストール(前日の続き)">stack-staticのインストール(前日の続き)</h2>
-<p><a href="https://aur.archlinux.org/packages/stack-static">stac-staticのAURページ</a>より<a href="https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=stack-static">PKGBUILD</a>を見てみたところ、 新しいGPGキー (フィンガープリント: <code>C5705533DA4F78D8664B5DC0575159689BEFB442</code>) の読み込みをしていた。 このキーが何者だかわからなくって怖いので、 色々調べてみる。</p>
-<p><a href="https://docs.haskellstack.org/en/stable/SIGNING_KEY/">haskellstack.orgのドキュメント</a>によると、 全てのリリースはそれをビルドした人の鍵によって 署名されており、それらの鍵は KeyID <code>0x575159689BEFB442</code> によって署名されているとのこと(きちんと各自確認してほしい)</p>
-<p>で、実際のGithub release(例えば<a href="https://github.com/commercialhaskell/stack/releases/tag/v2.7.5">v2.7.5</a>)を見てみると、 最近はEmanuel Borsboomさんによって署名されていることがわかり、 彼のKey IDは <code>65101FF31C5C154D</code> である。</p>
-<p>issueを調べてみると、 Emanuelさんのキーは以下の二つの場所で 署名されているとのこと(<a href="https://github.com/commercialhaskell/stack/issues/5122#issuecomment-591424040">ソース</a>)</p>
-<ul>
-<li>pool.sks-keyservers.net</li>
-<li>pgp.mit.edu</li>
-</ul>
-<p>このうち、sks-keyservers.netはどうやら完全に落ちているようで 通信不可能だったため、 pgp.mit.eduから読み込んでみることにした。</p>
-<h2 id="キーサーバーからGPGキーの取り込みが上手くいかない">キーサーバーからGPGキーの取り込みが上手くいかない</h2>
-<p>うまくいったわ。<a href="https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html">別途記事にした</a> これを元にstack-staticを明日入れる</p>
-<h1 id="知ったこと">知ったこと</h1>
-<h2 id="SKS keyserversは落ちている">SKS keyserversは落ちている</h2>
-<p>sks-keyservers.netもpool.sks-keyservers.netもどちらも pingもwhoisも通らない。</p>
-<p><a href="https://twitter.com/Cj_bc_sd/status/1504612612281344000?s=20&amp;t=PEdWvA4ytQxDokG7Ci8wGQ">https://twitter.com/Cj_bc_sd/status/1504612612281344000?s=20&amp;t=PEdWvA4ytQxDokG7Ci8wGQ</a></p>
-<p><a href="https://github.com/SKS-keyserver/sks-keyserver/issues/88">SKS-Keyserverのissue</a>によると、<a href="https://lists.gnupg.org/pipermail/gnupg-users/2021-June/065261.html">メーリングリスト</a>で法的理由により閉鎖したとの報告が あったとのこと。</p>
-<ul>
-<li><a href="https://github.com/mono/mono/issues/21121">mono/mono #21121</a></li>
-<li><a href="https://code.firstlook.media/the-death-of-sks-pgp-keyservers-and-how-first-look-media-is-handling-it">The Death of SKS PGP Keyservers, and How First Look Media is Handling It</a></li>
-</ul>
-<h2 id="thee, thou">thee, thou</h2>
-<p>you; object form of thou; used when speaking to one person</p>
-<h1 id="やること">やること</h1>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Fri, 18 Mar 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-03-18.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-03-18-gpg-stuggled-to-search-key-from-keyserver</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>gpg --search-keys がうまくいかなかったので調べる</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on March 18, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on March 18, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;gpg&#39;." href="/tags/gpg.html" class="ui tag label">gpg</a>
-	
-      </div>
-
-    <div class="description">
-      <h1 id="状況">状況</h1>
-<p>stackの署名キーを引いてくるために、 <code>--search-keywords</code> を してみたところエラーが起きた。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gpg</span> <span class="at">--search-keys</span> 65101FF31C5C154D</span></code></pre></div>
-</div>
-<p>gpg: error searching keyserver: Server indicated a failure gpg: keyserver search failed: Server indicated a failure</p>
-<h1 id="原因: DNSリゾルバが適切に設定されていなかった">原因: DNSリゾルバが適切に設定されていなかった</h1>
-<p>らしい。 <strong>systemd-resolvedを使用している場合</strong> 注意が必要そう。</p>
-<p>具体的には、 <strong>GnuPGはドメイン名解決のために <code>/etc/resolv.conf</code> を参照するが systemd-resolvedは <code>/etc/resolv.conf</code> を参照も設定もしない</strong></p>
-<p>なので、ドメイン名解決のための設定を何もしていない状況になっていた。</p>
-<p>実は <a href="https://wiki.archlinux.jp/index.php/Systemd-resolved#DNS">archwikiのsystemd-resolvedページに記載がある</a>のでそれに従い、</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 私の場合は元から /etc/resolve.conf が</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 空だったので削除しているが、必要に応じて</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># なんかして</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> /etc/resolv.conf</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf</span></code></pre></div>
-</div>
-<p>としてリンクを作成した。</p>
-<p>この後 <code>gpgconf --reload</code> で設定を読み直したら動くようになった!</p>
-<h1 id="過去の調べ物">過去の調べ物</h1>
-<p>とりあえず色々調べたけど、 結論今回は関係なかったものたち。 まぁ状況によっては役立つかもなので残しておく。</p>
-<h2 id="dirmngr 2.1.17時代のバグの話">dirmngr 2.1.17時代のバグの話</h2>
-<p>これは無関係だった。dirmngrの昔のバージョンにて、 全ての操作が出来無いバグがあったらしい。わぁぉ。</p>
-<ul>
-<li><a href="https://bbs.archlinux.org/viewtopic.php?id=220996">https://bbs.archlinux.org/viewtopic.php?id=220996</a></li>
-<li><a href="https://dev.gnupg.org/T2889">https://dev.gnupg.org/T2889</a></li>
-</ul>
-<h2 id="コードリーディングで原因探し">コードリーディングで原因探し</h2>
-<p>とりあえずもうちょい確信に迫りたかったので、 えいやって <a href="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=summary">gnupgのgitレポジトリ</a>cloneしてきて読んだ。</p>
-<p><code>gpg --debug-all --search-keys &lt;key_id&gt;</code> が出力した エラーメッセージ "Try again later" をとりあえずgrepする。</p>
-<p>けどみつからん。</p>
-<p>実は実際は<a href="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=src/err-codes.h.in;hb=32dad4e4135f0bdc436ed684da753d4b0cdb0ea1#l334">libgpg-error</a>の中にエラーメッセージが定義されており、 そちらを探すと以下のコードが見付かる。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="src/err-codes.h.in:334"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="src/err-codes.h.in:334-1"><a href="#src/err-codes.h.in:334-1" aria-hidden="true" tabindex="-1"></a><span class="dv">312</span>     GPG_ERR_TRY_LATER               Try again later</span></code></pre></div>
-</div>
-<p>これだけだとわからないが、 <em>まぁ多分これ定数だろうという推測</em> のもと今度は <code>GPG_ERR_TRY_LATER</code> を(今度こそ) gnupgのコードベースで grepしてみる。 と、一箇所だけ見付かる:</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb3" data-org-language="sh" wrap="src c"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-regex</span> <span class="st">&#39;.*\.c\|.*\.h&#39;</span> <span class="at">-exec</span> grep <span class="st">&#39;GPG_ERR_TRY_LATER&#39;</span> {} <span class="dt">\+</span></span></code></pre></div>
-</div>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">./</span>dirmngr<span class="op">/</span>dns<span class="op">-</span>stuff<span class="op">.</span>c<span class="op">:</span>    <span class="cf">case</span> TRY_AGAIN<span class="op">:</span>      ec <span class="op">=</span> GPG_ERR_TRY_LATER<span class="op">;</span> <span class="cf">break</span><span class="op">;</span></span></code></pre></div>
-</div>
-<p>これは <code>get_h_errno_as_gpg_error</code> 関数であり、 説明によると <code>H_ERRNO</code> をgpgで使用されるエラーコードに直してくれるらしい。</p>
-<p>…まぁとりあえず使用例を追う。と、 <a href="https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gnupg.git;a=blob;f=dirmngr/dns-stuff.c;h=0edbc0442e05086c5785a2efb75292e526291319;hb=HEAD">dirmngr/dns-stuff.c</a>の中に2箇所あるがどちらも <code>res_query</code> を呼んだ結果によって使用されている。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="getsrv_standard()"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="getsrv_standard()-1"><a href="#getsrv_standard()-1" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span>
-<span id="getsrv_standard()-2"><a href="#getsrv_standard()-2" aria-hidden="true" tabindex="-1"></a>     r <span class="op">=</span> res_query <span class="op">(</span>name<span class="op">,</span> C_IN<span class="op">,</span> T_SRV<span class="op">,</span> answer<span class="op">,</span> <span class="kw">sizeof</span> res<span class="op">.</span>ans<span class="op">);</span></span>
-<span id="getsrv_standard()-3"><a href="#getsrv_standard()-3" aria-hidden="true" tabindex="-1"></a>     my_protect <span class="op">();</span></span>
-<span id="getsrv_standard()-4"><a href="#getsrv_standard()-4" aria-hidden="true" tabindex="-1"></a>     <span class="cf">if</span> <span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
-<span id="getsrv_standard()-5"><a href="#getsrv_standard()-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> get_h_errno_as_gpg_error <span class="op">();</span></span>
-<span id="getsrv_standard()-6"><a href="#getsrv_standard()-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="getsrv_standard()-7"><a href="#getsrv_standard()-7" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span></code></pre></div>
-</div>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="get_dns_cname_standard()"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="get_dns_cname_standard()-1"><a href="#get_dns_cname_standard()-1" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span>
-<span id="get_dns_cname_standard()-2"><a href="#get_dns_cname_standard()-2" aria-hidden="true" tabindex="-1"></a>     r <span class="op">=</span> res_query <span class="op">(</span>name<span class="op">,</span> C_IN<span class="op">,</span> T_CERT<span class="op">,</span> answer<span class="op">,</span> <span class="kw">sizeof</span> res<span class="op">.</span>ans<span class="op">);</span></span>
-<span id="get_dns_cname_standard()-3"><a href="#get_dns_cname_standard()-3" aria-hidden="true" tabindex="-1"></a>     my_protect <span class="op">();</span></span>
-<span id="get_dns_cname_standard()-4"><a href="#get_dns_cname_standard()-4" aria-hidden="true" tabindex="-1"></a>     <span class="cf">if</span> <span class="op">(</span>r <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
-<span id="get_dns_cname_standard()-5"><a href="#get_dns_cname_standard()-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> get_h_errno_as_gpg_error <span class="op">();</span></span>
-<span id="get_dns_cname_standard()-6"><a href="#get_dns_cname_standard()-6" aria-hidden="true" tabindex="-1"></a>     <span class="op">...</span></span></code></pre></div>
-</div>
-<p>で、じゃぁこいつが何か…?と思ってgrepしてみると 定義がない。実はこいつはresolverで定義されており、manページを 引くことができる<a href="https://man.archlinux.org/man/res_query.3">res<sub>query</sub>(3)</a></p>
-<p>Cだとこういうのたまに見掛けるので面白いね。</p>
-<p>で、芋蔓式にわかるのだけれど <code>h_errno</code> も <a href="https://man.archlinux.org/man/gethostbyname.3">gethostbyname(3)</a>に定義されている。</p>
-<p>なので、あとはそこを追えばよさそう!!!</p>
-<p>…なのだけど、この段階になって先に述べた解決方法が 判明してしまったのでここまでで打ち切り。</p>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Fri, 18 Mar 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-03-18-gpg-stuggled-to-search-key-from-keyserver.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
