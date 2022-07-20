@@ -1,5 +1,5 @@
 * stack 2.7.5でのProfilingの仕方メモ
-  :PROPERTIES:
+:PROPERTIES:
   :DATE: [2022-07-17 Sun 09:55]
   :TAGS: :haskell:stack:profiling:
   :BLOG_POST_KIND: Knowledge
@@ -10,11 +10,11 @@
 CLOCK: [2022-07-17 Sun 09:57]--[2022-07-17 Sun 10:40] =>  0:43
 :END:
   
-  Stackを用いたHaskellプロジェクトのプロファイリングについて、
-  色々な情報を試したけれどうまく行かなかったのでメモ。
+Stackを用いたHaskellプロジェクトのプロファイリングについて、
+色々な情報を試したけれどうまく行かなかったのでメモ。
 
-  上手くいった例と、ダメだった例とを掲載します。
-  
+上手くいった例と、ダメだった例とを掲載します。
+
 ** プロファイリングの前提知識的なもの
 時間とメモリ使用量(time and space)に関するプロファイリングのための機能は、
 GHC自体が提供してくれています([[https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/profiling.html][公式ドキュメント]])
