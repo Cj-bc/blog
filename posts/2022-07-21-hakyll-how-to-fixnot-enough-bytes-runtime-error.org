@@ -1,0 +1,30 @@
+* Enough bytesランタイム例外の原因と対処の一例
+  :PROPERTIES:
+  :DATE: [2022-07-21 Thu 04:54]
+  :TAGS: :hakyll:haskell:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+:LOGBOOK:
+CLOCK: [2022-07-21 Thu 04:56]--[2022-07-21 Thu 05:00] =>  0:04
+:END:
+  
+[[https://github.com/Cj-bc/blog][私のHakyll製のこのブログ]]のコードをいじっていたとき、コンパイルは問題なかったが
+実行時に以下のような例外を吐いた。
+
+#+begin_src sh
+  blog: Data.Binary.Get.runGet at position 269: not enough bytes
+  CallStack (from HasCallStack):
+    error, called at libraries/binary/src/Data/Binary/Get.hs:351:5 in binary-0.8.8.0:Data.Binary.Get
+#+end_src
+
+これは、どこかで ~Snapshot~ に入れた値が ~Binary~ のインスタンスを持たない型であった
+可能性がある。
+
+一番気をつけるべき(と個人的に思う)のは、 *そのうちの一つが ~Text~ 型であること* だ。
+~Text~ は実は ~Binary~ のインスタンスを持たない (持ってそうなのに)。 [[https://hackage.haskell.org/package/text-2.0/docs/Data-Text.html#t:Text][hackage]]を確認すれば
+明白だろう。
+なので、 *Snapshotに入れる際は必ず ~unpack~ してあげる必要がある* 。
+
+
