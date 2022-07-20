@@ -7,8 +7,83 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/shell.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Mon, 11 Jul 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Sun, 17 Jul 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-07-17-haskell-profiling-with-stack-2-7-5</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-07-17-haskell-profiling-with-stack-2-7-5.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>stack 2.7.5でのProfilingの仕方メモ</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on July 17, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on July 20, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;stack&#39;." href="/tags/stack.html" class="ui tag label">stack</a><a title="All pages tagged &#39;profiling&#39;." href="/tags/profiling.html" class="ui tag label">profiling</a>
+	
+      </div>
+
+    <div class="description">
+      <p>Stackを用いたHaskellプロジェクトのプロファイリングについて、 色々な情報を試したけれどうまく行かなかったのでメモ。</p>
+<p>上手くいった例と、ダメだった例とを掲載します。</p>
+<h1 id="プロファイリングの前提知識的なもの">プロファイリングの前提知識的なもの</h1>
+<p>時間とメモリ使用量(time and space)に関するプロファイリングのための機能は、 GHC自体が提供してくれています(<a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/profiling.html">公式ドキュメント</a>)</p>
+<p>このGHCが提供する機能は、コンパイル時と実行時にRSTオプションを切り替えることで 様々なプロファイルを取ることが出来ます。 コンパイルする際にプロファイリングを取れるようにコンパイルし、 実行時のオプションによって具体的な動作を決める感じですね。</p>
+<p>詳しくは公式のドキュメントを参照してください。 (私もあまり詳しくないので)</p>
+<p>ですが、 <strong>これはstackから直接使うことはできません(少なくとも、最善ではない)</strong> 。 stackのbuildコマンドには <code>--ghc-options</code> というオプションがあるため これに渡したくなるものですが、そうではなく他のフラグを使う必要があります。</p>
+<h1 id="上手くいった方法">上手くいった方法</h1>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">stack</span> build <span class="at">--profile</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">stack</span> exec <span class="at">--profile</span> <span class="at">--</span> <span class="op">&lt;</span>EXE_NAME<span class="op">&gt;</span> +RTS <span class="at">-p</span></span></code></pre></div>
+</div>
+<p>ドキュメント: <a href="https://github.com/commercialhaskell/stack/blob/1be685aa6fa1e68caa1fd4b657d389ac782f8e1c/doc/GUIDE.md#debugging">commercialhaskell/stack – doc/GUIDE.md#debugging</a></p>
+<p>どちらにも <code>--profile</code> が必要そうです。</p>
+<p>追記:</p>
+<p>片方外したら動かなかったのですが、検証環境を綺麗に出来ていなかった 疑惑が出たため、もしかしたら片方でも動くかもしれません。</p>
+<h1 id="ダメだった方法">ダメだった方法</h1>
+<h2 id="-ghc-options &#39;-prof&#39;"><code>-ghc-options '-prof'</code></h2>
+<p><code>-prof</code> というのは、GHCにおいて<span class="spurious-link" target="*プロファイリングの前提知識的なもの"><em>プロファイリングの前提知識的なもの</em></span>で書いた 「GHCのプロファイリング機能」を使うためのフラグです。</p>
+<p>素のGHCでプロファイリングをする際は、ビルド時に <code>-prof</code> オプションが 必要だ、ということで愚直につけてみると怒られます。 (提示されたリンク先の内容も古いです)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> stack build <span class="at">--ghc-options</span> <span class="st">&#39;-prof&#39;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Error:</span> When building with stack, you should not use the <span class="at">-prof</span> GHC option</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Instead,</span> please use <span class="at">--library-profiling</span> and <span class="at">--executable-profiling</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">See:</span> https://github.com/commercialhaskell/stack/issues/1015</span></code></pre></div>
+</div>
+<h2 id="--profile なし"><code>--profile</code> なし</h2>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">stack</span> clean</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">stack</span> exec <span class="at">--</span> <span class="op">&lt;</span>EXE_NAME<span class="op">&gt;</span> +RTS <span class="at">-p</span></span></code></pre></div>
+</div>
+<p>stackから見るように言われる<a href="https://github.com/commercialhaskell/stack/issues/1015">commercialhaskell/stack#1015</a>では この方法で動いたとの記述があるが、動きませんでした。</p>
+<p>これはどうやらstack 1系からstack 2系になった際に変わったようで、 <a href="https://github.com/commercialhaskell/stack/commit/7bde3936768d365e0a1fdb70c945769ce388ab15">ドキュメントの更新コミット</a>に説明とリンクがあります。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Sun, 17 Jul 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-07-17-haskell-profiling-with-stack-2-7-5.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-07-11-evmc4u-with-univrm-0-101-0-and-uniy-2021</title>
     <link>https://cj-bc.github.io/blog/posts/2022-07-11-evmc4u-with-univrm-0-101-0-and-uniy-2021.html</link>
     <description><![CDATA[<div id="body-content">
@@ -934,172 +1009,6 @@ elisp
 ]]></description>
     <pubDate>Fri, 01 Apr 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-04-01-org-roam-when-you-can-use-completion-by-default.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-03-31-archiso-create-x-enabled-archiso</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-03-31-archiso-create-x-enabled-archiso.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>X環境を含んだarchsioイメージを作成する</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on March 31, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on April  1, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;archlinux&#39;." href="/tags/archlinux.html" class="ui tag label">archlinux</a><a title="All pages tagged &#39;archiso&#39;." href="/tags/archiso.html" class="ui tag label">archiso</a>
-	
-      </div>
-
-    <div class="description">
-      <p>基本は<a href="https://wiki.archlinux.jp/index.php/Archiso#USB">wiki</a>に従って作業します。 正直思った以上にやること少なかったので、この記事はwikiのまとめ的メモになります。</p>
-<p>やったこと全部書いているつもりではあるけど、今回は後から纏めなおしたので何か欠けている 可能性があります。</p>
-<p>実際に使っているものはこちら: <a href="https://github.com/Cj-bc/dotfiles/tree/master/dotfiles/archiso">Cj-bc/dotfiles/dotfiles/archiso</a></p>
-<h1 id="パッケージの追加">パッケージの追加</h1>
-<p><code>packages.x86_64</code> にパッケージを追加。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-diff
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/packages.x86_64 b/dotfiles/archiso/packages.x86_64</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>index aaf2416..2bbce38 100644</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/packages.x86_64</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/packages.x86_64</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -119,3 +119,10 @@ wvdial</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a> xfsprogs</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a> xl2tpd</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a> zsh</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="va">+xorg-server</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="va">+lightdm</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="va">+lightdm-gtk-greeter</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="va">+xterm</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="va">+xmonad</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="va">+linux-surface</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="va">+gparted</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>\ No newline at end of file</span></code></pre></div>
-</div>
-<p>WMやDMは好みのものを使って大丈夫だと思います。 私はメイン環境と合わせてLightDM+XMonadにしてあります。</p>
-<h1 id="レポジトリの追加">レポジトリの追加</h1>
-<p>linux-surfaceを使いたいのでレポジトリを追加する</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-diff
-</div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/pacman.conf b/dotfiles/archiso/pacman.conf</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>index 5ee6c1e..2ba1626 100644</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/pacman.conf</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/pacman.conf</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -30,7 +30,7 @@ Architecture = auto</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a> # Misc options</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a> #UseSyslog</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">-#Color</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="va">+Color</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a> #NoProgressBar</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a> # We cannot check disk space from within a chroot environment</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a> #CheckSpace</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -99,3 +99,7 @@ Include = /etc/pacman.d/mirrorlist</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a> #[custom]</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a> #SigLevel = Optional TrustAll</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a> #Server = file:///home/custompkgs</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="va">+</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="va">+[linux-surface]</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="va">+SigLevel = Optional TrustAll</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="va">+Server = https://pkg.surfacelinux.com/arch/</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>\ No newline at end of file</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
-</div>
-<h1 id="メタデータの編集">メタデータの編集</h1>
-<p>ついでなのでメタデータもちょっと書き換えておきました。 後々識別しやすい…かな?</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-diff
-</div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">diff --git a/dotfiles/archiso/profiledef.sh b/dotfiles/archiso/profiledef.sh</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>index 5feb205..7ce4a85 100644</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">--- a/dotfiles/archiso/profiledef.sh</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">+++ b/dotfiles/archiso/profiledef.sh</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dt">@@ -1,9 +1,9 @@</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a> #!/usr/bin/env bash</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a> # shellcheck disable=SC2034</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="st">-iso_name=&quot;archlinux&quot;</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="va">+iso_name=&quot;archlinux-x&quot;</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a> iso_label=&quot;ARCH_$(date +%Y%m)&quot;</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="st">-iso_publisher=&quot;Arch Linux &lt;https://archlinux.org&gt;&quot;</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="va">+iso_publisher=&quot;Cj.bc-sd &lt;cj.bc-sd@outlook.jp&gt;&quot;</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a> iso_application=&quot;Arch Linux Live/Rescue CD&quot;</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a> iso_version=&quot;$(date +%Y.%m.%d)&quot;</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a> install_dir=&quot;arch&quot;</span></code></pre></div>
-</div>
-<h1 id="デフォルトでXが起動するように設定">デフォルトでXが起動するように設定</h1>
-<p>systemdのUnitにsymlinkを貼ります。 これは <code>systemctl enable</code> がするのと同じ挙動です。</p>
-<h2 id="古い手法について">古い手法について</h2>
-<p>Wikiには <code>customize_airootfs.sh</code> の編集をする方法も記載されていますが、 これはもうdeprecatedとなっています</p>
-<p>(参考: <a href="https://gitlab.archlinux.org/archlinux/archiso/-/blob/master/CHANGELOG.rst">バージョン51のCHANGELOG</a>)</p>
-<p>実行したら怒られたログ↓</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-
-</div>
-<pre class="SourceCode"><code>[mkarchiso] WARNING: customize_airootfs.sh is deprecated! Support for it will be removed in a future archiso version.
-</code></pre>
-</div>
-<h1 id="mkarchisoする">mkarchisoする</h1>
-<p>あとはやるだけ。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb5" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> workdir out</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">mkarchiso</span> <span class="at">-v</span> <span class="at">-w</span> workdir <span class="at">-o</span> out .</span></code></pre></div>
-</div>
-<table>
-<thead>
-<tr class="header">
-<th>オプション</th>
-<th>解説</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>-v</code></td>
-<td>verbose。ログの出力をします</td>
-</tr>
-<tr class="even">
-<td><code>-w workdir</code></td>
-<td>作業ディレクトリの設定をします</td>
-</tr>
-<tr class="odd">
-<td><code>-o out</code></td>
-<td>最終的に出来上がったisoファイルを格納するディレクトリの設定をします</td>
-</tr>
-</tbody>
-</table>
-<p>ちょっと時間(とストレージ)食うので待つ。 うちの環境では 5GBくらい要求されたので気をつけてとのこと。</p>
-<h1 id="できたisoを焼く">できたisoを焼く</h1>
-<p><a href="https://wiki.archlinux.jp/index.php/USB_インストールメディア#dd_を使う">USBインストールメディアを作成するwiki</a>に従って焼く。 今回はddを使う。各パラメーターについては各自確認してから焼いてほしい。 あぶないので。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb6" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dd bs=4M if=out/archlinux-x-2022.04.01-x86_64.iso of=/dev/sda status=progress <span class="kw">&amp;&amp;</span> <span class="fu">sync</span></span></code></pre></div>
-</div>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Thu, 31 Mar 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-03-31-archiso-create-x-enabled-archiso.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
