@@ -3,7 +3,7 @@
   :DATE: [2022-07-17 Sun 09:55]
   :TAGS: :haskell:stack:profiling:
   :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
 :LOGBOOK:
