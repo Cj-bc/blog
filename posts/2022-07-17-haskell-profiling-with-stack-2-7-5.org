@@ -1,0 +1,81 @@
+* stack 2.7.5でのProfilingの仕方メモ
+  :PROPERTIES:
+  :DATE: [2022-07-17 Sun 09:55]
+  :TAGS: :haskell:stack:profiling:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+:LOGBOOK:
+CLOCK: [2022-07-17 Sun 09:57]--[2022-07-17 Sun 10:40] =>  0:43
+:END:
+  
+  Stackを用いたHaskellプロジェクトのプロファイリングについて、
+  色々な情報を試したけれどうまく行かなかったのでメモ。
+
+  上手くいった例と、ダメだった例とを掲載します。
+  
+** プロファイリングの前提知識的なもの
+時間とメモリ使用量(time and space)に関するプロファイリングのための機能は、
+GHC自体が提供してくれています([[https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/profiling.html][公式ドキュメント]])
+
+
+このGHCが提供する機能は、コンパイル時と実行時にRSTオプションを切り替えることで
+様々なプロファイルを取ることが出来ます。
+コンパイルする際にプロファイリングを取れるようにコンパイルし、
+実行時のオプションによって具体的な動作を決める感じですね。
+
+詳しくは公式のドキュメントを参照してください。
+(私もあまり詳しくないので)
+
+
+ですが、 *これはstackから直接使うことはできません(少なくとも、最善ではない)* 。
+stackのbuildコマンドには ~--ghc-options~ というオプションがあるため
+これに渡したくなるものですが、そうではなく他のフラグを使う必要があります。
+
+** 上手くいった方法
+
+#+begin_src sh
+  stack build --profile
+  stack exec --profile -- <EXE_NAME> +RTS -p
+#+end_src
+
+ドキュメント: [[https://github.com/commercialhaskell/stack/blob/1be685aa6fa1e68caa1fd4b657d389ac782f8e1c/doc/GUIDE.md#debugging][commercialhaskell/stack -- doc/GUIDE.md#debugging]]
+
+どちらにも ~--profile~ が必要そうです。
+
+
+追記:
+
+片方外したら動かなかったのですが、検証環境を綺麗に出来ていなかった
+疑惑が出たため、もしかしたら片方でも動くかもしれません。
+
+** ダメだった方法
+*** ~-ghc-options '-prof'~
+~-prof~ というのは、GHCにおいて[[*プロファイリングの前提知識的なもの][プロファイリングの前提知識的なもの]]で書いた
+「GHCのプロファイリング機能」を使うためのフラグです。
+
+素のGHCでプロファイリングをする際は、ビルド時に ~-prof~ オプションが
+必要だ、ということで愚直につけてみると怒られます。
+(提示されたリンク先の内容も古いです)
+
+#+begin_src sh
+  $ stack build --ghc-options '-prof'
+  Error: When building with stack, you should not use the -prof GHC option
+  Instead, please use --library-profiling and --executable-profiling
+  See: https://github.com/commercialhaskell/stack/issues/1015
+#+end_src
+
+*** ~--profile~ なし
+
+#+begin_src sh
+  stack clean
+  stack exec -- <EXE_NAME> +RTS -p
+#+end_src
+
+stackから見るように言われる[[https://github.com/commercialhaskell/stack/issues/1015][commercialhaskell/stack#1015]]では
+この方法で動いたとの記述があるが、動きませんでした。
+
+これはどうやらstack 1系からstack 2系になった際に変わったようで、
+[[https://github.com/commercialhaskell/stack/commit/7bde3936768d365e0a1fdb70c945769ce388ab15][ドキュメントの更新コミット]]に説明とリンクがあります。
+
