@@ -7,8 +7,52 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/VRM_IMPORTER_for_Blender.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Sun, 17 Jul 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Thu, 21 Jul 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-07-21-hakyll-how-to-fixnot-enough-bytes-runtime-error</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-07-21-hakyll-how-to-fixnot-enough-bytes-runtime-error.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>Enough bytesランタイム例外の原因と対処の一例</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on July 21, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on July 21, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;hakyll&#39;." href="/tags/hakyll.html" class="ui tag label">hakyll</a><a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a>
+	
+      </div>
+
+    <div class="description">
+      <p><a href="https://github.com/Cj-bc/blog">私のHakyll製のこのブログ</a>のコードをいじっていたとき、コンパイルは問題なかったが 実行時に以下のような例外を吐いた。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">blog:</span> Data.Binary.Get.runGet at position 269: not enough bytes</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">CallStack</span> <span class="er">(</span><span class="ex">from</span> HasCallStack<span class="kw">)</span><span class="bu">:</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">error,</span> called at libraries/binary/src/Data/Binary/Get.hs:351:5 in binary-0.8.8.0:Data.Binary.Get</span></code></pre></div>
+</div>
+<p>これは、どこかで <code>Snapshot</code> に入れた値が <code>Binary</code> のインスタンスを持たない型であった 可能性がある。</p>
+<p>一番気をつけるべき(と個人的に思う)のは、 <strong>そのうちの一つが <code>Text</code> 型であること</strong> だ。 <code>Text</code> は実は <code>Binary</code> のインスタンスを持たない (持ってそうなのに)。 <a href="https://hackage.haskell.org/package/text-2.0/docs/Data-Text.html#t:Text">hackage</a>を確認すれば 明白だろう。 なので、 <strong>Snapshotに入れる際は必ず <code>unpack</code> してあげる必要がある</strong> 。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Thu, 21 Jul 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-07-21-hakyll-how-to-fixnot-enough-bytes-runtime-error.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-07-17-haskell-profiling-with-stack-2-7-5</title>
     <link>https://cj-bc.github.io/blog/posts/2022-07-17-haskell-profiling-with-stack-2-7-5.html</link>
     <description><![CDATA[<div id="body-content">
@@ -20,7 +64,7 @@
 	<div class="item">Posted on July 17, 2022</div>
 	<div class="item">
 	  <i class="history icon"></i>
-	  Updated on July 20, 2022
+	  Updated on July 21, 2022
 	</div>
 
 	
@@ -942,73 +986,6 @@ elisp
 ]]></description>
     <pubDate>Sat, 16 Apr 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-04-16-emacs-set-different-fonts-for-different-language-letters.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-04-01-org-roam-when-you-can-use-completion-by-default</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-04-01-org-roam-when-you-can-use-completion-by-default.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>org roam標準で補完が効く条件</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on April  1, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on April  2, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;org-roam&#39;." href="/tags/org-roam.html" class="ui tag label">org-roam</a><a title="All pages tagged &#39;org&#39;." href="/tags/org.html" class="ui tag label">org</a>
-	
-      </div>
-
-    <div class="description">
-      <p><a href="info:org-roam#Completion"><a href="info:org-roam#Completion">info:org-roam#Completion</a></a>にあるように、 org-roamは標準で補完機能を持っています。</p>
-<p>が、自分の環境では上手く動かなかったので原因を探った際のメモ。</p>
-<h1 id="Tl;Dr:">Tl;Dr:</h1>
-<p>デフォルトでは、help:org-roam-db-autosync-mode を有効にした状態で、 ファイルからバッファーを読み込んだ際に有効化される。</p>
-<p><strong>help:org-roam-completion-everywhere ですらこの条件が必要</strong> なので注意。</p>
-<h1 id="詳しく">詳しく</h1>
-<h2 id="org-roamが提供する補完機能の概要">org-roamが提供する補完機能の概要</h2>
-<p>org-roamは、help:completion-at-point を用いた補完機能を提供しています。 又、company-modeも別途対応している模様です。</p>
-<h2 id="実際の仕組み">実際の仕組み</h2>
-<p>そもそものcompletion-at-pointの仕組みについては割愛しますが 簡単に必要なことだけを書くと、補完に使用する関数を <code>completion-at-point-functions</code> 変数から取得して補完を行います。</p>
-<p>なので、 <code>completion-at-point</code> を使用した補完の際は、その変数をいじっている所を探しにいけば良いということになります。 org-roamでもこの <code>completion-at-point-functions</code> に関数を追加しています。</p>
-<ul>
-<li><a href="~/.emacs.d/elpa/org-roam-20220319.1902/org-roam-node.el::defun org-roam--register-completion-functions-h (">org-roam–register-completion-functions-h</a>で help:completion-at-point-functions を設定している
-<ul>
-<li><code>org-roam--register-completion-functions-h</code> は help:org-roam-find-file-hook に追加されている</li>
-</ul></li>
-</ul>
-<ul>
-<li>help:org-roam-find-file-hook は help:org-roam-db-autosync–setup-file-h から実行される</li>
-<li>help:org-roam-db-autosync–setup-file-h は help:org-roam-db-autosync-mode を有効にした時に help:find-file-hook に 追加される
-<ul>
-<li>help:find-file-hook はファイルからバッファーが読み込まれた際に実行される</li>
-</ul>
-よって、 help:org-roam-db-autosync-mode を有効にしていない限りは同期されない。 まぁそれはそうか。</li>
-</ul>
-<h1 id="手動で設定する方法">手動で設定する方法</h1>
-<p>db-syncはしなくていいけど補完は使えるようになってほしい、という場合 help:org-roam–register-completion-functions-h を手動で実行すれば良いです。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>(org-roam--register-completion-functions-h)
-</code></pre>
-</div>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Fri, 01 Apr 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-04-01-org-roam-when-you-can-use-completion-by-default.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 

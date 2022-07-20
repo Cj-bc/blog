@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>CLI! CLI! CLI! -- jtdaugherty/tart ソースリーディングメモ</title>
+        <title>CLI! CLI! CLI! -- Enough bytesランタイム例外の原因と対処の一例</title>
 
         <!-- Fomantic-UI -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
@@ -21,7 +21,7 @@
         <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
 
 	  
-	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2020-08-24-jdaughertys-tart-code-reading.html" /><meta property="og:title" content="jtdaugherty/tart ソースリーディングメモ" /><meta property="og:description" content="AAエディター(?)であるTartの内部実装を読んだ時のメモ" />
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2022-07-21-hakyll-how-to-fixnot-enough-bytes-runtime-error.html" /><meta property="og:title" content="Enough bytesランタイム例外の原因と対処の一例" /><meta property="og:description" content="私のHakyll製のこのブログのコードをいじっていたとき、コンパイルは問題なかったが 実行時に以下のような例外を吐いた。" />
 	  
 	  
 	  <meta name="twitter:card" content="summary" />
@@ -96,42 +96,34 @@
 	      <div id="body-content">
   <div class="content of Memo">
     <div class="ui center aligned icon header">
-      <h1>jtdaugherty/tart ソースリーディングメモ</h1>
+      <h1>Enough bytesランタイム例外の原因と対処の一例</h1>
     </div>
       <div class="meta ui list">
-	<div class="item">Posted on August 24, 2020</div>
+	<div class="item">Posted on July 21, 2022</div>
 	<div class="item">
 	  <i class="history icon"></i>
-	  Updated on December 24, 2021
+	  Updated on July 21, 2022
 	</div>
 
 	
 
 	
-	<a title="All pages tagged 'tart'." href="../tags/tart.html" class="ui tag label">tart</a><a title="All pages tagged 'cli'." href="../tags/cli.html" class="ui tag label">cli</a><a title="All pages tagged 'haskell'." href="../tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged 'memo'." href="../tags/memo.html" class="ui tag label">memo</a>
+	<a title="All pages tagged 'hakyll'." href="../tags/hakyll.html" class="ui tag label">hakyll</a><a title="All pages tagged 'haskell'." href="../tags/haskell.html" class="ui tag label">haskell</a>
 	
       </div>
 
     <div class="description">
-      <p>AAエディター(?)である<a href="https://github.com/jtdaugherty/tart">Tart</a>の内部実装を読んだ時のメモ</p>
-<h1 id="eventの処理">Eventの処理</h1>
+      <p><a href="https://github.com/Cj-bc/blog">私のHakyll製のこのブログ</a>のコードをいじっていたとき、コンパイルは問題なかったが 実行時に以下のような例外を吐いた。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
-example
+bash
 </div>
-<pre class="example SourceCode"><code>main
- |- Events.handleEvent
-    |- マウスでの描画イベントを処理
-    |- マウスがドラッグ中でかつ前回と違うものの上にある時はここでイベントを終了する
-    |- 現在のモードに合わせて、イベントを処理する
-      |- Events.Main.handleEvent
-        |- Events.Main.handleCommonEvent
-        |   |- ツールバー系のトグルをする
-        |- Events.Main.handleAttrEvent
-        |   |- Attributes(fg,bg,style)がクリックされた場合、変更作業をする
-        |- Events.Main.handleEvent
-</code></pre>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">blog:</span> Data.Binary.Get.runGet at position 269: not enough bytes</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">CallStack</span> <span class="er">(</span><span class="ex">from</span> HasCallStack<span class="kw">)</span><span class="bu">:</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">error,</span> called at libraries/binary/src/Data/Binary/Get.hs:351:5 in binary-0.8.8.0:Data.Binary.Get</span></code></pre></div>
 </div>
+<p>これは、どこかで <code>Snapshot</code> に入れた値が <code>Binary</code> のインスタンスを持たない型であった 可能性がある。</p>
+<p>一番気をつけるべき(と個人的に思う)のは、 <strong>そのうちの一つが <code>Text</code> 型であること</strong> だ。 <code>Text</code> は実は <code>Binary</code> のインスタンスを持たない (持ってそうなのに)。 <a href="https://hackage.haskell.org/package/text-2.0/docs/Data-Text.html#t:Text">hackage</a>を確認すれば 明白だろう。 なので、 <strong>Snapshotに入れる際は必ず <code>unpack</code> してあげる必要がある</strong> 。</p>
     </div>
   </div>
   
