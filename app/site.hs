@@ -3,10 +3,11 @@
 import qualified Data.Map as M
 import           Data.Maybe (fromMaybe)
 import           Data.Monoid (mappend)
+import           Data.List (find)
 import           Hakyll
 import           Text.Pandoc.Options (ReaderOptions(..), Extension(..), extensionsFromList)
 import           Text.Pandoc.Shared (stringify, splitTextBy)
-import           Text.Pandoc.Definition (docTitle, Pandoc(Pandoc))
+import           Text.Pandoc.Definition (docTitle, Pandoc(Pandoc), Block(Para))
 import           Data.Default (def)
 import qualified Data.Text as T
 import           Control.Monad (forM_)
@@ -139,10 +140,15 @@ main = hakyll $ do
         route $ setExtension "html"
         compile $ do
             originalPostData <- getResourceBody >>= readPandocWith pandocMarkdownCfg
-            pandocData@(Item ident (Pandoc pandocMeta _)) <- traverse (return . myPandocTransform) originalPostData
+            pandocData@(Item ident (Pandoc pandocMeta contents)) <- traverse (return . myPandocTransform) originalPostData
             let titleMetadata = T.unpack . foldl (\p n -> p <> stringify n) "" . docTitle $ pandocMeta
                 metadataSet = fmap MD.collectMetaData originalPostData
             saveSnapshot "title" =<< makeItem titleMetadata
+            let isPara (Para _) = True
+                isPara _        = False
+            saveSnapshot "summary" =<< makeItem (maybe "No description is provided."
+                                                  (T.unpack . stringify) . find isPara
+                                                  $ contents)
 
             -- Store tags of this Post in snapshot
             saveSnapshot "tags" (fmap T.unpack . view MD.tags <$> metadataSet)

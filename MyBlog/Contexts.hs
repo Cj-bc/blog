@@ -44,7 +44,7 @@ postCtx =
     <> defaultContext'
   where
     ogpContext = snapshotField "title" -- We need this because 'defaultContext'' doesn't contain proper title
-                 <> field "og-description" (\item -> take 100 <$> loadSnapshotBody (itemIdentifier item) "raw content")
+                 <> field "og-description" (\item -> loadSnapshotBody (itemIdentifier item) "summary")
                  <> constField  "root"   "https://cj-bc.github.io/blog"
                  <> defaultContext'
 
