@@ -1,13 +1,13 @@
----
-title: HaskellのIxedインスタンスを自作型につける
-tags:
-  - Haskell
-  - Ixed
-kind: note
-date: May 19, 2021
----
+* HaskellのIxedインスタンスを自作型につける
+:PROPERTIES:
+:DATE: [2021-05-19 Wed]
+:TAGS: :haskell:Ixed:
+:BLOG_POST_KIND: Knowledge
+:BLOG_POST_PROGRESS: Published
+:BLOG_POST_STATUS: Normal
+:END:
 
-* ~Ixed~ とは
+** ~Ixed~ とは
 
 数学的解説はわかりませんごめんなさい。誰か補足があれば [[https://github.com/Cj-bc/blog][blogのレポジトリ]] にissueでも残してください()
 Haskellなのでとりあえず hoogleを参照します。
@@ -58,7 +58,7 @@ Haskellなのでとりあえず hoogleを参照します。
 ~Ixed~ において、 ~Index~ はインデックスの型、 ~IxValue~ はそこに格納されている
 値の型です。
 
-* 作る
+** 作る
 
 とりあえず作り始めます。
 
@@ -79,7 +79,7 @@ Haskellなのでとりあえず hoogleを参照します。
 ~Ixed~ の定義に特に制限がかかれていないので、 ~ix~ を定義することにします。
 そのために、 ~ix~ で使用される ~Index~ と ~IxValue~ を定義することにします。
 
-** Index
+*** Index
    ~Index~ はあまり説明がありませんが、型の情報からすると恐らく「添字に使う型」
    の定義であろうと推測が出来ます。
    (名前が ~Index~ であること、 ~ix~ において最初に取ること等。又、
@@ -91,14 +91,14 @@ Haskellなのでとりあえず hoogleを参照します。
      type instance Index Lane = Int
    #+end_src
 
-** IxValue
+*** IxValue
    同様ですが、今度はそれぞれの中身の型を定義します。
 
    #+begin_src haskell
      type instance IxValue Lane = Maybe Pin
    #+end_src
 
-** Ixed
+*** Ixed
    ~Ixed~ 本体に行きます!!
 
    ~ix~ の型は
@@ -119,7 +119,7 @@ Haskellなのでとりあえず hoogleを参照します。
 
    *>>>>> ~Traversal'~ ってナニよ!!!!! <<<<<*
 
-** Traversal' ってナニよ!
+*** Traversal' ってナニよ!
 
    はい。名前は知ってるけど使い方良く分からずに放置してた子ですね。
    定義によると
@@ -143,7 +143,7 @@ Haskellなのでとりあえず hoogleを参照します。
    
    - [[https://fumieval.hatenablog.com/entry/2015/07/14/223329][lensパッケージのオプティクス(弱い順) -- モナドとわたしとコモナド]]
      
-** ~ix~ を作る
+*** ~ix~ を作る
    さて、 ~Traversal'~ がわかったので ~ix~ を作れ(る気がし)ます。
    ~Traversal'~ を置き換えてみると:
 
