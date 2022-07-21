@@ -25,6 +25,7 @@ myPandocTransform = walk codeBlockFormat
                   . walk (walk imageFormat :: Block -> Block)
                   . walk addAnchorToHeader
                   . walk (walk orgLinkFormat :: Block -> Block)
+                  . walk tableFormat
                   . headerShift (-1)
 
 
@@ -43,6 +44,9 @@ codeBlockFormat (CodeBlock (ident, classes, kv) t) = Div ("", ["ui", "segment"],
             filetype = maybe "" id (listToMaybe  classes)
 codeBlockFormat other = other
 
+tableFormat :: Block -> Block
+tableFormat (Table attr c csp th tbs tf) = Table (addClass ["ui", "celled", "table"] attr) c csp th tbs tf
+tableFormat other = other
 
 imageFormat :: Inline -> Inline
 imageFormat (Image attr inlines target) = Image (addClass ["ui", "rounded", "image"] attr) inlines target
