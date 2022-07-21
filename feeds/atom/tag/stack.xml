@@ -167,7 +167,7 @@ bash
 <li>ついでなのでUniVRMもアプデしてみる</li>
 </ul>
 <h1 id="環境">環境</h1>
-<table>
+<table class="ui celled table">
 <tbody>
 <tr class="odd">
 <td>Unity</td>
@@ -310,7 +310,7 @@ csharp
 </ol>
 <h1 id="使用ライブラリ">使用ライブラリ</h1>
 <p>音声合成などに関してはpyworldを用いるとして、他の処理に用いるものを。</p>
-<table>
+<table class="ui celled table">
 <tbody>
 <tr class="odd">
 <td>音声変換</td>
