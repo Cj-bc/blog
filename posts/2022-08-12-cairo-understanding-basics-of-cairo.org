@@ -1,0 +1,334 @@
+* cairoの基礎的なことを学んでみた
+  :PROPERTIES:
+  :DATE: [2022-08-12 Fri 21:34]
+  :TAGS: :cairo:c:graphic:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+:LOGBOOK:
+CLOCK: [2022-08-14 Sun 22:00]--[2022-08-14 Mon 23:00] =>  1:00
+CLOCK: [2022-08-12 Fri 21:57]--[2022-08-12 Fri 22:28] =>  0:31
+CLOCK: [2022-08-12 Fri 21:41]--[2022-08-12 Fri 21:45] =>  0:04
+:END:
+  
+cairoには、[[https://www.cairographics.org/tutorial/][公式のページにチュートリアルがある]]のでこれを見て学習します。
+尚、この後にcairo-xlibのHaskell用のバインディングを書きたい影響で、Cを用いて学習することにします。
+
+とはいえ、チュートリアルがとても分かりやすいので英語が分かるのであればそちらを読むことを推奨します。
+
+** cairoでのレンダリングの仕組み
+cairoのレンダリングは、 ~Surface~ 、 ~Source~ 、 ~Mask~ の3つの概念を組み合わせることで行われます。
+それらは3つの板のようなもので、Surfaceの上に ~Mask~ を置き、その上から ~Source~ を載せるようにして描画されます。
+
+そして、それらを保持するための仕組みとして ~Context~ が存在します。
+
+*** Surface
+Surfaceは文字通り「表面」のことで、つまり描画する対象のことです。
+SVGやPDFファイル、はたまたX window systemのwindowなどを選ぶことができます。
+
+~cairo_surface_t~ というデータ型に格納されます。
+
+Surface は種類毎に作成する関数が異なります。
+一例として、以下のコードは各ピクセル32bit、120x120ピクセルの画像の ~Surface~
+を作成します。
+
+#+begin_src c
+  cairo_surface_t *surface;
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 120, 120);
+#+end_src
+
+使用後に [[https://www.cairographics.org/manual/cairo-cairo-surface-t.html#cairo-surface-destroy][~cairo_surface_destroy()~]] を呼び出す必要があります。
+
+*** Source
+Maskを通して塗られる色やパターン・画像のことです。
+単色やパターン、既に作られた Surface を Source として使用する事が可能です。
+
+*** Mask
+SourceをSurfaceに転写する範囲を制限するマスクです。
+Path や Source 等を使って作成されます。
+
+*** Path
+ベクターグラフィックを扱ったことがある人は、その Path と思ってよいと思います。
+内部でどう保存されているのかはわかりませんが、扱いとしてはベクターの線です。
+
+cairoでは Path は「点と点を繋いだもの」として表現されており、その繋ぎ方を直線・円・曲線等
+から選ぶことができます。
+
+レンダリング時にMaskに変換されます。
+
+*** Context
+レンダリングにおいて必要な情報を全て保持しています。
+使用する ~Surface~, ~Source~, ~Mask~ をそれぞれ一つずつと付随する補助変数、そして ~Path~ を
+使用している場合はそれも保持されています。
+
+~Context~ は ~cairo_t~ というデータ型に格納されます。
+また、 ~Surface~ と紐付けられている必要があるため、作成時には ~Surface~ を先に作成しておく必要があります。
+
+#+begin_src c
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 120, 120);
+  cr = cairo_create(surface);
+#+end_src
+
+使用後に [[https://www.cairographics.org/manual/cairo-cairo-surface-t.html#cairo-surface-destroy][~cairo_destroy()~]] を呼び出す必要があります。
+
+** レンダリングの手順
+実際のコードでどう書くかを書きます。
+今回は、ピクセル毎32bit 120x120ピクセルの画像を作成することにします。
+
+まずは ~Surface~ と ~Context~ を作成します。最後に破棄もすることを忘れずに。
+
+尚、本来ならシグナルハンドリング等するべきだと思うのですが、
+私はCをほぼ使っておらず疎いので書いてありません。
+
+#+begin_src c
+  int main(int argc, char *argv[]) {
+    cairo_surface_t *surface;
+    cairo_t *cr;
+
+    surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 120, 120);
+    cr = cairo_create(surface);
+
+    // cairoを使う処理はここに書く
+
+    // 最後に行う
+    cairo_destroy(cr);
+    cairo_surface_destroy(surface);
+  }
+#+end_src
+
+後は、その間に描画用の処理を書いていきます。
+描画用の処理は用途によって異なるためここでは省略します。代わりに、次の章に
+使える関数について書き、その後に例のコードをいくつか置いておこうと思います。
+
+** ライブラリのコード各種
+*** 色々なSurface
+[[https://www.cairographics.org/manual/cairo-surfaces.html][Surfaceの一覧ページ]]
+に全て載っています。
+正直全てを把握しているわけではないので、詳しくはそちらを参照してください。
+
+| Surface名            | どんなもの？                                                 |
+|----------------------+--------------------------------------------------------------|
+| Image Surfaces       | メモリ上に保存される画像データ。これを画像に書き出し出来る。 |
+| PDF Surfaces         |                                                              |
+| PNG Support          |                                                              |
+| PostScript Surfaces  |                                                              |
+| Recording Surfaces   |                                                              |
+| Win32 Surfaces       |                                                              |
+| SVG Surfaces         |                                                              |
+| Quartz Surfaces      |                                                              |
+| XCB Surfaces         |                                                              |
+| XLib Surfaces        |                                                              |
+| XLib-XRender Backend |                                                              |
+| Script Surfaces      |                                                              |
+
+*** 色々なSource
+Sourceはさほど多くないです。
+
+| linear gradient(~cairo_pattern_create_linear()~) | linear gradientを作成します。                      |
+
+**** 単色 (~cairo_pattern_create_rgb()~)
+単色のみの Source です。
+
+
+link: https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-rgb
+**** 単色+Alpha (~cairo_pattern_create_rgba()~)
+単色でもアルファチャンネルを指定する関数もあります。
+
+link: https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-rgba
+**** linear gradient
+link: https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-linear
+**** Radial gradient
+link: https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-radial
+**** Raster Source
+link: https://www.cairographics.org/manual/cairo-Raster-Sources.html
+
+*** 色々なMask
+Surface や Pattern、 Path を Mask として使うことが出来ます。
+ちょっと疲れてきたので端折り。
+
+*** 色々なPath生成関数
+最初にも述べた通り、 cairo では Path は「点と点の繋がり」で表現されています。
+そのため Path の開始点は常に内部で保存されており(多分 Context の中？)、
+その点から指定した点への Path が描画されるようになっています。
+
+
+cairoでの座標系は *左上が ~(0, 0)~ である* ことに注意してください。
+これを間違えると悲しいことになります。ハマりました(当事者)
+
+**** 開始点の移動
+Path の開始点を移動します。
+
+#+begin_src c
+  void cairo_move_to(cairo_t *cr, double x, double y);
+#+end_src
+
+これは Pathの開始点を移動する関数なので Path を作成しません。
+
+**** 直線
+現在の座標からグローバル座標の特定の場所まで線を引きます。
+
+#+begin_src c
+  void cairo_line_to(cairo_t *cr, double x, double y);
+#+end_src
+
+又、相対座標で指定するには [[https://www.cairographics.org/manual/cairo-Paths.html#cairo-rel-line-to][~cairo_rel_line_to~]] を使用します。
+
+#+begin_src c
+  void cairo_rel_line_to(cairo_t *cr, double dx, double dy);
+#+end_src
+
+**** 曲線
+cairoでは3次ベジエ曲線(cubic Bézier spline)を使用することが出来ます。
+
+#+begin_src c
+  void cairo_curve_to(cairo_t *cr
+                      , double x1, double y1
+                      , double x2, double y2
+                      , double x3, double y3);
+#+end_src
+
+~(x1, y1)~ ~(x2, y2)~ の二つの座標をコントロールポイントとし、
+カーブの終点が ~(x3, y3)~ となります。
+
+**** 弧
+弧は開始点に関わらずに描画されます。
+
+弧を描く関数は [[https://www.cairographics.org/manual/cairo-Paths.html#cairo-arc][~cairo_arc()~]] と [[https://www.cairographics.org/manual/cairo-Paths.html#cairo-arc-negative][~cairo_arc_negative()~]] の2種類があり、
+これは弧を描く方向のみ異なる関数です。
+
+~cairo_arc()~ は時計周り、 ~cairo_arc_nagative()~ は反時計周りに弧を描きます。
+
+(※ ~cairo_arc()~ のドキュメントの説明で"Y+方向に向かって回る"とありますが、
+*cairoでのY+方向は一般的には下向き* であることを忘れないでください。私は嵌りました。)
+
+角度はラジアンで表記されており、x+軸方向(つまり一般的には右方向)が0になっています。
+
+#+begin_src c
+  void cairo_arc(cairo_t *cr
+                 , double xc // 弧を描く円の中心点のx座標
+                 , double yc // 弧を描く円の中心点のy座標
+                 , double radius // 弧を描く円の半径
+                 , double angle1 // ラジアンで
+                 , double angle2
+                 );
+#+end_src
+
+**** 文字
+文字を表示する方法は二通りあります。
+[[https://www.cairographics.org/manual/cairo-text.html#cairo-show-text][~cairo_show_text()~]]を使って Path の作成と fill を同時に行うのと、
+[[https://www.cairographics.org/manual/cairo-Paths.html#cairo-text-path][~cairo_text_path()~]] で Path を作成した後に [[https://www.cairographics.org/manual/cairo-cairo-t.html#cairo-fill][~cairo_fill()~]] で fill をする方法です。
+
+チュートリアルによると、前者の ~cairo_show_text()~ の方は内部でキャッシュを持ったり効率的に動くため、
+そちらを推奨するとのことです。
+
+#+begin_src c
+  void cairo_show_text (cairo_t *cr, const char *utf8);
+#+end_src
+
+**** Path を閉じる
+現在の Path の始点と終点を繋いで Path を閉じます。
+閉じられた Path には LineCaps の設定が適用されなくなります(適用する場所がない)
+
+詳しくは [[https://www.cairographics.org/manual/cairo-Paths.html#cairo-close-path][~cairo_close_path()~]]
+
+#+begin_src c
+  void cairo_close_path (cairo_t *cr);
+#+end_src
+
+** コード例
+
+以下のコードは、私の環境下(archlinux)にてorg-modeのTangle機能を利用して
+実行し、実際に動作しているのを確認しています。
+
+尚、私の環境のそれぞれのバージョンは以下の通りです:
+
+| ライブラリ・ツール | バージョン                  |
+|--------------------+-----------------------------|
+| gcc                | ~gcc (GCC) 12.1.1 20220730~ |
+| cairo              | ~1.17.6-2~                  |
+
+*** 三角形(塗り潰しなし)
+120x120ピクセル、透過ありのPNG画像に三角形を描画します。
+
+#+NAME: png-triangle.c
+#+begin_src c :tangle "png-triangle.c"
+  #include <cairo.h>
+
+  int main(int argc, char *argv[]) {
+    cairo_surface_t *surface;
+    cairo_t *cr;
+
+    surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 120, 120);
+    cr = cairo_create(surface);
+    cairo_scale(cr, 120, 120);
+
+    cairo_set_line_width(cr, 0.1);
+    cairo_set_source_rgb(cr, 0, 0, 0);
+    cairo_move_to(cr, 0.5, 0.25);
+    cairo_line_to(cr, 0.25, 0.75);
+    cairo_line_to(cr, 0.75, 0.75);
+    cairo_line_to(cr, 0.5, 0.25);
+    cairo_stroke(cr);
+
+    cairo_surface_write_to_png(surface, "triangle.png");
+    cairo_destroy(cr);
+    cairo_surface_destroy(surface);
+  }
+#+end_src
+
+これをコンパイルして実行すると:
+
+#+begin_src sh
+  gcc -o png-triangle $(pkg-config --cflags --libs cairo) png-triangle.c && ./png-triangle
+#+end_src
+
+以下のようなPNGファイルが生成されます。
+
+[[images/triangle.png]]
+
+*** 三角形(塗り潰しあり)
+120x120ピクセル、透過ありのPNG画像に三角形を描画します。
+先程のものを、 Path の中を塗り潰すようにしたものです。
+~cairo_stroke()~ を ~cairo_fill()~ に入れ替えただけです。
+
+#+NAME: png-triangle-filled.c
+#+begin_src c :tangle "png-triangle-filled.c"
+  #include <cairo.h>
+
+  int main(int argc, char *argv[]) {
+    cairo_surface_t *surface;
+    cairo_t *cr;
+
+    surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 120, 120);
+    cr = cairo_create(surface);
+    cairo_scale(cr, 120, 120);
+
+    cairo_set_line_width(cr, 0.1);
+    cairo_set_source_rgb(cr, 0, 0, 0);
+    cairo_move_to(cr, 0.5, 0.25);
+    cairo_line_to(cr, 0.25, 0.75);
+    cairo_line_to(cr, 0.75, 0.75);
+    cairo_line_to(cr, 0.5, 0.25);
+    cairo_fill(cr);
+
+    cairo_surface_write_to_png(surface, "triangle-filled.png");
+    cairo_destroy(cr);
+    cairo_surface_destroy(surface);
+  }
+#+end_src
+
+これをコンパイルして実行すると:
+
+#+begin_src sh
+  gcc -o png-triangle-filled $(pkg-config --cflags --libs cairo) png-triangle-filled.c && ./png-triangle-filled
+#+end_src
+
+#+RESULTS:
+
+以下のようなPNGファイルが生成されます。
+
+[[images/triangle-filled.png]]
