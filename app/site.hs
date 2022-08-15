@@ -63,7 +63,7 @@ modifySourceUrl item = do
         prefix      = "/images"
         isSourceUrl = isPrefixOf prefix
         fixSourceDist fn = withUrls $ \x -> if isSourceUrl x then fixSourceDist' fn x else x
-        fixSourceDist' fn x = "/images/" ++ fn ++ (drop (length prefix) x)
+        fixSourceDist' fn x = "https://raw.githubusercontent.com/Cj-bc/blog/publish/images/" ++ fn ++ (drop (length prefix) x)
 
 
 type Renderer = FeedConfiguration -> Context String -> [Item String] -> Compiler (Item String)
