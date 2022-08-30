@@ -1,0 +1,221 @@
+* GStreamerでRTSPを経由して画面映像を共有する
+  :PROPERTIES:
+  :DATE: [2022-08-29 Mon 23:45]
+  :TAGS: :gstreamer:rtsp:streaming:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+:LOGBOOK:
+CLOCK: [2022-08-30 Tue 00:47]--[2022-08-30 Tue 00:51] =>  0:04
+:END:
+
+** Tl;Dr
+
+~x264enc~ は ~gst-plugins-ugly~ に含まれています。
+
+ #+begin_src sh
+   git clone https://github.com/GStreamer/gst-rtsp-server
+   cd gst-rtsp-server
+   meson dest
+   cd dest
+   ninja
+   ./examples/test-launch -p 39451 "( ximagesrc ! videoconvert ! x264enc ! rtph264pay name=pay0 )"
+ #+end_src
+
+ 途中で ~ninja~ した時にエラーを吐かれましたが、何故かその後上手くビルド出来ていたのでとりあえずそのままに
+ しています。
+ 
+
+ #+begin_quote
+ $?=1 QwQi:dest$ ninja
+[19/22] Generating gst/rtsp-server/GstRtspServer-1.0.gir with a custom command (wrapped by meson to set env)
+FAILED: gst/rtsp-server/GstRtspServer-1.0.gir
+/usr/bin/meson --internal exe --unpickle /home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/meson-private/meson_exe_g-ir-scanner_3ab56c3a7bd05fcd52077a9babfa7bfdcb5a
+c3e5.dat
+while executing ['/usr/bin/g-ir-scanner', '--no-libtool', '--namespace=GstRtspServer', '--nsversion=1.0', '--warn-all', '--output', 'gst/rtsp-server/GstRtspServer-1.0.gir', '--add-init
+-section=extern void gst_init(gint*,gchar**);g_setenv("GST_REGISTRY_1.0", "/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gir_empty_registry.reg", TRUE);g_setenv
+("GST_PLUGIN_PATH_1_0", "", TRUE);g_setenv("GST_PLUGIN_SYSTEM_PATH_1_0", "", TRUE);gst_init(NULL,NULL);', '--quiet', '--c-include=gst/rtsp-server/rtsp-server.h', '-I/home/me/Docum
+ents/ghq/github.com/GStreamer/gst-rtsp-server/gst/rtsp-server', '-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gst/rtsp-server', '-I/home/me/Documents/gh
+q/github.com/GStreamer/gst-rtsp-server/gst/rtsp-server', '-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gst/rtsp-server', '-I/home/me/Documents/ghq/githu
+b.com/GStreamer/gst-rtsp-server/.', '-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/.', '--filelist=/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-s
+erver/dest/gst/rtsp-server/libgstrtspserver-1.0.so.0.1902.0.p/GstRtspServer_1.0_gir_filelist', '--include=Gst-1.0', '--include=GstRtsp-1.0', '--include=GstNet-1.0', '--symbol-prefix=gs
+t', '--identifier-prefix=Gst', '--pkg-export=gstreamer-rtsp-server-1.0', '--cflags-begin', '-DG_DISABLE_DEPRECATED', '-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server
+/gst/rtsp-server', '-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gst/rtsp-server', '-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/.', '-
+I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/.', '-I/usr/include/gstreamer-1.0', '-I/usr/include/glib-2.0', '-I/usr/lib/glib-2.0/include', '-I/usr/include/sys
+prof-4', '-I/usr/include/orc-0.4', '-I/usr/include/libmount', '-I/usr/include/blkid', '-I/usr/include/gio-unix-2.0', '-I/usr/include/gobject-introspection-1.0', '--cflags-end', '--add-
+include-path=/usr/share/gir-1.0', '-L/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gst/rtsp-server', '--library', 'gstrtspserver-1.0', '-lgstrtsp-1.0', '-lgstre
+amer-1.0', '-lgstsdp-1.0', '-lgio-2.0', '-lgobject-2.0', '-lglib-2.0', '-lgstrtp-1.0', '-lgstbase-1.0', '-lgstnet-1.0', '-lgstapp-1.0', '-lgirepository-1.0']
+--- stdout ---
+
+--- stderr ---
+Traceback (most recent call last):
+  File "/usr/bin/g-ir-scanner", line 98, in <module>
+    from giscanner.scannermain import scanner_main
+  File "/usr/lib/gobject-introspection/giscanner/scannermain.py", line 35, in <module>
+    from giscanner.ast import Include, Namespace
+  File "/usr/lib/gobject-introspection/giscanner/ast.py", line 29, in <module>
+    from .sourcescanner import CTYPE_TYPEDEF, CSYMBOL_TYPE_TYPEDEF
+  File "/usr/lib/gobject-introspection/giscanner/sourcescanner.py", line 34, in <module>
+    from giscanner._giscanner import SourceScanner as CSourceScanner
+ModuleNotFoundError: No module named 'giscanner._giscanner'
+ #+end_quote
+  
+** 動機
+ パソコンの画面をNeosVRから見たい。
+ でもLAN内で見ることさえ出来れば良いので外部のサーバーを経由させたくなくて、
+ [[https://www.youtube.com/watch?v=Ta8N4ZFRjJg][kokolive]]や[[https://github.com/TopazChat/TopazChat][TopazChat]]とかは使えませんでした。
+
+ なのでじゃぁ自分で構築するしかないかぁということで行き着いたところです。
+ 
+** 作りたいものの要件
++ GNU/Linux上で動く
++ 自分のみが見えれば良い
++ LAN内のみで完結する
++ 映像配信を外部のサーバーを通さなくて良い
++ 低遅延
+
+
+他の人と共有することは目的としていない為、LANのみで
+完結する構成にしたいです。
+
+** RTSPについて少しだけ
+RTSPは、ビデオや音声等のマルチメディアをリアルタイムに _制御する_ ためのアプリケーション層のプロトコルです。
+大切なことなのでもう一度書きますが、 _制御する_ ためのプロトコルです。
+ここでの制御とは例えば、再生・一時停止・停止等の操作を指します。
+
+実際のデータの送受信には RTP 等の別のプロトコルを用います。
+
+#+begin_quote
+This protocol is intended to
+control multiple data delivery sessions; provide a means for choosing
+delivery channels such as UDP, multicast UDP, and TCP; and provide a
+means for choosing delivery mechanisms based upon RTP (RFC 3550).
+
+--- https://www.rfc-editor.org/rfc/rfc7826, Abstract
+#+end_quote
+
+** 詳細
+今回、GStreamer自体についての解説はあまり含みません。
+それに関しては別途記事を書くかもしれないし書かないかもしれないのですが、
+もし興味がある&英語おkなら[[https://gstreamer.freedesktop.org/documentation/tutorials/index.html][公式のチュートリアル]]を見てみると良いと思います。
+
+知らないと分からないことはないと思いますが、所々用語は普通に使うのでご容赦下さい。
+
+*** 使用するサーバーを決める
+RTSPサーバーがあり、クライアントがそこに接続してストリームを受け取るという
+仕組みになっているので、まずはRTSPサーバーを建てる必要があります。
+[[DeveloppersIOの記事]]には [[https://github.com/mpromonet/v4l2rtspserver][v4l2rtspserver]]についても紹介されていますが、
+
++ v4l2に関してよく分からなかった
++ GStreamerなら開発元に信頼がある
++ GStreamerは単純に見知っている
+
+という理由から、GStreamerを使ったものを建ててみました。
+
+
+GStreamer公式から [[https://github.com/GStreamer/gst-rtsp-server][GStreamer/gst-rtsp-server]] が提供されているので、
+これを使います。
+
+それ自体はライブラリとなっていますが、examplesに簡単なサーバーとして使用出来る
+サンプルファイルがあるのでとりあえずはこれを用いることにします。
+
+幾つかありますが、今回は [[https://github.com/GStreamer/gst-rtsp-server/blob/master/examples/test-launch.c][gst-rtsp-server/test-launch.c at master · GStreamer/gst-rtsp-server]] を使用しました。
+
+*** サーバーのビルド
+[[DeveloppersIOの記事]]では ~autogen.sh~ を叩いていましたが、今は ~meson~ に変わっていました。
+~meson~ にはあまり馴染みがないのですが、以下の手順でとりあえず動くものは出来ました。
+
+#+begin_src sh
+  # `dest' にmesonにより生成されたものが格納されます。
+  # 任意の名前で良いです。
+  meson dest
+  # `build.ninja' のあるディレクトリに移動します
+  cd dest
+  ninja
+#+end_src
+
+尚、この際にエラーを吐かれましたが無視しても動いたので一度放置しています。
+~--internal exe~ とかあるのでWindows用のかな？と思っていたり。
+*** ソースの指定、サーバーの実行
+~test-launch.c~ は ~gst-launch-1.0~ の引数と同じ形式の文字列を引数に取り、
+サーバーを起動します。
+
+#+begin_src sh
+  $ ./dest/examples/test-launch --help
+  Usage:
+    test-launch [OPTION?] <launch line> - Test RTSP Server, Launch
+
+  Example: "( videotestsrc ! x264enc ! rtph264pay name=pay0 pt=96 )"
+
+  Help Options:
+    -h, --help                        Show help options
+    --help-all                        Show all help options
+    --help-gst                        Show GStreamer Options
+
+  Application Options:
+    -p, --port=PORT                   Port to listen on (default: 8554)
+    --disable-rtcp                    Whether RTCP should be disabled (default false)
+#+end_src
+
+~Example~ にある通りに実行すると、よくブラウン管テレビとかに写ってそうなテスト映像を配信する
+RTSPサーバーが立ち上がります。
+
+#+begin_src sh
+  ./dest/examples/test-launch "( videotestsrc ! x264enc ! rtph264pay name=pay0 pt=96 )"
+#+end_src
+
+上手くいかない事があった場合は、 [[デバッグログの出し方]] にあるように環境変数を使ってログを出してみて下さい。
+*** X.orgの画面をキャプチャして配信する
+問題なく動作したら次の段階に進めてみましょう。
+前章ではテスト用の映像を配信していましたが、本命は「画面共有」なので
+画面の映像を配信するように作り変えてみます。
+
+X.org用のソースには[[https://gstreamer.freedesktop.org/documentation/ximagesrc/index.html][ximagesrc]]を使用します。そのまま ~x264enc~ には入れられないため、一度 ~videoconvert~ を
+かましています。
+
+#+begin_src sh
+  ./dest/examples/test-launch "( ximagesrc ! videoconvert ! x264enc ! rtph264pay name=pay0 pt=96 )"
+#+end_src
+
+変えるのは少しだけ!GStreamer楽!!
+** 作業時のTips
+*** 各パーツの調べ方
+~gst-inspect-1.0~ を使う
+*** デバッグログの出し方
+~GST_DEBUG~ 環境変数を設定すると、デバッグログを出力させることができます。
+出力するログの段階はカテゴリ毎に細かく設定することが出来ますが、
+数字を直接指定することで全体に対して指定もできます。
+
+ログの段階は以下の通りです
+
+| 指定する数字 | 意味    |
+|--------------+---------|
+|            1 | ERROR   |
+|            2 | WARN    |
+|            3 | FIXME   |
+|            4 | INFO    |
+|            5 | DEBUG   |
+|            6 | LOG     |
+|            7 | TRACE   |
+|            9 | MEMDUMP |
+
+例えば、 ~WARN~ までのログを全てのカテゴリに於いて出力したい場合は
+
+#+begin_src sh
+  GST_DEBUG=2 ./dest/examples/test-launch "( videotestsrc ! x264enc ! rtph264pay name=pay0 pt=96 )"
+#+end_src
+
+のように実行します。
+
+
+詳しい使い方は [[https://man.archlinux.org/man/gst-launch-1.0.1][gst-launch-1.0のmanページ]] に記載されています。
+
+
+
+** 参考
++ <<DeveloppersIOの記事>>: [[https://dev.classmethod.jp/articles/amazon-kinesis-vidseo-streams-gstreamer-rtsp-server/][Kinesis Video Streams GStreamerを使用したRTSPサーバを構築し、Macから動画を送信してみました。 | DevelopersIO]]
++ [[https://github.com/GStreamer/gst-rtsp-server/blob/master/examples/test-launch.c][gst-rtsp-server/test-launch.c at master · GStreamer/gst-rtsp-server]]
++ [[https://www.rfc-editor.org/rfc/rfc7826][RFC 7826: Real-Time Streaming Protocol Version 2.0]]
++ [[https://gstreamer.freedesktop.org/documentation/additional/rtp.html][RTP and RTSP support -- gstreamer.freedesktop.org]]
+
