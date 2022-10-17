@@ -1,0 +1,17 @@
+* 2022/10/17
+  :PROPERTIES:
+  :DATE: [2022-10-17 Mon 21:27]
+  :TAGS: 
+  :BLOG_POST_KIND: Diary
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  
+
+** やったこと
+** 知ったこと
+*** [[https://www.youtube.com/watch?v=8Ab3ArE8W3s]["Stop Writing Dead Programs" by Jack Rusher (Strange Loop 2022) - YouTube]]
++ 単純に話が面白い。
++ プログラミングは未だにバッチ処理的なものが殆んどだが、環境と直接対話していけるものの方がよくね、という
+** やること
+
