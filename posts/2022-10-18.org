@@ -1,0 +1,38 @@
+* 2022/10/18
+  :PROPERTIES:
+  :DATE: [2022-10-18 Tue 22:16]
+  :TAGS: :neosvr:
+  :BLOG_POST_KIND: Diary
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+  
+Neosで色々いじって遊んでた。
+
+** やったこと
+
+** 知ったこと
+***  ~VirtualKey~ は、同じSlotに付いた ~Button~ コンポーネントによる入力以外受け付けない                   :neosvr:
+NeosVRの公式discordを検索してきた所、何人か同じことを質問している人がいた。
+やっぱりか~みたいな感じではある。 ~VirtualKey~ 、文字を入力するだけでなく
+「キーボードをエミュレートする」挙動をするようなのでセキュリティ面でも仕方
+ないことなのかもしれない。
+
+**** 一応可能な突破方法: Userの手元に"TouchButton"を出現させ、押させる
+NeosVR公式Discordでの会話の中で、「ユーザーが一瞬だけボタンをタッチするように
+すれば出来るは出来るよ」みたいなことが言われていたので実際にやってみた所、十分
+普通に動いた。現状はこれが唯一のハックかな？って気がする。
+
+*** 名前忘れちゃったけどNから始まる方の楽器群がめちゃよい!! :neosvr:insturments:
+~Neos Essentials/Community public folders/JP Publics/個人 individuals/?~
+
+Neos閉じちゃって名前が分からない。
+ギター的なのとかドラム的なのとかオカリナ的なのとか色々な種類の楽器がある。めちゃよい。
+
+*** Aegisさんのモデリングツール
+場所: ~Essential Tools/Aegis Folder~
+
+メッシュ一枚一枚作成して最終的に一つのモデルを作ることが出来る。
+[[https://www.youtube.com/watch?v=sap5_NvrBFk][本人の動画]]がYouTubeにある。
+
+** やること
