@@ -3,7 +3,7 @@
   :DATE: [2022-10-18 Tue 22:16]
   :TAGS: :neosvr:
   :BLOG_POST_KIND: Diary
-  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
   
