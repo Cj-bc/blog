@@ -7,8 +7,143 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/elisp.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Tue, 30 Aug 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Tue, 18 Oct 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-10-18</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-10-18.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>2022/10/18</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on October 18, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on October 19, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;neosvr&#39;." href="/tags/neosvr.html" class="ui tag label">neosvr</a>
+	
+      </div>
+
+    <div class="description">
+      <p>Neosで色々いじって遊んでた。</p>
+<h1 id="やったこと">やったこと</h1>
+<h1 id="知ったこと">知ったこと</h1>
+<h2 id="VirtualKey は、同じSlotに付いた Button コンポーネントによる入力以外受け付けない neosvr"><code>VirtualKey</code> は、同じSlotに付いた <code>Button</code> コンポーネントによる入力以外受け付けない <span class="tag" data-tag-name="neosvr"><span class="smallcaps">neosvr</span></span></h2>
+<p>NeosVRの公式discordを検索してきた所、何人か同じことを質問している人がいた。 やっぱりか~みたいな感じではある。 <code>VirtualKey</code> 、文字を入力するだけでなく 「キーボードをエミュレートする」挙動をするようなのでセキュリティ面でも仕方 ないことなのかもしれない。</p>
+<ol>
+<li><p>一応可能な突破方法: Userの手元に"TouchButton"を出現させ、押させる</p>
+<p>NeosVR公式Discordでの会話の中で、「ユーザーが一瞬だけボタンをタッチするように すれば出来るは出来るよ」みたいなことが言われていたので実際にやってみた所、十分 普通に動いた。現状はこれが唯一のハックかな？って気がする。</p></li>
+</ol>
+<h2 id="名前忘れちゃったけどNから始まる方の楽器群がめちゃよい!! neosvr insturments">名前忘れちゃったけどNから始まる方の楽器群がめちゃよい!! <span class="tag" data-tag-name="neosvr"><span class="smallcaps">neosvr</span></span> <span class="tag" data-tag-name="insturments"><span class="smallcaps">insturments</span></span></h2>
+<p><code>Neos Essentials/Community public folders/JP Publics/個人 individuals/?</code></p>
+<p>Neos閉じちゃって名前が分からない。 ギター的なのとかドラム的なのとかオカリナ的なのとか色々な種類の楽器がある。めちゃよい。</p>
+<h2 id="Aegisさんのモデリングツール">Aegisさんのモデリングツール</h2>
+<p>場所: <code>Essential Tools/Aegis Folder</code></p>
+<p>メッシュ一枚一枚作成して最終的に一つのモデルを作ることが出来る。 <a href="https://www.youtube.com/watch?v=sap5_NvrBFk">本人の動画</a>がYouTubeにある。</p>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Tue, 18 Oct 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-10-18.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2022-10-17</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-10-17.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>2022/10/17</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on October 17, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on October 19, 2022
+	</div>
+
+	
+
+	
+	
+	
+      </div>
+
+    <div class="description">
+      <h1 id="やったこと">やったこと</h1>
+<h1 id="知ったこと">知ったこと</h1>
+<h2 id="&quot;Stop Writing Dead Programs&quot; by Jack Rusher (Strange Loop 2022) - YouTube"><a href="https://www.youtube.com/watch?v=8Ab3ArE8W3s">"Stop Writing Dead Programs" by Jack Rusher (Strange Loop 2022) - YouTube</a></h2>
+<ul>
+<li>単純に話が面白い。</li>
+<li>プログラミングは未だにバッチ処理的なものが殆んどだが、環境と直接対話していけるものの方がよくね、という</li>
+</ul>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Mon, 17 Oct 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-10-17.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2022-10-16</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-10-16.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>2022/10/16</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on October 16, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on October 19, 2022
+	</div>
+
+	
+
+	
+	
+	
+      </div>
+
+    <div class="description">
+      <p>今日はなんか色々調べたりしていたのでメモっておく。</p>
+<h1 id="やったこと">やったこと</h1>
+<h1 id="知ったこと">知ったこと</h1>
+<h2 id="RDF">RDF</h2>
+<p>知識記述言語とのこと。 それ自体は具体的な文法を持たず、N3やRDF/XML等が別個定義されている。</p>
+<h2 id="ActivityPubの概要ざっくり">ActivityPubの概要ざっくり</h2>
+<p><a href="https://www.w3.org/TR/activitypub/#Overview">w3.orgのOverview</a>自体が割と分かりやすい説明をしてくれているのでそれを見ると良い。</p>
+<p>基本は<a href="https://www.w3.org/TR/activitystreams-core/">ActivityStreams</a>というデータフォーマットを軸にして作られている。 ソーシャルネットワークで必要となる基本的な語彙(表現したいオブジェクトや活動など)は ActivityStreams自体で表現が可能で、物足りない場合は<a href="https://www.w3.org/TR/json-ld/">JSON-LD</a>で拡張出来る。</p>
+<p>サーバー⇔サーバー間のプロトコルとサーバー⇔クライアント間のプロトコルの二つの プロトコルから構成されている。</p>
+<p>片方のみの実装でも可能で、例えばMisskeyとかはサーバー⇔クライアント間は独自のプロトコルを 使っていたはず。</p>
+<p>ユーザーは<a href="https://www.w3.org/TR/activitypub/#actors">actors</a>として表現されており、それぞれ <code>inbox</code> と <code>outbox</code> を持つ。 <code>inbox</code> はその名の通り受け取るメッセージが入ってくる所で、Actorはそこにアクセスすることで 自分宛のメッセージを受け取る。 <code>outbox</code> は逆に「自分が世界に発信したいもの」を置く場所で、他のActorがそこを見にきたり、 サーバー間プロトコルによって転送されたりする。 「世界に発信」ではなく「特定の個人に発信」したい場合は、その個人のActorが持つ <code>inbox</code> に直接 メッセージをPOSTする。</p>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Sun, 16 Oct 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-10-16.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-08-30-rtsp-stream-rtsp-with-gstreamer</title>
     <link>https://cj-bc.github.io/blog/posts/2022-08-30-rtsp-stream-rtsp-with-gstreamer.html</link>
     <description><![CDATA[<div id="body-content">
@@ -20,7 +155,7 @@
 	<div class="item">Posted on August 30, 2022</div>
 	<div class="item">
 	  <i class="history icon"></i>
-	  Updated on August 30, 2022
+	  Updated on October 19, 2022
 	</div>
 
 	
@@ -1268,160 +1403,6 @@ elisp
 ]]></description>
     <pubDate>Tue, 21 Jun 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-06-21-skk-azik-tring.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-05-16-thought-about-yukkuri-related-trademark</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-05-16-thought-about-yukkuri-related-trademark.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>最近話題のゆっくりに関連した商標に関しての考え</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on May 16, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on June 22, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;商標法&#39;." href="/tags/%E5%95%86%E6%A8%99%E6%B3%95.html" class="ui tag label">商標法</a>
-	
-      </div>
-
-    <div class="description">
-      <h1 id="始めに">始めに</h1>
-<p>私は法律の専門家ではありません。知財法に関してちょこっとだけ齧りましたが、 ほんとにちょこっとだけです。</p>
-<p>ここで書かれていることは個人的な考えであり、 一応対応する法律等は明記するものの間違っている可能性があります。</p>
-<p>又、ここでの知識は知的財産管理技能検定3級公式テキスト改訂11版を 主に元としています。</p>
-<h1 id="例の問題">例の問題</h1>
-<p>5/15、YouTubeチャンネル「柚葉 / Yuzuha」さんが、 「 ゆっくり茶番劇」という文字商標を取得したことを<a href="https://twitter.com/Yuzuha_YouTube/status/1525607600250712064?s=20&amp;t=JDWJ3zpE2P4Biw8Kkd_SwQ">twitterで公開</a>しました。</p>
-<p>そしてそれに伴い、使用料10万円を請求するとのことで話題になりました。</p>
-<p>詳しくは<a href="https://nlab.itmedia.co.jp/nl/articles/2205/15/news045.html">ねとらぼさんの記事</a> 等を確認してもらえると良いかと思います。</p>
-<h1 id="私の考え">私の考え</h1>
-<h2 id="Q. 第三者が勝手に商標を登録することは可能なのか？">Q. 第三者が勝手に商標を登録することは可能なのか？</h2>
-<p>可能だと思います。 商標は法人でも自然人でも登録可能であり、要件も満たしていれば問題がないです。 登録の要件は<a href="https://elaws.e-gov.go.jp/document?lawid=334AC0000000127">商標法</a>3条で定義されており、知的財産管理技能検定3級公式テキスト改訂11版 を参考にして簡単に纏めると以下のようになります:</p>
-<ul>
-<li>自己の業務に係る商品等に使用すること</li>
-<li>識別力を有すること</li>
-</ul>
-<p>「自己の業務に係る」という点に於いて、柚葉さんのYouTubeを見てみると (一応)「ゆっくり茶番劇」という名称を使っているので、 これは満たしていると判断されるかもしれません。</p>
-<p>識別力については謎な所で、個人的には「識別力はない」のではないか？と考えています。</p>
-<p>例えば、YouTubeで「視聴回数順」のソートで軽く検索かけてみた所16件あり、 恐らく文化圏的にニコニコの方にもっとあるであろうことを考えると 少なくともこの界隈内で識別するのは難しいと言わざるを得ません。</p>
-<p>が、まぁ一部の界隈だけというのもまた事実ではありますね…そういう面 で実体調査をパスしたのかもしれません。</p>
-<h2 id="Q. ここから無効にする方法は？">Q. ここから無効にする方法は？</h2>
-<p>利害関係者であれば「商標登録の無効の審判」を請求することができます。 (<a href="https://elaws.e-gov.go.jp/document?lawid=334AC0000000127">商標法</a>46条)</p>
-<p>今回の場合、「ゆっくり茶番劇」はかなり昔から使われている名称であるため、 「普通名称」として無効を主張できないんかな？と思っています。</p>
-<p>但し、その全てについて「自分が作ったものです」と言われると面倒な気はします… 証明できるもの出せないから出来ないか…?</p>
-<h2 id="Q. 我々がするべきではないことは？">Q. 我々がするべきではないことは？</h2>
-<p><strong>爆破予告・殺害予告・名誉毀損等の行為です</strong></p>
-<p>そもそも、それらのものは許されるべきではない、という事は言わずとも同感していただけると 思います。 それでも、感情的になったあまりそういった手段に走ってしまう人がいるような情報が流れてきます。 これは、逆に訴えられてしまったり自分達にとって不利に働くだけなのでやめて 欲しいなぁと思いながら見ています。</p>
-<p>法に則って行われた手続きには法に則って解決しようねぇ</p>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Mon, 16 May 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-05-16-thought-about-yukkuri-related-trademark.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-05-13-emacs-magit-how-to-stage-piece-of-hunk</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-05-13-emacs-magit-how-to-stage-piece-of-hunk.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>MagitでTigみたいに行単位ステージを行う</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on May 13, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on May 13, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;magit&#39;." href="/tags/magit.html" class="ui tag label">magit</a><a title="All pages tagged &#39;tig&#39;." href="/tags/tig.html" class="ui tag label">tig</a>
-	
-      </div>
-
-    <div class="description">
-      <p>元々Emacsに来る前は<a href="https://github.com/jonas/tig">tig</a>を愛用しており、Emacsに乗り換えて Magitに大体移行した後も、いくつかの機能に於いてはtigを用いていた。</p>
-<p>その一つがハンクより細かい行単位でのステージ(とアンステージ)だ。</p>
-<p>が、 <a href="info:magit#Staging and Unstaging"><a href="info:magit#Staging">info:magit#Staging</a> and Unstaging</a>を見ていた所、実はMagitでも デフォルトで出来ることがわかったのでメモしておく。</p>
-<h1 id="やり方">やり方</h1>
-<p>まず help:magit-status で普通にMagitバッファを開く (デフォルトでは <code>C-x g</code> にアサインされている)</p>
-<p>ステージ若しくはアンステージしたい行をリージョンで選択し、 通常通り <code>s</code> 若しくは <code>u</code> でステージ・アンステージ処理をするだけ。</p>
-<p>尚、 <strong>Magitではevil-modeはデフォルトでは機能しない</strong> ようなので、従来の Emacsのリージョン開始コマンドを使う必要がある。 リージョンを開始するには help:set-mark-command (デフォルトでは <code>C-@</code>) を使う。</p>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Fri, 13 May 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-05-13-emacs-magit-how-to-stage-piece-of-hunk.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-05-02-elisp-hashtable-key-comparison-method</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-05-02-elisp-hashtable-key-comparison-method.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>ElispのHash Tableのキーの一意性確認のための方法について</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on May  2, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on May  4, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
-	
-      </div>
-
-    <div class="description">
-      <h1 id="Hash Tableの種類">Hash Tableの種類</h1>
-<p>elispにおいてHash Tableは一つではあるが、キーを比較するための方法は 複数存在する (<a href="help:make-hash-table">help:make-hash-table</a>)</p>
-<p>そして、この比較する方法の違いを把握してないと「何故これが重複して存在するの!？」 みたいなことになるので気をつける必要がある。</p>
-<p>一応ユーザーが自分で実装することもできるそうだが (<a href="info:elisp#Defining Hash">elisp#Defining Hash</a>の help:define-hash-table-test を参照)、 今回はそれは含めない。</p>
-<p>情報源は <a href="info:elisp#Creating Hash">elisp#Creating Hash</a></p>
-<h2 id="eql (デフォルト)"><code>eql</code> (デフォルト)</h2>
-<p>数字(float若しくはinteger)は <code>equal</code> で等しければ同じと判断され、 <strong>他のオブジェクトは全て等しくなることはない</strong> (!)</p>
-<h2 id="equal"><code>equal</code></h2>
-<p><code>equal</code> によって判定される。</p>
-<h2 id="eq"><code>eq</code></h2>
-<p>異なるLispオブジェクトは同じになることはない。</p>
-<h1 id="「こういう時は？」">「こういう時は？」</h1>
-<h2 id="キーに文字列を使いたい">キーに文字列を使いたい</h2>
-<p><strong>デフォルトの <code>eql</code> では決して等しくならない</strong> <code>'equal</code> にする</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>(make-hash-table :test &#39;equal)
-</code></pre>
-</div>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Mon, 02 May 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-05-02-elisp-hashtable-key-comparison-method.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 

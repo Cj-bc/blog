@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- 2022/10/18</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2022-10-18.html" /><meta property="og:title" content="2022/10/18" /><meta property="og:description" content="Neosで色々いじって遊んでた。" />
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+
+	<meta name="viewport" content="width=device-width" />
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+	  
+	  <a href="../" class="mobile only item"><i class="angle left icon"></i></a>
+	  
+          <div class="computer only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+          <div class="mobile only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"></div>
+            <a href="../" class="computer only item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>2022/10/18</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on October 18, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on October 19, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged 'neosvr'." href="../tags/neosvr.html" class="ui tag label">neosvr</a>
+	
+      </div>
+
+    <div class="description">
+      <p>Neosで色々いじって遊んでた。</p>
+<h1 id="やったこと">やったこと</h1>
+<h1 id="知ったこと">知ったこと</h1>
+<h2 id="VirtualKey は、同じSlotに付いた Button コンポーネントによる入力以外受け付けない neosvr"><code>VirtualKey</code> は、同じSlotに付いた <code>Button</code> コンポーネントによる入力以外受け付けない <span class="tag" data-tag-name="neosvr"><span class="smallcaps">neosvr</span></span></h2>
+<p>NeosVRの公式discordを検索してきた所、何人か同じことを質問している人がいた。 やっぱりか~みたいな感じではある。 <code>VirtualKey</code> 、文字を入力するだけでなく 「キーボードをエミュレートする」挙動をするようなのでセキュリティ面でも仕方 ないことなのかもしれない。</p>
+<ol>
+<li><p>一応可能な突破方法: Userの手元に"TouchButton"を出現させ、押させる</p>
+<p>NeosVR公式Discordでの会話の中で、「ユーザーが一瞬だけボタンをタッチするように すれば出来るは出来るよ」みたいなことが言われていたので実際にやってみた所、十分 普通に動いた。現状はこれが唯一のハックかな？って気がする。</p></li>
+</ol>
+<h2 id="名前忘れちゃったけどNから始まる方の楽器群がめちゃよい!! neosvr insturments">名前忘れちゃったけどNから始まる方の楽器群がめちゃよい!! <span class="tag" data-tag-name="neosvr"><span class="smallcaps">neosvr</span></span> <span class="tag" data-tag-name="insturments"><span class="smallcaps">insturments</span></span></h2>
+<p><code>Neos Essentials/Community public folders/JP Publics/個人 individuals/?</code></p>
+<p>Neos閉じちゃって名前が分からない。 ギター的なのとかドラム的なのとかオカリナ的なのとか色々な種類の楽器がある。めちゃよい。</p>
+<h2 id="Aegisさんのモデリングツール">Aegisさんのモデリングツール</h2>
+<p>場所: <code>Essential Tools/Aegis Folder</code></p>
+<p>メッシュ一枚一枚作成して最終的に一つのモデルを作ることが出来る。 <a href="https://www.youtube.com/watch?v=sap5_NvrBFk">本人の動画</a>がYouTubeにある。</p>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

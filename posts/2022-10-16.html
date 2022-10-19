@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- 2022/10/16</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2022-10-16.html" /><meta property="og:title" content="2022/10/16" /><meta property="og:description" content="今日はなんか色々調べたりしていたのでメモっておく。" />
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+
+	<meta name="viewport" content="width=device-width" />
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+	  
+	  <a href="../" class="mobile only item"><i class="angle left icon"></i></a>
+	  
+          <div class="computer only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+          <div class="mobile only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"></div>
+            <a href="../" class="computer only item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>2022/10/16</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on October 16, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on October 19, 2022
+	</div>
+
+	
+
+	
+	
+	
+      </div>
+
+    <div class="description">
+      <p>今日はなんか色々調べたりしていたのでメモっておく。</p>
+<h1 id="やったこと">やったこと</h1>
+<h1 id="知ったこと">知ったこと</h1>
+<h2 id="RDF">RDF</h2>
+<p>知識記述言語とのこと。 それ自体は具体的な文法を持たず、N3やRDF/XML等が別個定義されている。</p>
+<h2 id="ActivityPubの概要ざっくり">ActivityPubの概要ざっくり</h2>
+<p><a href="https://www.w3.org/TR/activitypub/#Overview">w3.orgのOverview</a>自体が割と分かりやすい説明をしてくれているのでそれを見ると良い。</p>
+<p>基本は<a href="https://www.w3.org/TR/activitystreams-core/">ActivityStreams</a>というデータフォーマットを軸にして作られている。 ソーシャルネットワークで必要となる基本的な語彙(表現したいオブジェクトや活動など)は ActivityStreams自体で表現が可能で、物足りない場合は<a href="https://www.w3.org/TR/json-ld/">JSON-LD</a>で拡張出来る。</p>
+<p>サーバー⇔サーバー間のプロトコルとサーバー⇔クライアント間のプロトコルの二つの プロトコルから構成されている。</p>
+<p>片方のみの実装でも可能で、例えばMisskeyとかはサーバー⇔クライアント間は独自のプロトコルを 使っていたはず。</p>
+<p>ユーザーは<a href="https://www.w3.org/TR/activitypub/#actors">actors</a>として表現されており、それぞれ <code>inbox</code> と <code>outbox</code> を持つ。 <code>inbox</code> はその名の通り受け取るメッセージが入ってくる所で、Actorはそこにアクセスすることで 自分宛のメッセージを受け取る。 <code>outbox</code> は逆に「自分が世界に発信したいもの」を置く場所で、他のActorがそこを見にきたり、 サーバー間プロトコルによって転送されたりする。 「世界に発信」ではなく「特定の個人に発信」したい場合は、その個人のActorが持つ <code>inbox</code> に直接 メッセージをPOSTする。</p>
+<h1 id="やること">やること</h1>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
