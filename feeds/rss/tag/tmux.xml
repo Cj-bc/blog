@@ -7,8 +7,57 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/tmux.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Tue, 18 Oct 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Thu, 03 Nov 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2022-11-03-maim-prevent-dimming-by-maim-or-slop</title>
+    <link>https://cj-bc.github.io/blog/posts/2022-11-03-maim-prevent-dimming-by-maim-or-slop.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>maimで撮影する際に全画面にdimがかからないようにする</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on November  3, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on November  3, 2022
+	</div>
+
+	
+
+	
+	
+	
+      </div>
+
+    <div class="description">
+      <h1 id="解決したい問題">解決したい問題</h1>
+<p>picomをX11コンポジッターとして使っており、 <code>inactivate-dim</code> を 使用している際、maimで部分のみのスクショを撮ろうとすると以下の ように変に暗くなってしまう。</p>
+<p><img src="file:///images/dimmed-maim.png" class="ui rounded image" /></p>
+<p>これは本来もうちょっと明るい色であるべきなのだ。</p>
+<h1 id="解決策: slop に対してpicomのルールを設定する">解決策: <code>slop</code> に対してpicomのルールを設定する</h1>
+<p>[[<a href="https://www.linux.org/threads/solved-picom-blurs-maim.29586/">https://www.linux.org/threads/solved-picom-blurs-maim.29586/</a>][[solved] picom blurs maim! | Linux.org]] を見ればわかるのだけれど、 どうやらmaim内部では <code>slop</code> というコマンドを用いて画面領域の選択 をしているらしい。そして、slopは画面領域の選択をする際に透明な ウィンドウで画面全体を覆っており、それ故に他のウィンドウがinactive と判定されているようなのだ。なので、そいつを <code>inactive-dim</code> の 対象から外してやればいいということだ。</p>
+<p><code>inactive-dim</code> の影響を受けないようにするには、 <code>focus-exclude</code> に 設定を入れればいい。例えば、今回の場合は以下の内容を <code>\~/.config/picom.conf</code> に保存すればいい。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+picom
+</div>
+<pre class="picom SourceCode"><code>focus-exclude = [&quot;class_i = &#39;slop&#39;&quot;]
+</code></pre>
+</div>
+<p>こうすると、綺麗に元の色のままでキャプチャできる</p>
+<p><img src="file:///images/pretty-maim.png" class="ui rounded image" /></p>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Thu, 03 Nov 2022 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2022-11-03-maim-prevent-dimming-by-maim-or-slop.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2022-10-18</title>
     <link>https://cj-bc.github.io/blog/posts/2022-10-18.html</link>
     <description><![CDATA[<div id="body-content">
@@ -1242,167 +1291,6 @@ python
 ]]></description>
     <pubDate>Thu, 30 Jun 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-06-30-pyworld-trying.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-06-21-skk-azik-tring</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-06-21-skk-azik-tring.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>DDSKKでAZIKを始めてみた</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on June 21, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on June 22, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;skk&#39;." href="/tags/skk.html" class="ui tag label">skk</a><a title="All pages tagged &#39;日本語入力&#39;." href="/tags/%E6%97%A5%E6%9C%AC%E8%AA%9E%E5%85%A5%E5%8A%9B.html" class="ui tag label">日本語入力</a><a title="All pages tagged &#39;azik&#39;." href="/tags/azik.html" class="ui tag label">azik</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
-	
-      </div>
-
-    <div class="description">
-      <p>長らくDDSKKを使った日本語入力をしてきたが、そろそろかなり慣れてきたので AZIKも導入してみる。</p>
-<h1 id="導入手順">導入手順</h1>
-<p>導入手順はとても簡単で、とりあえず <a href="info:skk#AZIK">info:skk#AZIK</a> を読めばことたりる。 が、まぁ</p>
-<h2 id="1. AZIKを有効にする">1. AZIKを有効にする</h2>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>(setq skk-use-azik t)
-</code></pre>
-</div>
-<p>を <code>/.skk.el</code> に書き込む。</p>
-<h2 id="2. DDSKKを再起動する">2. DDSKKを再起動する</h2>
-<p>変数を設定しただけでは反映されないようなので、 <code>skk-restart</code> (help:skk-restart) で再起動をかける。</p>
-<h1 id="使ってみた感想">使ってみた感想</h1>
-<p>導入してから1日ほど使ってみた。 主な用途はテキストファイルの記述、この記事と+3000文字くらい書いたくらい。</p>
-<p>使い始めた最初は結構戸惑った。というか今もそう。</p>
-<p>慣れたら便利そうだなとは感じた。 慣れるまでやっぱり時間がかかる。特に、「っ」の入力と「ん」の入力で詰まる。</p>
-<p>例えば</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-
-</div>
-<pre class="SourceCode"><code>使って
-</code></pre>
-</div>
-<p>と打ちたい場合、今の自分のDDSKK+AZIK環境では</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-
-</div>
-<pre class="SourceCode"><code>TukaXtute 
-</code></pre>
-</div>
-<p>と打つのだが、従来通り</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-
-</div>
-<pre class="SourceCode"><code>Tukatte
-</code></pre>
-</div>
-<p>と打ってしまうことがある。(ちなみにそうすると <code>つかたちえ</code> となる)</p>
-<h2 id="良い所">良い所</h2>
-<p>AZIKを使い込んでの評価はまだ出来無いが、 とりあえず始めるにあたっての評価ということで。</p>
-<ol>
-<li><p>基本の配列が変わらない</p>
-<p>まず、「基本は普段通りの配列」であることは本当に嬉しい。 これのお影で、普通にAZIKにしたまま普段使いが出来る。</p>
-<p>そうじゃなかったら長期休暇でもない限り試そうと思えんて…</p>
-<p>特に、キー配列すら大体JIS配列のみみたいな現代では、 あまり異なりすぎるインプットメゾットに切り替えることが難しい。 他の環境を使い辛くなるからだ。</p>
-<p>このAZIKくらいなら、まぁ他の環境での作業の時もそこまで作業に支障が出ないだろうと思える。</p></li>
-<li><p>少しづつ試せる</p>
-<p>基本の配列が変わらないことにも影響されるが、少しずつ機能を試すことが出来る。 一気に覚えようとすると結構タフなのでありがたい。</p>
-<p>今は「;」による「っ」の入力と、「◯ん」の入力(kzで「かん」とか) を試している</p></li>
-<li><p>意外とそれなりに情報がある</p>
-<p>意外とインターネットには情報がある。少し調べると色んなブログがまぁあるし、 そもそも公式ページが詳しいのでそれで事足りる。今の所。</p></li>
-</ol>
-<h2 id="困った所">困った所</h2>
-<p>今少し試してみていて、気になる部分をば。幾つかは解決策があるし幾つかはない。</p>
-<ol>
-<li><p><code>shi</code> で「し」が打てない</p>
-<p>これは私の困った日本語入力のクセみたいな所がある。 私は何故か分からないが「し」の入力だけ「shi」と打ってきていた。 が、AZIKではこの入力では「すうい」となってしまう。</p>
-<p>ちなみにこの文章で出てくる「し」も大体最初「すうい」と入力してしまって書き直している。 今の「してしまって」とか地獄だ。ぴぇ。</p>
-<p>まぁ、これは「si」で打てた方がどちらにせよ短いし慣らそうと思う。</p></li>
-<li><p><code>sticky-shift</code> の設定をしてると変換のタイミングで「っ」を素直に打てない</p>
-<p>AZIKでは、「;」で「っ」を入力する。 しかし、DDSKKでは</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>(setq skk-sticky-key &quot;;&quot;)
-</code></pre>
-</div>
-<p>とかしているとDDSKKの変換モード中で送り仮名入力に移ってしまう。 (そして初心者だった頃にこれを設定していた私は気付かずに暫く苦労した)</p>
-<p>なので、DDSKK+AZIKにしたい民は</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>(setq skk-sticky-key nil)
-</code></pre>
-</div>
-<p>とかして無効化するか、他のキーに割り当てしなおす必要がある。</p>
-<p>ちなみに私は今の今まで存在に気付いておらず使われてなかったので素直に消した。</p></li>
-<li><p>かな入力モードの状態で <code>+</code> が打てない</p>
-<p>恐らく、ハード的にはJIS配列・内部的にはUS配列とかいう 特殊なキーボードの使い方をしているのが原因だろうけど、 かなモードで <code>+</code> を打つと、変換モードになって「っ」が入力されてしまう。</p>
-<p>これはSKKのみの時には見られなかった挙動で、試しに <code>skk-use-azik</code> を <code>nil</code> にして みると無くなるのでAZIKのせいなのは確定だろう。</p>
-<p>実装を追ってみると、どうやら help:skk-azik-keyboard-type が <code>jp106</code> 若しくは <code>jp-pc98</code> の際には help:skk-set-henkan-point-key に <code>?+</code> が 追加されるらしい。(<a href="https://github.com/skk-dev/ddskk/blob/master/skk-azik.el#L540-L549">skk-dev/ddskk – skk-azik.el#L540-L549</a>)</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>((eq skk-azik-keyboard-type &#39;jp106)
-      (setq skk-set-henkan-point-key
-            (append &#39;(?+) skk-set-henkan-point-key))
-      (setq skk-downcase-alist
-            (append &#39;((?+ . ?\;)) skk-downcase-alist))
-      (setq skk-azik-keyboard-specific-additional-rom-kana-rule-list
-            &#39;((&quot;@&quot; nil skk-toggle-characters)
-              (&quot;x@&quot; nil skk-today)
-              (&quot;`&quot; nil skk-set-henkan-point-subr)
-              (&quot;:&quot; nil &quot;ー&quot;))))
-</code></pre>
-</div>
-<p>help:skk-azik-keyboard-type はデフォルトでは <code>jp106</code> 、今確認しても手元のは <code>jp106</code> なので、このコードは実行されているはずで、 <code>?+</code> が help:skk-set-henkan-point-key に入っているはずなので確認してみる。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>(seq-find (lambda (x) (eq ?+ x)) skk-set-henkan-point-key)
-</code></pre>
-</div>
-<p>入ってるのがわかる。 これを削除してみると</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>(setq skk-set-henkan-point-key (seq-remove (lambda (x) (eq ?+ x)) skk-set-henkan-point-key))
-</code></pre>
-</div>
-<p>困った挙動が無くなった。</p>
-<p>しかし他の設定も見ると上手く自分の環境に適応する <code>skk-azik-keyboard-type</code> が ないため、ここは後で自分で少し書き換えようかと思う。</p></li>
-</ol>
-<h1 id="その他Tips">その他Tips</h1>
-<h2 id="DDSKKの何かと機能が競合して使い辛い!">DDSKKの何かと機能が競合して使い辛い!</h2>
-<p>まず何の機能が競合しているのかを把握する必要がある。 当たり前だけど。</p>
-<p>その際、 help:describe-key を使ってもあまり上手くいかない (全て help:skk-insert と言われてしまう)。</p>
-<p><code>info</code> を引く人ならば <a href="info:skk#キー索引">info:skk#キー索引</a> を使うのが良い。</p>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Tue, 21 Jun 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-06-21-skk-azik-tring.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
