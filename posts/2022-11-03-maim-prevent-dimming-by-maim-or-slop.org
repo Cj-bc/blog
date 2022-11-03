@@ -1,0 +1,42 @@
+* maimで撮影する際に全画面にdimがかからないようにする
+:PROPERTIES:
+:DATE: [2022-11-03 Thu 11:00]
+:TAGS: :main:picom:slop:
+:BLOG_POST_KIND: Knowledge
+:BLOG_POST_PROGRESS: Empty
+:BLOG_POST_STATUS: Normal
+:END:
+:LOGBOOK:
+CLOCK: [2022-11-03 Thu 11:05]--[2022-11-03 Thu 11:21] =>  0:16
+:END:
+  
+** 解決したい問題
+picomをX11コンポジッターとして使っており、 ~inactivate-dim~ を
+使用している際、maimで部分のみのスクショを撮ろうとすると以下の
+ように変に暗くなってしまう。
+
+[[/images/dimmed-maim.png]]
+
+これは本来もうちょっと明るい色であるべきなのだ。
+
+
+** 解決策: ~slop~ に対してpicomのルールを設定する
+
+[[https://www.linux.org/threads/solved-picom-blurs-maim.29586/][[solved] picom blurs maim! | Linux.org]] を見ればわかるのだけれど、
+どうやらmaim内部では ~slop~ というコマンドを用いて画面領域の選択
+をしているらしい。そして、slopは画面領域の選択をする際に透明な
+ウィンドウで画面全体を覆っており、それ故に他のウィンドウがinactive
+と判定されているようなのだ。なので、そいつを ~inactive-dim~ の
+対象から外してやればいいということだ。
+
+~inactive-dim~ の影響を受けないようにするには、 ~focus-exclude~ に
+設定を入れればいい。例えば、今回の場合は以下の内容を ~\~/.config/picom.conf~
+に保存すればいい。 
+
+#+begin_src picom
+  focus-exclude = ["class_i = 'slop'"]
+#+end_src
+
+こうすると、綺麗に元の色のままでキャプチャできる
+
+[[/images/pretty-maim.png]]
