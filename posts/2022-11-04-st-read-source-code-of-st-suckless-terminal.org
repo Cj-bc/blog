@@ -1,0 +1,80 @@
+* st (Suckless Terminal)のソースコードリーディング
+  :PROPERTIES:
+  :DATE: [2022-11-04 Fri 10:03]
+  :TAGS: :st:code-reading:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+:LOGBOOK:
+CLOCK: [2022-11-04 Fri 10:14]--[2022-11-04 Fri 10:21] =>  0:07
+CLOCK: [2022-11-04 Fri 10:03]--[2022-11-04 Fri 10:07] =>  0:04
+:END:
+  
+[[https://st.suckless.org/][st]]はC言語で書かれた、とてもシンプルなX用ターミナル実装です。
+([[https://wiki.archlinux.jp/index.php/St][archlinux wikiのページ]])  
+
+コンフィグの設定は ~config.h~ を編集する、機能拡張にはパッチを適用
+するなどといった(コードベース的に)徹底的なシンプルさを持ちます。
+そのため、ターミナル実装の作り方を知るためには一番良い教材になりそうだと感じ
+たのでコードを読んでみることとします。
+
+
+** 使用するコードのバージョン
+[2022-11-04 Fri 20:24] 現在の[[https://git.suckless.org/st/commit/e5e959835b195c023d1f685ef4dbbcfc3b5120b2.html][最新のコミット]]を使用します。
+
++ hash: ~e5e959835b195c023d1f685ef4dbbcfc3b5120b2~
+
+** この記事の構成について
+この記事では、ソースコードが ~MIT/X~ ライセンスであるため
+実際のコードを引用してきて、各関数・型毎にコメントを書いていきます。
+(ライセンスは
+
+又、全体の処理の流れ等は分かり次第別のヘディングに分割して
+記載する予定です。
+
+** コードリーディング
+*** ~st.h~
+*** ~st.c~
+
+** Stのソースコードのライセンス文
+
+#+begin_quote
+MIT/X Consortium License
+
+© 2014-2022 Hiltjo Posthuma <hiltjo at codemadness dot org>
+© 2018 Devin J. Pohly <djpohly at gmail dot com>
+© 2014-2017 Quentin Rameau <quinq at fifth dot space>
+© 2009-2012 Aurélien APTEL <aurelien dot aptel at gmail dot com>
+© 2008-2017 Anselm R Garbe <garbeam at gmail dot com>
+© 2012-2017 Roberto E. Vargas Caballero <k0ga at shike2 dot com>
+© 2012-2016 Christoph Lohmann <20h at r-36 dot net>
+© 2013 Eon S. Jeon <esjeon at hyunmu dot am>
+© 2013 Alexander Sedov <alex0player at gmail dot com>
+© 2013 Mark Edgar <medgar123 at gmail dot com>
+© 2013-2014 Eric Pruitt <eric.pruitt at gmail dot com>
+© 2013 Michael Forney <mforney at mforney dot org>
+© 2013-2014 Markus Teich <markus dot teich at stusta dot mhn dot de>
+© 2014-2015 Laslo Hunhold <dev at frign dot de>
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+
+#+end_quote
+
+
