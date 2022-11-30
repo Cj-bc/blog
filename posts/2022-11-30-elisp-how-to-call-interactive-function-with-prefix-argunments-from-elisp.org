@@ -1,0 +1,61 @@
+* Interactiveな関数をElispからPrefix Arguments付きで呼ぶ
+  :PROPERTIES:
+  :DATE: [2022-11-30 Wed 09:45]
+  :TAGS: :elisp:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+:LOGBOOK:
+CLOCK: [2022-11-30 Wed 09:46]--[2022-11-30 Wed 10:22] =>  0:36
+:END:
+
+** やりたいこと
+Org modeで「現在時刻を即時入力したい」時、インタラクティブな編集ではhelp:org-time-stamp-inactive
+を Prefix Argument 2つで呼び出すことで実現出来ます。
+
+#+begin_src elisp
+  C-u C-u M-x org-time-stamp-inactive
+  ; => [2022-11-30 Wed 09:51]
+#+end_src
+
+で、これをElispからも行いたいというのが今回の目的です。
+** 結論
+Prefix Argumentの代わりに ~'(4)~ のような ~raw prefix argument~ を指定します。
+冒頭の回答は以下:
+
+#+begin_src elisp
+  (org-time-stamp-inactive '(16))
+#+end_src
+
+詳しくは[[info:elisp#Prefix Command Arguments][elisp#Prefix Command Arguments]]を参照して下さい。
+
+*** Raw Prefix Argumentとは？
+Prefix Argumentsには2種類の表現方法(representation)があり、その一つが "Raw"
+です。ちなみにもう一つは"numeric"。内部的にはこの "raw prefix argument" とし
+て使っていますが、コマンドからはどちらの表現でも用いることが出来ます。実際に
+Interactiveなコマンドが動作する際には、 ~(interactive)~ の引数に応じて"raw"
+若しくは"numeric"な値が最初の引数として与えられるようです。
+
+
+Raw prefix argumentは、その与え方によって値が変化します。
+
+#+NAME: Prefix argumentの指定方法とRaw prefix argumentの値
+| Prefix argument | Raw prefix argumentの値 |
+|-----------------+-------------------------|
+| 何もなし        | ~nil~                   |
+| ~C-u <数字>~    | ~<数字>~                |
+| ~C-u~           | ~(4)~                   |
+| ~C-u C-u~       | ~(16)~                  |
+| ~C-u C-u C-u~   | ~(64)~                  |
+| ~M--~/~C-u -~   | ~-~                     |
+| ~C-u -<数字>~   | ~-<数字>~               |
+
+数字なしで ~C-u~ が呼ばれる際は、リストとして渡されるようです。複数の ~C-u~
+が与えられた場合は、4倍ずつされていくようです。
+
+** 出来そうで上手くいかなかったもの
+ help:universal-argument, help:digit-argument, help:negative-argument
+ みたいなものは存在するがどうやって使うのか？がわかりません...oh...
+ どうやら ~C-u~ 等にバインドされているらしいので、Elispから使う用では
+ ないみたい？
