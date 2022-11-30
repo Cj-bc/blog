@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- Interactiveな関数をElispからPrefix Arguments付きで呼ぶ</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2022-11-30-elisp-how-to-call-interactive-function-with-prefix-argunments-from-elisp.html" /><meta property="og:title" content="Interactiveな関数をElispからPrefix Arguments付きで呼ぶ" /><meta property="og:description" content="Org modeで「現在時刻を即時入力したい」時、インタラクティブな編集ではhelp:org-time-stamp-inactive を Prefix Argument 2つで呼び出すことで実現出来ます。" />
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+
+	<meta name="viewport" content="width=device-width" />
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+	  
+	  <a href="../" class="mobile only item"><i class="angle left icon"></i></a>
+	  
+          <div class="computer only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+          <div class="mobile only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"></div>
+            <a href="../" class="computer only item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>Interactiveな関数をElispからPrefix Arguments付きで呼ぶ</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on November 30, 2022</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on November 30, 2022
+	</div>
+
+	
+
+	
+	<a title="All pages tagged 'elisp'." href="../tags/elisp.html" class="ui tag label">elisp</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="やりたいこと">やりたいこと</h1>
+<p>Org modeで「現在時刻を即時入力したい」時、インタラクティブな編集ではhelp:org-time-stamp-inactive を Prefix Argument 2つで呼び出すことで実現出来ます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>C-u C-u M-x org-time-stamp-inactive
+; =&gt; [2022-11-30 Wed 09:51]
+</code></pre>
+</div>
+<p>で、これをElispからも行いたいというのが今回の目的です。</p>
+<h1 id="結論">結論</h1>
+<p>Prefix Argumentの代わりに <code>'(4)</code> のような <code>raw prefix argument</code> を指定します。 冒頭の回答は以下:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(org-time-stamp-inactive '(16))
+</code></pre>
+</div>
+<p>詳しくは<a href="info:elisp#Prefix Command Arguments">elisp#Prefix Command Arguments</a>を参照して下さい。</p>
+<h2 id="Raw Prefix Argumentとは？">Raw Prefix Argumentとは？</h2>
+<p>Prefix Argumentsには2種類の表現方法(representation)があり、その一つが "Raw" です。ちなみにもう一つは"numeric"。内部的にはこの "raw prefix argument" とし て使っていますが、コマンドからはどちらの表現でも用いることが出来ます。実際に Interactiveなコマンドが動作する際には、 <code>(interactive)</code> の引数に応じて"raw" 若しくは"numeric"な値が最初の引数として与えられるようです。</p>
+<p>Raw prefix argumentは、その与え方によって値が変化します。</p>
+<div id="Prefix argumentの指定方法とRaw prefix argumentの値">
+<table class="ui celled table">
+<thead>
+<tr class="header">
+<th>Prefix argument</th>
+<th>Raw prefix argumentの値</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>何もなし</td>
+<td><code>nil</code></td>
+</tr>
+<tr class="even">
+<td><code>C-u &lt;数字&gt;</code></td>
+<td><code>&lt;数字&gt;</code></td>
+</tr>
+<tr class="odd">
+<td><code>C-u</code></td>
+<td><code>(4)</code></td>
+</tr>
+<tr class="even">
+<td><code>C-u C-u</code></td>
+<td><code>(16)</code></td>
+</tr>
+<tr class="odd">
+<td><code>C-u C-u C-u</code></td>
+<td><code>(64)</code></td>
+</tr>
+<tr class="even">
+<td><code>M--~/~C-u -</code></td>
+<td><code>-</code></td>
+</tr>
+<tr class="odd">
+<td><code>C-u -&lt;数字&gt;</code></td>
+<td><code>-&lt;数字&gt;</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>数字なしで <code>C-u</code> が呼ばれる際は、リストとして渡されるようです。複数の <code>C-u</code> が与えられた場合は、4倍ずつされていくようです。</p>
+<h1 id="出来そうで上手くいかなかったもの">出来そうで上手くいかなかったもの</h1>
+<p>help:universal-argument, help:digit-argument, help:negative-argument みたいなものは存在するがどうやって使うのか？がわかりません…oh… どうやら <code>C-u</code> 等にバインドされているらしいので、Elispから使う用では ないみたい？</p>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
