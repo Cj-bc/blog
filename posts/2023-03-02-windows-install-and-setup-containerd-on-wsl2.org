@@ -1,0 +1,125 @@
+* Windows WSL2上にcontainerdとnerdctlをインストールする
+:PROPERTIES:
+:DATE: [2023-03-02 Thu 12:20]
+:TAGS: :windows:環境構築:WSL2:
+:BLOG_POST_KIND: HowTo
+:BLOG_POST_PROGRESS: Empty
+:BLOG_POST_STATUS: Normal
+:EXPORT_AUTHOR: Cj-bc
+:END:
+:LOGBOOK:
+CLOCK: [2023-03-02 Thu 12:21]--[2023-03-02 Thu 12:36] =>  0:15
+:END:
+
+別段Docker for Windowsでも良いが、良い機会なので新しいものを試してみることとした。
+nerdctlはWindowsではまだexperimentalであるため、今回はWSL2上で使用することとする。
+
+** WSL2のセットアップ
+*** インストール
+これは簡単。Windows Terminalをおもむろに開き、
+
+#+begin_src powershell
+  wsl --install -d ubuntu
+#+end_src
+
+でインストールする。本当はnixOS or archlinuxにしたい所だが、まぁ今回は
+これを常用するわけではないので一番楽そうなubuntuにしておく。インストー
+ルが終わったら再起動する。
+*** Systemdを有効化する
+containerdはsystemdを利用するため、そのセットアップをしてあげる必要がある。
+デフォルトでは無効化されているが、[[https://learn.microsoft.com/ja-jp/windows/wsl/wsl-config#systemd-support][learn.microsoft.comのドキュメント]]の
+通りにするとすぐに有効化出来る。具体的には、WLS2環境から ~/etc/wsl.conf~
+に以下を書き込んでWSL2を再起動すれば良い。
+
+#+begin_src toml
+  [boot]
+  systemd=true
+#+end_src
+
+WSL2の再起動は、powershell等から ~wsl --shutdown~ で落として ~wsl~ で
+起動しなおすことで行える。
+
+** nerdctlのインストール
+apt等では配付されておらず、パッケージマネージャーとしてはlinuxbrewが唯
+一の選択肢となる。しかし、 +ちょっとインストーラー読むのが面倒だったので+
+これのためだけにパッケージマネージャーを増やすのが少し嫌だったため、バ
+イナリを持ってくることにした。又この際、イメージのビルド等も行えるよう
+にしたかったので ~nerdctl-full~ のtarファイルを持ってきている。
+
+#+begin_src sh
+  $ wget https://github.com/containerd/nerdctl/releases/download/v1.2.1/nerdctl-full-1.2.1-linux-amd64.tar.gz
+  $ tar zxf nerdctl-full-1.2.1-linux-amd64.tar.gz
+  $ sudo mv bin/* /usr/local/bin
+  $ sudo mv lib/* /usr/local/lib
+  $ sudo mv libexec /usr/local/libexec
+  $ sudo mv share/* /usr/local/share
+#+end_src
+
+*** newuidmapのインストール
+nerdctlはコンテナをrootlessで実行することが出来る。そのためには
+rootlesskitというソフトウェアが必要になる。それを走らせるために
+[[https://github.com/rootless-containers/rootlesskit#subuid][~newuidmap~ というツールが必要になる]]ので、インストールする。
+
+#+begin_src sh
+  $ sudo apt install uidmap
+#+end_src
+
+*** rootlessで起動する
+これもまぁそのままドキュメントの指示に従う
+
+#+begin_src sh
+  $ containerd-rootless-setuptool.sh install
+#+end_src
+
+*** buildkitをインストールする
+最初は気付かなかったが、どうやら ~nerdctl build .~ とかしようとすると
+buildkitのインストールが必要となるらしい(インストールされているとばか
+り思っていたが、上記のではダメらしい)。
+
+(一度 ~nerdctl build .~ して怒られた)
+
+
+そこで、言われた通りにコマンドを実行しておく
+#+begin_src sh
+  $ containerd-rootless-setuptool.sh install-buildkit
+  $ containerd-rootless-setuptool.sh install-buildkit-containerd
+#+end_src
+
+** トラブルシューティング
+*** イメージをpullしようとするとタイムアウトする
+どうやら既知の問題らしい。[[https://github.com/containerd/nerdctl/issues/677][containerd/nerdctl #677]]のコメントにあるように、
+~containerd-rootless-setuptool.sh nsenter bash~ でrootlesskitの名前空
+間に入った後、 ~/etc/resolv.conf~ のnameserverを8.8.8.8にしたら疎通す
+るようになった。
+
+*** CGroup v2の対応方法
+containerdをrootlessで使っている場合、一部の機能が制限されてしまう。
+それを避けたい場合CGroup v2に対応する必要があるが、[[https://rootlesscontaine.rs/getting-started/common/cgroup2/][公式で示されている
+方法]]はgrubの設定を書き換える必要があり、Grubが使用されていないWSL2環境
+では行うことが出来ない。そこで、[[https://learn.microsoft.com/ja-jp/windows/wsl/wsl-config#configuration-setting-for-wslconfig][.wslconfig]]を設定してあげる必要がある。
+
+** Rootlessにするべきなのか否か？
+まぁ基本的にはRoot権限を用いない方が良いというのはそうなのだが、ならば
+デフォルトでそう設定されているはず。デフォルトでRootを必要とするという
+ことは、何らかしらのトレードオフが存在していると考えて良い。ということ
+で、Rootlessにする場合のメリット・デメリットをすこし軽く調べてみた
+
+- [[https://medium.com/nttlabs/accelerating-rootless-container-network-29d0e908dda4][インターンレポート: RootlessコンテナのTCP/IP高速化 | by 松本直樹 | nttlabs | Medium]]
+
+** [補足] Containerdのインストール
+今回はnerdctlと共に導入したのでこれは結局アンインストールしたが、
+containerdのみをインストールするのも先にやっていたのでメモとして残して
+おく。
+
+
+containerdはaptで配付されているが、独自のレポジトリを追加してあげる必
+要がある。これは[[https://github.com/containerd/containerd/blob/main/docs/getting-started.md#option-2-from-apt-get-or-dnf][containerdプロジェクトではなくdockerからの提供となって
+いる]]ので注意。ということで、[[https://docs.docker.com/engine/install/ubuntu/][Dockerのドキュメントにある手順]]を元にして
+Dockerに関する部分を省きつつインストールする。具体的には、大体はそのま
+まだが ~apt-get~ で一部分のみをインストールすることにする。
+ちなみにこれで足りているのかはわからん。
+
+#+begin_src diff
+  - sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  + sudo apt-get install containerd.io
+#+end_src
