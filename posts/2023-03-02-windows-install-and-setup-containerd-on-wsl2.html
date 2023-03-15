@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- Windows WSL2上にcontainerdとnerdctlをインストールする</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2023-03-02-windows-install-and-setup-containerd-on-wsl2.html" /><meta property="og:title" content="Windows WSL2上にcontainerdとnerdctlをインストールする" /><meta property="og:description" content="別段Docker for Windowsでも良いが、良い機会なので新しいものを試してみることとした。 nerdctlはWindowsではまだexperimentalであるため、今回はWSL2上で使用することとする。" />
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+
+	<meta name="viewport" content="width=device-width" />
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+	  
+	  <a href="../" class="mobile only item"><i class="angle left icon"></i></a>
+	  
+          <div class="computer only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+          <div class="mobile only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"></div>
+            <a href="../" class="computer only item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>Windows WSL2上にcontainerdとnerdctlをインストールする</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March  2, 2023</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 16, 2023
+	</div>
+
+	
+
+	
+	<a title="All pages tagged 'windows'." href="../tags/windows.html" class="ui tag label">windows</a><a title="All pages tagged '環境構築'." href="../tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89.html" class="ui tag label">環境構築</a>
+	
+      </div>
+
+    <div class="description">
+      <p>別段Docker for Windowsでも良いが、良い機会なので新しいものを試してみることとした。 nerdctlはWindowsではまだexperimentalであるため、今回はWSL2上で使用することとする。</p>
+<h1 id="WSL2のセットアップ">WSL2のセットアップ</h1>
+<h2 id="インストール">インストール</h2>
+<p>これは簡単。Windows Terminalをおもむろに開き、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+powershell
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode powershell SourceCode"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>wsl <span class="op">--</span>install <span class="op">-</span>d ubuntu</span></code></pre></div>
+</div>
+<p>でインストールする。本当はnixOS or archlinuxにしたい所だが、まぁ今回は これを常用するわけではないので一番楽そうなubuntuにしておく。インストー ルが終わったら再起動する。</p>
+<h2 id="Systemdを有効化する">Systemdを有効化する</h2>
+<p>containerdはsystemdを利用するため、そのセットアップをしてあげる必要がある。 デフォルトでは無効化されているが、<a href="https://learn.microsoft.com/ja-jp/windows/wsl/wsl-config#systemd-support">learn.microsoft.comのドキュメント</a>の 通りにするとすぐに有効化出来る。具体的には、WLS2環境から <code>/etc/wsl.conf</code> に以下を書き込んでWSL2を再起動すれば良い。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+toml
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode toml SourceCode"><code class="sourceCode toml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[</span><span class="dt">boot</span><span class="kw">]</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">systemd</span><span class="op">=</span><span class="cn">true</span></span></code></pre></div>
+</div>
+<p>WSL2の再起動は、powershell等から <code>wsl --shutdown</code> で落として <code>wsl</code> で 起動しなおすことで行える。</p>
+<h1 id="nerdctlのインストール">nerdctlのインストール</h1>
+<p>apt等では配付されておらず、パッケージマネージャーとしてはlinuxbrewが唯 一の選択肢となる。しかし、 <del>ちょっとインストーラー読むのが面倒だったので</del> これのためだけにパッケージマネージャーを増やすのが少し嫌だったため、バ イナリを持ってくることにした。又この際、イメージのビルド等も行えるよう にしたかったので <code>nerdctl-full</code> のtarファイルを持ってきている。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> wget https://github.com/containerd/nerdctl/releases/download/v1.2.1/nerdctl-full-1.2.1-linux-amd64.tar.gz</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tar zxf nerdctl-full-1.2.1-linux-amd64.tar.gz</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sudo mv bin/<span class="pp">*</span> /usr/local/bin</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sudo mv lib/<span class="pp">*</span> /usr/local/lib</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sudo mv libexec /usr/local/libexec</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sudo mv share/<span class="pp">*</span> /usr/local/share</span></code></pre></div>
+</div>
+<h2 id="newuidmapのインストール">newuidmapのインストール</h2>
+<p>nerdctlはコンテナをrootlessで実行することが出来る。そのためには rootlesskitというソフトウェアが必要になる。それを走らせるために <a href="https://github.com/rootless-containers/rootlesskit#subuid"><code>newuidmap</code> というツールが必要になる</a>ので、インストールする。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb4" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sudo apt install uidmap</span></code></pre></div>
+</div>
+<h2 id="rootlessで起動する">rootlessで起動する</h2>
+<p>これもまぁそのままドキュメントの指示に従う</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb5" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> containerd-rootless-setuptool.sh install</span></code></pre></div>
+</div>
+<h2 id="buildkitをインストールする">buildkitをインストールする</h2>
+<p>最初は気付かなかったが、どうやら <code>nerdctl build .</code> とかしようとすると buildkitのインストールが必要となるらしい(インストールされているとばか り思っていたが、上記のではダメらしい)。</p>
+<p>(一度 <code>nerdctl build .</code> して怒られた)</p>
+<p>そこで、言われた通りにコマンドを実行しておく</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb6" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> containerd-rootless-setuptool.sh install-buildkit</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> containerd-rootless-setuptool.sh install-buildkit-containerd</span></code></pre></div>
+</div>
+<h1 id="トラブルシューティング">トラブルシューティング</h1>
+<h2 id="イメージをpullしようとするとタイムアウトする">イメージをpullしようとするとタイムアウトする</h2>
+<p>どうやら既知の問題らしい。<a href="https://github.com/containerd/nerdctl/issues/677">containerd/nerdctl #677</a>のコメントにあるように、 <code>containerd-rootless-setuptool.sh nsenter bash</code> でrootlesskitの名前空 間に入った後、 <code>/etc/resolv.conf</code> のnameserverを8.8.8.8にしたら疎通す るようになった。</p>
+<h2 id="CGroup v2の対応方法">CGroup v2の対応方法</h2>
+<p>containerdをrootlessで使っている場合、一部の機能が制限されてしまう。 それを避けたい場合CGroup v2に対応する必要があるが、<a href="https://rootlesscontaine.rs/getting-started/common/cgroup2/">公式で示されている 方法</a>はgrubの設定を書き換える必要があり、Grubが使用されていないWSL2環境 では行うことが出来ない。そこで、<a href="https://learn.microsoft.com/ja-jp/windows/wsl/wsl-config#configuration-setting-for-wslconfig">.wslconfig</a>を設定してあげる必要がある。</p>
+<h1 id="Rootlessにするべきなのか否か？">Rootlessにするべきなのか否か？</h1>
+<p>まぁ基本的にはRoot権限を用いない方が良いというのはそうなのだが、ならば デフォルトでそう設定されているはず。デフォルトでRootを必要とするという ことは、何らかしらのトレードオフが存在していると考えて良い。ということ で、Rootlessにする場合のメリット・デメリットをすこし軽く調べてみた</p>
+<ul>
+<li><a href="https://medium.com/nttlabs/accelerating-rootless-container-network-29d0e908dda4">インターンレポート: RootlessコンテナのTCP/IP高速化 | by 松本直樹 | nttlabs | Medium</a></li>
+</ul>
+<h1 id="[補足] Containerdのインストール">[補足] Containerdのインストール</h1>
+<p>今回はnerdctlと共に導入したのでこれは結局アンインストールしたが、 containerdのみをインストールするのも先にやっていたのでメモとして残して おく。</p>
+<p>containerdはaptで配付されているが、独自のレポジトリを追加してあげる必 要がある。これは<a href="https://github.com/containerd/containerd/blob/main/docs/getting-started.md#option-2-from-apt-get-or-dnf">containerdプロジェクトではなくdockerからの提供となって いる</a>ので注意。ということで、<a href="https://docs.docker.com/engine/install/ubuntu/">Dockerのドキュメントにある手順</a>を元にして Dockerに関する部分を省きつつインストールする。具体的には、大体はそのま まだが <code>apt-get</code> で一部分のみをインストールすることにする。 ちなみにこれで足りているのかはわからん。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+diff
+</div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="st">- sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="va">+ sudo apt-get install containerd.io</span></span></code></pre></div>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
