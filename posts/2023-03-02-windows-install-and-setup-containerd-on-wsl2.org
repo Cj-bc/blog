@@ -3,7 +3,7 @@
 :DATE: [2023-03-02 Thu 12:20]
 :TAGS: :windows:環境構築:WSL2:
 :BLOG_POST_KIND: HowTo
-:BLOG_POST_PROGRESS: Empty
+:BLOG_POST_PROGRESS: Published
 :BLOG_POST_STATUS: Normal
 :EXPORT_AUTHOR: Cj-bc
 :END:
