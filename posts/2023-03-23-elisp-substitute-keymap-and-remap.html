@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- 既存のキーバインドを置き換える(remap, substitute-key-definition)</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2023-03-23-elisp-substitute-keymap-and-remap.html" /><meta property="og:title" content="既存のキーバインドを置き換える(remap, substitute-key-definition)" /><meta property="og:description" content="既存のコマンドを置き換えるコマンドを自作した際、新しいキーバインドを作るのではなくそのコマンドで古い コマンドを置き換えたい時があります。その際、具体的に「元々どこにバインドされていたか」を調べずに置き 換えることが可能なのでメモを残しておきます。" />
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+
+	<meta name="viewport" content="width=device-width" />
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+	  
+	  <a href="../" class="mobile only item"><i class="angle left icon"></i></a>
+	  
+          <div class="computer only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+          <div class="mobile only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"></div>
+            <a href="../" class="computer only item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>既存のキーバインドを置き換える(remap, substitute-key-definition)</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 23, 2023</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 23, 2023
+	</div>
+
+	
+
+	
+	<a title="All pages tagged 'emacs'." href="../tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged 'elisp'." href="../tags/elisp.html" class="ui tag label">elisp</a>
+	
+      </div>
+
+    <div class="description">
+      <p>既存のコマンドを置き換えるコマンドを自作した際、新しいキーバインドを作るのではなくそのコマンドで古い コマンドを置き換えたい時があります。その際、具体的に「元々どこにバインドされていたか」を調べずに置き 換えることが可能なのでメモを残しておきます。</p>
+<h1 id="アクティブなキーマップ上のコマンドを置き換えたい: remapキーイベント + define-key">アクティブなキーマップ上のコマンドを置き換えたい: remapキーイベント + <code>define-key</code></h1>
+<p><code>remap</code> キーイベントを使うと、新たにremapを行うキーバインドを作成出来ます。注意点として、 <u>実際に置き換えるのではなく「アクティブなキーマップ上のコマンドを置き換えるキーバインド」を新たに作成 する</u> 形になっています。そのため、指定したキーマップから参照されている Prefix keymap中にあるものは置 き換わりません。</p>
+<p>つまり、以下のようなキーマップの構成を考えた時、 <code>remap</code> を使って置き換えようとすると、 <code>outer-map</code> に存在する <code>func</code> は <code>new-func</code> で置き換えられますが <code>inner-map</code> に存在する <code>func</code> はそのまま残りま す:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(let* ((func '(lambda () (interactive) (message &quot;inner-map default&quot;)))
+      (new-func '(lambda () (interactive) (message &quot;replaced&quot;)))
+      (inner-map '(keymap (?1 . func)))
+      (outer-map `(keymap (?a . func) (?b . ,inner-map))))
+  (define-key outer-map [remap func] 'new-func)
+  (describe-keymap outer-map)
+  )
+</code></pre>
+</div>
+<h1 id="指定のキーマップから参照される Prefix keymap 内でも変更したい: substitute-key-definition">指定のキーマップから参照される Prefix keymap 内でも変更したい: <code>substitute-key-definition</code></h1>
+<p>elisp:substitute-key-definition は、「既存のコマンド」「新しいコマンド」「対象のキーマップ」の3つを 必須の引数として受け取り、「対象のキーマップ」の中にある「既存のコマンド」を「新しいコマンド」で置き 換えるように作用します。</p>
+<p>例えば、以下の例ではglobal keymap中の <code>count-words-region</code> を自作のコマンド <code>org-count-words/subtree-if-no-region</code> で置き換えます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(substitute-key-definition 'count-words-region 'org-count-words/subtree-if-no-region (current-global-map))
+</code></pre>
+</div>
+<p>(ちなみに <code>org-count-words/subtree-if-no-region</code> は<a href="https://github.com/Cj-bc/dotfiles/blob/0e2e604eaf05ec27a21af04b4e8060dd085f6118/dotfiles/emacs/emacs.d/lib/org-count-words.el#L6-L12">私のdotfiles</a>にあります)</p>
+<p><code>substitute-key-definition</code> は、指定したキーマップだけでなく Prefixキーマップ内にあるキーバインドも 置き換えます。つまり、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(let* ((func '(lambda () (interactive) (message &quot;inner-map default&quot;)))
+      (new-func '(lambda () (interactive) (message &quot;replaced&quot;)))
+      (inner-map '(keymap (?1 . func)))
+      (outer-map `(keymap (?a . func) (?b . ,inner-map))))
+  (substitute-key-definition 'func 'new-func outer-map)
+  (describe-keymap outer-map)
+  )
+</code></pre>
+</div>
+<p>は以下のような表示が出るはずです</p>
+<div class="line-block">key binding<br />
+— ——-<br />
+<br />
+a		new-func<br />
+b		Prefix Command<br />
+<br />
+b 1		new-func</div>
+<h1 id="「既存のコマンドを置き換えるキーマップを作りたい」: substitute-key-definition (2)">「既存のコマンドを置き換えるキーマップを作りたい」: <code>substitute-key-definition</code> (2)</h1>
+<p><code>substitute-key-definition</code> に <code>OLDMAP</code> 引数も加えてあげると、「 <code>OLDMAP</code> 上の「既存のコマンド」のキー バインド」を参考にして「対象のキーマップ」を更新します。つまり、先程の例を元に以下のようにすると:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(substitute-key-definition 'count-words-region 'org-count-words/subtree-if-no-region (current-local-map) (current-global-map))
+</code></pre>
+</div>
+<p>現在の global keymap 中の <code>count-words-region</code> (デフォルトでは <code>\M-=</code> )を置き換える代わりに、 local keymap の同じキーバインド(デフォルトなら <code>\M-=</code>)に <code>count-words-region</code> を設定します。</p>
+<h1 id="参考資料">参考資料</h1>
+<ul>
+<li><a href="info:elisp#Changing Key Bindings">elisp#Changing Key Bindings</a></li>
+<li><a href="info:elisp#Remapping Commands">elisp#Remapping Commands</a></li>
+</ul>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

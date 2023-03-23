@@ -7,8 +7,106 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/%E3%83%8F%E3%83%BC%E3%83%89%E3%82%A6%E3%82%A7%E3%82%A2.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Thu, 16 Mar 2023 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Thu, 23 Mar 2023 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2023-03-23-elisp-substitute-keymap-and-remap</title>
+    <link>https://cj-bc.github.io/blog/posts/2023-03-23-elisp-substitute-keymap-and-remap.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>既存のキーバインドを置き換える(remap, substitute-key-definition)</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on March 23, 2023</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on March 23, 2023
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a>
+	
+      </div>
+
+    <div class="description">
+      <p>既存のコマンドを置き換えるコマンドを自作した際、新しいキーバインドを作るのではなくそのコマンドで古い コマンドを置き換えたい時があります。その際、具体的に「元々どこにバインドされていたか」を調べずに置き 換えることが可能なのでメモを残しておきます。</p>
+<h1 id="アクティブなキーマップ上のコマンドを置き換えたい: remapキーイベント + define-key">アクティブなキーマップ上のコマンドを置き換えたい: remapキーイベント + <code>define-key</code></h1>
+<p><code>remap</code> キーイベントを使うと、新たにremapを行うキーバインドを作成出来ます。注意点として、 <u>実際に置き換えるのではなく「アクティブなキーマップ上のコマンドを置き換えるキーバインド」を新たに作成 する</u> 形になっています。そのため、指定したキーマップから参照されている Prefix keymap中にあるものは置 き換わりません。</p>
+<p>つまり、以下のようなキーマップの構成を考えた時、 <code>remap</code> を使って置き換えようとすると、 <code>outer-map</code> に存在する <code>func</code> は <code>new-func</code> で置き換えられますが <code>inner-map</code> に存在する <code>func</code> はそのまま残りま す:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(let* ((func &#39;(lambda () (interactive) (message &quot;inner-map default&quot;)))
+      (new-func &#39;(lambda () (interactive) (message &quot;replaced&quot;)))
+      (inner-map &#39;(keymap (?1 . func)))
+      (outer-map `(keymap (?a . func) (?b . ,inner-map))))
+  (define-key outer-map [remap func] &#39;new-func)
+  (describe-keymap outer-map)
+  )
+</code></pre>
+</div>
+<h1 id="指定のキーマップから参照される Prefix keymap 内でも変更したい: substitute-key-definition">指定のキーマップから参照される Prefix keymap 内でも変更したい: <code>substitute-key-definition</code></h1>
+<p>elisp:substitute-key-definition は、「既存のコマンド」「新しいコマンド」「対象のキーマップ」の3つを 必須の引数として受け取り、「対象のキーマップ」の中にある「既存のコマンド」を「新しいコマンド」で置き 換えるように作用します。</p>
+<p>例えば、以下の例ではglobal keymap中の <code>count-words-region</code> を自作のコマンド <code>org-count-words/subtree-if-no-region</code> で置き換えます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(substitute-key-definition &#39;count-words-region &#39;org-count-words/subtree-if-no-region (current-global-map))
+</code></pre>
+</div>
+<p>(ちなみに <code>org-count-words/subtree-if-no-region</code> は<a href="https://github.com/Cj-bc/dotfiles/blob/0e2e604eaf05ec27a21af04b4e8060dd085f6118/dotfiles/emacs/emacs.d/lib/org-count-words.el#L6-L12">私のdotfiles</a>にあります)</p>
+<p><code>substitute-key-definition</code> は、指定したキーマップだけでなく Prefixキーマップ内にあるキーバインドも 置き換えます。つまり、</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(let* ((func &#39;(lambda () (interactive) (message &quot;inner-map default&quot;)))
+      (new-func &#39;(lambda () (interactive) (message &quot;replaced&quot;)))
+      (inner-map &#39;(keymap (?1 . func)))
+      (outer-map `(keymap (?a . func) (?b . ,inner-map))))
+  (substitute-key-definition &#39;func &#39;new-func outer-map)
+  (describe-keymap outer-map)
+  )
+</code></pre>
+</div>
+<p>は以下のような表示が出るはずです</p>
+<div class="line-block">key binding<br />
+— ——-<br />
+<br />
+a		new-func<br />
+b		Prefix Command<br />
+<br />
+b 1		new-func</div>
+<h1 id="「既存のコマンドを置き換えるキーマップを作りたい」: substitute-key-definition (2)">「既存のコマンドを置き換えるキーマップを作りたい」: <code>substitute-key-definition</code> (2)</h1>
+<p><code>substitute-key-definition</code> に <code>OLDMAP</code> 引数も加えてあげると、「 <code>OLDMAP</code> 上の「既存のコマンド」のキー バインド」を参考にして「対象のキーマップ」を更新します。つまり、先程の例を元に以下のようにすると:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(substitute-key-definition &#39;count-words-region &#39;org-count-words/subtree-if-no-region (current-local-map) (current-global-map))
+</code></pre>
+</div>
+<p>現在の global keymap 中の <code>count-words-region</code> (デフォルトでは <code>\M-=</code> )を置き換える代わりに、 local keymap の同じキーバインド(デフォルトなら <code>\M-=</code>)に <code>count-words-region</code> を設定します。</p>
+<h1 id="参考資料">参考資料</h1>
+<ul>
+<li><a href="info:elisp#Changing Key Bindings">elisp#Changing Key Bindings</a></li>
+<li><a href="info:elisp#Remapping Commands">elisp#Remapping Commands</a></li>
+</ul>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Thu, 23 Mar 2023 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2023-03-23-elisp-substitute-keymap-and-remap.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2023-03-16-yozakura-mia-kawaii</title>
     <link>https://cj-bc.github.io/blog/posts/2023-03-16-yozakura-mia-kawaii.html</link>
     <description><![CDATA[<div id="body-content">
@@ -4179,362 +4277,6 @@ bash
 ]]></description>
     <pubDate>Tue, 30 Aug 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-08-30-rtsp-stream-rtsp-with-gstreamer.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-08-12-cairo-understanding-basics-of-cairo</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-08-12-cairo-understanding-basics-of-cairo.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>cairoの基礎的なことを学んでみた</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on August 12, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on August 15, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;cairo&#39;." href="/tags/cairo.html" class="ui tag label">cairo</a><a title="All pages tagged &#39;c&#39;." href="/tags/c.html" class="ui tag label">c</a><a title="All pages tagged &#39;graphic&#39;." href="/tags/graphic.html" class="ui tag label">graphic</a>
-	
-      </div>
-
-    <div class="description">
-      <p>cairoには、<a href="https://www.cairographics.org/tutorial/">公式のページにチュートリアルがある</a>のでこれを見て学習します。 尚、この後にcairo-xlibのHaskell用のバインディングを書きたい影響で、Cを用いて学習することにします。</p>
-<p>とはいえ、チュートリアルがとても分かりやすいので英語が分かるのであればそちらを読むことを推奨します。</p>
-<h1 id="cairoでのレンダリングの仕組み">cairoでのレンダリングの仕組み</h1>
-<p>cairoのレンダリングは、 <code>Surface</code> 、 <code>Source</code> 、 <code>Mask</code> の3つの概念を組み合わせることで行われます。 それらは3つの板のようなもので、Surfaceの上に <code>Mask</code> を置き、その上から <code>Source</code> を載せるようにして描画されます。</p>
-<p>そして、それらを保持するための仕組みとして <code>Context</code> が存在します。</p>
-<h2 id="Surface">Surface</h2>
-<p>Surfaceは文字通り「表面」のことで、つまり描画する対象のことです。 SVGやPDFファイル、はたまたX window systemのwindowなどを選ぶことができます。</p>
-<p><code>cairo_surface_t</code> というデータ型に格納されます。</p>
-<p>Surface は種類毎に作成する関数が異なります。 一例として、以下のコードは各ピクセル32bit、120x120ピクセルの画像の <code>Surface</code> を作成します。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>cairo_surface_t <span class="op">*</span>surface<span class="op">;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>surface <span class="op">=</span> cairo_image_surface_create <span class="op">(</span>CAIRO_FORMAT_ARGB32<span class="op">,</span> <span class="dv">120</span><span class="op">,</span> <span class="dv">120</span><span class="op">);</span></span></code></pre></div>
-</div>
-<p>使用後に <a href="https://www.cairographics.org/manual/cairo-cairo-surface-t.html#cairo-surface-destroy"><code>cairo_surface_destroy()</code></a> を呼び出す必要があります。</p>
-<h2 id="Source">Source</h2>
-<p>Maskを通して塗られる色やパターン・画像のことです。 単色やパターン、既に作られた Surface を Source として使用する事が可能です。</p>
-<h2 id="Mask">Mask</h2>
-<p>SourceをSurfaceに転写する範囲を制限するマスクです。 Path や Source 等を使って作成されます。</p>
-<h2 id="Path">Path</h2>
-<p>ベクターグラフィックを扱ったことがある人は、その Path と思ってよいと思います。 内部でどう保存されているのかはわかりませんが、扱いとしてはベクターの線です。</p>
-<p>cairoでは Path は「点と点を繋いだもの」として表現されており、その繋ぎ方を直線・円・曲線等 から選ぶことができます。</p>
-<p>レンダリング時にMaskに変換されます。</p>
-<h2 id="Context">Context</h2>
-<p>レンダリングにおいて必要な情報を全て保持しています。 使用する <code>Surface</code>, <code>Source</code>, <code>Mask</code> をそれぞれ一つずつと付随する補助変数、そして <code>Path</code> を 使用している場合はそれも保持されています。</p>
-<p><code>Context</code> は <code>cairo_t</code> というデータ型に格納されます。 また、 <code>Surface</code> と紐付けられている必要があるため、作成時には <code>Surface</code> を先に作成しておく必要があります。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cairo_surface_t <span class="op">*</span>surface<span class="op">;</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>cairo_t <span class="op">*</span>cr<span class="op">;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>surface <span class="op">=</span> cairo_image_surface_create <span class="op">(</span>CAIRO_FORMAT_ARGB32<span class="op">,</span> <span class="dv">120</span><span class="op">,</span> <span class="dv">120</span><span class="op">);</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>cr <span class="op">=</span> cairo_create<span class="op">(</span>surface<span class="op">);</span></span></code></pre></div>
-</div>
-<p>使用後に <a href="https://www.cairographics.org/manual/cairo-cairo-surface-t.html#cairo-surface-destroy"><code>cairo_destroy()</code></a> を呼び出す必要があります。</p>
-<h1 id="レンダリングの手順">レンダリングの手順</h1>
-<p>実際のコードでどう書くかを書きます。 今回は、ピクセル毎32bit 120x120ピクセルの画像を作成することにします。</p>
-<p>まずは <code>Surface</code> と <code>Context</code> を作成します。最後に破棄もすることを忘れずに。</p>
-<p>尚、本来ならシグナルハンドリング等するべきだと思うのですが、 私はCをほぼ使っておらず疎いので書いてありません。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">*</span>argv<span class="op">[])</span> <span class="op">{</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  cairo_surface_t <span class="op">*</span>surface<span class="op">;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  cairo_t <span class="op">*</span>cr<span class="op">;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  surface <span class="op">=</span> cairo_image_surface_create<span class="op">(</span>CAIRO_FORMAT_ARGB32<span class="op">,</span> <span class="dv">120</span><span class="op">,</span> <span class="dv">120</span><span class="op">);</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  cr <span class="op">=</span> cairo_create<span class="op">(</span>surface<span class="op">);</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// cairoを使う処理はここに書く</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 最後に行う</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  cairo_destroy<span class="op">(</span>cr<span class="op">);</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  cairo_surface_destroy<span class="op">(</span>surface<span class="op">);</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-</div>
-<p>後は、その間に描画用の処理を書いていきます。 描画用の処理は用途によって異なるためここでは省略します。代わりに、次の章に 使える関数について書き、その後に例のコードをいくつか置いておこうと思います。</p>
-<h1 id="ライブラリのコード各種">ライブラリのコード各種</h1>
-<h2 id="色々なSurface">色々なSurface</h2>
-<p><a href="https://www.cairographics.org/manual/cairo-surfaces.html">Surfaceの一覧ページ</a> に全て載っています。 正直全てを把握しているわけではないので、詳しくはそちらを参照してください。</p>
-<table class="ui celled table">
-<thead>
-<tr class="header">
-<th>Surface名</th>
-<th>どんなもの？</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Image Surfaces</td>
-<td>メモリ上に保存される画像データ。これを画像に書き出し出来る。</td>
-</tr>
-<tr class="even">
-<td>PDF Surfaces</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>PNG Support</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>PostScript Surfaces</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>Recording Surfaces</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>Win32 Surfaces</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>SVG Surfaces</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>Quartz Surfaces</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>XCB Surfaces</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>XLib Surfaces</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>XLib-XRender Backend</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>Script Surfaces</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h2 id="色々なSource">色々なSource</h2>
-<p>Sourceはさほど多くないです。</p>
-<table class="ui celled table">
-<tbody>
-<tr class="odd">
-<td>linear gradient(<code>cairo_pattern_create_linear()</code>)</td>
-<td>linear gradientを作成します。</td>
-</tr>
-</tbody>
-</table>
-<ol>
-<li><p>単色 (<code>cairo_pattern_create_rgb()</code>)</p>
-<p>単色のみの Source です。</p>
-<p>link: <a href="https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-rgb">https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-rgb</a></p></li>
-<li><p>単色+Alpha (<code>cairo_pattern_create_rgba()</code>)</p>
-<p>単色でもアルファチャンネルを指定する関数もあります。</p>
-<p>link: <a href="https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-rgba">https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-rgba</a></p></li>
-<li><p>linear gradient</p>
-<p>link: <a href="https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-linear">https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-linear</a></p></li>
-<li><p>Radial gradient</p>
-<p>link: <a href="https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-radial">https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-radial</a></p></li>
-<li><p>Raster Source</p>
-<p>link: <a href="https://www.cairographics.org/manual/cairo-Raster-Sources.html">https://www.cairographics.org/manual/cairo-Raster-Sources.html</a></p></li>
-</ol>
-<h2 id="色々なMask">色々なMask</h2>
-<p>Surface や Pattern、 Path を Mask として使うことが出来ます。 ちょっと疲れてきたので端折り。</p>
-<h2 id="色々なPath生成関数">色々なPath生成関数</h2>
-<p>最初にも述べた通り、 cairo では Path は「点と点の繋がり」で表現されています。 そのため Path の開始点は常に内部で保存されており(多分 Context の中？)、 その点から指定した点への Path が描画されるようになっています。</p>
-<p>cairoでの座標系は <strong>左上が <code>(0, 0)</code> である</strong> ことに注意してください。 これを間違えると悲しいことになります。ハマりました(当事者)</p>
-<ol>
-<li><p>開始点の移動</p>
-<p>Path の開始点を移動します。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> cairo_move_to<span class="op">(</span>cairo_t <span class="op">*</span>cr<span class="op">,</span> <span class="dt">double</span> x<span class="op">,</span> <span class="dt">double</span> y<span class="op">);</span></span></code></pre></div>
-</div>
-<p>これは Pathの開始点を移動する関数なので Path を作成しません。</p></li>
-<li><p>直線</p>
-<p>現在の座標からグローバル座標の特定の場所まで線を引きます。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> cairo_line_to<span class="op">(</span>cairo_t <span class="op">*</span>cr<span class="op">,</span> <span class="dt">double</span> x<span class="op">,</span> <span class="dt">double</span> y<span class="op">);</span></span></code></pre></div>
-</div>
-<p>又、相対座標で指定するには <a href="https://www.cairographics.org/manual/cairo-Paths.html#cairo-rel-line-to"><code>cairo_rel_line_to</code></a> を使用します。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> cairo_rel_line_to<span class="op">(</span>cairo_t <span class="op">*</span>cr<span class="op">,</span> <span class="dt">double</span> dx<span class="op">,</span> <span class="dt">double</span> dy<span class="op">);</span></span></code></pre></div>
-</div></li>
-<li><p>曲線</p>
-<p>cairoでは3次ベジエ曲線(cubic Bézier spline)を使用することが出来ます。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> cairo_curve_to<span class="op">(</span>cairo_t <span class="op">*</span>cr</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                    <span class="op">,</span> <span class="dt">double</span> x1<span class="op">,</span> <span class="dt">double</span> y1</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                    <span class="op">,</span> <span class="dt">double</span> x2<span class="op">,</span> <span class="dt">double</span> y2</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                    <span class="op">,</span> <span class="dt">double</span> x3<span class="op">,</span> <span class="dt">double</span> y3<span class="op">);</span></span></code></pre></div>
-</div>
-<p><code>(x1, y1)</code> <code>(x2, y2)</code> の二つの座標をコントロールポイントとし、 カーブの終点が <code>(x3, y3)</code> となります。</p></li>
-<li><p>弧</p>
-<p>弧は開始点に関わらずに描画されます。</p>
-<p>弧を描く関数は <a href="https://www.cairographics.org/manual/cairo-Paths.html#cairo-arc"><code>cairo_arc()</code></a> と <a href="https://www.cairographics.org/manual/cairo-Paths.html#cairo-arc-negative"><code>cairo_arc_negative()</code></a> の2種類があり、 これは弧を描く方向のみ異なる関数です。</p>
-<p><code>cairo_arc()</code> は時計周り、 <code>cairo_arc_nagative()</code> は反時計周りに弧を描きます。</p>
-<p>(※ <code>cairo_arc()</code> のドキュメントの説明で"Y+方向に向かって回る"とありますが、 <strong>cairoでのY+方向は一般的には下向き</strong> であることを忘れないでください。私は嵌りました。)</p>
-<p>角度はラジアンで表記されており、x+軸方向(つまり一般的には右方向)が0になっています。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> cairo_arc<span class="op">(</span>cairo_t <span class="op">*</span>cr</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>               <span class="op">,</span> <span class="dt">double</span> xc <span class="co">// 弧を描く円の中心点のx座標</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>               <span class="op">,</span> <span class="dt">double</span> yc <span class="co">// 弧を描く円の中心点のy座標</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>               <span class="op">,</span> <span class="dt">double</span> radius <span class="co">// 弧を描く円の半径</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>               <span class="op">,</span> <span class="dt">double</span> angle1 <span class="co">// ラジアンで</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>               <span class="op">,</span> <span class="dt">double</span> angle2</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>               <span class="op">);</span></span></code></pre></div>
-</div></li>
-<li><p>文字</p>
-<p>文字を表示する方法は二通りあります。 <a href="https://www.cairographics.org/manual/cairo-text.html#cairo-show-text"><code>cairo_show_text()</code></a>を使って Path の作成と fill を同時に行うのと、 <a href="https://www.cairographics.org/manual/cairo-Paths.html#cairo-text-path"><code>cairo_text_path()</code></a> で Path を作成した後に <a href="https://www.cairographics.org/manual/cairo-cairo-t.html#cairo-fill"><code>cairo_fill()</code></a> で fill をする方法です。</p>
-<p>チュートリアルによると、前者の <code>cairo_show_text()</code> の方は内部でキャッシュを持ったり効率的に動くため、 そちらを推奨するとのことです。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> cairo_show_text <span class="op">(</span>cairo_t <span class="op">*</span>cr<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>utf8<span class="op">);</span></span></code></pre></div>
-</div></li>
-<li><p>Path を閉じる</p>
-<p>現在の Path の始点と終点を繋いで Path を閉じます。 閉じられた Path には LineCaps の設定が適用されなくなります(適用する場所がない)</p>
-<p>詳しくは <a href="https://www.cairographics.org/manual/cairo-Paths.html#cairo-close-path"><code>cairo_close_path()</code></a></p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> cairo_close_path <span class="op">(</span>cairo_t <span class="op">*</span>cr<span class="op">);</span></span></code></pre></div>
-</div></li>
-</ol>
-<h1 id="コード例">コード例</h1>
-<p>以下のコードは、私の環境下(archlinux)にてorg-modeのTangle機能を利用して 実行し、実際に動作しているのを確認しています。</p>
-<p>尚、私の環境のそれぞれのバージョンは以下の通りです:</p>
-<table class="ui celled table">
-<thead>
-<tr class="header">
-<th>ライブラリ・ツール</th>
-<th>バージョン</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>gcc</td>
-<td><code>gcc (GCC) 12.1.1 20220730</code></td>
-</tr>
-<tr class="even">
-<td>cairo</td>
-<td><code>1.17.6-2</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="三角形(塗り潰しなし)">三角形(塗り潰しなし)</h2>
-<p>120x120ピクセル、透過ありのPNG画像に三角形を描画します。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="png-triangle.c" data-tangle="&quot;png-triangle.c&quot;"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="png-triangle.c-1"><a href="#png-triangle.c-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;cairo.h&gt;</span></span>
-<span id="png-triangle.c-2"><a href="#png-triangle.c-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="png-triangle.c-3"><a href="#png-triangle.c-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">*</span>argv<span class="op">[])</span> <span class="op">{</span></span>
-<span id="png-triangle.c-4"><a href="#png-triangle.c-4" aria-hidden="true" tabindex="-1"></a>  cairo_surface_t <span class="op">*</span>surface<span class="op">;</span></span>
-<span id="png-triangle.c-5"><a href="#png-triangle.c-5" aria-hidden="true" tabindex="-1"></a>  cairo_t <span class="op">*</span>cr<span class="op">;</span></span>
-<span id="png-triangle.c-6"><a href="#png-triangle.c-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="png-triangle.c-7"><a href="#png-triangle.c-7" aria-hidden="true" tabindex="-1"></a>  surface <span class="op">=</span> cairo_image_surface_create<span class="op">(</span>CAIRO_FORMAT_ARGB32<span class="op">,</span> <span class="dv">120</span><span class="op">,</span> <span class="dv">120</span><span class="op">);</span></span>
-<span id="png-triangle.c-8"><a href="#png-triangle.c-8" aria-hidden="true" tabindex="-1"></a>  cr <span class="op">=</span> cairo_create<span class="op">(</span>surface<span class="op">);</span></span>
-<span id="png-triangle.c-9"><a href="#png-triangle.c-9" aria-hidden="true" tabindex="-1"></a>  cairo_scale<span class="op">(</span>cr<span class="op">,</span> <span class="dv">120</span><span class="op">,</span> <span class="dv">120</span><span class="op">);</span></span>
-<span id="png-triangle.c-10"><a href="#png-triangle.c-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="png-triangle.c-11"><a href="#png-triangle.c-11" aria-hidden="true" tabindex="-1"></a>  cairo_set_line_width<span class="op">(</span>cr<span class="op">,</span> <span class="fl">0.1</span><span class="op">);</span></span>
-<span id="png-triangle.c-12"><a href="#png-triangle.c-12" aria-hidden="true" tabindex="-1"></a>  cairo_set_source_rgb<span class="op">(</span>cr<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
-<span id="png-triangle.c-13"><a href="#png-triangle.c-13" aria-hidden="true" tabindex="-1"></a>  cairo_move_to<span class="op">(</span>cr<span class="op">,</span> <span class="fl">0.5</span><span class="op">,</span> <span class="fl">0.25</span><span class="op">);</span></span>
-<span id="png-triangle.c-14"><a href="#png-triangle.c-14" aria-hidden="true" tabindex="-1"></a>  cairo_line_to<span class="op">(</span>cr<span class="op">,</span> <span class="fl">0.25</span><span class="op">,</span> <span class="fl">0.75</span><span class="op">);</span></span>
-<span id="png-triangle.c-15"><a href="#png-triangle.c-15" aria-hidden="true" tabindex="-1"></a>  cairo_line_to<span class="op">(</span>cr<span class="op">,</span> <span class="fl">0.75</span><span class="op">,</span> <span class="fl">0.75</span><span class="op">);</span></span>
-<span id="png-triangle.c-16"><a href="#png-triangle.c-16" aria-hidden="true" tabindex="-1"></a>  cairo_line_to<span class="op">(</span>cr<span class="op">,</span> <span class="fl">0.5</span><span class="op">,</span> <span class="fl">0.25</span><span class="op">);</span></span>
-<span id="png-triangle.c-17"><a href="#png-triangle.c-17" aria-hidden="true" tabindex="-1"></a>  cairo_stroke<span class="op">(</span>cr<span class="op">);</span></span>
-<span id="png-triangle.c-18"><a href="#png-triangle.c-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="png-triangle.c-19"><a href="#png-triangle.c-19" aria-hidden="true" tabindex="-1"></a>  cairo_surface_write_to_png<span class="op">(</span>surface<span class="op">,</span> <span class="st">&quot;triangle.png&quot;</span><span class="op">);</span></span>
-<span id="png-triangle.c-20"><a href="#png-triangle.c-20" aria-hidden="true" tabindex="-1"></a>  cairo_destroy<span class="op">(</span>cr<span class="op">);</span></span>
-<span id="png-triangle.c-21"><a href="#png-triangle.c-21" aria-hidden="true" tabindex="-1"></a>  cairo_surface_destroy<span class="op">(</span>surface<span class="op">);</span></span>
-<span id="png-triangle.c-22"><a href="#png-triangle.c-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-</div>
-<p>これをコンパイルして実行すると:</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb11" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-o</span> png-triangle <span class="va">$(</span><span class="ex">pkg-config</span> <span class="at">--cflags</span> <span class="at">--libs</span> cairo<span class="va">)</span> png-triangle.c <span class="kw">&amp;&amp;</span> <span class="ex">./png-triangle</span></span></code></pre></div>
-</div>
-<p>以下のようなPNGファイルが生成されます。</p>
-<p><img src="file:///images/triangle.png" class="ui rounded image" /></p>
-<h2 id="三角形(塗り潰しあり)">三角形(塗り潰しあり)</h2>
-<p>120x120ピクセル、透過ありのPNG画像に三角形を描画します。 先程のものを、 Path の中を塗り潰すようにしたものです。 <code>cairo_stroke()</code> を <code>cairo_fill()</code> に入れ替えただけです。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="png-triangle-filled.c" data-tangle="&quot;png-triangle-filled.c&quot;"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="png-triangle-filled.c-1"><a href="#png-triangle-filled.c-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;cairo.h&gt;</span></span>
-<span id="png-triangle-filled.c-2"><a href="#png-triangle-filled.c-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="png-triangle-filled.c-3"><a href="#png-triangle-filled.c-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">*</span>argv<span class="op">[])</span> <span class="op">{</span></span>
-<span id="png-triangle-filled.c-4"><a href="#png-triangle-filled.c-4" aria-hidden="true" tabindex="-1"></a>  cairo_surface_t <span class="op">*</span>surface<span class="op">;</span></span>
-<span id="png-triangle-filled.c-5"><a href="#png-triangle-filled.c-5" aria-hidden="true" tabindex="-1"></a>  cairo_t <span class="op">*</span>cr<span class="op">;</span></span>
-<span id="png-triangle-filled.c-6"><a href="#png-triangle-filled.c-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="png-triangle-filled.c-7"><a href="#png-triangle-filled.c-7" aria-hidden="true" tabindex="-1"></a>  surface <span class="op">=</span> cairo_image_surface_create<span class="op">(</span>CAIRO_FORMAT_ARGB32<span class="op">,</span> <span class="dv">120</span><span class="op">,</span> <span class="dv">120</span><span class="op">);</span></span>
-<span id="png-triangle-filled.c-8"><a href="#png-triangle-filled.c-8" aria-hidden="true" tabindex="-1"></a>  cr <span class="op">=</span> cairo_create<span class="op">(</span>surface<span class="op">);</span></span>
-<span id="png-triangle-filled.c-9"><a href="#png-triangle-filled.c-9" aria-hidden="true" tabindex="-1"></a>  cairo_scale<span class="op">(</span>cr<span class="op">,</span> <span class="dv">120</span><span class="op">,</span> <span class="dv">120</span><span class="op">);</span></span>
-<span id="png-triangle-filled.c-10"><a href="#png-triangle-filled.c-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="png-triangle-filled.c-11"><a href="#png-triangle-filled.c-11" aria-hidden="true" tabindex="-1"></a>  cairo_set_line_width<span class="op">(</span>cr<span class="op">,</span> <span class="fl">0.1</span><span class="op">);</span></span>
-<span id="png-triangle-filled.c-12"><a href="#png-triangle-filled.c-12" aria-hidden="true" tabindex="-1"></a>  cairo_set_source_rgb<span class="op">(</span>cr<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
-<span id="png-triangle-filled.c-13"><a href="#png-triangle-filled.c-13" aria-hidden="true" tabindex="-1"></a>  cairo_move_to<span class="op">(</span>cr<span class="op">,</span> <span class="fl">0.5</span><span class="op">,</span> <span class="fl">0.25</span><span class="op">);</span></span>
-<span id="png-triangle-filled.c-14"><a href="#png-triangle-filled.c-14" aria-hidden="true" tabindex="-1"></a>  cairo_line_to<span class="op">(</span>cr<span class="op">,</span> <span class="fl">0.25</span><span class="op">,</span> <span class="fl">0.75</span><span class="op">);</span></span>
-<span id="png-triangle-filled.c-15"><a href="#png-triangle-filled.c-15" aria-hidden="true" tabindex="-1"></a>  cairo_line_to<span class="op">(</span>cr<span class="op">,</span> <span class="fl">0.75</span><span class="op">,</span> <span class="fl">0.75</span><span class="op">);</span></span>
-<span id="png-triangle-filled.c-16"><a href="#png-triangle-filled.c-16" aria-hidden="true" tabindex="-1"></a>  cairo_line_to<span class="op">(</span>cr<span class="op">,</span> <span class="fl">0.5</span><span class="op">,</span> <span class="fl">0.25</span><span class="op">);</span></span>
-<span id="png-triangle-filled.c-17"><a href="#png-triangle-filled.c-17" aria-hidden="true" tabindex="-1"></a>  cairo_fill<span class="op">(</span>cr<span class="op">);</span></span>
-<span id="png-triangle-filled.c-18"><a href="#png-triangle-filled.c-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="png-triangle-filled.c-19"><a href="#png-triangle-filled.c-19" aria-hidden="true" tabindex="-1"></a>  cairo_surface_write_to_png<span class="op">(</span>surface<span class="op">,</span> <span class="st">&quot;triangle-filled.png&quot;</span><span class="op">);</span></span>
-<span id="png-triangle-filled.c-20"><a href="#png-triangle-filled.c-20" aria-hidden="true" tabindex="-1"></a>  cairo_destroy<span class="op">(</span>cr<span class="op">);</span></span>
-<span id="png-triangle-filled.c-21"><a href="#png-triangle-filled.c-21" aria-hidden="true" tabindex="-1"></a>  cairo_surface_destroy<span class="op">(</span>surface<span class="op">);</span></span>
-<span id="png-triangle-filled.c-22"><a href="#png-triangle-filled.c-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-</div>
-<p>これをコンパイルして実行すると:</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb12" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-o</span> png-triangle-filled <span class="va">$(</span><span class="ex">pkg-config</span> <span class="at">--cflags</span> <span class="at">--libs</span> cairo<span class="va">)</span> png-triangle-filled.c <span class="kw">&amp;&amp;</span> <span class="ex">./png-triangle-filled</span></span></code></pre></div>
-</div>
-<p>以下のようなPNGファイルが生成されます。</p>
-<p><img src="file:///images/triangle-filled.png" class="ui rounded image" /></p>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Fri, 12 Aug 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-08-12-cairo-understanding-basics-of-cairo.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
