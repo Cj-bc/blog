@@ -1,0 +1,97 @@
+* 既存のキーバインドを置き換える(remap, substitute-key-definition)
+:PROPERTIES:
+:DATE: [2023-03-23 Thu 14:45]
+:TAGS: :emacs:elisp:
+:BLOG_POST_KIND: Knowledge
+:BLOG_POST_PROGRESS: Empty
+:BLOG_POST_STATUS: Normal
+:END:
+:LOGBOOK:
+CLOCK: [2023-03-23 Thu 15:03]--[2023-03-23 Thu 15:36] =>  0:33
+CLOCK: [2023-03-23 Thu 14:46]--[2023-03-23 Thu 15:03] =>  0:17
+:END:
+  
+既存のコマンドを置き換えるコマンドを自作した際、新しいキーバインドを作るのではなくそのコマンドで古い
+コマンドを置き換えたい時があります。その際、具体的に「元々どこにバインドされていたか」を調べずに置き
+換えることが可能なのでメモを残しておきます。
+
+** アクティブなキーマップ上のコマンドを置き換えたい: remapキーイベント + ~define-key~
+~remap~ キーイベントを使うと、新たにremapを行うキーバインドを作成出来ます。注意点として、
+_実際に置き換えるのではなく「アクティブなキーマップ上のコマンドを置き換えるキーバインド」を新たに作成
+する_ 形になっています。そのため、指定したキーマップから参照されている Prefix keymap中にあるものは置
+き換わりません。
+
+つまり、以下のようなキーマップの構成を考えた時、 ~remap~ を使って置き換えようとすると、 ~outer-map~
+に存在する ~func~ は ~new-func~ で置き換えられますが ~inner-map~ に存在する ~func~ はそのまま残りま
+す:
+
+
+#+begin_src elisp
+  (let* ((func '(lambda () (interactive) (message "inner-map default")))
+        (new-func '(lambda () (interactive) (message "replaced")))
+        (inner-map '(keymap (?1 . func)))
+        (outer-map `(keymap (?a . func) (?b . ,inner-map))))
+    (define-key outer-map [remap func] 'new-func)
+    (describe-keymap outer-map)
+    )
+#+end_src
+
+** 指定のキーマップから参照される Prefix keymap 内でも変更したい: ~substitute-key-definition~
+elisp:substitute-key-definition は、「既存のコマンド」「新しいコマンド」「対象のキーマップ」の3つを
+必須の引数として受け取り、「対象のキーマップ」の中にある「既存のコマンド」を「新しいコマンド」で置き
+換えるように作用します。
+
+例えば、以下の例ではglobal keymap中の ~count-words-region~ を自作のコマンド
+~org-count-words/subtree-if-no-region~ で置き換えます。
+
+#+begin_src elisp
+  (substitute-key-definition 'count-words-region 'org-count-words/subtree-if-no-region (current-global-map))
+#+end_src
+
+#+RESULTS:
+
+(ちなみに ~org-count-words/subtree-if-no-region~ は[[https://github.com/Cj-bc/dotfiles/blob/0e2e604eaf05ec27a21af04b4e8060dd085f6118/dotfiles/emacs/emacs.d/lib/org-count-words.el#L6-L12][私のdotfiles]]にあります)
+
+~substitute-key-definition~ は、指定したキーマップだけでなく Prefixキーマップ内にあるキーバインドも
+置き換えます。つまり、
+
+#+begin_src elisp
+  (let* ((func '(lambda () (interactive) (message "inner-map default")))
+        (new-func '(lambda () (interactive) (message "replaced")))
+        (inner-map '(keymap (?1 . func)))
+        (outer-map `(keymap (?a . func) (?b . ,inner-map))))
+    (substitute-key-definition 'func 'new-func outer-map)
+    (describe-keymap outer-map)
+    )
+#+end_src
+
+#+RESULTS:
+: KEYMAP\ OBJECT\ \(no\ variable\)\ 11
+
+は以下のような表示が出るはずです
+
+#+begin_verse
+key             binding
+---             -------
+
+a		new-func
+b		Prefix Command
+
+b 1		new-func
+#+end_verse
+
+** 「既存のコマンドを置き換えるキーマップを作りたい」: ~substitute-key-definition~ (2)
+~substitute-key-definition~ に ~OLDMAP~ 引数も加えてあげると、「 ~OLDMAP~ 上の「既存のコマンド」のキー
+バインド」を参考にして「対象のキーマップ」を更新します。つまり、先程の例を元に以下のようにすると:
+
+#+begin_src elisp
+  (substitute-key-definition 'count-words-region 'org-count-words/subtree-if-no-region (current-local-map) (current-global-map))
+#+end_src
+
+現在の global keymap 中の ~count-words-region~ (デフォルトでは ~\M-=~ )を置き換える代わりに、
+local keymap の同じキーバインド(デフォルトなら ~\M-=~)に ~count-words-region~ を設定します。
+
+** 参考資料
++ [[info:elisp#Changing Key Bindings][elisp#Changing Key Bindings]]
++ [[info:elisp#Remapping Commands][elisp#Remapping Commands]]
+
