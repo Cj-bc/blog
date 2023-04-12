@@ -1,10 +1,11 @@
 {-# LANGUAGE OverloadedStrings, TemplateHaskell, DeriveGeneric #-}
 module MyBlog.MetaData where
-import Lens.Micro.Platform (makeLenses, set, (.~), (&))
+import Lens.Micro.Platform (makeLenses, set, (.~), (&), view)
 import Data.Foldable (fold)
 import Data.Default (Default(..))
 import Text.Pandoc.Shared (safeRead, splitTextBy)
 import Text.Pandoc.Definition
+import Text.Pandoc.Builder (setMeta)
 import Data.Text (Text)
 import Data.Binary (Binary)
 import GHC.Generics (Generic)
@@ -73,3 +74,9 @@ readOneMetaData ("blog_post_status", s)   = safeRead s >>= pure . flip (set stat
 readOneMetaData ("blog_post_progress", p) = safeRead p >>= pure . flip (set progress) def
 readOneMetaData ("tags", t)               = Just $ def&tags.~(filter (/= "") $ splitTextBy (== ':') t)
 readOneMetaData _                         = Nothing
+
+setBlogMetaDataToPandoc :: BlogMetaData -> Pandoc -> Pandoc
+setBlogMetaDataToPandoc mtd = setMeta "tags" (view tags mtd)
+                              . setMeta "kind" (show . view kind $ mtd)
+                              . setMeta "status" (show . view status $ mtd)
+                              . setMeta "author" (view author mtd)

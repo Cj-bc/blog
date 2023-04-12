@@ -23,5 +23,6 @@ executable blog
                        pandoc-types,
                        data-default,
                        text,
+                       time,
                        microlens-platform,
                        binary
