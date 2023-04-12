@@ -2,6 +2,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.String (fromString)
 import           System.Environment (getArgs)
+import           System.FilePath (takeFileName, (</>))
+import           System.FilePath.Glob (glob)
 import           Text.Pandoc.Options (ReaderOptions(..), Extension(..), extensionsFromList, WriterOptions(..))
 import           Text.Pandoc.Error (PandocError)
 import           Text.Pandoc.Writers (writeMarkdown)
@@ -77,13 +79,11 @@ convertFormat original = runPure $ do
   writeMarkdown (pandocWriterCfg tmpl) (MD.setBlogMetaDataToPandoc (MD.collectMetaData ast) ast)
 
 main :: IO ()
-main = do
-  args <- getArgs
-  case args of
-    [] -> putStrLn "Please give filepath"
-    (fn:_) ->
-      TIO.readFile fn
-      >>= (return . either (T.pack . show) id . convertFormat)
-      >>= TIO.putStrLn
+main =
+  let distDir = "/tmp/blogPosts"
+      postsGlob = "./posts/*.org" 
+  in glob postsGlob >>= sequence_ . fmap (\fn -> TIO.readFile fn
+                                          >>= (return . either (T.pack . show) id . convertFormat)
+                                          >>= TIO.writeFile (distDir </> (takeFileName fn)))
 
 --------------------------------------------------------------------------------
