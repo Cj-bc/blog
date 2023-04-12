@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.String (fromString)
+import           System.Environment (getArgs)
 import           Text.Pandoc.Options (ReaderOptions(..), Extension(..), extensionsFromList, WriterOptions(..))
 import           Text.Pandoc.Error (PandocError)
 import           Text.Pandoc.Writers (writeMarkdown)
@@ -77,12 +78,12 @@ convertFormat original = runPure $ do
 
 main :: IO ()
 main = do
-  let original = T.unlines ["* Hello there"
-                           , "This is test documentation"
-                           , "** I want to nest heading"
-                           , "for making complex document"]
-
-  (return . either (T.pack . show) id $ convertFormat original)
-  >>= TIO.putStrLn
+  args <- getArgs
+  case args of
+    [] -> putStrLn "Please give filepath"
+    (fn:_) ->
+      TIO.readFile fn
+      >>= (return . either (T.pack . show) id . convertFormat)
+      >>= TIO.putStrLn
 
 --------------------------------------------------------------------------------
