@@ -1,0 +1,213 @@
+* PandocのwriteMarkdownでメタデータをYAML出力する
+:PROPERTIES:
+:DATE: [2023-04-12 Wed 21:37]
+:TAGS: :haskell:pandoc:
+:BLOG_POST_KIND: Knowledge
+:BLOG_POST_PROGRESS: Empty
+:BLOG_POST_STATUS: Normal
+:END:
+:LOGBOOK:
+CLOCK: [2023-04-13 Thu 18:15]--[2023-04-13 Thu 18:23] =>  0:08
+CLOCK: [2023-04-12 Wed 21:38]--[2023-04-12 Wed 22:48] =>  1:10
+:END:
+
+** やりたいこと
+Pandocに限らず、いくつかのMarkdownを扱えるプログラムでは、Markdownファイルの冒頭にYAML形式のメタデータを持つことが
+出来ます(frontmatterというやつです)。
+
+例えば、以下のような:
+
+#+begin_src markdown
+  ---
+  title: PandocのwriteMarkdownでメタデータをYAML出力する
+  author: cj.bc_sd
+  tags:
+  - haskell
+  - pandoc
+  ---
+
+  # Header1
+  ...
+#+end_src
+
+
+そこで、Pandocを用いて他のフォーマットから変換する際にこのYAML形式のメタデータを付与したいです。
+
+** Tl;Dr
++ ~WriterOptions.writerExtensions~ ([[https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Options.html#t:WriterOptions][src]]) に ~Ext_yaml_metadata_block~ ([[https://pandoc.org/MANUAL.html#extension-yaml_metadata_block][解説]])を追加する
++ ~WriterOptions.writerTemplate~ に何かテンプレートを設定する(~Nothing~ じゃなければ良い)
+  + デフォルトのものを ~compileDefaultTemplate "markdown"~ ([[https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Templates.html#v:compileDefaultTemplate][src]])で取ってきても良い
+  + その場合、 ~PandocPure~ を使っている場合は適切に ~stFiles~ を弄る必要がある(後述)
+** 解説
+*** 前提: Pandocをライブラリとして利用して変換する
+Pandocをライブラリとして使う場合、以下のような流れで変換処理を行うことが出来ます:
+
+1. [[https://hackage.haskell.org/package/text-2.0.1/docs/Data-Text-IO.html#v:readFile][~Data.Text.IO.readFile~]]等を用いてファイルの内容を ~Text~ として読み込みます
+2. [[https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Readers.html][~Reader~]] のうちの一つを用いて元のコンテンツをパースして [[https://hackage.haskell.org/package/pandoc-types-1.23/docs/Text-Pandoc-Definition.html#t:Pandoc][~Pandoc~]]型の値を得ます
+3. 必要なら ~Pandoc~ 型に処理をします
+4. [[https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Writers.html][~Writer~]]のうちの一つを用いて、 ~Text~ 型にできます
+
+今回は、書き出しはMarkdown形式で行うので、以下のようになります。
+
+
+~Reader~ は元のフォーマットに対応したものであれば何でも良いのですが、この記事では
+元のフォーマットとしてOrgを想定し、 ~readOrg~ を使用します。
+
+又、 [[https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Class.html#v:runPure][~runPure~]] は [[https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Class.html#v:runIO][~runIO~]] にしても良いです。
+~runPure~ の場合は ~runIO~ よりも少し工程が増えますが、純粋性を持たせることは出来ます。
+
+#+begin_src haskell
+  import Text.Pandoc
+  import qualified Data.Text.IO as TIO
+
+  main = do
+    rawContent <- TIO.readFile "/tmp/FILENAME.org"
+
+    txt <- handleError . runPure $ do
+      pandocDoc <- readOrg def rawContent
+      writeMarkdown def pandocDoc
+
+    TIO.writeFile "/tmp/dist.md" txt
+#+end_src
+
+以降は、これに変更を加えていく形で進めていこうと思います。
+
+*** Ext_yaml_metadata_block 拡張を有効化する
+まず、デフォルトの ~WriterOptions~ ではYAML形式のメタデータブロックは生成されません。
+[[https://pandoc.org/MANUAL.html#extension-yaml_metadata_block][~Ext_yaml_metadata_block~]]を有効化する必要があります。
+尚、
+
+#+begin_src haskell
+  import Text.Pandoc
+  import qualified Data.Text.IO as TIO
+
+  main = do
+    rawContent <- TIO.readFile "/tmp/FILENAME.org"
+
+    txt <- handleError . runPure $ do
+      let writerOpts = def { writerExtensions = extensionsFromList [Ext_yaml_metadata_block]}
+
+      pandocDoc <- readOrg def rawContent
+      writeMarkdown writerOpts pandocDoc
+
+    TIO.writeFile "/tmp/dist.md" txt
+#+end_src
+
+#+begin_src diff
+
+      txt <- handleError . runPure $ do
+  +     let writerOpts = def { writerExtensions = extensionsFromList [Ext_yaml_metadata_block]}
+        pandocDoc <- readOrg def rawContent
+  -     writeMarkdown def pandocDoc
+  +     writeMarkdown writerOpts pandocDoc
+
+#+end_src
+
+*** Writerのテンプレートを明示的に指定する
+何故か、MarkdownのwriterではYAMLのfrontmatterを出力するためには明示的にテンプレートを指定する必要があります。
+これは、[[https://github.com/jgm/pandoc/blob/effca7f7cf7afeb381154f77e33a16b7b19c02b7/src/Text/Pandoc/Writers/Markdown.hs#L225-L229][テンプレートが明示的に指定されている時のみ ~Ext_yaml_metadata_block~ を確認する]]ようになっているためです。
+
+(...ドウシテ...??)
+
+まぁ、これを行えばきちんとfrontmatterが出力されるはずです!
+
+**** ~PandocIO~ モナド内で行う場合
+
+~PandocIO~ モナドを用いている場合は、 [[https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Templates.html#v:compileDefaultTemplate][~compileDefaultTemplate~]] を使ってテンプレートを取り出し、それを素直に
+~writerTemplate~ に設定すれば良いです。尚、Org文書ではメタデータを埋め込めないため [[https://hackage.haskell.org/package/pandoc-types-1.23/docs/src/Text.Pandoc.Builder.html#setMeta][~setMeta~]]
+を用いてコード内からメタデータを設定しています(~setMeta (T.pack "author") "test" pandocDoc~)
+
+#+begin_src haskell
+  import Text.Pandoc
+  import Text.Pandoc.Builder (setMeta)
+  import qualified Data.Text.IO as TIO
+  import qualified Data.Text as T
+
+  main = do
+    rawContent <- TIO.readFile "/tmp/FILENAME.org"
+
+    result <- runIO $ do
+      tmpl <- compileDefaultTemplate (T.pack "markdown")
+      let writerOpts = def { writerExtensions = extensionsFromList [Ext_yaml_metadata_block]
+                           , writerTemplate = Just tmpl
+                           }
+
+      pandocDoc <- readOrg def rawContent
+
+      writeMarkdown writerOpts $ setMeta (T.pack "author") "test" pandocDoc
+
+    txt <- handleError result
+
+    TIO.writeFile "/tmp/dist.md" txt
+#+end_src
+
+**** ~PandocPure~ モナド内で行う場合
+~PandocPure~ モナド内で行う場合は、 ~PandocIO~ を用いたコードに加えた変更にプラスして少し手を加える必要があります。
+~PandocPure~ 内ではファイルシステムにアクセスすることが出来ず、デフォルトのテンプレートファイルが存在しないので、
+そのまま ~compileDefaultTemplate~ してしまうと以下のような実行時エラーが吐かれます。
+
+#+begin_quote
+Could not find data file data/data/templates/default.markdown
+#+end_quote
+
+そこで、 ~PandocPure~ 内にある仮想ファイルシステム的なものに該当のファイルを追加する必要があります。
+そのためには、[[https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Class.html#t:PureState][~PureState~]] の ~stFiles~ を [[https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Class.html#v:modifyPureState][~modifyPureState~]] で編集します。
+
+#+begin_src haskell
+  import Text.Pandoc
+  import Text.Pandoc.Builder (setMeta)
+  import qualified Data.Text.IO as TIO
+  import qualified Data.Text as T
+  import Data.String (fromString)
+
+  -- | デフォルトのマークダウン用テンプレートファイル
+  --
+  -- ファイルの内容は @pandoc -D markdown@ コマンドの出力をそのまま使っています
+  defaultMarkdownTemplate :: FileInfo
+  defaultMarkdownTemplate = FileInfo (read "2023-06-03 0:00:00UTC") (fromString content)
+    where
+      content = unlines ["$if(titleblock)$"
+                        , "$titleblock$"
+                        , ""
+                        , "$endif$"
+                        , "$for(header-includes)$"
+                        , "$header-includes$"
+                        , ""
+                        , "$endfor$"
+                        , "$for(include-before)$"
+                        , "$include-before$"
+                        , ""
+                        , "$endfor$"
+                        , "$if(toc)$"
+                        , "$table-of-contents$"
+                        , ""
+                        , "$endif$"
+                        , "$body$"
+                        , "$for(include-after)$"
+                        , ""
+                        , "$include-after$"
+                        , "$endfor$"
+                        ]
+
+  main = do
+    rawContent <- TIO.readFile "/tmp/FILENAME.org"
+
+    txt <- handleError . runPure $ do
+      -- ファイルを追加します
+      files <- (getsPureState stFiles)
+      let dummyDataFiles = insertInFileTree "data/data/templates/default.markdown" defaultMarkdownTemplate files
+      modifyPureState (\st -> st {stFiles = dummyDataFiles })
+      -- ^
+
+      tmpl <- compileDefaultTemplate (T.pack "markdown")
+      let writerOpts = def { writerExtensions = extensionsFromList [Ext_yaml_metadata_block]
+                           , writerTemplate = Just tmpl
+                           }
+
+      pandocDoc <- readOrg def rawContent
+
+      writeMarkdown writerOpts $ setMeta (T.pack "author") "test" pandocDoc
+
+    TIO.writeFile "/tmp/dist.md" txt
+#+end_src
+
