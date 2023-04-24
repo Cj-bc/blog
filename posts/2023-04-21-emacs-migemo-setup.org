@@ -1,0 +1,195 @@
+* Emacsでmigemoを使う環境を整える
+:PROPERTIES:
+:DATE: [2023-04-21 Fri 10:40]
+:TAGS: :migemo:emacs:ivy:
+:BLOG_POST_KIND: Knowledge
+:BLOG_POST_PROGRESS: Empty
+:BLOG_POST_STATUS: Normal
+:END:
+:LOGBOOK:
+CLOCK: [2023-04-24 Mon 21:33]--[2023-04-24 Mon 23:43] =>  2:10
+CLOCK: [2023-04-21 Fri 15:51]--[2023-04-21 Fri 16:44] =>  0:53
+CLOCK: [2023-04-21 Fri 10:41]--[2023-04-21 Fri 10:55] =>  0:14
+:END:
+
+** migemoとは
+[[https://github.com/koron/cmigemo/blob/master/doc/README_j.txt][migemo]]とは、
+
+#+begin_quote
+Migemo はローマ字のまま日本語をインクリメンタル検索するため のツールです。
+かな漢字変換をすることなく日本語のインクリメン タル検索を快適に行うことができます。
+
+-- http://0xcc.net/migemo/
+#+end_quote
+
+プログラマーでない人向けに少し解説をすると、プログラミングをしている際は、文字入力を英語を入力するモードに
+切り替えていることが多く、その状態で日本語を検索しようとすると「一度日本語入力モードに切り替えて検索し、そ
+の後元に戻す」というひとてまが発生します。migemoを用いると、その必要がなく「英語入力モードのままで日本語
+を検索出来る」ようになります。
+どうやらオリジナルのものは2000年に公開されているという割かし古いプログラムではありますが、その実装の一つ
+である[[https://github.com/koron/cmigemo][koron/cmigemo]]は2022年でも更新が受け入れられているなどまだ使われているプログラムのようです。
+
+名前は割と昔、SKKを調べ始めた頃から見ていましたがこれまで試してきておらず、ここにきて試してみようと思い
+立った備忘録です。
+
+** 環境構成
+migemo自体は「ローマ字から日本語の正規表現を組み立てて返す」という動作をするだけのプログラムです。そのた
+め、実際に使用するには他のプラグイン等と組み合わせる必要があります。
+今回は以下のような環境で使うための設定をしていきます
+
++ Emacs (28.2)
++ ivy-swiper
++ AZIK使用したい
+
+** 作業工程
+*** cmigemoのインストール
+まずはmigemo本体のインストールをします。migemoの実装は本家の[[http://0xcc.net/migemo/][Ruby版]]とその[[https://www.kaoriya.net/software/cmigemo/][C版]]とがあります。
+なんかC版であるcmigemoの方が良いと見た気がするので、cmigemoを入れていきます。
+
+archlinuxでは、AURにあるので取ってきます(勿論AURなので自己責任で...)
+
+#+begin_src sh
+  yay -S cmigemo-git
+#+end_src
+
+*** migemo.elの設定
+Emacsから使用出来るようにするために、[[https://github.com/emacs-jp/migemo][emacs-jp/migemo]]を利用します。私は
+[[https://github.com/conao3/leaf.el][conao3/leaf.el]]を使用しているので、以下のようにして設定を追記します。大
+体の設定値は[[https://github.com/emacs-jp/migemo#sample-configuration][Sample-configuration]]のままにしています。
+
+
+但し設定を変えた後は一度 ~migemo-kill~ しないと反映されないため、既に
+migemoを使っていた場合は一度 ~migemo-kill~ を挟むようにしています。
+
+#+begin_src elisp
+  (leaf migemo
+    :ensure t
+    :require t
+    :custom
+    (migemo-command . "cmigemo")
+    (migemo-options . '("-q" "--emacs"))
+    (migemo-coding-system . 'utf-8-unix)
+    (migemo-dictionary . "/usr/share/migemo/utf-8/migemo-dict")
+    (migemo-user-dictionary . nil)
+    (migemo-regex-dictionary . nil)
+    :config
+    (when (and (processp migemo-process)
+               (eq (process-status migemo-process) 'run))
+      (migemo-kill))
+    (migemo-init)
+    )
+#+end_src
+
+この時点で、 ~migemo-forward~ 関数などが使用可能なはずです。
+*** ivy-migemo
+デフォルトの ~migemo.el~ ではisearch用のラッパーは用意されていますが、
+私はivy(swiper)を利用しているのでそれに対応させるためのパッケージを入
+れます。これも設定は[[https://github.com/ROCKTAKEY/ivy-migemo][ROCKTAKEY/ivy-migemo]]のREADMEから直接使用しています。
+
+
+#+begin_src elisp
+  (leaf ivy-migemo
+    :after ivy migemo
+    :ensure t
+    :require t
+    :custom
+    (ivy-re-builders-alist . '((t . ivy--regex-fuzzy)
+                               (swiper . ivy-migemo-regex-fuzzy)
+                               )))
+#+end_src
+
+私はfuzzy-matchingがすきなので ~ivy--regex-fuzzy~ / ~ivy-migemo-regex-fuzzy~ を利用していますが、お好み
+で ~ivy-migemo-regex-plus~ も用意されているようです。
+*** avy-migemo
+avy-migemoはavyをmigemo対応させるやつ...なようですが、大分古くて更新が止まっているのでそのままだと上
+手く動きません。今、夜で眠いのでまた対応させる気が出たら対応させて追記します。
+
+(ちなみに色々先人は
+
+*** AZIK配列に対応させる
+[[https://asiamoth.com/200608052313/][MigemoでAZIK！（「mpxo」で「猛暑」を検索） | 亜細亜ノ蛾]]を参考にすると、辞書ファイルの ~roma2hira.dat~
+を編集すれば良いとのことです。該当のファイルはarchlinux上では ~/usr/share/migemo/utf-8/roma2hira.dat~ 
+にあるので、それを置き換えることにします。
+
+
+上記参考記事ではAZIK for ATOK 2006 for Windowsの辞書をゴニョゴニョしたとのことですが、該当リンクが切
+れていることとライセンスの問題が何か面倒だった気がすること、実装によって微妙に変換規則が異なっている
+ことがあること、どうせなら自分で使っている辞書を使えばいいや!と思ったことから、手元にあるlibskkが使
+用している辞書(というか変換テーブル)をゴニョることにしました。
+
+**** 変換テーブルの作成
+libskkが使用している、ローマ字とかな文字の変換テーブルはJSONで書かれています。そのため、jqとsedでゴ
+ニョればいい感じに取り出すことが出来ます。(ちなみに同様にして、tcodeやkzik等等他の配列へも対応出来る
+はずです)
+
+以下に、私の環境で使用したスクリプトを記載します。尚、エスケープ漏れ？のせいでファイルのうち一つが適
+切なJSONとして認識されなかったため、前処理をしています。
+
+#+begin_src sh :results file :file /tmp/2023-04-23-emacs-migemo-setup--azik-array
+  cat /usr/share/libskk/rules/default/rom-kana/default.json /usr/share/libskk/rules/azik/rom-kana/default.json | sed "s;\\\\';';" | jq  -s '.[0] * .[1] | .define."rom-kana" | map_values(.[1]) | to_entries | map_values("\(.key) \(.value)")'  | sed '/^[^ ]\+/d;s/^ \+\|[",]//g'
+#+end_src
+
+#+RESULTS:
+[[file:/tmp/2023-04-23-emacs-migemo-setup--azik-array]]
+
+***** スクリプトの解説
+****** 不正なクオーテーションの削除
+~/usr/share/libskk/rules/default/rom-kana/default.json~ にある以下の記述が、どうやらパースに失敗して
+いるようです。エスケープ用のバックスペースが無ければ上手く動いたので、sedで取り除いています。
+
+変換前:
+
+#+begin_src js
+  {
+      ...
+      "n\'": ["", "ん" ],
+      ...
+  }
+#+end_src
+
+変換後:
+
+#+begin_src js
+  {
+      ...
+      "n'": ["", "ん" ],
+      ...
+  }
+#+end_src
+
+スクリプト該当部分:
+
+#+begin_src sh
+  sed "s;\\\\';';"
+#+end_src
+****** 複数のrom-kana JSONのマージ
+libskkでは、既存のJSONファイルをマージすることが出来ます。これにより、例えばAZIKでは基本的な配列は
+そのままに拡張することが出来ます。これを使用するために、複数のJSONファイルをjqでマージします。
+本来は、目的のファイル(~/usr/share/libskk/rules/azik/rom-kana/default.json~)の ~include~ を読み、必
+要なファイルを自動的に判別すると汎用性が出て良いと思うのですが、今回はそれは面倒なので必要なファイル
+を直書きします。
+
+#+begin_src sh
+  jq  -s '.[0] * .[1] | .define."rom-kana" | map_values(.[1]) | to_entries | map_values("\(.key) \(.value)")'
+#+end_src
+
+参考:
++ [[https://dev.classmethod.jp/articles/merge_multiple_json/][複数のjsonファイルをjqを使ってmergeする | DevelopersIO]]
+
+****** JSON書式から、migemoで使用可能な形式への変換
+migemoで使用する形式は、
+
+#+begin_quote
+[ローマ字]<空白>[変換後の文字]
+#+end_quote
+
+となっています。この形式へと変換します。
+
+#+begin_src sh
+  sed '/^[^ ]\+/d;s/^ \+\|[",]//g'
+#+end_src
+
+** トラブルシューティング
+*** migemo.elの設定を変えても反映されない
+設定を変えた後は、一度 ~(migemo-kill)~ した後に ~(migemo-init)~ しなおす必要があります。
+
