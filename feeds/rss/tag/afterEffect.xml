@@ -7,8 +7,193 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/afterEffect.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Wed, 12 Apr 2023 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Fri, 21 Apr 2023 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2023-04-21-emacs-migemo-setup</title>
+    <link>https://cj-bc.github.io/blog/posts/2023-04-21-emacs-migemo-setup.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>Emacsでmigemoを使う環境を整える</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on April 21, 2023</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on April 24, 2023
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
+	
+      </div>
+
+    <div class="description">
+      <h1 id="migemoとは">migemoとは</h1>
+<p><a href="https://github.com/koron/cmigemo/blob/master/doc/README_j.txt">migemo</a>とは、</p>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>Migemo はローマ字のまま日本語をインクリメンタル検索するため のツールです。 かな漢字変換をすることなく日本語のインクリメン タル検索を快適に行うことができます。</p>
+<p>– <a href="http://0xcc.net/migemo/">http://0xcc.net/migemo/</a></p>
+</blockquote>
+</div>
+<p>プログラマーでない人向けに少し解説をすると、プログラミングをしている際は、文字入力を英語を入力するモードに 切り替えていることが多く、その状態で日本語を検索しようとすると「一度日本語入力モードに切り替えて検索し、そ の後元に戻す」というひとてまが発生します。migemoを用いると、その必要がなく「英語入力モードのままで日本語 を検索出来る」ようになります。 どうやらオリジナルのものは2000年に公開されているという割かし古いプログラムではありますが、その実装の一つ である<a href="https://github.com/koron/cmigemo">koron/cmigemo</a>は2022年でも更新が受け入れられているなどまだ使われているプログラムのようです。</p>
+<p>名前は割と昔、SKKを調べ始めた頃から見ていましたがこれまで試してきておらず、ここにきて試してみようと思い 立った備忘録です。</p>
+<h1 id="環境構成">環境構成</h1>
+<p>migemo自体は「ローマ字から日本語の正規表現を組み立てて返す」という動作をするだけのプログラムです。そのた め、実際に使用するには他のプラグイン等と組み合わせる必要があります。 今回は以下のような環境で使うための設定をしていきます</p>
+<ul>
+<li>Emacs (28.2)</li>
+<li>ivy-swiper</li>
+<li>AZIK使用したい</li>
+</ul>
+<h1 id="作業工程">作業工程</h1>
+<h2 id="cmigemoのインストール">cmigemoのインストール</h2>
+<p>まずはmigemo本体のインストールをします。migemoの実装は本家の<a href="http://0xcc.net/migemo/">Ruby版</a>とその<a href="https://www.kaoriya.net/software/cmigemo/">C版</a>とがあります。 なんかC版であるcmigemoの方が良いと見た気がするので、cmigemoを入れていきます。</p>
+<p>archlinuxでは、AURにあるので取ってきます(勿論AURなので自己責任で…)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">yay</span> <span class="at">-S</span> cmigemo-git</span></code></pre></div>
+</div>
+<h2 id="migemo.elの設定">migemo.elの設定</h2>
+<p>Emacsから使用出来るようにするために、<a href="https://github.com/emacs-jp/migemo">emacs-jp/migemo</a>を利用します。私は <a href="https://github.com/conao3/leaf.el">conao3/leaf.el</a>を使用しているので、以下のようにして設定を追記します。大 体の設定値は<a href="https://github.com/emacs-jp/migemo#sample-configuration">Sample-configuration</a>のままにしています。</p>
+<p>但し設定を変えた後は一度 <code>migemo-kill</code> しないと反映されないため、既に migemoを使っていた場合は一度 <code>migemo-kill</code> を挟むようにしています。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(leaf migemo
+  :ensure t
+  :require t
+  :custom
+  (migemo-command . &quot;cmigemo&quot;)
+  (migemo-options . &#39;(&quot;-q&quot; &quot;--emacs&quot;))
+  (migemo-coding-system . &#39;utf-8-unix)
+  (migemo-dictionary . &quot;/usr/share/migemo/utf-8/migemo-dict&quot;)
+  (migemo-user-dictionary . nil)
+  (migemo-regex-dictionary . nil)
+  :config
+  (when (and (processp migemo-process)
+             (eq (process-status migemo-process) &#39;run))
+    (migemo-kill))
+  (migemo-init)
+  )
+</code></pre>
+</div>
+<p>この時点で、 <code>migemo-forward</code> 関数などが使用可能なはずです。</p>
+<h2 id="ivy-migemo">ivy-migemo</h2>
+<p>デフォルトの <code>migemo.el</code> ではisearch用のラッパーは用意されていますが、 私はivy(swiper)を利用しているのでそれに対応させるためのパッケージを入 れます。これも設定は<a href="https://github.com/ROCKTAKEY/ivy-migemo">ROCKTAKEY/ivy-migemo</a>のREADMEから直接使用しています。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(leaf ivy-migemo
+  :after ivy migemo
+  :ensure t
+  :require t
+  :custom
+  (ivy-re-builders-alist . &#39;((t . ivy--regex-fuzzy)
+                             (swiper . ivy-migemo-regex-fuzzy)
+                             )))
+</code></pre>
+</div>
+<p>私はfuzzy-matchingがすきなので <code>ivy--regex-fuzzy</code> / <code>ivy-migemo-regex-fuzzy</code> を利用していますが、お好み で <code>ivy-migemo-regex-plus</code> も用意されているようです。</p>
+<h2 id="avy-migemo">avy-migemo</h2>
+<p>avy-migemoはavyをmigemo対応させるやつ…なようですが、大分古くて更新が止まっているのでそのままだと上 手く動きません。今、夜で眠いのでまた対応させる気が出たら対応させて追記します。</p>
+<p>(ちなみに色々先人は</p>
+<h2 id="AZIK配列に対応させる">AZIK配列に対応させる</h2>
+<p><a href="https://asiamoth.com/200608052313/">MigemoでAZIK！（「mpxo」で「猛暑」を検索） | 亜細亜ノ蛾</a>を参考にすると、辞書ファイルの <code>roma2hira.dat</code> を編集すれば良いとのことです。該当のファイルはarchlinux上では <code>/usr/share/migemo/utf-8/roma2hira.dat</code> にあるので、それを置き換えることにします。</p>
+<p>上記参考記事ではAZIK for ATOK 2006 for Windowsの辞書をゴニョゴニョしたとのことですが、該当リンクが切 れていることとライセンスの問題が何か面倒だった気がすること、実装によって微妙に変換規則が異なっている ことがあること、どうせなら自分で使っている辞書を使えばいいや!と思ったことから、手元にあるlibskkが使 用している辞書(というか変換テーブル)をゴニョることにしました。</p>
+<ol>
+<li><p>変換テーブルの作成</p>
+<p>libskkが使用している、ローマ字とかな文字の変換テーブルはJSONで書かれています。そのため、jqとsedでゴ ニョればいい感じに取り出すことが出来ます。(ちなみに同様にして、tcodeやkzik等等他の配列へも対応出来る はずです)</p>
+<p>以下に、私の環境で使用したスクリプトを記載します。尚、エスケープ漏れ？のせいでファイルのうち一つが適 切なJSONとして認識されなかったため、前処理をしています。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb4" data-org-language="sh" data-results="file" data-file="/tmp/2023-04-23-emacs-migemo-setup--azik-array"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /usr/share/libskk/rules/default/rom-kana/default.json /usr/share/libskk/rules/azik/rom-kana/default.json <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&quot;s;</span><span class="dt">\\\\</span><span class="st">&#39;;&#39;;&quot;</span> <span class="kw">|</span> <span class="ex">jq</span>  <span class="at">-s</span> <span class="st">&#39;.[0] * .[1] | .define.&quot;rom-kana&quot; | map_values(.[1]) | to_entries | map_values(&quot;\(.key) \(.value)&quot;)&#39;</span>  <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;/^[^ ]\+/d;s/^ \+\|[&quot;,]//g&#39;</span></span></code></pre></div>
+</div>
+<ol>
+<li><p>スクリプトの解説</p>
+<ol>
+<li><p>不正なクオーテーションの削除</p>
+<p><code>/usr/share/libskk/rules/default/rom-kana/default.json</code> にある以下の記述が、どうやらパースに失敗して いるようです。エスケープ用のバックスペースが無ければ上手く動いたので、sedで取り除いています。</p>
+<p>変換前:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+javascript
+</div>
+<div class="sourceCode" id="cb5" data-org-language="js"><pre class="sourceCode javascript SourceCode"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;n</span><span class="sc">\&#39;</span><span class="st">&quot;</span><span class="op">:</span> [<span class="st">&quot;&quot;</span><span class="op">,</span> <span class="st">&quot;ん&quot;</span> ]<span class="op">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<p>変換後:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+javascript
+</div>
+<div class="sourceCode" id="cb6" data-org-language="js"><pre class="sourceCode javascript SourceCode"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;n&#39;&quot;</span><span class="op">:</span> [<span class="st">&quot;&quot;</span><span class="op">,</span> <span class="st">&quot;ん&quot;</span> ]<span class="op">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<p>スクリプト該当部分:</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb7" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">&quot;s;</span><span class="dt">\\\\</span><span class="st">&#39;;&#39;;&quot;</span></span></code></pre></div>
+</div></li>
+<li><p>複数のrom-kana JSONのマージ</p>
+<p>libskkでは、既存のJSONファイルをマージすることが出来ます。これにより、例えばAZIKでは基本的な配列は そのままに拡張することが出来ます。これを使用するために、複数のJSONファイルをjqでマージします。 本来は、目的のファイル(<code>/usr/share/libskk/rules/azik/rom-kana/default.json</code>)の <code>include</code> を読み、必 要なファイルを自動的に判別すると汎用性が出て良いと思うのですが、今回はそれは面倒なので必要なファイル を直書きします。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb8" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jq</span>  <span class="at">-s</span> <span class="st">&#39;.[0] * .[1] | .define.&quot;rom-kana&quot; | map_values(.[1]) | to_entries | map_values(&quot;\(.key) \(.value)&quot;)&#39;</span></span></code></pre></div>
+</div>
+<p>参考:</p>
+<ul>
+<li><a href="https://dev.classmethod.jp/articles/merge_multiple_json/">複数のjsonファイルをjqを使ってmergeする | DevelopersIO</a></li>
+</ul></li>
+<li><p>JSON書式から、migemoで使用可能な形式への変換</p>
+<p>migemoで使用する形式は、</p>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>[ローマ字]&lt;空白&gt;[変換後の文字]</p>
+</blockquote>
+</div>
+<p>となっています。この形式へと変換します。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb9" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">&#39;/^[^ ]\+/d;s/^ \+\|[&quot;,]//g&#39;</span></span></code></pre></div>
+</div></li>
+</ol></li>
+</ol></li>
+</ol>
+<h1 id="トラブルシューティング">トラブルシューティング</h1>
+<h2 id="migemo.elの設定を変えても反映されない">migemo.elの設定を変えても反映されない</h2>
+<p>設定を変えた後は、一度 <code>(migemo-kill)</code> した後に <code>(migemo-init)</code> しなおす必要があります。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Fri, 21 Apr 2023 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2023-04-21-emacs-migemo-setup.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2023-04-12-pandoc-library-how-to-write-yaml-metadata-with-markdown-writer</title>
     <link>https://cj-bc.github.io/blog/posts/2023-04-12-pandoc-library-how-to-write-yaml-metadata-with-markdown-writer.html</link>
     <description><![CDATA[<div id="body-content">
@@ -4257,55 +4442,6 @@ picom
 ]]></description>
     <pubDate>Thu, 03 Nov 2022 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2022-11-03-maim-prevent-dimming-by-maim-or-slop.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-10-18</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-10-18.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>2022/10/18</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on October 18, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on October 19, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;neosvr&#39;." href="/tags/neosvr.html" class="ui tag label">neosvr</a>
-	
-      </div>
-
-    <div class="description">
-      <p>Neosで色々いじって遊んでた。</p>
-<h1 id="やったこと">やったこと</h1>
-<h1 id="知ったこと">知ったこと</h1>
-<h2 id="VirtualKey は、同じSlotに付いた Button コンポーネントによる入力以外受け付けない neosvr"><code>VirtualKey</code> は、同じSlotに付いた <code>Button</code> コンポーネントによる入力以外受け付けない <span class="tag" data-tag-name="neosvr"><span class="smallcaps">neosvr</span></span></h2>
-<p>NeosVRの公式discordを検索してきた所、何人か同じことを質問している人がいた。 やっぱりか~みたいな感じではある。 <code>VirtualKey</code> 、文字を入力するだけでなく 「キーボードをエミュレートする」挙動をするようなのでセキュリティ面でも仕方 ないことなのかもしれない。</p>
-<ol>
-<li><p>一応可能な突破方法: Userの手元に"TouchButton"を出現させ、押させる</p>
-<p>NeosVR公式Discordでの会話の中で、「ユーザーが一瞬だけボタンをタッチするように すれば出来るは出来るよ」みたいなことが言われていたので実際にやってみた所、十分 普通に動いた。現状はこれが唯一のハックかな？って気がする。</p></li>
-</ol>
-<h2 id="名前忘れちゃったけどNから始まる方の楽器群がめちゃよい!! neosvr insturments">名前忘れちゃったけどNから始まる方の楽器群がめちゃよい!! <span class="tag" data-tag-name="neosvr"><span class="smallcaps">neosvr</span></span> <span class="tag" data-tag-name="insturments"><span class="smallcaps">insturments</span></span></h2>
-<p><code>Neos Essentials/Community public folders/JP Publics/個人 individuals/?</code></p>
-<p>Neos閉じちゃって名前が分からない。 ギター的なのとかドラム的なのとかオカリナ的なのとか色々な種類の楽器がある。めちゃよい。</p>
-<h2 id="Aegisさんのモデリングツール">Aegisさんのモデリングツール</h2>
-<p>場所: <code>Essential Tools/Aegis Folder</code></p>
-<p>メッシュ一枚一枚作成して最終的に一つのモデルを作ることが出来る。 <a href="https://www.youtube.com/watch?v=sap5_NvrBFk">本人の動画</a>がYouTubeにある。</p>
-<h1 id="やること">やること</h1>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Tue, 18 Oct 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-10-18.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
