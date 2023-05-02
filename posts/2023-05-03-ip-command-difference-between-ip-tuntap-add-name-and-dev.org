@@ -3,7 +3,7 @@
   :DATE: [2023-05-03 Wed 03:10]
   :TAGS: :ip:tuntap:linux:
   :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_PROGRESS: Published
   :BLOG_POST_STATUS: Normal
   :END:
 :LOGBOOK:
