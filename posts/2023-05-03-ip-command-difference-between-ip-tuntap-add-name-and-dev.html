@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- ip tuntap addコマンドのdevとnameの違い</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2023-05-03-ip-command-difference-between-ip-tuntap-add-name-and-dev.html" /><meta property="og:title" content="ip tuntap addコマンドのdevとnameの違い" /><meta property="og:description" content="ニッチですが、どちらも同じ効果がありそうだったので気になって調べてみたメモ。" />
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+
+	<meta name="viewport" content="width=device-width" />
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+	  
+	  <a href="../" class="mobile only item"><i class="angle left icon"></i></a>
+	  
+          <div class="computer only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+          <div class="mobile only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"></div>
+            <a href="../" class="computer only item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>ip tuntap addコマンドのdevとnameの違い</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on May  3, 2023</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on May  3, 2023
+	</div>
+
+	
+
+	
+	<a title="All pages tagged 'ip'." href="../tags/ip.html" class="ui tag label">ip</a><a title="All pages tagged 'tuntap'." href="../tags/tuntap.html" class="ui tag label">tuntap</a><a title="All pages tagged 'linux'." href="../tags/linux.html" class="ui tag label">linux</a>
+	
+      </div>
+
+    <div class="description">
+      <p>ニッチですが、どちらも同じ効果がありそうだったので気になって調べてみたメモ。</p>
+<h1 id="結論: 恐らくほぼ違いはない">結論: 恐らくほぼ違いはない</h1>
+<p>実装を軽く見た感じ、処理上ではほぼ同じ扱いをしているように見えます。</p>
+<p><a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/ip/iptuntap.c#n176">iptuntap.c « ip - iproute2/iproute2.git - Iproute2 routing commands and utilities</a> の <code>parse_args</code> の実装が以下です</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>matches<span class="op">(*</span>argv<span class="op">,</span> <span class="st">&quot;dev&quot;</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                        NEXT_ARG<span class="op">();</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">if</span> <span class="op">(</span>get_ifname<span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">,</span> <span class="op">*</span>argv<span class="op">))</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                                invarg<span class="op">(</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">dev</span><span class="sc">\&quot;</span><span class="st"> not a valid ifname&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">if</span> <span class="op">(</span>matches<span class="op">(*</span>argv<span class="op">,</span> <span class="st">&quot;name&quot;</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                                NEXT_ARG<span class="op">();</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>matches<span class="op">(*</span>argv<span class="op">,</span> <span class="st">&quot;help&quot;</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                                usage<span class="op">();</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">if</span> <span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">[</span><span class="dv">0</span><span class="op">])</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                                duparg2<span class="op">(</span><span class="st">&quot;name&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">if</span> <span class="op">(</span>get_ifname<span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">,</span> <span class="op">*</span>argv<span class="op">))</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                                invarg<span class="op">(</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">name</span><span class="sc">\&quot;</span><span class="st"> not a valid ifname&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span></code></pre></div>
+</div>
+<h1 id="処理の追跡">処理の追跡</h1>
+<h2 id="ip tuntap add dev DEVNAME の処理"><code>ip tuntap add dev DEVNAME</code> の処理</h2>
+<p>先程の部分から、実際に実行される動作は以下です。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>NEXT_ARG<span class="op">();</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>get_ifname<span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">,</span> <span class="op">*</span>argv<span class="op">))</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        invarg<span class="op">(</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">dev</span><span class="sc">\&quot;</span><span class="st"> not a valid ifname&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span></code></pre></div>
+</div>
+<p><code>NEXT_ARG</code> は、~argv~ の指す先をインクリメントして次の引数を示すように します。その際、必要な数引数がなかった場合はエラーを吐くようにしてある ようです。(<a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/include/utils.h#n51">実際のコード</a>)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define NEXT_ARG() do { argv++; if (--argc &lt;= 0) incomplete_command(); } while(0)</span></span></code></pre></div>
+</div>
+<p><code>invarg</code> はエラー処理用の関数で、入ったらエラーを出力してそのまま終了 するので(<a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n792">utils.c « lib - iproute2/iproute2.git - Iproute2 routing commands and utilities</a>) 今は特に考慮しなくて良いかと。</p>
+<p><code>get_ifname</code> は第二引数に与えられた文字列が有効なものかを確認し、有効 であれば第一引数に与えられたポインタに書き込みます(<a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n846">utils.c « lib - iproute2/iproute2.git - Iproute2 routing commands and utilities</a>)。</p>
+<p>なので、ここでやっていることとしては、argvが <code>DEVNAME</code> を指すようにし た状態で <code>get_ifname(ifr-&gt;ifr_name, \*argv)</code> を呼び出しています。</p>
+<h2 id="ip tuntap add name DEVNAME の処理"><code>ip tuntap add name DEVNAME</code> の処理</h2>
+<p>実際に動作する部分は以下(不要なelse文を除去してあります)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>matches<span class="op">(*</span>argv<span class="op">,</span> <span class="st">&quot;name&quot;</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>        NEXT_ARG<span class="op">();</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="op">...</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">[</span><span class="dv">0</span><span class="op">])</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        duparg2<span class="op">(</span><span class="st">&quot;name&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>get_ifname<span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">,</span> <span class="op">*</span>argv<span class="op">))</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        invarg<span class="op">(</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">name</span><span class="sc">\&quot;</span><span class="st"> not a valid ifname&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span></code></pre></div>
+</div>
+<p><code>matches(*argv, "name") == 0</code> は真になるので <code>NEXT_ARG</code> は呼ばれます。 <code>duparg2</code> は<a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n806">引数の重複時等用のもエラー処理用の関数</a>なので、本筋とは外れ るので一旦置きます。そうすると、実質実行されるのは以下のようなコードと なります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>NEXT_ARG<span class="op">();</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>get_ifname<span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">,</span> <span class="op">*</span>argv<span class="op">))</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        invarg<span class="op">(</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">name</span><span class="sc">\&quot;</span><span class="st"> not a valid ifname&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span></code></pre></div>
+</div>
+<p>これは、 <code>ip tuntap add dev DEVNAME</code> の処理と全く同じです…!!</p>
+<h1 id="細かな違い">細かな違い</h1>
+<p>先程のエラー処理を考えると、 <code>dev</code> オプション(オプションなのか？)は複 数付けることが出来、最後に与えた値が有効な値となりそうです。他方、 <code>name</code> は複数与えることが出来ず、そうした場合はエラーを返します。</p>
+<p>又、devの後にnameを与えるとエラーになり、その逆(nameの後にdevを与える) とdevの値で上書きされるものと考えられます。</p>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
