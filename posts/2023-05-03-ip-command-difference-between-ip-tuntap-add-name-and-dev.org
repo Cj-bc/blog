@@ -1,0 +1,106 @@
+* ip tuntap addコマンドのdevとnameの違い
+  :PROPERTIES:
+  :DATE: [2023-05-03 Wed 03:10]
+  :TAGS: :ip:tuntap:linux:
+  :BLOG_POST_KIND: Knowledge
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+:LOGBOOK:
+CLOCK: [2023-05-03 Wed 03:11]--[2023-05-03 Wed 04:34] =>  1:23
+:END:
+
+ ニッチですが、どちらも同じ効果がありそうだったので気になって調べてみたメモ。
+
+
+** 結論: 恐らくほぼ違いはない
+実装を軽く見た感じ、処理上ではほぼ同じ扱いをしているように見えます。
+
+[[https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/ip/iptuntap.c#n176][iptuntap.c « ip - iproute2/iproute2.git - Iproute2 routing commands
+and utilities]] の ~parse_args~ の実装が以下です
+
+#+begin_src c
+  ...
+                  } else if (matches(*argv, "dev") == 0) {
+                          NEXT_ARG();
+                          if (get_ifname(ifr->ifr_name, *argv))
+                                  invarg("\"dev\" not a valid ifname", *argv);
+                  } else {
+                          if (matches(*argv, "name") == 0) {
+                                  NEXT_ARG();
+                          } else if (matches(*argv, "help") == 0)
+                                  usage();
+                          if (ifr->ifr_name[0])
+                                  duparg2("name", *argv);
+                          if (get_ifname(ifr->ifr_name, *argv))
+                                  invarg("\"name\" not a valid ifname", *argv);
+                  }
+  ...
+#+end_src
+
+** 処理の追跡
+*** ~ip tuntap add dev DEVNAME~ の処理
+先程の部分から、実際に実行される動作は以下です。
+
+#+begin_src c
+  NEXT_ARG();
+  if (get_ifname(ifr->ifr_name, *argv))
+          invarg("\"dev\" not a valid ifname", *argv);
+#+end_src
+
+~NEXT_ARG~ は、~argv~ の指す先をインクリメントして次の引数を示すように
+します。その際、必要な数引数がなかった場合はエラーを吐くようにしてある
+ようです。([[https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/include/utils.h#n51][実際のコード]])
+
+#+begin_src c 
+  #define NEXT_ARG() do { argv++; if (--argc <= 0) incomplete_command(); } while(0)
+#+end_src
+
+
+~invarg~ はエラー処理用の関数で、入ったらエラーを出力してそのまま終了
+するので([[https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n792][utils.c « lib - iproute2/iproute2.git - Iproute2 routing
+commands and utilities]]) 今は特に考慮しなくて良いかと。
+
+
+~get_ifname~ は第二引数に与えられた文字列が有効なものかを確認し、有効
+であれば第一引数に与えられたポインタに書き込みます([[https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n846][utils.c « lib -
+iproute2/iproute2.git - Iproute2 routing commands and utilities]])。
+
+
+なので、ここでやっていることとしては、argvが ~DEVNAME~ を指すようにし
+た状態で ~get_ifname(ifr->ifr_name, \*argv)~ を呼び出しています。 
+
+*** ~ip tuntap add name DEVNAME~ の処理
+実際に動作する部分は以下(不要なelse文を除去してあります)
+
+#+begin_src c
+  if (matches(*argv, "name") == 0) {
+          NEXT_ARG();
+  } ...
+  if (ifr->ifr_name[0])
+          duparg2("name", *argv);
+  if (get_ifname(ifr->ifr_name, *argv))
+          invarg("\"name\" not a valid ifname", *argv);
+#+end_src
+
+~matches(*argv, "name") == 0~ は真になるので ~NEXT_ARG~ は呼ばれます。
+~duparg2~ は[[https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n806][引数の重複時等用のもエラー処理用の関数]]なので、本筋とは外れ
+るので一旦置きます。そうすると、実質実行されるのは以下のようなコードと
+なります。
+
+#+begin_src c
+  NEXT_ARG();
+  if (get_ifname(ifr->ifr_name, *argv))
+          invarg("\"name\" not a valid ifname", *argv);
+#+end_src
+
+これは、 ~ip tuntap add dev DEVNAME~ の処理と全く同じです...!!
+
+** 細かな違い
+先程のエラー処理を考えると、 ~dev~ オプション(オプションなのか？)は複
+数付けることが出来、最後に与えた値が有効な値となりそうです。他方、
+~name~ は複数与えることが出来ず、そうした場合はエラーを返します。
+
+
+又、devの後にnameを与えるとエラーになり、その逆(nameの後にdevを与える)
+とdevの値で上書きされるものと考えられます。
