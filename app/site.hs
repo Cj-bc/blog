@@ -58,7 +58,7 @@ pandocMarkdownCfg = def { readerExtensions = extensionsFromList [Ext_emoji, Ext_
 
 pandocWriterCfg :: Template T.Text -> WriterOptions
 pandocWriterCfg tmpl = def { writerTemplate = Just tmpl
-                           , writerExtensions = extensionsFromList [Ext_yaml_metadata_block]
+                           , writerExtensions = extensionsFromList [Ext_yaml_metadata_block, Ext_backtick_code_blocks]
                            }
 
 -- | insert default template for markdown
