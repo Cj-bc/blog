@@ -7,8 +7,79 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/cli.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Fri, 02 Jun 2023 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Thu, 20 Jul 2023 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2023-07-20-latex-japanese-article-to-pdf</title>
+    <link>https://cj-bc.github.io/blog/posts/2023-07-20-latex-japanese-article-to-pdf.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>LaTeXで日本語PDF文書を書く時の走り書きメモ</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on July 20, 2023</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on July 20, 2023
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;latex&#39;." href="/tags/latex.html" class="ui tag label">latex</a><a title="All pages tagged &#39;pdf&#39;." href="/tags/pdf.html" class="ui tag label">pdf</a>
+	
+      </div>
+
+    <div class="description">
+      <p>時間があまりないが、忘れると困るレベルに苦手だったLaTeXで日本語を含んだPDFが出力出来たので走り書きのメモ。 後にきちんと書く。</p>
+<p>とりあえず <a href="https://texwiki.texjp.org/?LaTeX入門">texwiki.texjp.org</a> 読んどけば、大学で習ってない民でも結構なんとかなる。なんと2023年でも更新されていてありがたい。</p>
+<h1 id="環境">環境</h1>
+<p>archlinux上でTeXLiveを使っている。</p>
+<h1 id="とりあえずPDFにする">とりあえずPDFにする</h1>
+<p><code>YOUR_FILE.tex</code> から <code>YOUR_FILE.pdf</code> を作成するためには</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> platex YOUR_FILE</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dvipdfmx YOUR_FILE</span></code></pre></div>
+</div>
+<h1 id="独自のstyファイルを使う">独自のstyファイルを使う</h1>
+<p><code>TEXMFHOME/tex/latex</code> ないし <code>TEXMFLOCAL/tex/latex</code> 以下に <code>sty</code> ファイルを置き、 <code>sudo mktexlsr</code> すればよい。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tlmgr conf</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="va">TEXMFHOME</span><span class="op">=</span>/home/me/texmf</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">TEXMFLOCAL</span><span class="op">=</span>/usr/local/share/texmf:/usr/share/texmf</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span></code></pre></div>
+</div>
+<h1 id="BibTeX">BibTeX</h1>
+<p><a href="https://texwiki.texjp.org/?文献引用">https://texwiki.texjp.org/?文献引用</a></p>
+<p>4回コマンドを実行する。 <strong>TeXファイルとBibTeXファイルの名前は拡張子以外合わせるぽい？</strong></p>
+<div class="ui segment">
+<div class="ui top right attached label">
+bash
+</div>
+<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> platex YOUR_FILE</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> pbibtex YOUR_FILE</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> platex YOUR_FILE</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> platex YOUR_FILE</span></code></pre></div>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Thu, 20 Jul 2023 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2023-07-20-latex-japanese-article-to-pdf.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2023-06-02-yozakura-mia-as-valorant-agent</title>
     <link>https://cj-bc.github.io/blog/posts/2023-06-02-yozakura-mia-as-valorant-agent.html</link>
     <description><![CDATA[<div id="body-content">
@@ -20,7 +91,7 @@
 	<div class="item">Posted on June  2, 2023</div>
 	<div class="item">
 	  <i class="history icon"></i>
-	  Updated on June  3, 2023
+	  Updated on July 12, 2023
 	</div>
 
 	
@@ -124,7 +195,12 @@
 <li>「黒猫さんは買うものではない」ので黒猫さん関連をシグネチャアビリティにして、他は魔力を使うので購入にする…？</li>
 <li>本来は詠唱魔法だが、戦闘中に詠唱する余裕はないので即時に発動できるような魔法道具を使っている。本来何も買わなくてもいいはずなのに買うのは、その魔法道具を買っているから。</li>
 </ul>
-<p>キャラクターのコンセプトを研究したい ・ソーヴァ: 発見 ・セージ: 遅延 ・キルジョイ:</p></li>
+<p>キャラクターのコンセプトを研究したい</p>
+<ul>
+<li>ソーヴァ: 発見</li>
+<li>セージ: 遅延</li>
+<li>キルジョイ:</li>
+</ul></li>
 </ol>
 <h2 id="VALORANTのエージェントの作り方の調査">VALORANTのエージェントの作り方の調査</h2>
 <p>漠然としたアイデアは出て、方向性として面白そうだなとなったのできちんと落とし込む作業に入ります。夜桜 みあのFAであると同時に、VALORANTのFAでもあるので、きちんとVALORANTにも失礼がないように&amp;現実的である ようにするためVALORANTのエージェントの制作過程を調べることとしました。</p>
@@ -1357,106 +1433,6 @@ diff
 ]]></description>
     <pubDate>Thu, 02 Mar 2023 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2023-03-02-windows-install-and-setup-containerd-on-wsl2.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2022-11-30-elisp-how-to-call-interactive-function-with-prefix-argunments-from-elisp</title>
-    <link>https://cj-bc.github.io/blog/posts/2022-11-30-elisp-how-to-call-interactive-function-with-prefix-argunments-from-elisp.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>Interactiveな関数をElispからPrefix Arguments付きで呼ぶ</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on November 30, 2022</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on November 30, 2022
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a>
-	
-      </div>
-
-    <div class="description">
-      <h1 id="やりたいこと">やりたいこと</h1>
-<p>Org modeで「現在時刻を即時入力したい」時、インタラクティブな編集ではhelp:org-time-stamp-inactive を Prefix Argument 2つで呼び出すことで実現出来ます。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>C-u C-u M-x org-time-stamp-inactive
-; =&gt; [2022-11-30 Wed 09:51]
-</code></pre>
-</div>
-<p>で、これをElispからも行いたいというのが今回の目的です。</p>
-<h1 id="結論">結論</h1>
-<p>Prefix Argumentの代わりに <code>'(4)</code> のような <code>raw prefix argument</code> を指定します。 冒頭の回答は以下:</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>(org-time-stamp-inactive &#39;(16))
-</code></pre>
-</div>
-<p>詳しくは<a href="info:elisp#Prefix Command Arguments">elisp#Prefix Command Arguments</a>を参照して下さい。</p>
-<h2 id="Raw Prefix Argumentとは？">Raw Prefix Argumentとは？</h2>
-<p>Prefix Argumentsには2種類の表現方法(representation)があり、その一つが "Raw" です。ちなみにもう一つは"numeric"。内部的にはこの "raw prefix argument" とし て使っていますが、コマンドからはどちらの表現でも用いることが出来ます。実際に Interactiveなコマンドが動作する際には、 <code>(interactive)</code> の引数に応じて"raw" 若しくは"numeric"な値が最初の引数として与えられるようです。</p>
-<p>Raw prefix argumentは、その与え方によって値が変化します。</p>
-<div id="Prefix argumentの指定方法とRaw prefix argumentの値">
-<table class="ui celled table">
-<thead>
-<tr class="header">
-<th>Prefix argument</th>
-<th>Raw prefix argumentの値</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>何もなし</td>
-<td><code>nil</code></td>
-</tr>
-<tr class="even">
-<td><code>C-u &lt;数字&gt;</code></td>
-<td><code>&lt;数字&gt;</code></td>
-</tr>
-<tr class="odd">
-<td><code>C-u</code></td>
-<td><code>(4)</code></td>
-</tr>
-<tr class="even">
-<td><code>C-u C-u</code></td>
-<td><code>(16)</code></td>
-</tr>
-<tr class="odd">
-<td><code>C-u C-u C-u</code></td>
-<td><code>(64)</code></td>
-</tr>
-<tr class="even">
-<td><code>M--~/~C-u -</code></td>
-<td><code>-</code></td>
-</tr>
-<tr class="odd">
-<td><code>C-u -&lt;数字&gt;</code></td>
-<td><code>-&lt;数字&gt;</code></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>数字なしで <code>C-u</code> が呼ばれる際は、リストとして渡されるようです。複数の <code>C-u</code> が与えられた場合は、4倍ずつされていくようです。</p>
-<h1 id="出来そうで上手くいかなかったもの">出来そうで上手くいかなかったもの</h1>
-<p>help:universal-argument, help:digit-argument, help:negative-argument みたいなものは存在するがどうやって使うのか？がわかりません…oh… どうやら <code>C-u</code> 等にバインドされているらしいので、Elispから使う用では ないみたい？</p>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Wed, 30 Nov 2022 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2022-11-30-elisp-how-to-call-interactive-function-with-prefix-argunments-from-elisp.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
