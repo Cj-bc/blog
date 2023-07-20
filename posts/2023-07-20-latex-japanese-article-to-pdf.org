@@ -1,0 +1,55 @@
+* LaTeXで日本語PDF文書を書く時の走り書きメモ
+  :PROPERTIES:
+  :DATE: [2023-07-20 Thu 23:48]
+  :TAGS: :latex:pdf:
+  :BLOG_POST_KIND: Memo
+  :BLOG_POST_PROGRESS: Empty
+  :BLOG_POST_STATUS: Normal
+  :END:
+:LOGBOOK:
+CLOCK: [2023-07-20 Thu 23:48]--[2023-07-20 Thu 23:55] =>  0:07
+:END:
+  
+ 時間があまりないが、忘れると困るレベルに苦手だったLaTeXで日本語を含んだPDFが出力出来たので走り書きのメモ。
+ 後にきちんと書く。
+
+ とりあえず [[https://texwiki.texjp.org/?LaTeX入門][texwiki.texjp.org]] 読んどけば、大学で習ってない民でも結構なんとかなる。なんと2023年でも更新されていてありがたい。
+ 
+** 環境
+archlinux上でTeXLiveを使っている。
+
+** とりあえずPDFにする
+
+~YOUR_FILE.tex~ から ~YOUR_FILE.pdf~ を作成するためには
+
+#+begin_src sh
+  $ platex YOUR_FILE
+  $ dvipdfmx YOUR_FILE
+#+end_src
+
+** 独自のstyファイルを使う
+~TEXMFHOME/tex/latex~ ないし ~TEXMFLOCAL/tex/latex~ 以下に ~sty~ ファイルを置き、
+~sudo mktexlsr~ すればよい。
+
+
+#+begin_src sh
+  $ tlmgr conf
+  ...
+  TEXMFHOME=/home/me/texmf
+  TEXMFLOCAL=/usr/local/share/texmf:/usr/share/texmf
+
+  ...
+#+end_src
+
+** BibTeX
+https://texwiki.texjp.org/?文献引用
+
+4回コマンドを実行する。 *TeXファイルとBibTeXファイルの名前は拡張子以外合わせるぽい？*
+
+#+begin_src sh
+  $ platex YOUR_FILE
+  $ pbibtex YOUR_FILE
+  $ platex YOUR_FILE
+  $ platex YOUR_FILE
+#+end_src
+
