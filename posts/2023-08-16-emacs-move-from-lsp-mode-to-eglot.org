@@ -1,0 +1,118 @@
+* lsp-modeからEglotへ乗り換える
+:PROPERTIES:
+:DATE: [2023-08-16 Wed 10:18]
+:TAGS: :emacs:eglot:lsp:lsp-mode:
+:BLOG_POST_KIND: Knowledge
+:BLOG_POST_PROGRESS: Empty
+:BLOG_POST_STATUS: Normal
+:END:
+:LOGBOOK:
+CLOCK: [2023-08-16 Wed 12:18]--[2023-08-16 Wed 13:11] =>  0:53
+CLOCK: [2023-08-16 Wed 11:00]--[2023-08-16 Wed 11:47] =>  0:47
+CLOCK: [2023-08-16 Wed 10:18]--[2023-08-16 Wed 10:35] =>  0:17
+:END:
+  
+Emacs29.1から、LSPクライアントとしてEglotが標準搭載されるようになりま
+した。今迄は[[https://github.com/emacs-lsp/lsp-mode/][lsp-mode]]を使っていたのですが、そもそもあまりきちんと使えて
+いなかったのでこの機に一旦eglotに移ってみようと思います。
+
+** 前提
++ 筆者自身、普段そこまでLSPサーバーの機能を使用せずにコーディングしています
++ 複雑な設定等の移行の参考にはならない可能性があります
+
+** 現在のlsp-modeの設定
+私はパッケージマネージャーとして[[https://github.com/conao3/leaf.el][conao3/leaf.el]]を使用しているので、その設定を載せます。
+
+#+begin_src elisp
+  (leaf lsp-mode
+    :commands lsp
+    :ensure t
+    :hook
+    (sh-mode-hook . lsp)
+    (haskell-mode-hook . lsp)
+    (kotlin-mode-hook . lsp)
+    (c++-mode . lsp)
+    :custom
+    (lsp-keymap-prefix .  "M-l")
+    :bind
+    ("M-l". nil)
+    )
+#+end_src
+
+割とシンプル。いくつかのmodeでlspコマンドを実行するのと、lspで用いる
+prefix keyを"M-l"にしているだけです。これをEglot用に写していきます。
+
+** lsp-modeの無効化
+lsp-modeを完全に消してしまってもいいのですが、一旦eglotの使い勝手を見
+るという意味でlsp-modeも無効にしつつ置いておくことにします。
+
+#+begin_src elisp
+  (remove-hook 'sh-mode-hook 'lsp)
+  (remove-hook 'sh-mode-hook lsp)
+  (remove-hook 'haskell-mode-hook lsp)
+  (remove-hook 'kotlin-mode-hook lsp)
+  (remove-hook 'c++-mode lsp)
+#+end_src
+
+** Eglotの設定
+
+まずはhookを設定して...後は特にすることなし!!!...え???
+
+EglotはLSPクライアントとしての機能を提供するために、独自のコマンドでは
+なく「Emacsで良く使われている他のパッケージ」を用いるので、lsp-modeと
+同じキー配置にしたいのでなければキーマップの設定もほぼ要らないと思いま
+す。
+
+#+begin_src elisp
+  (leaf eglot
+    :hook
+    (sh-mode-hook . eglot)
+    (haskell-mode-hook . eglot)
+    (kotlin-mode-hook . eglot)
+    (c++-mode . eglot)
+    )
+#+end_src
+
+** lsp-modeのコマンドとの対応
+正直に言うと私自身あまりきちんとlsp-modeを使っていないのですが、代替コ
+マンド(と思われる)の一覧を残しておきます。
+
+尚この表は[[https://emacs-lsp.github.io/lsp-mode/page/keybindings/][lsp-modeのkeybindingsドキュメント]]で扱われているもののうち、
+外部パッケージとの連携を必要としないもののみに絞っています。
+
+| Description                                                                                 | lsp-modeコマンド                  | eglotコマンド                                        |
+|---------------------------------------------------------------------------------------------+-----------------------------------+------------------------------------------------------|
+| Start server                                                                                | lsp                               | ~eglot~                                              |
+| Restart server                                                                              | lsp-workspace-restart             | ~eglot-reconnect~                                    |
+| Shutdown server                                                                             | lsp-workspace-shutdown            | ~eglot-shutdown~                                     |
+| Describes current session                                                                   | lsp-describe-session              |                                                      |
+| Disconnect the buffer from the language server keeping the server running.                  | lsp-disconnect                    | -                                                    |
+| format this document.                                                                       | lsp-format-buffer                 | ~eglot-format-buffer~, ~eglot-format~ with no region |
+| format the region, or if none is selected, the current line.                                | lsp-format-region                 | ~eglot-format~                                       |
+| Add new project root to the list of workspace folders.                                      | lsp-workspace-folders-add         | -                                                    |
+| Remove project root from the list of workspace folders.                                     | lsp-workspace-folders-remove      | -                                                    |
+| Remove project root from the workspace blacklist.                                           | lsp-workspace-blacklist-remove    | -                                                    |
+| Toggle code-lens overlays.                                                                  | lsp-lens-mode                     | -                                                    |
+| Toggle client-server protocol logging.                                                      | lsp-toggle-trace-io               | -                                                    |
+| Toggle symbol highlighting.                                                                 | lsp-toggle-symbol-highlight       | -                                                    |
+| Toggle minor mode for showing information for current line in sideline. (requires =lsp-ui=) | lsp-ui-sideline-mode              | -                                                    |
+| Toggle minor mode for showing hover information in child frame. (requires =lsp-ui=)         | lsp-ui-doc-mode                   | -                                                    |
+| Toggle signature auto activate.                                                             | nil                               | -                                                    |
+| Toggle on type formatting.                                                                  | nil                               | -                                                    |
+| Find definitions of the symbol under point.                                                 | lsp-find-definition               | ~xref-find-definitions~                              |
+| Find references of the symbol under point.                                                  | lsp-find-references               | ~xref-find-references~                               |
+| Find implementations of the symbol under point.                                             | lsp-find-implementation           | ~xref-find-references~, ~eglot-find-implementation~  |
+| Find type definitions of the symbol under point.                                            | lsp-find-type-definition          | ~xref-find-references~, ~eglot-find-typeDefinition~  |
+| Find declarations of the symbol under point.                                                | lsp-find-declaration              | ~xref-find-references~, ~eglot-find-declaration~     |
+| Find all meaningful symbols that match pattern.                                             | xref-find-apropos                 | -                                                    |
+| Display the type signature and documentation of the thing at point.                         | lsp-describe-thing-at-point       | -                                                    |
+| Activate signature help.                                                                    | lsp-signature                     | -                                                    |
+| Trigger display hover information popup and hide it on next typing.                         | lsp-ui-doc-glance                 | -                                                    |
+| Rename the symbol (and all references to it).                                               | lsp-rename                        | ~eglot-rename~                                       |
+| Perform the source.organizeImports code action, if available.                               | lsp-organize-imports              | ~eglot-code-action-organize-imports~                 |
+| Execute code action.                                                                        | lsp-execute-code-action           | ~eglot-code-actions~                                 |
+| Highlight symbol at point.                                                                  | lsp-document-highlight            | -                                                    |
+| Peek definitions to the identifier at point. (requires =lsp-ui=)                            | lsp-ui-peek-find-definitions      | -                                                    |
+| Peek references to the identifier at point. (requires =lsp-ui=)                             | lsp-ui-peek-find-references       | -                                                    |
+| Peek implementation locations of the symbol at point. (requires =lsp-ui=)                   | lsp-ui-peek-find-implementation   | -                                                    |
+| Peek symbols in the workspace. (requires =lsp-ui=)                                          | lsp-ui-peek-find-workspace-symbol | -                                                    |
