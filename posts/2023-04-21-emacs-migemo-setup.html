@@ -124,14 +124,24 @@
 <p><a href="https://github.com/koron/cmigemo/blob/master/doc/README_j.txt">migemo</a>とは、</p>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
-<p>Migemo はローマ字のまま日本語をインクリメンタル検索するため のツールです。 かな漢字変換をすることなく日本語のインクリメン タル検索を快適に行うことができます。</p>
+<p>Migemo はローマ字のまま日本語をインクリメンタル検索するため
+のツールです。 かな漢字変換をすることなく日本語のインクリメン
+タル検索を快適に行うことができます。</p>
 <p>– <a href="http://0xcc.net/migemo/">http://0xcc.net/migemo/</a></p>
 </blockquote>
 </div>
-<p>プログラマーでない人向けに少し解説をすると、プログラミングをしている際は、文字入力を英語を入力するモードに 切り替えていることが多く、その状態で日本語を検索しようとすると「一度日本語入力モードに切り替えて検索し、そ の後元に戻す」というひとてまが発生します。migemoを用いると、その必要がなく「英語入力モードのままで日本語 を検索出来る」ようになります。 どうやらオリジナルのものは2000年に公開されているという割かし古いプログラムではありますが、その実装の一つ である<a href="https://github.com/koron/cmigemo">koron/cmigemo</a>は2022年でも更新が受け入れられているなどまだ使われているプログラムのようです。</p>
-<p>名前は割と昔、SKKを調べ始めた頃から見ていましたがこれまで試してきておらず、ここにきて試してみようと思い 立った備忘録です。</p>
+<p>プログラマーでない人向けに少し解説をすると、プログラミングをしている際は、文字入力を英語を入力するモードに
+切り替えていることが多く、その状態で日本語を検索しようとすると「一度日本語入力モードに切り替えて検索し、そ
+の後元に戻す」というひとてまが発生します。migemoを用いると、その必要がなく「英語入力モードのままで日本語
+を検索出来る」ようになります。
+どうやらオリジナルのものは2000年に公開されているという割かし古いプログラムではありますが、その実装の一つ
+である<a href="https://github.com/koron/cmigemo">koron/cmigemo</a>は2022年でも更新が受け入れられているなどまだ使われているプログラムのようです。</p>
+<p>名前は割と昔、SKKを調べ始めた頃から見ていましたがこれまで試してきておらず、ここにきて試してみようと思い
+立った備忘録です。</p>
 <h1 id="環境構成">環境構成</h1>
-<p>migemo自体は「ローマ字から日本語の正規表現を組み立てて返す」という動作をするだけのプログラムです。そのた め、実際に使用するには他のプラグイン等と組み合わせる必要があります。 今回は以下のような環境で使うための設定をしていきます</p>
+<p>migemo自体は「ローマ字から日本語の正規表現を組み立てて返す」という動作をするだけのプログラムです。そのた
+め、実際に使用するには他のプラグイン等と組み合わせる必要があります。
+今回は以下のような環境で使うための設定をしていきます</p>
 <ul>
 <li>Emacs (28.2)</li>
 <li>ivy-swiper</li>
@@ -139,7 +149,8 @@
 </ul>
 <h1 id="作業工程">作業工程</h1>
 <h2 id="cmigemoのインストール">cmigemoのインストール</h2>
-<p>まずはmigemo本体のインストールをします。migemoの実装は本家の<a href="http://0xcc.net/migemo/">Ruby版</a>とその<a href="https://www.kaoriya.net/software/cmigemo/">C版</a>とがあります。 なんかC版であるcmigemoの方が良いと見た気がするので、cmigemoを入れていきます。</p>
+<p>まずはmigemo本体のインストールをします。migemoの実装は本家の<a href="http://0xcc.net/migemo/">Ruby版</a>とその<a href="https://www.kaoriya.net/software/cmigemo/">C版</a>とがあります。
+なんかC版であるcmigemoの方が良いと見た気がするので、cmigemoを入れていきます。</p>
 <p>archlinuxでは、AURにあるので取ってきます(勿論AURなので自己責任で…)</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -148,8 +159,12 @@ bash
 <div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">yay</span> <span class="at">-S</span> cmigemo-git</span></code></pre></div>
 </div>
 <h2 id="migemo.elの設定">migemo.elの設定</h2>
-<p>Emacsから使用出来るようにするために、<a href="https://github.com/emacs-jp/migemo">emacs-jp/migemo</a>を利用します。私は <a href="https://github.com/conao3/leaf.el">conao3/leaf.el</a>を使用しているので、以下のようにして設定を追記します。大 体の設定値は<a href="https://github.com/emacs-jp/migemo#sample-configuration">Sample-configuration</a>のままにしています。</p>
-<p>但し設定を変えた後は一度 <code>migemo-kill</code> しないと反映されないため、既に migemoを使っていた場合は一度 <code>migemo-kill</code> を挟むようにしています。</p>
+<p>Emacsから使用出来るようにするために、<a href="https://github.com/emacs-jp/migemo">emacs-jp/migemo</a>を利用します。私は
+<a href="https://github.com/conao3/leaf.el">conao3/leaf.el</a>を使用しているので、以下のようにして設定を追記します。大
+体の設定値は<a href="https://github.com/emacs-jp/migemo#sample-configuration">Sample-configuration</a>のままにしています。</p>
+<p>但し設定を変えた後は一度 <code>migemo-kill</code>
+しないと反映されないため、既に migemoを使っていた場合は一度
+<code>migemo-kill</code> を挟むようにしています。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -172,9 +187,13 @@ elisp
   )
 </code></pre>
 </div>
-<p>この時点で、 <code>migemo-forward</code> 関数などが使用可能なはずです。</p>
+<p>この時点で、 <code>migemo-forward</code>
+関数などが使用可能なはずです。</p>
 <h2 id="ivy-migemo">ivy-migemo</h2>
-<p>デフォルトの <code>migemo.el</code> ではisearch用のラッパーは用意されていますが、 私はivy(swiper)を利用しているのでそれに対応させるためのパッケージを入 れます。これも設定は<a href="https://github.com/ROCKTAKEY/ivy-migemo">ROCKTAKEY/ivy-migemo</a>のREADMEから直接使用しています。</p>
+<p>デフォルトの <code>migemo.el</code>
+ではisearch用のラッパーは用意されていますが、
+私はivy(swiper)を利用しているのでそれに対応させるためのパッケージを入
+れます。これも設定は<a href="https://github.com/ROCKTAKEY/ivy-migemo">ROCKTAKEY/ivy-migemo</a>のREADMEから直接使用しています。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -189,17 +208,32 @@ elisp
                              )))
 </code></pre>
 </div>
-<p>私はfuzzy-matchingがすきなので <code>ivy--regex-fuzzy</code> / <code>ivy-migemo-regex-fuzzy</code> を利用していますが、お好み で <code>ivy-migemo-regex-plus</code> も用意されているようです。</p>
+<p>私はfuzzy-matchingがすきなので <code>ivy--regex-fuzzy</code> /
+<code>ivy-migemo-regex-fuzzy</code> を利用していますが、お好み で
+<code>ivy-migemo-regex-plus</code> も用意されているようです。</p>
 <h2 id="avy-migemo">avy-migemo</h2>
-<p>avy-migemoはavyをmigemo対応させるやつ…なようですが、大分古くて更新が止まっているのでそのままだと上 手く動きません。今、夜で眠いのでまた対応させる気が出たら対応させて追記します。</p>
+<p>avy-migemoはavyをmigemo対応させるやつ…なようですが、大分古くて更新が止まっているのでそのままだと上
+手く動きません。今、夜で眠いのでまた対応させる気が出たら対応させて追記します。</p>
 <p>(ちなみに色々先人は</p>
 <h2 id="AZIK配列に対応させる">AZIK配列に対応させる</h2>
-<p><a href="https://asiamoth.com/200608052313/">MigemoでAZIK！（「mpxo」で「猛暑」を検索） | 亜細亜ノ蛾</a>を参考にすると、辞書ファイルの <code>roma2hira.dat</code> を編集すれば良いとのことです。該当のファイルはarchlinux上では <code>/usr/share/migemo/utf-8/roma2hira.dat</code> にあるので、それを置き換えることにします。</p>
-<p>上記参考記事ではAZIK for ATOK 2006 for Windowsの辞書をゴニョゴニョしたとのことですが、該当リンクが切 れていることとライセンスの問題が何か面倒だった気がすること、実装によって微妙に変換規則が異なっている ことがあること、どうせなら自分で使っている辞書を使えばいいや!と思ったことから、手元にあるlibskkが使 用している辞書(というか変換テーブル)をゴニョることにしました。</p>
+<p><a href="https://asiamoth.com/200608052313/">MigemoでAZIK！（「mpxo」で「猛暑」を検索）
+| 亜細亜ノ蛾</a>を参考にすると、辞書ファイルの
+<code>roma2hira.dat</code>
+を編集すれば良いとのことです。該当のファイルはarchlinux上では
+<code>/usr/share/migemo/utf-8/roma2hira.dat</code>
+にあるので、それを置き換えることにします。</p>
+<p>上記参考記事ではAZIK for ATOK 2006 for
+Windowsの辞書をゴニョゴニョしたとのことですが、該当リンクが切
+れていることとライセンスの問題が何か面倒だった気がすること、実装によって微妙に変換規則が異なっている
+ことがあること、どうせなら自分で使っている辞書を使えばいいや!と思ったことから、手元にあるlibskkが使
+用している辞書(というか変換テーブル)をゴニョることにしました。</p>
 <ol>
 <li><p>変換テーブルの作成</p>
-<p>libskkが使用している、ローマ字とかな文字の変換テーブルはJSONで書かれています。そのため、jqとsedでゴ ニョればいい感じに取り出すことが出来ます。(ちなみに同様にして、tcodeやkzik等等他の配列へも対応出来る はずです)</p>
-<p>以下に、私の環境で使用したスクリプトを記載します。尚、エスケープ漏れ？のせいでファイルのうち一つが適 切なJSONとして認識されなかったため、前処理をしています。</p>
+<p>libskkが使用している、ローマ字とかな文字の変換テーブルはJSONで書かれています。そのため、jqとsedでゴ
+ニョればいい感じに取り出すことが出来ます。(ちなみに同様にして、tcodeやkzik等等他の配列へも対応出来る
+はずです)</p>
+<p>以下に、私の環境で使用したスクリプトを記載します。尚、エスケープ漏れ？のせいでファイルのうち一つが適
+切なJSONとして認識されなかったため、前処理をしています。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
@@ -210,7 +244,9 @@ bash
 <li><p>スクリプトの解説</p>
 <ol>
 <li><p>不正なクオーテーションの削除</p>
-<p><code>/usr/share/libskk/rules/default/rom-kana/default.json</code> にある以下の記述が、どうやらパースに失敗して いるようです。エスケープ用のバックスペースが無ければ上手く動いたので、sedで取り除いています。</p>
+<p><code>/usr/share/libskk/rules/default/rom-kana/default.json</code>
+にある以下の記述が、どうやらパースに失敗して
+いるようです。エスケープ用のバックスペースが無ければ上手く動いたので、sedで取り除いています。</p>
 <p>変換前:</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -241,7 +277,12 @@ bash
 <div class="sourceCode" id="cb7" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">&quot;s;</span><span class="dt">\\\\</span><span class="st">';';&quot;</span></span></code></pre></div>
 </div></li>
 <li><p>複数のrom-kana JSONのマージ</p>
-<p>libskkでは、既存のJSONファイルをマージすることが出来ます。これにより、例えばAZIKでは基本的な配列は そのままに拡張することが出来ます。これを使用するために、複数のJSONファイルをjqでマージします。 本来は、目的のファイル(<code>/usr/share/libskk/rules/azik/rom-kana/default.json</code>)の <code>include</code> を読み、必 要なファイルを自動的に判別すると汎用性が出て良いと思うのですが、今回はそれは面倒なので必要なファイル を直書きします。</p>
+<p>libskkでは、既存のJSONファイルをマージすることが出来ます。これにより、例えばAZIKでは基本的な配列は
+そのままに拡張することが出来ます。これを使用するために、複数のJSONファイルをjqでマージします。
+本来は、目的のファイル(<code>/usr/share/libskk/rules/azik/rom-kana/default.json</code>)の
+<code>include</code> を読み、必
+要なファイルを自動的に判別すると汎用性が出て良いと思うのですが、今回はそれは面倒なので必要なファイル
+を直書きします。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
@@ -250,7 +291,8 @@ bash
 </div>
 <p>参考:</p>
 <ul>
-<li><a href="https://dev.classmethod.jp/articles/merge_multiple_json/">複数のjsonファイルをjqを使ってmergeする | DevelopersIO</a></li>
+<li><a href="https://dev.classmethod.jp/articles/merge_multiple_json/">複数のjsonファイルをjqを使ってmergeする
+| DevelopersIO</a></li>
 </ul></li>
 <li><p>JSON書式から、migemoで使用可能な形式への変換</p>
 <p>migemoで使用する形式は、</p>
@@ -271,7 +313,8 @@ bash
 </ol>
 <h1 id="トラブルシューティング">トラブルシューティング</h1>
 <h2 id="migemo.elの設定を変えても反映されない">migemo.elの設定を変えても反映されない</h2>
-<p>設定を変えた後は、一度 <code>(migemo-kill)</code> した後に <code>(migemo-init)</code> しなおす必要があります。</p>
+<p>設定を変えた後は、一度 <code>(migemo-kill)</code> した後に
+<code>(migemo-init)</code> しなおす必要があります。</p>
     </div>
   </div>
   

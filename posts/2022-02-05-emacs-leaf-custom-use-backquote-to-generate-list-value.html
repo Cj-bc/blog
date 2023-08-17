@@ -120,7 +120,10 @@
       </div>
 
     <div class="description">
-      <p><a href="https://github.com/conao3/leaf.el">conao3/leaf.el</a>に於いて、動的な値を <code>:custom</code> キーワードに与えるにはバッククォートを使う必要があります。 (<a href="https://qiita.com/conao3/items/347d7e472afd0c58fbd7#変数の変更について">conao3さんのQiita記事 「Emacs入門から始めるleaf.el入門」</a>にも記載があります。</p>
+      <p><a href="https://github.com/conao3/leaf.el">conao3/leaf.el</a>に於いて、動的な値を
+<code>:custom</code>
+キーワードに与えるにはバッククォートを使う必要があります。 (<a href="https://qiita.com/conao3/items/347d7e472afd0c58fbd7#変数の変更について">conao3さんのQiita記事
+「Emacs入門から始めるleaf.el入門」</a>にも記載があります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -130,8 +133,10 @@ elisp
   `(foo-variable . ,(+ 3 3)))
 </code></pre>
 </div>
-<p>(backquoteについては <a href="info:elisp#Backquote">info:elisp#Backquote</a> を参照すると良いと思います。)</p>
-<p>先の事例では、リストではない値を割り当てていましたが、リストを割り当てる場合は 少しトリッキーになります。</p>
+<p>(backquoteについては <a href="info:elisp#Backquote">info:elisp#Backquote</a>
+を参照すると良いと思います。)</p>
+<p>先の事例では、リストではない値を割り当てていましたが、リストを割り当てる場合は
+少しトリッキーになります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -140,7 +145,10 @@ elisp
 </code></pre>
 </div>
 <p>(org-agenda-list quote (foo.org bar.org))</p>
-<p>Org babelで実行して <code>RESULTS</code> を見てみると変な感じがしますが、動いているぽい。 <code>'</code> でクォートしてあげないと、完全に一つのリストになってしまいます。 これの理屈としては、恐らくバッククォートを用いたことで以下のように展開され:</p>
+<p>Org babelで実行して <code>RESULTS</code>
+を見てみると変な感じがしますが、動いているぽい。 <code>'</code>
+でクォートしてあげないと、完全に一つのリストになってしまいます。
+これの理屈としては、恐らくバッククォートを用いたことで以下のように展開され:</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -149,17 +157,21 @@ elisp
 </code></pre>
 </div>
 <p>これはつまりリストの構成と同じなのでくっついてしまうんでしょうね。</p>
-<p>ちなみに、CDRがリストならDotted pair表示にはならないらしい (<a href="info:elisp#Dotted Pair Notation">info:elisp#Dotted Pair Notation</a>より) のでDotted pairの表示じゃないのは正常なようです。</p>
+<p>ちなみに、CDRがリストならDotted pair表示にはならないらしい (<a href="info:elisp#Dotted Pair Notation">info:elisp#Dotted Pair
+Notation</a>より) のでDotted pairの表示じゃないのは正常なようです。</p>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
-<p>When printing a list, the dotted pair notation is only used if the CDR of a cons cell is not a list.</p>
+<p>When printing a list, the dotted pair notation is only used if the
+CDR of a cons cell is not a list.</p>
 </blockquote>
 </div>
 <p>まぁ普通のリストになっちゃうからそれはそうだよねっていう。</p>
 <h1 id="まだわからないこと">まだわからないこと</h1>
 <ul>
-<li><code>(org-agenda-files quote ("path1" "path2"))</code> と続いているが、なぜ <code>quote</code> がそこにあって動くのか？</li>
-<li>そもそも dotted Pairじゃなくしたらダメ…?(これはleafの仕様の話になってきます</li>
+<li><code>(org-agenda-files quote ("path1" "path2"))</code>
+と続いているが、なぜ <code>quote</code> がそこにあって動くのか？</li>
+<li>そもそも dotted
+Pairじゃなくしたらダメ…?(これはleafの仕様の話になってきます</li>
 </ul>
     </div>
   </div>

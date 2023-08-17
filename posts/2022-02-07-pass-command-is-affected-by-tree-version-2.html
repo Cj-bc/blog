@@ -120,23 +120,34 @@
       </div>
 
     <div class="description">
-      <p><a href="https://git.zx2c4.com/password-store/about/">pass</a>コマンドは内部で<a href="http://mama.indstate.edu/users/ice/tree/">tree</a>コマンドを使用しています。 このところ、treeコマンドの使用変更によってpassコマンドが上手く動かなくなったので その原因と対処法について書き残しておきます。</p>
+      <p><a href="https://git.zx2c4.com/password-store/about/">pass</a>コマンドは内部で<a href="http://mama.indstate.edu/users/ice/tree/">tree</a>コマンドを使用しています。
+このところ、treeコマンドの使用変更によってpassコマンドが上手く動かなくなったので
+その原因と対処法について書き残しておきます。</p>
 <ul>
-<li>tree v2.0.0 から、FD 3が開いていると標準出力の替わりにそちらにデータをJSONで流すよ</li>
-<li>今迄通りの挙動をさせるには、 <code>3&gt;&amp;-</code> 等でFD 3を閉じてあげる必要があるよ</li>
+<li>tree v2.0.0 から、FD
+3が開いていると標準出力の替わりにそちらにデータをJSONで流すよ</li>
+<li>今迄通りの挙動をさせるには、 <code>3&gt;&amp;-</code> 等でFD
+3を閉じてあげる必要があるよ</li>
 <li><a href="https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09">passはこれに対処済み</a>だけどまだリリースされてないのでユーザーサイドでは使えないよ</li>
-<li>現状passを呼び出す際は必ず <code>pass 3&gt;&amp;-</code> としておけば対策できるよ</li>
+<li>現状passを呼び出す際は必ず <code>pass 3&gt;&amp;-</code>
+としておけば対策できるよ</li>
 </ul>
 <h1 id="原因">原因</h1>
 <p>treeの2.0.0リリースにて入った破壊的変更が原因です。</p>
 <p><a href="http://mama.indstate.edu/users/ice/tree/changes.html">treeのCHANGELOG</a>から引用させてもらうと</p>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
-<p>Output un-indented JSON on file descriptor 3 ("stddata") automatically if file descriptor 3 is present (currently Linux only.) Maybe switch to BSON.</p>
+<p>Output un-indented JSON on file descriptor 3 ("stddata")
+automatically if file descriptor 3 is present (currently Linux only.)
+Maybe switch to BSON.</p>
 </blockquote>
 </div>
-<p>ざっくりと訳すと「Linuxに於いては、File Descriptor 3が開いている場合はそこに整形されていないJSON を書き込むようになりました。BSONになるかもしれない」とのことです。</p>
-<p>pass自体も普通に使っていれば問題ないのですが、 <code>git credential</code> を呼んだ際はどうしてか 沢山ファイルディスクリプタが使用されます。</p>
+<p>ざっくりと訳すと「Linuxに於いては、File Descriptor
+3が開いている場合はそこに整形されていないJSON
+を書き込むようになりました。BSONになるかもしれない」とのことです。</p>
+<p>pass自体も普通に使っていれば問題ないのですが、
+<code>git credential</code> を呼んだ際はどうしてか
+沢山ファイルディスクリプタが使用されます。</p>
 <p>私の環境下では以下のファイルディスクリプタが開いていました</p>
 <ul>
 <li>0 (標準入力)</li>
@@ -153,7 +164,9 @@
 <p>必要なのは、treeコマンドのファイルディスクリプタの3番を閉じるだけです。</p>
 <h2 id="上流で行われている対策">上流で行われている対策</h2>
 <p>実はpassではこれに対して対策が取られており、<a href="https://git.zx2c4.com/password-store/commit/?id=eea24967a002a2a81ae9b97a1fe972b5287f3a09">commit:eea24967</a>にてコミットされています。</p>
-<p><strong>しかし</strong> 、2022/02/07現在ではこれはまだリリースされていないためエンドユーザーは使用できません。 (まぁgitでmasterから取って来て使うことは勿論出来ますが)</p>
+<p><strong>しかし</strong>
+、2022/02/07現在ではこれはまだリリースされていないためエンドユーザーは使用できません。
+(まぁgitでmasterから取って来て使うことは勿論出来ますが)</p>
 <p>はやいとこリリースされてほしい…</p>
 <h2 id="現状できること">現状できること</h2>
 <p>passを呼び出す際にfd 3を塞ぎます。</p>
@@ -163,13 +176,26 @@ bash
 </div>
 <div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pass</span> <span class="dv">3</span><span class="op">&gt;&amp;</span>-</span></code></pre></div>
 </div>
-<p>とすることで、passプロセスのファイルディスクリプタ3番を閉じることができます。 passを使用する何らかのスクリプトを書いている場合、当面はこうするのがよさそうです。</p>
-<h1 id="おまけ: &gt;&amp;- の意味">おまけ: <code>&gt;&amp;-</code> の意味</h1>
-<p>元は <code>[n]&gt;&amp;word</code> という形です。 <code>n</code> で指定された、出力のファイルディスクリプターを <code>word</code> で指定された番号の ファイルディスクリプターに複製します。 そして、 <strong>もし <code>word</code> が <code>-</code> であるなら</strong> 指定したファイルディスクリプターを閉じます。</p>
-<p>man:bash(1) <em>Redirection</em> 節の <em>Duplicating File Descriptors</em> に説明があります。</p>
-<h1 id="おまけ2: あるプログラムが開いているファイルデイスクリプターの一覧を取得する">おまけ2: あるプログラムが開いているファイルデイスクリプターの一覧を取得する</h1>
-<p>Linuxでは、カーネルがあらゆる情報を <strong>procファイルシステム</strong> に擬似的なファイルとして書き込んでくれています。 (man:proc(5))</p>
-<p>大抵はこれが <code>/proc</code> にマウントされているはずです。 各プロセスの情報は <code>/proc/${PID}/</code> ディレクトリ下に生成され、ファイルディスクリプターの 情報は <code>/proc/${PID}/fd</code> ディレクトリ下に生成されます。</p>
+<p>とすることで、passプロセスのファイルディスクリプタ3番を閉じることができます。
+passを使用する何らかのスクリプトを書いている場合、当面はこうするのがよさそうです。</p>
+<h1 id="おまけ: &gt;&amp;- の意味">おまけ: <code>&gt;&amp;-</code>
+の意味</h1>
+<p>元は <code>[n]&gt;&amp;word</code> という形です。 <code>n</code>
+で指定された、出力のファイルディスクリプターを <code>word</code>
+で指定された番号の ファイルディスクリプターに複製します。 そして、
+<strong>もし <code>word</code> が <code>-</code> であるなら</strong>
+指定したファイルディスクリプターを閉じます。</p>
+<p>man:bash(1) <em>Redirection</em> 節の <em>Duplicating File
+Descriptors</em> に説明があります。</p>
+<h1 id="おまけ2: あるプログラムが開いているファイルデイスクリプターの一覧を取得する">おまけ2:
+あるプログラムが開いているファイルデイスクリプターの一覧を取得する</h1>
+<p>Linuxでは、カーネルがあらゆる情報を
+<strong>procファイルシステム</strong>
+に擬似的なファイルとして書き込んでくれています。 (man:proc(5))</p>
+<p>大抵はこれが <code>/proc</code> にマウントされているはずです。
+各プロセスの情報は <code>/proc/${PID}/</code>
+ディレクトリ下に生成され、ファイルディスクリプターの 情報は
+<code>/proc/${PID}/fd</code> ディレクトリ下に生成されます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash

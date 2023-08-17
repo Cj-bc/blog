@@ -144,7 +144,9 @@ python
 <h1 id="tldr">tl;dr</h1>
 <p>速いぽい</p>
 <h1 id="条件">条件</h1>
-<p>pythonは3.7.4、if文の中身が同じものだと最適化がかかったりしないか怖かったのでそれぞれ違う出力をするprint文を入れます。 elifの数は適当に多めにしておきました。 また、1000回実行した平均の速度を表示するようにしました。</p>
+<p>pythonは3.7.4、if文の中身が同じものだと最適化がかかったりしないか怖かったのでそれぞれ違う出力をするprint文を入れます。
+elifの数は適当に多めにしておきました。
+また、1000回実行した平均の速度を表示するようにしました。</p>
 <h1 id="測定に使ったコード">測定に使ったコード</h1>
 <p>長いので</p>
 <details>
@@ -617,7 +619,9 @@ print(f&quot;with elif   : {(t_with_elif_end - t_with_elif_start)/1000} sec&quot
 </details>
 
 <h1 id="結果">結果</h1>
-<p>=print=でたくさん標準出力を使っていますが、 そこの値は重要ではないので 私は<a href="https://github.com/thinca/vim-quickrun">quickrun</a>を使って vim上のバッファで加工して消しています</p>
+<p>=print=でたくさん標準出力を使っていますが、
+そこの値は重要ではないので 私は<a href="https://github.com/thinca/vim-quickrun">quickrun</a>を使って
+vim上のバッファで加工して消しています</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 example
@@ -716,7 +720,8 @@ s
 &gt;&gt;&gt;
 </code></pre>
 </div>
-<p>やはり、=if=文を分割した場合と比べて=elif=の方が”–Return–“が早く来ていますね。 これひとつではそこまで差異はないと思いますが、もっと複雑な条件式を使っている場合や何度も重なっている場合は影響が出そうですね。</p>
+<p>やはり、=if=文を分割した場合と比べて=elif=の方が”–Return–“が早く来ていますね。
+これひとつではそこまで差異はないと思いますが、もっと複雑な条件式を使っている場合や何度も重なっている場合は影響が出そうですね。</p>
     </div>
   </div>
   

@@ -120,11 +120,16 @@
       </div>
 
     <div class="description">
-      <p><a href="https://github.com/Cj-bc/brick-3d">Cj-bc/brick-3d</a> を作成している間、「二つの頂点を結ぶ直線をAAに落としこむ」作業が 必要になったのでメモ。 今回は二つの頂点は平面上にあるものとして扱いますが、他の次元でも同じだと思います。</p>
+      <p><a href="https://github.com/Cj-bc/brick-3d">Cj-bc/brick-3d</a>
+を作成している間、「二つの頂点を結ぶ直線をAAに落としこむ」作業が
+必要になったのでメモ。
+今回は二つの頂点は平面上にあるものとして扱いますが、他の次元でも同じだと思います。</p>
 <div class="tldr">
 <ul>
-<li>二つの頂点を結ぶ直線の式は <span class="math inline">$\vec{begin} + t(\vec{end} - \vec{begin})$</span> ( <span class="math inline"><em>t</em> ∈ [0..1]</span> )</li>
-<li>tが0の時は <span class="math inline">$\vec{begin}$</span> 、1の時は <span class="math inline">$\vec{end}$</span> になる</li>
+<li>二つの頂点を結ぶ直線の式は <span class="math inline">$\vec{begin} +
+t(\vec{end} - \vec{begin})$</span> ( <span class="math inline"><em>t</em> ∈ [0..1]</span> )</li>
+<li>tが0の時は <span class="math inline">$\vec{begin}$</span> 、1の時は
+<span class="math inline">$\vec{end}$</span> になる</li>
 <li>tをよしなな感覚で0~1の間で取ってやり、それを一つめに示した式に入れる</li>
 </ul>
 </div>
@@ -134,15 +139,24 @@
 <li>媒介変数</li>
 </ul>
 <h1 id="ベクトルと媒介変数を用いた直線の式">ベクトルと媒介変数を用いた直線の式</h1>
-<p>まず直線の式を考えます。二つの頂点は位置ベクトルとして捉えます。 この二点を <span class="math inline">$\vec{begin}$</span> と <span class="math inline">$\vec{end}$</span> とおくことにすると、 この2点間を結ぶベクトル <span class="math inline"><em>v⃗</em></span> の式は</p>
+<p>まず直線の式を考えます。二つの頂点は位置ベクトルとして捉えます。
+この二点を <span class="math inline">$\vec{begin}$</span> と <span class="math inline">$\vec{end}$</span> とおくことにすると、
+この2点間を結ぶベクトル <span class="math inline"><em>v⃗</em></span>
+の式は</p>
 <p>となります。</p>
 <p><img src="file:///images/vector-v-explained.png" class="ui rounded image" /></p>
-<p>これはベクトルなので実数を掛けることができ、 0をかけると長さ0のベクトル、1を掛けるとそのままのベクトルが出来ます。</p>
-<p>そこで、媒介変数 <span class="math inline"><em>t</em></span> を0から1の間の数を持たせてやると、 これは <span class="math inline"><em>v⃗</em></span> 上の点を表す式(=線分の式)になります。</p>
-<p>このベクトルは位置ベクトルではないため空間上のどこに存在しても良い状態なので、 ベクトルの開始地点を <span class="math inline">$\vec{begin}$</span> に移してあげます。</p>
+<p>これはベクトルなので実数を掛けることができ、
+0をかけると長さ0のベクトル、1を掛けるとそのままのベクトルが出来ます。</p>
+<p>そこで、媒介変数 <span class="math inline"><em>t</em></span>
+を0から1の間の数を持たせてやると、 これは <span class="math inline"><em>v⃗</em></span>
+上の点を表す式(=線分の式)になります。</p>
+<p>このベクトルは位置ベクトルではないため空間上のどこに存在しても良い状態なので、
+ベクトルの開始地点を <span class="math inline">$\vec{begin}$</span>
+に移してあげます。</p>
 <p>これで直線の式になります。</p>
 <h1 id="直線の式からその上にある頂点を計算する">直線の式からその上にある頂点を計算する</h1>
-<p>媒介変数表示の式になっているので、後は <span class="math inline"><em>t</em></span> の値を少しずつ ずらしていってあげれば、線分上の頂点が得られます。</p>
+<p>媒介変数表示の式になっているので、後は <span class="math inline"><em>t</em></span> の値を少しずつ
+ずらしていってあげれば、線分上の頂点が得られます。</p>
 <p>自分のプロジェクトではHaskellで書いていたのでそのまま書かせてもらうと:</p>
 <div class="ui segment">
 <div class="ui top right attached label">

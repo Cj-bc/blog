@@ -120,13 +120,22 @@
       </div>
 
     <div class="description">
-      <p><a href="https://hackage.haskell.org/package/xmonad-0.17.0/docs/XMonad-Core.html#t:ManageHook">ManageHook</a> は、XMonadの重要な要素の一つで、ウィンドウ毎に 設定をしたり <a href="https://hackage.haskell.org/package/xmonad-0.17.0/docs/XMonad-Core.html#t:X">Xモナド</a> のアクションを実行したりするためのもの。</p>
+      <p><a href="https://hackage.haskell.org/package/xmonad-0.17.0/docs/XMonad-Core.html#t:ManageHook">ManageHook</a>
+は、XMonadの重要な要素の一つで、ウィンドウ毎に 設定をしたり <a href="https://hackage.haskell.org/package/xmonad-0.17.0/docs/XMonad-Core.html#t:X">Xモナド</a>
+のアクションを実行したりするためのもの。</p>
 <h1 id="やりたかったこと">やりたかったこと</h1>
 <p>条件に一致するウィンドウをFloat化し、レイアウトを調節する。</p>
 <h1 id="ポイント: 順序に気をつける">ポイント: 順序に気をつける</h1>
-<p>ポイントは、 <strong><a href="https://hackage.haskell.org/package/xmonad-0.17.0/docs/XMonad-Core.html#t:ManageHook">ManageHook</a>の中身に<a href="https://hackage.haskell.org/package/base-4.16.0.0/docs/Data-Monoid.html#t:Endo">Endo</a>が使われている</strong> ことです。 Endoは、関数のモノイドを提供するためのラッパーで、これは 結合に <code>.</code> (関数合成)を用います。 (参考: <a href="https://blog.miz-ar.info/2019/02/monoid-for-haskellers/#_a_-gt_a_Endo">Haskellerのためのモノイド完全ガイド</a>)</p>
-<p>これはつまり、二つの <code>ManageHook</code> <code>a ::ManageHook</code> / <code>b ::ManageHook</code> があった場合、これをモノイドとして結合 (e.g. <code>a &lt;&gt; b</code>) した 際の実行順序は後ろからかけた方(例の場合は <code>b</code>) が先に実行されるということです。</p>
-<p>なので、「Float化してからレイアウト調整する」のであれば 先にFloatさせる = 先に <code>doFloat</code> する</p>
+<p>ポイントは、 <strong><a href="https://hackage.haskell.org/package/xmonad-0.17.0/docs/XMonad-Core.html#t:ManageHook">ManageHook</a>の中身に<a href="https://hackage.haskell.org/package/base-4.16.0.0/docs/Data-Monoid.html#t:Endo">Endo</a>が使われている</strong>
+ことです。 Endoは、関数のモノイドを提供するためのラッパーで、これは
+結合に <code>.</code> (関数合成)を用います。 (参考: <a href="https://blog.miz-ar.info/2019/02/monoid-for-haskellers/#_a_-gt_a_Endo">Haskellerのためのモノイド完全ガイド</a>)</p>
+<p>これはつまり、二つの <code>ManageHook</code>
+<code>a ::ManageHook</code> / <code>b ::ManageHook</code>
+があった場合、これをモノイドとして結合 (e.g. <code>a &lt;&gt; b</code>)
+した 際の実行順序は後ろからかけた方(例の場合は <code>b</code>)
+が先に実行されるということです。</p>
+<p>なので、「Float化してからレイアウト調整する」のであれば
+先にFloatさせる = 先に <code>doFloat</code> する</p>
 <p>眠いのでちょっとあとでまた整理するかもzzz</p>
     </div>
   </div>

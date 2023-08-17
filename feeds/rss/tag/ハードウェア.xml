@@ -7,8 +7,307 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/%E3%83%8F%E3%83%BC%E3%83%89%E3%82%A6%E3%82%A7%E3%82%A2.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Thu, 20 Jul 2023 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Wed, 16 Aug 2023 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2023-08-16-emacs-move-from-lsp-mode-to-eglot</title>
+    <link>https://cj-bc.github.io/blog/posts/2023-08-16-emacs-move-from-lsp-mode-to-eglot.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>lsp-modeからEglotへ乗り換える</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on August 16, 2023</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on August 17, 2023
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
+	
+      </div>
+
+    <div class="description">
+      <p>Emacs29.1から、LSPクライアントとしてEglotが標準搭載されるようになりま
+した。今迄は<a
+href="https://github.com/emacs-lsp/lsp-mode/">lsp-mode</a>を使っていたのですが、そもそもあまりきちんと使えて
+いなかったのでこの機に一旦eglotに移ってみようと思います。</p>
+<h1 id="前提">前提</h1>
+<ul>
+<li>筆者自身、普段そこまでLSPサーバーの機能を使用せずにコーディングしています</li>
+<li>複雑な設定等の移行の参考にはならない可能性があります</li>
+</ul>
+<h1 id="現在のlsp-modeの設定">現在のlsp-modeの設定</h1>
+<p>私はパッケージマネージャーとして<a
+href="https://github.com/conao3/leaf.el">conao3/leaf.el</a>を使用しているので、その設定を載せます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(leaf lsp-mode
+  :commands lsp
+  :ensure t
+  :hook
+  (sh-mode-hook . lsp)
+  (haskell-mode-hook . lsp)
+  (kotlin-mode-hook . lsp)
+  (c++-mode . lsp)
+  :custom
+  (lsp-keymap-prefix .  &quot;M-l&quot;)
+  :bind
+  (&quot;M-l&quot;. nil)
+  )
+</code></pre>
+</div>
+<p>割とシンプル。いくつかのmodeでlspコマンドを実行するのと、lspで用いる
+prefix keyを"M-l"にしているだけです。これをEglot用に写していきます。</p>
+<h1 id="lsp-modeの無効化">lsp-modeの無効化</h1>
+<p>lsp-modeを完全に消してしまってもいいのですが、一旦eglotの使い勝手を見
+るという意味でlsp-modeも無効にしつつ置いておくことにします。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(remove-hook &#39;sh-mode-hook &#39;lsp)
+(remove-hook &#39;sh-mode-hook lsp)
+(remove-hook &#39;haskell-mode-hook lsp)
+(remove-hook &#39;kotlin-mode-hook lsp)
+(remove-hook &#39;c++-mode lsp)
+</code></pre>
+</div>
+<h1 id="Eglotの設定">Eglotの設定</h1>
+<p>まずはhookを設定して…後は特にすることなし!!!…え???</p>
+<p>EglotはLSPクライアントとしての機能を提供するために、独自のコマンドでは
+なく「Emacsで良く使われている他のパッケージ」を用いるので、lsp-modeと
+同じキー配置にしたいのでなければキーマップの設定もほぼ要らないと思いま
+す。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(leaf eglot
+  :hook
+  (sh-mode-hook . eglot)
+  (haskell-mode-hook . eglot)
+  (kotlin-mode-hook . eglot)
+  (c++-mode . eglot)
+  )
+</code></pre>
+</div>
+<h1 id="lsp-modeのコマンドとの対応">lsp-modeのコマンドとの対応</h1>
+<p>正直に言うと私自身あまりきちんとlsp-modeを使っていないのですが、代替コ
+マンド(と思われる)の一覧を残しておきます。</p>
+<p>尚この表は<a
+href="https://emacs-lsp.github.io/lsp-mode/page/keybindings/">lsp-modeのkeybindingsドキュメント</a>で扱われているもののうち、
+外部パッケージとの連携を必要としないもののみに絞っています。</p>
+<table class="ui celled table">
+<thead>
+<tr class="header">
+<th>Description</th>
+<th>lsp-modeコマンド</th>
+<th>eglotコマンド</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Start server</td>
+<td>lsp</td>
+<td><code>eglot</code></td>
+</tr>
+<tr class="even">
+<td>Restart server</td>
+<td>lsp-workspace-restart</td>
+<td><code>eglot-reconnect</code></td>
+</tr>
+<tr class="odd">
+<td>Shutdown server</td>
+<td>lsp-workspace-shutdown</td>
+<td><code>eglot-shutdown</code></td>
+</tr>
+<tr class="even">
+<td>Describes current session</td>
+<td>lsp-describe-session</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Disconnect the buffer from the language server keeping the server
+running.</td>
+<td>lsp-disconnect</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>format this document.</td>
+<td>lsp-format-buffer</td>
+<td><code>eglot-format-buffer</code>, <code>eglot-format</code> with no
+region</td>
+</tr>
+<tr class="odd">
+<td>format the region, or if none is selected, the current line.</td>
+<td>lsp-format-region</td>
+<td><code>eglot-format</code></td>
+</tr>
+<tr class="even">
+<td>Add new project root to the list of workspace folders.</td>
+<td>lsp-workspace-folders-add</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Remove project root from the list of workspace folders.</td>
+<td>lsp-workspace-folders-remove</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Remove project root from the workspace blacklist.</td>
+<td>lsp-workspace-blacklist-remove</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Toggle code-lens overlays.</td>
+<td>lsp-lens-mode</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Toggle client-server protocol logging.</td>
+<td>lsp-toggle-trace-io</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Toggle symbol highlighting.</td>
+<td>lsp-toggle-symbol-highlight</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Toggle minor mode for showing information for current line in
+sideline. (requires <code class="verbatim">lsp-ui</code>)</td>
+<td>lsp-ui-sideline-mode</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Toggle minor mode for showing hover information in child frame.
+(requires <code class="verbatim">lsp-ui</code>)</td>
+<td>lsp-ui-doc-mode</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Toggle signature auto activate.</td>
+<td>nil</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Toggle on type formatting.</td>
+<td>nil</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Find definitions of the symbol under point.</td>
+<td>lsp-find-definition</td>
+<td><code>xref-find-definitions</code></td>
+</tr>
+<tr class="odd">
+<td>Find references of the symbol under point.</td>
+<td>lsp-find-references</td>
+<td><code>xref-find-references</code></td>
+</tr>
+<tr class="even">
+<td>Find implementations of the symbol under point.</td>
+<td>lsp-find-implementation</td>
+<td><code>xref-find-references</code>,
+<code>eglot-find-implementation</code></td>
+</tr>
+<tr class="odd">
+<td>Find type definitions of the symbol under point.</td>
+<td>lsp-find-type-definition</td>
+<td><code>xref-find-references</code>,
+<code>eglot-find-typeDefinition</code></td>
+</tr>
+<tr class="even">
+<td>Find declarations of the symbol under point.</td>
+<td>lsp-find-declaration</td>
+<td><code>xref-find-references</code>,
+<code>eglot-find-declaration</code></td>
+</tr>
+<tr class="odd">
+<td>Find all meaningful symbols that match pattern.</td>
+<td>xref-find-apropos</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Display the type signature and documentation of the thing at
+point.</td>
+<td>lsp-describe-thing-at-point</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Activate signature help.</td>
+<td>lsp-signature</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Trigger display hover information popup and hide it on next
+typing.</td>
+<td>lsp-ui-doc-glance</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Rename the symbol (and all references to it).</td>
+<td>lsp-rename</td>
+<td><code>eglot-rename</code></td>
+</tr>
+<tr class="even">
+<td>Perform the source.organizeImports code action, if available.</td>
+<td>lsp-organize-imports</td>
+<td><code>eglot-code-action-organize-imports</code></td>
+</tr>
+<tr class="odd">
+<td>Execute code action.</td>
+<td>lsp-execute-code-action</td>
+<td><code>eglot-code-actions</code></td>
+</tr>
+<tr class="even">
+<td>Highlight symbol at point.</td>
+<td>lsp-document-highlight</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Peek definitions to the identifier at point. (requires <code
+class="verbatim">lsp-ui</code>)</td>
+<td>lsp-ui-peek-find-definitions</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Peek references to the identifier at point. (requires <code
+class="verbatim">lsp-ui</code>)</td>
+<td>lsp-ui-peek-find-references</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Peek implementation locations of the symbol at point. (requires
+<code class="verbatim">lsp-ui</code>)</td>
+<td>lsp-ui-peek-find-implementation</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Peek symbols in the workspace. (requires <code
+class="verbatim">lsp-ui</code>)</td>
+<td>lsp-ui-peek-find-workspace-symbol</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Wed, 16 Aug 2023 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2023-08-16-emacs-move-from-lsp-mode-to-eglot.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2023-07-20-latex-japanese-article-to-pdf</title>
     <link>https://cj-bc.github.io/blog/posts/2023-07-20-latex-japanese-article-to-pdf.html</link>
     <description><![CDATA[<div id="body-content">
@@ -31,26 +330,34 @@
       </div>
 
     <div class="description">
-      <p>時間があまりないが、忘れると困るレベルに苦手だったLaTeXで日本語を含んだPDFが出力出来たので走り書きのメモ。 後にきちんと書く。</p>
-<p>とりあえず <a href="https://texwiki.texjp.org/?LaTeX入門">texwiki.texjp.org</a> 読んどけば、大学で習ってない民でも結構なんとかなる。なんと2023年でも更新されていてありがたい。</p>
+      <p>時間があまりないが、忘れると困るレベルに苦手だったLaTeXで日本語を含んだPDFが出力出来たので走り書きのメモ。
+後にきちんと書く。</p>
+<p>とりあえず <a
+href="https://texwiki.texjp.org/?LaTeX入門">texwiki.texjp.org</a>
+読んどけば、大学で習ってない民でも結構なんとかなる。なんと2023年でも更新されていてありがたい。</p>
 <h1 id="環境">環境</h1>
 <p>archlinux上でTeXLiveを使っている。</p>
 <h1 id="とりあえずPDFにする">とりあえずPDFにする</h1>
-<p><code>YOUR_FILE.tex</code> から <code>YOUR_FILE.pdf</code> を作成するためには</p>
+<p><code>YOUR_FILE.tex</code> から <code>YOUR_FILE.pdf</code>
+を作成するためには</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> platex YOUR_FILE</span>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre
+class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> platex YOUR_FILE</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dvipdfmx YOUR_FILE</span></code></pre></div>
 </div>
 <h1 id="独自のstyファイルを使う">独自のstyファイルを使う</h1>
-<p><code>TEXMFHOME/tex/latex</code> ないし <code>TEXMFLOCAL/tex/latex</code> 以下に <code>sty</code> ファイルを置き、 <code>sudo mktexlsr</code> すればよい。</p>
+<p><code>TEXMFHOME/tex/latex</code> ないし
+<code>TEXMFLOCAL/tex/latex</code> 以下に <code>sty</code>
+ファイルを置き、 <code>sudo mktexlsr</code> すればよい。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tlmgr conf</span>
+<div class="sourceCode" id="cb2" data-org-language="sh"><pre
+class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tlmgr conf</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="va">TEXMFHOME</span><span class="op">=</span>/home/me/texmf</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">TEXMFLOCAL</span><span class="op">=</span>/usr/local/share/texmf:/usr/share/texmf</span>
@@ -58,13 +365,16 @@ bash
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span></code></pre></div>
 </div>
 <h1 id="BibTeX">BibTeX</h1>
-<p><a href="https://texwiki.texjp.org/?文献引用">https://texwiki.texjp.org/?文献引用</a></p>
-<p>4回コマンドを実行する。 <strong>TeXファイルとBibTeXファイルの名前は拡張子以外合わせるぽい？</strong></p>
+<p><a
+href="https://texwiki.texjp.org/?文献引用">https://texwiki.texjp.org/?文献引用</a></p>
+<p>4回コマンドを実行する。
+<strong>TeXファイルとBibTeXファイルの名前は拡張子以外合わせるぽい？</strong></p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> platex YOUR_FILE</span>
+<div class="sourceCode" id="cb3" data-org-language="sh"><pre
+class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> platex YOUR_FILE</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> pbibtex YOUR_FILE</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> platex YOUR_FILE</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> platex YOUR_FILE</span></code></pre></div>
@@ -103,73 +413,121 @@ bash
 
     <div class="description">
       <h1 id="はじめに">はじめに</h1>
-<p>みあちゃんお誕生日おめでとうございます!!!! (この記事は<a href="https://twitter.com/yozakura_mia">夜桜みあ</a>ちゃんの2023年度お誕生日のリスナー有志お祝い企画の参加記事です)</p>
-<p>「夜桜みあxバトルもの」ということで、みあちゃんをVALORANTのエージェントにした場合どうなるんやろか？ というのをふと思い立ったので考えてみました。尚、思った以上に難航してしまい完成まで出来ていないのですが、一旦出来た範囲でということで…!!</p>
-<p>又、この記事では制作過程(思考過程)に関しても纏めてあるため謎に長くなっています。最終的な結果のみ見た い場合は、冒頭のみを見れば十分だと思います。残りは私の趣味です。</p>
+<p>みあちゃんお誕生日おめでとうございます!!!! (この記事は<a
+href="https://twitter.com/yozakura_mia">夜桜みあ</a>ちゃんの2023年度お誕生日のリスナー有志お祝い企画の参加記事です)</p>
+<p>「夜桜みあxバトルもの」ということで、みあちゃんをVALORANTのエージェントにした場合どうなるんやろか？
+というのをふと思い立ったので考えてみました。尚、思った以上に難航してしまい完成まで出来ていないのですが、一旦出来た範囲でということで…!!</p>
+<p>又、この記事では制作過程(思考過程)に関しても纏めてあるため謎に長くなっています。最終的な結果のみ見た
+い場合は、冒頭のみを見れば十分だと思います。残りは私の趣味です。</p>
 <h1 id="根本的なアイデア">根本的なアイデア</h1>
-<p>「夜桜みあの世界観と性格を、"VALORANTのエージェントとして"ゲームに落とし込んだらどうなるだろうか？」 というのが根本的なアイデアです。そのため、夜桜みあの持つ世界観のみならず、VALORANTの世界に入り込んで も違和感がないもの、というのを目指しています。</p>
-<h1 id="(未)完成版: エージェント「夜桜みあ」">(未)完成版: エージェント「夜桜みあ」</h1>
+<p>「夜桜みあの世界観と性格を、"VALORANTのエージェントとして"ゲームに落とし込んだらどうなるだろうか？」
+というのが根本的なアイデアです。そのため、夜桜みあの持つ世界観のみならず、VALORANTの世界に入り込んで
+も違和感がないもの、というのを目指しています。</p>
+<h1 id="(未)完成版: エージェント「夜桜みあ」">(未)完成版:
+エージェント「夜桜みあ」</h1>
 <p>ロールはセンチネル。</p>
-<h2 id="シグネチャーアビリティ: キャットス">シグネチャーアビリティ: キャットス</h2>
-<p>猫耳魔法のキャットス。使用すると猫耳が生え、前方左右n°ずつ(調整必要、30・30とか？)の範囲の聴力が強化 される。再使用で解除する。再使用までのクールダウンはない。</p>
+<h2 id="シグネチャーアビリティ: キャットス">シグネチャーアビリティ:
+キャットス</h2>
+<p>猫耳魔法のキャットス。使用すると猫耳が生え、前方左右n°ずつ(調整必要、30・30とか？)の範囲の聴力が強化
+される。再使用で解除する。再使用までのクールダウンはない。</p>
 <p>キャットス発動中は、前方以外からの音をクロネコ宅急便からの音以外ほぼ遮断する。</p>
-<p>聴力強化範囲でオペレーターの音が鳴ると、一時的に音が一切聞こえなくなる。又、キャットス中はフラッシュ を喰らった際の持続時間が増加する。</p>
-<p>発動すると、詠唱の一部が他のエージェントにも聞こえる。これは「アビリティが実行されていることを知れる 必要がある」から。</p>
+<p>聴力強化範囲でオペレーターの音が鳴ると、一時的に音が一切聞こえなくなる。又、キャットス中はフラッシュ
+を喰らった際の持続時間が増加する。</p>
+<p>発動すると、詠唱の一部が他のエージェントにも聞こえる。これは「アビリティが実行されていることを知れる
+必要がある」から。</p>
 <ol>
 <li><p>使い道の例</p>
 <ol>
 <li><p>防衛時</p>
-<p>他のアビリティを設置した後、メインに向けて発動しておくことで、進行を把握出来る。又、敵が来ているのを 把握した上でアレスを用いた壁抜きをすることも可能。(夜桜みあはアレスがすきだったため)</p></li>
+<p>他のアビリティを設置した後、メインに向けて発動しておくことで、進行を把握出来る。又、敵が来ているのを
+把握した上でアレスを用いた壁抜きをすることも可能。(夜桜みあはアレスがすきだったため)</p></li>
 </ol></li>
 <li><p>詳細</p>
-<p>猫耳を用いるので遠くの音まで聞こえるようになる一方、指向性が強くなるので他の範囲が聞こえなくなってい ます。クロネコ宅急便の音は魔法で繋がっているので聞こえます。</p>
-<p>ゲームバランス的な観点から言うと、「音」が大分重要なゲームである以上そこを強化するアビリティはコスト も相応にしておく必要があると考えました。又、サイファーのカメラと同じように即座に使えるアビリティであ る関係で、スキル中も周りの音が聞こえているとどこでも使えてしまい強すぎます。 そこで、視界方向以外の情報を下げることで、「目的としたエリア以外の情報を取りすぎない」「きちんと安全 確保されていない場所で使いづらくなる」というリスクを与えることを目的としています。</p></li>
+<p>猫耳を用いるので遠くの音まで聞こえるようになる一方、指向性が強くなるので他の範囲が聞こえなくなってい
+ます。クロネコ宅急便の音は魔法で繋がっているので聞こえます。</p>
+<p>ゲームバランス的な観点から言うと、「音」が大分重要なゲームである以上そこを強化するアビリティはコスト
+も相応にしておく必要があると考えました。又、サイファーのカメラと同じように即座に使えるアビリティであ
+る関係で、スキル中も周りの音が聞こえているとどこでも使えてしまい強すぎます。
+そこで、視界方向以外の情報を下げることで、「目的としたエリア以外の情報を取りすぎない」「きちんと安全
+確保されていない場所で使いづらくなる」というリスクを与えることを目的としています。</p></li>
 <li><p>このスキルへの対策</p>
-<p>敵がキャットスを発動している場合、安全に音を立てられる範囲が狭まります。対策としてオペレーターを先に 撃つことで一時的に無効化出来ますが、オペレーターの存在を開示する必要があります。ゆっくりとドライで上 がっていくことが一番です。</p>
+<p>敵がキャットスを発動している場合、安全に音を立てられる範囲が狭まります。対策としてオペレーターを先に
+撃つことで一時的に無効化出来ますが、オペレーターの存在を開示する必要があります。ゆっくりとドライで上
+がっていくことが一番です。</p>
 <p>(正直、プロの試合とか見てるとドライよくあるからこれスキル弱すぎるか…?って思ったりする)</p></li>
 </ol>
 <h2 id="アビリティ: フローレ">アビリティ: フローレ</h2>
-<p>設置型アビリティ。設置した場所に桜吹雪を起こし、その上を通るエージェントの視界を悪化させると共にスロー 効果を付与する。視界悪化はあくまでも花吹雪による物理的なものであるので、例えばレイナのウルトやヴァイ パーウルトのように敵を強調表示するスキルには効果がない。</p>
+<p>設置型アビリティ。設置した場所に桜吹雪を起こし、その上を通るエージェントの視界を悪化させると共にスロー
+効果を付与する。視界悪化はあくまでも花吹雪による物理的なものであるので、例えばレイナのウルトやヴァイ
+パーウルトのように敵を強調表示するスキルには効果がない。</p>
 <p>敵を検知して自動で発動するか、それとも手動にするか、などは今現在詰められていない。</p>
 <h2 id="アビリティ: クロネコ宅急便">アビリティ: クロネコ宅急便</h2>
 <p>設置型アビリティ。アラボ等と同じような立ち位置…なはず。</p>
 <p>(正直最初からあるけど一番内容が決まっていない存在)</p>
-<h2 id="アルティメット: 「みあこんぐ!」/「おつみあ~!」">アルティメット: 「みあこんぐ!」/「おつみあ~!」</h2>
-<p>名前が使いたかっただけみたいな所があり…はい…どちらの名前もアルティメットぽくて良いなというので記 録を残しておきます。他スキルとシナジーのあるウルトが上手く思い付いていないので現状未実装です。ただ、 夜桜みあがヴァイパーのウルトすきらしかったので領域展開系にしたいなとは思っています(詳しくは後述)</p>
+<h2 id="アルティメット: 「みあこんぐ!」/「おつみあ~!」">アルティメット:
+「みあこんぐ!」/「おつみあ~!」</h2>
+<p>名前が使いたかっただけみたいな所があり…はい…どちらの名前もアルティメットぽくて良いなというので記
+録を残しておきます。他スキルとシナジーのあるウルトが上手く思い付いていないので現状未実装です。ただ、
+夜桜みあがヴァイパーのウルトすきらしかったので領域展開系にしたいなとは思っています(詳しくは後述)</p>
 <h1 id="ボツアイデアs">ボツアイデアs</h1>
 <p>せっかくなのでボツ案を先に出しておこうと思います。</p>
-<h2 id="コンセプト: フラッシュ系スキル持ちセンチネル">コンセプト: フラッシュ系スキル持ちセンチネル</h2>
+<h2 id="コンセプト: フラッシュ系スキル持ちセンチネル">コンセプト:
+フラッシュ系スキル持ちセンチネル</h2>
 <p>既存センチネルの特徴を出してみた時、</p>
 <ul>
-<li>サイファー → モク代わりのケージ → コントローラー寄りのセンチネル</li>
+<li>サイファー → モク代わりのケージ →
+コントローラー寄りのセンチネル</li>
 <li>チェンバー → ？？？とりあえずデュエリスト寄りのセンチネル</li>
 <li>キルジョイ → モロトフ代わりのナノスワ</li>
 <li>セージ → モロトフと似た役割(進行止め、顔出し阻止)のスローオーブ</li>
 </ul>
-<p>といった具合に定番アビリティの「モロトフ」「モク」を持つエージェントはいるものの、フラッシュのみは持 つエージェントが存在していなかったので思い付きました。</p>
-<p>しかしセンチネルの「足止めする必要がある」という役割を考えると、一瞬しか効果のない上に避けることので きるフラッシュは強いアビリティとはいえないと思われます。そういうことでボツとなりました。 恐らくフラッシュ系持ちのセンチネルは実装されないんじゃなかろうか…?</p>
-<h2 id="キャットス: 聴覚情報を視覚的に表示する">キャットス: 聴覚情報を視覚的に表示する</h2>
-<p>猫耳による聴覚強化をどう行うか、というのを考えていた時の案の一つ。イメージとしては、サイファーやリコ ン等のように表示する感じ。視覚的に表示するのは強そうに見えるが、慣れているプレイヤーは大体頭の中で補 完出来ている範囲の情報でしかなくて弱いかなと判断した。又、敵対した際に「新たな戦略を練る必要性」を生 み出すことが出来ないし、対策のしようがないので却下。</p>
-<h2 id="キャットス: 聴覚情報をミニマップに表示">キャットス: 聴覚情報をミニマップに表示</h2>
-<p>こちらも同じく聴覚強化の案の一つ。赤点表示のようなものを考えていたが、上記とほぼ同様の理由(慣れたプ レイヤーに恩恵はないし、敵対した際の対策が打てない)ので却下</p>
-<h2 id="フローレ: フラッシュアビリティ化">フローレ: フラッシュアビリティ化</h2>
-<p>ディジーと同じように、画面にエフェクトを乗せる形での視界妨害アビリティとする案。センチネルにするとなっ た際、センチネルとの相性が悪いので却下。(詳しくは制作過程にて)</p>
+<p>といった具合に定番アビリティの「モロトフ」「モク」を持つエージェントはいるものの、フラッシュのみは持
+つエージェントが存在していなかったので思い付きました。</p>
+<p>しかしセンチネルの「足止めする必要がある」という役割を考えると、一瞬しか効果のない上に避けることので
+きるフラッシュは強いアビリティとはいえないと思われます。そういうことでボツとなりました。
+恐らくフラッシュ系持ちのセンチネルは実装されないんじゃなかろうか…?</p>
+<h2 id="キャットス: 聴覚情報を視覚的に表示する">キャットス:
+聴覚情報を視覚的に表示する</h2>
+<p>猫耳による聴覚強化をどう行うか、というのを考えていた時の案の一つ。イメージとしては、サイファーやリコ
+ン等のように表示する感じ。視覚的に表示するのは強そうに見えるが、慣れているプレイヤーは大体頭の中で補
+完出来ている範囲の情報でしかなくて弱いかなと判断した。又、敵対した際に「新たな戦略を練る必要性」を生
+み出すことが出来ないし、対策のしようがないので却下。</p>
+<h2 id="キャットス: 聴覚情報をミニマップに表示">キャットス:
+聴覚情報をミニマップに表示</h2>
+<p>こちらも同じく聴覚強化の案の一つ。赤点表示のようなものを考えていたが、上記とほぼ同様の理由(慣れたプ
+レイヤーに恩恵はないし、敵対した際の対策が打てない)ので却下</p>
+<h2 id="フローレ: フラッシュアビリティ化">フローレ:
+フラッシュアビリティ化</h2>
+<p>ディジーと同じように、画面にエフェクトを乗せる形での視界妨害アビリティとする案。センチネルにするとなっ
+た際、センチネルとの相性が悪いので却下。(詳しくは制作過程にて)</p>
 <h2 id="フローレ: スモーク化">フローレ: スモーク化</h2>
-<p>桜吹雪が舞うことで視界を悪化させ、進行を食い止める案。コントローラーではないので、しっかりとしたスモー クにすることは出来ないのでそこまで進行を食い止めることが出来そうにはなく、他のアビリティ候補に遅延出 来そうなものが少ないので却下。遅延スキルとして使いたいので。</p>
+<p>桜吹雪が舞うことで視界を悪化させ、進行を食い止める案。コントローラーではないので、しっかりとしたスモー
+クにすることは出来ないのでそこまで進行を食い止めることが出来そうにはなく、他のアビリティ候補に遅延出
+来そうなものが少ないので却下。遅延スキルとして使いたいので。</p>
 <h2 id="フローレ: 敵重火器の制圧">フローレ: 敵重火器の制圧</h2>
-<p>敵の重火器に桜を咲かせ、一定期間銃撃が行えないようにする案。今迄存在していないタイプのアビリティでは あるが、これとKAY/Oのナイフ類を組み合わせた場合の絶望感が半端ないので却下。アビリティが使えなくとも フィジカルで勝てる、最終的にはフィジカルが大事なゲーム性だと感じたため。</p>
+<p>敵の重火器に桜を咲かせ、一定期間銃撃が行えないようにする案。今迄存在していないタイプのアビリティでは
+あるが、これとKAY/Oのナイフ類を組み合わせた場合の絶望感が半端ないので却下。アビリティが使えなくとも
+フィジカルで勝てる、最終的にはフィジカルが大事なゲーム性だと感じたため。</p>
 <p>あと純粋に実装が難しそう(唐突な現実)</p>
 <h2 id="クロネコ: タレット的運用">クロネコ: タレット的運用</h2>
-<p>設置型にし、敵を見付けると攻撃してくれるという案。「キルジョイとの差別化は？」という課題があるのと、 敵になった際に猫を撃つの嫌だな…という個人的感情から却下。</p>
+<p>設置型にし、敵を見付けると攻撃してくれるという案。「キルジョイとの差別化は？」という課題があるのと、
+敵になった際に猫を撃つの嫌だな…という個人的感情から却下。</p>
 <h2 id="クロネコ: 索敵">クロネコ: 索敵</h2>
-<p>スカイの犬やウィングマン的に索敵を行う案。ロールが固まりきっておらず、イニシエーターにするか悩んでい た時の案であり、センチネルとした際に却下。</p>
+<p>スカイの犬やウィングマン的に索敵を行う案。ロールが固まりきっておらず、イニシエーターにするか悩んでい
+た時の案であり、センチネルとした際に却下。</p>
 <h2 id="クロネコ: デバフ要員">クロネコ: デバフ要員</h2>
-<p>「黒猫が前をよぎるとよくない」みたいな伝承から、設置された場所を敵が通るとデバフを与える、という案。 クロネコをデバフ付与系の設置アビリティにしてしまうと、エリアを見るためのアビリティが無くなっていしま うので却下。</p>
-<p>ちなみに個人的にはあの伝承を全く信じていないし、黒猫かわいくてすきなのでいつも「なんでそんな酷い噂を 言うの…」と思っている。</p>
+<p>「黒猫が前をよぎるとよくない」みたいな伝承から、設置された場所を敵が通るとデバフを与える、という案。
+クロネコをデバフ付与系の設置アビリティにしてしまうと、エリアを見るためのアビリティが無くなっていしま
+うので却下。</p>
+<p>ちなみに個人的にはあの伝承を全く信じていないし、黒猫かわいくてすきなのでいつも「なんでそんな酷い噂を
+言うの…」と思っている。</p>
 <h1 id="制作過程">制作過程</h1>
-<p>なんか綺麗な流れみたいに解説を書きますが、実際の過程としては、暇があれば色々考えてメモして調べて考え て…というのを繰り返しているので全くもってこの通りではないです。</p>
-<h2 id="面白そうかどうかのアイデア出し">面白そうかどうかのアイデア出し</h2>
-<p>まずは、そもそもこれが面白そうかどうか？を探りたかったので難しいことを考えずにひたすらアイデアを出し ました。一番初期に出たアイデアは以下の通りです。</p>
+<p>なんか綺麗な流れみたいに解説を書きますが、実際の過程としては、暇があれば色々考えてメモして調べて考え
+て…というのを繰り返しているので全くもってこの通りではないです。</p>
+<h2
+id="面白そうかどうかのアイデア出し">面白そうかどうかのアイデア出し</h2>
+<p>まずは、そもそもこれが面白そうかどうか？を探りたかったので難しいことを考えずにひたすらアイデアを出し
+ました。一番初期に出たアイデアは以下の通りです。</p>
 <ol>
 <li><p>能力系</p>
 <ul>
@@ -202,14 +560,27 @@ bash
 <li>キルジョイ:</li>
 </ul></li>
 </ol>
-<h2 id="VALORANTのエージェントの作り方の調査">VALORANTのエージェントの作り方の調査</h2>
-<p>漠然としたアイデアは出て、方向性として面白そうだなとなったのできちんと落とし込む作業に入ります。夜桜 みあのFAであると同時に、VALORANTのFAでもあるので、きちんとVALORANTにも失礼がないように&amp;現実的である ようにするためVALORANTのエージェントの制作過程を調べることとしました。</p>
-<p>ここで、VALORANT公式ブログがとても役に立ちます。何故か知らないですがVALORANTは割とブログに開発陣の話 がよく載っており、マップの作成時の話やバランス調整に何を考えているのか、はたまた「<a href="https://playvalorant.com/ja-jp/news/dev/how-we-got-to-the-best-performing-valorant-servers-since-launch/">VALORANTがいかにし てリリース以降最高のサーバー環境を実現したか</a>」といった完全に技術屋に寄ったものまで公開されています (個人的にすごく楽しい)。そして勿論その一環として、エージェント開発時のエピソードや解説等が一部公開さ れているのです。</p>
+<h2
+id="VALORANTのエージェントの作り方の調査">VALORANTのエージェントの作り方の調査</h2>
+<p>漠然としたアイデアは出て、方向性として面白そうだなとなったのできちんと落とし込む作業に入ります。夜桜
+みあのFAであると同時に、VALORANTのFAでもあるので、きちんとVALORANTにも失礼がないように&amp;現実的である
+ようにするためVALORANTのエージェントの制作過程を調べることとしました。</p>
+<p>ここで、VALORANT公式ブログがとても役に立ちます。何故か知らないですがVALORANTは割とブログに開発陣の話
+がよく載っており、マップの作成時の話やバランス調整に何を考えているのか、はたまた「<a
+href="https://playvalorant.com/ja-jp/news/dev/how-we-got-to-the-best-performing-valorant-servers-since-launch/">VALORANTがいかにし
+てリリース以降最高のサーバー環境を実現したか</a>」といった完全に技術屋に寄ったものまで公開されています
+(個人的にすごく楽しい)。そして勿論その一環として、エージェント開発時のエピソードや解説等が一部公開さ
+れているのです。</p>
 <p>ということで、主に参考になったものについてメモを見てみましょう。</p>
 <ol>
-<li><p><span class="todo TODO">TODO</span> VALORANTエージェント開発エピソード：フェイド</p>
-<p><a href="https://playvalorant.com/ja-jp/news/game-updates/valorant-agent-insights-fade/">https://playvalorant.com/ja-jp/news/game-updates/valorant-agent-insights-fade/</a></p>
-<p>イニシエーターのエージェント「フェイド」を開発する際に、どのようなことを考え、どのような理由で現在の アビリティや特性へ至ったのかを解説している記事です。作業プロセスについては後述する資料と比べるとそこ まで書かれていないですが、「いかにして既存エージェントと差別化したか」「どうやって立ち位置を持たせた か」「エージェントの世界観とゲーム性をどう合わせ持たせたか」等を読み取ることが出来ます。</p>
+<li><p><span class="todo TODO">TODO</span>
+VALORANTエージェント開発エピソード：フェイド</p>
+<p><a
+href="https://playvalorant.com/ja-jp/news/game-updates/valorant-agent-insights-fade/">https://playvalorant.com/ja-jp/news/game-updates/valorant-agent-insights-fade/</a></p>
+<p>イニシエーターのエージェント「フェイド」を開発する際に、どのようなことを考え、どのような理由で現在の
+アビリティや特性へ至ったのかを解説している記事です。作業プロセスについては後述する資料と比べるとそこ
+まで書かれていないですが、「いかにして既存エージェントと差別化したか」「どうやって立ち位置を持たせた
+か」「エージェントの世界観とゲーム性をどう合わせ持たせたか」等を読み取ることが出来ます。</p>
 <ul>
 <li>フェイドは、現状ソーヴァしかいない偵察兵を増やすために考案された</li>
 <li>「悪夢」というのはとても特徴的な「力の源」となる</li>
@@ -217,36 +588,57 @@ bash
 <li>コンセプトとして「賞金首狩り」を持ち、獲物を追い詰めてゆく</li>
 <li>ナイトフォールの「広範囲」なアビリティは、「イニシエーターの標準的アルティメット」</li>
 </ul></li>
-<li><p><span class="todo TODO">TODO</span> エージェントデザインの過程 // Dev Diaries - VALORANT - YouTube</p>
-<p><a href="https://www.youtube.com/watch?v=Nv09DpFkfb4">YouTube link</a></p>
-<p>キルジョイとレイナを題材として、エージェントをデザインする際の全般的な話が聞けます。これは、実際にど のような流れでエージェントを制作しているのかを知るのに役立ちます。例えば、最初に何を意識しているのか、 どういった事を念頭に置きながら制作しているのか、など。</p>
+<li><p><span class="todo TODO">TODO</span> エージェントデザインの過程 //
+Dev Diaries - VALORANT - YouTube</p>
+<p><a href="https://www.youtube.com/watch?v=Nv09DpFkfb4">YouTube
+link</a></p>
+<p>キルジョイとレイナを題材として、エージェントをデザインする際の全般的な話が聞けます。これは、実際にど
+のような流れでエージェントを制作しているのかを知るのに役立ちます。例えば、最初に何を意識しているのか、
+どういった事を念頭に置きながら制作しているのか、など。</p>
 <ol>
 <li><p>ターゲットプレイヤーの決定</p>
 <ul>
 <li>まずは「誰がターゲットプレイヤーなのか」を考えるところから始める。
 <ul>
-<li>「誰が、どんな人が使いたいと思うべきなのか」 &amp; 「何故そうなるべきなのか」</li>
+<li>「誰が、どんな人が使いたいと思うべきなのか」 &amp;
+「何故そうなるべきなのか」</li>
 </ul></li>
 <li>レイナの場合は、「キルを獲得することを楽しみ、最多キルでチームに貢献するのがすきな人」がターゲット</li>
 <li>この時点では「どのようなアビリティーを持つか」を考えていない。</li>
 </ul></li>
 <li><p>Roster Impactを考慮したテストプレイの実装</p>
-<p>テストプレイの段階では、「そのエージェントが実際にゲームプレイにどのような影響を与えるのか」を考えま す。エージェントは、「新しい展開を生み出し」たり、「新しい課題を生み出し」たり、「新しい構成を生み出 し」たりする必要があり、「使うプレイヤーが楽しいだけ」や「何かかっこいいもの」ではいけません。</p>
-<p>キルジョイを例に取ると、セージは「遅延すること」に長けたセンチネルで、サイファーは「広範囲を管理する こと」に長けたセンチネル。それに対し、キルジョイは「サイトを要塞化し、相手にリスクを負わせる」ことに 長けたセンチネルです。ちなみにこの動画当時、まだチェンバーはいない模様です。</p>
-<p>同じセンチネルでも、大分異なるプレイスタイルとなるように設計されているのです。 守りつつキルを取ることが主体となります。</p></li>
+<p>テストプレイの段階では、「そのエージェントが実際にゲームプレイにどのような影響を与えるのか」を考えま
+す。エージェントは、「新しい展開を生み出し」たり、「新しい課題を生み出し」たり、「新しい構成を生み出
+し」たりする必要があり、「使うプレイヤーが楽しいだけ」や「何かかっこいいもの」ではいけません。</p>
+<p>キルジョイを例に取ると、セージは「遅延すること」に長けたセンチネルで、サイファーは「広範囲を管理する
+こと」に長けたセンチネル。それに対し、キルジョイは「サイトを要塞化し、相手にリスクを負わせる」ことに
+長けたセンチネルです。ちなみにこの動画当時、まだチェンバーはいない模様です。</p>
+<p>同じセンチネルでも、大分異なるプレイスタイルとなるように設計されているのです。
+守りつつキルを取ることが主体となります。</p></li>
 <li><p>何の「戦術ツール」を持つか？を決める: 妨害アビリティは必須</p>
-<p>アイデンティティとなるスキルの他に、戦術ツールを持つ必要がある。 視界を塞いだりなどの敵を妨害するためのツールはどのキャラクターにも必要なものとなる。何故なら、それら は必ず必要なアビリティとなるためそれを持たないとピックされづらくなってしまうから。</p></li>
+<p>アイデンティティとなるスキルの他に、戦術ツールを持つ必要がある。
+視界を塞いだりなどの敵を妨害するためのツールはどのキャラクターにも必要なものとなる。何故なら、それら
+は必ず必要なアビリティとなるためそれを持たないとピックされづらくなってしまうから。</p></li>
 <li><p>テストプレイをする</p>
-<p>「ターゲットプレイヤー」に楽しんでもらえるかをテストする必要があります。ここで大切なのは、「ターゲッ トプレイヤーではない人に気に入られる必要はない」ということです。例えば、キルジョイは計画を建ててサイ トの要塞化を行い防衛しつつ戦うのがすきなプレイヤーをターゲットにしていますが、その人達には「沢山キル を取りたいプレイヤー」をターゲットとするレイナは恐らく刺さらないでしょう。</p>
+<p>「ターゲットプレイヤー」に楽しんでもらえるかをテストする必要があります。ここで大切なのは、「ターゲッ
+トプレイヤーではない人に気に入られる必要はない」ということです。例えば、キルジョイは計画を建ててサイ
+トの要塞化を行い防衛しつつ戦うのがすきなプレイヤーをターゲットにしていますが、その人達には「沢山キル
+を取りたいプレイヤー」をターゲットとするレイナは恐らく刺さらないでしょう。</p>
 <p>テストプレイ中では、色々な変更が入ります。最初から上手くいくことはありません。</p></li>
 <li><p>ゲームバランスの調整:</p>
-<p>ゲームバランスを調整する際は、キャラクターの強さを簡単に調整出来るようなコントロールパネルを用意して いるようです。「キャラクターのアイデンティティを変えるのは最終手段」と言っていますが、これは恐らくア ビリティの考え直しみたいな話をしているのかな？と思っています。</p>
-<p>スキルのバランスは「持つスキル全体を考慮して」考えており、個々のスキル毎に考えているわけではないよう です。</p></li>
+<p>ゲームバランスを調整する際は、キャラクターの強さを簡単に調整出来るようなコントロールパネルを用意して
+いるようです。「キャラクターのアイデンティティを変えるのは最終手段」と言っていますが、これは恐らくア
+ビリティの考え直しみたいな話をしているのかな？と思っています。</p>
+<p>スキルのバランスは「持つスキル全体を考慮して」考えており、個々のスキル毎に考えているわけではないよう
+です。</p></li>
 <li><p>まとめ: 新たなエージェントを加えることの意味</p>
-<p>新たなエージェントを加えるというのは、「新しい可能性」を追加するということ。昔ながらの爆破ゲーにある ような「戦術ループ」は基礎としてあり、そこへ「回復」「ダッシュ」「視界を遮る」といった例外を加えるの がvALORANT流、ということのようです。</p></li>
+<p>新たなエージェントを加えるというのは、「新しい可能性」を追加するということ。昔ながらの爆破ゲーにある
+ような「戦術ループ」は基礎としてあり、そこへ「回復」「ダッシュ」「視界を遮る」といった例外を加えるの
+がvALORANT流、ということのようです。</p></li>
 </ol></li>
 <li><p>パッチ5.12でのチェンバーの変更について</p>
-<p><a href="https://playvalorant.com/ja-jp/news/game-updates/valorant-chamber-changes-for-patch-5-12/">https://playvalorant.com/ja-jp/news/game-updates/valorant-chamber-changes-for-patch-5-12/</a></p>
+<p><a
+href="https://playvalorant.com/ja-jp/news/game-updates/valorant-chamber-changes-for-patch-5-12/">https://playvalorant.com/ja-jp/news/game-updates/valorant-chamber-changes-for-patch-5-12/</a></p>
 <ul>
 <li>エージェント設計の原則として、「カウンタープレイ」「計画性」がある。
 <ul>
@@ -255,7 +647,8 @@ bash
 <li>チェンバーの例では、「トレードマークの範囲制限により、敵チェンバーの位置が推測しやすくなる」など</li>
 </ul></li>
 <li>「裏取りの監視はサイファーの強みであるべきで、センチネル全員の基本性能ではありません」</li>
-<li>「エージェントのアビリティーは戦略サイクルの各段階にさまざまな影響を与えますが、アビリティーの実行 は明確であり、敵に反撃の余地を与えるものでなければいけません」
+<li>「エージェントのアビリティーは戦略サイクルの各段階にさまざまな影響を与えますが、アビリティーの実行
+は明確であり、敵に反撃の余地を与えるものでなければいけません」
 <ul>
 <li>対抗手段は用意する必要がある</li>
 <li>アビリティを実行していることが分かる必要がある(レイナのウルトが叫ぶのとかはそれ？)</li>
@@ -263,34 +656,45 @@ bash
 <li>チェンバーは「高精度を誇り、リスクを取ってエリアを制圧するセンチネル」というアイデンティティー</li>
 </ul></li>
 <li><p>ネオン＆ゼリの共同開発秘話</p>
-<p><a href="https://playvalorant.com/ja-jp/news/dev/co-developing-neon-zeri/">https://playvalorant.com/ja-jp/news/dev/co-developing-neon-zeri/</a></p>
+<p><a
+href="https://playvalorant.com/ja-jp/news/dev/co-developing-neon-zeri/">https://playvalorant.com/ja-jp/news/dev/co-developing-neon-zeri/</a></p>
 <ul>
 <li>「パワーの源」という概念があり、VALORANTの場合は「テクノロジー」と「レディアント」</li>
 <li>「ネオン及びゼリが何故速いのか」を説明する「パワーの源」が必要だった</li>
 </ul></li>
 </ol>
 <h2 id="お断り">お断り</h2>
-<p>先程の「エージェントの作り方」で得た知識を元に、「実際に存在しうるようなエージェント」に仕立てる作業 をするわけですが、本来のエージェントを作る順序とは大きく異なり</p>
+<p>先程の「エージェントの作り方」で得た知識を元に、「実際に存在しうるようなエージェント」に仕立てる作業
+をするわけですが、本来のエージェントを作る順序とは大きく異なり</p>
 <ul>
 <li>先にエージェントの人物像が存在する</li>
 <li>ある程度スキルとして使いたいもの(魔法等)が存在する</li>
 </ul>
-<p>という条件が存在しています。そのため、ある程度の制約と妥協(「力の源」の定義や、スキルと人物像とのマッ チ具合等)は行う必要があります。(優先順位的に、"夜桜みあであること"が最上位であるため)</p>
-<h2 id="ターゲットプレイヤー・コンセプトを決める">ターゲットプレイヤー・コンセプトを決める</h2>
-<p>まずは、「どういったプレイを好む人に使われてほしいのか」ということを考える必要があります。これに関し ては、「夜桜みあを実装したい」という目的上「夜桜みあに使われてほしい」ということになります。しかしそ れだとペルソナとしては曖昧すぎるので、具体的に「どういったプレイスタイルを好んでいるか」を推測してい く必要があります。</p>
+<p>という条件が存在しています。そのため、ある程度の制約と妥協(「力の源」の定義や、スキルと人物像とのマッ
+チ具合等)は行う必要があります。(優先順位的に、"夜桜みあであること"が最上位であるため)</p>
+<h2
+id="ターゲットプレイヤー・コンセプトを決める">ターゲットプレイヤー・コンセプトを決める</h2>
+<p>まずは、「どういったプレイを好む人に使われてほしいのか」ということを考える必要があります。これに関し
+ては、「夜桜みあを実装したい」という目的上「夜桜みあに使われてほしい」ということになります。しかしそ
+れだとペルソナとしては曖昧すぎるので、具体的に「どういったプレイスタイルを好んでいるか」を推測してい
+く必要があります。</p>
 <ol>
 <li><p>プレイスタイルの推測: ピックデータ</p>
-<p>雰囲気や後述する言動からどういうエージェントを使っているかは分かるものの、せっかくなのできちんとデータが取りたい…と いうことで、今迄のVALORANT配信で使われている(or 「使える」と言っている)エージェントを調べた結果がこれです。</p>
+<p>雰囲気や後述する言動からどういうエージェントを使っているかは分かるものの、せっかくなのできちんとデータが取りたい…と
+いうことで、今迄のVALORANT配信で使われている(or
+「使える」と言っている)エージェントを調べた結果がこれです。</p>
 <p>補足:</p>
 <ul>
-<li>本来、時系列上の変化も考慮するべきですが、 <del>やりかたよく分からない</del> ちょっとそこまでやるのはやりすぎな気がするのでやりません</li>
+<li>本来、時系列上の変化も考慮するべきですが、
+<del>やりかたよく分からない</del>
+ちょっとそこまでやるのはやりすぎな気がするのでやりません</li>
 <li>合わせピックか否かも考慮しようとしましたが、どちらにせよピックプールは一定だったので考慮せずとも良いと判断しました。</li>
 <li>サンプル数が少ないため、ランク・アンレ双方混ぜて集計しています。</li>
-<li><a href="https://www.youtube.com/watch?v=BDGYmgotBy4">フラッシュ縛りの回</a>は除外しています。</li>
+<li><a
+href="https://www.youtube.com/watch?v=BDGYmgotBy4">フラッシュ縛りの回</a>は除外しています。</li>
 <li>統計学んだはずだけど苦手分野なのできちんと意味のあるデータになっていない可能性があります、ユルシテ。</li>
 </ul>
-<div id="配信上のエージェントピック">
-<table class="ui celled table">
+<table id="配信上のエージェントピック" class="ui celled table">
 <thead>
 <tr class="header">
 <th>エージェント</th>
@@ -326,9 +730,7 @@ bash
 </tr>
 </tbody>
 </table>
-</div>
-<div id="ピックプール">
-<table class="ui celled table">
+<table id="ピックプール" class="ui celled table">
 <thead>
 <tr class="header">
 <th>マップ</th>
@@ -369,32 +771,43 @@ bash
 </tr>
 </tbody>
 </table>
-</div>
 <p>これより、データからも圧倒的にキルジョイが多用されており、センチネルがメインであることが分かります。</p>
 <ol>
 <li><p>データソース</p>
 <ul>
-<li><a href="https://www.youtube.com/watch?v=j7YSVkeDQcc">【#VALORANT女子】#み♡も は戦場でお茶会をします（？）【Vtuber】 - YouTube</a>
+<li><a
+href="https://www.youtube.com/watch?v=j7YSVkeDQcc">【#VALORANT女子】#み♡も
+は戦場でお茶会をします（？）【Vtuber】 - YouTube</a>
 <ul>
 <li>Fracture(スカイ), Split(セージ)</li>
 </ul></li>
-<li><a href="https://www.youtube.com/watch?v=0PiBto5cMH8">【VALORANT】はじめてのソロ…！🔫爆弾のおつかいをします【Vtuber】 - YouTube</a>
+<li><a
+href="https://www.youtube.com/watch?v=0PiBto5cMH8">【VALORANT】はじめてのソロ…！🔫爆弾のおつかいをします【Vtuber】
+- YouTube</a>
 <ul>
 <li>Icebox(ヴァイパー), Haven(キルジョイ)</li>
 </ul></li>
-<li><a href="https://www.youtube.com/watch?v=nrKoFExkQTE">【VALORANT】じょしヴァロラント♡みあおぢさんが武器買ってあげちゃおうね…【#Vtuber】 - YouTube</a>
+<li><a
+href="https://www.youtube.com/watch?v=nrKoFExkQTE">【VALORANT】じょしヴァロラント♡みあおぢさんが武器買ってあげちゃおうね…【#Vtuber】
+- YouTube</a>
 <ul>
 <li>Bind(キルジョイ), Fracture(キルジョイ), ブリーズ(セージ)</li>
 </ul></li>
-<li><a href="https://www.youtube.com/watch?v=TEs3Erk6DyQ">【VALORANT】配信で初めてのヴァロ！！フルパで臨みます…！【Vtuber】 - YouTube</a>
+<li><a
+href="https://www.youtube.com/watch?v=TEs3Erk6DyQ">【VALORANT】配信で初めてのヴァロ！！フルパで臨みます…！【Vtuber】
+- YouTube</a>
 <ul>
 <li>Bind(キルジョイ)、 Icebox(キルジョイ), Fracture(セージ)</li>
 </ul></li>
-<li><a href="https://www.youtube.com/watch?v=Gai4AE9IB0g">【VALORANT】~うぇーいヴァロラントアンレ！~【魂のソウル】 - YouTube</a> (本人枠なし)
+<li><a
+href="https://www.youtube.com/watch?v=Gai4AE9IB0g">【VALORANT】~うぇーいヴァロラントアンレ！~【魂のソウル】
+- YouTube</a> (本人枠なし)
 <ul>
 <li>Bind(セージ), Accent(レイズ), Haven(セージ), Accent(キルジョイ)</li>
 </ul></li>
-<li><a href="https://www.youtube.com/watch?v=h2tOU36GWvk">【VALORANT】~フルパヴァロラントうぃずそらいろのふたり~【魂のソウル】【夜桜みあ】【裏咲無形】【夢河かのん】【踊場そよぎ】 - YouTube</a>
+<li><a
+href="https://www.youtube.com/watch?v=h2tOU36GWvk">【VALORANT】~フルパヴァロラントうぃずそらいろのふたり~【魂のソウル】【夜桜みあ】【裏咲無形】【夢河かのん】【踊場そよぎ】
+- YouTube</a>
 <ul>
 <li>[2022-01-11 Tue]</li>
 <li>TODO ブリーズ(キルジョイ), Accent(キルジョイ), Fracture(セージ)</li>
@@ -402,8 +815,13 @@ bash
 </ul></li>
 </ol></li>
 <li><p>プレイスタイルの推測: 雑談より</p>
-<p><a href="https://youtu.be/iP0eZqrorZc?t=3650">#み♡も マシュマロ雑談企画</a> ですきなロールに関する話がいくつか聞けます。「キルジョイがすき」「センチネ ルが全体的にすき」「元々、何かと一緒に戦うのとか戦略的に戦うとかがすき」という発言があるのは大分参考 になります。</p>
-<p>ゴリ押しヴァイパーウルトで領域展開するのがすきらしい。「呼んでくれたらセンチネルかデュエやるよ!」と 言っていたり、「イニシも若干使う」と言っていたり、なんだかんだ色々使いはするらしい。なるほど。</p></li>
+<p><a href="https://youtu.be/iP0eZqrorZc?t=3650">#み♡も
+マシュマロ雑談企画</a>
+ですきなロールに関する話がいくつか聞けます。「キルジョイがすき」「センチネ
+ルが全体的にすき」「元々、何かと一緒に戦うのとか戦略的に戦うとかがすき」という発言があるのは大分参考
+になります。</p>
+<p>ゴリ押しヴァイパーウルトで領域展開するのがすきらしい。「呼んでくれたらセンチネルかデュエやるよ!」と
+言っていたり、「イニシも若干使う」と言っていたり、なんだかんだ色々使いはするらしい。なるほど。</p></li>
 <li><p>結論</p>
 <p>上記のデータより、</p>
 <ul>
@@ -411,21 +829,36 @@ bash
 <li>何かと一緒に戦うのがすき</li>
 <li>ゴリ押し領域展開がすき</li>
 </ul>
-<p>ということがわかります。正直これだとまだセンチネルという枠組み以上に絞り込むことは難しい(ゴリ押し領 域展開だけは特徴として出ているけれども)です。もう少し色々な配信を見直したりプレイスタイルの観察等す ればよかったのですが、 <del>流石に気持ち悪い気がする</del> そこまでの時間がないので、ここから先は自由に決定出 来るものとすることにしました。</p></li>
+<p>ということがわかります。正直これだとまだセンチネルという枠組み以上に絞り込むことは難しい(ゴリ押し領
+域展開だけは特徴として出ているけれども)です。もう少し色々な配信を見直したりプレイスタイルの観察等す
+ればよかったのですが、 <del>流石に気持ち悪い気がする</del>
+そこまでの時間がないので、ここから先は自由に決定出
+来るものとすることにしました。</p></li>
 </ol>
-<h2 id="VALORANT視点でコンセプトを決める">VALORANT視点でコンセプトを決める</h2>
-<p>立ち回りについて自由に決定出来るといわれても困るので(オープンクエスチョンが苦手)、ここはVALORANT側の 視点から考えてみます。</p>
-<p>「エージェントデザインの過程」の動画によると、新しく追加されるエージェントは、「現在の環境に何かする」 必要があります。動画では、「新しい展開を生み出し」たり、「新しい課題を生み出し」たり、「新しい構成を 生み出し」たり等が例示されていました。そこで、既存のセンチネルの分析をし、現状存在していないコンセプ トが何か無いかを探っていくことにします。</p>
+<h2
+id="VALORANT視点でコンセプトを決める">VALORANT視点でコンセプトを決める</h2>
+<p>立ち回りについて自由に決定出来るといわれても困るので(オープンクエスチョンが苦手)、ここはVALORANT側の
+視点から考えてみます。</p>
+<p>「エージェントデザインの過程」の動画によると、新しく追加されるエージェントは、「現在の環境に何かする」
+必要があります。動画では、「新しい展開を生み出し」たり、「新しい課題を生み出し」たり、「新しい構成を
+生み出し」たり等が例示されていました。そこで、既存のセンチネルの分析をし、現状存在していないコンセプ
+トが何か無いかを探っていくことにします。</p>
 <ol>
 <li><p>エージェントの分析: 戦術ツールの視点から</p>
-<p>「エージェントデザインの過程」によると、各エージェントは戦術ツールを持つ必要があります。ここでの戦術 ツールは、具体的に明示されていませんでしたが、恐らくCSGOでいうところのフラッシュ・モク・モロトフ等に 値するスキルのことだと考えられます。</p>
+<p>「エージェントデザインの過程」によると、各エージェントは戦術ツールを持つ必要があります。ここでの戦術
+ツールは、具体的に明示されていませんでしたが、恐らくCSGOでいうところのフラッシュ・モク・モロトフ等に
+値するスキルのことだと考えられます。</p>
 <ol>
 <li><p>キルジョイ(モロトフ系)</p>
-<p>ナノスワームがモロトフの役割を果たしています。これは、相手の侵入を防ぎ、時間を稼ぐのに良いツールだと 思われます。又、攻撃側の際は解除阻止にも使えるやつですね。</p></li>
+<p>ナノスワームがモロトフの役割を果たしています。これは、相手の侵入を防ぎ、時間を稼ぐのに良いツールだと
+思われます。又、攻撃側の際は解除阻止にも使えるやつですね。</p></li>
 <li><p>サイファー(モク系)</p>
-<p>サイバーケージをモク代わりに使うことが出来ます。上手い人のプレイをたまに見ると、ケージを上手く使って 射線を変えるなどの立ち回りをしたりすることがよくあります。</p></li>
+<p>サイバーケージをモク代わりに使うことが出来ます。上手い人のプレイをたまに見ると、ケージを上手く使って
+射線を変えるなどの立ち回りをしたりすることがよくあります。</p></li>
 <li><p>セージ(モロト…フ…?)</p>
-<p>よく考えたらよく分かんなくなってきた。足止めスキルとして持つスローオーブがまさに戦術ツールであり、相 手の居場所を限定して入ってこれなくするという観点からモロトフ系と同様な役割を持っているように思われま す。</p></li>
+<p>よく考えたらよく分かんなくなってきた。足止めスキルとして持つスローオーブがまさに戦術ツールであり、相
+手の居場所を限定して入ってこれなくするという観点からモロトフ系と同様な役割を持っているように思われま
+す。</p></li>
 <li><p>チェンバー(？？？)</p>
 <p>こいつ何…??</p></li>
 </ol></li>
@@ -434,43 +867,68 @@ bash
 <li><p>キルジョイ: 籠城して守る</p>
 <p>サイト中を徹底して</p></li>
 <li><p>サイファー: 情報収集・裏取り警戒</p>
-<p>「パッチ5.12でのチェンバーの変更について」にて「裏取りの監視はサイファーの強みであるべき」と書かれて おり、攻撃時は</p></li>
+<p>「パッチ5.12でのチェンバーの変更について」にて「裏取りの監視はサイファーの強みであるべき」と書かれて
+おり、攻撃時は</p></li>
 <li><p>セージ: ひたすらに遅延</p>
-<p>壁を建てるのもスローオーブも遅延用途。ヒールオーブも蘇生も「遅延要員を倒させない」という面で遅延用ス キルと考えられます。情報を取ったり、サイト中で耐えるという動きは仕辛いけれどその分「侵入されるまでの 遅延をする」のが役割なのではないかなと考えています。</p></li>
+<p>壁を建てるのもスローオーブも遅延用途。ヒールオーブも蘇生も「遅延要員を倒させない」という面で遅延用ス
+キルと考えられます。情報を取ったり、サイト中で耐えるという動きは仕辛いけれどその分「侵入されるまでの
+遅延をする」のが役割なのではないかなと考えています。</p></li>
 <li><p>チェンバー: 安全なワンピック</p>
-<p>「パッチ5.12でのチェンバーの変更について」にて「高精度を誇り、リスクを取ってエリアを制圧するセンチネ ル」というアイデンティティであるとの記述があります。</p>
-<p>基本的には「生きのこること」が大切となるセンチネルに於いて、ハイリスクを冒すのは難しいように思うもの の、そこをランデブーで補完しているんでしょうね。</p></li>
+<p>「パッチ5.12でのチェンバーの変更について」にて「高精度を誇り、リスクを取ってエリアを制圧するセンチネ
+ル」というアイデンティティであるとの記述があります。</p>
+<p>基本的には「生きのこること」が大切となるセンチネルに於いて、ハイリスクを冒すのは難しいように思うもの
+の、そこをランデブーで補完しているんでしょうね。</p></li>
 </ol></li>
 <li><p>エージェントの分析: ○○寄りのセンチネル</p>
 <p>割と区分として、</p></li>
 </ol>
-<h2 id="センチネルにふさわしいスキルセットとは？">センチネルにふさわしいスキルセットとは？</h2>
+<h2
+id="センチネルにふさわしいスキルセットとは？">センチネルにふさわしいスキルセットとは？</h2>
 <ol>
 <li><p>センチネルの特徴: 状態異常系スキルを持つ</p>
-<p>あらためて考えてみると、センチネルは必ず状態異常を付与するアビリティを所持しています。セージはスロー オーブ、キルジョイはアラームボット、チェンバーはトレードマークとツール・ド・フォース、サイファーはト ラップワイヤーです。</p>
-<p>ここからは推測ですが、センチネルの役割の一つに「ラッシュを止める」というものがある関係で「状態異常に させることでエントリーしづらくさせる」という目的があるのではないかなと考えられます。</p></li>
+<p>あらためて考えてみると、センチネルは必ず状態異常を付与するアビリティを所持しています。セージはスロー
+オーブ、キルジョイはアラームボット、チェンバーはトレードマークとツール・ド・フォース、サイファーはト
+ラップワイヤーです。</p>
+<p>ここからは推測ですが、センチネルの役割の一つに「ラッシュを止める」というものがある関係で「状態異常に
+させることでエントリーしづらくさせる」という目的があるのではないかなと考えられます。</p></li>
 <li><p>「センチネル」の役回りから考える、必要な能力</p></li>
 </ol>
-<h2 id="TODO カウンタープレイの実装"><span class="todo TODO">TODO</span> カウンタープレイの実装</h2>
+<h2 id="TODO カウンタープレイの実装"><span class="todo TODO">TODO</span>
+カウンタープレイの実装</h2>
 <p>まだできてない。</p>
 <h2 id="スキルの価格帯設定">スキルの価格帯設定</h2>
 <h1 id="TODO おわりに"><span class="todo TODO">TODO</span> おわりに</h1>
 <p>おわりなので、本題とはちょっと離れた話をします。オフトピってﾔﾂ。</p>
-<p>実は企画を聞いた当初は、普通に絵を書こうとしていました。バトルもの、ということでみあちゃんが良くやっ ているゲームと組み合わせるか~~？？と思っていたのですが、最近よくやっているらしいApexは本家やっていな くてよくわからんのでVALORANTを選択しました。でも絵が壊滅的にダメ(1年に1回しか描かないのでそれはそう) で、行き詰まってしまい…色々悩んでいた時にこのアイデアが降ってきたので取り掛かってみた次第です。</p>
-<p>ちなみに途中でアレス(夜桜みあがよく持つ武器)のスキンを考えようともしていましたが、そちらもデザインセ ンスが間に合いませんでしたgg。</p>
-<p>エージェント化の話に戻すと。5/21あたりに夢からアイデアを貰い突発的に考え始め(実は<a href="https://twitter.com/cj_bc_sd/status/1660042761163378688">このツイート</a>がそう)、 「や~!おもしろそうだな!!色々アイデア浮かんだし!!!できそう!!!!」とかナメてかかったわけですが、見事に 間に合いませんでした…アイデハは浮かんでも、きちんと作ろうとするとボツになることの繰り返し…バラン ス考えたりキャラ被り考えたりするのって難しいですね。本職の人やっぱすげぇや…</p>
-<p>て、そうではなくて。や、そう("本職の人すごい")ではあるんですけど。色々考えること多くて、実は大分焦っ て纏めた本文なのですけどとても楽しかったです。きちんと作り込めなくて悔しさは大分ある…リベンジした い。</p>
-<p>ちなみに作業中に大分色々なエージェントについて理解が深まったりしたのでとても楽しかったです。まぁ完全 に趣味みたいなことしてるのをFAちゅてええのか…?感はあるけど、お絵描きすきな人がお絵描きでFA作るのと 同じ感覚なので許されるやろ、しらんけど、という感情でいます。</p>
+<p>実は企画を聞いた当初は、普通に絵を書こうとしていました。バトルもの、ということでみあちゃんが良くやっ
+ているゲームと組み合わせるか~~？？と思っていたのですが、最近よくやっているらしいApexは本家やっていな
+くてよくわからんのでVALORANTを選択しました。でも絵が壊滅的にダメ(1年に1回しか描かないのでそれはそう)
+で、行き詰まってしまい…色々悩んでいた時にこのアイデアが降ってきたので取り掛かってみた次第です。</p>
+<p>ちなみに途中でアレス(夜桜みあがよく持つ武器)のスキンを考えようともしていましたが、そちらもデザインセ
+ンスが間に合いませんでしたgg。</p>
+<p>エージェント化の話に戻すと。5/21あたりに夢からアイデアを貰い突発的に考え始め(実は<a
+href="https://twitter.com/cj_bc_sd/status/1660042761163378688">このツイート</a>がそう)、
+「や~!おもしろそうだな!!色々アイデア浮かんだし!!!できそう!!!!」とかナメてかかったわけですが、見事に
+間に合いませんでした…アイデハは浮かんでも、きちんと作ろうとするとボツになることの繰り返し…バラン
+ス考えたりキャラ被り考えたりするのって難しいですね。本職の人やっぱすげぇや…</p>
+<p>て、そうではなくて。や、そう("本職の人すごい")ではあるんですけど。色々考えること多くて、実は大分焦っ
+て纏めた本文なのですけどとても楽しかったです。きちんと作り込めなくて悔しさは大分ある…リベンジした
+い。</p>
+<p>ちなみに作業中に大分色々なエージェントについて理解が深まったりしたのでとても楽しかったです。まぁ完全
+に趣味みたいなことしてるのをFAちゅてええのか…?感はあるけど、お絵描きすきな人がお絵描きでFA作るのと
+同じ感覚なので許されるやろ、しらんけど、という感情でいます。</p>
 <h1 id="参考資料">参考資料</h1>
 <ul>
-<li><a href="id:53c89468-dc7d-4597-a068-95112d654d46">エージェントデザインの過程 – VALORANT</a></li>
+<li><a
+href="id:53c89468-dc7d-4597-a068-95112d654d46">エージェントデザインの過程
+– VALORANT</a></li>
 </ul>
 <h2 id="夜桜みあの統計">夜桜みあの統計</h2>
 <ol>
 <li><p>エージェントピック</p>
 <p>本来なら時系列を考慮したりするべきではありますが、正直統計は苦手なので</p>
 <ul>
-<li><a href="https://youtu.be/0PiBto5cMH8?t=1081">2022/06/17 - 18:01</a> モクはヴァイパーしか出来ない</li>
+<li><a href="https://youtu.be/0PiBto5cMH8?t=1081">2022/06/17 - 18:01</a>
+モクはヴァイパーしか出来ない</li>
 </ul>
 <ol>
 <li><p>その他喋っていたこと</p></li>
@@ -507,10 +965,12 @@ bash
 <ol>
 <li><p>魔法: キャットス</p>
 <p>猫耳を生やす魔法。猫耳を生やすことしか分かっていない。</p>
-<p>1:11:46 <a href="https://www.youtube.com/watch?v=l9nmg9zMDBA&amp;t=4168s">https://www.youtube.com/watch?v=l9nmg9zMDBA&amp;t=4168s</a></p>
+<p>1:11:46 <a
+href="https://www.youtube.com/watch?v=l9nmg9zMDBA&amp;t=4168s">https://www.youtube.com/watch?v=l9nmg9zMDBA&amp;t=4168s</a></p>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
-<p>夜空に舞う妖精よ 音を奏でるハープよ かわいいを創造し &lt;不明瞭区間&gt; 姿を変えん キャットス</p>
+<p>夜空に舞う妖精よ 音を奏でるハープよ かわいいを創造し
+&lt;不明瞭区間&gt; 姿を変えん キャットス</p>
 </blockquote>
 </div></li>
 <li><p>魔法: フローレ</p>
@@ -520,7 +980,8 @@ bash
 <li><p>杖</p>
 <p>あくまでもアクセサリーとしての存在であり、杖がなくとも詠唱で魔法が使える。ハープの部分は一応音が鳴る。</p>
 <p>夜桜みあ曰く杖は重いらしい。コントローラーよりか重い。それはとても重いな。うん。</p>
-<p>1:15:14 <a href="https://www.youtube.com/watch?v=l9nmg9zMDBA&amp;t=4168s">https://www.youtube.com/watch?v=l9nmg9zMDBA&amp;t=4168s</a></p></li>
+<p>1:15:14 <a
+href="https://www.youtube.com/watch?v=l9nmg9zMDBA&amp;t=4168s">https://www.youtube.com/watch?v=l9nmg9zMDBA&amp;t=4168s</a></p></li>
 </ol>
 <h2 id="Valorantの統計">Valorantの統計</h2>
 <ol>
@@ -563,12 +1024,16 @@ bash
       <p>ニッチですが、どちらも同じ効果がありそうだったので気になって調べてみたメモ。</p>
 <h1 id="結論: 恐らくほぼ違いはない">結論: 恐らくほぼ違いはない</h1>
 <p>実装を軽く見た感じ、処理上ではほぼ同じ扱いをしているように見えます。</p>
-<p><a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/ip/iptuntap.c#n176">iptuntap.c « ip - iproute2/iproute2.git - Iproute2 routing commands and utilities</a> の <code>parse_args</code> の実装が以下です</p>
+<p><a
+href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/ip/iptuntap.c#n176">iptuntap.c
+« ip - iproute2/iproute2.git - Iproute2 routing commands and
+utilities</a> の <code>parse_args</code> の実装が以下です</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>matches<span class="op">(*</span>argv<span class="op">,</span> <span class="st">&quot;dev&quot;</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                        NEXT_ARG<span class="op">();</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">if</span> <span class="op">(</span>get_ifname<span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">,</span> <span class="op">*</span>argv<span class="op">))</span></span>
@@ -586,33 +1051,56 @@ c
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span></code></pre></div>
 </div>
 <h1 id="処理の追跡">処理の追跡</h1>
-<h2 id="ip tuntap add dev DEVNAME の処理"><code>ip tuntap add dev DEVNAME</code> の処理</h2>
+<h2
+id="ip tuntap add dev DEVNAME の処理"><code>ip tuntap add dev DEVNAME</code>
+の処理</h2>
 <p>先程の部分から、実際に実行される動作は以下です。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>NEXT_ARG<span class="op">();</span></span>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>NEXT_ARG<span class="op">();</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>get_ifname<span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">,</span> <span class="op">*</span>argv<span class="op">))</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        invarg<span class="op">(</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">dev</span><span class="sc">\&quot;</span><span class="st"> not a valid ifname&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span></code></pre></div>
 </div>
-<p><code>NEXT_ARG</code> は、~argv~ の指す先をインクリメントして次の引数を示すように します。その際、必要な数引数がなかった場合はエラーを吐くようにしてある ようです。(<a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/include/utils.h#n51">実際のコード</a>)</p>
+<p><code>NEXT_ARG</code> は、~argv~
+の指す先をインクリメントして次の引数を示すように
+します。その際、必要な数引数がなかった場合はエラーを吐くようにしてある
+ようです。(<a
+href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/include/utils.h#n51">実際のコード</a>)</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
 </div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define NEXT_ARG() do { argv++; if (--argc &lt;= 0) incomplete_command(); } while(0)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define NEXT_ARG</span><span class="op">()</span><span class="pp"> </span><span class="cf">do</span><span class="pp"> </span><span class="op">{</span><span class="pp"> argv</span><span class="op">++;</span><span class="pp"> </span><span class="cf">if</span><span class="pp"> </span><span class="op">(--</span><span class="pp">argc </span><span class="op">&lt;=</span><span class="pp"> </span><span class="dv">0</span><span class="op">)</span><span class="pp"> incomplete_command</span><span class="op">();</span><span class="pp"> </span><span class="op">}</span><span class="pp"> </span><span class="cf">while</span><span class="op">(</span><span class="dv">0</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p><code>invarg</code> はエラー処理用の関数で、入ったらエラーを出力してそのまま終了 するので(<a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n792">utils.c « lib - iproute2/iproute2.git - Iproute2 routing commands and utilities</a>) 今は特に考慮しなくて良いかと。</p>
-<p><code>get_ifname</code> は第二引数に与えられた文字列が有効なものかを確認し、有効 であれば第一引数に与えられたポインタに書き込みます(<a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n846">utils.c « lib - iproute2/iproute2.git - Iproute2 routing commands and utilities</a>)。</p>
-<p>なので、ここでやっていることとしては、argvが <code>DEVNAME</code> を指すようにし た状態で <code>get_ifname(ifr-&gt;ifr_name, \*argv)</code> を呼び出しています。</p>
-<h2 id="ip tuntap add name DEVNAME の処理"><code>ip tuntap add name DEVNAME</code> の処理</h2>
+<p><code>invarg</code>
+はエラー処理用の関数で、入ったらエラーを出力してそのまま終了 するので(<a
+href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n792">utils.c
+« lib - iproute2/iproute2.git - Iproute2 routing commands and
+utilities</a>) 今は特に考慮しなくて良いかと。</p>
+<p><code>get_ifname</code>
+は第二引数に与えられた文字列が有効なものかを確認し、有効
+であれば第一引数に与えられたポインタに書き込みます(<a
+href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n846">utils.c
+« lib - iproute2/iproute2.git - Iproute2 routing commands and
+utilities</a>)。</p>
+<p>なので、ここでやっていることとしては、argvが <code>DEVNAME</code>
+を指すようにし た状態で
+<code>get_ifname(ifr-&gt;ifr_name, \*argv)</code>
+を呼び出しています。</p>
+<h2
+id="ip tuntap add name DEVNAME の処理"><code>ip tuntap add name DEVNAME</code>
+の処理</h2>
 <p>実際に動作する部分は以下(不要なelse文を除去してあります)</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
 </div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>matches<span class="op">(*</span>argv<span class="op">,</span> <span class="st">&quot;name&quot;</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>matches<span class="op">(*</span>argv<span class="op">,</span> <span class="st">&quot;name&quot;</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>        NEXT_ARG<span class="op">();</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="op">...</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">[</span><span class="dv">0</span><span class="op">])</span></span>
@@ -620,19 +1108,30 @@ c
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>get_ifname<span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">,</span> <span class="op">*</span>argv<span class="op">))</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        invarg<span class="op">(</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">name</span><span class="sc">\&quot;</span><span class="st"> not a valid ifname&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span></code></pre></div>
 </div>
-<p><code>matches(*argv, "name") == 0</code> は真になるので <code>NEXT_ARG</code> は呼ばれます。 <code>duparg2</code> は<a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n806">引数の重複時等用のもエラー処理用の関数</a>なので、本筋とは外れ るので一旦置きます。そうすると、実質実行されるのは以下のようなコードと なります。</p>
+<p><code>matches(*argv, "name") == 0</code> は真になるので
+<code>NEXT_ARG</code> は呼ばれます。 <code>duparg2</code> は<a
+href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n806">引数の重複時等用のもエラー処理用の関数</a>なので、本筋とは外れ
+るので一旦置きます。そうすると、実質実行されるのは以下のようなコードと
+なります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
 </div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>NEXT_ARG<span class="op">();</span></span>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>NEXT_ARG<span class="op">();</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>get_ifname<span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">,</span> <span class="op">*</span>argv<span class="op">))</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        invarg<span class="op">(</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">name</span><span class="sc">\&quot;</span><span class="st"> not a valid ifname&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span></code></pre></div>
 </div>
-<p>これは、 <code>ip tuntap add dev DEVNAME</code> の処理と全く同じです…!!</p>
+<p>これは、 <code>ip tuntap add dev DEVNAME</code>
+の処理と全く同じです…!!</p>
 <h1 id="細かな違い">細かな違い</h1>
-<p>先程のエラー処理を考えると、 <code>dev</code> オプション(オプションなのか？)は複 数付けることが出来、最後に与えた値が有効な値となりそうです。他方、 <code>name</code> は複数与えることが出来ず、そうした場合はエラーを返します。</p>
-<p>又、devの後にnameを与えるとエラーになり、その逆(nameの後にdevを与える) とdevの値で上書きされるものと考えられます。</p>
+<p>先程のエラー処理を考えると、 <code>dev</code>
+オプション(オプションなのか？)は複
+数付けることが出来、最後に与えた値が有効な値となりそうです。他方、
+<code>name</code>
+は複数与えることが出来ず、そうした場合はエラーを返します。</p>
+<p>又、devの後にnameを与えるとエラーになり、その逆(nameの後にdevを与える)
+とdevの値で上書きされるものと考えられます。</p>
     </div>
   </div>
   
@@ -667,17 +1166,29 @@ c
 
     <div class="description">
       <h1 id="migemoとは">migemoとは</h1>
-<p><a href="https://github.com/koron/cmigemo/blob/master/doc/README_j.txt">migemo</a>とは、</p>
+<p><a
+href="https://github.com/koron/cmigemo/blob/master/doc/README_j.txt">migemo</a>とは、</p>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
-<p>Migemo はローマ字のまま日本語をインクリメンタル検索するため のツールです。 かな漢字変換をすることなく日本語のインクリメン タル検索を快適に行うことができます。</p>
+<p>Migemo はローマ字のまま日本語をインクリメンタル検索するため
+のツールです。 かな漢字変換をすることなく日本語のインクリメン
+タル検索を快適に行うことができます。</p>
 <p>– <a href="http://0xcc.net/migemo/">http://0xcc.net/migemo/</a></p>
 </blockquote>
 </div>
-<p>プログラマーでない人向けに少し解説をすると、プログラミングをしている際は、文字入力を英語を入力するモードに 切り替えていることが多く、その状態で日本語を検索しようとすると「一度日本語入力モードに切り替えて検索し、そ の後元に戻す」というひとてまが発生します。migemoを用いると、その必要がなく「英語入力モードのままで日本語 を検索出来る」ようになります。 どうやらオリジナルのものは2000年に公開されているという割かし古いプログラムではありますが、その実装の一つ である<a href="https://github.com/koron/cmigemo">koron/cmigemo</a>は2022年でも更新が受け入れられているなどまだ使われているプログラムのようです。</p>
-<p>名前は割と昔、SKKを調べ始めた頃から見ていましたがこれまで試してきておらず、ここにきて試してみようと思い 立った備忘録です。</p>
+<p>プログラマーでない人向けに少し解説をすると、プログラミングをしている際は、文字入力を英語を入力するモードに
+切り替えていることが多く、その状態で日本語を検索しようとすると「一度日本語入力モードに切り替えて検索し、そ
+の後元に戻す」というひとてまが発生します。migemoを用いると、その必要がなく「英語入力モードのままで日本語
+を検索出来る」ようになります。
+どうやらオリジナルのものは2000年に公開されているという割かし古いプログラムではありますが、その実装の一つ
+である<a
+href="https://github.com/koron/cmigemo">koron/cmigemo</a>は2022年でも更新が受け入れられているなどまだ使われているプログラムのようです。</p>
+<p>名前は割と昔、SKKを調べ始めた頃から見ていましたがこれまで試してきておらず、ここにきて試してみようと思い
+立った備忘録です。</p>
 <h1 id="環境構成">環境構成</h1>
-<p>migemo自体は「ローマ字から日本語の正規表現を組み立てて返す」という動作をするだけのプログラムです。そのた め、実際に使用するには他のプラグイン等と組み合わせる必要があります。 今回は以下のような環境で使うための設定をしていきます</p>
+<p>migemo自体は「ローマ字から日本語の正規表現を組み立てて返す」という動作をするだけのプログラムです。そのた
+め、実際に使用するには他のプラグイン等と組み合わせる必要があります。
+今回は以下のような環境で使うための設定をしていきます</p>
 <ul>
 <li>Emacs (28.2)</li>
 <li>ivy-swiper</li>
@@ -685,17 +1196,28 @@ c
 </ul>
 <h1 id="作業工程">作業工程</h1>
 <h2 id="cmigemoのインストール">cmigemoのインストール</h2>
-<p>まずはmigemo本体のインストールをします。migemoの実装は本家の<a href="http://0xcc.net/migemo/">Ruby版</a>とその<a href="https://www.kaoriya.net/software/cmigemo/">C版</a>とがあります。 なんかC版であるcmigemoの方が良いと見た気がするので、cmigemoを入れていきます。</p>
+<p>まずはmigemo本体のインストールをします。migemoの実装は本家の<a
+href="http://0xcc.net/migemo/">Ruby版</a>とその<a
+href="https://www.kaoriya.net/software/cmigemo/">C版</a>とがあります。
+なんかC版であるcmigemoの方が良いと見た気がするので、cmigemoを入れていきます。</p>
 <p>archlinuxでは、AURにあるので取ってきます(勿論AURなので自己責任で…)</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">yay</span> <span class="at">-S</span> cmigemo-git</span></code></pre></div>
+<div class="sourceCode" id="cb1" data-org-language="sh"><pre
+class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">yay</span> <span class="at">-S</span> cmigemo-git</span></code></pre></div>
 </div>
 <h2 id="migemo.elの設定">migemo.elの設定</h2>
-<p>Emacsから使用出来るようにするために、<a href="https://github.com/emacs-jp/migemo">emacs-jp/migemo</a>を利用します。私は <a href="https://github.com/conao3/leaf.el">conao3/leaf.el</a>を使用しているので、以下のようにして設定を追記します。大 体の設定値は<a href="https://github.com/emacs-jp/migemo#sample-configuration">Sample-configuration</a>のままにしています。</p>
-<p>但し設定を変えた後は一度 <code>migemo-kill</code> しないと反映されないため、既に migemoを使っていた場合は一度 <code>migemo-kill</code> を挟むようにしています。</p>
+<p>Emacsから使用出来るようにするために、<a
+href="https://github.com/emacs-jp/migemo">emacs-jp/migemo</a>を利用します。私は
+<a
+href="https://github.com/conao3/leaf.el">conao3/leaf.el</a>を使用しているので、以下のようにして設定を追記します。大
+体の設定値は<a
+href="https://github.com/emacs-jp/migemo#sample-configuration">Sample-configuration</a>のままにしています。</p>
+<p>但し設定を変えた後は一度 <code>migemo-kill</code>
+しないと反映されないため、既に migemoを使っていた場合は一度
+<code>migemo-kill</code> を挟むようにしています。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -718,9 +1240,14 @@ elisp
   )
 </code></pre>
 </div>
-<p>この時点で、 <code>migemo-forward</code> 関数などが使用可能なはずです。</p>
+<p>この時点で、 <code>migemo-forward</code>
+関数などが使用可能なはずです。</p>
 <h2 id="ivy-migemo">ivy-migemo</h2>
-<p>デフォルトの <code>migemo.el</code> ではisearch用のラッパーは用意されていますが、 私はivy(swiper)を利用しているのでそれに対応させるためのパッケージを入 れます。これも設定は<a href="https://github.com/ROCKTAKEY/ivy-migemo">ROCKTAKEY/ivy-migemo</a>のREADMEから直接使用しています。</p>
+<p>デフォルトの <code>migemo.el</code>
+ではisearch用のラッパーは用意されていますが、
+私はivy(swiper)を利用しているのでそれに対応させるためのパッケージを入
+れます。これも設定は<a
+href="https://github.com/ROCKTAKEY/ivy-migemo">ROCKTAKEY/ivy-migemo</a>のREADMEから直接使用しています。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -735,34 +1262,56 @@ elisp
                              )))
 </code></pre>
 </div>
-<p>私はfuzzy-matchingがすきなので <code>ivy--regex-fuzzy</code> / <code>ivy-migemo-regex-fuzzy</code> を利用していますが、お好み で <code>ivy-migemo-regex-plus</code> も用意されているようです。</p>
+<p>私はfuzzy-matchingがすきなので <code>ivy--regex-fuzzy</code> /
+<code>ivy-migemo-regex-fuzzy</code> を利用していますが、お好み で
+<code>ivy-migemo-regex-plus</code> も用意されているようです。</p>
 <h2 id="avy-migemo">avy-migemo</h2>
-<p>avy-migemoはavyをmigemo対応させるやつ…なようですが、大分古くて更新が止まっているのでそのままだと上 手く動きません。今、夜で眠いのでまた対応させる気が出たら対応させて追記します。</p>
+<p>avy-migemoはavyをmigemo対応させるやつ…なようですが、大分古くて更新が止まっているのでそのままだと上
+手く動きません。今、夜で眠いのでまた対応させる気が出たら対応させて追記します。</p>
 <p>(ちなみに色々先人は</p>
 <h2 id="AZIK配列に対応させる">AZIK配列に対応させる</h2>
-<p><a href="https://asiamoth.com/200608052313/">MigemoでAZIK！（「mpxo」で「猛暑」を検索） | 亜細亜ノ蛾</a>を参考にすると、辞書ファイルの <code>roma2hira.dat</code> を編集すれば良いとのことです。該当のファイルはarchlinux上では <code>/usr/share/migemo/utf-8/roma2hira.dat</code> にあるので、それを置き換えることにします。</p>
-<p>上記参考記事ではAZIK for ATOK 2006 for Windowsの辞書をゴニョゴニョしたとのことですが、該当リンクが切 れていることとライセンスの問題が何か面倒だった気がすること、実装によって微妙に変換規則が異なっている ことがあること、どうせなら自分で使っている辞書を使えばいいや!と思ったことから、手元にあるlibskkが使 用している辞書(というか変換テーブル)をゴニョることにしました。</p>
+<p><a
+href="https://asiamoth.com/200608052313/">MigemoでAZIK！（「mpxo」で「猛暑」を検索）
+| 亜細亜ノ蛾</a>を参考にすると、辞書ファイルの
+<code>roma2hira.dat</code>
+を編集すれば良いとのことです。該当のファイルはarchlinux上では
+<code>/usr/share/migemo/utf-8/roma2hira.dat</code>
+にあるので、それを置き換えることにします。</p>
+<p>上記参考記事ではAZIK for ATOK 2006 for
+Windowsの辞書をゴニョゴニョしたとのことですが、該当リンクが切
+れていることとライセンスの問題が何か面倒だった気がすること、実装によって微妙に変換規則が異なっている
+ことがあること、どうせなら自分で使っている辞書を使えばいいや!と思ったことから、手元にあるlibskkが使
+用している辞書(というか変換テーブル)をゴニョることにしました。</p>
 <ol>
 <li><p>変換テーブルの作成</p>
-<p>libskkが使用している、ローマ字とかな文字の変換テーブルはJSONで書かれています。そのため、jqとsedでゴ ニョればいい感じに取り出すことが出来ます。(ちなみに同様にして、tcodeやkzik等等他の配列へも対応出来る はずです)</p>
-<p>以下に、私の環境で使用したスクリプトを記載します。尚、エスケープ漏れ？のせいでファイルのうち一つが適 切なJSONとして認識されなかったため、前処理をしています。</p>
+<p>libskkが使用している、ローマ字とかな文字の変換テーブルはJSONで書かれています。そのため、jqとsedでゴ
+ニョればいい感じに取り出すことが出来ます。(ちなみに同様にして、tcodeやkzik等等他の配列へも対応出来る
+はずです)</p>
+<p>以下に、私の環境で使用したスクリプトを記載します。尚、エスケープ漏れ？のせいでファイルのうち一つが適
+切なJSONとして認識されなかったため、前処理をしています。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb4" data-org-language="sh" data-results="file" data-file="/tmp/2023-04-23-emacs-migemo-setup--azik-array"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /usr/share/libskk/rules/default/rom-kana/default.json /usr/share/libskk/rules/azik/rom-kana/default.json <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&quot;s;</span><span class="dt">\\\\</span><span class="st">&#39;;&#39;;&quot;</span> <span class="kw">|</span> <span class="ex">jq</span>  <span class="at">-s</span> <span class="st">&#39;.[0] * .[1] | .define.&quot;rom-kana&quot; | map_values(.[1]) | to_entries | map_values(&quot;\(.key) \(.value)&quot;)&#39;</span>  <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;/^[^ ]\+/d;s/^ \+\|[&quot;,]//g&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb4" data-org-language="sh"
+data-results="file"
+data-file="/tmp/2023-04-23-emacs-migemo-setup--azik-array"><pre
+class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> /usr/share/libskk/rules/default/rom-kana/default.json /usr/share/libskk/rules/azik/rom-kana/default.json <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&quot;s;</span><span class="dt">\\\\</span><span class="st">&#39;;&#39;;&quot;</span> <span class="kw">|</span> <span class="ex">jq</span>  <span class="at">-s</span> <span class="st">&#39;.[0] * .[1] | .define.&quot;rom-kana&quot; | map_values(.[1]) | to_entries | map_values(&quot;\(.key) \(.value)&quot;)&#39;</span>  <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;/^[^ ]\+/d;s/^ \+\|[&quot;,]//g&#39;</span></span></code></pre></div>
 </div>
 <ol>
 <li><p>スクリプトの解説</p>
 <ol>
 <li><p>不正なクオーテーションの削除</p>
-<p><code>/usr/share/libskk/rules/default/rom-kana/default.json</code> にある以下の記述が、どうやらパースに失敗して いるようです。エスケープ用のバックスペースが無ければ上手く動いたので、sedで取り除いています。</p>
+<p><code>/usr/share/libskk/rules/default/rom-kana/default.json</code>
+にある以下の記述が、どうやらパースに失敗して
+いるようです。エスケープ用のバックスペースが無ければ上手く動いたので、sedで取り除いています。</p>
 <p>変換前:</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 javascript
 </div>
-<div class="sourceCode" id="cb5" data-org-language="js"><pre class="sourceCode javascript SourceCode"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<div class="sourceCode" id="cb5" data-org-language="js"><pre
+class="sourceCode javascript SourceCode"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>{</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;n</span><span class="sc">\&#39;</span><span class="st">&quot;</span><span class="op">:</span> [<span class="st">&quot;&quot;</span><span class="op">,</span> <span class="st">&quot;ん&quot;</span> ]<span class="op">,</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span>
@@ -773,7 +1322,8 @@ javascript
 <div class="ui top right attached label">
 javascript
 </div>
-<div class="sourceCode" id="cb6" data-org-language="js"><pre class="sourceCode javascript SourceCode"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<div class="sourceCode" id="cb6" data-org-language="js"><pre
+class="sourceCode javascript SourceCode"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>{</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;n&#39;&quot;</span><span class="op">:</span> [<span class="st">&quot;&quot;</span><span class="op">,</span> <span class="st">&quot;ん&quot;</span> ]<span class="op">,</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span>
@@ -784,19 +1334,28 @@ javascript
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb7" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">&quot;s;</span><span class="dt">\\\\</span><span class="st">&#39;;&#39;;&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb7" data-org-language="sh"><pre
+class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">&quot;s;</span><span class="dt">\\\\</span><span class="st">&#39;;&#39;;&quot;</span></span></code></pre></div>
 </div></li>
 <li><p>複数のrom-kana JSONのマージ</p>
-<p>libskkでは、既存のJSONファイルをマージすることが出来ます。これにより、例えばAZIKでは基本的な配列は そのままに拡張することが出来ます。これを使用するために、複数のJSONファイルをjqでマージします。 本来は、目的のファイル(<code>/usr/share/libskk/rules/azik/rom-kana/default.json</code>)の <code>include</code> を読み、必 要なファイルを自動的に判別すると汎用性が出て良いと思うのですが、今回はそれは面倒なので必要なファイル を直書きします。</p>
+<p>libskkでは、既存のJSONファイルをマージすることが出来ます。これにより、例えばAZIKでは基本的な配列は
+そのままに拡張することが出来ます。これを使用するために、複数のJSONファイルをjqでマージします。
+本来は、目的のファイル(<code>/usr/share/libskk/rules/azik/rom-kana/default.json</code>)の
+<code>include</code> を読み、必
+要なファイルを自動的に判別すると汎用性が出て良いと思うのですが、今回はそれは面倒なので必要なファイル
+を直書きします。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb8" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jq</span>  <span class="at">-s</span> <span class="st">&#39;.[0] * .[1] | .define.&quot;rom-kana&quot; | map_values(.[1]) | to_entries | map_values(&quot;\(.key) \(.value)&quot;)&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb8" data-org-language="sh"><pre
+class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jq</span>  <span class="at">-s</span> <span class="st">&#39;.[0] * .[1] | .define.&quot;rom-kana&quot; | map_values(.[1]) | to_entries | map_values(&quot;\(.key) \(.value)&quot;)&#39;</span></span></code></pre></div>
 </div>
 <p>参考:</p>
 <ul>
-<li><a href="https://dev.classmethod.jp/articles/merge_multiple_json/">複数のjsonファイルをjqを使ってmergeする | DevelopersIO</a></li>
+<li><a
+href="https://dev.classmethod.jp/articles/merge_multiple_json/">複数のjsonファイルをjqを使ってmergeする
+| DevelopersIO</a></li>
 </ul></li>
 <li><p>JSON書式から、migemoで使用可能な形式への変換</p>
 <p>migemoで使用する形式は、</p>
@@ -810,14 +1369,17 @@ bash
 <div class="ui top right attached label">
 bash
 </div>
-<div class="sourceCode" id="cb9" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">&#39;/^[^ ]\+/d;s/^ \+\|[&quot;,]//g&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb9" data-org-language="sh"><pre
+class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">&#39;/^[^ ]\+/d;s/^ \+\|[&quot;,]//g&#39;</span></span></code></pre></div>
 </div></li>
 </ol></li>
 </ol></li>
 </ol>
 <h1 id="トラブルシューティング">トラブルシューティング</h1>
-<h2 id="migemo.elの設定を変えても反映されない">migemo.elの設定を変えても反映されない</h2>
-<p>設定を変えた後は、一度 <code>(migemo-kill)</code> した後に <code>(migemo-init)</code> しなおす必要があります。</p>
+<h2
+id="migemo.elの設定を変えても反映されない">migemo.elの設定を変えても反映されない</h2>
+<p>設定を変えた後は、一度 <code>(migemo-kill)</code> した後に
+<code>(migemo-init)</code> しなおす必要があります。</p>
     </div>
   </div>
   
@@ -852,13 +1414,15 @@ bash
 
     <div class="description">
       <h1 id="やりたいこと">やりたいこと</h1>
-<p>Pandocに限らず、いくつかのMarkdownを扱えるプログラムでは、Markdownファイルの冒頭にYAML形式のメタデータを持つことが 出来ます(frontmatterというやつです)。</p>
+<p>Pandocに限らず、いくつかのMarkdownを扱えるプログラムでは、Markdownファイルの冒頭にYAML形式のメタデータを持つことが
+出来ます(frontmatterというやつです)。</p>
 <p>例えば、以下のような:</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 markdown
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode markdown SourceCode"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode markdown SourceCode"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> PandocのwriteMarkdownでメタデータをYAML出力する</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> cj.bc_sd</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">tags:</span></span>
@@ -872,30 +1436,54 @@ markdown
 <p>そこで、Pandocを用いて他のフォーマットから変換する際にこのYAML形式のメタデータを付与したいです。</p>
 <h1 id="Tl;Dr">Tl;Dr</h1>
 <ul>
-<li><code>WriterOptions.writerExtensions</code> (<a href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Options.html#t:WriterOptions">src</a>) に <code>Ext_yaml_metadata_block</code> (<a href="https://pandoc.org/MANUAL.html#extension-yaml_metadata_block">解説</a>)を追加する</li>
-<li><code>WriterOptions.writerTemplate</code> に何かテンプレートを設定する(<code>Nothing</code> じゃなければ良い)
+<li><code>WriterOptions.writerExtensions</code> (<a
+href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Options.html#t:WriterOptions">src</a>)
+に <code>Ext_yaml_metadata_block</code> (<a
+href="https://pandoc.org/MANUAL.html#extension-yaml_metadata_block">解説</a>)を追加する</li>
+<li><code>WriterOptions.writerTemplate</code>
+に何かテンプレートを設定する(<code>Nothing</code> じゃなければ良い)
 <ul>
-<li>デフォルトのものを <code>compileDefaultTemplate "markdown"</code> (<a href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Templates.html#v:compileDefaultTemplate">src</a>)で取ってきても良い</li>
-<li>その場合、 <code>PandocPure</code> を使っている場合は適切に <code>stFiles</code> を弄る必要がある(後述)</li>
+<li>デフォルトのものを <code>compileDefaultTemplate "markdown"</code>
+(<a
+href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Templates.html#v:compileDefaultTemplate">src</a>)で取ってきても良い</li>
+<li>その場合、 <code>PandocPure</code> を使っている場合は適切に
+<code>stFiles</code> を弄る必要がある(後述)</li>
 </ul></li>
 </ul>
 <h1 id="解説">解説</h1>
-<h2 id="前提: Pandocをライブラリとして利用して変換する">前提: Pandocをライブラリとして利用して変換する</h2>
+<h2 id="前提: Pandocをライブラリとして利用して変換する">前提:
+Pandocをライブラリとして利用して変換する</h2>
 <p>Pandocをライブラリとして使う場合、以下のような流れで変換処理を行うことが出来ます:</p>
 <ol>
-<li><a href="https://hackage.haskell.org/package/text-2.0.1/docs/Data-Text-IO.html#v:readFile"><code>Data.Text.IO.readFile</code></a>等を用いてファイルの内容を <code>Text</code> として読み込みます</li>
-<li><a href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Readers.html"><code>Reader</code></a> のうちの一つを用いて元のコンテンツをパースして <a href="https://hackage.haskell.org/package/pandoc-types-1.23/docs/Text-Pandoc-Definition.html#t:Pandoc"><code>Pandoc</code></a>型の値を得ます</li>
+<li><a
+href="https://hackage.haskell.org/package/text-2.0.1/docs/Data-Text-IO.html#v:readFile"><code>Data.Text.IO.readFile</code></a>等を用いてファイルの内容を
+<code>Text</code> として読み込みます</li>
+<li><a
+href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Readers.html"><code>Reader</code></a>
+のうちの一つを用いて元のコンテンツをパースして <a
+href="https://hackage.haskell.org/package/pandoc-types-1.23/docs/Text-Pandoc-Definition.html#t:Pandoc"><code>Pandoc</code></a>型の値を得ます</li>
 <li>必要なら <code>Pandoc</code> 型に処理をします</li>
-<li><a href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Writers.html"><code>Writer</code></a>のうちの一つを用いて、 <code>Text</code> 型にできます</li>
+<li><a
+href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Writers.html"><code>Writer</code></a>のうちの一つを用いて、
+<code>Text</code> 型にできます</li>
 </ol>
 <p>今回は、書き出しはMarkdown形式で行うので、以下のようになります。</p>
-<p><code>Reader</code> は元のフォーマットに対応したものであれば何でも良いのですが、この記事では 元のフォーマットとしてOrgを想定し、 <code>readOrg</code> を使用します。</p>
-<p>又、 <a href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Class.html#v:runPure"><code>runPure</code></a> は <a href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Class.html#v:runIO"><code>runIO</code></a> にしても良いです。 <code>runPure</code> の場合は <code>runIO</code> よりも少し工程が増えますが、純粋性を持たせることは出来ます。</p>
+<p><code>Reader</code>
+は元のフォーマットに対応したものであれば何でも良いのですが、この記事では
+元のフォーマットとしてOrgを想定し、 <code>readOrg</code>
+を使用します。</p>
+<p>又、 <a
+href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Class.html#v:runPure"><code>runPure</code></a>
+は <a
+href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Class.html#v:runIO"><code>runIO</code></a>
+にしても良いです。 <code>runPure</code> の場合は <code>runIO</code>
+よりも少し工程が増えますが、純粋性を持たせることは出来ます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Text.Pandoc</span></span>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Text.Pandoc</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.IO</span> <span class="kw">as</span> <span class="dt">TIO</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
@@ -908,13 +1496,19 @@ haskell
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  TIO.writeFile <span class="st">&quot;/tmp/dist.md&quot;</span> txt</span></code></pre></div>
 </div>
 <p>以降は、これに変更を加えていく形で進めていこうと思います。</p>
-<h2 id="Extyamlmetadatablock 拡張を有効化する">Ext<sub>yamlmetadatablock</sub> 拡張を有効化する</h2>
-<p>まず、デフォルトの <code>WriterOptions</code> ではYAML形式のメタデータブロックは生成されません。 <a href="https://pandoc.org/MANUAL.html#extension-yaml_metadata_block"><code>Ext_yaml_metadata_block</code></a>を有効化する必要があります。 尚、</p>
+<h2
+id="Extyamlmetadatablock 拡張を有効化する">Ext<sub>yamlmetadatablock</sub>
+拡張を有効化する</h2>
+<p>まず、デフォルトの <code>WriterOptions</code>
+ではYAML形式のメタデータブロックは生成されません。 <a
+href="https://pandoc.org/MANUAL.html#extension-yaml_metadata_block"><code>Ext_yaml_metadata_block</code></a>を有効化する必要があります。
+尚、</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Text.Pandoc</span></span>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Text.Pandoc</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.IO</span> <span class="kw">as</span> <span class="dt">TIO</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
@@ -932,7 +1526,8 @@ haskell
 <div class="ui top right attached label">
 diff
 </div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    txt &lt;- handleError . runPure $ do</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="va">+     let writerOpts = def { writerExtensions = extensionsFromList [Ext_yaml_metadata_block]}</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>      pandocDoc &lt;- readOrg def rawContent</span>
@@ -940,18 +1535,29 @@ diff
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="va">+     writeMarkdown writerOpts pandocDoc</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 </div>
-<h2 id="Writerのテンプレートを明示的に指定する">Writerのテンプレートを明示的に指定する</h2>
-<p>何故か、MarkdownのwriterではYAMLのfrontmatterを出力するためには明示的にテンプレートを指定する必要があります。 これは、<a href="https://github.com/jgm/pandoc/blob/effca7f7cf7afeb381154f77e33a16b7b19c02b7/src/Text/Pandoc/Writers/Markdown.hs#L225-L229">テンプレートが明示的に指定されている時のみ <code>Ext_yaml_metadata_block</code> を確認する</a>ようになっているためです。</p>
+<h2
+id="Writerのテンプレートを明示的に指定する">Writerのテンプレートを明示的に指定する</h2>
+<p>何故か、MarkdownのwriterではYAMLのfrontmatterを出力するためには明示的にテンプレートを指定する必要があります。
+これは、<a
+href="https://github.com/jgm/pandoc/blob/effca7f7cf7afeb381154f77e33a16b7b19c02b7/src/Text/Pandoc/Writers/Markdown.hs#L225-L229">テンプレートが明示的に指定されている時のみ
+<code>Ext_yaml_metadata_block</code>
+を確認する</a>ようになっているためです。</p>
 <p>(…ドウシテ…??)</p>
 <p>まぁ、これを行えばきちんとfrontmatterが出力されるはずです!</p>
 <ol>
 <li><p><code>PandocIO</code> モナド内で行う場合</p>
-<p><code>PandocIO</code> モナドを用いている場合は、 <a href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Templates.html#v:compileDefaultTemplate"><code>compileDefaultTemplate</code></a> を使ってテンプレートを取り出し、それを素直に <code>writerTemplate</code> に設定すれば良いです。尚、Org文書ではメタデータを埋め込めないため <a href="https://hackage.haskell.org/package/pandoc-types-1.23/docs/src/Text.Pandoc.Builder.html#setMeta"><code>setMeta</code></a> を用いてコード内からメタデータを設定しています(<code>setMeta (T.pack "author") "test" pandocDoc</code>)</p>
+<p><code>PandocIO</code> モナドを用いている場合は、 <a
+href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Templates.html#v:compileDefaultTemplate"><code>compileDefaultTemplate</code></a>
+を使ってテンプレートを取り出し、それを素直に <code>writerTemplate</code>
+に設定すれば良いです。尚、Org文書ではメタデータを埋め込めないため <a
+href="https://hackage.haskell.org/package/pandoc-types-1.23/docs/src/Text.Pandoc.Builder.html#setMeta"><code>setMeta</code></a>
+を用いてコード内からメタデータを設定しています(<code>setMeta (T.pack "author") "test" pandocDoc</code>)</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Text.Pandoc</span></span>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Text.Pandoc</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Text.Pandoc.Builder</span> (setMeta)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.IO</span> <span class="kw">as</span> <span class="dt">TIO</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text</span> <span class="kw">as</span> <span class="dt">T</span></span>
@@ -974,18 +1580,30 @@ haskell
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  TIO.writeFile <span class="st">&quot;/tmp/dist.md&quot;</span> txt</span></code></pre></div>
 </div></li>
 <li><p><code>PandocPure</code> モナド内で行う場合</p>
-<p><code>PandocPure</code> モナド内で行う場合は、 <code>PandocIO</code> を用いたコードに加えた変更にプラスして少し手を加える必要があります。 <code>PandocPure</code> 内ではファイルシステムにアクセスすることが出来ず、デフォルトのテンプレートファイルが存在しないので、 そのまま <code>compileDefaultTemplate</code> してしまうと以下のような実行時エラーが吐かれます。</p>
+<p><code>PandocPure</code> モナド内で行う場合は、 <code>PandocIO</code>
+を用いたコードに加えた変更にプラスして少し手を加える必要があります。
+<code>PandocPure</code>
+内ではファイルシステムにアクセスすることが出来ず、デフォルトのテンプレートファイルが存在しないので、
+そのまま <code>compileDefaultTemplate</code>
+してしまうと以下のような実行時エラーが吐かれます。</p>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
 <p>Could not find data file data/data/templates/default.markdown</p>
 </blockquote>
 </div>
-<p>そこで、 <code>PandocPure</code> 内にある仮想ファイルシステム的なものに該当のファイルを追加する必要があります。 そのためには、<a href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Class.html#t:PureState"><code>PureState</code></a> の <code>stFiles</code> を <a href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Class.html#v:modifyPureState"><code>modifyPureState</code></a> で編集します。</p>
+<p>そこで、 <code>PandocPure</code>
+内にある仮想ファイルシステム的なものに該当のファイルを追加する必要があります。
+そのためには、<a
+href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Class.html#t:PureState"><code>PureState</code></a>
+の <code>stFiles</code> を <a
+href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Class.html#v:modifyPureState"><code>modifyPureState</code></a>
+で編集します。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
 </div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Text.Pandoc</span></span>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Text.Pandoc</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Text.Pandoc.Builder</span> (setMeta)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.IO</span> <span class="kw">as</span> <span class="dt">TIO</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text</span> <span class="kw">as</span> <span class="dt">T</span></span>
@@ -1075,20 +1693,57 @@ haskell
       </div>
 
     <div class="description">
-      <p>これまためちゃくちゃ 色々刺さったので書いておく。動画はまだないとのこと。 あ。大事なことなのですが <strong>割と他担なオタクが出てくるので注意</strong> 。名取もすきだけどどうしても感情が昂っ た時に最推しが出てきてしまう…</p>
-<p>「誰かの手を煩わせてる」の時点ですっっごく心にぐっ…ときた。なんだろう、上手くいえないけど私が普段 からとても気にしていて不安にしていることだから。なんだろうな、こうやってとても楽しそうにライブをして きた名取ですら、やっぱりこういう日々はあったのかな、て思ったからなのだろうか。</p>
-<p>名取も、「誰もが笑顔になれる私」を探してあれこれ試したりなんだりしたのかなって。色々上手くいかないこ と沢山あるよね。空回りばかりして余計に分かんなくなっていって。世界が怖くなっていって。時間ばかりが早 く過ぎていって。色々言おうとしても言葉にならなくてため息を吐いたりもしたんだろうか。</p>
-<p>徐々にせんせえ方がどんな状態でもずっといてくれる、って信頼出来るようになっていって、それでちょっと荷 が下りたんだろうか。中々、緊張した状態を振り解くのって難しいよね。特に活動者みたいな「自分の魅力に対 して人が来てくれている」状態の場合、きっと変化によってそれを失うのが怖くなりそうだな、などと思ったり した。よっぽどの信頼がないと出来ないよなぁって。</p>
-<p>私もそんな存在になれるだろうか。ちゃんとリスナーとして、推しの安心に繋がるような良い存在でいれている のだろうか。いっつも自問自答はしてっけど余計に考えてしまった。そういう存在でありたい。そういう存在に なりたい。別段そうする必要性っていうものはないけれど、推しの存在から私が受け取っている物以上のものを 返せる存在でありたい。そうなりたい。</p>
-<p>「誰もが笑顔になる私」っていうのはきっとある程度以上は自身に負荷がかかった存在ではあって、だからこそ の「すきなままでいられそうかなあ」なのかなあって。私はとてもそれを掲げることは出来ない程に大変な存在 であるとは思うけど、それを掲げる程には名取はせんせえ方のことを考えていて、真剣で、色々悩んだりもした んだろうなぁって。</p>
-<p>「私はどんな私が好き？」って自分の観点を最終的に取り入れているの、とってもすきだよ。好きになれる自分 自身であること、とてもすてきなこと。</p>
-<p>これ、本当に曲の感想文なのによくないなぁって思うんだけどどうしても夜桜みあの事が頭に浮かんでしまうん だよな。正直書き出しから夜桜みあって書きそうになったしリアタイで聞いていた時もどうしてもみあちゃんの ことが浮かんできてしまってもう感情がダメだった。</p>
-<p>みあちゃんも(これは個人の解釈ではあるが)だいぶ人のこと考える人だし、黒猫さん達のこと考えてくれている と感じるし、かつ大分考え込みすぎそうな気が勝手にしているからちょっと似たストーリーがありそうでこう…み あちゃんは大丈夫だろうか…って勝手に心の中で思っていたりした。</p>
-<p>大体は上で名取に思っていた事もそのまんまみあちゃんに関しても当て嵌るんだよな。人のことをとても考えて、 その結果として自分自身が嫌いになってたりとかしそうな…分からんけど…。 みあちゃんも色々試行錯誤したり、嫌になったり、空回りしたり、色々あるんだろうけど(そもそも人生ってい うスケールで存在するよねってのもそうだが)、そこから乗り越えていけてるのだろうか。</p>
-<p>みあちゃんは自分のことすきでいられているんだろうか。好かれようと無茶していないだろうか。これただの杞 憂民です杞憂民は早いとこ帰ってくださいgg。みあちゃんがみあちゃん自身の人生好きでいられるといいな、無 茶しないで楽しくいられるといいな、ってとても思っている。私はみあちゃんがすきだが、みあちゃんがみあちゃ ん自身のことをすきでいられる状況の方がもっとすき。</p>
-<p>そりゃ全ての人にすかれようとかは並大抵のことじゃないし、大分辛い道のりではあるよ。そもそもそこを目指 してんのかどうかも私は知らないけれども。でも、少なくとも今でさえ残っている黒猫さんたちはきっとどんな 事でもいてくれると思うしね。</p>
-<p>別段私が言うことじゃないし、ここに書くだけで本人にわざわざ見えるようにはしたりしないが(何かの拍子に 見てくれてたらありがとう)名取の力だったりなんだりを貰って徐々に、徐々にでもみあちゃんの生涯に幸せが 増えていきますように。王様名取も言ってたけどみあちゃんが楽しむことで私達も楽しくなるしな。"楽しむフ リ"ではなく。</p>
-<p>本当に曲の感想？？って思われそうだけど本当に色々と考えてしまったんよな…すごいね、名取は。こんなに も色々考えさせてしまうなんてさ。や、綺麗に纏めようとしてる？？？って思われそうだけどこれは本当に思っ ている。ステージがなかったらこんな色々考えなかっただろうし、実際私は曲に対してこんな文字を書いたこと がなかった。曲だけじゃなくパフォーマンス等も含まれてはしまうが、名取の力があってこその伝わってきたメッ セージだったように思う。結局綺麗に纏めそうで草。</p>
+      <p>これまためちゃくちゃ
+色々刺さったので書いておく。動画はまだないとのこと。
+あ。大事なことなのですが
+<strong>割と他担なオタクが出てくるので注意</strong>
+。名取もすきだけどどうしても感情が昂っ た時に最推しが出てきてしまう…</p>
+<p>「誰かの手を煩わせてる」の時点ですっっごく心にぐっ…ときた。なんだろう、上手くいえないけど私が普段
+からとても気にしていて不安にしていることだから。なんだろうな、こうやってとても楽しそうにライブをして
+きた名取ですら、やっぱりこういう日々はあったのかな、て思ったからなのだろうか。</p>
+<p>名取も、「誰もが笑顔になれる私」を探してあれこれ試したりなんだりしたのかなって。色々上手くいかないこ
+と沢山あるよね。空回りばかりして余計に分かんなくなっていって。世界が怖くなっていって。時間ばかりが早
+く過ぎていって。色々言おうとしても言葉にならなくてため息を吐いたりもしたんだろうか。</p>
+<p>徐々にせんせえ方がどんな状態でもずっといてくれる、って信頼出来るようになっていって、それでちょっと荷
+が下りたんだろうか。中々、緊張した状態を振り解くのって難しいよね。特に活動者みたいな「自分の魅力に対
+して人が来てくれている」状態の場合、きっと変化によってそれを失うのが怖くなりそうだな、などと思ったり
+した。よっぽどの信頼がないと出来ないよなぁって。</p>
+<p>私もそんな存在になれるだろうか。ちゃんとリスナーとして、推しの安心に繋がるような良い存在でいれている
+のだろうか。いっつも自問自答はしてっけど余計に考えてしまった。そういう存在でありたい。そういう存在に
+なりたい。別段そうする必要性っていうものはないけれど、推しの存在から私が受け取っている物以上のものを
+返せる存在でありたい。そうなりたい。</p>
+<p>「誰もが笑顔になる私」っていうのはきっとある程度以上は自身に負荷がかかった存在ではあって、だからこそ
+の「すきなままでいられそうかなあ」なのかなあって。私はとてもそれを掲げることは出来ない程に大変な存在
+であるとは思うけど、それを掲げる程には名取はせんせえ方のことを考えていて、真剣で、色々悩んだりもした
+んだろうなぁって。</p>
+<p>「私はどんな私が好き？」って自分の観点を最終的に取り入れているの、とってもすきだよ。好きになれる自分
+自身であること、とてもすてきなこと。</p>
+<p>これ、本当に曲の感想文なのによくないなぁって思うんだけどどうしても夜桜みあの事が頭に浮かんでしまうん
+だよな。正直書き出しから夜桜みあって書きそうになったしリアタイで聞いていた時もどうしてもみあちゃんの
+ことが浮かんできてしまってもう感情がダメだった。</p>
+<p>みあちゃんも(これは個人の解釈ではあるが)だいぶ人のこと考える人だし、黒猫さん達のこと考えてくれている
+と感じるし、かつ大分考え込みすぎそうな気が勝手にしているからちょっと似たストーリーがありそうでこう…み
+あちゃんは大丈夫だろうか…って勝手に心の中で思っていたりした。</p>
+<p>大体は上で名取に思っていた事もそのまんまみあちゃんに関しても当て嵌るんだよな。人のことをとても考えて、
+その結果として自分自身が嫌いになってたりとかしそうな…分からんけど…。
+みあちゃんも色々試行錯誤したり、嫌になったり、空回りしたり、色々あるんだろうけど(そもそも人生ってい
+うスケールで存在するよねってのもそうだが)、そこから乗り越えていけてるのだろうか。</p>
+<p>みあちゃんは自分のことすきでいられているんだろうか。好かれようと無茶していないだろうか。これただの杞
+憂民です杞憂民は早いとこ帰ってくださいgg。みあちゃんがみあちゃん自身の人生好きでいられるといいな、無
+茶しないで楽しくいられるといいな、ってとても思っている。私はみあちゃんがすきだが、みあちゃんがみあちゃ
+ん自身のことをすきでいられる状況の方がもっとすき。</p>
+<p>そりゃ全ての人にすかれようとかは並大抵のことじゃないし、大分辛い道のりではあるよ。そもそもそこを目指
+してんのかどうかも私は知らないけれども。でも、少なくとも今でさえ残っている黒猫さんたちはきっとどんな
+事でもいてくれると思うしね。</p>
+<p>別段私が言うことじゃないし、ここに書くだけで本人にわざわざ見えるようにはしたりしないが(何かの拍子に
+見てくれてたらありがとう)名取の力だったりなんだりを貰って徐々に、徐々にでもみあちゃんの生涯に幸せが
+増えていきますように。王様名取も言ってたけどみあちゃんが楽しむことで私達も楽しくなるしな。"楽しむフ
+リ"ではなく。</p>
+<p>本当に曲の感想？？って思われそうだけど本当に色々と考えてしまったんよな…すごいね、名取は。こんなに
+も色々考えさせてしまうなんてさ。や、綺麗に纏めようとしてる？？？って思われそうだけどこれは本当に思っ
+ている。ステージがなかったらこんな色々考えなかっただろうし、実際私は曲に対してこんな文字を書いたこと
+がなかった。曲だけじゃなくパフォーマンス等も含まれてはしまうが、名取の力があってこその伝わってきたメッ
+セージだったように思う。結局綺麗に纏めそうで草。</p>
     </div>
   </div>
   
@@ -1122,22 +1777,67 @@ haskell
       </div>
 
     <div class="description">
-      <p>中々ない、「感情がそのまま文字を書きたがった曲」だからメモを残しておく。尚今回はガチのメモなので、全 然整理はされていない。</p>
-<p>曲: <a href="https://www.youtube.com/watch?v=SlBmv7w1VqY">全部ホントで全部ウソ / ナナヲアカリ - YouTube</a></p>
-<p>歌詞的には自分とは真逆な人生を歩んでいる人達の曲だけど、だから自分とは相容れないけれど、何か心にひっ かかるものがある曲だった。そういった生き方をしている人達にとっては素敵な曲だろうな、と思うような曲だった。</p>
-<p>実際、人生日替わりコーデな生き方をしている人達の方が多いんだろうし、自分のとても仲の良い(と勝手に思っ ている)人もそういう人だから全然その生き方に対して批判的であることはない。そういった生き方をしている 動機は勿論人にもよるんだろうけど、自分自身が傷付かないように、だったり他の人が傷付かないように、だっ たり他の人にプラスなものを与えるように、だったりすると思うから、それが一概に悪いことだとは思っていな い。(「一概に」と表記したのは、多分だけど悪用する人達も一定数はいるだろうから、そこを排除するため)</p>
-<p>ただ、そういった生き方をしている事で悩んでいる事もあるみたいなのは観測した事があるから、それに対して 「このままでいいのだ」「ぶっちゃけ世の中大半は皆同士」っていってくれるのはきっと救われる人達多いだろ うなぁ、などと。「どれが本当の自分か分からない」みたいなね。</p>
-<p>こういう、なんか明るそうに見える曲なのに「正直自分のこともよくわかんない」って言っているの、何も考え ずに「このままでいいや!」って言っているわけじゃないってのが伝わってきて、色々悩んだ上でのってのが伝 わってきて、すきだよ。独自解釈だけど。</p>
-<p>私は極端に「自分自身が嘘をつくこと」が嫌いで、嘘も方便という言葉を真と考えつつも自分には適用出来無い タイプの人間。や、少なくとも自分はそう思っている。え、そんな嘘あんま付いてないと思っているけどついて たらゴメン…(あでもネットリテラシー的に自分の個人情報はある程度カモフラージュはしているよ、そこは流 石に色々まずいので。嘘は書いていないが。)</p>
-<p>外面コーデも壊滅的だが内面コーデは最早選択肢を持っていないというレベルでセットがない。なので一戸建て にずっと住んでる安心感？はすごいあるが必要な環境変化への適応力はない。</p>
-<p>なんかどーーでもいいことや嘘を付いた方が得かつ誰も損しない時でも嘘を付くのが気持ち悪く感じてしまう。 テストの採点が間違っていて点数が不正に高くなってしまった時にそれを言いにいかないと気がすまなかったり。 最近はあんまり嘘かなきゃいけないような場面に出会っていないのでそんなに事例が思い付かないな… いうたらツイッターに全部書き込んでしまうのもそう。他の場所でツイートをすることを「嘘をついている」と いう風に感じてしまう。自分自身がね。他の人がどこでツイートしようが別に嘘つきとは思わないし、なんなら それが普通の使い方だと思っている。アカウント分けるのが普通だと。まぁなので気にしていない(気にはなる かもしれんが)。私がちょっと頑固なだけ。</p>
-<p>正直自分の方がかっこわるいし普通に不便だし他人への不快感は高い人生をしているだろうな。多分頭が堅いと も言う。また違った生き辛さがある気はする。協調性のかけらもないとも言うので、真似はしない方が良い。</p>
-<p>でも私は「かっこよくなること」とか「人に好かれること」を完全に放棄しているのであまり悩んでいないんだ と思う。その割には寂しそうなことあるって？そりゃあるわ。でもある程度諦めと解決方法が他にあるってだけ。 あというたら偶に向こうから話し掛けてくれて話しをしてくれる人がいるのでそれで十分みたいな所ある。後は 推しの存在には大分助けられている…本当に…でも大分依存しすぎだから気をつけなきゃいけないけど。</p>
+      <p>中々ない、「感情がそのまま文字を書きたがった曲」だからメモを残しておく。尚今回はガチのメモなので、全
+然整理はされていない。</p>
+<p>曲: <a
+href="https://www.youtube.com/watch?v=SlBmv7w1VqY">全部ホントで全部ウソ
+/ ナナヲアカリ - YouTube</a></p>
+<p>歌詞的には自分とは真逆な人生を歩んでいる人達の曲だけど、だから自分とは相容れないけれど、何か心にひっ
+かかるものがある曲だった。そういった生き方をしている人達にとっては素敵な曲だろうな、と思うような曲だった。</p>
+<p>実際、人生日替わりコーデな生き方をしている人達の方が多いんだろうし、自分のとても仲の良い(と勝手に思っ
+ている)人もそういう人だから全然その生き方に対して批判的であることはない。そういった生き方をしている
+動機は勿論人にもよるんだろうけど、自分自身が傷付かないように、だったり他の人が傷付かないように、だっ
+たり他の人にプラスなものを与えるように、だったりすると思うから、それが一概に悪いことだとは思っていな
+い。(「一概に」と表記したのは、多分だけど悪用する人達も一定数はいるだろうから、そこを排除するため)</p>
+<p>ただ、そういった生き方をしている事で悩んでいる事もあるみたいなのは観測した事があるから、それに対して
+「このままでいいのだ」「ぶっちゃけ世の中大半は皆同士」っていってくれるのはきっと救われる人達多いだろ
+うなぁ、などと。「どれが本当の自分か分からない」みたいなね。</p>
+<p>こういう、なんか明るそうに見える曲なのに「正直自分のこともよくわかんない」って言っているの、何も考え
+ずに「このままでいいや!」って言っているわけじゃないってのが伝わってきて、色々悩んだ上でのってのが伝
+わってきて、すきだよ。独自解釈だけど。</p>
+<p>私は極端に「自分自身が嘘をつくこと」が嫌いで、嘘も方便という言葉を真と考えつつも自分には適用出来無い
+タイプの人間。や、少なくとも自分はそう思っている。え、そんな嘘あんま付いてないと思っているけどついて
+たらゴメン…(あでもネットリテラシー的に自分の個人情報はある程度カモフラージュはしているよ、そこは流
+石に色々まずいので。嘘は書いていないが。)</p>
+<p>外面コーデも壊滅的だが内面コーデは最早選択肢を持っていないというレベルでセットがない。なので一戸建て
+にずっと住んでる安心感？はすごいあるが必要な環境変化への適応力はない。</p>
+<p>なんかどーーでもいいことや嘘を付いた方が得かつ誰も損しない時でも嘘を付くのが気持ち悪く感じてしまう。
+テストの採点が間違っていて点数が不正に高くなってしまった時にそれを言いにいかないと気がすまなかったり。
+最近はあんまり嘘かなきゃいけないような場面に出会っていないのでそんなに事例が思い付かないな…
+いうたらツイッターに全部書き込んでしまうのもそう。他の場所でツイートをすることを「嘘をついている」と
+いう風に感じてしまう。自分自身がね。他の人がどこでツイートしようが別に嘘つきとは思わないし、なんなら
+それが普通の使い方だと思っている。アカウント分けるのが普通だと。まぁなので気にしていない(気にはなる
+かもしれんが)。私がちょっと頑固なだけ。</p>
+<p>正直自分の方がかっこわるいし普通に不便だし他人への不快感は高い人生をしているだろうな。多分頭が堅いと
+も言う。また違った生き辛さがある気はする。協調性のかけらもないとも言うので、真似はしない方が良い。</p>
+<p>でも私は「かっこよくなること」とか「人に好かれること」を完全に放棄しているのであまり悩んでいないんだ
+と思う。その割には寂しそうなことあるって？そりゃあるわ。でもある程度諦めと解決方法が他にあるってだけ。
+あというたら偶に向こうから話し掛けてくれて話しをしてくれる人がいるのでそれで十分みたいな所ある。後は
+推しの存在には大分助けられている…本当に…でも大分依存しすぎだから気をつけなきゃいけないけど。</p>
 <p>まぁ細かに自分の事書くエントリでもないか。</p>
-<p>ぶっちゃけいっつも"ぶってる"あんたたちの方がかっこいいな、と思うときも沢山あるよ。中々ストレスかかる じゃん。どこでどういう顔をしていたかとか、どんな話し方してたとか、どんな性格してたとか覚えてないとい けないし、毎回それで対応しないといけない。正味私はそれが出来る気はしないから、そうやって他の人のこと 考えたりすることから逃げてるとも言える。それに、いうなれば私の生き方は「周りを気にしない」みたいなも ので正直一番良くない自覚があるよ。だから、だからこそ、そうやって悪い意味ではなく全部ホントで全部ウソ な人生を生きている人達がこうやって「これで、このままでもいいのだ」って思えると良いなってとっても思っ た。</p>
-<p>私はこの曲を名取の2023年のお誕生日ライブから聞いて、かつ推しの夜桜みあの同時視聴枠で見たから余計に色々 考えてしまった。あんまりこの表現はすきではないからボカしてかくが、ようするに彼等彼女等は一種「全部ホ ントで全部ウソ」なわけで。そんな存在でこれを歌うって色々と考えることがあると思うんだ。表現者として 「ステージ」を作っている名取自身は特にね。夜桜みあは(これは勝手に思っている事なので間違っている可能 性も大分ある)大分感性が強いし他の人のことも考える人なので、名取が色々考えているのを色々想像したりと か、普段から活動していて色々と考える部分があるんじゃないかなぁと勝手に思っている。全く分からん妄想だ けどさ。</p>
-<p>あと名取に関して言えば、この若干「メタ」に触れるような意味にも取れる楽曲を選んだのってそれなりな覚悟 があったんやないかなぁって気持ちを抱いた。や、そもそも今回のライブのテーマ的にも凄くピッタリなんだけど も、ダブルミーニング的になっていると思うんだよね。そもそもの一人の人間(バーチャルだとしても)としての 名取さな自身のこと(ライブテーマ)と、そして"Vとしての名取"と"サナトリウムにいる名取"という関係性のこ とっていう双方に於いて、「全部ホントで全部ウソ」っていう。まぁある意味で「メタ要素」とも取れる患者姿 の事にライブの流れとして触れたので、それ自体ももうステージの一部に取り込まれているんだけど、大分覚悟 を決めての構成じゃないかなぁってにわかながらに思っていた。</p>
-<p>と、いうことで、久々に色々文字が浮かんでくる楽曲に出会えたので名取に感謝、そしてそのキッカケをくれた みあちゃんに感謝、といった所。しかも自分と正反対な存在に関しての歌でなるのは珍しい経験だった。</p>
+<p>ぶっちゃけいっつも"ぶってる"あんたたちの方がかっこいいな、と思うときも沢山あるよ。中々ストレスかかる
+じゃん。どこでどういう顔をしていたかとか、どんな話し方してたとか、どんな性格してたとか覚えてないとい
+けないし、毎回それで対応しないといけない。正味私はそれが出来る気はしないから、そうやって他の人のこと
+考えたりすることから逃げてるとも言える。それに、いうなれば私の生き方は「周りを気にしない」みたいなも
+ので正直一番良くない自覚があるよ。だから、だからこそ、そうやって悪い意味ではなく全部ホントで全部ウソ
+な人生を生きている人達がこうやって「これで、このままでもいいのだ」って思えると良いなってとっても思っ
+た。</p>
+<p>私はこの曲を名取の2023年のお誕生日ライブから聞いて、かつ推しの夜桜みあの同時視聴枠で見たから余計に色々
+考えてしまった。あんまりこの表現はすきではないからボカしてかくが、ようするに彼等彼女等は一種「全部ホ
+ントで全部ウソ」なわけで。そんな存在でこれを歌うって色々と考えることがあると思うんだ。表現者として
+「ステージ」を作っている名取自身は特にね。夜桜みあは(これは勝手に思っている事なので間違っている可能
+性も大分ある)大分感性が強いし他の人のことも考える人なので、名取が色々考えているのを色々想像したりと
+か、普段から活動していて色々と考える部分があるんじゃないかなぁと勝手に思っている。全く分からん妄想だ
+けどさ。</p>
+<p>あと名取に関して言えば、この若干「メタ」に触れるような意味にも取れる楽曲を選んだのってそれなりな覚悟
+があったんやないかなぁって気持ちを抱いた。や、そもそも今回のライブのテーマ的にも凄くピッタリなんだけど
+も、ダブルミーニング的になっていると思うんだよね。そもそもの一人の人間(バーチャルだとしても)としての
+名取さな自身のこと(ライブテーマ)と、そして"Vとしての名取"と"サナトリウムにいる名取"という関係性のこ
+とっていう双方に於いて、「全部ホントで全部ウソ」っていう。まぁある意味で「メタ要素」とも取れる患者姿
+の事にライブの流れとして触れたので、それ自体ももうステージの一部に取り込まれているんだけど、大分覚悟
+を決めての構成じゃないかなぁってにわかながらに思っていた。</p>
+<p>と、いうことで、久々に色々文字が浮かんでくる楽曲に出会えたので名取に感謝、そしてそのキッカケをくれた
+みあちゃんに感謝、といった所。しかも自分と正反対な存在に関しての歌でなるのは珍しい経験だった。</p>
     </div>
   </div>
   
@@ -1171,10 +1871,23 @@ haskell
       </div>
 
     <div class="description">
-      <p>既存のコマンドを置き換えるコマンドを自作した際、新しいキーバインドを作るのではなくそのコマンドで古い コマンドを置き換えたい時があります。その際、具体的に「元々どこにバインドされていたか」を調べずに置き 換えることが可能なのでメモを残しておきます。</p>
-<h1 id="アクティブなキーマップ上のコマンドを置き換えたい: remapキーイベント + define-key">アクティブなキーマップ上のコマンドを置き換えたい: remapキーイベント + <code>define-key</code></h1>
-<p><code>remap</code> キーイベントを使うと、新たにremapを行うキーバインドを作成出来ます。注意点として、 <u>実際に置き換えるのではなく「アクティブなキーマップ上のコマンドを置き換えるキーバインド」を新たに作成 する</u> 形になっています。そのため、指定したキーマップから参照されている Prefix keymap中にあるものは置 き換わりません。</p>
-<p>つまり、以下のようなキーマップの構成を考えた時、 <code>remap</code> を使って置き換えようとすると、 <code>outer-map</code> に存在する <code>func</code> は <code>new-func</code> で置き換えられますが <code>inner-map</code> に存在する <code>func</code> はそのまま残りま す:</p>
+      <p>既存のコマンドを置き換えるコマンドを自作した際、新しいキーバインドを作るのではなくそのコマンドで古い
+コマンドを置き換えたい時があります。その際、具体的に「元々どこにバインドされていたか」を調べずに置き
+換えることが可能なのでメモを残しておきます。</p>
+<h1
+id="アクティブなキーマップ上のコマンドを置き換えたい: remapキーイベント + define-key">アクティブなキーマップ上のコマンドを置き換えたい:
+remapキーイベント + <code>define-key</code></h1>
+<p><code>remap</code>
+キーイベントを使うと、新たにremapを行うキーバインドを作成出来ます。注意点として、
+<u>実際に置き換えるのではなく「アクティブなキーマップ上のコマンドを置き換えるキーバインド」を新たに作成
+する</u>
+形になっています。そのため、指定したキーマップから参照されている Prefix
+keymap中にあるものは置 き換わりません。</p>
+<p>つまり、以下のようなキーマップの構成を考えた時、 <code>remap</code>
+を使って置き換えようとすると、 <code>outer-map</code> に存在する
+<code>func</code> は <code>new-func</code> で置き換えられますが
+<code>inner-map</code> に存在する <code>func</code> はそのまま残りま
+す:</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -1188,9 +1901,17 @@ elisp
   )
 </code></pre>
 </div>
-<h1 id="指定のキーマップから参照される Prefix keymap 内でも変更したい: substitute-key-definition">指定のキーマップから参照される Prefix keymap 内でも変更したい: <code>substitute-key-definition</code></h1>
-<p>elisp:substitute-key-definition は、「既存のコマンド」「新しいコマンド」「対象のキーマップ」の3つを 必須の引数として受け取り、「対象のキーマップ」の中にある「既存のコマンド」を「新しいコマンド」で置き 換えるように作用します。</p>
-<p>例えば、以下の例ではglobal keymap中の <code>count-words-region</code> を自作のコマンド <code>org-count-words/subtree-if-no-region</code> で置き換えます。</p>
+<h1
+id="指定のキーマップから参照される Prefix keymap 内でも変更したい: substitute-key-definition">指定のキーマップから参照される
+Prefix keymap 内でも変更したい:
+<code>substitute-key-definition</code></h1>
+<p>elisp:substitute-key-definition
+は、「既存のコマンド」「新しいコマンド」「対象のキーマップ」の3つを
+必須の引数として受け取り、「対象のキーマップ」の中にある「既存のコマンド」を「新しいコマンド」で置き
+換えるように作用します。</p>
+<p>例えば、以下の例ではglobal keymap中の <code>count-words-region</code>
+を自作のコマンド <code>org-count-words/subtree-if-no-region</code>
+で置き換えます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -1198,8 +1919,11 @@ elisp
 <pre class="elisp SourceCode"><code>(substitute-key-definition &#39;count-words-region &#39;org-count-words/subtree-if-no-region (current-global-map))
 </code></pre>
 </div>
-<p>(ちなみに <code>org-count-words/subtree-if-no-region</code> は<a href="https://github.com/Cj-bc/dotfiles/blob/0e2e604eaf05ec27a21af04b4e8060dd085f6118/dotfiles/emacs/emacs.d/lib/org-count-words.el#L6-L12">私のdotfiles</a>にあります)</p>
-<p><code>substitute-key-definition</code> は、指定したキーマップだけでなく Prefixキーマップ内にあるキーバインドも 置き換えます。つまり、</p>
+<p>(ちなみに <code>org-count-words/subtree-if-no-region</code> は<a
+href="https://github.com/Cj-bc/dotfiles/blob/0e2e604eaf05ec27a21af04b4e8060dd085f6118/dotfiles/emacs/emacs.d/lib/org-count-words.el#L6-L12">私のdotfiles</a>にあります)</p>
+<p><code>substitute-key-definition</code>
+は、指定したキーマップだけでなく Prefixキーマップ内にあるキーバインドも
+置き換えます。つまり、</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -1221,8 +1945,13 @@ a		new-func<br />
 b		Prefix Command<br />
 <br />
 b 1		new-func</div>
-<h1 id="「既存のコマンドを置き換えるキーマップを作りたい」: substitute-key-definition (2)">「既存のコマンドを置き換えるキーマップを作りたい」: <code>substitute-key-definition</code> (2)</h1>
-<p><code>substitute-key-definition</code> に <code>OLDMAP</code> 引数も加えてあげると、「 <code>OLDMAP</code> 上の「既存のコマンド」のキー バインド」を参考にして「対象のキーマップ」を更新します。つまり、先程の例を元に以下のようにすると:</p>
+<h1
+id="「既存のコマンドを置き換えるキーマップを作りたい」: substitute-key-definition (2)">「既存のコマンドを置き換えるキーマップを作りたい」:
+<code>substitute-key-definition</code> (2)</h1>
+<p><code>substitute-key-definition</code> に <code>OLDMAP</code>
+引数も加えてあげると、「 <code>OLDMAP</code>
+上の「既存のコマンド」のキー
+バインド」を参考にして「対象のキーマップ」を更新します。つまり、先程の例を元に以下のようにすると:</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -1230,11 +1959,16 @@ elisp
 <pre class="elisp SourceCode"><code>(substitute-key-definition &#39;count-words-region &#39;org-count-words/subtree-if-no-region (current-local-map) (current-global-map))
 </code></pre>
 </div>
-<p>現在の global keymap 中の <code>count-words-region</code> (デフォルトでは <code>\M-=</code> )を置き換える代わりに、 local keymap の同じキーバインド(デフォルトなら <code>\M-=</code>)に <code>count-words-region</code> を設定します。</p>
+<p>現在の global keymap 中の <code>count-words-region</code>
+(デフォルトでは <code>\M-=</code> )を置き換える代わりに、 local keymap
+の同じキーバインド(デフォルトなら <code>\M-=</code>)に
+<code>count-words-region</code> を設定します。</p>
 <h1 id="参考資料">参考資料</h1>
 <ul>
-<li><a href="info:elisp#Changing Key Bindings">elisp#Changing Key Bindings</a></li>
-<li><a href="info:elisp#Remapping Commands">elisp#Remapping Commands</a></li>
+<li><a href="info:elisp#Changing Key Bindings">elisp#Changing Key
+Bindings</a></li>
+<li><a href="info:elisp#Remapping Commands">elisp#Remapping
+Commands</a></li>
 </ul>
     </div>
   </div>
@@ -1269,13 +2003,16 @@ elisp
       </div>
 
     <div class="description">
-      <p>これ書きながら思ったんですけど、夜桜みあの魅力の中から「かわいさ」だけを抽出するのって難しいんですよね。なので一部 他の魅力について語るオタクが出てくると思うんですけど目を瞑ってもらえると嬉しいです。では。</p>
+      <p>これ書きながら思ったんですけど、夜桜みあの魅力の中から「かわいさ」だけを抽出するのって難しいんですよね。なので一部
+他の魅力について語るオタクが出てくると思うんですけど目を瞑ってもらえると嬉しいです。では。</p>
 <h1 id="経緯">経緯</h1>
-<p>今日のみあちゃんの配信にてかわいさに関してのレシート(長文マシュマロのこと、基本嫌われる)書くか~~？？みたいなノリになり、試しに 書き出してみた所全然文字数オーバーすることが分かったのでどうせならブログに残しておくことにしました。</p>
+<p>今日のみあちゃんの配信にてかわいさに関してのレシート(長文マシュマロのこと、基本嫌われる)書くか~~？？みたいなノリになり、試しに
+書き出してみた所全然文字数オーバーすることが分かったのでどうせならブログに残しておくことにしました。</p>
 <h1 id="夜桜みあちゃんのリンク系">夜桜みあちゃんのリンク系</h1>
 <ul>
 <li><a href="https://twitter.com/yozakura_mia">Twitter</a></li>
-<li><a href="https://www.youtube.com/channel/UCH3tRsAvHSsTi1LDC7l_PDA">YouTube</a></li>
+<li><a
+href="https://www.youtube.com/channel/UCH3tRsAvHSsTi1LDC7l_PDA">YouTube</a></li>
 </ul>
 <h1 id="注意事項">注意事項</h1>
 <ul>
@@ -1285,32 +2022,88 @@ elisp
 <li>今思いつく限りしか載っていないので抜けはあるかも</li>
 </ul>
 <h1 id="声">声</h1>
-<p>まずそもそも声がかわいいね。や、これは本当に沢山ある中での一要素でしかないんですけど、やっぱり夜桜みあに興味を持った 最初のキッカケも声だったし誰もが分かるかわいさっていう面でまず第一に持ってきたいところです。 声はねぇ…ほんとうに…ほんっっとうにかわいいんですよ。夜桜みあの声は(両声類とか程ではなくとも)結構バリーエションが あると思っていて、かわいさに分類されない「かっこよさ」みたいなのもありつつかわいさの魅力もガンガンあるんですよね。 あ、「かっこよさ」とかも正直めちゃくちゃすきなポイントなんですけど今回は「かわいい所」なので一旦パスで。</p>
-<p>あとこれはある程度の時間推させて頂いているからこそ分かる所なんですけど、大分声がお姉さんへ成長しましたね。 正直に言うと昔の方がもっとロリっぽかったように思っていまして、昔でいうとロリ100%だった所をロリ70お姉さん30くらいに なっているように思います。でもたまにロリ100%に戻ったりするんで、あなたもしかしてある程度コントロールできる…!?み たいな気持ちでいます。まぁ出来るか。…あざとくない…?? (ここに関して、ちょっと配信に慣れたりして声のトーンが下がったりもしたのかなぁ、と思ったりもしていますが、それはそ れで嬉しくて良い。正味どんな声でもすき。かわいいジャンルとは違うけど、お友達の方々と喋ってたりゲームやって煽ってた りする時のような通常時ぽい声もめちゃすきなんよね。頑張ったけど出なかった大蛇丸とかもね。喉潰さんようにね)</p>
-<p>完全にロリ意識してるだろって時の声は本当にとにかく甘い。とにかく甘くてかわいい。は？？なんですか？？？かわいいんで すけど…でも甘いのになんだろ、嫌な感じがないというか。ただただ甘いチョコレートだと沢山食べると「もう今はちょっと いいかな…チョコだけに」ってなるんですが夜桜みあの場合はこう、いくらでも食べれる甘いチョコレートみたいな所があり ます。これは個人の好み的なものもあるのかもしれないですが、私には丁度良い塩梅でした。 あと多分私がそれまで甘いかわいさみたいなの触れてこなかったのもあって、大分落とされましたね。</p>
-<p>普通にしている時？でもスタンダードにかわいいですよね。何？？多分そこまでかわいさ意識して喋ってないと(勝手に)思って いるんですけど、とてもかわいいんですよね。でもこれは甘さとはちょっと違うかもしれない。単純に私がすきな周波数帯とマッ チしているだけ説はあります。</p>
+<p>まずそもそも声がかわいいね。や、これは本当に沢山ある中での一要素でしかないんですけど、やっぱり夜桜みあに興味を持った
+最初のキッカケも声だったし誰もが分かるかわいさっていう面でまず第一に持ってきたいところです。
+声はねぇ…ほんとうに…ほんっっとうにかわいいんですよ。夜桜みあの声は(両声類とか程ではなくとも)結構バリーエションが
+あると思っていて、かわいさに分類されない「かっこよさ」みたいなのもありつつかわいさの魅力もガンガンあるんですよね。
+あ、「かっこよさ」とかも正直めちゃくちゃすきなポイントなんですけど今回は「かわいい所」なので一旦パスで。</p>
+<p>あとこれはある程度の時間推させて頂いているからこそ分かる所なんですけど、大分声がお姉さんへ成長しましたね。
+正直に言うと昔の方がもっとロリっぽかったように思っていまして、昔でいうとロリ100%だった所をロリ70お姉さん30くらいに
+なっているように思います。でもたまにロリ100%に戻ったりするんで、あなたもしかしてある程度コントロールできる…!?み
+たいな気持ちでいます。まぁ出来るか。…あざとくない…??
+(ここに関して、ちょっと配信に慣れたりして声のトーンが下がったりもしたのかなぁ、と思ったりもしていますが、それはそ
+れで嬉しくて良い。正味どんな声でもすき。かわいいジャンルとは違うけど、お友達の方々と喋ってたりゲームやって煽ってた
+りする時のような通常時ぽい声もめちゃすきなんよね。頑張ったけど出なかった大蛇丸とかもね。喉潰さんようにね)</p>
+<p>完全にロリ意識してるだろって時の声は本当にとにかく甘い。とにかく甘くてかわいい。は？？なんですか？？？かわいいんで
+すけど…でも甘いのになんだろ、嫌な感じがないというか。ただただ甘いチョコレートだと沢山食べると「もう今はちょっと
+いいかな…チョコだけに」ってなるんですが夜桜みあの場合はこう、いくらでも食べれる甘いチョコレートみたいな所があり
+ます。これは個人の好み的なものもあるのかもしれないですが、私には丁度良い塩梅でした。
+あと多分私がそれまで甘いかわいさみたいなの触れてこなかったのもあって、大分落とされましたね。</p>
+<p>普通にしている時？でもスタンダードにかわいいですよね。何？？多分そこまでかわいさ意識して喋ってないと(勝手に)思って
+いるんですけど、とてもかわいいんですよね。でもこれは甘さとはちょっと違うかもしれない。単純に私がすきな周波数帯とマッ
+チしているだけ説はあります。</p>
 <h1 id="仕草">仕草</h1>
-<p>次!やっと次だよちなみにここまでで1000文字くらいあるぽいですね。え…? 次は仕草です。夜桜みあの仕草。これは例えばウインクであったり、歌いながらめちゃノリノリだったり、そういうところを指 しています。頑張ってウインクしてるのかわいくない？？配信の最後に毎回ウインクしてるの、かわいくてとても良いよね。 まぁ頑張ってって言ってもみあちゃんはウインク得意だから実際そんなに頑張っているわけじゃないんだろうけど、でもこう…ウ インクした後ドヤッ…ってしてるの、毎回「頑張ったでしょ!」「上手く出来たでしょ!」って自慢されている気がしてとても かわいいなぁと思っています。まぁこれはまた後ほど。</p>
-<p>ノリノリなのかわいいのはそれはとてもそうじゃん。それももうそのままじゃん。だって…ねぇ？そこで夜桜みあがめちゃ動 いているんだよ？？もう動いているだけでかわいくない？？？それを言ったら存在自体のかわいさ的な話になるので一旦置いて おくことにします。一旦置いておくことが出来る猫です。おあずけ。簡単に言うと「ノリノリで楽しそうな状態」っていうのが かわいいよねっていう話です。</p>
+<p>次!やっと次だよちなみにここまでで1000文字くらいあるぽいですね。え…?
+次は仕草です。夜桜みあの仕草。これは例えばウインクであったり、歌いながらめちゃノリノリだったり、そういうところを指
+しています。頑張ってウインクしてるのかわいくない？？配信の最後に毎回ウインクしてるの、かわいくてとても良いよね。
+まぁ頑張ってって言ってもみあちゃんはウインク得意だから実際そんなに頑張っているわけじゃないんだろうけど、でもこう…ウ
+インクした後ドヤッ…ってしてるの、毎回「頑張ったでしょ!」「上手く出来たでしょ!」って自慢されている気がしてとても
+かわいいなぁと思っています。まぁこれはまた後ほど。</p>
+<p>ノリノリなのかわいいのはそれはとてもそうじゃん。それももうそのままじゃん。だって…ねぇ？そこで夜桜みあがめちゃ動
+いているんだよ？？もう動いているだけでかわいくない？？？それを言ったら存在自体のかわいさ的な話になるので一旦置いて
+おくことにします。一旦置いておくことが出来る猫です。おあずけ。簡単に言うと「ノリノリで楽しそうな状態」っていうのが
+かわいいよねっていう話です。</p>
 <h1 id="反応">反応</h1>
-<p>何かしらのイベントが起こった時の反応の仕方がかわいいと私の中で話題に。何かへの反応として出る声だとか、驚き方とか、 そういった所です。実は結構細かい所で沢山あるんだけれど、逆にいうと細かい所すぎてあまりしっかりと覚えていないみたい な所があります…オタクくんさぁ…?? 何か考えている間に言葉に出ちゃったりするのもかわいいよね。コメントにしろ自身の行動の結果にしろゲームからのイベント にしろ…喋りながらさらっと物真似になっていたり、さらっと歌い出していたり、さらっとだじゃれを言うてたりとか。例が 雑だって？そんなことないが…?そんなこと言うのは君か？</p>
-<p>なんか知らんけどやたら楽観的な反応をしている所もかわいいな…って思ってたりはします。親不知の話の時に本人めちゃピ ンピンしていた話とかね。</p>
-<p>「歌詞歌詞歌詞歌詞歌詞…くしくし、僕ハム太郎なのだ!ヘケッ」とか。おうた中に歌詞が抜けた時、あわてつつもメロディラ インには載せながら色々話しているのもすき。</p>
-<p>でもここはあれかも、かわいいもそうなんだけど「反応の豊富さ・面白さ」みたいな独立した魅力でもあるから「かわいいも の」って限定して考えるのはあまり向いていないかもしれない。</p>
+<p>何かしらのイベントが起こった時の反応の仕方がかわいいと私の中で話題に。何かへの反応として出る声だとか、驚き方とか、
+そういった所です。実は結構細かい所で沢山あるんだけれど、逆にいうと細かい所すぎてあまりしっかりと覚えていないみたい
+な所があります…オタクくんさぁ…??
+何か考えている間に言葉に出ちゃったりするのもかわいいよね。コメントにしろ自身の行動の結果にしろゲームからのイベント
+にしろ…喋りながらさらっと物真似になっていたり、さらっと歌い出していたり、さらっとだじゃれを言うてたりとか。例が
+雑だって？そんなことないが…?そんなこと言うのは君か？</p>
+<p>なんか知らんけどやたら楽観的な反応をしている所もかわいいな…って思ってたりはします。親不知の話の時に本人めちゃピ
+ンピンしていた話とかね。</p>
+<p>「歌詞歌詞歌詞歌詞歌詞…くしくし、僕ハム太郎なのだ!ヘケッ」とか。おうた中に歌詞が抜けた時、あわてつつもメロディラ
+インには載せながら色々話しているのもすき。</p>
+<p>でもここはあれかも、かわいいもそうなんだけど「反応の豊富さ・面白さ」みたいな独立した魅力でもあるから「かわいいも
+の」って限定して考えるのはあまり向いていないかもしれない。</p>
 <h1 id="態度変化">態度変化</h1>
-<p>す~~ぐイキる所とかね。それでいてまたすぐフラグ回収して泣きべそかいたり…んでまたす~~ぐイキったり。 なんか上手くいった時とかにめちゃめちゃドヤっているのもかわいいねぇ…って目を細めてしまいます。おじいちゃんなので。 自慢気になってるのもかわいいね…沢山褒めてあげようねぇ…ってなる。 あれですね、感情がよく動いていてかわいいんかなぁと思っています。</p>
-<p>実はこの分野、上の「反応」「仕草」あたりと近しい部分でもあって、大分個人的には色々魅力の詰まっている項目だと思って いるけど上手く言葉に出てこなかったので一旦は区切ろうかなと思います。</p>
+<p>す~~ぐイキる所とかね。それでいてまたすぐフラグ回収して泣きべそかいたり…んでまたす~~ぐイキったり。
+なんか上手くいった時とかにめちゃめちゃドヤっているのもかわいいねぇ…って目を細めてしまいます。おじいちゃんなので。
+自慢気になってるのもかわいいね…沢山褒めてあげようねぇ…ってなる。
+あれですね、感情がよく動いていてかわいいんかなぁと思っています。</p>
+<p>実はこの分野、上の「反応」「仕草」あたりと近しい部分でもあって、大分個人的には色々魅力の詰まっている項目だと思って
+いるけど上手く言葉に出てこなかったので一旦は区切ろうかなと思います。</p>
 <h1 id="エピソード">エピソード</h1>
 <p>数々のエピソード、色々聞いているけどかわいいなぁ…ってなるのがチラホラある。</p>
-<p>だきまくらくん抱いて寝てた話あったじゃないですか、あれめちゃかわいいな…って思いながら聞いてたりしました。夜桜み あの抱き枕くんあんた幸せものな自覚持って…?みあちゃんをよろしく頼むな…側にいてやってくれな…</p>
-<p>オタクなエピソードはめちゃくちゃかわいいよね。そもそもこう…「かわいい」が「かわいい」を推しているって時点でかわ いさしかないんですよ。百合とかとも同じだけどかわいいxかわいい=かわいい理論。(これは苦手な場合もあると思うので明言 しておくけど、百合はすきだけどこれに関しては「かわいいものを推している推しがかわいい」という話であって百合として見 てるとかではないので安心してほしい。) そもそも何かに夢中になっている人って人間として魅力的だなと思っていて、夜桜みあの場合夢中になってて楽しそうにしてい るその姿がとってもかわいいな…ってなっています。</p>
+<p>だきまくらくん抱いて寝てた話あったじゃないですか、あれめちゃかわいいな…って思いながら聞いてたりしました。夜桜み
+あの抱き枕くんあんた幸せものな自覚持って…?みあちゃんをよろしく頼むな…側にいてやってくれな…</p>
+<p>オタクなエピソードはめちゃくちゃかわいいよね。そもそもこう…「かわいい」が「かわいい」を推しているって時点でかわ
+いさしかないんですよ。百合とかとも同じだけどかわいいxかわいい=かわいい理論。(これは苦手な場合もあると思うので明言
+しておくけど、百合はすきだけどこれに関しては「かわいいものを推している推しがかわいい」という話であって百合として見
+てるとかではないので安心してほしい。)
+そもそも何かに夢中になっている人って人間として魅力的だなと思っていて、夜桜みあの場合夢中になってて楽しそうにしてい
+るその姿がとってもかわいいな…ってなっています。</p>
 <h1 id="御姿">御姿</h1>
-<p>ん!あまりにも当たり前すぎて忘れていた事があります。御姿ですね!バリかわいい…かわいくない…?マジで… おようふくもかわいいしお顔もかわいい。足とかすきだったりはするけどそれは「かわいい」とはベクトルが違うので一旦おあ ずけ。</p>
-<p>これは初期衣装では思ってなかったんですけど、第二衣装(って勝手に呼んでいる猫耳生える方のやつ)ではめちゃ綺麗なお姉さ んファッションみたいにまとめてきているのにクマちゃんヘアピンはしっかり受け継いでいる所とかかわいいですよね。第二衣 装は「綺麗なお姉さん」っていうのに大分力を入れたデザインをしていると思っているんですよね。腕がスラッとするようなシャ ツだとか、襟元が出来たりだとか、胸元のリボンを小さめにしたりとか、綺麗なおあしが出ていたりとか、お洒落なブーツ履い てたりとか。や、みあちゃんがそこまで考えてたかは分かんないけど個人的な解釈としてね。でも、正直クマちゃんヘアピンっ て「綺麗なお姉さん」っていうイメージとは違うと思うんですよ。なんとなくね。「綺麗なお姉さん」コンセプトだったら外さ れちゃってもっとスマートなヘアピンになったりもしたと思うんです。それなのにクマちゃんヘアピンは生き残った。今迄の思 い出の入ったクマちゃんヘアピンをそのまま外せずに持ってきたのかな…とか、無意識のうちにそれは付けちゃったのかな…と か考えるととってもかわいですよね。</p>
+<p>ん!あまりにも当たり前すぎて忘れていた事があります。御姿ですね!バリかわいい…かわいくない…?マジで…
+おようふくもかわいいしお顔もかわいい。足とかすきだったりはするけどそれは「かわいい」とはベクトルが違うので一旦おあ
+ずけ。</p>
+<p>これは初期衣装では思ってなかったんですけど、第二衣装(って勝手に呼んでいる猫耳生える方のやつ)ではめちゃ綺麗なお姉さ
+んファッションみたいにまとめてきているのにクマちゃんヘアピンはしっかり受け継いでいる所とかかわいいですよね。第二衣
+装は「綺麗なお姉さん」っていうのに大分力を入れたデザインをしていると思っているんですよね。腕がスラッとするようなシャ
+ツだとか、襟元が出来たりだとか、胸元のリボンを小さめにしたりとか、綺麗なおあしが出ていたりとか、お洒落なブーツ履い
+てたりとか。や、みあちゃんがそこまで考えてたかは分かんないけど個人的な解釈としてね。でも、正直クマちゃんヘアピンっ
+て「綺麗なお姉さん」っていうイメージとは違うと思うんですよ。なんとなくね。「綺麗なお姉さん」コンセプトだったら外さ
+れちゃってもっとスマートなヘアピンになったりもしたと思うんです。それなのにクマちゃんヘアピンは生き残った。今迄の思
+い出の入ったクマちゃんヘアピンをそのまま外せずに持ってきたのかな…とか、無意識のうちにそれは付けちゃったのかな…と
+か考えるととってもかわいですよね。</p>
 <p>…ん？ここまで書いてて気付いたけどこれはただのオタクの妄想では…??</p>
 <h1 id="最後に">最後に</h1>
-<p>結構あれだね、「かわいさ」っていう所だけにフォーカスすると書けない事も多いですね…かわいさだけじゃないので夜桜み あの取り柄は。マジで。寧ろかわいさ(特に声のかわいさ)はまだ入口でしかなくってそこから先へ進むと凄く沢山の魅力がある 人だなぁと思っています。ただそこはこの記事の範囲外なので一旦置いておきます。というか書ききれないよ普通に。 夜桜みあだいすきだぞ~!!</p>
-<p>大分雑に書いた(しかも推敲をしていない)文なのですが読んでくれた人はありがとう!当方ただのオタク!!! 夜桜みあちゃんのチャンネル登録とTwitterのフォロー、よろしくお願いしますね。</p>
+<p>結構あれだね、「かわいさ」っていう所だけにフォーカスすると書けない事も多いですね…かわいさだけじゃないので夜桜み
+あの取り柄は。マジで。寧ろかわいさ(特に声のかわいさ)はまだ入口でしかなくってそこから先へ進むと凄く沢山の魅力がある
+人だなぁと思っています。ただそこはこの記事の範囲外なので一旦置いておきます。というか書ききれないよ普通に。
+夜桜みあだいすきだぞ~!!</p>
+<p>大分雑に書いた(しかも推敲をしていない)文なのですが読んでくれた人はありがとう!当方ただのオタク!!!
+夜桜みあちゃんのチャンネル登録とTwitterのフォロー、よろしくお願いしますね。</p>
     </div>
   </div>
   
@@ -1319,120 +2112,6 @@ elisp
 ]]></description>
     <pubDate>Thu, 16 Mar 2023 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2023-03-16-yozakura-mia-kawaii.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2023-03-02-windows-install-and-setup-containerd-on-wsl2</title>
-    <link>https://cj-bc.github.io/blog/posts/2023-03-02-windows-install-and-setup-containerd-on-wsl2.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>Windows WSL2上にcontainerdとnerdctlをインストールする</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on March  2, 2023</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on March 16, 2023
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;windows&#39;." href="/tags/windows.html" class="ui tag label">windows</a><a title="All pages tagged &#39;環境構築&#39;." href="/tags/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89.html" class="ui tag label">環境構築</a>
-	
-      </div>
-
-    <div class="description">
-      <p>別段Docker for Windowsでも良いが、良い機会なので新しいものを試してみることとした。 nerdctlはWindowsではまだexperimentalであるため、今回はWSL2上で使用することとする。</p>
-<h1 id="WSL2のセットアップ">WSL2のセットアップ</h1>
-<h2 id="インストール">インストール</h2>
-<p>これは簡単。Windows Terminalをおもむろに開き、</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-powershell
-</div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode powershell SourceCode"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>wsl <span class="op">--</span>install <span class="op">-</span>d ubuntu</span></code></pre></div>
-</div>
-<p>でインストールする。本当はnixOS or archlinuxにしたい所だが、まぁ今回は これを常用するわけではないので一番楽そうなubuntuにしておく。インストー ルが終わったら再起動する。</p>
-<h2 id="Systemdを有効化する">Systemdを有効化する</h2>
-<p>containerdはsystemdを利用するため、そのセットアップをしてあげる必要がある。 デフォルトでは無効化されているが、<a href="https://learn.microsoft.com/ja-jp/windows/wsl/wsl-config#systemd-support">learn.microsoft.comのドキュメント</a>の 通りにするとすぐに有効化出来る。具体的には、WLS2環境から <code>/etc/wsl.conf</code> に以下を書き込んでWSL2を再起動すれば良い。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-toml
-</div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode toml SourceCode"><code class="sourceCode toml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[</span><span class="dt">boot</span><span class="kw">]</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">systemd</span><span class="op">=</span><span class="cn">true</span></span></code></pre></div>
-</div>
-<p>WSL2の再起動は、powershell等から <code>wsl --shutdown</code> で落として <code>wsl</code> で 起動しなおすことで行える。</p>
-<h1 id="nerdctlのインストール">nerdctlのインストール</h1>
-<p>apt等では配付されておらず、パッケージマネージャーとしてはlinuxbrewが唯 一の選択肢となる。しかし、 <del>ちょっとインストーラー読むのが面倒だったので</del> これのためだけにパッケージマネージャーを増やすのが少し嫌だったため、バ イナリを持ってくることにした。又この際、イメージのビルド等も行えるよう にしたかったので <code>nerdctl-full</code> のtarファイルを持ってきている。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> wget https://github.com/containerd/nerdctl/releases/download/v1.2.1/nerdctl-full-1.2.1-linux-amd64.tar.gz</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tar zxf nerdctl-full-1.2.1-linux-amd64.tar.gz</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sudo mv bin/<span class="pp">*</span> /usr/local/bin</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sudo mv lib/<span class="pp">*</span> /usr/local/lib</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sudo mv libexec /usr/local/libexec</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sudo mv share/<span class="pp">*</span> /usr/local/share</span></code></pre></div>
-</div>
-<h2 id="newuidmapのインストール">newuidmapのインストール</h2>
-<p>nerdctlはコンテナをrootlessで実行することが出来る。そのためには rootlesskitというソフトウェアが必要になる。それを走らせるために <a href="https://github.com/rootless-containers/rootlesskit#subuid"><code>newuidmap</code> というツールが必要になる</a>ので、インストールする。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb4" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sudo apt install uidmap</span></code></pre></div>
-</div>
-<h2 id="rootlessで起動する">rootlessで起動する</h2>
-<p>これもまぁそのままドキュメントの指示に従う</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb5" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> containerd-rootless-setuptool.sh install</span></code></pre></div>
-</div>
-<h2 id="buildkitをインストールする">buildkitをインストールする</h2>
-<p>最初は気付かなかったが、どうやら <code>nerdctl build .</code> とかしようとすると buildkitのインストールが必要となるらしい(インストールされているとばか り思っていたが、上記のではダメらしい)。</p>
-<p>(一度 <code>nerdctl build .</code> して怒られた)</p>
-<p>そこで、言われた通りにコマンドを実行しておく</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb6" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> containerd-rootless-setuptool.sh install-buildkit</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> containerd-rootless-setuptool.sh install-buildkit-containerd</span></code></pre></div>
-</div>
-<h1 id="トラブルシューティング">トラブルシューティング</h1>
-<h2 id="イメージをpullしようとするとタイムアウトする">イメージをpullしようとするとタイムアウトする</h2>
-<p>どうやら既知の問題らしい。<a href="https://github.com/containerd/nerdctl/issues/677">containerd/nerdctl #677</a>のコメントにあるように、 <code>containerd-rootless-setuptool.sh nsenter bash</code> でrootlesskitの名前空 間に入った後、 <code>/etc/resolv.conf</code> のnameserverを8.8.8.8にしたら疎通す るようになった。</p>
-<h2 id="CGroup v2の対応方法">CGroup v2の対応方法</h2>
-<p>containerdをrootlessで使っている場合、一部の機能が制限されてしまう。 それを避けたい場合CGroup v2に対応する必要があるが、<a href="https://rootlesscontaine.rs/getting-started/common/cgroup2/">公式で示されている 方法</a>はgrubの設定を書き換える必要があり、Grubが使用されていないWSL2環境 では行うことが出来ない。そこで、<a href="https://learn.microsoft.com/ja-jp/windows/wsl/wsl-config#configuration-setting-for-wslconfig">.wslconfig</a>を設定してあげる必要がある。</p>
-<h1 id="Rootlessにするべきなのか否か？">Rootlessにするべきなのか否か？</h1>
-<p>まぁ基本的にはRoot権限を用いない方が良いというのはそうなのだが、ならば デフォルトでそう設定されているはず。デフォルトでRootを必要とするという ことは、何らかしらのトレードオフが存在していると考えて良い。ということ で、Rootlessにする場合のメリット・デメリットをすこし軽く調べてみた</p>
-<ul>
-<li><a href="https://medium.com/nttlabs/accelerating-rootless-container-network-29d0e908dda4">インターンレポート: RootlessコンテナのTCP/IP高速化 | by 松本直樹 | nttlabs | Medium</a></li>
-</ul>
-<h1 id="[補足] Containerdのインストール">[補足] Containerdのインストール</h1>
-<p>今回はnerdctlと共に導入したのでこれは結局アンインストールしたが、 containerdのみをインストールするのも先にやっていたのでメモとして残して おく。</p>
-<p>containerdはaptで配付されているが、独自のレポジトリを追加してあげる必 要がある。これは<a href="https://github.com/containerd/containerd/blob/main/docs/getting-started.md#option-2-from-apt-get-or-dnf">containerdプロジェクトではなくdockerからの提供となって いる</a>ので注意。ということで、<a href="https://docs.docker.com/engine/install/ubuntu/">Dockerのドキュメントにある手順</a>を元にして Dockerに関する部分を省きつつインストールする。具体的には、大体はそのま まだが <code>apt-get</code> で一部分のみをインストールすることにする。 ちなみにこれで足りているのかはわからん。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-diff
-</div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="st">- sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="va">+ sudo apt-get install containerd.io</span></span></code></pre></div>
-</div>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Thu, 02 Mar 2023 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2023-03-02-windows-install-and-setup-containerd-on-wsl2.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 

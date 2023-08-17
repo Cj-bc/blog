@@ -120,22 +120,39 @@
       </div>
 
     <div class="description">
-      <p><a href="https://vim-jp.org/vimdoc-ja/usr_46.html">vim9script</a>は、新しく実装が進められているvim用のスクリプト言語で、 型を取り入れたりモジュールの概念を取り入れたりなど「モダンな言語」の機能をふんだんに取り入れています。</p>
-<p><strong>現在はまだ開発中であり不安定である</strong> ためプラグインの作成などには向かないようですが、あくまでも自己責任ということで使ってみたくなったので <a href="https://github.com/Cj-bc/dotfiles/tree/master/dotfiles/vim">自分のvimrc</a> の新しく書く部分に少し使ってみたりしています。</p>
+      <p><a href="https://vim-jp.org/vimdoc-ja/usr_46.html">vim9script</a>は、新しく実装が進められているvim用のスクリプト言語で、
+型を取り入れたりモジュールの概念を取り入れたりなど「モダンな言語」の機能をふんだんに取り入れています。</p>
+<p><strong>現在はまだ開発中であり不安定である</strong>
+ためプラグインの作成などには向かないようですが、あくまでも自己責任ということで使ってみたくなったので
+<a href="https://github.com/Cj-bc/dotfiles/tree/master/dotfiles/vim">自分のvimrc</a>
+の新しく書く部分に少し使ってみたりしています。</p>
 <p>が、如何せん開発中のものなのでバグが多かったり、ドキュメントが不足していたり。。。</p>
 <p>取り急ぎ、自分で把握したものはメモしていきます。</p>
-<p>なお当方のvimは現時点でのgitのマスターブランチから <code class="verbatim">make</code> コマンドのみによってコンパイルされたもので、</p>
-<p>バージョンは <code class="verbatim">8.2 (2019 Dec 12, compiled Mar 2 2021 10:43:55) patch 1-2560</code> です。</p>
-<p>又、コードの実行には <a href="https://github.com/thinca/vim-quickrun">thinca/vim-quickrun</a> を使用させていただいております。</p>
+<p>なお当方のvimは現時点でのgitのマスターブランチから <code class="verbatim">make</code>
+コマンドのみによってコンパイルされたもので、</p>
+<p>バージョンは <code class="verbatim">8.2 (2019 Dec 12, compiled Mar 2 2021 10:43:55) patch 1-2560</code>
+です。</p>
+<p>又、コードの実行には <a href="https://github.com/thinca/vim-quickrun">thinca/vim-quickrun</a>
+を使用させていただいております。</p>
 <h1 id="文字列連結は...ではない">文字列連結は'..'。'.'ではない。</h1>
-<p>これは明確に「変更点」としては見当たらなかったのですが、恐らく変更されているところです。 <code class="verbatim">.</code> を使って連結しようとしてみたところ、 <code class="verbatim">E15: 無効な式です</code> と言われてしまいました。</p>
+<p>これは明確に「変更点」としては見当たらなかったのですが、恐らく変更されているところです。
+<code class="verbatim">.</code> を使って連結しようとしてみたところ、
+<code class="verbatim">E15: 無効な式です</code>
+と言われてしまいました。</p>
 <p>&lt;画像入れる&gt;</p>
-<p>これを <code class="verbatim">..</code> に変えたところすんなり動きました。</p>
+<p>これを <code class="verbatim">..</code>
+に変えたところすんなり動きました。</p>
 <h1 id="mapとmapnewを使い分ける">'map()'と'mapnew()'を使い分ける</h1>
-<p><code class="verbatim">map()</code> は、リストや辞書型のオブジェクトの要素ひとつひとつに対して関数を適用してくれる関数です。</p>
+<p><code class="verbatim">map()</code>
+は、リストや辞書型のオブジェクトの要素ひとつひとつに対して関数を適用してくれる関数です。</p>
 <p>Haskellとかやってると馴染みが深いですが、その分注意する必要がある点があります。</p>
-<p><code class="verbatim">map()</code> 関数、実は <strong>与えられたリストや辞書型のオブジェクトをそのまま更新</strong> します。 つまり <strong>新しいオブジェクトを作って返すわけではない</strong> のです。</p>
-<p>今まではこれで良かったのですが、=vim9script= になると違います。 使用する関数を気をつけないと、 <strong>型の不一致でコンパイルエラー</strong> を受けます。</p>
+<p><code class="verbatim">map()</code> 関数、実は
+<strong>与えられたリストや辞書型のオブジェクトをそのまま更新</strong>
+します。 つまり
+<strong>新しいオブジェクトを作って返すわけではない</strong> のです。</p>
+<p>今まではこれで良かったのですが、=vim9script= になると違います。
+使用する関数を気をつけないと、
+<strong>型の不一致でコンパイルエラー</strong> を受けます。</p>
 <p>例えば、</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -145,7 +162,8 @@ example
 map(ret, (n) =&gt; n + 1)
 </code></pre>
 </div>
-<p>は <code class="verbatim">a -&gt; a</code> な関数を渡しているので動きますが、</p>
+<p>は <code class="verbatim">a -&gt; a</code>
+な関数を渡しているので動きますが、</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 example
@@ -154,7 +172,8 @@ example
 map(ret, (n) =&gt; n .. &quot;th&quot;)
 </code></pre>
 </div>
-<p>は~a -&gt; b~ (<code class="verbatim">number -&gt; string</code>) な関数を渡しているのでコンパイルエラーになります。</p>
+<p>は~a -&gt; b~ (<code class="verbatim">number -&gt; string</code>)
+な関数を渡しているのでコンパイルエラーになります。</p>
 <p>この場合、*新しいオブジェクトを作って返す* バージョンである <code class="verbatim">mapnew()</code> を使用して回避できます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">

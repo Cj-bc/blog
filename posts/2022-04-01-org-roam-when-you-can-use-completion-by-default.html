@@ -120,33 +120,53 @@
       </div>
 
     <div class="description">
-      <p><a href="info:org-roam#Completion"><a href="info:org-roam#Completion">info:org-roam#Completion</a></a>にあるように、 org-roamは標準で補完機能を持っています。</p>
+      <p><a href="info:org-roam#Completion"><a href="info:org-roam#Completion">info:org-roam#Completion</a></a>にあるように、
+org-roamは標準で補完機能を持っています。</p>
 <p>が、自分の環境では上手く動かなかったので原因を探った際のメモ。</p>
 <h1 id="Tl;Dr:">Tl;Dr:</h1>
-<p>デフォルトでは、help:org-roam-db-autosync-mode を有効にした状態で、 ファイルからバッファーを読み込んだ際に有効化される。</p>
-<p><strong>help:org-roam-completion-everywhere ですらこの条件が必要</strong> なので注意。</p>
+<p>デフォルトでは、help:org-roam-db-autosync-mode を有効にした状態で、
+ファイルからバッファーを読み込んだ際に有効化される。</p>
+<p><strong>help:org-roam-completion-everywhere
+ですらこの条件が必要</strong> なので注意。</p>
 <h1 id="詳しく">詳しく</h1>
 <h2 id="org-roamが提供する補完機能の概要">org-roamが提供する補完機能の概要</h2>
-<p>org-roamは、help:completion-at-point を用いた補完機能を提供しています。 又、company-modeも別途対応している模様です。</p>
+<p>org-roamは、help:completion-at-point
+を用いた補完機能を提供しています。
+又、company-modeも別途対応している模様です。</p>
 <h2 id="実際の仕組み">実際の仕組み</h2>
-<p>そもそものcompletion-at-pointの仕組みについては割愛しますが 簡単に必要なことだけを書くと、補完に使用する関数を <code>completion-at-point-functions</code> 変数から取得して補完を行います。</p>
-<p>なので、 <code>completion-at-point</code> を使用した補完の際は、その変数をいじっている所を探しにいけば良いということになります。 org-roamでもこの <code>completion-at-point-functions</code> に関数を追加しています。</p>
+<p>そもそものcompletion-at-pointの仕組みについては割愛しますが
+簡単に必要なことだけを書くと、補完に使用する関数を
+<code>completion-at-point-functions</code>
+変数から取得して補完を行います。</p>
+<p>なので、 <code>completion-at-point</code>
+を使用した補完の際は、その変数をいじっている所を探しにいけば良いということになります。
+org-roamでもこの <code>completion-at-point-functions</code>
+に関数を追加しています。</p>
 <ul>
-<li><a href="~/.emacs.d/elpa/org-roam-20220319.1902/org-roam-node.el::defun org-roam--register-completion-functions-h (">org-roam–register-completion-functions-h</a>で help:completion-at-point-functions を設定している
+<li><a href="~/.emacs.d/elpa/org-roam-20220319.1902/org-roam-node.el::defun org-roam--register-completion-functions-h (">org-roam–register-completion-functions-h</a>で
+help:completion-at-point-functions を設定している
 <ul>
-<li><code>org-roam--register-completion-functions-h</code> は help:org-roam-find-file-hook に追加されている</li>
+<li><code>org-roam--register-completion-functions-h</code> は
+help:org-roam-find-file-hook に追加されている</li>
 </ul></li>
 </ul>
 <ul>
-<li>help:org-roam-find-file-hook は help:org-roam-db-autosync–setup-file-h から実行される</li>
-<li>help:org-roam-db-autosync–setup-file-h は help:org-roam-db-autosync-mode を有効にした時に help:find-file-hook に 追加される
+<li>help:org-roam-find-file-hook は
+help:org-roam-db-autosync–setup-file-h から実行される</li>
+<li>help:org-roam-db-autosync–setup-file-h は
+help:org-roam-db-autosync-mode を有効にした時に help:find-file-hook に
+追加される
 <ul>
-<li>help:find-file-hook はファイルからバッファーが読み込まれた際に実行される</li>
+<li>help:find-file-hook
+はファイルからバッファーが読み込まれた際に実行される</li>
 </ul>
-よって、 help:org-roam-db-autosync-mode を有効にしていない限りは同期されない。 まぁそれはそうか。</li>
+よって、 help:org-roam-db-autosync-mode
+を有効にしていない限りは同期されない。 まぁそれはそうか。</li>
 </ul>
 <h1 id="手動で設定する方法">手動で設定する方法</h1>
-<p>db-syncはしなくていいけど補完は使えるようになってほしい、という場合 help:org-roam–register-completion-functions-h を手動で実行すれば良いです。</p>
+<p>db-syncはしなくていいけど補完は使えるようになってほしい、という場合
+help:org-roam–register-completion-functions-h
+を手動で実行すれば良いです。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp

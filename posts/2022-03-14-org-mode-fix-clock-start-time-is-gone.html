@@ -127,10 +127,15 @@
 </blockquote>
 </div>
 <p>とか言われて戻れないことがあります。 この時の対処法についてです。</p>
-<h1 id="原因: org-clock-marker がずれている">原因: <code>org-clock-marker</code> がずれている</h1>
-<p>これは珍しい事例なのでは？と思うのですが、 最後の <code class="verbatim">Clock-in</code> した場所を保持している <code>org-clock-marker</code> が ずれている場合があります。</p>
-<p>このマーカーは、 <code>CLOCK: ~ 等の行の先頭に位置する必要がありますが、
-   私の見た環境では ~:LOGBOOK:</code> の行に存在していました。 この場合、 <code class="verbatim">org-clock.el</code> の以下の部分で弾かれてエラーになってしまいます。</p>
+<h1 id="原因: org-clock-marker がずれている">原因:
+<code>org-clock-marker</code> がずれている</h1>
+<p>これは珍しい事例なのでは？と思うのですが、 最後の <code class="verbatim">Clock-in</code> した場所を保持している
+<code>org-clock-marker</code> が ずれている場合があります。</p>
+<p>このマーカーは、
+<code>CLOCK: ~ 等の行の先頭に位置する必要がありますが、
+   私の見た環境では ~:LOGBOOK:</code> の行に存在していました。
+この場合、 <code class="verbatim">org-clock.el</code>
+の以下の部分で弾かれてエラーになってしまいます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -141,10 +146,18 @@ elisp
 (if fail-quietly (throw 'exit nil) (error &quot;Clock start time is gone&quot;)))
 </code></pre>
 </div>
-<p>[[<a href="file:/usr/share/emacs/27.2/lisp/org/org-clock.el.gz">file:/usr/share/emacs/27.2/lisp/org/org-clock.el.gz</a>::if (and (looking-at (concat "<span class="math display">$$ \t$$</span>*" org-keyword-time-regexp)][source code(オフライン用)]]</p>
+<p>[[<a href="file:/usr/share/emacs/27.2/lisp/org/org-clock.el.gz">file:/usr/share/emacs/27.2/lisp/org/org-clock.el.gz</a>::if
+(and (looking-at (concat "<span class="math display">$$ \t$$</span>*"
+org-keyword-time-regexp)][source code(オフライン用)]]</p>
 <h1 id="解決策: マーカーをずらす">解決策: マーカーをずらす</h1>
-<p>凄く愚直ですがまぁ。 help:move-marker でマーカーを動かせるので、それを使用します。</p>
-<p>マーカーは <code>CLOCK:</code> の行の最初にある必要があるので、まずはそこの 位置を調べる必要があります。 カーソルの位置を調べる方法は何かありそうではありますが、 今回はマーカーを置きたい位置にカーソルを置き、そこのtext Propertyを調べます。</p>
+<p>凄く愚直ですがまぁ。 help:move-marker
+でマーカーを動かせるので、それを使用します。</p>
+<p>マーカーは <code>CLOCK:</code>
+の行の最初にある必要があるので、まずはそこの
+位置を調べる必要があります。
+カーソルの位置を調べる方法は何かありそうではありますが、
+今回はマーカーを置きたい位置にカーソルを置き、そこのtext
+Propertyを調べます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -152,7 +165,8 @@ elisp
 <pre class="elisp SourceCode"><code>(describe-text-properties)
 </code></pre>
 </div>
-<p>そうすると、以下のように表示されます。この場合位置は <code>1411</code> ということになります。</p>
+<p>そうすると、以下のように表示されます。この場合位置は
+<code>1411</code> ということになります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 

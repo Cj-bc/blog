@@ -120,12 +120,15 @@
       </div>
 
     <div class="description">
-      <p>時間があまりないが、忘れると困るレベルに苦手だったLaTeXで日本語を含んだPDFが出力出来たので走り書きのメモ。 後にきちんと書く。</p>
-<p>とりあえず <a href="https://texwiki.texjp.org/?LaTeX入門">texwiki.texjp.org</a> 読んどけば、大学で習ってない民でも結構なんとかなる。なんと2023年でも更新されていてありがたい。</p>
+      <p>時間があまりないが、忘れると困るレベルに苦手だったLaTeXで日本語を含んだPDFが出力出来たので走り書きのメモ。
+後にきちんと書く。</p>
+<p>とりあえず <a href="https://texwiki.texjp.org/?LaTeX入門">texwiki.texjp.org</a>
+読んどけば、大学で習ってない民でも結構なんとかなる。なんと2023年でも更新されていてありがたい。</p>
 <h1 id="環境">環境</h1>
 <p>archlinux上でTeXLiveを使っている。</p>
 <h1 id="とりあえずPDFにする">とりあえずPDFにする</h1>
-<p><code>YOUR_FILE.tex</code> から <code>YOUR_FILE.pdf</code> を作成するためには</p>
+<p><code>YOUR_FILE.tex</code> から <code>YOUR_FILE.pdf</code>
+を作成するためには</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
@@ -134,7 +137,9 @@ bash
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dvipdfmx YOUR_FILE</span></code></pre></div>
 </div>
 <h1 id="独自のstyファイルを使う">独自のstyファイルを使う</h1>
-<p><code>TEXMFHOME/tex/latex</code> ないし <code>TEXMFLOCAL/tex/latex</code> 以下に <code>sty</code> ファイルを置き、 <code>sudo mktexlsr</code> すればよい。</p>
+<p><code>TEXMFHOME/tex/latex</code> ないし
+<code>TEXMFLOCAL/tex/latex</code> 以下に <code>sty</code>
+ファイルを置き、 <code>sudo mktexlsr</code> すればよい。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
@@ -148,7 +153,8 @@ bash
 </div>
 <h1 id="BibTeX">BibTeX</h1>
 <p><a href="https://texwiki.texjp.org/?文献引用">https://texwiki.texjp.org/?文献引用</a></p>
-<p>4回コマンドを実行する。 <strong>TeXファイルとBibTeXファイルの名前は拡張子以外合わせるぽい？</strong></p>
+<p>4回コマンドを実行する。
+<strong>TeXファイルとBibTeXファイルの名前は拡張子以外合わせるぽい？</strong></p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash

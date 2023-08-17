@@ -123,7 +123,8 @@
       <h1 id="最初に">最初に</h1>
 <p>この記事は非公式かつ、EVMC4Uを触って1日目の個人が書いています。</p>
 <p><strong>記事の内容はテストされておらず、公式でサポートされているわけでもありません</strong></p>
-<p>本当に動かすようにした所までなのでまだ見掛けていない不具合がある可能性は 十分にありますので、もしも参考にされる際はお気をつけ下さい。責任は負えません。</p>
+<p>本当に動かすようにした所までなのでまだ見掛けていない不具合がある可能性は
+十分にありますので、もしも参考にされる際はお気をつけ下さい。責任は負えません。</p>
 <h1 id="この記事の目的">この記事の目的</h1>
 <ul>
 <li>とりあえずUnity 2021.3.1f1で動くようにする
@@ -150,9 +151,13 @@
 </tbody>
 </table>
 <h1 id="やっていき">やっていき</h1>
-<p>まずUnityを立ち上げ Unity 2021.3.1f1の3Dテンプレートでプロジェクトを作成し、 普通にUniVRMを導入します。</p>
+<p>まずUnityを立ち上げ Unity
+2021.3.1f1の3Dテンプレートでプロジェクトを作成し、
+普通にUniVRMを導入します。</p>
 <h2 id="UniVRM 0.101.0の読み込み">UniVRM 0.101.0の読み込み</h2>
-<p>今回は UPMを用いて、 <code>manifest.json</code> を編集することで導入しました。 個人的にはパッケージは記載して管理する方がすき。</p>
+<p>今回は UPMを用いて、 <code>manifest.json</code>
+を編集することで導入しました。
+個人的にはパッケージは記載して管理する方がすき。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 javascript
@@ -169,14 +174,19 @@ javascript
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <p>これに関しては <a href="https://github.com/vrm-c/UniVRM/releases/tag/v0.101.0">vrm-c/UniVRMのリリース</a>に書いてあるやつです。</p>
-<h2 id="修正箇所1: VRMの読み込み時 VRMData を介する">修正箇所1: VRMの読み込み時 <code>VRMData</code> を介する</h2>
+<h2 id="修正箇所1: VRMの読み込み時 VRMData を介する">修正箇所1:
+VRMの読み込み時 <code>VRMData</code> を介する</h2>
 <p>UniVRM 0.82あたりでの変更点(らしい)です。</p>
 <p>ドキュメント: <a href="https://vrm-c.github.io/UniVRM/ja/api/0_82_runtime_import.html">https://vrm-c.github.io/UniVRM/ja/api/0_82_runtime_import.html</a></p>
 <ul>
-<li><code>VRMImporterContext</code> に渡す前に、 <code>GltfData</code> を <code>GltfData</code> に変換する必要が出来た</li>
+<li><code>VRMImporterContext</code> に渡す前に、 <code>GltfData</code>
+を <code>GltfData</code> に変換する必要が出来た</li>
 <li><code>VRMImporterContext</code> Disposeで破棄する必要が出来た</li>
 </ul>
-<p>ので、 <code>vrmImporter</code> を使ってる辺りを <code>using</code> で囲みます。 囲まないタイプの <code>using</code> もあるらしいけどUnityで使われてるC#のバージョン では対応してるんですかね…?調べるの面倒だったのでこちらで。</p>
+<p>ので、 <code>vrmImporter</code> を使ってる辺りを <code>using</code>
+で囲みます。 囲まないタイプの <code>using</code>
+もあるらしいけどUnityで使われてるC#のバージョン
+では対応してるんですかね…?調べるの面倒だったのでこちらで。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 diff
@@ -190,13 +200,19 @@ diff
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="va">+ }</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 </div>
-<h2 id="修正箇所2: VRMImporterContext.LoadAsyncが IAwaitCaller を実装した型を引数に取るように">修正箇所2: VRMImporterContext.LoadAsyncが <code>IAwaitCaller</code> を実装した型を引数に取るように</h2>
+<h2 id="修正箇所2: VRMImporterContext.LoadAsyncが IAwaitCaller を実装した型を引数に取るように">修正箇所2:
+VRMImporterContext.LoadAsyncが <code>IAwaitCaller</code>
+を実装した型を引数に取るように</h2>
 <p>ドキュメント: <a href="https://vrm-c.github.io/UniVRM/ja/api/0_87_runtime_import.html">https://vrm-c.github.io/UniVRM/ja/api/0_87_runtime_import.html</a></p>
 <ul>
 <li>同期的に読み込む場合は <code>ImmediateCaller</code> を与える</li>
-<li>非同期的に読み込む場合は <code>RuntimeOnlyAwaitCaller</code> を与える</li>
+<li>非同期的に読み込む場合は <code>RuntimeOnlyAwaitCaller</code>
+を与える</li>
 </ul>
-<p>今回は単純に簡単そうだったので <code>ImmediateCaller</code> を与えましたが、 実際にはもうちょい考えた方が良いのかもしれません。 まぁすぐに <code>await</code> して待ってるし同じ…?(あまり非同期得意ではない)</p>
+<p>今回は単純に簡単そうだったので <code>ImmediateCaller</code>
+を与えましたが、 実際にはもうちょい考えた方が良いのかもしれません。
+まぁすぐに <code>await</code>
+して待ってるし同じ…?(あまり非同期得意ではない)</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 diff
@@ -204,7 +220,8 @@ diff
 <div class="sourceCode" id="cb3"><pre class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="st">- RuntimeGltfInstance instance = await vrmImporter.LoadAsync();</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">+ RuntimeGltfInstance instance = await vrmImporter.LoadAsync(VRMShaders.ImmediateCaller);</span></span></code></pre></div>
 </div>
-<p>参考までに、UniVRMのサンプルでは <code>m_useAsync</code> プロパティで <code>IAWaitCaller</code> を変えている実装がありました。 (<a href="https://github.com/vrm-c/UniVRM/blob/2f6b5224b641ea8b7919610e0955a0a810a16c3c/Assets/VRM10_Samples/VRM10Viewer/VRM10ViewerUI.cs#L447">Assets/VRM10<sub>Samples</sub>/VRM10Viewer/VRM10ViewerUI.cs#L447</a>)</p>
+<p>参考までに、UniVRMのサンプルでは <code>m_useAsync</code> プロパティで
+<code>IAWaitCaller</code> を変えている実装がありました。 (<a href="https://github.com/vrm-c/UniVRM/blob/2f6b5224b641ea8b7919610e0955a0a810a16c3c/Assets/VRM10_Samples/VRM10Viewer/VRM10ViewerUI.cs#L447">Assets/VRM10<sub>Samples</sub>/VRM10Viewer/VRM10ViewerUI.cs#L447</a>)</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 csharp
@@ -212,19 +229,28 @@ csharp
 <div class="sourceCode" id="cb4"><pre class="sourceCode csharp SourceCode"><code class="sourceCode cs"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>awaitCaller<span class="op">:</span> m_useAsync<span class="op">.</span><span class="fu">enabled</span> <span class="op">?</span> <span class="op">(</span>IAwaitCaller<span class="op">)</span><span class="kw">new</span> <span class="fu">RuntimeOnlyAwaitCaller</span><span class="op">()</span> <span class="op">:</span> <span class="op">(</span>IAwaitCaller<span class="op">)</span><span class="kw">new</span> <span class="fu">ImmediateCaller</span><span class="op">(),</span></span></code></pre></div>
 </div>
 <h2 id="(一旦) おわり!">(一旦) おわり!</h2>
-<p>おわり!これでとりあえず読み込めるようになります。 UniVRM 0.101.0 で読み込んだモデルを使い、WaidayoのiPhone版アプリと 接続して使っていますが全く問題ないです。今の所。</p>
-<p>多分だけどUnity 2021にした影響は特になさそうでした。 まぁ保証は出来無い。</p>
+<p>おわり!これでとりあえず読み込めるようになります。 UniVRM 0.101.0
+で読み込んだモデルを使い、WaidayoのiPhone版アプリと
+接続して使っていますが全く問題ないです。今の所。</p>
+<p>多分だけどUnity 2021にした影響は特になさそうでした。
+まぁ保証は出来無い。</p>
 <h2 id="今回対応していないが参考">今回対応していないが参考</h2>
-<p>とりあえず上記をやれば動くようにはなりましたが、 他にも本来修正すべき所があるぽいので追記。</p>
-<p>ちなみに、こうした更新情報については、 <a href="https://vrm-c.github.io/UniVRM/ja/api/index.html">https://vrm-c.github.io/UniVRM/ja/api/index.html</a> で提供されているようです。 正直<a href="https://vrm.dev/">vrm.dev</a>から分かりやすくリンクされていないのでGithubレポジトリ直接漁ってて見付けました… 見逃してる人もいそうなのでここに。</p>
+<p>とりあえず上記をやれば動くようにはなりましたが、
+他にも本来修正すべき所があるぽいので追記。</p>
+<p>ちなみに、こうした更新情報については、 <a href="https://vrm-c.github.io/UniVRM/ja/api/index.html">https://vrm-c.github.io/UniVRM/ja/api/index.html</a>
+で提供されているようです。 正直<a href="https://vrm.dev/">vrm.dev</a>から分かりやすくリンクされていないのでGithubレポジトリ直接漁ってて見付けました…
+見逃してる人もいそうなのでここに。</p>
 <p>(ちなみに<a href="https://vrm.dev/univrm/programming/index.html">https://vrm.dev/univrm/programming/index.html</a>に一応あります。う~ん深いね!)</p>
 <ol>
 <li><p><code>GltfData</code> も Disposeする必要がある</p>
 <p>ドキュメント: <a href="https://vrm-c.github.io/UniVRM/ja/api/0_95_dispose.html">https://vrm-c.github.io/UniVRM/ja/api/0_95_dispose.html</a></p>
-<p>らしいです。 今回私は急いでいたので、これなくても動いたのでそのままにしましたが お行儀は多分全くよくない。ので修正した方がいいんだと思います。</p></li>
+<p>らしいです。
+今回私は急いでいたので、これなくても動いたのでそのままにしましたが
+お行儀は多分全くよくない。ので修正した方がいいんだと思います。</p></li>
 <li><p>高レベルAPI</p>
 <p>ドキュメント: <a href="https://vrm-c.github.io/UniVRM/ja/api/0_95_highlevel.html">https://vrm-c.github.io/UniVRM/ja/api/0_95_highlevel.html</a></p>
-<p>よくある用途に対して高レベルAPIが提供されたらしいです。 多分ここら辺みながら直した方がよかったのかもしれない…?</p></li>
+<p>よくある用途に対して高レベルAPIが提供されたらしいです。
+多分ここら辺みながら直した方がよかったのかもしれない…?</p></li>
 </ol>
     </div>
   </div>

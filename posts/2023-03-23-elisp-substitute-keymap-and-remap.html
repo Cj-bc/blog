@@ -120,10 +120,22 @@
       </div>
 
     <div class="description">
-      <p>既存のコマンドを置き換えるコマンドを自作した際、新しいキーバインドを作るのではなくそのコマンドで古い コマンドを置き換えたい時があります。その際、具体的に「元々どこにバインドされていたか」を調べずに置き 換えることが可能なのでメモを残しておきます。</p>
-<h1 id="アクティブなキーマップ上のコマンドを置き換えたい: remapキーイベント + define-key">アクティブなキーマップ上のコマンドを置き換えたい: remapキーイベント + <code>define-key</code></h1>
-<p><code>remap</code> キーイベントを使うと、新たにremapを行うキーバインドを作成出来ます。注意点として、 <u>実際に置き換えるのではなく「アクティブなキーマップ上のコマンドを置き換えるキーバインド」を新たに作成 する</u> 形になっています。そのため、指定したキーマップから参照されている Prefix keymap中にあるものは置 き換わりません。</p>
-<p>つまり、以下のようなキーマップの構成を考えた時、 <code>remap</code> を使って置き換えようとすると、 <code>outer-map</code> に存在する <code>func</code> は <code>new-func</code> で置き換えられますが <code>inner-map</code> に存在する <code>func</code> はそのまま残りま す:</p>
+      <p>既存のコマンドを置き換えるコマンドを自作した際、新しいキーバインドを作るのではなくそのコマンドで古い
+コマンドを置き換えたい時があります。その際、具体的に「元々どこにバインドされていたか」を調べずに置き
+換えることが可能なのでメモを残しておきます。</p>
+<h1 id="アクティブなキーマップ上のコマンドを置き換えたい: remapキーイベント + define-key">アクティブなキーマップ上のコマンドを置き換えたい:
+remapキーイベント + <code>define-key</code></h1>
+<p><code>remap</code>
+キーイベントを使うと、新たにremapを行うキーバインドを作成出来ます。注意点として、
+<u>実際に置き換えるのではなく「アクティブなキーマップ上のコマンドを置き換えるキーバインド」を新たに作成
+する</u>
+形になっています。そのため、指定したキーマップから参照されている Prefix
+keymap中にあるものは置 き換わりません。</p>
+<p>つまり、以下のようなキーマップの構成を考えた時、 <code>remap</code>
+を使って置き換えようとすると、 <code>outer-map</code> に存在する
+<code>func</code> は <code>new-func</code> で置き換えられますが
+<code>inner-map</code> に存在する <code>func</code> はそのまま残りま
+す:</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -137,9 +149,16 @@ elisp
   )
 </code></pre>
 </div>
-<h1 id="指定のキーマップから参照される Prefix keymap 内でも変更したい: substitute-key-definition">指定のキーマップから参照される Prefix keymap 内でも変更したい: <code>substitute-key-definition</code></h1>
-<p>elisp:substitute-key-definition は、「既存のコマンド」「新しいコマンド」「対象のキーマップ」の3つを 必須の引数として受け取り、「対象のキーマップ」の中にある「既存のコマンド」を「新しいコマンド」で置き 換えるように作用します。</p>
-<p>例えば、以下の例ではglobal keymap中の <code>count-words-region</code> を自作のコマンド <code>org-count-words/subtree-if-no-region</code> で置き換えます。</p>
+<h1 id="指定のキーマップから参照される Prefix keymap 内でも変更したい: substitute-key-definition">指定のキーマップから参照される
+Prefix keymap 内でも変更したい:
+<code>substitute-key-definition</code></h1>
+<p>elisp:substitute-key-definition
+は、「既存のコマンド」「新しいコマンド」「対象のキーマップ」の3つを
+必須の引数として受け取り、「対象のキーマップ」の中にある「既存のコマンド」を「新しいコマンド」で置き
+換えるように作用します。</p>
+<p>例えば、以下の例ではglobal keymap中の <code>count-words-region</code>
+を自作のコマンド <code>org-count-words/subtree-if-no-region</code>
+で置き換えます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -148,7 +167,9 @@ elisp
 </code></pre>
 </div>
 <p>(ちなみに <code>org-count-words/subtree-if-no-region</code> は<a href="https://github.com/Cj-bc/dotfiles/blob/0e2e604eaf05ec27a21af04b4e8060dd085f6118/dotfiles/emacs/emacs.d/lib/org-count-words.el#L6-L12">私のdotfiles</a>にあります)</p>
-<p><code>substitute-key-definition</code> は、指定したキーマップだけでなく Prefixキーマップ内にあるキーバインドも 置き換えます。つまり、</p>
+<p><code>substitute-key-definition</code>
+は、指定したキーマップだけでなく Prefixキーマップ内にあるキーバインドも
+置き換えます。つまり、</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -170,8 +191,12 @@ a		new-func<br />
 b		Prefix Command<br />
 <br />
 b 1		new-func</div>
-<h1 id="「既存のコマンドを置き換えるキーマップを作りたい」: substitute-key-definition (2)">「既存のコマンドを置き換えるキーマップを作りたい」: <code>substitute-key-definition</code> (2)</h1>
-<p><code>substitute-key-definition</code> に <code>OLDMAP</code> 引数も加えてあげると、「 <code>OLDMAP</code> 上の「既存のコマンド」のキー バインド」を参考にして「対象のキーマップ」を更新します。つまり、先程の例を元に以下のようにすると:</p>
+<h1 id="「既存のコマンドを置き換えるキーマップを作りたい」: substitute-key-definition (2)">「既存のコマンドを置き換えるキーマップを作りたい」:
+<code>substitute-key-definition</code> (2)</h1>
+<p><code>substitute-key-definition</code> に <code>OLDMAP</code>
+引数も加えてあげると、「 <code>OLDMAP</code>
+上の「既存のコマンド」のキー
+バインド」を参考にして「対象のキーマップ」を更新します。つまり、先程の例を元に以下のようにすると:</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -179,11 +204,16 @@ elisp
 <pre class="elisp SourceCode"><code>(substitute-key-definition 'count-words-region 'org-count-words/subtree-if-no-region (current-local-map) (current-global-map))
 </code></pre>
 </div>
-<p>現在の global keymap 中の <code>count-words-region</code> (デフォルトでは <code>\M-=</code> )を置き換える代わりに、 local keymap の同じキーバインド(デフォルトなら <code>\M-=</code>)に <code>count-words-region</code> を設定します。</p>
+<p>現在の global keymap 中の <code>count-words-region</code>
+(デフォルトでは <code>\M-=</code> )を置き換える代わりに、 local keymap
+の同じキーバインド(デフォルトなら <code>\M-=</code>)に
+<code>count-words-region</code> を設定します。</p>
 <h1 id="参考資料">参考資料</h1>
 <ul>
-<li><a href="info:elisp#Changing Key Bindings">elisp#Changing Key Bindings</a></li>
-<li><a href="info:elisp#Remapping Commands">elisp#Remapping Commands</a></li>
+<li><a href="info:elisp#Changing Key Bindings">elisp#Changing Key
+Bindings</a></li>
+<li><a href="info:elisp#Remapping Commands">elisp#Remapping
+Commands</a></li>
 </ul>
     </div>
   </div>

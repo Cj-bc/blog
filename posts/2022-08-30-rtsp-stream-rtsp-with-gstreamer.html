@@ -121,7 +121,8 @@
 
     <div class="description">
       <h1 id="Tl;Dr">Tl;Dr</h1>
-<p><code>x264enc</code> は <code>gst-plugins-ugly</code> に含まれています。</p>
+<p><code>x264enc</code> は <code>gst-plugins-ugly</code>
+に含まれています。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
@@ -133,15 +134,73 @@ bash
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">ninja</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">./examples/test-launch</span> <span class="at">-p</span> 39451 <span class="st">&quot;( ximagesrc ! videoconvert ! x264enc ! rtph264pay name=pay0 )&quot;</span></span></code></pre></div>
 </div>
-<p>途中で <code>ninja</code> した時にエラーを吐かれましたが、何故かその後上手くビルド出来ていたのでとりあえずそのままに しています。</p>
+<p>途中で <code>ninja</code>
+した時にエラーを吐かれましたが、何故かその後上手くビルド出来ていたのでとりあえずそのままに
+しています。</p>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
-<p><span class="math inline">? = 1<em>Q</em><em>w</em><em>Q</em><em>i</em> : <em>d</em><em>e</em><em>s</em><em>t</em></span> ninja [19/22] Generating gst/rtsp-server/GstRtspServer-1.0.gir with a custom command (wrapped by meson to set env) FAILED: gst/rtsp-server/GstRtspServer-1.0.gir /usr/bin/meson –internal exe –unpickle /home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/meson-private/meson<sub>exeg</sub>-ir-scanner<sub>3ab56c3a7bd05fcd52077a9babfa7bfdcb5a</sub> c3e5.dat while executing ['/usr/bin/g-ir-scanner', '–no-libtool', '–namespace=GstRtspServer', '–nsversion=1.0', '–warn-all', '–output', 'gst/rtsp-server/GstRtspServer-1.0.gir', '–add-init -section=extern void gst<sub>init</sub>(gint*,gchar**);g<sub>setenv</sub>("GST<sub>REGISTRY1</sub>.0", "/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gir<sub>emptyregistry</sub>.reg", TRUE);g<sub>setenv</sub> ("GST<sub>PLUGINPATH10</sub>", "", TRUE);g<sub>setenv</sub>("GST<sub>PLUGINSYSTEMPATH10</sub>", "", TRUE);gst<sub>init</sub>(NULL,NULL);', '–quiet', '–c-include=gst/rtsp-server/rtsp-server.h', '-I/home/me/Docum ents/ghq/github.com/GStreamer/gst-rtsp-server/gst/rtsp-server', '-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gst/rtsp-server', '-I/home/me/Documents/gh q/github.com/GStreamer/gst-rtsp-server/gst/rtsp-server', '-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gst/rtsp-server', '-I/home/me/Documents/ghq/githu b.com/GStreamer/gst-rtsp-server/.', '-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/.', '–filelist=/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-s erver/dest/gst/rtsp-server/libgstrtspserver-1.0.so.0.1902.0.p/GstRtspServer<sub>1</sub>.0<sub>girfilelist</sub>', '–include=Gst-1.0', '–include=GstRtsp-1.0', '–include=GstNet-1.0', '–symbol-prefix=gs t', '–identifier-prefix=Gst', '–pkg-export=gstreamer-rtsp-server-1.0', '–cflags-begin', '-DG<sub>DISABLEDEPRECATED</sub>', '-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server <em>gst/rtsp-server', '-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gst/rtsp-server', '-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server</em>.', '- I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/.', '-I/usr/include/gstreamer-1.0', '-I/usr/include/glib-2.0', '-I/usr/lib/glib-2.0/include', '-I/usr/include/sys prof-4', '-I/usr/include/orc-0.4', '-I/usr/include/libmount', '-I/usr/include/blkid', '-I/usr/include/gio-unix-2.0', '-I/usr/include/gobject-introspection-1.0', '–cflags-end', '–add- include-path=/usr/share/gir-1.0', '-L/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gst/rtsp-server', '–library', 'gstrtspserver-1.0', '-lgstrtsp-1.0', '-lgstre amer-1.0', '-lgstsdp-1.0', '-lgio-2.0', '-lgobject-2.0', '-lglib-2.0', '-lgstrtp-1.0', '-lgstbase-1.0', '-lgstnet-1.0', '-lgstapp-1.0', '-lgirepository-1.0'] — stdout —</p>
-<p>— stderr — Traceback (most recent call last): File "/usr/bin/g-ir-scanner", line 98, in &lt;module&gt; from giscanner.scannermain import scanner<sub>main</sub> File "/usr/lib/gobject-introspection/giscanner/scannermain.py", line 35, in &lt;module&gt; from giscanner.ast import Include, Namespace File "/usr/lib/gobject-introspection/giscanner/ast.py", line 29, in &lt;module&gt; from .sourcescanner import CTYPE<sub>TYPEDEF</sub>, CSYMBOL<sub>TYPETYPEDEF</sub> File "/usr/lib/gobject-introspection/giscanner/sourcescanner.py", line 34, in &lt;module&gt; from giscanner.<sub>giscanner</sub> import SourceScanner as CSourceScanner ModuleNotFoundError: No module named 'giscanner.<sub>giscanner</sub>'</p>
+<p><span class="math inline">? = 1<em>Q</em><em>w</em><em>Q</em><em>i</em> : <em>d</em><em>e</em><em>s</em><em>t</em></span>
+ninja [19/22] Generating gst/rtsp-server/GstRtspServer-1.0.gir with a
+custom command (wrapped by meson to set env) FAILED:
+gst/rtsp-server/GstRtspServer-1.0.gir /usr/bin/meson –internal exe
+–unpickle
+/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/meson-private/meson<sub>exeg</sub>-ir-scanner<sub>3ab56c3a7bd05fcd52077a9babfa7bfdcb5a</sub>
+c3e5.dat while executing ['/usr/bin/g-ir-scanner', '–no-libtool',
+'–namespace=GstRtspServer', '–nsversion=1.0', '–warn-all', '–output',
+'gst/rtsp-server/GstRtspServer-1.0.gir', '–add-init -section=extern void
+gst<sub>init</sub>(gint*,gchar**);g<sub>setenv</sub>("GST<sub>REGISTRY1</sub>.0",
+"/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gir<sub>emptyregistry</sub>.reg",
+TRUE);g<sub>setenv</sub> ("GST<sub>PLUGINPATH10</sub>", "",
+TRUE);g<sub>setenv</sub>("GST<sub>PLUGINSYSTEMPATH10</sub>", "",
+TRUE);gst<sub>init</sub>(NULL,NULL);', '–quiet',
+'–c-include=gst/rtsp-server/rtsp-server.h', '-I/home/me/Docum
+ents/ghq/github.com/GStreamer/gst-rtsp-server/gst/rtsp-server',
+'-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gst/rtsp-server',
+'-I/home/me/Documents/gh
+q/github.com/GStreamer/gst-rtsp-server/gst/rtsp-server',
+'-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gst/rtsp-server',
+'-I/home/me/Documents/ghq/githu b.com/GStreamer/gst-rtsp-server/.',
+'-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/.',
+'–filelist=/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-s
+erver/dest/gst/rtsp-server/libgstrtspserver-1.0.so.0.1902.0.p/GstRtspServer<sub>1</sub>.0<sub>girfilelist</sub>',
+'–include=Gst-1.0', '–include=GstRtsp-1.0', '–include=GstNet-1.0',
+'–symbol-prefix=gs t', '–identifier-prefix=Gst',
+'–pkg-export=gstreamer-rtsp-server-1.0', '–cflags-begin',
+'-DG<sub>DISABLEDEPRECATED</sub>',
+'-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server
+<em>gst/rtsp-server',
+'-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gst/rtsp-server',
+'-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server</em>.',
+'- I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/.',
+'-I/usr/include/gstreamer-1.0', '-I/usr/include/glib-2.0',
+'-I/usr/lib/glib-2.0/include', '-I/usr/include/sys prof-4',
+'-I/usr/include/orc-0.4', '-I/usr/include/libmount',
+'-I/usr/include/blkid', '-I/usr/include/gio-unix-2.0',
+'-I/usr/include/gobject-introspection-1.0', '–cflags-end', '–add-
+include-path=/usr/share/gir-1.0',
+'-L/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gst/rtsp-server',
+'–library', 'gstrtspserver-1.0', '-lgstrtsp-1.0', '-lgstre amer-1.0',
+'-lgstsdp-1.0', '-lgio-2.0', '-lgobject-2.0', '-lglib-2.0',
+'-lgstrtp-1.0', '-lgstbase-1.0', '-lgstnet-1.0', '-lgstapp-1.0',
+'-lgirepository-1.0'] — stdout —</p>
+<p>— stderr — Traceback (most recent call last): File
+"/usr/bin/g-ir-scanner", line 98, in &lt;module&gt; from
+giscanner.scannermain import scanner<sub>main</sub> File
+"/usr/lib/gobject-introspection/giscanner/scannermain.py", line 35, in
+&lt;module&gt; from giscanner.ast import Include, Namespace File
+"/usr/lib/gobject-introspection/giscanner/ast.py", line 29, in
+&lt;module&gt; from .sourcescanner import CTYPE<sub>TYPEDEF</sub>,
+CSYMBOL<sub>TYPETYPEDEF</sub> File
+"/usr/lib/gobject-introspection/giscanner/sourcescanner.py", line 34, in
+&lt;module&gt; from giscanner.<sub>giscanner</sub> import SourceScanner
+as CSourceScanner ModuleNotFoundError: No module named
+'giscanner.<sub>giscanner</sub>'</p>
 </blockquote>
 </div>
 <h1 id="動機">動機</h1>
-<p>パソコンの画面をNeosVRから見たい。 でもLAN内で見ることさえ出来れば良いので外部のサーバーを経由させたくなくて、 <a href="https://www.youtube.com/watch?v=Ta8N4ZFRjJg">kokolive</a>や<a href="https://github.com/TopazChat/TopazChat">TopazChat</a>とかは使えませんでした。</p>
+<p>パソコンの画面をNeosVRから見たい。
+でもLAN内で見ることさえ出来れば良いので外部のサーバーを経由させたくなくて、
+<a href="https://www.youtube.com/watch?v=Ta8N4ZFRjJg">kokolive</a>や<a href="https://github.com/TopazChat/TopazChat">TopazChat</a>とかは使えませんでした。</p>
 <p>なのでじゃぁ自分で構築するしかないかぁということで行き着いたところです。</p>
 <h1 id="作りたいものの要件">作りたいものの要件</h1>
 <ul>
@@ -151,32 +210,50 @@ bash
 <li>映像配信を外部のサーバーを通さなくて良い</li>
 <li>低遅延</li>
 </ul>
-<p>他の人と共有することは目的としていない為、LANのみで 完結する構成にしたいです。</p>
+<p>他の人と共有することは目的としていない為、LANのみで
+完結する構成にしたいです。</p>
 <h1 id="RTSPについて少しだけ">RTSPについて少しだけ</h1>
-<p>RTSPは、ビデオや音声等のマルチメディアをリアルタイムに <u>制御する</u> ためのアプリケーション層のプロトコルです。 大切なことなのでもう一度書きますが、 <u>制御する</u> ためのプロトコルです。 ここでの制御とは例えば、再生・一時停止・停止等の操作を指します。</p>
+<p>RTSPは、ビデオや音声等のマルチメディアをリアルタイムに
+<u>制御する</u> ためのアプリケーション層のプロトコルです。
+大切なことなのでもう一度書きますが、 <u>制御する</u>
+ためのプロトコルです。
+ここでの制御とは例えば、再生・一時停止・停止等の操作を指します。</p>
 <p>実際のデータの送受信には RTP 等の別のプロトコルを用います。</p>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
-<p>This protocol is intended to control multiple data delivery sessions; provide a means for choosing delivery channels such as UDP, multicast UDP, and TCP; and provide a means for choosing delivery mechanisms based upon RTP (RFC 3550).</p>
-<p>— <a href="https://www.rfc-editor.org/rfc/rfc7826">https://www.rfc-editor.org/rfc/rfc7826</a>, Abstract</p>
+<p>This protocol is intended to control multiple data delivery sessions;
+provide a means for choosing delivery channels such as UDP, multicast
+UDP, and TCP; and provide a means for choosing delivery mechanisms based
+upon RTP (RFC 3550).</p>
+<p>— <a href="https://www.rfc-editor.org/rfc/rfc7826">https://www.rfc-editor.org/rfc/rfc7826</a>,
+Abstract</p>
 </blockquote>
 </div>
 <h1 id="詳細">詳細</h1>
-<p>今回、GStreamer自体についての解説はあまり含みません。 それに関しては別途記事を書くかもしれないし書かないかもしれないのですが、 もし興味がある&amp;英語おkなら<a href="https://gstreamer.freedesktop.org/documentation/tutorials/index.html">公式のチュートリアル</a>を見てみると良いと思います。</p>
+<p>今回、GStreamer自体についての解説はあまり含みません。
+それに関しては別途記事を書くかもしれないし書かないかもしれないのですが、
+もし興味がある&amp;英語おkなら<a href="https://gstreamer.freedesktop.org/documentation/tutorials/index.html">公式のチュートリアル</a>を見てみると良いと思います。</p>
 <p>知らないと分からないことはないと思いますが、所々用語は普通に使うのでご容赦下さい。</p>
 <h2 id="使用するサーバーを決める">使用するサーバーを決める</h2>
-<p>RTSPサーバーがあり、クライアントがそこに接続してストリームを受け取るという 仕組みになっているので、まずはRTSPサーバーを建てる必要があります。 <a href="#DeveloppersIOの記事">DeveloppersIOの記事</a>には <a href="https://github.com/mpromonet/v4l2rtspserver">v4l2rtspserver</a>についても紹介されていますが、</p>
+<p>RTSPサーバーがあり、クライアントがそこに接続してストリームを受け取るという
+仕組みになっているので、まずはRTSPサーバーを建てる必要があります。 <a href="#DeveloppersIOの記事">DeveloppersIOの記事</a>には <a href="https://github.com/mpromonet/v4l2rtspserver">v4l2rtspserver</a>についても紹介されていますが、</p>
 <ul>
 <li>v4l2に関してよく分からなかった</li>
 <li>GStreamerなら開発元に信頼がある</li>
 <li>GStreamerは単純に見知っている</li>
 </ul>
 <p>という理由から、GStreamerを使ったものを建ててみました。</p>
-<p>GStreamer公式から <a href="https://github.com/GStreamer/gst-rtsp-server">GStreamer/gst-rtsp-server</a> が提供されているので、 これを使います。</p>
-<p>それ自体はライブラリとなっていますが、examplesに簡単なサーバーとして使用出来る サンプルファイルがあるのでとりあえずはこれを用いることにします。</p>
-<p>幾つかありますが、今回は <a href="https://github.com/GStreamer/gst-rtsp-server/blob/master/examples/test-launch.c">gst-rtsp-server/test-launch.c at master · GStreamer/gst-rtsp-server</a> を使用しました。</p>
+<p>GStreamer公式から <a href="https://github.com/GStreamer/gst-rtsp-server">GStreamer/gst-rtsp-server</a>
+が提供されているので、 これを使います。</p>
+<p>それ自体はライブラリとなっていますが、examplesに簡単なサーバーとして使用出来る
+サンプルファイルがあるのでとりあえずはこれを用いることにします。</p>
+<p>幾つかありますが、今回は <a href="https://github.com/GStreamer/gst-rtsp-server/blob/master/examples/test-launch.c">gst-rtsp-server/test-launch.c
+at master · GStreamer/gst-rtsp-server</a> を使用しました。</p>
 <h2 id="サーバーのビルド">サーバーのビルド</h2>
-<p><a href="#DeveloppersIOの記事">DeveloppersIOの記事</a>では <code>autogen.sh</code> を叩いていましたが、今は <code>meson</code> に変わっていました。 <code>meson</code> にはあまり馴染みがないのですが、以下の手順でとりあえず動くものは出来ました。</p>
+<p><a href="#DeveloppersIOの記事">DeveloppersIOの記事</a>では
+<code>autogen.sh</code> を叩いていましたが、今は <code>meson</code>
+に変わっていました。 <code>meson</code>
+にはあまり馴染みがないのですが、以下の手順でとりあえず動くものは出来ました。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
@@ -188,16 +265,19 @@ bash
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> dest</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">ninja</span></span></code></pre></div>
 </div>
-<p>尚、この際にエラーを吐かれましたが無視しても動いたので一度放置しています。 <code>--internal exe</code> とかあるのでWindows用のかな？と思っていたり。</p>
+<p>尚、この際にエラーを吐かれましたが無視しても動いたので一度放置しています。
+<code>--internal exe</code>
+とかあるのでWindows用のかな？と思っていたり。</p>
 <h2 id="ソースの指定、サーバーの実行">ソースの指定、サーバーの実行</h2>
-<p><code>test-launch.c</code> は <code>gst-launch-1.0</code> の引数と同じ形式の文字列を引数に取り、 サーバーを起動します。</p>
+<p><code>test-launch.c</code> は <code>gst-launch-1.0</code>
+の引数と同じ形式の文字列を引数に取り、 サーバーを起動します。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
 <div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./dest/examples/test-launch <span class="at">--help</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Usage:</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">test-launch</span> [OPTION<span class="pp">?</span>] <span class="op">&lt;</span>launch line<span class="op">&gt;</span> - Test RTSP Server, Launch</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">test-launch</span> <span class="pp">[</span><span class="ss">OPTION?</span><span class="pp">]</span> <span class="op">&lt;</span>launch line<span class="op">&gt;</span> - Test RTSP Server, Launch</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ex">Example:</span> <span class="st">&quot;( videotestsrc ! x264enc ! rtph264pay name=pay0 pt=96 )&quot;</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
@@ -210,17 +290,24 @@ bash
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="ex">-p,</span> <span class="at">--port</span><span class="op">=</span>PORT                   Port to listen on <span class="er">(</span><span class="ex">default:</span> 8554<span class="kw">)</span></span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="ex">--disable-rtcp</span>                    Whether RTCP should be disabled <span class="er">(</span><span class="ex">default</span> false<span class="kw">)</span></span></code></pre></div>
 </div>
-<p><code>Example</code> にある通りに実行すると、よくブラウン管テレビとかに写ってそうなテスト映像を配信する RTSPサーバーが立ち上がります。</p>
+<p><code>Example</code>
+にある通りに実行すると、よくブラウン管テレビとかに写ってそうなテスト映像を配信する
+RTSPサーバーが立ち上がります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
 <div class="sourceCode" id="cb4" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./dest/examples/test-launch</span> <span class="st">&quot;( videotestsrc ! x264enc ! rtph264pay name=pay0 pt=96 )&quot;</span></span></code></pre></div>
 </div>
-<p>上手くいかない事があった場合は、 <span class="spurious-link" target="デバッグログの出し方"><em>デバッグログの出し方</em></span> にあるように環境変数を使ってログを出してみて下さい。</p>
+<p>上手くいかない事があった場合は、 <span class="spurious-link" target="デバッグログの出し方"><em>デバッグログの出し方</em></span>
+にあるように環境変数を使ってログを出してみて下さい。</p>
 <h2 id="X.orgの画面をキャプチャして配信する">X.orgの画面をキャプチャして配信する</h2>
-<p>問題なく動作したら次の段階に進めてみましょう。 前章ではテスト用の映像を配信していましたが、本命は「画面共有」なので 画面の映像を配信するように作り変えてみます。</p>
-<p>X.org用のソースには<a href="https://gstreamer.freedesktop.org/documentation/ximagesrc/index.html">ximagesrc</a>を使用します。そのまま <code>x264enc</code> には入れられないため、一度 <code>videoconvert</code> を かましています。</p>
+<p>問題なく動作したら次の段階に進めてみましょう。
+前章ではテスト用の映像を配信していましたが、本命は「画面共有」なので
+画面の映像を配信するように作り変えてみます。</p>
+<p>X.org用のソースには<a href="https://gstreamer.freedesktop.org/documentation/ximagesrc/index.html">ximagesrc</a>を使用します。そのまま
+<code>x264enc</code> には入れられないため、一度
+<code>videoconvert</code> を かましています。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
@@ -232,7 +319,10 @@ bash
 <h2 id="各パーツの調べ方">各パーツの調べ方</h2>
 <p><code>gst-inspect-1.0</code> を使う</p>
 <h2 id="デバッグログの出し方">デバッグログの出し方</h2>
-<p><code>GST_DEBUG</code> 環境変数を設定すると、デバッグログを出力させることができます。 出力するログの段階はカテゴリ毎に細かく設定することが出来ますが、 数字を直接指定することで全体に対して指定もできます。</p>
+<p><code>GST_DEBUG</code>
+環境変数を設定すると、デバッグログを出力させることができます。
+出力するログの段階はカテゴリ毎に細かく設定することが出来ますが、
+数字を直接指定することで全体に対して指定もできます。</p>
 <p>ログの段階は以下の通りです</p>
 <table class="ui celled table">
 <thead>
@@ -276,7 +366,8 @@ bash
 </tr>
 </tbody>
 </table>
-<p>例えば、 <code>WARN</code> までのログを全てのカテゴリに於いて出力したい場合は</p>
+<p>例えば、 <code>WARN</code>
+までのログを全てのカテゴリに於いて出力したい場合は</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
@@ -284,13 +375,20 @@ bash
 <div class="sourceCode" id="cb6" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="va">GST_DEBUG</span><span class="op">=</span>2 <span class="ex">./dest/examples/test-launch</span> <span class="st">&quot;( videotestsrc ! x264enc ! rtph264pay name=pay0 pt=96 )&quot;</span></span></code></pre></div>
 </div>
 <p>のように実行します。</p>
-<p>詳しい使い方は <a href="https://man.archlinux.org/man/gst-launch-1.0.1">gst-launch-1.0のmanページ</a> に記載されています。</p>
+<p>詳しい使い方は <a href="https://man.archlinux.org/man/gst-launch-1.0.1">gst-launch-1.0のmanページ</a>
+に記載されています。</p>
 <h1 id="参考">参考</h1>
 <ul>
-<li><span id="DeveloppersIOの記事"></span>: <a href="https://dev.classmethod.jp/articles/amazon-kinesis-vidseo-streams-gstreamer-rtsp-server/">Kinesis Video Streams GStreamerを使用したRTSPサーバを構築し、Macから動画を送信してみました。 | DevelopersIO</a></li>
-<li><a href="https://github.com/GStreamer/gst-rtsp-server/blob/master/examples/test-launch.c">gst-rtsp-server/test-launch.c at master · GStreamer/gst-rtsp-server</a></li>
-<li><a href="https://www.rfc-editor.org/rfc/rfc7826">RFC 7826: Real-Time Streaming Protocol Version 2.0</a></li>
-<li><a href="https://gstreamer.freedesktop.org/documentation/additional/rtp.html">RTP and RTSP support – gstreamer.freedesktop.org</a></li>
+<li><span id="DeveloppersIOの記事"></span>: <a href="https://dev.classmethod.jp/articles/amazon-kinesis-vidseo-streams-gstreamer-rtsp-server/">Kinesis
+Video Streams
+GStreamerを使用したRTSPサーバを構築し、Macから動画を送信してみました。 |
+DevelopersIO</a></li>
+<li><a href="https://github.com/GStreamer/gst-rtsp-server/blob/master/examples/test-launch.c">gst-rtsp-server/test-launch.c
+at master · GStreamer/gst-rtsp-server</a></li>
+<li><a href="https://www.rfc-editor.org/rfc/rfc7826">RFC 7826: Real-Time
+Streaming Protocol Version 2.0</a></li>
+<li><a href="https://gstreamer.freedesktop.org/documentation/additional/rtp.html">RTP
+and RTSP support – gstreamer.freedesktop.org</a></li>
 </ul>
     </div>
   </div>

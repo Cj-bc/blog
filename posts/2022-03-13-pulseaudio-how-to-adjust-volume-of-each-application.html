@@ -120,10 +120,14 @@
       </div>
 
     <div class="description">
-      <p>PulseAudioを使用している際、たまにアプリケーション毎の 音量バランスがバグる(過剰な表現)時がある。</p>
-<p>私の環境では、qutebrowserの音量が異常に小さくZoomやShotcutの 音量が異常にデカくなっており、Zoom会議に参加しながら共有された YouTubeの動画を見ることができない等の問題がありました。</p>
+      <p>PulseAudioを使用している際、たまにアプリケーション毎の
+音量バランスがバグる(過剰な表現)時がある。</p>
+<p>私の環境では、qutebrowserの音量が異常に小さくZoomやShotcutの
+音量が異常にデカくなっており、Zoom会議に参加しながら共有された
+YouTubeの動画を見ることができない等の問題がありました。</p>
 <h1 id="原因">原因</h1>
-<p><code class="verbatim">sink-input</code> のVolumeが小さくなっていることがあります。</p>
+<p><code class="verbatim">sink-input</code>
+のVolumeが小さくなっていることがあります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
@@ -166,16 +170,22 @@ bash
 
 </code></pre>
 </div>
-<p>この中の <code>Volume:</code> に表示されているのが、各Sink inputのボリュームです。 100%より小さい場合、100%にした方が良いかもしれません。 注意点として、 <strong>実際に音を鳴らしているなど音声が流れているないし流れる状態にある</strong> 必要があります。 そうでない場合、Sink inputの一覧に表示されません。</p>
+<p>この中の <code>Volume:</code> に表示されているのが、各Sink
+inputのボリュームです。
+100%より小さい場合、100%にした方が良いかもしれません。 注意点として、
+<strong>実際に音を鳴らしているなど音声が流れているないし流れる状態にある</strong>
+必要があります。 そうでない場合、Sink inputの一覧に表示されません。</p>
 <h1 id="解決方法">解決方法</h1>
-<p>該当の <code class="verbatim">sink-input</code> のボリュームを100%にしてあげます。</p>
+<p>該当の <code class="verbatim">sink-input</code>
+のボリュームを100%にしてあげます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
 <div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pactl</span> set-sink-input-volume <span class="op">&lt;</span>ID<span class="op">&gt;</span> 100%</span></code></pre></div>
 </div>
-<p>SinkのIDは、先程の <code>pactl list sink-inputs</code> の冒頭にある</p>
+<p>SinkのIDは、先程の <code>pactl list sink-inputs</code>
+の冒頭にある</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 
@@ -185,9 +195,17 @@ bash
 </div>
 <p>の#以降の数字で、この例だと37です。</p>
 <h1 id="解説">解説</h1>
-<p>PulseAudioでは、全てのアプリケーションは "client" としてサーバーに接続されます。 そして各アプリケーションに於いて何かしら音声が流れると、新しい <code class="verbatim">sink-input</code> が作成 されて登録されます。ここから、音声が <code class="verbatim">sink</code> に渡って音が鳴るわけです。</p>
-<p>この <code class="verbatim">sink-input</code> にはそれぞれにボリュームが設定されているので、そこを調節してあげると アプリケーション間のボリューム調整ができます。</p>
-<p>PulseAudioの仕組み等については、<a href="https://gavv.github.io/articles/pulseaudio-under-the-hood/#sound-processing">Pulseaudio under the hood</a>というブログ記事が、 公式で紹介されているほど詳しいです。</p>
+<p>PulseAudioでは、全てのアプリケーションは "client"
+としてサーバーに接続されます。
+そして各アプリケーションに於いて何かしら音声が流れると、新しい <code class="verbatim">sink-input</code> が作成
+されて登録されます。ここから、音声が <code class="verbatim">sink</code>
+に渡って音が鳴るわけです。</p>
+<p>この <code class="verbatim">sink-input</code>
+にはそれぞれにボリュームが設定されているので、そこを調節してあげると
+アプリケーション間のボリューム調整ができます。</p>
+<p>PulseAudioの仕組み等については、<a href="https://gavv.github.io/articles/pulseaudio-under-the-hood/#sound-processing">Pulseaudio
+under the hood</a>というブログ記事が、
+公式で紹介されているほど詳しいです。</p>
     </div>
   </div>
   

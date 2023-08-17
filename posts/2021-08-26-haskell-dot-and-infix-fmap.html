@@ -140,7 +140,8 @@ haskell
 </div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]</span></code></pre></div>
 </div>
-<p>でも以下のように書くと、 <strong>"Why NOT?"</strong> とか言って書き換えを提案されるよ!</p>
+<p>でも以下のように書くと、 <strong>"Why NOT?"</strong>
+とか言って書き換えを提案されるよ!</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
@@ -152,10 +153,12 @@ haskell
 </div>
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
-<p>Found: print &lt;$&gt; (++ " ") &lt;$&gt; getLine Why not: print . (++ " ") &lt;$&gt; getLine</p>
+<p>Found: print &lt;$&gt; (++ " ") &lt;$&gt; getLine Why not: print .
+(++ " ") &lt;$&gt; getLine</p>
 </blockquote>
 </div>
-<p>で、素直にこれで書き換えられるのも分かるのだけど きちんと論理的に考えてみるのです。</p>
+<p>で、素直にこれで書き換えられるのも分かるのだけど
+きちんと論理的に考えてみるのです。</p>
 <h1 id="論理的に考えるあるよ">論理的に考えるあるよ</h1>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -163,8 +166,13 @@ haskell
 </div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>(<span class="op">*</span> <span class="dv">2</span>) <span class="op">.</span> (<span class="op">+</span> <span class="dv">1</span>) <span class="op">&lt;$&gt;</span> [<span class="dv">1</span><span class="op">..</span><span class="dv">5</span>]</span></code></pre></div>
 </div>
-<p>解釈を考えるあるよ。基本的に左から読まれるわけだけど(ほんとか？)、 今回は中置演算子で繋がれているので <code>infix</code> の値を確認するよ。</p>
-<p><code>infix</code> は、 <em>値が大きければ大きい程優先される</em> 。 冒頭でも書いたけど、 <code class="sourceCode haskell">(<span class="op">.</span>)</code> は <code>infix 9</code> で <code class="sourceCode haskell">(<span class="op">&lt;$&gt;</span>)</code> は <code>infix 4</code> 。</p>
+<p>解釈を考えるあるよ。基本的に左から読まれるわけだけど(ほんとか？)、
+今回は中置演算子で繋がれているので <code>infix</code>
+の値を確認するよ。</p>
+<p><code>infix</code> は、 <em>値が大きければ大きい程優先される</em> 。
+冒頭でも書いたけど、 <code class="sourceCode haskell">(<span class="op">.</span>)</code> は
+<code>infix 9</code> で <code class="sourceCode haskell">(<span class="op">&lt;$&gt;</span>)</code> は
+<code>infix 4</code> 。</p>
 <p>なので、先に <code>.</code> での束縛が行われるよ。つまり:</p>
 <div class="ui segment">
 <div class="ui top right attached label">

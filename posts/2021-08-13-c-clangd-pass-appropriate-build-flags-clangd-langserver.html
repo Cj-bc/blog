@@ -123,25 +123,33 @@
       <p>公式ページ: <a href="https://clangd.llvm.org/installation">https://clangd.llvm.org/installation</a></p>
 <div class="tldr">
 <ul>
-<li>同じディレクトリに <code class="verbatim">compile_flags.txt</code> ファイルを作れ</li>
+<li>同じディレクトリに <code class="verbatim">compile_flags.txt</code>
+ファイルを作れ</li>
 <li>一行に一フラグずつ書け</li>
 </ul>
 </div>
-<p>C言語(とC++言語)のLSPサーバーに、LLVMプロジェクトの<a href="https://clangd.llvm.org/">clangd</a>があります。 何も設定しないで使おうとすると</p>
+<p>C言語(とC++言語)のLSPサーバーに、LLVMプロジェクトの<a href="https://clangd.llvm.org/">clangd</a>があります。
+何も設定しないで使おうとすると</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
 </div>
 <div class="sourceCode" id="cb1" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> clang foo.cc</span></code></pre></div>
 </div>
-<p>とビルドされるものと解釈して動きます。 これだと大体のプログラムはフラグが足りないため、 フラグを設定する方法が2通り用意されています。</p>
+<p>とビルドされるものと解釈して動きます。
+これだと大体のプログラムはフラグが足りないため、
+フラグを設定する方法が2通り用意されています。</p>
 <ul>
 <li><code>compile_commands.json</code></li>
 <li><code>compile_flags.txt</code></li>
 </ul>
-<h1 id="compile_commands.json: ビルドツールを使用する場合"><code>compile_commands.json</code>: ビルドツールを使用する場合</h1>
-<p>プロジェクトの中にある各ファイルのコンパイルコマンドを定義できます。 これは基本的にはツールによって生成されます。</p>
-<p><code class="verbatim">clangd</code> は、今編集しているファイルの親ディレクトリに このファイルを探しにいきます。</p>
+<h1 id="compile_commands.json: ビルドツールを使用する場合"><code>compile_commands.json</code>:
+ビルドツールを使用する場合</h1>
+<p>プロジェクトの中にある各ファイルのコンパイルコマンドを定義できます。
+これは基本的にはツールによって生成されます。</p>
+<p><code class="verbatim">clangd</code>
+は、今編集しているファイルの親ディレクトリに
+このファイルを探しにいきます。</p>
 <p>下に2つの例を上げていますが、これ以外のツールでも生成出来るものがあるそうです。</p>
 <p>参考: <a href="https://clang.llvm.org/docs/JSONCompilationDatabase.html">compile<sub>commands</sub>.jsonの仕様</a></p>
 <h2 id="CMakeを使っている場合">CMakeを使っている場合</h2>
@@ -151,7 +159,9 @@ bash
 </div>
 <div class="sourceCode" id="cb2" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cmake</span> <span class="at">-DCMAKE_EXPORT_COMPILE_COMMANDS</span><span class="op">=</span>1</span></code></pre></div>
 </div>
-<p>とすることで、ビルドディレクトリに <code>compile_commands.json</code> を 出力します。 プロジェクトルートとは異なる場合であった場合は手動で (シムリンクorコピーすることで)移動する必要があります。</p>
+<p>とすることで、ビルドディレクトリに <code>compile_commands.json</code>
+を 出力します。 プロジェクトルートとは異なる場合であった場合は手動で
+(シムリンクorコピーすることで)移動する必要があります。</p>
 <h2 id="他のビルドツールを使っている場合">他のビルドツールを使っている場合</h2>
 <p><a href="https://github.com/rizsotto/Bear">bear</a>を使用することで様々なビルドツールでも使うことができるようです。</p>
 <div class="ui segment">
@@ -160,11 +170,18 @@ bash
 </div>
 <div class="sourceCode" id="cb3" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">bear</span> <span class="at">--</span> <span class="op">&lt;&lt;使用しているビルドコマンド&gt;&gt;</span></span></code></pre></div>
 </div>
-<p>とすることで、生成できます。 仕組み的には、ビルドコマンドで普通にビルドし、そのログから コンパイラの呼び出しを特定&amp; <code>compile_commands.json</code> を作るようです。</p>
+<p>とすることで、生成できます。
+仕組み的には、ビルドコマンドで普通にビルドし、そのログから
+コンパイラの呼び出しを特定&amp; <code>compile_commands.json</code>
+を作るようです。</p>
 <p>(READMEを雑に読んだ程度の知識)</p>
-<h1 id="compile_flags.txt: 手動ビルド、若しくはフラグが少ない場合"><code>compile_flags.txt</code>: 手動ビルド、若しくはフラグが少ない場合</h1>
-<p>手動でのビルドをしている場合や、フラグが少ない場合は <code>compile_flags.txt</code> を使う方が楽でしょう。</p>
-<p>但し <strong>同じディレクトリにある全てのソースに対して同じフラグが設定される</strong> ので注意が必要です。</p>
+<h1 id="compile_flags.txt: 手動ビルド、若しくはフラグが少ない場合"><code>compile_flags.txt</code>:
+手動ビルド、若しくはフラグが少ない場合</h1>
+<p>手動でのビルドをしている場合や、フラグが少ない場合は
+<code>compile_flags.txt</code> を使う方が楽でしょう。</p>
+<p>但し
+<strong>同じディレクトリにある全てのソースに対して同じフラグが設定される</strong>
+ので注意が必要です。</p>
 <p>このファイルはシンプルな構文で、一行に一つフラグを記入するだけです。</p>
 <p>例えばgtk4を用いて以下のようにコンパイルしていた場合:</p>
 <div class="ui segment">

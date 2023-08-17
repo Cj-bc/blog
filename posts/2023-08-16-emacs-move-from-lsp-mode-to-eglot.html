@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- lsp-modeからEglotへ乗り換える</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2023-08-16-emacs-move-from-lsp-mode-to-eglot.html" /><meta property="og:title" content="lsp-modeからEglotへ乗り換える" /><meta property="og:description" content="Emacs29.1から、LSPクライアントとしてEglotが標準搭載されるようになりま した。今迄はlsp-modeを使っていたのですが、そもそもあまりきちんと使えて いなかったのでこの機に一旦eglotに移ってみようと思います。" />
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+
+	<meta name="viewport" content="width=device-width" />
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+	  
+	  <a href="../" class="mobile only item"><i class="angle left icon"></i></a>
+	  
+          <div class="computer only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+          <div class="mobile only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"></div>
+            <a href="../" class="computer only item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui secondary segment">
+	      <p>
+		現在ブログ改修工事中です。恐らく多分きっとメイビーそのうちAstro製の既存デザインへと
+		変換しますので、見辛さは今暫くご容赦下さい。
+	      </p>
+	    </div>
+
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>lsp-modeからEglotへ乗り換える</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on August 16, 2023</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on August 17, 2023
+	</div>
+
+	
+
+	
+	<a title="All pages tagged 'emacs'." href="../tags/emacs.html" class="ui tag label">emacs</a>
+	
+      </div>
+
+    <div class="description">
+      <p>Emacs29.1から、LSPクライアントとしてEglotが標準搭載されるようになりま
+した。今迄は<a href="https://github.com/emacs-lsp/lsp-mode/">lsp-mode</a>を使っていたのですが、そもそもあまりきちんと使えて
+いなかったのでこの機に一旦eglotに移ってみようと思います。</p>
+<h1 id="前提">前提</h1>
+<ul>
+<li>筆者自身、普段そこまでLSPサーバーの機能を使用せずにコーディングしています</li>
+<li>複雑な設定等の移行の参考にはならない可能性があります</li>
+</ul>
+<h1 id="現在のlsp-modeの設定">現在のlsp-modeの設定</h1>
+<p>私はパッケージマネージャーとして<a href="https://github.com/conao3/leaf.el">conao3/leaf.el</a>を使用しているので、その設定を載せます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(leaf lsp-mode
+  :commands lsp
+  :ensure t
+  :hook
+  (sh-mode-hook . lsp)
+  (haskell-mode-hook . lsp)
+  (kotlin-mode-hook . lsp)
+  (c++-mode . lsp)
+  :custom
+  (lsp-keymap-prefix .  &quot;M-l&quot;)
+  :bind
+  (&quot;M-l&quot;. nil)
+  )
+</code></pre>
+</div>
+<p>割とシンプル。いくつかのmodeでlspコマンドを実行するのと、lspで用いる
+prefix keyを"M-l"にしているだけです。これをEglot用に写していきます。</p>
+<h1 id="lsp-modeの無効化">lsp-modeの無効化</h1>
+<p>lsp-modeを完全に消してしまってもいいのですが、一旦eglotの使い勝手を見
+るという意味でlsp-modeも無効にしつつ置いておくことにします。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(remove-hook 'sh-mode-hook 'lsp)
+(remove-hook 'sh-mode-hook lsp)
+(remove-hook 'haskell-mode-hook lsp)
+(remove-hook 'kotlin-mode-hook lsp)
+(remove-hook 'c++-mode lsp)
+</code></pre>
+</div>
+<h1 id="Eglotの設定">Eglotの設定</h1>
+<p>まずはhookを設定して…後は特にすることなし!!!…え???</p>
+<p>EglotはLSPクライアントとしての機能を提供するために、独自のコマンドでは
+なく「Emacsで良く使われている他のパッケージ」を用いるので、lsp-modeと
+同じキー配置にしたいのでなければキーマップの設定もほぼ要らないと思いま
+す。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(leaf eglot
+  :hook
+  (sh-mode-hook . eglot)
+  (haskell-mode-hook . eglot)
+  (kotlin-mode-hook . eglot)
+  (c++-mode . eglot)
+  )
+</code></pre>
+</div>
+<h1 id="lsp-modeのコマンドとの対応">lsp-modeのコマンドとの対応</h1>
+<p>正直に言うと私自身あまりきちんとlsp-modeを使っていないのですが、代替コ
+マンド(と思われる)の一覧を残しておきます。</p>
+<p>尚この表は<a href="https://emacs-lsp.github.io/lsp-mode/page/keybindings/">lsp-modeのkeybindingsドキュメント</a>で扱われているもののうち、
+外部パッケージとの連携を必要としないもののみに絞っています。</p>
+<table class="ui celled table">
+<thead>
+<tr class="header">
+<th>Description</th>
+<th>lsp-modeコマンド</th>
+<th>eglotコマンド</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Start server</td>
+<td>lsp</td>
+<td><code>eglot</code></td>
+</tr>
+<tr class="even">
+<td>Restart server</td>
+<td>lsp-workspace-restart</td>
+<td><code>eglot-reconnect</code></td>
+</tr>
+<tr class="odd">
+<td>Shutdown server</td>
+<td>lsp-workspace-shutdown</td>
+<td><code>eglot-shutdown</code></td>
+</tr>
+<tr class="even">
+<td>Describes current session</td>
+<td>lsp-describe-session</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Disconnect the buffer from the language server keeping the server
+running.</td>
+<td>lsp-disconnect</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>format this document.</td>
+<td>lsp-format-buffer</td>
+<td><code>eglot-format-buffer</code>, <code>eglot-format</code> with no
+region</td>
+</tr>
+<tr class="odd">
+<td>format the region, or if none is selected, the current line.</td>
+<td>lsp-format-region</td>
+<td><code>eglot-format</code></td>
+</tr>
+<tr class="even">
+<td>Add new project root to the list of workspace folders.</td>
+<td>lsp-workspace-folders-add</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Remove project root from the list of workspace folders.</td>
+<td>lsp-workspace-folders-remove</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Remove project root from the workspace blacklist.</td>
+<td>lsp-workspace-blacklist-remove</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Toggle code-lens overlays.</td>
+<td>lsp-lens-mode</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Toggle client-server protocol logging.</td>
+<td>lsp-toggle-trace-io</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Toggle symbol highlighting.</td>
+<td>lsp-toggle-symbol-highlight</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Toggle minor mode for showing information for current line in
+sideline. (requires <code class="verbatim">lsp-ui</code>)</td>
+<td>lsp-ui-sideline-mode</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Toggle minor mode for showing hover information in child frame.
+(requires <code class="verbatim">lsp-ui</code>)</td>
+<td>lsp-ui-doc-mode</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Toggle signature auto activate.</td>
+<td>nil</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Toggle on type formatting.</td>
+<td>nil</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Find definitions of the symbol under point.</td>
+<td>lsp-find-definition</td>
+<td><code>xref-find-definitions</code></td>
+</tr>
+<tr class="odd">
+<td>Find references of the symbol under point.</td>
+<td>lsp-find-references</td>
+<td><code>xref-find-references</code></td>
+</tr>
+<tr class="even">
+<td>Find implementations of the symbol under point.</td>
+<td>lsp-find-implementation</td>
+<td><code>xref-find-references</code>,
+<code>eglot-find-implementation</code></td>
+</tr>
+<tr class="odd">
+<td>Find type definitions of the symbol under point.</td>
+<td>lsp-find-type-definition</td>
+<td><code>xref-find-references</code>,
+<code>eglot-find-typeDefinition</code></td>
+</tr>
+<tr class="even">
+<td>Find declarations of the symbol under point.</td>
+<td>lsp-find-declaration</td>
+<td><code>xref-find-references</code>,
+<code>eglot-find-declaration</code></td>
+</tr>
+<tr class="odd">
+<td>Find all meaningful symbols that match pattern.</td>
+<td>xref-find-apropos</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Display the type signature and documentation of the thing at
+point.</td>
+<td>lsp-describe-thing-at-point</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Activate signature help.</td>
+<td>lsp-signature</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Trigger display hover information popup and hide it on next
+typing.</td>
+<td>lsp-ui-doc-glance</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Rename the symbol (and all references to it).</td>
+<td>lsp-rename</td>
+<td><code>eglot-rename</code></td>
+</tr>
+<tr class="even">
+<td>Perform the source.organizeImports code action, if available.</td>
+<td>lsp-organize-imports</td>
+<td><code>eglot-code-action-organize-imports</code></td>
+</tr>
+<tr class="odd">
+<td>Execute code action.</td>
+<td>lsp-execute-code-action</td>
+<td><code>eglot-code-actions</code></td>
+</tr>
+<tr class="even">
+<td>Highlight symbol at point.</td>
+<td>lsp-document-highlight</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Peek definitions to the identifier at point. (requires <code class="verbatim">lsp-ui</code>)</td>
+<td>lsp-ui-peek-find-definitions</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Peek references to the identifier at point. (requires <code class="verbatim">lsp-ui</code>)</td>
+<td>lsp-ui-peek-find-references</td>
+<td>-</td>
+</tr>
+<tr class="odd">
+<td>Peek implementation locations of the symbol at point. (requires
+<code class="verbatim">lsp-ui</code>)</td>
+<td>lsp-ui-peek-find-implementation</td>
+<td>-</td>
+</tr>
+<tr class="even">
+<td>Peek symbols in the workspace. (requires <code class="verbatim">lsp-ui</code>)</td>
+<td>lsp-ui-peek-find-workspace-symbol</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

@@ -123,7 +123,9 @@
       <p>ニッチですが、どちらも同じ効果がありそうだったので気になって調べてみたメモ。</p>
 <h1 id="結論: 恐らくほぼ違いはない">結論: 恐らくほぼ違いはない</h1>
 <p>実装を軽く見た感じ、処理上ではほぼ同じ扱いをしているように見えます。</p>
-<p><a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/ip/iptuntap.c#n176">iptuntap.c « ip - iproute2/iproute2.git - Iproute2 routing commands and utilities</a> の <code>parse_args</code> の実装が以下です</p>
+<p><a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/ip/iptuntap.c#n176">iptuntap.c
+« ip - iproute2/iproute2.git - Iproute2 routing commands and
+utilities</a> の <code>parse_args</code> の実装が以下です</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
@@ -146,7 +148,8 @@ c
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span></code></pre></div>
 </div>
 <h1 id="処理の追跡">処理の追跡</h1>
-<h2 id="ip tuntap add dev DEVNAME の処理"><code>ip tuntap add dev DEVNAME</code> の処理</h2>
+<h2 id="ip tuntap add dev DEVNAME の処理"><code>ip tuntap add dev DEVNAME</code>
+の処理</h2>
 <p>先程の部分から、実際に実行される動作は以下です。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -156,17 +159,31 @@ c
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>get_ifname<span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">,</span> <span class="op">*</span>argv<span class="op">))</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        invarg<span class="op">(</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">dev</span><span class="sc">\&quot;</span><span class="st"> not a valid ifname&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span></code></pre></div>
 </div>
-<p><code>NEXT_ARG</code> は、~argv~ の指す先をインクリメントして次の引数を示すように します。その際、必要な数引数がなかった場合はエラーを吐くようにしてある ようです。(<a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/include/utils.h#n51">実際のコード</a>)</p>
+<p><code>NEXT_ARG</code> は、~argv~
+の指す先をインクリメントして次の引数を示すように
+します。その際、必要な数引数がなかった場合はエラーを吐くようにしてある
+ようです。(<a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/include/utils.h#n51">実際のコード</a>)</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
 </div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define NEXT_ARG() do { argv++; if (--argc &lt;= 0) incomplete_command(); } while(0)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define NEXT_ARG</span><span class="op">()</span><span class="pp"> </span><span class="cf">do</span><span class="pp"> </span><span class="op">{</span><span class="pp"> argv</span><span class="op">++;</span><span class="pp"> </span><span class="cf">if</span><span class="pp"> </span><span class="op">(--</span><span class="pp">argc </span><span class="op">&lt;=</span><span class="pp"> </span><span class="dv">0</span><span class="op">)</span><span class="pp"> incomplete_command</span><span class="op">();</span><span class="pp"> </span><span class="op">}</span><span class="pp"> </span><span class="cf">while</span><span class="op">(</span><span class="dv">0</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p><code>invarg</code> はエラー処理用の関数で、入ったらエラーを出力してそのまま終了 するので(<a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n792">utils.c « lib - iproute2/iproute2.git - Iproute2 routing commands and utilities</a>) 今は特に考慮しなくて良いかと。</p>
-<p><code>get_ifname</code> は第二引数に与えられた文字列が有効なものかを確認し、有効 であれば第一引数に与えられたポインタに書き込みます(<a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n846">utils.c « lib - iproute2/iproute2.git - Iproute2 routing commands and utilities</a>)。</p>
-<p>なので、ここでやっていることとしては、argvが <code>DEVNAME</code> を指すようにし た状態で <code>get_ifname(ifr-&gt;ifr_name, \*argv)</code> を呼び出しています。</p>
-<h2 id="ip tuntap add name DEVNAME の処理"><code>ip tuntap add name DEVNAME</code> の処理</h2>
+<p><code>invarg</code>
+はエラー処理用の関数で、入ったらエラーを出力してそのまま終了 するので(<a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n792">utils.c
+« lib - iproute2/iproute2.git - Iproute2 routing commands and
+utilities</a>) 今は特に考慮しなくて良いかと。</p>
+<p><code>get_ifname</code>
+は第二引数に与えられた文字列が有効なものかを確認し、有効
+であれば第一引数に与えられたポインタに書き込みます(<a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n846">utils.c
+« lib - iproute2/iproute2.git - Iproute2 routing commands and
+utilities</a>)。</p>
+<p>なので、ここでやっていることとしては、argvが <code>DEVNAME</code>
+を指すようにし た状態で
+<code>get_ifname(ifr-&gt;ifr_name, \*argv)</code>
+を呼び出しています。</p>
+<h2 id="ip tuntap add name DEVNAME の処理"><code>ip tuntap add name DEVNAME</code>
+の処理</h2>
 <p>実際に動作する部分は以下(不要なelse文を除去してあります)</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -180,7 +197,10 @@ c
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>get_ifname<span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">,</span> <span class="op">*</span>argv<span class="op">))</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        invarg<span class="op">(</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">name</span><span class="sc">\&quot;</span><span class="st"> not a valid ifname&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span></code></pre></div>
 </div>
-<p><code>matches(*argv, "name") == 0</code> は真になるので <code>NEXT_ARG</code> は呼ばれます。 <code>duparg2</code> は<a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n806">引数の重複時等用のもエラー処理用の関数</a>なので、本筋とは外れ るので一旦置きます。そうすると、実質実行されるのは以下のようなコードと なります。</p>
+<p><code>matches(*argv, "name") == 0</code> は真になるので
+<code>NEXT_ARG</code> は呼ばれます。 <code>duparg2</code> は<a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n806">引数の重複時等用のもエラー処理用の関数</a>なので、本筋とは外れ
+るので一旦置きます。そうすると、実質実行されるのは以下のようなコードと
+なります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
@@ -189,10 +209,16 @@ c
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>get_ifname<span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">,</span> <span class="op">*</span>argv<span class="op">))</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        invarg<span class="op">(</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">name</span><span class="sc">\&quot;</span><span class="st"> not a valid ifname&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span></code></pre></div>
 </div>
-<p>これは、 <code>ip tuntap add dev DEVNAME</code> の処理と全く同じです…!!</p>
+<p>これは、 <code>ip tuntap add dev DEVNAME</code>
+の処理と全く同じです…!!</p>
 <h1 id="細かな違い">細かな違い</h1>
-<p>先程のエラー処理を考えると、 <code>dev</code> オプション(オプションなのか？)は複 数付けることが出来、最後に与えた値が有効な値となりそうです。他方、 <code>name</code> は複数与えることが出来ず、そうした場合はエラーを返します。</p>
-<p>又、devの後にnameを与えるとエラーになり、その逆(nameの後にdevを与える) とdevの値で上書きされるものと考えられます。</p>
+<p>先程のエラー処理を考えると、 <code>dev</code>
+オプション(オプションなのか？)は複
+数付けることが出来、最後に与えた値が有効な値となりそうです。他方、
+<code>name</code>
+は複数与えることが出来ず、そうした場合はエラーを返します。</p>
+<p>又、devの後にnameを与えるとエラーになり、その逆(nameの後にdevを与える)
+とdevの値で上書きされるものと考えられます。</p>
     </div>
   </div>
   

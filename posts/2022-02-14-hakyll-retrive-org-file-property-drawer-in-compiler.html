@@ -123,11 +123,14 @@
       <p>解決方法が知りたい場合 <span class="spurious-link" target="*解決方法"><em>*解決方法</em></span>まで飛ばして下さい。</p>
 <p>私のこのブログでも使っているので参考までに: <a href="https://github.com/Cj-bc/blog/tree/source">Cj-bc/blog</a></p>
 <ul>
-<li><strong>Hakyllの提供している <code>Metadata</code> は使わない</strong> よ</li>
-<li>Postを処理する <code>Rules</code> 内でpandocを用いて取り出し、 <code>saveSnapshot</code> するよ</li>
+<li><strong>Hakyllの提供している <code>Metadata</code>
+は使わない</strong> よ</li>
+<li>Postを処理する <code>Rules</code> 内でpandocを用いて取り出し、
+<code>saveSnapshot</code> するよ</li>
 </ul>
 <h1 id="Hakyllのメタデータとは">Hakyllのメタデータとは</h1>
-<p>Hakyllでは、作者やタイトル・タグ等のデータを "メタデータ"として特別なフォーマットを用いて扱います。</p>
+<p>Hakyllでは、作者やタイトル・タグ等のデータを
+"メタデータ"として特別なフォーマットを用いて扱います。</p>
 <p>デフォルトでは</p>
 <ul>
 <li>Yamlヘッダー形式</li>
@@ -143,35 +146,55 @@ html
 </div>
 <p>のようにして使用されることになります。</p>
 <h1 id="問題点">問題点</h1>
-<p>Orgファイル(他のファイル形式でも)では、元々メタデータ用の 構文を持っています。</p>
+<p>Orgファイル(他のファイル形式でも)では、元々メタデータ用の
+構文を持っています。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 org
 </div>
-<pre class="org SourceCode"><code>#+TITLE: タイトルのメタデータです
-</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode org SourceCode"><code class="sourceCode orgmode"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#+TITLE: タイトルのメタデータです</span></span></code></pre></div>
 </div>
 <p>とする形式(<strong>この記事では扱いません!!!</strong>)と</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 org
 </div>
-<pre class="org SourceCode"><code>* 見出し
-  :PROPERTIES:
-  :AUTHOR: Cj.bc-sd
-  :END:
-</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode org SourceCode"><code class="sourceCode orgmode"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">* 見出し</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  :PROPERTIES:</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  :AUTHOR: Cj.bc-sd</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  :END:</span></code></pre></div>
 </div>
 <p>とするプロパティを用いる形式の二つです。</p>
-<p>特にOrg文書はOrg-modeとの連携が大事になり、出来ることならそれ自体の 形式を使いたいわけです。</p>
-<p>しかし、残念ながら <strong>後から <code>Metadata</code> を更新する方法はなさそう</strong> です。 そのため、 上記の情報等を Org propertiesから読み込むことができません。</p>
+<p>特にOrg文書はOrg-modeとの連携が大事になり、出来ることならそれ自体の
+形式を使いたいわけです。</p>
+<p>しかし、残念ながら <strong>後から <code>Metadata</code>
+を更新する方法はなさそう</strong> です。 そのため、 上記の情報等を Org
+propertiesから読み込むことができません。</p>
 <h2 id="余談: 書き換えられない証拠">余談: 書き換えられない証拠</h2>
-<p><code>Metadata</code> を扱える型クラス <code>MonadMetadata</code> の<a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Compiler.Internal.html#line-207"> <code>Compiler</code> インスタンス</a>を見てみると、 <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Compiler.Internal.html#compilerGetMetadata"> <code>compilerGetMetadata</code> </a> &gt; <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.MetadataCache.html#resourceMetadata"> <code>resourceMetadata</code> </a> &gt; <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.MetadataCache.html#load"> <code>load</code> (<code>Compiler</code> の loadとは別)</a> &gt; <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.Metadata.html#loadMetadata"> <code>loadMetadata</code> </a> &gt; の中で、色々な関数において直接 ファイルを読み込んでパースしているのがわかります。</p>
+<p><code>Metadata</code> を扱える型クラス <code>MonadMetadata</code>
+の<a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Compiler.Internal.html#line-207">
+<code>Compiler</code> インスタンス</a>を見てみると、 <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Compiler.Internal.html#compilerGetMetadata">
+<code>compilerGetMetadata</code> </a> &gt; <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.MetadataCache.html#resourceMetadata">
+<code>resourceMetadata</code> </a> &gt; <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.MetadataCache.html#load">
+<code>load</code> (<code>Compiler</code> の loadとは別)</a> &gt; <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/src/Hakyll.Core.Provider.Metadata.html#loadMetadata">
+<code>loadMetadata</code> </a> &gt; の中で、色々な関数において直接
+ファイルを読み込んでパースしているのがわかります。</p>
 <h1 id="解決方法">解決方法</h1>
-<p>orgファイルを読み込む時にPandocのデータ型から取り出し、 <code>Snapshot</code> に仕舞っておくという手法を取ります。</p>
-<h2 id="1. 投稿の内容を Pandoc 型として取得する">1. 投稿の内容を <code>Pandoc</code> 型として取得する</h2>
-<p><a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:pandocCompiler"> <code>pandocCompiler</code> </a> を使うと <code>String</code> 型に変換されてしまいメタデータが消えるため、 <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:readPandoc"> <code>readPandoc</code> </a>若しくは<a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:readPandocWith"> <code>readPandocWith</code> </a>を使います。(オプションを変更したい場合は <code>readPandocWith</code> の方を使います。)</p>
-<p><a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Core-Compiler.html#v:getResourceBody"> <code>getResourceBody</code> </a>を用いることで、今処理しているファイルの中身が取れるのでそれを <code>readPandoc</code> に渡します。</p>
+<p>orgファイルを読み込む時にPandocのデータ型から取り出し、
+<code>Snapshot</code> に仕舞っておくという手法を取ります。</p>
+<h2 id="1. 投稿の内容を Pandoc 型として取得する">1. 投稿の内容を
+<code>Pandoc</code> 型として取得する</h2>
+<p><a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:pandocCompiler">
+<code>pandocCompiler</code> </a> を使うと <code>String</code>
+型に変換されてしまいメタデータが消えるため、 <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:readPandoc">
+<code>readPandoc</code> </a>若しくは<a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Pandoc.html#v:readPandocWith">
+<code>readPandocWith</code>
+</a>を使います。(オプションを変更したい場合は
+<code>readPandocWith</code> の方を使います。)</p>
+<p><a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Core-Compiler.html#v:getResourceBody">
+<code>getResourceBody</code>
+</a>を用いることで、今処理しているファイルの中身が取れるのでそれを
+<code>readPandoc</code> に渡します。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
@@ -182,9 +205,15 @@ haskell
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- ↓ここの行のこと</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  postPandoc <span class="ot">&lt;-</span> getResourceBody <span class="op">&gt;&gt;=</span> readPandoc</span></code></pre></div>
 </div>
-<h2 id="2. Pandoc からProperties drawerの情報を取り出す">2. <code>Pandoc</code> からProperties drawerの情報を取り出す</h2>
-<p>PROPERTIES drawerに入っている情報は、 該当のheadlineのAttributeとして保存されます。 <a href="https://hackage.haskell.org/package/pandoc-types-1.22.1/docs/Text-Pandoc-Definition.html#t:Pandoc"> <code>Pandoc</code> </a>の <code>Meta</code> <strong>ではない</strong> ので注意してください。</p>
-<p>Org文章でいうHeadlineは、Pandocでは<a href="https://hackage.haskell.org/package/pandoc-types-1.22.1/docs/Text-Pandoc-Definition.html#t:Block"> <code>Block</code> </a>の <code>Header</code> に あたります。この中の <code>Attr</code> にkey-value Pairとして格納されています。</p>
+<h2 id="2. Pandoc からProperties drawerの情報を取り出す">2.
+<code>Pandoc</code> からProperties drawerの情報を取り出す</h2>
+<p>PROPERTIES drawerに入っている情報は、
+該当のheadlineのAttributeとして保存されます。 <a href="https://hackage.haskell.org/package/pandoc-types-1.22.1/docs/Text-Pandoc-Definition.html#t:Pandoc">
+<code>Pandoc</code> </a>の <code>Meta</code> <strong>ではない</strong>
+ので注意してください。</p>
+<p>Org文章でいうHeadlineは、Pandocでは<a href="https://hackage.haskell.org/package/pandoc-types-1.22.1/docs/Text-Pandoc-Definition.html#t:Block">
+<code>Block</code> </a>の <code>Header</code> に あたります。この中の
+<code>Attr</code> にkey-value Pairとして格納されています。</p>
 <p>以下は実装からの引用(一部抜粋):</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -199,8 +228,11 @@ haskell
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>   <span class="co">-- | Attributes: identifier, classes, key-value pairs</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>   <span class="kw">type</span> <span class="dt">Attr</span> <span class="ot">=</span> (<span class="dt">Text</span>, [<span class="dt">Text</span>], [(<span class="dt">Text</span>, <span class="dt">Text</span>)])</span></code></pre></div>
 </div>
-<p>具体的には、先程の <code>postPandoc</code> の中身を調べていくことになります。</p>
-<p>私は、各投稿の最初には必ずLevel1のheadlineが来るようにしているので Level1の <code>Header</code> が来ることを期待して取り出す処理をかきます。</p>
+<p>具体的には、先程の <code>postPandoc</code>
+の中身を調べていくことになります。</p>
+<p>私は、各投稿の最初には必ずLevel1のheadlineが来るようにしているので
+Level1の <code>Header</code>
+が来ることを期待して取り出す処理をかきます。</p>
 <p>様々な状況に対応させたい場合、ここはもう少し丁寧にやった方が良いと思います。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -215,7 +247,11 @@ haskell
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>       _ <span class="ot">-&gt;</span> [] </span></code></pre></div>
 </div>
 <h2 id="3. お目当ての情報を取り出す">3. お目当ての情報を取り出す</h2>
-<p>先程作った <code>properties</code> 変数(<code>properties :: [(Text, Text)]</code>)は <code>(プロパティ名, プロパティの値)</code> という構造になっているので、 必要なプロパティを取り出します。 今回は例として、 <code>AUTHOR</code> を取り出すことにします。</p>
+<p>先程作った <code>properties</code>
+変数(<code>properties :: [(Text, Text)]</code>)は
+<code>(プロパティ名, プロパティの値)</code> という構造になっているので、
+必要なプロパティを取り出します。 今回は例として、 <code>AUTHOR</code>
+を取り出すことにします。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
@@ -230,7 +266,9 @@ haskell
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>authorProperty <span class="ot">=</span> fromMaybe <span class="st">&quot;著者不明&quot;</span> <span class="op">$</span> <span class="fu">lookup</span> <span class="st">&quot;AUTHOR&quot;</span> properties</span></code></pre></div>
 </div>
 <h2 id="4. Snapshotに仕舞っておく">4. Snapshotに仕舞っておく</h2>
-<p><code>Snapshot</code> に仕舞っておくことで、 後に他の <code>Compiler</code> や <code>Context</code> の中から使用することができます。</p>
+<p><code>Snapshot</code> に仕舞っておくことで、 後に他の
+<code>Compiler</code> や <code>Context</code>
+の中から使用することができます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
@@ -246,7 +284,8 @@ haskell
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>   saveSnapshot <span class="st">&quot;title&quot;</span> <span class="op">=&lt;&lt;</span> makeItem authorProperty</span></code></pre></div>
 </div>
-<h2 id="5. 他の場所から使う(別の Compiler 編)">5. 他の場所から使う(別の <code>Compiler</code> 編)</h2>
+<h2 id="5. 他の場所から使う(別の Compiler 編)">5. 他の場所から使う(別の
+<code>Compiler</code> 編)</h2>
 <p>上記のステップの後、別のCompilerモナドからtitleプロパティの値を使うことができるようになりました。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -254,9 +293,14 @@ haskell
 </div>
 <div class="sourceCode" id="cb9"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>loadSnapshotBody <span class="st">&quot;&quot;</span> <span class="st">&quot;title&quot;</span></span></code></pre></div>
 </div>
-<h2 id="6. 他の場所から使う(Context 編)">6. 他の場所から使う(<code>Context</code> 編)</h2>
-<p>実はこれが一番やりたかったことでした。 Contextの中から <code>loadSnapshotBody</code> で読み込むことで <code>Identifier</code> 毎に違う値を取り出すことができるため、 <code>listField</code> を使う際に各要素毎に違う値を持たせることができます。</p>
-<p>そのためには <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Template-Context.html#v:field"> <code>field</code> </a>関数を直接使います。</p>
+<h2 id="6. 他の場所から使う(Context 編)">6.
+他の場所から使う(<code>Context</code> 編)</h2>
+<p>実はこれが一番やりたかったことでした。 Contextの中から
+<code>loadSnapshotBody</code> で読み込むことで <code>Identifier</code>
+毎に違う値を取り出すことができるため、 <code>listField</code>
+を使う際に各要素毎に違う値を持たせることができます。</p>
+<p>そのためには <a href="https://hackage.haskell.org/package/hakyll-4.15.1.1/docs/Hakyll-Web-Template-Context.html#v:field">
+<code>field</code> </a>関数を直接使います。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
@@ -275,16 +319,21 @@ haskell
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>postListCtx posts <span class="ot">=</span> listField <span class="st">&quot;posts&quot;</span> (titleField' <span class="st">&quot;title&quot;</span> <span class="op">&lt;&gt;</span> postCtx) (<span class="fu">return</span> posts)</span></code></pre></div>
 </div>
 <h1 id="参考情報">参考情報</h1>
-<p>実は、メタデータの収集元については他にも困っている人がそれなりに いるようで、Githubにissueがいくつか立っています。</p>
+<p>実は、メタデータの収集元については他にも困っている人がそれなりに
+いるようで、Githubにissueがいくつか立っています。</p>
 <dl>
 <dt><a href="https://github.com/jaspervdj/hakyll/issues/529">#529</a></dt>
-<dd>メタデータのパーサーを指定できるようにしたいよというissue
+<dd>
+メタデータのパーサーを指定できるようにしたいよというissue
 </dd>
 <dt><a href="https://github.com/jaspervdj/hakyll/issues/700">#700</a></dt>
-<dd><code>#+TITLE</code> 形式のメタデータを読み込む方法についての議論issue (walkaroundあり)
+<dd>
+<code>#+TITLE</code> 形式のメタデータを読み込む方法についての議論issue
+(walkaroundあり)
 </dd>
 <dt><a href="https://github.com/jaspervdj/hakyll/issues/643">#643</a></dt>
-<dd>Pandocがメタデータとしてパースした情報を使えるようにしたいというissue
+<dd>
+Pandocがメタデータとしてパースした情報を使えるようにしたいというissue
 </dd>
 </dl>
     </div>

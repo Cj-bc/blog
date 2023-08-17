@@ -121,12 +121,26 @@
 
     <div class="description">
       <h1 id="解決したい問題">解決したい問題</h1>
-<p>picomをX11コンポジッターとして使っており、 <code>inactivate-dim</code> を 使用している際、maimで部分のみのスクショを撮ろうとすると以下の ように変に暗くなってしまう。</p>
+<p>picomをX11コンポジッターとして使っており、
+<code>inactivate-dim</code> を
+使用している際、maimで部分のみのスクショを撮ろうとすると以下の
+ように変に暗くなってしまう。</p>
 <p><img src="file:///images/dimmed-maim.png" class="ui rounded image" /></p>
 <p>これは本来もうちょっと明るい色であるべきなのだ。</p>
-<h1 id="解決策: slop に対してpicomのルールを設定する">解決策: <code>slop</code> に対してpicomのルールを設定する</h1>
-<p>[[<a href="https://www.linux.org/threads/solved-picom-blurs-maim.29586/">https://www.linux.org/threads/solved-picom-blurs-maim.29586/</a>][[solved] picom blurs maim! | Linux.org]] を見ればわかるのだけれど、 どうやらmaim内部では <code>slop</code> というコマンドを用いて画面領域の選択 をしているらしい。そして、slopは画面領域の選択をする際に透明な ウィンドウで画面全体を覆っており、それ故に他のウィンドウがinactive と判定されているようなのだ。なので、そいつを <code>inactive-dim</code> の 対象から外してやればいいということだ。</p>
-<p><code>inactive-dim</code> の影響を受けないようにするには、 <code>focus-exclude</code> に 設定を入れればいい。例えば、今回の場合は以下の内容を <code>\~/.config/picom.conf</code> に保存すればいい。</p>
+<h1 id="解決策: slop に対してpicomのルールを設定する">解決策:
+<code>slop</code> に対してpicomのルールを設定する</h1>
+<p>[[<a href="https://www.linux.org/threads/solved-picom-blurs-maim.29586/">https://www.linux.org/threads/solved-picom-blurs-maim.29586/</a>][[solved]
+picom blurs maim! | Linux.org]] を見ればわかるのだけれど、
+どうやらmaim内部では <code>slop</code>
+というコマンドを用いて画面領域の選択
+をしているらしい。そして、slopは画面領域の選択をする際に透明な
+ウィンドウで画面全体を覆っており、それ故に他のウィンドウがinactive
+と判定されているようなのだ。なので、そいつを <code>inactive-dim</code>
+の 対象から外してやればいいということだ。</p>
+<p><code>inactive-dim</code> の影響を受けないようにするには、
+<code>focus-exclude</code> に
+設定を入れればいい。例えば、今回の場合は以下の内容を
+<code>\~/.config/picom.conf</code> に保存すればいい。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 picom

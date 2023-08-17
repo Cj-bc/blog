@@ -120,13 +120,17 @@
       </div>
 
     <div class="description">
-      <p>一応 <a href="https://hackage.haskell.org/package/gi-gtk-4.0.4">haskellのgi-gtkバインディング</a>を使えるようになることが最終目標だが、 まずはCでのサンプルを実装してみている</p>
+      <p>一応 <a href="https://hackage.haskell.org/package/gi-gtk-4.0.4">haskellのgi-gtkバインディング</a>を使えるようになることが最終目標だが、
+まずはCでのサンプルを実装してみている</p>
 <h1 id="基本的な仕組み">基本的な仕組み</h1>
 <ul>
-<li>基本的には <code>GtkWidget</code> を <code>Container</code> に入れてゆく</li>
+<li>基本的には <code>GtkWidget</code> を <code>Container</code>
+に入れてゆく</li>
 <li><code>signal</code> にたいしてコールバック関数を与えてやる。</li>
-<li>トップレベルは <code>GtkApplication</code> で、その中に <code>GtkWindow</code> を入れる。</li>
-<li><code>gpointer</code> は <code>*void</code> と同値。なので何でも入れられる</li>
+<li>トップレベルは <code>GtkApplication</code> で、その中に
+<code>GtkWindow</code> を入れる。</li>
+<li><code>gpointer</code> は <code>*void</code>
+と同値。なので何でも入れられる</li>
 </ul>
     </div>
   </div>

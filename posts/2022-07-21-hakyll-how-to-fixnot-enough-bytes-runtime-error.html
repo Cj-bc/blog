@@ -120,7 +120,8 @@
       </div>
 
     <div class="description">
-      <p><a href="https://github.com/Cj-bc/blog">私のHakyll製のこのブログ</a>のコードをいじっていたとき、コンパイルは問題なかったが 実行時に以下のような例外を吐いた。</p>
+      <p><a href="https://github.com/Cj-bc/blog">私のHakyll製のこのブログ</a>のコードをいじっていたとき、コンパイルは問題なかったが
+実行時に以下のような例外を吐いた。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
@@ -129,8 +130,14 @@ bash
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">CallStack</span> <span class="er">(</span><span class="ex">from</span> HasCallStack<span class="kw">)</span><span class="bu">:</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">error,</span> called at libraries/binary/src/Data/Binary/Get.hs:351:5 in binary-0.8.8.0:Data.Binary.Get</span></code></pre></div>
 </div>
-<p>これは、どこかで <code>Snapshot</code> に入れた値が <code>Binary</code> のインスタンスを持たない型であった 可能性がある。</p>
-<p>一番気をつけるべき(と個人的に思う)のは、 <strong>そのうちの一つが <code>Text</code> 型であること</strong> だ。 <code>Text</code> は実は <code>Binary</code> のインスタンスを持たない (持ってそうなのに)。 <a href="https://hackage.haskell.org/package/text-2.0/docs/Data-Text.html#t:Text">hackage</a>を確認すれば 明白だろう。 なので、 <strong>Snapshotに入れる際は必ず <code>unpack</code> してあげる必要がある</strong> 。</p>
+<p>これは、どこかで <code>Snapshot</code> に入れた値が
+<code>Binary</code> のインスタンスを持たない型であった
+可能性がある。</p>
+<p>一番気をつけるべき(と個人的に思う)のは、 <strong>そのうちの一つが
+<code>Text</code> 型であること</strong> だ。 <code>Text</code> は実は
+<code>Binary</code> のインスタンスを持たない (持ってそうなのに)。 <a href="https://hackage.haskell.org/package/text-2.0/docs/Data-Text.html#t:Text">hackage</a>を確認すれば
+明白だろう。 なので、 <strong>Snapshotに入れる際は必ず
+<code>unpack</code> してあげる必要がある</strong> 。</p>
     </div>
   </div>
   

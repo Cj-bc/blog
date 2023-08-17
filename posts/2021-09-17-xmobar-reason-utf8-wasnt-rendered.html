@@ -122,11 +122,16 @@
     <div class="description">
       <div class="ui piled segment" style="z-index: 0">
 <blockquote>
-<p><code>LANG</code> の設定を確認して。 <code>bashrc</code> 等で設定していても、xmonadから呼び出される場合は それらは反映されない。</p>
+<p><code>LANG</code> の設定を確認して。 <code>bashrc</code>
+等で設定していても、xmonadから呼び出される場合は
+それらは反映されない。</p>
 <p>xmobarを呼び出している場所でそのまま設定できる 詳しい方法は以下</p>
 </blockquote>
 </div>
-<p>xmobarは、ビルド時のフラグ <code>with_utf8</code> を付けることで UTF-8文字列を扱えるようになる。 そしてこのフラグはデフォルトで <code>True</code> (=有効)なので、特に 何もしなくても使えるはずだった。</p>
+<p>xmobarは、ビルド時のフラグ <code>with_utf8</code> を付けることで
+UTF-8文字列を扱えるようになる。 そしてこのフラグはデフォルトで
+<code>True</code> (=有効)なので、特に
+何もしなくても使えるはずだった。</p>
 <p>が、上手くいかなかった。</p>
 <h1 id="試したが上手くいかなかったこと">試したが上手くいかなかったこと</h1>
 <ul>
@@ -140,23 +145,33 @@
 </ul></li>
 </ul>
 <h1 id="判明した原因">判明した原因</h1>
-<p>bashからではなくxmonadから起動していた影響で 環境変数が伝搬されておらず、 <code>LANG=ja_JP.UTF-8</code> でない環境で 実行されていた。</p>
-<p>証拠に、ターミナルから <code class="sourceCode bash" data-org-language="sh"><span class="va">LANG</span><span class="op">=</span>C <span class="ex">xmobar</span></code> と実行してみると 日本語が表示できなくなった。</p>
+<p>bashからではなくxmonadから起動していた影響で
+環境変数が伝搬されておらず、 <code>LANG=ja_JP.UTF-8</code> でない環境で
+実行されていた。</p>
+<p>証拠に、ターミナルから <code class="sourceCode bash" data-org-language="sh"><span class="va">LANG</span><span class="op">=</span>C <span class="ex">xmobar</span></code>
+と実行してみると 日本語が表示できなくなった。</p>
 <h1 id="解決策">解決策</h1>
 <h2 id="XMonad.Hooks.DynamicLogを使用している場合"><a href="https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Hooks-DynamicLog.html">XMonad.Hooks.DynamicLog</a>を使用している場合</h2>
 <p>多分大半がこちらなのではないか…??</p>
-<p>とは思うんだけど時間がない&amp;&amp;私やってないので割愛、 <a href="https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/src/XMonad.Hooks.DynamicLog.html#xmobar">xmobar</a>関数の定義を少し弄ってあげた以下のような関数を作れば動くはず。 理由は [[* <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html">XMonad.Hooks.StatusBar</a> を使用している場合]] を参照。</p>
+<p>とは思うんだけど時間がない&amp;&amp;私やってないので割愛、 <a href="https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/src/XMonad.Hooks.DynamicLog.html#xmobar">xmobar</a>関数の定義を少し弄ってあげた以下のような関数を作れば動くはず。
+理由は [[* <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html">XMonad.Hooks.StatusBar</a>
+を使用している場合]] を参照。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
 </div>
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>xmobar' conf <span class="ot">=</span> statusbar <span class="st">&quot;LANG=ja_JP.UTF-8 xmobar&quot;</span> xmobarPP toggleStructsKey conf</span></code></pre></div>
 </div>
-<h2 id="XMonad.Hooks.StatusBar を使用している場合"><a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html">XMonad.Hooks.StatusBar</a> を使用している場合</h2>
-<p>実はこちらの方が新しいらしく、もう <a href="https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Hooks-DynamicLog.html">DynamicLog</a> は推奨されていないのだそうだ。</p>
+<h2 id="XMonad.Hooks.StatusBar を使用している場合"><a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html">XMonad.Hooks.StatusBar</a>
+を使用している場合</h2>
+<p>実はこちらの方が新しいらしく、もう <a href="https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Hooks-DynamicLog.html">DynamicLog</a>
+は推奨されていないのだそうだ。</p>
 <p><strong>知るか!!!!!</strong></p>
-<p>と怒鳴ってもしかたないのだけど怒鳴られても仕方ない事情もある。 (それはそれで別で書こう。 )</p>
-<p>さて。 <code>StatusBar</code> を使用している場合、 <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#t:StatusBarConfig">StatusBarConfig</a> 型の 値を使っているはず。 今はみんなここで <code class="sourceCode haskell">statusBarProp <span class="st">&quot;xmobar&quot;</span> (<span class="fu">pure</span> xmobarPP)</code> とかしているのではないだろうか。</p>
+<p>と怒鳴ってもしかたないのだけど怒鳴られても仕方ない事情もある。
+(それはそれで別で書こう。 )</p>
+<p>さて。 <code>StatusBar</code> を使用している場合、 <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#t:StatusBarConfig">StatusBarConfig</a>
+型の 値を使っているはず。 今はみんなここで <code class="sourceCode haskell">statusBarProp <span class="st">&quot;xmobar&quot;</span> (<span class="fu">pure</span> xmobarPP)</code>
+とかしているのではないだろうか。</p>
 <p>ここを以下のように書き換えればよい:</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -164,14 +179,28 @@ haskell
 </div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>statusBarProp <span class="st">&quot;LANG=ja_JP.UTF-8 xmobar&quot;</span> (<span class="fu">pure</span> xmobarPP)</span></code></pre></div>
 </div>
-<p>そう、 <em>先頭に <code>LANG=ja_JP.UTF-8</code> を付け加えるだけ</em> である。 かんたん!!</p>
+<p>そう、 <em>先頭に <code>LANG=ja_JP.UTF-8</code> を付け加えるだけ</em>
+である。 かんたん!!</p>
 <ol>
 <li><p>仕組み</p>
-<p>実は <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#v:statusBarProp">statusBarProp</a> の中を見てみても分かりづらいのだが、 <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#t:StatusBarConfig">StatusBarConfig</a> から読み解くとわかる。</p>
-<p><code>StatusBarConfig</code> では、 <code>sbStartUpHook</code> を使って 「ステータスバーを起動する <code>X ()</code> アクション」を定義している。</p>
-<p><code>statusBarProp</code> 関数にて引数に取った文字列 ( <code>LANG=ja_JP.UTF-8 xmobar</code> なり <code>xmobar</code> なり)は <code>statusBarProp</code> → <code>statusBarPropTo</code> → <code>statusBarGeneric</code> → <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#v:spawnStatusBar">spawnStatusBar</a> とそのまま受け渡されていき、</p>
-<p>そこから<a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-Core.html#v:spawnPID">spawnPID</a>へと渡される。 そしてこの中では <a href="https://hackage.haskell.org/package/unix-2.7.2.2/docs/System-Posix-Process.html#v:executeFile">executeFile</a> に <strong>なんと <code>/bin/sh -c</code> の引数として</strong> 渡され、最終的に <code>execv</code> システムコールによって実行される。</p>
-<p>ここが大事で、 <em>shの上で実行される</em> ことによって環境変数を その場で設定したりといったシェルの機能を使うことができる。</p></li>
+<p>実は <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#v:statusBarProp">statusBarProp</a>
+の中を見てみても分かりづらいのだが、 <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#t:StatusBarConfig">StatusBarConfig</a>
+から読み解くとわかる。</p>
+<p><code>StatusBarConfig</code> では、 <code>sbStartUpHook</code>
+を使って 「ステータスバーを起動する <code>X ()</code>
+アクション」を定義している。</p>
+<p><code>statusBarProp</code> 関数にて引数に取った文字列 (
+<code>LANG=ja_JP.UTF-8 xmobar</code> なり <code>xmobar</code> なり)は
+<code>statusBarProp</code> → <code>statusBarPropTo</code> →
+<code>statusBarGeneric</code> → <a href="https://xmonad.github.io/xmonad-docs/xmonad-contrib-0.16.999/XMonad-Hooks-StatusBar.html#v:spawnStatusBar">spawnStatusBar</a>
+とそのまま受け渡されていき、</p>
+<p>そこから<a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-Core.html#v:spawnPID">spawnPID</a>へと渡される。
+そしてこの中では <a href="https://hackage.haskell.org/package/unix-2.7.2.2/docs/System-Posix-Process.html#v:executeFile">executeFile</a>
+に <strong>なんと <code>/bin/sh -c</code> の引数として</strong>
+渡され、最終的に <code>execv</code>
+システムコールによって実行される。</p>
+<p>ここが大事で、 <em>shの上で実行される</em> ことによって環境変数を
+その場で設定したりといったシェルの機能を使うことができる。</p></li>
 </ol>
     </div>
   </div>

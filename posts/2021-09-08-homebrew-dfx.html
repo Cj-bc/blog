@@ -120,8 +120,10 @@
       </div>
 
     <div class="description">
-      <p>Dfinity SDKは標準のインストーラーが付属するが、 これをHomebrew管理したかったのでラッパーとなるように<a href="https://github.com/Cj-bc/homebrew-dfx">Formula</a>を書いた。</p>
-<p>尚これは非公式なものであること・あまりHomebrewのformulaeとしては お行儀良くないことは留意していただきたい。</p>
+      <p>Dfinity SDKは標準のインストーラーが付属するが、
+これをHomebrew管理したかったのでラッパーとなるように<a href="https://github.com/Cj-bc/homebrew-dfx">Formula</a>を書いた。</p>
+<p>尚これは非公式なものであること・あまりHomebrewのformulaeとしては
+お行儀良くないことは留意していただきたい。</p>
 <h1 id="使い方">使い方</h1>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -141,15 +143,19 @@ ruby
 </div>
 <h2 id="ビルド中の一時ディレクトリにファイルを保存する">ビルド中の一時ディレクトリにファイルを保存する</h2>
 <p><a href="https://docs.brew.sh/Formula-Cookbook#variables-for-directory-locations">https://docs.brew.sh/Formula-Cookbook#variables-for-directory-locations</a></p>
-<p><code>#{hoge}</code> はRubyの記法で、文字列の中に変数を埋め込むことができる。</p>
+<p><code>#{hoge}</code>
+はRubyの記法で、文字列の中に変数を埋め込むことができる。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 ruby
 </div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">system</span> <span class="st">&quot;curl -fsSL https://sdk.dfinity.org/install.sh &gt; </span><span class="sc">#{</span>buildpath<span class="sc">}</span><span class="st">/install.sh&quot;</span></span></code></pre></div>
 </div>
-<h2 id="system 等で実行したいプログラムの標準入出力を操作する"><code>system</code> 等で実行したいプログラムの標準入出力を操作する</h2>
-<p><a href="https://rubydoc.brew.sh/Formula.html">brewのrubydocのFormula.test</a>の部分に書かれているのだが、どうやら <code>open3</code> という ライブラリを使えるらしい。(筆者のRuby歴はHomebrew formulaeを除けば0)</p>
+<h2 id="system 等で実行したいプログラムの標準入出力を操作する"><code>system</code>
+等で実行したいプログラムの標準入出力を操作する</h2>
+<p><a href="https://rubydoc.brew.sh/Formula.html">brewのrubydocのFormula.test</a>の部分に書かれているのだが、どうやら
+<code>open3</code> という
+ライブラリを使えるらしい。(筆者のRuby歴はHomebrew formulaeを除けば0)</p>
 <p>ということでその例を拝借して書き換えてみると:</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -162,18 +168,26 @@ ruby
 </div>
 <ol>
 <li><p>ユーザーの入力を受け付けてそれをプログラムに渡す</p>
-<p>今回の公式のインストールスクリプトは、ライセンスへの同意をキー入力で答える必要があります。 これのためには、homebrew側で受け取ったキー入力をスクリプトに渡してあげる必要があります。</p>
-<p><code>stdin</code> を先程の <code>Open3.popen3</code> で設定した変数だとすると、以下のようにすることで 入力のバイパスが出来ました。</p>
+<p>今回の公式のインストールスクリプトは、ライセンスへの同意をキー入力で答える必要があります。
+これのためには、homebrew側で受け取ったキー入力をスクリプトに渡してあげる必要があります。</p>
+<p><code>stdin</code> を先程の <code>Open3.popen3</code>
+で設定した変数だとすると、以下のようにすることで
+入力のバイパスが出来ました。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 ruby
 </div>
 <div class="sourceCode" id="cb5"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>stdin <span class="kw">&lt;&lt;</span> <span class="va">$stdin</span><span class="at">.gets</span></span></code></pre></div>
 </div>
-<p>Rubyにおいて、 <code>$変数名</code> は「グローバル変数」を指します。 なので、グローバルにhomebrewが扱っている標準入力を <code>$stdin</code> として参照しています。</p></li>
+<p>Rubyにおいて、 <code>$変数名</code> は「グローバル変数」を指します。
+なので、グローバルにhomebrewが扱っている標準入力を <code>$stdin</code>
+として参照しています。</p></li>
 <li><p>スレッドを待機させる必要がありそう</p>
-<p>単純に <code>Open3.popen3</code> を使った場合、その処理を行っているスレッドは別スレッドとして非同期的に処理がされるようです。 なので、このままだとそちらの処理が終わる前にプログラムが進んでしまいます。</p>
-<p>他の言語での <code>await</code> のような機能として、 <code>&lt;thread&gt;.join</code> を使います。</p>
+<p>単純に <code>Open3.popen3</code>
+を使った場合、その処理を行っているスレッドは別スレッドとして非同期的に処理がされるようです。
+なので、このままだとそちらの処理が終わる前にプログラムが進んでしまいます。</p>
+<p>他の言語での <code>await</code> のような機能として、
+<code>&lt;thread&gt;.join</code> を使います。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 ruby
@@ -183,7 +197,8 @@ ruby
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>t<span class="at">.join</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>     <span class="cf">end</span>  </span></code></pre></div>
 </div>
-<p>とすることで、 <code>sh -i install.sh</code> が終了するまで待つことができます。</p></li>
+<p>とすることで、 <code>sh -i install.sh</code>
+が終了するまで待つことができます。</p></li>
 </ol>
 <h2 id="文字列にある文字列が含まれるかを確認する">文字列にある文字列が含まれるかを確認する</h2>
 <div class="ui segment">
@@ -192,7 +207,8 @@ ruby
 </div>
 <div class="sourceCode" id="cb7"><pre class="sourceCode ruby SourceCode"><code class="sourceCode ruby"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">String</span><span class="co">#match?(/&lt;Regex&gt;/)</span></span></code></pre></div>
 </div>
-<p>を使うことで、正規表現 <code>&lt;Regex&gt;</code> がマッチしたなら <code>true</code>, しなかったら <code>false</code> を返してくれる。</p>
+<p>を使うことで、正規表現 <code>&lt;Regex&gt;</code> がマッチしたなら
+<code>true</code>, しなかったら <code>false</code> を返してくれる。</p>
     </div>
   </div>
   

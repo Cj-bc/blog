@@ -121,7 +121,9 @@
 
     <div class="description">
       <h1 id="やりたいこと">やりたいこと</h1>
-<p>Org modeで「現在時刻を即時入力したい」時、インタラクティブな編集ではhelp:org-time-stamp-inactive を Prefix Argument 2つで呼び出すことで実現出来ます。</p>
+<p>Org
+modeで「現在時刻を即時入力したい」時、インタラクティブな編集ではhelp:org-time-stamp-inactive
+を Prefix Argument 2つで呼び出すことで実現出来ます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -132,7 +134,8 @@ elisp
 </div>
 <p>で、これをElispからも行いたいというのが今回の目的です。</p>
 <h1 id="結論">結論</h1>
-<p>Prefix Argumentの代わりに <code>'(4)</code> のような <code>raw prefix argument</code> を指定します。 冒頭の回答は以下:</p>
+<p>Prefix Argumentの代わりに <code>'(4)</code> のような
+<code>raw prefix argument</code> を指定します。 冒頭の回答は以下:</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -140,12 +143,18 @@ elisp
 <pre class="elisp SourceCode"><code>(org-time-stamp-inactive '(16))
 </code></pre>
 </div>
-<p>詳しくは<a href="info:elisp#Prefix Command Arguments">elisp#Prefix Command Arguments</a>を参照して下さい。</p>
+<p>詳しくは<a href="info:elisp#Prefix Command Arguments">elisp#Prefix
+Command Arguments</a>を参照して下さい。</p>
 <h2 id="Raw Prefix Argumentとは？">Raw Prefix Argumentとは？</h2>
-<p>Prefix Argumentsには2種類の表現方法(representation)があり、その一つが "Raw" です。ちなみにもう一つは"numeric"。内部的にはこの "raw prefix argument" とし て使っていますが、コマンドからはどちらの表現でも用いることが出来ます。実際に Interactiveなコマンドが動作する際には、 <code>(interactive)</code> の引数に応じて"raw" 若しくは"numeric"な値が最初の引数として与えられるようです。</p>
+<p>Prefix Argumentsには2種類の表現方法(representation)があり、その一つが
+"Raw" です。ちなみにもう一つは"numeric"。内部的にはこの "raw prefix
+argument" とし
+て使っていますが、コマンドからはどちらの表現でも用いることが出来ます。実際に
+Interactiveなコマンドが動作する際には、 <code>(interactive)</code>
+の引数に応じて"raw"
+若しくは"numeric"な値が最初の引数として与えられるようです。</p>
 <p>Raw prefix argumentは、その与え方によって値が変化します。</p>
-<div id="Prefix argumentの指定方法とRaw prefix argumentの値">
-<table class="ui celled table">
+<table id="Prefix argumentの指定方法とRaw prefix argumentの値" class="ui celled table">
 <thead>
 <tr class="header">
 <th>Prefix argument</th>
@@ -183,10 +192,14 @@ elisp
 </tr>
 </tbody>
 </table>
-</div>
-<p>数字なしで <code>C-u</code> が呼ばれる際は、リストとして渡されるようです。複数の <code>C-u</code> が与えられた場合は、4倍ずつされていくようです。</p>
+<p>数字なしで <code>C-u</code>
+が呼ばれる際は、リストとして渡されるようです。複数の <code>C-u</code>
+が与えられた場合は、4倍ずつされていくようです。</p>
 <h1 id="出来そうで上手くいかなかったもの">出来そうで上手くいかなかったもの</h1>
-<p>help:universal-argument, help:digit-argument, help:negative-argument みたいなものは存在するがどうやって使うのか？がわかりません…oh… どうやら <code>C-u</code> 等にバインドされているらしいので、Elispから使う用では ないみたい？</p>
+<p>help:universal-argument, help:digit-argument, help:negative-argument
+みたいなものは存在するがどうやって使うのか？がわかりません…oh… どうやら
+<code>C-u</code> 等にバインドされているらしいので、Elispから使う用では
+ないみたい？</p>
     </div>
   </div>
   

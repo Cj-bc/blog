@@ -130,13 +130,16 @@
 <blockquote>
 <p>The following SSH key was added to your account:</p>
 <p>&lt;:区切りの二文字の英数字が並んでいる文字列(<code class="verbatim">\([[:alnum:]]{2}:\)\+</code>)(正規表現は自信ない)&gt;</p>
-<p>If you believe this key was added in error, you can remove the key and disable access at the following location:</p>
+<p>If you believe this key was added in error, you can remove the key
+and disable access at the following location:</p>
 <p><a href="https://github.com/settings/keys">https://github.com/settings/keys</a></p>
 </blockquote>
 </div>
 <p>これは、昔確かに自分で追加したはずのSSH鍵なので問題はないはず…ですが念のため確認してみます</p>
 <h1 id="確認する">確認する</h1>
-<p>私はgpgキーを使ってssh認証をしているため、gpgキーの情報を確認すれば良いはずです。 が、 <code>xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx</code> なんて文字列を見つけることができない。IPv6でしかみたことないぞ。<br />
+<p>私はgpgキーを使ってssh認証をしているため、gpgキーの情報を確認すれば良いはずです。
+が、 <code>xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx</code>
+なんて文字列を見つけることができない。IPv6でしかみたことないぞ。<br />
 …そんなことなかったです。 <strong>md5のハッシュでした</strong></p>
 <h2 id="自分の鍵のmd5ハッシュを確認する">自分の鍵のmd5ハッシュを確認する</h2>
 <div class="ui segment">
@@ -151,8 +154,11 @@ bash
 </div>
 <p>これが一致すれば大丈夫</p>
 <h2 id="githubの設定画面から確認する">Githubの設定画面から確認する</h2>
-<p><a href="https://github.com/settings/keys">githubの設定画面のここ</a>で鍵の一覧を見ることができます。 その中の <em>New SSH keys</em> に該当の名前の鍵があるはずです。</p>
-<p>そこの鍵名の下に書いてある <code>SHA256: ...</code> が確認するべき値です。 この値について、「GPG fingerprintとも合わん！」 「GPG keyidとも合わん！！」「何だこいつ！！！」と暴れていましたが<br />
+<p><a href="https://github.com/settings/keys">githubの設定画面のここ</a>で鍵の一覧を見ることができます。
+その中の <em>New SSH keys</em> に該当の名前の鍵があるはずです。</p>
+<p>そこの鍵名の下に書いてある <code>SHA256: ...</code>
+が確認するべき値です。 この値について、「GPG fingerprintとも合わん！」
+「GPG keyidとも合わん！！」「何だこいつ！！！」と暴れていましたが<br />
 安心してください。 <em>GPGじゃない</em> です。 これは、<a href="https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/reviewing-your-ssh-keys">マニュアル</a>に書いてあります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">

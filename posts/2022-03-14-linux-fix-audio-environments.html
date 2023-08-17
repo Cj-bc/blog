@@ -120,23 +120,34 @@
       </div>
 
     <div class="description">
-      <p>実はこの環境は音声周りの環境が大分悪くて、 普段はYouTubeなどはこの環境からは利用していない。</p>
+      <p>実はこの環境は音声周りの環境が大分悪くて、
+普段はYouTubeなどはこの環境からは利用していない。</p>
 <p>今回暇だったので、せっかくなので直してみることにする。</p>
 <h1 id="元々あった問題">元々あった問題</h1>
 <h2 id="アプリケーション毎の音量差が激しすぎる">アプリケーション毎の音量差が激しすぎる</h2>
-<p>ブラウザで流しているYouTubeの音が聞こえる程度の音量にすると、 通知が爆音でガチビビるという現象がありました。 逆に通知の音量程度にすると、YouTubeの音が全く聞こえません。</p>
-<p>ちなみに、通知の音量程度にした時にPulseAudioの音量ゲージが100% なのでブラウザ側の音量が小さいのが問題です。</p>
-<h2 id="Air Podsを接続して聞くと音がガビガビになる">Air Podsを接続して聞くと音がガビガビになる</h2>
-<p>昔はきちんと聞こえていた(と思う)のですが、いつからか ガビガビで聞けたものじゃなくなりました。</p>
+<p>ブラウザで流しているYouTubeの音が聞こえる程度の音量にすると、
+通知が爆音でガチビビるという現象がありました。
+逆に通知の音量程度にすると、YouTubeの音が全く聞こえません。</p>
+<p>ちなみに、通知の音量程度にした時にPulseAudioの音量ゲージが100%
+なのでブラウザ側の音量が小さいのが問題です。</p>
+<h2 id="Air Podsを接続して聞くと音がガビガビになる">Air
+Podsを接続して聞くと音がガビガビになる</h2>
+<p>昔はきちんと聞こえていた(と思う)のですが、いつからか
+ガビガビで聞けたものじゃなくなりました。</p>
 <h1 id="今回やったこと">今回やったこと</h1>
-<h2 id="1. ブラウザの sink-input の音量を調節した">1. ブラウザの <code>sink-input</code> の音量を調節した</h2>
+<h2 id="1. ブラウザの sink-input の音量を調節した">1. ブラウザの
+<code>sink-input</code> の音量を調節した</h2>
 <p>詳しくは<a href="https://cj-bc.github.io/blog/posts/2022-03-13-pulseaudio-how-to-adjust-volume-of-each-application.html">前回書いたブログ</a>を参照。</p>
-<p>ブラウザの音量めっっっちゃ小さくされてた(10%だった) のでそれを100%に戻したところ、 良いバランスになった</p>
-<h2 id="2. Air PodsのBluetoothプロファイルを修正した">2. Air PodsのBluetoothプロファイルを修正した</h2>
-<p>前に、音質周りについてプロファイルの問題うんたらと見た ことがあったな~と思ったのでそこ辺りを検索。</p>
-<p>その結果 <a href="https://zenn.dev/noraworld/articles/pulseaudio-bluetooth#設定の変更">Raspberry Pi に複数の Bluetooth デバイスを接続して同時に音を流す – noraworld</a> を発見、どうやら音声通話用プロファイルと音楽用プロファイルが別に存在するらしい。</p>
-<div id="ここで扱われるBluetoothプロファイルの一覧">
-<table class="ui celled table">
+<p>ブラウザの音量めっっっちゃ小さくされてた(10%だった)
+のでそれを100%に戻したところ、 良いバランスになった</p>
+<h2 id="2. Air PodsのBluetoothプロファイルを修正した">2. Air
+PodsのBluetoothプロファイルを修正した</h2>
+<p>前に、音質周りについてプロファイルの問題うんたらと見た
+ことがあったな~と思ったのでそこ辺りを検索。</p>
+<p>その結果 <a href="https://zenn.dev/noraworld/articles/pulseaudio-bluetooth#設定の変更">Raspberry
+Pi に複数の Bluetooth デバイスを接続して同時に音を流す – noraworld</a>
+を発見、どうやら音声通話用プロファイルと音楽用プロファイルが別に存在するらしい。</p>
+<table id="ここで扱われるBluetoothプロファイルの一覧" class="ui celled table">
 <thead>
 <tr class="header">
 <th>用途</th>
@@ -157,7 +168,6 @@
 </tr>
 </tbody>
 </table>
-</div>
 <p>(ちなみに本当に一覧が見たければ<a href="https://www.bluetooth.com/specifications/specs/">bluetooth公式のページに</a>存在する)</p>
 <p><code>pactl list sinks</code> でSinkの一覧を表示した際、</p>
 <div class="ui segment">
@@ -183,10 +193,19 @@
                ...
 </code></pre>
 </div>
-<p>プロパティーの下に <code>bluetooth.protocol = "handsfree_head_unit"</code> とあるので HFPになってるらしいことがわかる。 また、チャンネルマップが <code>mono</code> であることからこれはおそらくモノラル音源になっている ことがわかる。</p>
-<p>またこれはあまり詳しくないので間違っているかもしれないが、 サンプル数も1ch 16000Hzとかなり低めになっていることがわかる。 (参考までに、パソコン本体のサンプル仕様は 2ch 44100Hzだった)</p>
-<p>ということでこれをA2DPに切り替える。 今回はpavucontrolを使って切り替えた。</p>
-<p>pavucontrolを起動したら <code class="verbatim">configure</code> タブを開き、そこに表示された BluetoothヘッドホンのProfileを <code>A2DP</code> に変更する。</p>
+<p>プロパティーの下に
+<code>bluetooth.protocol = "handsfree_head_unit"</code> とあるので
+HFPになってるらしいことがわかる。 また、チャンネルマップが
+<code>mono</code> であることからこれはおそらくモノラル音源になっている
+ことがわかる。</p>
+<p>またこれはあまり詳しくないので間違っているかもしれないが、
+サンプル数も1ch 16000Hzとかなり低めになっていることがわかる。
+(参考までに、パソコン本体のサンプル仕様は 2ch 44100Hzだった)</p>
+<p>ということでこれをA2DPに切り替える。
+今回はpavucontrolを使って切り替えた。</p>
+<p>pavucontrolを起動したら <code class="verbatim">configure</code>
+タブを開き、そこに表示された BluetoothヘッドホンのProfileを
+<code>A2DP</code> に変更する。</p>
     </div>
   </div>
   

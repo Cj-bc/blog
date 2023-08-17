@@ -120,11 +120,15 @@
       </div>
 
     <div class="description">
-      <p>前々からLinuxで使えるボイチェンが欲しくて、何度かWORLDをおすすめされていたのだけれど C++があまり得意ではないので二の足を踏んでいた。 (最初は出来るだけオリジナルを使用したい民なので、pyworldの方はまだ試すつもりがなかった)</p>
+      <p>前々からLinuxで使えるボイチェンが欲しくて、何度かWORLDをおすすめされていたのだけれど
+C++があまり得意ではないので二の足を踏んでいた。
+(最初は出来るだけオリジナルを使用したい民なので、pyworldの方はまだ試すつもりがなかった)</p>
 <p>でも、まぁそろそろやる気が出たのでPython版を使ってみる。</p>
-<p>ちなみに、Grallion2とかはLinux対応しているらしいので既存のもので良いならそっちの方が良いと 思う。</p>
+<p>ちなみに、Grallion2とかはLinux対応しているらしいので既存のもので良いならそっちの方が良いと
+思う。</p>
 <h1 id="今回の目標">今回の目標</h1>
-<p>最終的には自分用のボイチェンを作りたいのでリアルタイム処理を したいのだが、とりあえずは音声ファイルを変換するのを出来るようにする。</p>
+<p>最終的には自分用のボイチェンを作りたいのでリアルタイム処理を
+したいのだが、とりあえずは音声ファイルを変換するのを出来るようにする。</p>
 <h1 id="やることの大雑把な流れ">やることの大雑把な流れ</h1>
 <p>大雑把な流れとしては、以下の通り。</p>
 <ol>
@@ -149,13 +153,19 @@
 </tr>
 </tbody>
 </table>
-<p>尚wavファイルの読み込みには <code>scipy</code> を使うこともできるらしい。</p>
+<p>尚wavファイルの読み込みには <code>scipy</code>
+を使うこともできるらしい。</p>
 <h1 id="環境構築">環境構築</h1>
-<p>グローバルに入れるの嫌だけど、ffi使う都合でC関連のものを グローバルに入れなきゃいけなくてめんどくせーー!!のでDockerで環境を閉じ込める。 ついでに可搬性も手に入るしね。</p>
+<p>グローバルに入れるの嫌だけど、ffi使う都合でC関連のものを
+グローバルに入れなきゃいけなくてめんどくせーー!!のでDockerで環境を閉じ込める。
+ついでに可搬性も手に入るしね。</p>
 <p>ちなみにnixも試したが、手元の環境で上手く動かせなかったのでDocker。</p>
 <h2 id="ベースイメージ">ベースイメージ</h2>
-<p>ベースは軽ければ特にこだわりがないので、 <code>python:3.9-alpine</code> を使う。</p>
-<p>pythonのバージョンは、確か3.10だと上手く動かなかったので3.9にした記憶がある。 ただ、python以外の依存パッケージ系を色々入れてなかったので、その影響だったのかもしれない。 Dockerイメージ作り直すのが容量的にキツいのでそのまま3.9にしてある。</p>
+<p>ベースは軽ければ特にこだわりがないので、
+<code>python:3.9-alpine</code> を使う。</p>
+<p>pythonのバージョンは、確か3.10だと上手く動かなかったので3.9にした記憶がある。
+ただ、python以外の依存パッケージ系を色々入れてなかったので、その影響だったのかもしれない。
+Dockerイメージ作り直すのが容量的にキツいのでそのまま3.9にしてある。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 dockerfile
@@ -163,47 +173,60 @@ dockerfile
 <div class="sourceCode" id="cb1"><pre class="sourceCode dockerfile SourceCode"><code class="sourceCode dockerfile"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> python:3.9-alpine</span></code></pre></div>
 </div>
 <h2 id="pyworldの導入">pyworldの導入</h2>
-<p>pyworldはC++で書かれたWORLDのラッパーなので、g++を必要とすることに注意。 最初これに気付かなくて困った。</p>
+<p>pyworldはC++で書かれたWORLDのラッパーなので、g++を必要とすることに注意。
+最初これに気付かなくて困った。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 dockerfile
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode dockerfile SourceCode"><code class="sourceCode dockerfile"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> apk add g++ </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> pip install pyworld</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode dockerfile SourceCode"><code class="sourceCode dockerfile"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">apk</span> add g++ </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">pip</span> install pyworld</span></code></pre></div>
 </div>
 <h2 id="soundfileの導入">soundfileの導入</h2>
-<p>注意点として、 <strong>libsndfile/libffiは dev版を入れる</strong> こと! さもなくば、ヘッダファイルがなくて怒られる。</p>
+<p>注意点として、 <strong>libsndfile/libffiは dev版を入れる</strong>
+こと! さもなくば、ヘッダファイルがなくて怒られる。</p>
 <p>あとbuild-baseもいる。(はず)</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 dockerfile
 </div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode dockerfile SourceCode"><code class="sourceCode dockerfile"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>run apk add libsndfile-dev libffi-dev build-base</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> pip install soundfile</span></code></pre></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">pip</span> install soundfile</span></code></pre></div>
 </div>
 <h1 id="コーディング">コーディング</h1>
 <h2 id="ボイチェンの基本的なしくみ">ボイチェンの基本的なしくみ</h2>
-<p>凄い大雑把だが、ボイチェンは声の <em>ピッチ</em> と <em>フォルマント</em> をそれぞれ変換してやることで実装されている。</p>
+<p>凄い大雑把だが、ボイチェンは声の <em>ピッチ</em> と
+<em>フォルマント</em> をそれぞれ変換してやることで実装されている。</p>
 <p>ピッチが音の高さ、フォルマントが声色と呼ばれているやつだ。</p>
-<p>正直ここらへんは専門ではないので、詳しくは調べてほしい。気が向いたらそれ関連の リンクについても纏めようと思う。</p>
-<p>で、これらのうち、特にフォルマントは簡単に取得できるものではなく、 「推定」を行う必要がある。</p>
+<p>正直ここらへんは専門ではないので、詳しくは調べてほしい。気が向いたらそれ関連の
+リンクについても纏めようと思う。</p>
+<p>で、これらのうち、特にフォルマントは簡単に取得できるものではなく、
+「推定」を行う必要がある。</p>
 <p>WORLDはここらへんをよしなにしてくれる。</p>
 <h2 id="wavファイルの読み込み">wavファイルの読み込み</h2>
-<p>まずは読み込む。 読み込むといったってpyworldで使える形式でないと意味がないわけなので先にそこを説明する。</p>
+<p>まずは読み込む。
+読み込むといったってpyworldで使える形式でないと意味がないわけなので先にそこを説明する。</p>
 <p>pyworldの関数は</p>
 <ul>
 <li>一次元</li>
 <li>メモリーレイアウトが 'C'</li>
 <li>Double型の中身を持つ</li>
 </ul>
-<p><code>numpy.ndarray</code> を要求する。 これはそれぞれの関数の中の定義でも書かれているが、 <a href="https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder/blob/130c3abdeaeefc1dae3fdf7d2f2dba61938e58b5/pyworld/pyworld.pyx#L625-L658">wav2worldの実装</a> でも書かれている。</p>
-<p>なので、 <code>numpy.ndarray</code> として読み込めるものなら何でも良いだろう。</p>
+<p><code>numpy.ndarray</code> を要求する。
+これはそれぞれの関数の中の定義でも書かれているが、 <a href="https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder/blob/130c3abdeaeefc1dae3fdf7d2f2dba61938e58b5/pyworld/pyworld.pyx#L625-L658">wav2worldの実装</a>
+でも書かれている。</p>
+<p>なので、 <code>numpy.ndarray</code>
+として読み込めるものなら何でも良いだろう。</p>
 <p>とりあえず見た範囲では、以下の二つのライブラリが使用例があった。</p>
 <ul>
-<li><a href="https://docs.scipy.org/doc/scipy/tutorial/io.html#wav-sound-files-scipy-io-wavfile">scipy.io.wavfile</a>(使用されている記事: <a href="https://qiita.com/ohtaman/items/84426cee09c2ba4abc22">音声合成システム WORLD に触れてみる - Qiita</a>)</li>
-<li><a href="https://pysoundfile.readthedocs.io/en/latest/">pysoundfile</a> (使用されている記事: <a href="https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder/blob/f3c811fb3ce2693b45bd6411c511f60d2d308ed1/demo/demo.py">pyworldのデモコード</a>)</li>
+<li><a href="https://docs.scipy.org/doc/scipy/tutorial/io.html#wav-sound-files-scipy-io-wavfile">scipy.io.wavfile</a>(使用されている記事:
+<a href="https://qiita.com/ohtaman/items/84426cee09c2ba4abc22">音声合成システム
+WORLD に触れてみる - Qiita</a>)</li>
+<li><a href="https://pysoundfile.readthedocs.io/en/latest/">pysoundfile</a>
+(使用されている記事: <a href="https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder/blob/f3c811fb3ce2693b45bd6411c511f60d2d308ed1/demo/demo.py">pyworldのデモコード</a>)</li>
 </ul>
-<p>今回は、デモコードで使われていたという理由から <code>pysoundfile</code> を採用した。</p>
+<p>今回は、デモコードで使われていたという理由から
+<code>pysoundfile</code> を採用した。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 python
@@ -211,7 +234,9 @@ python
 <div class="sourceCode" id="cb4"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>soundfile.read(<span class="st">&quot;filename&quot;</span>)</span></code></pre></div>
 </div>
 <h2 id="チャンネルの分離">チャンネルの分離</h2>
-<p>pyworldの関数達は次元数が1の <code>ndarray</code> しか受け付けないわけだが、 1チャンネル辺り1次元で作られるため 元の音源がステレオ以上だと次元が多すぎてエラーを吐かれてしまう。</p>
+<p>pyworldの関数達は次元数が1の <code>ndarray</code>
+しか受け付けないわけだが、 1チャンネル辺り1次元で作られるため
+元の音源がステレオ以上だと次元が多すぎてエラーを吐かれてしまう。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 python
@@ -223,25 +248,34 @@ python
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  File <span class="st">&quot;pyworld/pyworld.pyx&quot;</span>, line <span class="dv">93</span>, <span class="kw">in</span> pyworld.pyworld.dio</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="pp">ValueError</span>: Buffer has wrong number of dimensions (expected <span class="dv">1</span>, got <span class="dv">2</span>)</span></code></pre></div>
 </div>
-<p>なので、音源が2チャンネル以上ある場合は切り分けてあげる必要がある。 <code>soundfile</code> で読み込んでいる場合、これをするには</p>
+<p>なので、音源が2チャンネル以上ある場合は切り分けてあげる必要がある。
+<code>soundfile</code> で読み込んでいる場合、これをするには</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 python
 </div>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data[:,<span class="dv">0</span>]</span></code></pre></div>
 </div>
-<p>のように、二つ目の添字をいじってあげることで取れる。 ここら辺の説明は面倒なので、というか結構色々あるので調べてみてほしい。 <code>numpy.ndarray</code> の構造までは知らなくていいと思うが、添字アクセスの仕方を知っていれば まぁわかると思う。</p>
+<p>のように、二つ目の添字をいじってあげることで取れる。
+ここら辺の説明は面倒なので、というか結構色々あるので調べてみてほしい。
+<code>numpy.ndarray</code>
+の構造までは知らなくていいと思うが、添字アクセスの仕方を知っていれば
+まぁわかると思う。</p>
 <p><strong>そしてここで注意</strong></p>
-<p>こうして制作したデータは、メモリ上で連続して存在しないため、 pyworldの関数に渡すことができない。 そのため、</p>
+<p>こうして制作したデータは、メモリ上で連続して存在しないため、
+pyworldの関数に渡すことができない。 そのため、</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 python
 </div>
 <div class="sourceCode" id="cb7"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data[:,<span class="dv">0</span>].copy(order<span class="op">=</span><span class="st">'C'</span>)</span></code></pre></div>
 </div>
-<p>として並べ替えてあげる必要がある。 尚、これについては少し後にもう少しだけ詳しく書いてある。</p>
+<p>として並べ替えてあげる必要がある。
+尚、これについては少し後にもう少しだけ詳しく書いてある。</p>
 <h2 id="ピッチ・フォルマント推定">ピッチ・フォルマント推定</h2>
-<p>これはもうworldにおまかせ。詳しいことはわからん。 色々関数があるが、一括で欲しいパラメータを全て取得出来る <code>wav2world</code> を使用する。</p>
+<p>これはもうworldにおまかせ。詳しいことはわからん。
+色々関数があるが、一括で欲しいパラメータを全て取得出来る
+<code>wav2world</code> を使用する。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 python
@@ -249,7 +283,9 @@ python
 <div class="sourceCode" id="cb8"><pre class="sourceCode python SourceCode"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>f0, sp, ap <span class="op">=</span> pw.wav2world(data[:,<span class="dv">0</span>].copy(order<span class="op">=</span><span class="st">'C'</span>), samplerate)</span></code></pre></div>
 </div>
 <h2 id="ピッチ・フォルマントをいじる">ピッチ・フォルマントをいじる</h2>
-<p>ここは一番手間がかかる所。先程取り出したパラメーターをよしなに変える。 正直ここは調整の話になってくると思うので、今はよくわからん。<a href="https://qiita.com/ohtaman/items/84426cee09c2ba4abc22">参考にしていた記事</a>にあった所を ちょっと弄っている所。</p>
+<p>ここは一番手間がかかる所。先程取り出したパラメーターをよしなに変える。
+正直ここは調整の話になってくると思うので、今はよくわからん。<a href="https://qiita.com/ohtaman/items/84426cee09c2ba4abc22">参考にしていた記事</a>にあった所を
+ちょっと弄っている所。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 python
@@ -261,7 +297,9 @@ python
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>converted_f0 <span class="op">=</span> f0<span class="op">*</span><span class="dv">2</span></span></code></pre></div>
 </div>
 <h2 id="合成する">合成する</h2>
-<p>これももうお任せ、 <code>pyworld.synthesize</code> に <code>pyworld.wav2world</code> した時の戻り値(とそれを いじったもの)を用いることで合成できる。</p>
+<p>これももうお任せ、 <code>pyworld.synthesize</code> に
+<code>pyworld.wav2world</code> した時の戻り値(とそれを
+いじったもの)を用いることで合成できる。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 python
@@ -270,7 +308,8 @@ python
 </div>
 <h2 id="書き出し">書き出し</h2>
 <p>書き出しする際は、それぞれ分けていたチャンネルを一つに結合させる必要がある。</p>
-<p><code>numpy.ndarray</code> を結合する関数は色々あるが、とりあえず <a href="https://numpy.org/doc/stable/reference/generated/numpy.stack.html#numpy.stack">numpy.stack</a> を使うと 簡潔に出来たのでこれでいく。</p>
+<p><code>numpy.ndarray</code> を結合する関数は色々あるが、とりあえず <a href="https://numpy.org/doc/stable/reference/generated/numpy.stack.html#numpy.stack">numpy.stack</a>
+を使うと 簡潔に出来たのでこれでいく。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 python
@@ -287,7 +326,8 @@ python
 </div>
 <h1 id="実装の注意点">実装の注意点</h1>
 <h2 id="pyworld.wav2worldはモノラル音源を期待する(らしい)">pyworld.wav2worldはモノラル音源を期待する(らしい)</h2>
-<p>実際のドキュメントとか見たわけではないが、2chのwav音源を引数に与えた所 以下のようなエラーを出された。</p>
+<p>実際のドキュメントとか見たわけではないが、2chのwav音源を引数に与えた所
+以下のようなエラーを出された。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 
@@ -300,10 +340,13 @@ ValueError: Buffer has wrong number of dimensions (expected 1, got 2)
 </code></pre>
 </div>
 <p>(ちなみにこれはReplでの表記なので実際に出たものとはほんの少し違うと思うが、まぁ大体同じ。)</p>
-<p>なので、 <u>チャンネルをそれぞれ分けて変換する必要がある</u> らしい。</p>
+<p>なので、 <u>チャンネルをそれぞれ分けて変換する必要がある</u>
+らしい。</p>
 <ol>
 <li><p>チャンネルを分離する</p>
-<p><code>soundfile.read()</code> で読み込んだデータは、nx2行列 (多分。2xnだったりする？？numpyの行列表現の順序に自信がない) として表現されている。サンプル数がn、チャンネル数が2のデータだ。</p>
+<p><code>soundfile.read()</code> で読み込んだデータは、nx2行列
+(多分。2xnだったりする？？numpyの行列表現の順序に自信がない)
+として表現されている。サンプル数がn、チャンネル数が2のデータだ。</p>
 <p>これを愚直に取り出すと、以下のようになる</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -327,9 +370,18 @@ Traceback (most recent call last):
 ValueError: ndarray is not C-contiguous
 </code></pre>
 </div>
-<p>この原因は、 <code>ch1</code> が内部構造として非連続的である(？)ことが原因らしい。</p>
-<p>ここら辺の情報は色々探したが日本語・英語共に見付けられなかったので、原文をそのまま 書くと「The data is in a single, C-style contiguous segment.」じゃなかったのが問題だったらしい。 (情報元は<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.flags.html">numpy.ndarray.flagsのドキュメント</a>の <code>C_CONTIGUOUS</code> の部分)</p>
-<p>これは推測だが、恐らく、 <code>ch1</code> に含まれる値は実際の値をコピーしているのではなく、 元の <code>data</code> の中に飛び飛びで存在する値を参照しており、連続的ではないのだと思われる。 これだとC言語側に渡した時に連続したアドレスから値が取得できないため、問題になってしまうのだろうなと 感じた。</p>
+<p>この原因は、 <code>ch1</code>
+が内部構造として非連続的である(？)ことが原因らしい。</p>
+<p>ここら辺の情報は色々探したが日本語・英語共に見付けられなかったので、原文をそのまま
+書くと「The data is in a single, C-style contiguous
+segment.」じゃなかったのが問題だったらしい。 (情報元は<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.flags.html">numpy.ndarray.flagsのドキュメント</a>の
+<code>C_CONTIGUOUS</code> の部分)</p>
+<p>これは推測だが、恐らく、 <code>ch1</code>
+に含まれる値は実際の値をコピーしているのではなく、 元の
+<code>data</code>
+の中に飛び飛びで存在する値を参照しており、連続的ではないのだと思われる。
+これだとC言語側に渡した時に連続したアドレスから値が取得できないため、問題になってしまうのだろうなと
+感じた。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 
@@ -353,8 +405,13 @@ ValueError: ndarray is not C-contiguous
 </code></pre>
 </div>
 <p>そこで、 <code>C_CONTIGUOUS</code> に変換していく必要がでてきた。</p>
-<p>色々な方法があるのかもしれないが、今回は <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.copy.html">numpy.ndarray.copy()</a> を利用する。</p>
-<p><code>copy()</code> はその <code>ndarray</code> のコピーを返す関数で、 パラーメーター引数 <code>order</code> を設定することでメモリーレイアウト (直訳、適切な訳があれば知りたい)を変更できる。デフォルトは <code>C</code> らしいが、明記しておいた。</p>
+<p>色々な方法があるのかもしれないが、今回は <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.copy.html">numpy.ndarray.copy()</a>
+を利用する。</p>
+<p><code>copy()</code> はその <code>ndarray</code>
+のコピーを返す関数で、 パラーメーター引数 <code>order</code>
+を設定することでメモリーレイアウト
+(直訳、適切な訳があれば知りたい)を変更できる。デフォルトは
+<code>C</code> らしいが、明記しておいた。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 python
@@ -365,9 +422,12 @@ python
 </ol>
 <h1 id="参考">参考</h1>
 <ul>
-<li><a href="https://qiita.com/ohtaman/items/84426cee09c2ba4abc22">音声合成システム WORLD に触れてみる - Qiita</a></li>
+<li><a href="https://qiita.com/ohtaman/items/84426cee09c2ba4abc22">音声合成システム
+WORLD に触れてみる - Qiita</a></li>
 <li><a href="https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder">JeremyCCHsu/Python-Wrapper-for-World-Vocoder</a></li>
-<li><a href="https://stackoverflow.com/questions/26778079/valueerror-ndarray-is-not-c-contiguous-in-cython">python - ValueError: ndarray is not C-contiguous in cython - Stack Overflow</a></li>
+<li><a href="https://stackoverflow.com/questions/26778079/valueerror-ndarray-is-not-c-contiguous-in-cython">python
+- ValueError: ndarray is not C-contiguous in cython - Stack
+Overflow</a></li>
 </ul>
     </div>
   </div>

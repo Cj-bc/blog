@@ -136,7 +136,8 @@ haskell
 <li>Segment</li>
 <li>Attached label</li>
 </ul>
-<p>又、各コードブロックに同じ処理をするために、Hakyllの=pandocCompilerWithTransform=を使用しています。 syntaxhilightは<a href="https://stackoverflow.com/a/43699538">=Hakyll=に合わせて</a>=Highlight.js=を使用しています。</p>
+<p>又、各コードブロックに同じ処理をするために、Hakyllの=pandocCompilerWithTransform=を使用しています。
+syntaxhilightは<a href="https://stackoverflow.com/a/43699538">=Hakyll=に合わせて</a>=Highlight.js=を使用しています。</p>
 <ol>
 <li><p>最終的なHTML</p>
 <div class="ui segment">
@@ -164,44 +165,56 @@ example
 </code></pre>
 </div></li>
 <li><p>=pandocCompilerWithTransform=を使用した処理</p>
-<p>=pandocCompilerWithTransform=は=pandocCompiler=の一種で、Markdownなどを=Pandoc=型に変換しその値をいじることができます。 =Pandoc=型には便利な型クラス=Walkable=があるので、これを使用します。</p>
+<p>=pandocCompilerWithTransform=は=pandocCompiler=の一種で、Markdownなどを=Pandoc=型に変換しその値をいじることができます。
+=Pandoc=型には便利な型クラス=Walkable=があるので、これを使用します。</p>
 <p>=Walkable=とは、「値の中を歩き、各子要素を与えられた関数に適用して置き換える」ような処理をします。</p>
 <ul class="task-list">
-<li><input type="checkbox" disabled />
-WIP</li>
+<li><input type="checkbox" disabled />WIP</li>
 </ul></li>
 <li><p>右上に拡張子を表示する</p>
-<p>右上に拡張子を表示するために使われているのが、<a href="https://fomantic-ui.com/elements/label.html#attached">attached label</a>です。 注意する点として、これは「コードブロックとは別の=div=として使用する」必要があります。</p></li>
+<p>右上に拡張子を表示するために使われているのが、<a href="https://fomantic-ui.com/elements/label.html#attached">attached
+label</a>です。
+注意する点として、これは「コードブロックとは別の=div=として使用する」必要があります。</p></li>
 <li><p>親=Div=に=segment=を設定する</p>
-<p><code class="verbatim">code=ブロックの親の=Div=に、=class</code>"ui segment"=を設定してください。 (他の要素はあっても大丈夫だと思いますが、とにかく<a href="https://fomantic-ui.com/elements/segment.html">segment</a>が必要です。)<br />
+<p><code class="verbatim">code=ブロックの親の=Div=に、=class</code>"ui
+segment"=を設定してください。
+(他の要素はあっても大丈夫だと思いますが、とにかく<a href="https://fomantic-ui.com/elements/segment.html">segment</a>が必要です。)<br />
 尚、きちんと調べているわけではないので、他のものでも代用できるのかもしれません。</p>
 <p><img src="file:///images/attached-label-wraped-in-segment.png" class="ui rounded image ui rounded image" /> <em>(赤丸は注釈)</em></p>
 <p>これをしない場合、ひとまわり上の=segment=、どこにもない場合webページの右上にこのラベルが表示されることになります。</p>
-<p><img src="file:///images/attached-label-not-wraped-in-segment.png" class="ui rounded image ui rounded image" /> <em>(赤丸は注釈)</em></p></li>
+<p><img src="file:///images/attached-label-not-wraped-in-segment.png" class="ui rounded image ui rounded image" />
+<em>(赤丸は注釈)</em></p></li>
 <li><p>テキストの折り返し</p>
 <p>これはシンプルにCSSの=overflow:auto=を使っています。</p></li>
 </ol>
 <h1 id="画像の整形">画像の整形</h1>
 <p>これまでは画像が正しいサイズになっておらず、このようになっていました。</p>
 <figure>
-<img src="file:///images/old-image-view.png" class="ui rounded image" alt="昔の画像表示" /><figcaption aria-hidden="true">昔の画像表示</figcaption>
+<img src="file:///images/old-image-view.png" class="ui rounded image" alt="昔の画像表示" />
+<figcaption aria-hidden="true">昔の画像表示</figcaption>
 </figure>
 <p>現在は、この画像のようになっています。</p>
 <figure>
-<img src="file:///images/current-image.view.png" class="ui rounded image" alt="今の画像表示" /><figcaption aria-hidden="true">今の画像表示</figcaption>
+<img src="file:///images/current-image.view.png" class="ui rounded image" alt="今の画像表示" />
+<figcaption aria-hidden="true">今の画像表示</figcaption>
 </figure>
 <h2 id="ui-image"><code class="verbatim">ui image</code></h2>
 <p>=ui image=を使うことで、親のSegment以内に納めてくれます。<br />
-又それにプラスして=rounded=をつけることで角を丸めています。 (最終的には=ui rounded image=となりました)</p>
+又それにプラスして=rounded=をつけることで角を丸めています。
+(最終的には=ui rounded image=となりました)</p>
 <h1 id="メニューの作成">メニューの作成</h1>
-<p>画面上部にあるメニューを作成しました。 これは主に=ui menu=を使っています。 それに追加して、viewportの上部に固定するために=fixed=を、色を反転させるために=inverted=をつけています。</p>
+<p>画面上部にあるメニューを作成しました。 これは主に=ui
+menu=を使っています。
+それに追加して、viewportの上部に固定するために=fixed=を、色を反転させるために=inverted=をつけています。</p>
 <h2 id="コンテンツの内容がかぶらないようにする">コンテンツの内容がかぶらないようにする</h2>
 <p>=fixed=を使った場合、そのままでは下のdiv(このサイトではidとして=content=を持つdiv)の内容に被ってしまいます。</p>
 <figure>
-<img src="file:///images/fixed-menu-without-margin.png" class="ui rounded image" alt="何も対処しない場合" /><figcaption aria-hidden="true">何も対処しない場合</figcaption>
+<img src="file:///images/fixed-menu-without-margin.png" class="ui rounded image" alt="何も対処しない場合" />
+<figcaption aria-hidden="true">何も対処しない場合</figcaption>
 </figure>
 <p>そこで、=content= divに=margin-top: 5em=を適用しています。<br />
-尚これは、同じ構成をしていた<a href="https://fomantic-ui.com/collections/menu.html">Fomantic-UIのモバイルページ</a>での設定値をそのまま持ってきています。 (モバイル端末で見るか、ブラウザの横幅を狭めれば見えると思います)</p>
+尚これは、同じ構成をしていた<a href="https://fomantic-ui.com/collections/menu.html">Fomantic-UIのモバイルページ</a>での設定値をそのまま持ってきています。
+(モバイル端末で見るか、ブラウザの横幅を狭めれば見えると思います)</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 css
@@ -211,7 +224,8 @@ css
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <h2 id="feedのリンクを右づめにする">Feedのリンクを右づめにする</h2>
-<p>=menu=の中にある=item=に、=right=と入れるだけでそこから下の=item=全てが右詰になります。 このサイトだと以下のようになっています。</p>
+<p>=menu=の中にある=item=に、=right=と入れるだけでそこから下の=item=全てが右詰になります。
+このサイトだと以下のようになっています。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 example

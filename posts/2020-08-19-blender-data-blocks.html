@@ -122,44 +122,62 @@
     <div class="description">
       <p>公式: <a href="https://docs.blender.org/manual/ja/2.80/files/data_blocks.html">https://docs.blender.org/manual/ja/2.80/files/data_blocks.html</a></p>
 <h1 id="data-blocks">Data blocks</h1>
-<p>いかなるBlenderプロジェクトの基本単位は=data-block=です。=data-block=の例としては: meshes, objects, materials, textures, node trees, scenes, texts, brushes, そして workspace</p>
+<p>いかなるBlenderプロジェクトの基本単位は=data-block=です。=data-block=の例としては:
+meshes, objects, materials, textures, node trees, scenes, texts,
+brushes, そして workspace</p>
 <p>=data-block=は、とても異なる種類のデータの全体的な抽象であり、共通の基本的な=feature=であるプロパティと=behaviors=に重心を置いています。</p>
 <p>いくつかの共通した特徴は:</p>
 <ul>
 <li>=blend-file=の=primary contents=です。</li>
-<li>再利用やインスタンス化のために、違いを参照することができます。(Child/parent, object/object-data, materials/images, in modifiers or constraints too…)</li>
+<li>再利用やインスタンス化のために、違いを参照することができます。(Child/parent,
+object/object-data, materials/images, in modifiers or constraints
+too…)</li>
 <li>それぞれの名前は、=blend-file=内で同じタイプの中で=unique=です。</li>
 <li>追加、削除、編集、複製が可能です。</li>
 <li>ファイル間で=link=することができます。(限られた種類の=data-blocks=のみです)</li>
 <li>それぞれ独自のアニメーションデータを持つことができます。</li>
-<li>それぞれ<a href="https://docs.blender.org/manual/ja/2.80/files/data_blocks.html#files-data-blocks-custom-properties">Custom properties</a>を持つことができます。</li>
+<li>それぞれ<a href="https://docs.blender.org/manual/ja/2.80/files/data_blocks.html#files-data-blocks-custom-properties">Custom
+properties</a>を持つことができます。</li>
 </ul>
-<p>ユーザーは=typically=高レベルの=data type=を扱うことになります(<code class="verbatim">obects</code>, =meshes=など)。 複雑なプロジェクトを扱う場合、特に=inter-linking blend-files=の場合、=data-block=の管理はより重要になります。 それ用の主なエディターは<a href="https://docs.blender.org/manual/ja/2.80/editors/outliner.html">Outliner</a>です</p>
-<p>Blender内の全てのデータが=data-block=なわけではありません。例えば、=bones=, <code class="verbatim">sequence strips=や=vertex groups=は違っており、
+<p>ユーザーは=typically=高レベルの=data type=を扱うことになります(<code class="verbatim">obects</code>, =meshes=など)。
+複雑なプロジェクトを扱う場合、特に=inter-linking
+blend-files=の場合、=data-block=の管理はより重要になります。
+それ用の主なエディターは<a href="https://docs.blender.org/manual/ja/2.80/editors/outliner.html">Outliner</a>です</p>
+<p>Blender内の全てのデータが=data-block=なわけではありません。例えば、=bones=,
+<code class="verbatim">sequence strips=や=vertex groups=は違っており、
 それぞれ=armature=、=scene=、=mesh types=に付属(=belong to</code>)しています。</p>
 <h1 id="life-time">Life Time</h1>
-<p>全ての=data-block=は=usage counted=(<code class="verbatim">reference count</code>)を持っており、一つ以上である場合は、UIの中で=data-block=の名前の右側に=current user=の数が表示されます。</p>
-<p>Blenderは、使用されていないデータは最終的に削除されるという=general rule=に従っています。</p>
+<p>全ての=data-block=は=usage counted=(<code class="verbatim">reference count</code>)を持っており、一つ以上である場合は、UIの中で=data-block=の名前の右側に=current
+user=の数が表示されます。</p>
+<p>Blenderは、使用されていないデータは最終的に削除されるという=general
+rule=に従っています。</p>
 <p>作業中にたくさんのデータを追加・削除することは一般的なため、全ての=data-block=を一つ一つ手動で管理する必要がないのは利点です。</p>
-<p>これは、=blend-file=を書き込む際に、=zero user=な=data-block=をスキップする仕組みになっています。</p>
+<p>これは、=blend-file=を書き込む際に、=zero
+user=な=data-block=をスキップする仕組みになっています。</p>
 <h1 id="protected">Protected</h1>
-<p>=zero user=な=data-block=は保存されないため、時にはユーザーのことを考えずにデータの保存を強制させたい時があるでしょう。</p>
-<p>もし、=blend-file=を=library=として使っていたり、他のファイルから=link=したりされたりする目的で使っていた場合、 突然削除されないように気をつける必要があります。</p>
-<p>=data-block=を=protect=するためには、その=data-block=の名前の横にある盾のボタンを使用します。 そうすると、その=data-block=はblenderによって自動的に削除されることは無くなりますが、必要ならば手動で削除することができます。</p>
+<p>=zero
+user=な=data-block=は保存されないため、時にはユーザーのことを考えずにデータの保存を強制させたい時があるでしょう。</p>
+<p>もし、=blend-file=を=library=として使っていたり、他のファイルから=link=したりされたりする目的で使っていた場合、
+突然削除されないように気をつける必要があります。</p>
+<p>=data-block=を=protect=するためには、その=data-block=の名前の横にある盾のボタンを使用します。
+そうすると、その=data-block=はblenderによって自動的に削除されることは無くなりますが、必要ならば手動で削除することができます。</p>
 <h1 id="sharing">Sharing</h1>
 <p>=data-block=は他の=data-block=間でも共有できます。</p>
 <p>よくデータの共有が行われる例:</p>
 <ul>
 <li>=materials=間で=textures=を共有する</li>
 <li><code class="verbatim">objects=(=instances</code>)間で=meshes=を共有する</li>
-<li>=objects=間で=animated actions=を共有する。例えば、全てのライトが同時に=dim=するようにします。</li>
+<li>=objects=間で=animated
+actions=を共有する。例えば、全てのライトが同時に=dim=するようにします。</li>
 </ul>
 <p>=data-block=をファイル間でも共有できます、詳しくは:</p>
 <ul>
-<li><a href="https://docs.blender.org/manual/ja/2.80/files/linked_libraries.html">linked libraries</a></li>
+<li><a href="https://docs.blender.org/manual/ja/2.80/files/linked_libraries.html">linked
+libraries</a></li>
 </ul>
 <h1 id="making-single-user">Making Single User</h1>
-<p>=data-block=が複数のユーザーによって共有されている時、あるユーザーのためにコピーを作成することができます。 そうするには、名前の右にある=user-count=ボタンを押してください。そうすることにより、その=data-block=を複製してその用途のみに=assign=します。</p>
+<p>=data-block=が複数のユーザーによって共有されている時、あるユーザーのためにコピーを作成することができます。
+そうするには、名前の右にある=user-count=ボタンを押してください。そうすることにより、その=data-block=を複製してその用途のみに=assign=します。</p>
 <h2 id="注釈">注釈</h2>
 <p>=Objects=は=single-user=になるためにより発展的な=actions=を持っています。<a href="https://docs.blender.org/manual/ja/2.80/scene_layout/object/editing/duplication.html">彼らのドキュメント</a>を参照してください。</p>
 <h1 id="removing-data-blocks">Removing Data-Blocks</h1>

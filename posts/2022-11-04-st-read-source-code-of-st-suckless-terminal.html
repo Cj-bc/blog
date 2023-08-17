@@ -120,93 +120,103 @@
       </div>
 
     <div class="description">
-      <p><a href="https://st.suckless.org/">st</a>はC言語で書かれた、とてもシンプルなX用ターミナル実装です。 (<a href="https://wiki.archlinux.jp/index.php/St">archlinux wikiのページ</a>)</p>
-<p>コンフィグの設定は <code>config.h</code> を編集する、機能拡張にはパッチを適用 するなどといった(コードベース的に)徹底的なシンプルさを持ちます。 そのため、ターミナル実装の作り方を知るためには一番良い教材になりそうだと感じ たのでコードを読んでみることとします。</p>
+      <p><a href="https://st.suckless.org/">st</a>はC言語で書かれた、とてもシンプルなX用ターミナル実装です。
+(<a href="https://wiki.archlinux.jp/index.php/St">archlinux
+wikiのページ</a>)</p>
+<p>コンフィグの設定は <code>config.h</code>
+を編集する、機能拡張にはパッチを適用
+するなどといった(コードベース的に)徹底的なシンプルさを持ちます。
+そのため、ターミナル実装の作り方を知るためには一番良い教材になりそうだと感じ
+たのでコードを読んでみることとします。</p>
 <h1 id="使用するコードのバージョン">使用するコードのバージョン</h1>
 <p>[2022-11-04 Fri 20:24] 現在の<a href="https://git.suckless.org/st/commit/e5e959835b195c023d1f685ef4dbbcfc3b5120b2.html">最新のコミット</a>を使用します。</p>
 <ul>
 <li>hash: <code>e5e959835b195c023d1f685ef4dbbcfc3b5120b2</code></li>
 </ul>
 <h1 id="この記事の構成について">この記事の構成について</h1>
-<p>この記事では、ソースコードが <code>MIT/X</code> ライセンスであるため 実際のコードを引用してきて、各関数・型毎にコメントを書いていきます。 (ライセンスは</p>
-<p>又、全体の処理の流れ等は分かり次第別のヘディングに分割して 記載する予定です。</p>
+<p>この記事では、ソースコードが <code>MIT/X</code> ライセンスであるため
+実際のコードを引用してきて、各関数・型毎にコメントを書いていきます。
+(ライセンスは</p>
+<p>又、全体の処理の流れ等は分かり次第別のヘディングに分割して
+記載する予定です。</p>
 <h1 id="コードリーディング">コードリーディング</h1>
 <h2 id="st.h"><code>st.h</code></h2>
-<p>ヘッダファイル内でのみ定義されているものについてのみ解説し、 <code>st.c</code> のシグネチャは省く。</p>
+<p>ヘッダファイル内でのみ定義されているものについてのみ解説し、
+<code>st.c</code> のシグネチャは省く。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MIN(a, b)		((a) &lt; (b) ? (a) : (b))</span></span></code></pre></div>
-</div>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MAX(a, b)		((a) &lt; (b) ? (b) : (a))</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MIN</span><span class="op">(</span><span class="pp">a</span><span class="op">,</span><span class="pp"> b</span><span class="op">)</span><span class="pp">		</span><span class="op">((</span><span class="pp">a</span><span class="op">)</span><span class="pp"> </span><span class="op">&lt;</span><span class="pp"> </span><span class="op">(</span><span class="pp">b</span><span class="op">)</span><span class="pp"> </span><span class="op">?</span><span class="pp"> </span><span class="op">(</span><span class="pp">a</span><span class="op">)</span><span class="pp"> </span><span class="op">:</span><span class="pp"> </span><span class="op">(</span><span class="pp">b</span><span class="op">))</span></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
 </div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define LEN(a)			(sizeof(a) / sizeof(a)[0])</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MAX</span><span class="op">(</span><span class="pp">a</span><span class="op">,</span><span class="pp"> b</span><span class="op">)</span><span class="pp">		</span><span class="op">((</span><span class="pp">a</span><span class="op">)</span><span class="pp"> </span><span class="op">&lt;</span><span class="pp"> </span><span class="op">(</span><span class="pp">b</span><span class="op">)</span><span class="pp"> </span><span class="op">?</span><span class="pp"> </span><span class="op">(</span><span class="pp">b</span><span class="op">)</span><span class="pp"> </span><span class="op">:</span><span class="pp"> </span><span class="op">(</span><span class="pp">a</span><span class="op">))</span></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
 </div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define BETWEEN(x, a, b)	((a) &lt;= (x) &amp;&amp; (x) &lt;= (b))</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define LEN</span><span class="op">(</span><span class="pp">a</span><span class="op">)</span><span class="pp">			</span><span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span><span class="pp">a</span><span class="op">)</span><span class="pp"> </span><span class="op">/</span><span class="pp"> </span><span class="kw">sizeof</span><span class="op">(</span><span class="pp">a</span><span class="op">)[</span><span class="dv">0</span><span class="op">])</span></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
 </div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define DIVCEIL(n, d)		(((n) + ((d) - 1)) / (d))</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define BETWEEN</span><span class="op">(</span><span class="pp">x</span><span class="op">,</span><span class="pp"> a</span><span class="op">,</span><span class="pp"> b</span><span class="op">)</span><span class="pp">	</span><span class="op">((</span><span class="pp">a</span><span class="op">)</span><span class="pp"> </span><span class="op">&lt;=</span><span class="pp"> </span><span class="op">(</span><span class="pp">x</span><span class="op">)</span><span class="pp"> </span><span class="op">&amp;&amp;</span><span class="pp"> </span><span class="op">(</span><span class="pp">x</span><span class="op">)</span><span class="pp"> </span><span class="op">&lt;=</span><span class="pp"> </span><span class="op">(</span><span class="pp">b</span><span class="op">))</span></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
 </div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define DEFAULT(a, b)		(a) = (a) ? (a) : (b)</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define DIVCEIL</span><span class="op">(</span><span class="pp">n</span><span class="op">,</span><span class="pp"> d</span><span class="op">)</span><span class="pp">		</span><span class="op">(((</span><span class="pp">n</span><span class="op">)</span><span class="pp"> </span><span class="op">+</span><span class="pp"> </span><span class="op">((</span><span class="pp">d</span><span class="op">)</span><span class="pp"> </span><span class="op">-</span><span class="pp"> </span><span class="dv">1</span><span class="op">))</span><span class="pp"> </span><span class="op">/</span><span class="pp"> </span><span class="op">(</span><span class="pp">d</span><span class="op">))</span></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
 </div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define LIMIT(x, a, b)		(x) = (x) &lt; (a) ? (a) : (x) &gt; (b) ? (b) : (x)</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define DEFAULT</span><span class="op">(</span><span class="pp">a</span><span class="op">,</span><span class="pp"> b</span><span class="op">)</span><span class="pp">		</span><span class="op">(</span><span class="pp">a</span><span class="op">)</span><span class="pp"> </span><span class="op">=</span><span class="pp"> </span><span class="op">(</span><span class="pp">a</span><span class="op">)</span><span class="pp"> </span><span class="op">?</span><span class="pp"> </span><span class="op">(</span><span class="pp">a</span><span class="op">)</span><span class="pp"> </span><span class="op">:</span><span class="pp"> </span><span class="op">(</span><span class="pp">b</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
 </div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ATTRCMP(a, b)		((a).mode != (b).mode || (a).fg != (b).fg || \</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="pp">                                (a).bg != (b).bg)</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define LIMIT</span><span class="op">(</span><span class="pp">x</span><span class="op">,</span><span class="pp"> a</span><span class="op">,</span><span class="pp"> b</span><span class="op">)</span><span class="pp">		</span><span class="op">(</span><span class="pp">x</span><span class="op">)</span><span class="pp"> </span><span class="op">=</span><span class="pp"> </span><span class="op">(</span><span class="pp">x</span><span class="op">)</span><span class="pp"> </span><span class="op">&lt;</span><span class="pp"> </span><span class="op">(</span><span class="pp">a</span><span class="op">)</span><span class="pp"> </span><span class="op">?</span><span class="pp"> </span><span class="op">(</span><span class="pp">a</span><span class="op">)</span><span class="pp"> </span><span class="op">:</span><span class="pp"> </span><span class="op">(</span><span class="pp">x</span><span class="op">)</span><span class="pp"> </span><span class="op">&gt;</span><span class="pp"> </span><span class="op">(</span><span class="pp">b</span><span class="op">)</span><span class="pp"> </span><span class="op">?</span><span class="pp"> </span><span class="op">(</span><span class="pp">b</span><span class="op">)</span><span class="pp"> </span><span class="op">:</span><span class="pp"> </span><span class="op">(</span><span class="pp">x</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
 </div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define TIMEDIFF(t1, t2)	((t1.tv_sec-t2.tv_sec)*1000 + \</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="pp">                                (t1.tv_nsec-t2.tv_nsec)/1E6)</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ATTRCMP</span><span class="op">(</span><span class="pp">a</span><span class="op">,</span><span class="pp"> b</span><span class="op">)</span><span class="pp">		</span><span class="op">((</span><span class="pp">a</span><span class="op">).</span><span class="pp">mode </span><span class="op">!=</span><span class="pp"> </span><span class="op">(</span><span class="pp">b</span><span class="op">).</span><span class="pp">mode </span><span class="op">||</span><span class="pp"> </span><span class="op">(</span><span class="pp">a</span><span class="op">).</span><span class="pp">fg </span><span class="op">!=</span><span class="pp"> </span><span class="op">(</span><span class="pp">b</span><span class="op">).</span><span class="pp">fg </span><span class="op">||</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="pp">                                </span><span class="op">(</span><span class="pp">a</span><span class="op">).</span><span class="pp">bg </span><span class="op">!=</span><span class="pp"> </span><span class="op">(</span><span class="pp">b</span><span class="op">).</span><span class="pp">bg</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
 </div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MODBIT(x, set, bit)	((set) ? ((x) |= (bit)) : ((x) &amp;= ~(bit)))</span></span>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define TIMEDIFF</span><span class="op">(</span><span class="pp">t1</span><span class="op">,</span><span class="pp"> t2</span><span class="op">)</span><span class="pp">	</span><span class="op">((</span><span class="pp">t1</span><span class="op">.</span><span class="pp">tv_sec</span><span class="op">-</span><span class="pp">t2</span><span class="op">.</span><span class="pp">tv_sec</span><span class="op">)*</span><span class="dv">1000</span><span class="pp"> </span><span class="op">+</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="pp">                                </span><span class="op">(</span><span class="pp">t1</span><span class="op">.</span><span class="pp">tv_nsec</span><span class="op">-</span><span class="pp">t2</span><span class="op">.</span><span class="pp">tv_nsec</span><span class="op">)/</span><span class="fl">1E6</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="ui segment">
+<div class="ui top right attached label">
+c
+</div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MODBIT</span><span class="op">(</span><span class="pp">x</span><span class="op">,</span><span class="pp"> set</span><span class="op">,</span><span class="pp"> bit</span><span class="op">)</span><span class="pp">	</span><span class="op">((</span><span class="pp">set</span><span class="op">)</span><span class="pp"> </span><span class="op">?</span><span class="pp"> </span><span class="op">((</span><span class="pp">x</span><span class="op">)</span><span class="pp"> </span><span class="op">|=</span><span class="pp"> </span><span class="op">(</span><span class="pp">bit</span><span class="op">))</span><span class="pp"> </span><span class="op">:</span><span class="pp"> </span><span class="op">((</span><span class="pp">x</span><span class="op">)</span><span class="pp"> </span><span class="op">&amp;=</span><span class="pp"> </span><span class="op">~(</span><span class="pp">bit</span><span class="op">)))</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
 </div>
-<div class="sourceCode" id="cb11"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define TRUECOLOR(r,g,b)	(1 &lt;&lt; 24 | (r) &lt;&lt; 16 | (g) &lt;&lt; 8 | (b))</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define TRUECOLOR</span><span class="op">(</span><span class="pp">r</span><span class="op">,</span><span class="pp">g</span><span class="op">,</span><span class="pp">b</span><span class="op">)</span><span class="pp">	</span><span class="op">(</span><span class="dv">1</span><span class="pp"> </span><span class="op">&lt;&lt;</span><span class="pp"> </span><span class="dv">24</span><span class="pp"> </span><span class="op">|</span><span class="pp"> </span><span class="op">(</span><span class="pp">r</span><span class="op">)</span><span class="pp"> </span><span class="op">&lt;&lt;</span><span class="pp"> </span><span class="dv">16</span><span class="pp"> </span><span class="op">|</span><span class="pp"> </span><span class="op">(</span><span class="pp">g</span><span class="op">)</span><span class="pp"> </span><span class="op">&lt;&lt;</span><span class="pp"> </span><span class="dv">8</span><span class="pp"> </span><span class="op">|</span><span class="pp"> </span><span class="op">(</span><span class="pp">b</span><span class="op">))</span></span></code></pre></div>
 </div>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
 </div>
-<div class="sourceCode" id="cb12"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IS_TRUECOL(x)		(1 &lt;&lt; 24 &amp; (x))</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IS_TRUECOL</span><span class="op">(</span><span class="pp">x</span><span class="op">)</span><span class="pp">		</span><span class="op">(</span><span class="dv">1</span><span class="pp"> </span><span class="op">&lt;&lt;</span><span class="pp"> </span><span class="dv">24</span><span class="pp"> </span><span class="op">&amp;</span><span class="pp"> </span><span class="op">(</span><span class="pp">x</span><span class="op">))</span></span></code></pre></div>
 </div>
 <ol>
 <li><p><code>glyph_attribute</code></p>
@@ -269,7 +279,8 @@ c
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>        SNAP_LINE <span class="op">=</span> <span class="dv">2</span></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
 </div></li>
-<li><p><code>uchar</code>, <code>uint</code>, <code>ulong</code>, <code>ushort</code></p>
+<li><p><code>uchar</code>, <code>uint</code>, <code>ulong</code>,
+<code>ushort</code></p>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
@@ -301,7 +312,9 @@ c
 <span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> Glyph<span class="op">;</span></span></code></pre></div>
 </div></li>
 <li><p><code>Line</code></p>
-<p><span class="spurious-link" target="*~Glyph"><em>Glyph</em></span>の横並び=一列。 ポインタで可変長配列、という感じ？ メモリ管理をきちんとしないと死にそう。</p>
+<p><span class="spurious-link" target="*~Glyph"><em>Glyph</em></span>の横並び=一列。
+ポインタで可変長配列、という感じ？
+メモリ管理をきちんとしないと死にそう。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
@@ -375,19 +388,19 @@ c
 <span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span>
 <span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a><span class="co">/* Arbitrary sizes */</span></span>
-<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a><span class="pp">#define UTF_INVALID   0xFFFD</span></span>
-<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a><span class="pp">#define UTF_SIZ       4</span></span>
-<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ESC_BUF_SIZ   (128*UTF_SIZ)</span></span>
-<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ESC_ARG_SIZ   16</span></span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a><span class="pp">#define UTF_INVALID   </span><span class="bn">0xFFFD</span></span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a><span class="pp">#define UTF_SIZ       </span><span class="dv">4</span></span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ESC_BUF_SIZ   </span><span class="op">(</span><span class="dv">128</span><span class="op">*</span>UTF_SIZ<span class="op">)</span></span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ESC_ARG_SIZ   </span><span class="dv">16</span></span>
 <span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a><span class="pp">#define STR_BUF_SIZ   ESC_BUF_SIZ</span></span>
 <span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a><span class="pp">#define STR_ARG_SIZ   ESC_ARG_SIZ</span></span>
 <span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a><span class="co">/* macros */</span></span>
-<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IS_SET(flag)		((term.mode &amp; (flag)) != 0)</span></span>
-<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ISCONTROLC0(c)		(BETWEEN(c, 0, 0x1f) || (c) == 0x7f)</span></span>
-<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ISCONTROLC1(c)		(BETWEEN(c, 0x80, 0x9f))</span></span>
-<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ISCONTROL(c)		(ISCONTROLC0(c) || ISCONTROLC1(c))</span></span>
-<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ISDELIM(u)		(u &amp;&amp; wcschr(worddelimiters, u))</span></span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a><span class="pp">#define IS_SET</span><span class="op">(</span><span class="pp">flag</span><span class="op">)</span><span class="pp">		</span><span class="op">((</span><span class="pp">term</span><span class="op">.</span><span class="pp">mode </span><span class="op">&amp;</span><span class="pp"> </span><span class="op">(</span><span class="pp">flag</span><span class="op">))</span><span class="pp"> </span><span class="op">!=</span><span class="pp"> </span><span class="dv">0</span><span class="op">)</span></span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ISCONTROLC0</span><span class="op">(</span><span class="pp">c</span><span class="op">)</span><span class="pp">		</span><span class="op">(</span><span class="pp">BETWEEN</span><span class="op">(</span><span class="pp">c</span><span class="op">,</span><span class="pp"> </span><span class="dv">0</span><span class="op">,</span><span class="pp"> </span><span class="bn">0x1f</span><span class="op">)</span><span class="pp"> </span><span class="op">||</span><span class="pp"> </span><span class="op">(</span><span class="pp">c</span><span class="op">)</span><span class="pp"> </span><span class="op">==</span><span class="pp"> </span><span class="bn">0x7f</span><span class="op">)</span></span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ISCONTROLC1</span><span class="op">(</span><span class="pp">c</span><span class="op">)</span><span class="pp">		</span><span class="op">(</span><span class="pp">BETWEEN</span><span class="op">(</span><span class="pp">c</span><span class="op">,</span><span class="pp"> </span><span class="bn">0x80</span><span class="op">,</span><span class="pp"> </span><span class="bn">0x9f</span><span class="op">))</span></span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ISCONTROL</span><span class="op">(</span><span class="pp">c</span><span class="op">)</span><span class="pp">		</span><span class="op">(</span><span class="pp">ISCONTROLC0</span><span class="op">(</span><span class="pp">c</span><span class="op">)</span><span class="pp"> </span><span class="op">||</span><span class="pp"> ISCONTROLC1</span><span class="op">(</span><span class="pp">c</span><span class="op">))</span></span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ISDELIM</span><span class="op">(</span>u<span class="op">)</span><span class="pp">		</span><span class="op">(</span>u<span class="pp"> </span><span class="op">&amp;&amp;</span><span class="pp"> wcschr</span><span class="op">(</span><span class="pp">worddelimiters</span><span class="op">,</span><span class="pp"> </span>u<span class="op">))</span></span>
 <span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> term_mode <span class="op">{</span></span>
 <span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a>        MODE_WRAP        <span class="op">=</span> <span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">0</span><span class="op">,</span></span>
@@ -580,14 +593,19 @@ c
 <span id="cb22-234"><a href="#cb22-234" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 </div></li>
 <li><p><code>xwrite</code></p>
-<p><code>write</code> 関数のラッパーみたいなもの。 <code>write</code> は <code>len</code> で与えた文字数を書き込むわけですが、 必ず全てが書き込まれるわけではありません。 <code>man 2 write</code> によると、</p>
+<p><code>write</code> 関数のラッパーみたいなもの。 <code>write</code> は
+<code>len</code> で与えた文字数を書き込むわけですが、
+必ず全てが書き込まれるわけではありません。 <code>man 2 write</code>
+によると、</p>
 <ul>
 <li>ファイルシステムに十分な空き容量が無い時</li>
 <li><code>RLIMIT_FSIZE</code> の制限にかかった時</li>
 <li>途中でシグナルハンドラに割り込みされた時</li>
 </ul>
 <p>に、一部のみの書き込みで終わってしまうことがあるようです。</p>
-<p>そこで、この関数では全てが書き込まれることを保証するために書き込まれた文字数(<code>r</code>)と 書き込みたい文字数の長さ(<code>len</code>)を比べ、全てが書き込まれるまで <code>write</code> を続けるようです。</p>
+<p>そこで、この関数では全てが書き込まれることを保証するために書き込まれた文字数(<code>r</code>)と
+書き込みたい文字数の長さ(<code>len</code>)を比べ、全てが書き込まれるまで
+<code>write</code> を続けるようです。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
@@ -622,7 +640,7 @@ c
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">void</span> <span class="op">*</span>p<span class="op">;</span></span>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(!(</span>p <span class="op">=</span> malloc<span class="op">(</span>len<span class="op">)))</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;malloc: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;malloc: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> p<span class="op">;</span></span>
 <span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
@@ -638,7 +656,7 @@ c
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>xrealloc<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>p<span class="op">,</span> <span class="dt">size_t</span> len<span class="op">)</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>p <span class="op">=</span> realloc<span class="op">(</span>p<span class="op">,</span> len<span class="op">))</span> <span class="op">==</span> NULL<span class="op">)</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;realloc: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;realloc: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
 <span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> p<span class="op">;</span></span>
 <span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
@@ -656,7 +674,7 @@ c
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> <span class="op">*</span>p<span class="op">;</span></span>
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>p <span class="op">=</span> strdup<span class="op">(</span>s<span class="op">))</span> <span class="op">==</span> NULL<span class="op">)</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;strdup: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;strdup: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
 <span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> p<span class="op">;</span></span>
 <span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
@@ -815,7 +833,7 @@ c
 <span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span>dst<span class="op">++</span> <span class="op">=</span> <span class="op">((</span>c <span class="op">&amp;</span> <span class="bn">0x03</span><span class="op">)</span> <span class="op">&lt;&lt;</span> <span class="dv">6</span><span class="op">)</span> <span class="op">|</span> d<span class="op">;</span></span>
 <span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>dst <span class="op">=</span> <span class="ch">'\0'</span><span class="op">;</span></span>
+<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>dst <span class="op">=</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">;</span></span>
 <span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> result<span class="op">;</span></span>
 <span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
@@ -837,7 +855,8 @@ c
 </div></li>
 <li><p><code>tlinelen</code></p>
 <p>与えられた <code>y</code> 行目にある文字数を返す。</p>
-<p>iは横幅。最後の文字から順々に見ていき、空白でない文字の indexを返す。</p>
+<p>iは横幅。最後の文字から順々に見ていき、空白でない文字の
+indexを返す。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
@@ -856,7 +875,8 @@ c
 <span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> i<span class="op">;</span></span>
 <span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 </div>
-<p>つまり、左上の文字を <code>term.line[0][0]</code> と仮定すると、以下の内容のとき:</p>
+<p>つまり、左上の文字を <code>term.line[0][0]</code>
+と仮定すると、以下の内容のとき:</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
@@ -934,7 +954,8 @@ c
 <span id="cb39-29"><a href="#cb39-29" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 </div></li>
 <li><p><code>selnormalize</code></p>
-<p>選択範囲の正規化を行う。正規化(normalize)と言ってはいるが、0~1の正規化ではなく 「始点」の座標が「終点」よりも前にくるようにする。</p>
+<p>選択範囲の正規化を行う。正規化(normalize)と言ってはいるが、0~1の正規化ではなく
+「始点」の座標が「終点」よりも前にくるようにする。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 c
@@ -1089,7 +1110,7 @@ c
 <span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>        <span class="co">/* append every set &amp; selected glyph to the selection */</span></span>
 <span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span>y <span class="op">=</span> sel<span class="op">.</span>nb<span class="op">.</span>y<span class="op">;</span> y <span class="op">&lt;=</span> sel<span class="op">.</span>ne<span class="op">.</span>y<span class="op">;</span> y<span class="op">++)</span> <span class="op">{</span></span>
 <span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">((</span>linelen <span class="op">=</span> tlinelen<span class="op">(</span>y<span class="op">))</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a>                        <span class="op">*</span>ptr<span class="op">++</span> <span class="op">=</span> <span class="ch">'\n'</span><span class="op">;</span></span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a>                        <span class="op">*</span>ptr<span class="op">++</span> <span class="op">=</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">;</span></span>
 <span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">continue</span><span class="op">;</span></span>
 <span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a></span>
@@ -1122,7 +1143,7 @@ c
 <span id="cb43-47"><a href="#cb43-47" aria-hidden="true" tabindex="-1"></a><span class="co">                 */</span></span>
 <span id="cb43-48"><a href="#cb43-48" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">((</span>y <span class="op">&lt;</span> sel<span class="op">.</span>ne<span class="op">.</span>y <span class="op">||</span> lastx <span class="op">&gt;=</span> linelen<span class="op">)</span> <span class="op">&amp;&amp;</span></span>
 <span id="cb43-49"><a href="#cb43-49" aria-hidden="true" tabindex="-1"></a>                    <span class="op">(!(</span>last<span class="op">-&gt;</span>mode <span class="op">&amp;</span> ATTR_WRAP<span class="op">)</span> <span class="op">||</span> sel<span class="op">.</span>type <span class="op">==</span> SEL_RECTANGULAR<span class="op">))</span></span>
-<span id="cb43-50"><a href="#cb43-50" aria-hidden="true" tabindex="-1"></a>                        <span class="op">*</span>ptr<span class="op">++</span> <span class="op">=</span> <span class="ch">'\n'</span><span class="op">;</span></span>
+<span id="cb43-50"><a href="#cb43-50" aria-hidden="true" tabindex="-1"></a>                        <span class="op">*</span>ptr<span class="op">++</span> <span class="op">=</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">;</span></span>
 <span id="cb43-51"><a href="#cb43-51" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb43-52"><a href="#cb43-52" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>ptr <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb43-53"><a href="#cb43-53" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> str<span class="op">;</span></span>
@@ -1177,7 +1198,7 @@ c
 <span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>        errno <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>pw <span class="op">=</span> getpwuid<span class="op">(</span>getuid<span class="op">()))</span> <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>errno<span class="op">)</span></span>
-<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>                        die<span class="op">(</span><span class="st">&quot;getpwuid: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>                        die<span class="op">(</span><span class="st">&quot;getpwuid: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
 <span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span></span>
 <span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>                        die<span class="op">(</span><span class="st">&quot;who are you?</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
 <span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
@@ -1233,15 +1254,15 @@ c
 <span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>        pid_t p<span class="op">;</span></span>
 <span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>p <span class="op">=</span> waitpid<span class="op">(</span>pid<span class="op">,</span> <span class="op">&amp;</span>stat<span class="op">,</span> WNOHANG<span class="op">))</span> <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;waiting for pid %hd failed: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> pid<span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;waiting for pid </span><span class="sc">%hd</span><span class="st"> failed: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> pid<span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
 <span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>pid <span class="op">!=</span> p<span class="op">)</span></span>
 <span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>WIFEXITED<span class="op">(</span>stat<span class="op">)</span> <span class="op">&amp;&amp;</span> WEXITSTATUS<span class="op">(</span>stat<span class="op">))</span></span>
-<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;child exited with status %d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> WEXITSTATUS<span class="op">(</span>stat<span class="op">));</span></span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;child exited with status </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> WEXITSTATUS<span class="op">(</span>stat<span class="op">));</span></span>
 <span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>WIFSIGNALED<span class="op">(</span>stat<span class="op">))</span></span>
-<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;child terminated due to signal %d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> WTERMSIG<span class="op">(</span>stat<span class="op">));</span></span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;child terminated due to signal </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> WTERMSIG<span class="op">(</span>stat<span class="op">));</span></span>
 <span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>        _exit<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
 <span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
@@ -1270,7 +1291,7 @@ c
 <span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a>                q <span class="op">+=</span> n<span class="op">;</span></span>
 <span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>                siz <span class="op">-=</span> n <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>q <span class="op">=</span> <span class="ch">'\0'</span><span class="op">;</span></span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>q <span class="op">=</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">;</span></span>
 <span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>system<span class="op">(</span>cmd<span class="op">)</span> <span class="op">!=</span> <span class="dv">0</span><span class="op">)</span></span>
 <span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>                perror<span class="op">(</span><span class="st">&quot;Couldn't call stty&quot;</span><span class="op">);</span></span>
 <span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
@@ -1291,14 +1312,14 @@ c
 <span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>                iofd <span class="op">=</span> <span class="op">(!</span>strcmp<span class="op">(</span>out<span class="op">,</span> <span class="st">&quot;-&quot;</span><span class="op">))</span> <span class="op">?</span></span>
 <span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>                          <span class="dv">1</span> <span class="op">:</span> open<span class="op">(</span>out<span class="op">,</span> O_WRONLY <span class="op">|</span> O_CREAT<span class="op">,</span> <span class="bn">0666</span><span class="op">);</span></span>
 <span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>iofd <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;Error opening %s:%s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;Error opening </span><span class="sc">%s</span><span class="st">:</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span></span>
 <span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>                                out<span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
 <span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>line<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">((</span>cmdfd <span class="op">=</span> open<span class="op">(</span>line<span class="op">,</span> O_RDWR<span class="op">))</span> <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
-<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>                        die<span class="op">(</span><span class="st">&quot;open line '%s' failed: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>                        die<span class="op">(</span><span class="st">&quot;open line '</span><span class="sc">%s</span><span class="st">' failed: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span></span>
 <span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>                            line<span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
 <span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a>                dup2<span class="op">(</span>cmdfd<span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
 <span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a>                stty<span class="op">(</span>args<span class="op">);</span></span>
@@ -1307,11 +1328,11 @@ c
 <span id="cb49-24"><a href="#cb49-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-25"><a href="#cb49-25" aria-hidden="true" tabindex="-1"></a>        <span class="co">/* seems to work fine on linux, openbsd and freebsd */</span></span>
 <span id="cb49-26"><a href="#cb49-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>openpty<span class="op">(&amp;</span>m<span class="op">,</span> <span class="op">&amp;</span>s<span class="op">,</span> NULL<span class="op">,</span> NULL<span class="op">,</span> NULL<span class="op">)</span> <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
-<span id="cb49-27"><a href="#cb49-27" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;openpty failed: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
+<span id="cb49-27"><a href="#cb49-27" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;openpty failed: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
 <span id="cb49-28"><a href="#cb49-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-29"><a href="#cb49-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">switch</span> <span class="op">(</span>pid <span class="op">=</span> fork<span class="op">())</span> <span class="op">{</span></span>
 <span id="cb49-30"><a href="#cb49-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="op">-</span><span class="dv">1</span><span class="op">:</span></span>
-<span id="cb49-31"><a href="#cb49-31" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;fork failed: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
+<span id="cb49-31"><a href="#cb49-31" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;fork failed: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
 <span id="cb49-32"><a href="#cb49-32" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb49-33"><a href="#cb49-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">0</span><span class="op">:</span></span>
 <span id="cb49-34"><a href="#cb49-34" aria-hidden="true" tabindex="-1"></a>                close<span class="op">(</span>iofd<span class="op">);</span></span>
@@ -1321,7 +1342,7 @@ c
 <span id="cb49-38"><a href="#cb49-38" aria-hidden="true" tabindex="-1"></a>                dup2<span class="op">(</span>s<span class="op">,</span> <span class="dv">1</span><span class="op">);</span></span>
 <span id="cb49-39"><a href="#cb49-39" aria-hidden="true" tabindex="-1"></a>                dup2<span class="op">(</span>s<span class="op">,</span> <span class="dv">2</span><span class="op">);</span></span>
 <span id="cb49-40"><a href="#cb49-40" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>ioctl<span class="op">(</span>s<span class="op">,</span> TIOCSCTTY<span class="op">,</span> NULL<span class="op">)</span> <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
-<span id="cb49-41"><a href="#cb49-41" aria-hidden="true" tabindex="-1"></a>                        die<span class="op">(</span><span class="st">&quot;ioctl TIOCSCTTY failed: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
+<span id="cb49-41"><a href="#cb49-41" aria-hidden="true" tabindex="-1"></a>                        die<span class="op">(</span><span class="st">&quot;ioctl TIOCSCTTY failed: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
 <span id="cb49-42"><a href="#cb49-42" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>s <span class="op">&gt;</span> <span class="dv">2</span><span class="op">)</span></span>
 <span id="cb49-43"><a href="#cb49-43" aria-hidden="true" tabindex="-1"></a>                        close<span class="op">(</span>s<span class="op">);</span></span>
 <span id="cb49-44"><a href="#cb49-44" aria-hidden="true" tabindex="-1"></a><span class="pp">#ifdef __OpenBSD__</span></span>
@@ -1363,7 +1384,7 @@ c
 <span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">0</span><span class="op">:</span></span>
 <span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>                exit<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
 <span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="op">-</span><span class="dv">1</span><span class="op">:</span></span>
-<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;couldn't read from shell: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>                die<span class="op">(</span><span class="st">&quot;couldn't read from shell: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
 <span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">default</span><span class="op">:</span></span>
 <span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>                buflen <span class="op">+=</span> ret<span class="op">;</span></span>
 <span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a>                written <span class="op">=</span> twrite<span class="op">(</span>buf<span class="op">,</span> buflen<span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
@@ -1397,7 +1418,7 @@ c
 <span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>        <span class="co">/* append every set &amp; selected glyph to the selection */</span></span>
 <span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span>y <span class="op">=</span> sel<span class="op">.</span>nb<span class="op">.</span>y<span class="op">;</span> y <span class="op">&lt;=</span> sel<span class="op">.</span>ne<span class="op">.</span>y<span class="op">;</span> y<span class="op">++)</span> <span class="op">{</span></span>
 <span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">((</span>linelen <span class="op">=</span> tlinelen<span class="op">(</span>y<span class="op">))</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>                        <span class="op">*</span>ptr<span class="op">++</span> <span class="op">=</span> <span class="ch">'\n'</span><span class="op">;</span></span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>                        <span class="op">*</span>ptr<span class="op">++</span> <span class="op">=</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">;</span></span>
 <span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">continue</span><span class="op">;</span></span>
 <span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a></span>
@@ -1430,7 +1451,7 @@ c
 <span id="cb51-47"><a href="#cb51-47" aria-hidden="true" tabindex="-1"></a><span class="co">                 */</span></span>
 <span id="cb51-48"><a href="#cb51-48" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">((</span>y <span class="op">&lt;</span> sel<span class="op">.</span>ne<span class="op">.</span>y <span class="op">||</span> lastx <span class="op">&gt;=</span> linelen<span class="op">)</span> <span class="op">&amp;&amp;</span></span>
 <span id="cb51-49"><a href="#cb51-49" aria-hidden="true" tabindex="-1"></a>                    <span class="op">(!(</span>last<span class="op">-&gt;</span>mode <span class="op">&amp;</span> ATTR_WRAP<span class="op">)</span> <span class="op">||</span> sel<span class="op">.</span>type <span class="op">==</span> SEL_RECTANGULAR<span class="op">))</span></span>
-<span id="cb51-50"><a href="#cb51-50" aria-hidden="true" tabindex="-1"></a>                        <span class="op">*</span>ptr<span class="op">++</span> <span class="op">=</span> <span class="ch">'\n'</span><span class="op">;</span></span>
+<span id="cb51-50"><a href="#cb51-50" aria-hidden="true" tabindex="-1"></a>                        <span class="op">*</span>ptr<span class="op">++</span> <span class="op">=</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">;</span></span>
 <span id="cb51-51"><a href="#cb51-51" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb51-52"><a href="#cb51-52" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>ptr <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
 <span id="cb51-53"><a href="#cb51-53" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> str<span class="op">;</span></span>
@@ -1465,7 +1486,7 @@ c
 <span id="cb52-21"><a href="#cb52-21" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>pselect<span class="op">(</span>cmdfd<span class="op">+</span><span class="dv">1</span><span class="op">,</span> <span class="op">&amp;</span>rfd<span class="op">,</span> <span class="op">&amp;</span>wfd<span class="op">,</span> NULL<span class="op">,</span> NULL<span class="op">,</span> NULL<span class="op">)</span> <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb52-22"><a href="#cb52-22" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">if</span> <span class="op">(</span>errno <span class="op">==</span> EINTR<span class="op">)</span></span>
 <span id="cb52-23"><a href="#cb52-23" aria-hidden="true" tabindex="-1"></a>                                <span class="cf">continue</span><span class="op">;</span></span>
-<span id="cb52-24"><a href="#cb52-24" aria-hidden="true" tabindex="-1"></a>                        die<span class="op">(</span><span class="st">&quot;select failed: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
+<span id="cb52-24"><a href="#cb52-24" aria-hidden="true" tabindex="-1"></a>                        die<span class="op">(</span><span class="st">&quot;select failed: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
 <span id="cb52-25"><a href="#cb52-25" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb52-26"><a href="#cb52-26" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>FD_ISSET<span class="op">(</span>cmdfd<span class="op">,</span> <span class="op">&amp;</span>wfd<span class="op">))</span> <span class="op">{</span></span>
 <span id="cb52-27"><a href="#cb52-27" aria-hidden="true" tabindex="-1"></a>                        <span class="co">/*</span></span>
@@ -1496,7 +1517,7 @@ c
 <span id="cb52-52"><a href="#cb52-52" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb52-53"><a href="#cb52-53" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb52-54"><a href="#cb52-54" aria-hidden="true" tabindex="-1"></a>write_error<span class="op">:</span></span>
-<span id="cb52-55"><a href="#cb52-55" aria-hidden="true" tabindex="-1"></a>        die<span class="op">(</span><span class="st">&quot;write error on tty: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
+<span id="cb52-55"><a href="#cb52-55" aria-hidden="true" tabindex="-1"></a>        die<span class="op">(</span><span class="st">&quot;write error on tty: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
 <span id="cb52-56"><a href="#cb52-56" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb52-57"><a href="#cb52-57" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 </div></li>
@@ -1515,7 +1536,7 @@ c
 <span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>        w<span class="op">.</span>ws_xpixel <span class="op">=</span> tw<span class="op">;</span></span>
 <span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>        w<span class="op">.</span>ws_ypixel <span class="op">=</span> th<span class="op">;</span></span>
 <span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>ioctl<span class="op">(</span>cmdfd<span class="op">,</span> TIOCSWINSZ<span class="op">,</span> <span class="op">&amp;</span>w<span class="op">)</span> <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
-<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>                fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;Couldn't set window size: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>                fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;Couldn't set window size: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> strerror<span class="op">(</span>errno<span class="op">));</span></span>
 <span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 </div></li>
@@ -1803,7 +1824,7 @@ c
 <span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a>                p<span class="op">++;</span></span>
 <span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-13"><a href="#cb67-13" aria-hidden="true" tabindex="-1"></a>        csiescseq<span class="op">.</span>buf<span class="op">[</span>csiescseq<span class="op">.</span>len<span class="op">]</span> <span class="op">=</span> <span class="ch">'\0'</span><span class="op">;</span></span>
+<span id="cb67-13"><a href="#cb67-13" aria-hidden="true" tabindex="-1"></a>        csiescseq<span class="op">.</span>buf<span class="op">[</span>csiescseq<span class="op">.</span>len<span class="op">]</span> <span class="op">=</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">;</span></span>
 <span id="cb67-14"><a href="#cb67-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="op">(</span>p <span class="op">&lt;</span> csiescseq<span class="op">.</span>buf<span class="op">+</span>csiescseq<span class="op">.</span>len<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb67-15"><a href="#cb67-15" aria-hidden="true" tabindex="-1"></a>                np <span class="op">=</span> NULL<span class="op">;</span></span>
 <span id="cb67-16"><a href="#cb67-16" aria-hidden="true" tabindex="-1"></a>                v <span class="op">=</span> strtol<span class="op">(</span>p<span class="op">,</span> <span class="op">&amp;</span>np<span class="op">,</span> <span class="dv">10</span><span class="op">);</span></span>
@@ -1818,7 +1839,7 @@ c
 <span id="cb67-25"><a href="#cb67-25" aria-hidden="true" tabindex="-1"></a>                p<span class="op">++;</span></span>
 <span id="cb67-26"><a href="#cb67-26" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb67-27"><a href="#cb67-27" aria-hidden="true" tabindex="-1"></a>        csiescseq<span class="op">.</span>mode<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="op">*</span>p<span class="op">++;</span></span>
-<span id="cb67-28"><a href="#cb67-28" aria-hidden="true" tabindex="-1"></a>        csiescseq<span class="op">.</span>mode<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="op">(</span>p <span class="op">&lt;</span> csiescseq<span class="op">.</span>buf<span class="op">+</span>csiescseq<span class="op">.</span>len<span class="op">)</span> <span class="op">?</span> <span class="op">*</span>p <span class="op">:</span> <span class="ch">'\0'</span><span class="op">;</span></span>
+<span id="cb67-28"><a href="#cb67-28" aria-hidden="true" tabindex="-1"></a>        csiescseq<span class="op">.</span>mode<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="op">(</span>p <span class="op">&lt;</span> csiescseq<span class="op">.</span>buf<span class="op">+</span>csiescseq<span class="op">.</span>len<span class="op">)</span> <span class="op">?</span> <span class="op">*</span>p <span class="op">:</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">;</span></span>
 <span id="cb67-29"><a href="#cb67-29" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb67-30"><a href="#cb67-30" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 </div></li>
@@ -2023,7 +2044,7 @@ c
 <span id="cb76-8"><a href="#cb76-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">2</span><span class="op">:</span> <span class="co">/* direct color in RGB space */</span></span>
 <span id="cb76-9"><a href="#cb76-9" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(*</span>npar <span class="op">+</span> <span class="dv">4</span> <span class="op">&gt;=</span> l<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb76-10"><a href="#cb76-10" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span></span>
-<span id="cb76-11"><a href="#cb76-11" aria-hidden="true" tabindex="-1"></a>                                <span class="st">&quot;erresc(38): Incorrect number of parameters (%d)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb76-11"><a href="#cb76-11" aria-hidden="true" tabindex="-1"></a>                                <span class="st">&quot;erresc(38): Incorrect number of parameters (</span><span class="sc">%d</span><span class="st">)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
 <span id="cb76-12"><a href="#cb76-12" aria-hidden="true" tabindex="-1"></a>                                <span class="op">*</span>npar<span class="op">);</span></span>
 <span id="cb76-13"><a href="#cb76-13" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb76-14"><a href="#cb76-14" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
@@ -2032,7 +2053,7 @@ c
 <span id="cb76-17"><a href="#cb76-17" aria-hidden="true" tabindex="-1"></a>                b <span class="op">=</span> attr<span class="op">[*</span>npar <span class="op">+</span> <span class="dv">4</span><span class="op">];</span></span>
 <span id="cb76-18"><a href="#cb76-18" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span>npar <span class="op">+=</span> <span class="dv">4</span><span class="op">;</span></span>
 <span id="cb76-19"><a href="#cb76-19" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(!</span>BETWEEN<span class="op">(</span>r<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">255</span><span class="op">)</span> <span class="op">||</span> <span class="op">!</span>BETWEEN<span class="op">(</span>g<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">255</span><span class="op">)</span> <span class="op">||</span> <span class="op">!</span>BETWEEN<span class="op">(</span>b<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">255</span><span class="op">))</span></span>
-<span id="cb76-20"><a href="#cb76-20" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;erresc: bad rgb color (%u,%u,%u)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb76-20"><a href="#cb76-20" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;erresc: bad rgb color (</span><span class="sc">%u</span><span class="st">,</span><span class="sc">%u</span><span class="st">,</span><span class="sc">%u</span><span class="st">)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
 <span id="cb76-21"><a href="#cb76-21" aria-hidden="true" tabindex="-1"></a>                                r<span class="op">,</span> g<span class="op">,</span> b<span class="op">);</span></span>
 <span id="cb76-22"><a href="#cb76-22" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span></span>
 <span id="cb76-23"><a href="#cb76-23" aria-hidden="true" tabindex="-1"></a>                        idx <span class="op">=</span> TRUECOLOR<span class="op">(</span>r<span class="op">,</span> g<span class="op">,</span> b<span class="op">);</span></span>
@@ -2040,13 +2061,13 @@ c
 <span id="cb76-25"><a href="#cb76-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">5</span><span class="op">:</span> <span class="co">/* indexed color */</span></span>
 <span id="cb76-26"><a href="#cb76-26" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(*</span>npar <span class="op">+</span> <span class="dv">2</span> <span class="op">&gt;=</span> l<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb76-27"><a href="#cb76-27" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span></span>
-<span id="cb76-28"><a href="#cb76-28" aria-hidden="true" tabindex="-1"></a>                                <span class="st">&quot;erresc(38): Incorrect number of parameters (%d)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb76-28"><a href="#cb76-28" aria-hidden="true" tabindex="-1"></a>                                <span class="st">&quot;erresc(38): Incorrect number of parameters (</span><span class="sc">%d</span><span class="st">)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
 <span id="cb76-29"><a href="#cb76-29" aria-hidden="true" tabindex="-1"></a>                                <span class="op">*</span>npar<span class="op">);</span></span>
 <span id="cb76-30"><a href="#cb76-30" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb76-31"><a href="#cb76-31" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb76-32"><a href="#cb76-32" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span>npar <span class="op">+=</span> <span class="dv">2</span><span class="op">;</span></span>
 <span id="cb76-33"><a href="#cb76-33" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(!</span>BETWEEN<span class="op">(</span>attr<span class="op">[*</span>npar<span class="op">],</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">255</span><span class="op">))</span></span>
-<span id="cb76-34"><a href="#cb76-34" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;erresc: bad fgcolor %d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> attr<span class="op">[*</span>npar<span class="op">]);</span></span>
+<span id="cb76-34"><a href="#cb76-34" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;erresc: bad fgcolor </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> attr<span class="op">[*</span>npar<span class="op">]);</span></span>
 <span id="cb76-35"><a href="#cb76-35" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span></span>
 <span id="cb76-36"><a href="#cb76-36" aria-hidden="true" tabindex="-1"></a>                        idx <span class="op">=</span> attr<span class="op">[*</span>npar<span class="op">];</span></span>
 <span id="cb76-37"><a href="#cb76-37" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
@@ -2056,7 +2077,7 @@ c
 <span id="cb76-41"><a href="#cb76-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="dv">4</span><span class="op">:</span> <span class="co">/* direct color in CMYK space */</span></span>
 <span id="cb76-42"><a href="#cb76-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">default</span><span class="op">:</span></span>
 <span id="cb76-43"><a href="#cb76-43" aria-hidden="true" tabindex="-1"></a>                fprintf<span class="op">(</span>stderr<span class="op">,</span></span>
-<span id="cb76-44"><a href="#cb76-44" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;erresc(38): gfx attr %d unknown</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> attr<span class="op">[*</span>npar<span class="op">]);</span></span>
+<span id="cb76-44"><a href="#cb76-44" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;erresc(38): gfx attr </span><span class="sc">%d</span><span class="st"> unknown</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> attr<span class="op">[*</span>npar<span class="op">]);</span></span>
 <span id="cb76-45"><a href="#cb76-45" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb76-46"><a href="#cb76-46" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb76-47"><a href="#cb76-47" aria-hidden="true" tabindex="-1"></a></span>
@@ -2162,7 +2183,7 @@ c
 <span id="cb77-91"><a href="#cb77-91" aria-hidden="true" tabindex="-1"></a>                                term<span class="op">.</span>c<span class="op">.</span>attr<span class="op">.</span>bg <span class="op">=</span> attr<span class="op">[</span>i<span class="op">]</span> <span class="op">-</span> <span class="dv">100</span> <span class="op">+</span> <span class="dv">8</span><span class="op">;</span></span>
 <span id="cb77-92"><a href="#cb77-92" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb77-93"><a href="#cb77-93" aria-hidden="true" tabindex="-1"></a>                                fprintf<span class="op">(</span>stderr<span class="op">,</span></span>
-<span id="cb77-94"><a href="#cb77-94" aria-hidden="true" tabindex="-1"></a>                                        <span class="st">&quot;erresc(default): gfx attr %d unknown</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb77-94"><a href="#cb77-94" aria-hidden="true" tabindex="-1"></a>                                        <span class="st">&quot;erresc(default): gfx attr </span><span class="sc">%d</span><span class="st"> unknown</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
 <span id="cb77-95"><a href="#cb77-95" aria-hidden="true" tabindex="-1"></a>                                        attr<span class="op">[</span>i<span class="op">]);</span></span>
 <span id="cb77-96"><a href="#cb77-96" aria-hidden="true" tabindex="-1"></a>                                csidump<span class="op">();</span></span>
 <span id="cb77-97"><a href="#cb77-97" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span></span>
@@ -2299,7 +2320,7 @@ c
 <span id="cb79-98"><a href="#cb79-98" aria-hidden="true" tabindex="-1"></a>                                <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb79-99"><a href="#cb79-99" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">default</span><span class="op">:</span></span>
 <span id="cb79-100"><a href="#cb79-100" aria-hidden="true" tabindex="-1"></a>                                fprintf<span class="op">(</span>stderr<span class="op">,</span></span>
-<span id="cb79-101"><a href="#cb79-101" aria-hidden="true" tabindex="-1"></a>                                        <span class="st">&quot;erresc: unknown private set/reset mode %d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb79-101"><a href="#cb79-101" aria-hidden="true" tabindex="-1"></a>                                        <span class="st">&quot;erresc: unknown private set/reset mode </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span></span>
 <span id="cb79-102"><a href="#cb79-102" aria-hidden="true" tabindex="-1"></a>                                        <span class="op">*</span>args<span class="op">);</span></span>
 <span id="cb79-103"><a href="#cb79-103" aria-hidden="true" tabindex="-1"></a>                                <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb79-104"><a href="#cb79-104" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span></span>
@@ -2321,7 +2342,7 @@ c
 <span id="cb79-120"><a href="#cb79-120" aria-hidden="true" tabindex="-1"></a>                                <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb79-121"><a href="#cb79-121" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">default</span><span class="op">:</span></span>
 <span id="cb79-122"><a href="#cb79-122" aria-hidden="true" tabindex="-1"></a>                                fprintf<span class="op">(</span>stderr<span class="op">,</span></span>
-<span id="cb79-123"><a href="#cb79-123" aria-hidden="true" tabindex="-1"></a>                                        <span class="st">&quot;erresc: unknown set/reset mode %d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb79-123"><a href="#cb79-123" aria-hidden="true" tabindex="-1"></a>                                        <span class="st">&quot;erresc: unknown set/reset mode </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span></span>
 <span id="cb79-124"><a href="#cb79-124" aria-hidden="true" tabindex="-1"></a>                                        <span class="op">*</span>args<span class="op">);</span></span>
 <span id="cb79-125"><a href="#cb79-125" aria-hidden="true" tabindex="-1"></a>                                <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb79-126"><a href="#cb79-126" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span></span>
@@ -2513,7 +2534,7 @@ c
 <span id="cb80-176"><a href="#cb80-176" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb80-177"><a href="#cb80-177" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'n'</span><span class="op">:</span> <span class="co">/* DSR – Device Status Report (cursor position) */</span></span>
 <span id="cb80-178"><a href="#cb80-178" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>csiescseq<span class="op">.</span>arg<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">==</span> <span class="dv">6</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb80-179"><a href="#cb80-179" aria-hidden="true" tabindex="-1"></a>                        len <span class="op">=</span> snprintf<span class="op">(</span>buf<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>buf<span class="op">),</span> <span class="st">&quot;</span><span class="sc">\033</span><span class="st">[%i;%iR&quot;</span><span class="op">,</span></span>
+<span id="cb80-179"><a href="#cb80-179" aria-hidden="true" tabindex="-1"></a>                        len <span class="op">=</span> snprintf<span class="op">(</span>buf<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>buf<span class="op">),</span> <span class="st">&quot;</span><span class="sc">\033</span><span class="st">[</span><span class="sc">%i</span><span class="st">;</span><span class="sc">%i</span><span class="st">R&quot;</span><span class="op">,</span></span>
 <span id="cb80-180"><a href="#cb80-180" aria-hidden="true" tabindex="-1"></a>                                        term<span class="op">.</span>c<span class="op">.</span>y<span class="op">+</span><span class="dv">1</span><span class="op">,</span> term<span class="op">.</span>c<span class="op">.</span>x<span class="op">+</span><span class="dv">1</span><span class="op">);</span></span>
 <span id="cb80-181"><a href="#cb80-181" aria-hidden="true" tabindex="-1"></a>                        ttywrite<span class="op">(</span>buf<span class="op">,</span> len<span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
 <span id="cb80-182"><a href="#cb80-182" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
@@ -2564,17 +2585,17 @@ c
 <span id="cb81-9"><a href="#cb81-9" aria-hidden="true" tabindex="-1"></a>                c <span class="op">=</span> csiescseq<span class="op">.</span>buf<span class="op">[</span>i<span class="op">]</span> <span class="op">&amp;</span> <span class="bn">0xff</span><span class="op">;</span></span>
 <span id="cb81-10"><a href="#cb81-10" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>isprint<span class="op">(</span>c<span class="op">))</span> <span class="op">{</span></span>
 <span id="cb81-11"><a href="#cb81-11" aria-hidden="true" tabindex="-1"></a>                        putc<span class="op">(</span>c<span class="op">,</span> stderr<span class="op">);</span></span>
-<span id="cb81-12"><a href="#cb81-12" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>c <span class="op">==</span> <span class="ch">'\n'</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb81-12"><a href="#cb81-12" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>c <span class="op">==</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb81-13"><a href="#cb81-13" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;(</span><span class="sc">\\</span><span class="st">n)&quot;</span><span class="op">);</span></span>
-<span id="cb81-14"><a href="#cb81-14" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>c <span class="op">==</span> <span class="ch">'\r'</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb81-14"><a href="#cb81-14" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>c <span class="op">==</span> <span class="ch">'</span><span class="sc">\r</span><span class="ch">'</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb81-15"><a href="#cb81-15" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;(</span><span class="sc">\\</span><span class="st">r)&quot;</span><span class="op">);</span></span>
 <span id="cb81-16"><a href="#cb81-16" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>c <span class="op">==</span> <span class="bn">0x1b</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb81-17"><a href="#cb81-17" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;(</span><span class="sc">\\</span><span class="st">e)&quot;</span><span class="op">);</span></span>
 <span id="cb81-18"><a href="#cb81-18" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
-<span id="cb81-19"><a href="#cb81-19" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;(%02x)&quot;</span><span class="op">,</span> c<span class="op">);</span></span>
+<span id="cb81-19"><a href="#cb81-19" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;(</span><span class="sc">%02x</span><span class="st">)&quot;</span><span class="op">,</span> c<span class="op">);</span></span>
 <span id="cb81-20"><a href="#cb81-20" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb81-21"><a href="#cb81-21" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb81-22"><a href="#cb81-22" aria-hidden="true" tabindex="-1"></a>        putc<span class="op">(</span><span class="ch">'\n'</span><span class="op">,</span> stderr<span class="op">);</span></span>
+<span id="cb81-22"><a href="#cb81-22" aria-hidden="true" tabindex="-1"></a>        putc<span class="op">(</span><span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">,</span> stderr<span class="op">);</span></span>
 <span id="cb81-23"><a href="#cb81-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb81-24"><a href="#cb81-24" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 </div></li>
@@ -2603,16 +2624,16 @@ c
 <span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">unsigned</span> <span class="dt">char</span> r<span class="op">,</span> g<span class="op">,</span> b<span class="op">;</span></span>
 <span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb83-8"><a href="#cb83-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>xgetcolor<span class="op">(</span>is_osc4 <span class="op">?</span> num <span class="op">:</span> index<span class="op">,</span> <span class="op">&amp;</span>r<span class="op">,</span> <span class="op">&amp;</span>g<span class="op">,</span> <span class="op">&amp;</span>b<span class="op">))</span> <span class="op">{</span></span>
-<span id="cb83-9"><a href="#cb83-9" aria-hidden="true" tabindex="-1"></a>                fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;erresc: failed to fetch %s color %d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb83-9"><a href="#cb83-9" aria-hidden="true" tabindex="-1"></a>                fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;erresc: failed to fetch </span><span class="sc">%s</span><span class="st"> color </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span></span>
 <span id="cb83-10"><a href="#cb83-10" aria-hidden="true" tabindex="-1"></a>                        is_osc4 <span class="op">?</span> <span class="st">&quot;osc4&quot;</span> <span class="op">:</span> <span class="st">&quot;osc&quot;</span><span class="op">,</span></span>
 <span id="cb83-11"><a href="#cb83-11" aria-hidden="true" tabindex="-1"></a>                        is_osc4 <span class="op">?</span> num <span class="op">:</span> index<span class="op">);</span></span>
 <span id="cb83-12"><a href="#cb83-12" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb83-13"><a href="#cb83-13" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb83-14"><a href="#cb83-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb83-15"><a href="#cb83-15" aria-hidden="true" tabindex="-1"></a>        n <span class="op">=</span> snprintf<span class="op">(</span>buf<span class="op">,</span> <span class="kw">sizeof</span> buf<span class="op">,</span> <span class="st">&quot;</span><span class="sc">\033</span><span class="st">]%s%d;rgb:%02x%02x/%02x%02x/%02x%02x</span><span class="sc">\007</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb83-15"><a href="#cb83-15" aria-hidden="true" tabindex="-1"></a>        n <span class="op">=</span> snprintf<span class="op">(</span>buf<span class="op">,</span> <span class="kw">sizeof</span> buf<span class="op">,</span> <span class="st">&quot;</span><span class="sc">\033</span><span class="st">]</span><span class="sc">%s%d</span><span class="st">;rgb:</span><span class="sc">%02x%02x</span><span class="st">/</span><span class="sc">%02x%02x</span><span class="st">/</span><span class="sc">%02x%02x\007</span><span class="st">&quot;</span><span class="op">,</span></span>
 <span id="cb83-16"><a href="#cb83-16" aria-hidden="true" tabindex="-1"></a>                     is_osc4 <span class="op">?</span> <span class="st">&quot;4;&quot;</span> <span class="op">:</span> <span class="st">&quot;&quot;</span><span class="op">,</span> num<span class="op">,</span> r<span class="op">,</span> r<span class="op">,</span> g<span class="op">,</span> g<span class="op">,</span> b<span class="op">,</span> b<span class="op">);</span></span>
 <span id="cb83-17"><a href="#cb83-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>n <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">||</span> n <span class="op">&gt;=</span> <span class="kw">sizeof</span><span class="op">(</span>buf<span class="op">))</span> <span class="op">{</span></span>
-<span id="cb83-18"><a href="#cb83-18" aria-hidden="true" tabindex="-1"></a>                fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;error: %s while printing %s response</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb83-18"><a href="#cb83-18" aria-hidden="true" tabindex="-1"></a>                fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;error: </span><span class="sc">%s</span><span class="st"> while printing </span><span class="sc">%s</span><span class="st"> response</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
 <span id="cb83-19"><a href="#cb83-19" aria-hidden="true" tabindex="-1"></a>                        n <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">?</span> <span class="st">&quot;snprintf failed&quot;</span> <span class="op">:</span> <span class="st">&quot;truncation occurred&quot;</span><span class="op">,</span></span>
 <span id="cb83-20"><a href="#cb83-20" aria-hidden="true" tabindex="-1"></a>                        is_osc4 <span class="op">?</span> <span class="st">&quot;osc4&quot;</span> <span class="op">:</span> <span class="st">&quot;osc&quot;</span><span class="op">);</span></span>
 <span id="cb83-21"><a href="#cb83-21" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
@@ -2681,7 +2702,7 @@ c
 <span id="cb84-53"><a href="#cb84-53" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">if</span> <span class="op">(!</span>strcmp<span class="op">(</span>p<span class="op">,</span> <span class="st">&quot;?&quot;</span><span class="op">))</span> <span class="op">{</span></span>
 <span id="cb84-54"><a href="#cb84-54" aria-hidden="true" tabindex="-1"></a>                                osc_color_response<span class="op">(</span>par<span class="op">,</span> osc_table<span class="op">[</span>j<span class="op">].</span>idx<span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
 <span id="cb84-55"><a href="#cb84-55" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>xsetcolorname<span class="op">(</span>osc_table<span class="op">[</span>j<span class="op">].</span>idx<span class="op">,</span> p<span class="op">))</span> <span class="op">{</span></span>
-<span id="cb84-56"><a href="#cb84-56" aria-hidden="true" tabindex="-1"></a>                                fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;erresc: invalid %s color: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb84-56"><a href="#cb84-56" aria-hidden="true" tabindex="-1"></a>                                fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;erresc: invalid </span><span class="sc">%s</span><span class="st"> color: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span></span>
 <span id="cb84-57"><a href="#cb84-57" aria-hidden="true" tabindex="-1"></a>                                        osc_table<span class="op">[</span>j<span class="op">].</span>str<span class="op">,</span> p<span class="op">);</span></span>
 <span id="cb84-58"><a href="#cb84-58" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb84-59"><a href="#cb84-59" aria-hidden="true" tabindex="-1"></a>                                tfulldirt<span class="op">();</span></span>
@@ -2700,7 +2721,7 @@ c
 <span id="cb84-72"><a href="#cb84-72" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>xsetcolorname<span class="op">(</span>j<span class="op">,</span> p<span class="op">))</span> <span class="op">{</span></span>
 <span id="cb84-73"><a href="#cb84-73" aria-hidden="true" tabindex="-1"></a>                                <span class="cf">if</span> <span class="op">(</span>par <span class="op">==</span> <span class="dv">104</span> <span class="op">&amp;&amp;</span> narg <span class="op">&lt;=</span> <span class="dv">1</span><span class="op">)</span></span>
 <span id="cb84-74"><a href="#cb84-74" aria-hidden="true" tabindex="-1"></a>                                        <span class="cf">return</span><span class="op">;</span> <span class="co">/* color reset without parameter */</span></span>
-<span id="cb84-75"><a href="#cb84-75" aria-hidden="true" tabindex="-1"></a>                                fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;erresc: invalid color j=%d, p=%s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb84-75"><a href="#cb84-75" aria-hidden="true" tabindex="-1"></a>                                fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;erresc: invalid color j=</span><span class="sc">%d</span><span class="st">, p=</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span></span>
 <span id="cb84-76"><a href="#cb84-76" aria-hidden="true" tabindex="-1"></a>                                        j<span class="op">,</span> p <span class="op">?</span> p <span class="op">:</span> <span class="st">&quot;(null)&quot;</span><span class="op">);</span></span>
 <span id="cb84-77"><a href="#cb84-77" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb84-78"><a href="#cb84-78" aria-hidden="true" tabindex="-1"></a>                                <span class="co">/*</span></span>
@@ -2738,18 +2759,18 @@ c
 <span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> <span class="op">*</span>p <span class="op">=</span> strescseq<span class="op">.</span>buf<span class="op">;</span></span>
 <span id="cb85-6"><a href="#cb85-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb85-7"><a href="#cb85-7" aria-hidden="true" tabindex="-1"></a>        strescseq<span class="op">.</span>narg <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb85-8"><a href="#cb85-8" aria-hidden="true" tabindex="-1"></a>        strescseq<span class="op">.</span>buf<span class="op">[</span>strescseq<span class="op">.</span>len<span class="op">]</span> <span class="op">=</span> <span class="ch">'\0'</span><span class="op">;</span></span>
+<span id="cb85-8"><a href="#cb85-8" aria-hidden="true" tabindex="-1"></a>        strescseq<span class="op">.</span>buf<span class="op">[</span>strescseq<span class="op">.</span>len<span class="op">]</span> <span class="op">=</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">;</span></span>
 <span id="cb85-9"><a href="#cb85-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb85-10"><a href="#cb85-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(*</span>p <span class="op">==</span> <span class="ch">'\0'</span><span class="op">)</span></span>
+<span id="cb85-10"><a href="#cb85-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(*</span>p <span class="op">==</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">)</span></span>
 <span id="cb85-11"><a href="#cb85-11" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb85-12"><a href="#cb85-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb85-13"><a href="#cb85-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="op">(</span>strescseq<span class="op">.</span>narg <span class="op">&lt;</span> STR_ARG_SIZ<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb85-14"><a href="#cb85-14" aria-hidden="true" tabindex="-1"></a>                strescseq<span class="op">.</span>args<span class="op">[</span>strescseq<span class="op">.</span>narg<span class="op">++]</span> <span class="op">=</span> p<span class="op">;</span></span>
-<span id="cb85-15"><a href="#cb85-15" aria-hidden="true" tabindex="-1"></a>                <span class="cf">while</span> <span class="op">((</span>c <span class="op">=</span> <span class="op">*</span>p<span class="op">)</span> <span class="op">!=</span> <span class="ch">';'</span> <span class="op">&amp;&amp;</span> c <span class="op">!=</span> <span class="ch">'\0'</span><span class="op">)</span></span>
+<span id="cb85-15"><a href="#cb85-15" aria-hidden="true" tabindex="-1"></a>                <span class="cf">while</span> <span class="op">((</span>c <span class="op">=</span> <span class="op">*</span>p<span class="op">)</span> <span class="op">!=</span> <span class="ch">';'</span> <span class="op">&amp;&amp;</span> c <span class="op">!=</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">)</span></span>
 <span id="cb85-16"><a href="#cb85-16" aria-hidden="true" tabindex="-1"></a>                        <span class="op">++</span>p<span class="op">;</span></span>
-<span id="cb85-17"><a href="#cb85-17" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>c <span class="op">==</span> <span class="ch">'\0'</span><span class="op">)</span></span>
+<span id="cb85-17"><a href="#cb85-17" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>c <span class="op">==</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">)</span></span>
 <span id="cb85-18"><a href="#cb85-18" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb85-19"><a href="#cb85-19" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span>p<span class="op">++</span> <span class="op">=</span> <span class="ch">'\0'</span><span class="op">;</span></span>
+<span id="cb85-19"><a href="#cb85-19" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span>p<span class="op">++</span> <span class="op">=</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">;</span></span>
 <span id="cb85-20"><a href="#cb85-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb85-21"><a href="#cb85-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb85-22"><a href="#cb85-22" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
@@ -2765,22 +2786,22 @@ c
 <span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">size_t</span> i<span class="op">;</span></span>
 <span id="cb86-5"><a href="#cb86-5" aria-hidden="true" tabindex="-1"></a>        uint c<span class="op">;</span></span>
 <span id="cb86-6"><a href="#cb86-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb86-7"><a href="#cb86-7" aria-hidden="true" tabindex="-1"></a>        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;ESC%c&quot;</span><span class="op">,</span> strescseq<span class="op">.</span>type<span class="op">);</span></span>
+<span id="cb86-7"><a href="#cb86-7" aria-hidden="true" tabindex="-1"></a>        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;ESC</span><span class="sc">%c</span><span class="st">&quot;</span><span class="op">,</span> strescseq<span class="op">.</span>type<span class="op">);</span></span>
 <span id="cb86-8"><a href="#cb86-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> strescseq<span class="op">.</span>len<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
 <span id="cb86-9"><a href="#cb86-9" aria-hidden="true" tabindex="-1"></a>                c <span class="op">=</span> strescseq<span class="op">.</span>buf<span class="op">[</span>i<span class="op">]</span> <span class="op">&amp;</span> <span class="bn">0xff</span><span class="op">;</span></span>
-<span id="cb86-10"><a href="#cb86-10" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>c <span class="op">==</span> <span class="ch">'\0'</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb86-11"><a href="#cb86-11" aria-hidden="true" tabindex="-1"></a>                        putc<span class="op">(</span><span class="ch">'\n'</span><span class="op">,</span> stderr<span class="op">);</span></span>
+<span id="cb86-10"><a href="#cb86-10" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>c <span class="op">==</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb86-11"><a href="#cb86-11" aria-hidden="true" tabindex="-1"></a>                        putc<span class="op">(</span><span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">,</span> stderr<span class="op">);</span></span>
 <span id="cb86-12"><a href="#cb86-12" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb86-13"><a href="#cb86-13" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>isprint<span class="op">(</span>c<span class="op">))</span> <span class="op">{</span></span>
 <span id="cb86-14"><a href="#cb86-14" aria-hidden="true" tabindex="-1"></a>                        putc<span class="op">(</span>c<span class="op">,</span> stderr<span class="op">);</span></span>
-<span id="cb86-15"><a href="#cb86-15" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>c <span class="op">==</span> <span class="ch">'\n'</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb86-15"><a href="#cb86-15" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>c <span class="op">==</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb86-16"><a href="#cb86-16" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;(</span><span class="sc">\\</span><span class="st">n)&quot;</span><span class="op">);</span></span>
-<span id="cb86-17"><a href="#cb86-17" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>c <span class="op">==</span> <span class="ch">'\r'</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb86-17"><a href="#cb86-17" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>c <span class="op">==</span> <span class="ch">'</span><span class="sc">\r</span><span class="ch">'</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb86-18"><a href="#cb86-18" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;(</span><span class="sc">\\</span><span class="st">r)&quot;</span><span class="op">);</span></span>
 <span id="cb86-19"><a href="#cb86-19" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>c <span class="op">==</span> <span class="bn">0x1b</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb86-20"><a href="#cb86-20" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;(</span><span class="sc">\\</span><span class="st">e)&quot;</span><span class="op">);</span></span>
 <span id="cb86-21"><a href="#cb86-21" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
-<span id="cb86-22"><a href="#cb86-22" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;(%02x)&quot;</span><span class="op">,</span> c<span class="op">);</span></span>
+<span id="cb86-22"><a href="#cb86-22" aria-hidden="true" tabindex="-1"></a>                        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;(</span><span class="sc">%02x</span><span class="st">)&quot;</span><span class="op">,</span> c<span class="op">);</span></span>
 <span id="cb86-23"><a href="#cb86-23" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb86-24"><a href="#cb86-24" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb86-25"><a href="#cb86-25" aria-hidden="true" tabindex="-1"></a>        fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;ESC</span><span class="sc">\\\n</span><span class="st">&quot;</span><span class="op">);</span></span>
@@ -2971,7 +2992,7 @@ c
 <span id="cb98-6"><a href="#cb98-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> <span class="op">*</span>p<span class="op">;</span></span>
 <span id="cb98-7"><a href="#cb98-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb98-8"><a href="#cb98-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">((</span>p <span class="op">=</span> strchr<span class="op">(</span>cs<span class="op">,</span> ascii<span class="op">))</span> <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb98-9"><a href="#cb98-9" aria-hidden="true" tabindex="-1"></a>                fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;esc unhandled charset: ESC ( %c</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> ascii<span class="op">);</span></span>
+<span id="cb98-9"><a href="#cb98-9" aria-hidden="true" tabindex="-1"></a>                fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;esc unhandled charset: ESC ( </span><span class="sc">%c\n</span><span class="st">&quot;</span><span class="op">,</span> ascii<span class="op">);</span></span>
 <span id="cb98-10"><a href="#cb98-10" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb98-11"><a href="#cb98-11" aria-hidden="true" tabindex="-1"></a>                term<span class="op">.</span>trantbl<span class="op">[</span>term<span class="op">.</span>icharset<span class="op">]</span> <span class="op">=</span> vcs<span class="op">[</span>p <span class="op">-</span> cs<span class="op">];</span></span>
 <span id="cb98-12"><a href="#cb98-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
@@ -3034,22 +3055,22 @@ c
 <span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a>tcontrolcode<span class="op">(</span>uchar ascii<span class="op">)</span></span>
 <span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
 <span id="cb101-4"><a href="#cb101-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">switch</span> <span class="op">(</span>ascii<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb101-5"><a href="#cb101-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'\t'</span><span class="op">:</span>   <span class="co">/* HT */</span></span>
+<span id="cb101-5"><a href="#cb101-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'</span><span class="sc">\t</span><span class="ch">'</span><span class="op">:</span>   <span class="co">/* HT */</span></span>
 <span id="cb101-6"><a href="#cb101-6" aria-hidden="true" tabindex="-1"></a>                tputtab<span class="op">(</span><span class="dv">1</span><span class="op">);</span></span>
 <span id="cb101-7"><a href="#cb101-7" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb101-8"><a href="#cb101-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'\b'</span><span class="op">:</span>   <span class="co">/* BS */</span></span>
+<span id="cb101-8"><a href="#cb101-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'</span><span class="sc">\b</span><span class="ch">'</span><span class="op">:</span>   <span class="co">/* BS */</span></span>
 <span id="cb101-9"><a href="#cb101-9" aria-hidden="true" tabindex="-1"></a>                tmoveto<span class="op">(</span>term<span class="op">.</span>c<span class="op">.</span>x<span class="op">-</span><span class="dv">1</span><span class="op">,</span> term<span class="op">.</span>c<span class="op">.</span>y<span class="op">);</span></span>
 <span id="cb101-10"><a href="#cb101-10" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb101-11"><a href="#cb101-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'\r'</span><span class="op">:</span>   <span class="co">/* CR */</span></span>
+<span id="cb101-11"><a href="#cb101-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'</span><span class="sc">\r</span><span class="ch">'</span><span class="op">:</span>   <span class="co">/* CR */</span></span>
 <span id="cb101-12"><a href="#cb101-12" aria-hidden="true" tabindex="-1"></a>                tmoveto<span class="op">(</span><span class="dv">0</span><span class="op">,</span> term<span class="op">.</span>c<span class="op">.</span>y<span class="op">);</span></span>
 <span id="cb101-13"><a href="#cb101-13" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb101-14"><a href="#cb101-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'\f'</span><span class="op">:</span>   <span class="co">/* LF */</span></span>
-<span id="cb101-15"><a href="#cb101-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'\v'</span><span class="op">:</span>   <span class="co">/* VT */</span></span>
-<span id="cb101-16"><a href="#cb101-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'\n'</span><span class="op">:</span>   <span class="co">/* LF */</span></span>
+<span id="cb101-14"><a href="#cb101-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'</span><span class="sc">\f</span><span class="ch">'</span><span class="op">:</span>   <span class="co">/* LF */</span></span>
+<span id="cb101-15"><a href="#cb101-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'</span><span class="sc">\v</span><span class="ch">'</span><span class="op">:</span>   <span class="co">/* VT */</span></span>
+<span id="cb101-16"><a href="#cb101-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span><span class="op">:</span>   <span class="co">/* LF */</span></span>
 <span id="cb101-17"><a href="#cb101-17" aria-hidden="true" tabindex="-1"></a>                <span class="co">/* go to first col if the mode is set */</span></span>
 <span id="cb101-18"><a href="#cb101-18" aria-hidden="true" tabindex="-1"></a>                tnewline<span class="op">(</span>IS_SET<span class="op">(</span>MODE_CRLF<span class="op">));</span></span>
 <span id="cb101-19"><a href="#cb101-19" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb101-20"><a href="#cb101-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'\a'</span><span class="op">:</span>   <span class="co">/* BEL */</span></span>
+<span id="cb101-20"><a href="#cb101-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'</span><span class="sc">\a</span><span class="ch">'</span><span class="op">:</span>   <span class="co">/* BEL */</span></span>
 <span id="cb101-21"><a href="#cb101-21" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>term<span class="op">.</span>esc <span class="op">&amp;</span> ESC_STR_END<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb101-22"><a href="#cb101-22" aria-hidden="true" tabindex="-1"></a>                        <span class="co">/* backwards compatibility to xterm */</span></span>
 <span id="cb101-23"><a href="#cb101-23" aria-hidden="true" tabindex="-1"></a>                        strhandle<span class="op">();</span></span>
@@ -3057,25 +3078,25 @@ c
 <span id="cb101-25"><a href="#cb101-25" aria-hidden="true" tabindex="-1"></a>                        xbell<span class="op">();</span></span>
 <span id="cb101-26"><a href="#cb101-26" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb101-27"><a href="#cb101-27" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
-<span id="cb101-28"><a href="#cb101-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'\033'</span><span class="op">:</span> <span class="co">/* ESC */</span></span>
+<span id="cb101-28"><a href="#cb101-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'</span><span class="sc">\033</span><span class="ch">'</span><span class="op">:</span> <span class="co">/* ESC */</span></span>
 <span id="cb101-29"><a href="#cb101-29" aria-hidden="true" tabindex="-1"></a>                csireset<span class="op">();</span></span>
 <span id="cb101-30"><a href="#cb101-30" aria-hidden="true" tabindex="-1"></a>                term<span class="op">.</span>esc <span class="op">&amp;=</span> <span class="op">~(</span>ESC_CSI<span class="op">|</span>ESC_ALTCHARSET<span class="op">|</span>ESC_TEST<span class="op">);</span></span>
 <span id="cb101-31"><a href="#cb101-31" aria-hidden="true" tabindex="-1"></a>                term<span class="op">.</span>esc <span class="op">|=</span> ESC_START<span class="op">;</span></span>
 <span id="cb101-32"><a href="#cb101-32" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb101-33"><a href="#cb101-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'\016'</span><span class="op">:</span> <span class="co">/* SO (LS1 -- Locking shift 1) */</span></span>
-<span id="cb101-34"><a href="#cb101-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'\017'</span><span class="op">:</span> <span class="co">/* SI (LS0 -- Locking shift 0) */</span></span>
-<span id="cb101-35"><a href="#cb101-35" aria-hidden="true" tabindex="-1"></a>                term<span class="op">.</span>charset <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> <span class="op">(</span>ascii <span class="op">-</span> <span class="ch">'\016'</span><span class="op">);</span></span>
+<span id="cb101-33"><a href="#cb101-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'</span><span class="sc">\016</span><span class="ch">'</span><span class="op">:</span> <span class="co">/* SO (LS1 -- Locking shift 1) */</span></span>
+<span id="cb101-34"><a href="#cb101-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'</span><span class="sc">\017</span><span class="ch">'</span><span class="op">:</span> <span class="co">/* SI (LS0 -- Locking shift 0) */</span></span>
+<span id="cb101-35"><a href="#cb101-35" aria-hidden="true" tabindex="-1"></a>                term<span class="op">.</span>charset <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> <span class="op">(</span>ascii <span class="op">-</span> <span class="ch">'</span><span class="sc">\016</span><span class="ch">'</span><span class="op">);</span></span>
 <span id="cb101-36"><a href="#cb101-36" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb101-37"><a href="#cb101-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'\032'</span><span class="op">:</span> <span class="co">/* SUB */</span></span>
+<span id="cb101-37"><a href="#cb101-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'</span><span class="sc">\032</span><span class="ch">'</span><span class="op">:</span> <span class="co">/* SUB */</span></span>
 <span id="cb101-38"><a href="#cb101-38" aria-hidden="true" tabindex="-1"></a>                tsetchar<span class="op">(</span><span class="ch">'?'</span><span class="op">,</span> <span class="op">&amp;</span>term<span class="op">.</span>c<span class="op">.</span>attr<span class="op">,</span> term<span class="op">.</span>c<span class="op">.</span>x<span class="op">,</span> term<span class="op">.</span>c<span class="op">.</span>y<span class="op">);</span></span>
 <span id="cb101-39"><a href="#cb101-39" aria-hidden="true" tabindex="-1"></a>                <span class="co">/* FALLTHROUGH */</span></span>
-<span id="cb101-40"><a href="#cb101-40" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'\030'</span><span class="op">:</span> <span class="co">/* CAN */</span></span>
+<span id="cb101-40"><a href="#cb101-40" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'</span><span class="sc">\030</span><span class="ch">'</span><span class="op">:</span> <span class="co">/* CAN */</span></span>
 <span id="cb101-41"><a href="#cb101-41" aria-hidden="true" tabindex="-1"></a>                csireset<span class="op">();</span></span>
 <span id="cb101-42"><a href="#cb101-42" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
-<span id="cb101-43"><a href="#cb101-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'\005'</span><span class="op">:</span> <span class="co">/* ENQ (IGNORED) */</span></span>
-<span id="cb101-44"><a href="#cb101-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'\000'</span><span class="op">:</span> <span class="co">/* NUL (IGNORED) */</span></span>
-<span id="cb101-45"><a href="#cb101-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'\021'</span><span class="op">:</span> <span class="co">/* XON (IGNORED) */</span></span>
-<span id="cb101-46"><a href="#cb101-46" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'\023'</span><span class="op">:</span> <span class="co">/* XOFF (IGNORED) */</span></span>
+<span id="cb101-43"><a href="#cb101-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'</span><span class="sc">\005</span><span class="ch">'</span><span class="op">:</span> <span class="co">/* ENQ (IGNORED) */</span></span>
+<span id="cb101-44"><a href="#cb101-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'</span><span class="sc">\000</span><span class="ch">'</span><span class="op">:</span> <span class="co">/* NUL (IGNORED) */</span></span>
+<span id="cb101-45"><a href="#cb101-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'</span><span class="sc">\021</span><span class="ch">'</span><span class="op">:</span> <span class="co">/* XON (IGNORED) */</span></span>
+<span id="cb101-46"><a href="#cb101-46" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'</span><span class="sc">\023</span><span class="ch">'</span><span class="op">:</span> <span class="co">/* XOFF (IGNORED) */</span></span>
 <span id="cb101-47"><a href="#cb101-47" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="bn">0177</span><span class="op">:</span>   <span class="co">/* DEL (IGNORED) */</span></span>
 <span id="cb101-48"><a href="#cb101-48" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb101-49"><a href="#cb101-49" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="bn">0x80</span><span class="op">:</span>   <span class="co">/* </span><span class="al">TODO</span><span class="co">: PAD */</span></span>
@@ -3208,12 +3229,12 @@ c
 <span id="cb102-73"><a href="#cb102-73" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'8'</span><span class="op">:</span> <span class="co">/* DECRC -- Restore Cursor */</span></span>
 <span id="cb102-74"><a href="#cb102-74" aria-hidden="true" tabindex="-1"></a>                tcursor<span class="op">(</span>CURSOR_LOAD<span class="op">);</span></span>
 <span id="cb102-75"><a href="#cb102-75" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
-<span id="cb102-76"><a href="#cb102-76" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'\\'</span><span class="op">:</span> <span class="co">/* ST -- String Terminator */</span></span>
+<span id="cb102-76"><a href="#cb102-76" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'</span><span class="sc">\\</span><span class="ch">'</span><span class="op">:</span> <span class="co">/* ST -- String Terminator */</span></span>
 <span id="cb102-77"><a href="#cb102-77" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>term<span class="op">.</span>esc <span class="op">&amp;</span> ESC_STR_END<span class="op">)</span></span>
 <span id="cb102-78"><a href="#cb102-78" aria-hidden="true" tabindex="-1"></a>                        strhandle<span class="op">();</span></span>
 <span id="cb102-79"><a href="#cb102-79" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb102-80"><a href="#cb102-80" aria-hidden="true" tabindex="-1"></a>        <span class="cf">default</span><span class="op">:</span></span>
-<span id="cb102-81"><a href="#cb102-81" aria-hidden="true" tabindex="-1"></a>                fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;erresc: unknown sequence ESC 0x%02X '%c'</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb102-81"><a href="#cb102-81" aria-hidden="true" tabindex="-1"></a>                fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;erresc: unknown sequence ESC 0x</span><span class="sc">%02X</span><span class="st"> '</span><span class="sc">%c</span><span class="st">'</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
 <span id="cb102-82"><a href="#cb102-82" aria-hidden="true" tabindex="-1"></a>                        <span class="op">(</span>uchar<span class="op">)</span> ascii<span class="op">,</span> isprint<span class="op">(</span>ascii<span class="op">)?</span> ascii<span class="op">:</span><span class="ch">'.'</span><span class="op">);</span></span>
 <span id="cb102-83"><a href="#cb102-83" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
 <span id="cb102-84"><a href="#cb102-84" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
@@ -3254,7 +3275,7 @@ c
 <span id="cb103-26"><a href="#cb103-26" aria-hidden="true" tabindex="-1"></a><span class="co">         * character.</span></span>
 <span id="cb103-27"><a href="#cb103-27" aria-hidden="true" tabindex="-1"></a><span class="co">         */</span></span>
 <span id="cb103-28"><a href="#cb103-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>term<span class="op">.</span>esc <span class="op">&amp;</span> ESC_STR<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb103-29"><a href="#cb103-29" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>u <span class="op">==</span> <span class="ch">'\a'</span> <span class="op">||</span> u <span class="op">==</span> <span class="bn">030</span> <span class="op">||</span> u <span class="op">==</span> <span class="bn">032</span> <span class="op">||</span> u <span class="op">==</span> <span class="bn">033</span> <span class="op">||</span></span>
+<span id="cb103-29"><a href="#cb103-29" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="op">(</span>u <span class="op">==</span> <span class="ch">'</span><span class="sc">\a</span><span class="ch">'</span> <span class="op">||</span> u <span class="op">==</span> <span class="bn">030</span> <span class="op">||</span> u <span class="op">==</span> <span class="bn">032</span> <span class="op">||</span> u <span class="op">==</span> <span class="bn">033</span> <span class="op">||</span></span>
 <span id="cb103-30"><a href="#cb103-30" aria-hidden="true" tabindex="-1"></a>                   ISCONTROLC1<span class="op">(</span>u<span class="op">))</span> <span class="op">{</span></span>
 <span id="cb103-31"><a href="#cb103-31" aria-hidden="true" tabindex="-1"></a>                        term<span class="op">.</span>esc <span class="op">&amp;=</span> <span class="op">~(</span>ESC_START<span class="op">|</span>ESC_STR<span class="op">);</span></span>
 <span id="cb103-32"><a href="#cb103-32" aria-hidden="true" tabindex="-1"></a>                        term<span class="op">.</span>esc <span class="op">|=</span> ESC_STR_END<span class="op">;</span></span>
@@ -3357,7 +3378,7 @@ c
 <span id="cb103-129"><a href="#cb103-129" aria-hidden="true" tabindex="-1"></a>                                gp<span class="op">[</span><span class="dv">2</span><span class="op">].</span>u <span class="op">=</span> <span class="ch">' '</span><span class="op">;</span></span>
 <span id="cb103-130"><a href="#cb103-130" aria-hidden="true" tabindex="-1"></a>                                gp<span class="op">[</span><span class="dv">2</span><span class="op">].</span>mode <span class="op">&amp;=</span> <span class="op">~</span>ATTR_WDUMMY<span class="op">;</span></span>
 <span id="cb103-131"><a href="#cb103-131" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span></span>
-<span id="cb103-132"><a href="#cb103-132" aria-hidden="true" tabindex="-1"></a>                        gp<span class="op">[</span><span class="dv">1</span><span class="op">].</span>u <span class="op">=</span> <span class="ch">'\0'</span><span class="op">;</span></span>
+<span id="cb103-132"><a href="#cb103-132" aria-hidden="true" tabindex="-1"></a>                        gp<span class="op">[</span><span class="dv">1</span><span class="op">].</span>u <span class="op">=</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">;</span></span>
 <span id="cb103-133"><a href="#cb103-133" aria-hidden="true" tabindex="-1"></a>                        gp<span class="op">[</span><span class="dv">1</span><span class="op">].</span>mode <span class="op">=</span> ATTR_WDUMMY<span class="op">;</span></span>
 <span id="cb103-134"><a href="#cb103-134" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
 <span id="cb103-135"><a href="#cb103-135" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
@@ -3396,7 +3417,7 @@ c
 <span id="cb104-20"><a href="#cb104-20" aria-hidden="true" tabindex="-1"></a>                                u <span class="op">&amp;=</span> <span class="bn">0x7f</span><span class="op">;</span></span>
 <span id="cb104-21"><a href="#cb104-21" aria-hidden="true" tabindex="-1"></a>                                tputc<span class="op">(</span><span class="ch">'^'</span><span class="op">);</span></span>
 <span id="cb104-22"><a href="#cb104-22" aria-hidden="true" tabindex="-1"></a>                                tputc<span class="op">(</span><span class="ch">'['</span><span class="op">);</span></span>
-<span id="cb104-23"><a href="#cb104-23" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>u <span class="op">!=</span> <span class="ch">'\n'</span> <span class="op">&amp;&amp;</span> u <span class="op">!=</span> <span class="ch">'\r'</span> <span class="op">&amp;&amp;</span> u <span class="op">!=</span> <span class="ch">'\t'</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb104-23"><a href="#cb104-23" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>u <span class="op">!=</span> <span class="ch">'</span><span class="sc">\n</span><span class="ch">'</span> <span class="op">&amp;&amp;</span> u <span class="op">!=</span> <span class="ch">'</span><span class="sc">\r</span><span class="ch">'</span> <span class="op">&amp;&amp;</span> u <span class="op">!=</span> <span class="ch">'</span><span class="sc">\t</span><span class="ch">'</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb104-24"><a href="#cb104-24" aria-hidden="true" tabindex="-1"></a>                                u <span class="op">^=</span> <span class="bn">0x40</span><span class="op">;</span></span>
 <span id="cb104-25"><a href="#cb104-25" aria-hidden="true" tabindex="-1"></a>                                tputc<span class="op">(</span><span class="ch">'^'</span><span class="op">);</span></span>
 <span id="cb104-26"><a href="#cb104-26" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span></span>
@@ -3423,7 +3444,7 @@ c
 <span id="cb105-9"><a href="#cb105-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb105-10"><a href="#cb105-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>col <span class="op">&lt;</span> <span class="dv">1</span> <span class="op">||</span> row <span class="op">&lt;</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb105-11"><a href="#cb105-11" aria-hidden="true" tabindex="-1"></a>                fprintf<span class="op">(</span>stderr<span class="op">,</span></span>
-<span id="cb105-12"><a href="#cb105-12" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;tresize: error resizing to %dx%d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> col<span class="op">,</span> row<span class="op">);</span></span>
+<span id="cb105-12"><a href="#cb105-12" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;tresize: error resizing to </span><span class="sc">%d</span><span class="st">x</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> col<span class="op">,</span> row<span class="op">);</span></span>
 <span id="cb105-13"><a href="#cb105-13" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb105-14"><a href="#cb105-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
 <span id="cb105-15"><a href="#cb105-15" aria-hidden="true" tabindex="-1"></a></span>
@@ -3576,10 +3597,35 @@ c
 <div class="ui piled segment" style="z-index: 0">
 <blockquote>
 <p>MIT/X Consortium License</p>
-<p>© 2014-2022 Hiltjo Posthuma &lt;hiltjo at codemadness dot org&gt; © 2018 Devin J. Pohly &lt;djpohly at gmail dot com&gt; © 2014-2017 Quentin Rameau &lt;quinq at fifth dot space&gt; © 2009-2012 Aurélien APTEL &lt;aurelien dot aptel at gmail dot com&gt; © 2008-2017 Anselm R Garbe &lt;garbeam at gmail dot com&gt; © 2012-2017 Roberto E. Vargas Caballero &lt;k0ga at shike2 dot com&gt; © 2012-2016 Christoph Lohmann &lt;20h at r-36 dot net&gt; © 2013 Eon S. Jeon &lt;esjeon at hyunmu dot am&gt; © 2013 Alexander Sedov &lt;alex0player at gmail dot com&gt; © 2013 Mark Edgar &lt;medgar123 at gmail dot com&gt; © 2013-2014 Eric Pruitt &lt;eric.pruitt at gmail dot com&gt; © 2013 Michael Forney &lt;mforney at mforney dot org&gt; © 2013-2014 Markus Teich &lt;markus dot teich at stusta dot mhn dot de&gt; © 2014-2015 Laslo Hunhold &lt;dev at frign dot de&gt;</p>
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
-<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
-<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>© 2014-2022 Hiltjo Posthuma &lt;hiltjo at codemadness dot org&gt; ©
+2018 Devin J. Pohly &lt;djpohly at gmail dot com&gt; © 2014-2017 Quentin
+Rameau &lt;quinq at fifth dot space&gt; © 2009-2012 Aurélien APTEL
+&lt;aurelien dot aptel at gmail dot com&gt; © 2008-2017 Anselm R Garbe
+&lt;garbeam at gmail dot com&gt; © 2012-2017 Roberto E. Vargas Caballero
+&lt;k0ga at shike2 dot com&gt; © 2012-2016 Christoph Lohmann &lt;20h at
+r-36 dot net&gt; © 2013 Eon S. Jeon &lt;esjeon at hyunmu dot am&gt; ©
+2013 Alexander Sedov &lt;alex0player at gmail dot com&gt; © 2013 Mark
+Edgar &lt;medgar123 at gmail dot com&gt; © 2013-2014 Eric Pruitt
+&lt;eric.pruitt at gmail dot com&gt; © 2013 Michael Forney &lt;mforney
+at mforney dot org&gt; © 2013-2014 Markus Teich &lt;markus dot teich at
+stusta dot mhn dot de&gt; © 2014-2015 Laslo Hunhold &lt;dev at frign dot
+de&gt;</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 </blockquote>
 </div>
     </div>

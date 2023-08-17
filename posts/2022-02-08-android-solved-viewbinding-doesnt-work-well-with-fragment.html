@@ -120,9 +120,12 @@
       </div>
 
     <div class="description">
-      <p>分かる人が見ればすぐ分かる凡ミスなのだけど、結構時間掛かってしまったので 置いておきます。</p>
+      <p>分かる人が見ればすぐ分かる凡ミスなのだけど、結構時間掛かってしまったので
+置いておきます。</p>
 <h1 id="問題">問題</h1>
-<p>以下のようなコードを書いていました。 ViewBindingを用いて、 <code>myButton</code> が押された時に実行される <code>OnClickListener</code> を 設定しているものです。</p>
+<p>以下のようなコードを書いていました。 ViewBindingを用いて、
+<code>myButton</code> が押された時に実行される
+<code>OnClickListener</code> を 設定しているものです。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 kotlin
@@ -145,11 +148,16 @@ kotlin
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>   <span class="op">}</span></span></code></pre></div>
 </div>
-<p>でも、実行して <code>myButon</code> を押してみても一向に反応しない。 他のレイアウトだとか何だとかをいじってみたりしたけど変わらず…</p>
+<p>でも、実行して <code>myButon</code> を押してみても一向に反応しない。
+他のレイアウトだとか何だとかをいじってみたりしたけど変わらず…</p>
 <h1 id="原因">原因</h1>
 <p>初めから <a href="https://developer.android.com/topic/libraries/view-binding?hl=ja">フラグメントでビューバインディングを使用する</a>を読んでおけばよかったはなしではある。</p>
-<p>凄く単純な話で、 <strong>戻り値として <code>binding.root</code> を返す必要があります!!!!!!</strong></p>
-<p>今だと <code>inflater.inflate</code> で作成したViewを返していて、それには <code>OnClickListener</code> が設定 されていないんですね。 なので呼び出されるはずもないという。なるほど~~~!!!!</p>
+<p>凄く単純な話で、 <strong>戻り値として <code>binding.root</code>
+を返す必要があります!!!!!!</strong></p>
+<p>今だと <code>inflater.inflate</code>
+で作成したViewを返していて、それには <code>OnClickListener</code> が設定
+されていないんですね。
+なので呼び出されるはずもないという。なるほど~~~!!!!</p>
 <p>と、いうことで結果的にはこうすれば良いのでした:</p>
 <div class="ui segment">
 <div class="ui top right attached label">

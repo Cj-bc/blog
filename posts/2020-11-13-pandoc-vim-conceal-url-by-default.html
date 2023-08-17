@@ -133,12 +133,17 @@ example
 <p>このように表示されます(=+conceal=オプションが有効な場合)</p>
 <p><a href="url">説明</a></p>
 <p>これがあると、長いURLを持つドキュメントでの可読性がグンと上がります</p>
-<p>例えば、<a href="https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html">blender data blocks</a>の記事は=markdown=/=vimwiki=/=pandoc=それぞれのsyntaxで 以下のように見えます。</p>
+<p>例えば、<a href="https://cj-bc.github.io/blog/posts/2020-08-19-blender-data-blocks.html">blender
+data blocks</a>の記事は=markdown=/=vimwiki=/=pandoc=それぞれのsyntaxで
+以下のように見えます。</p>
 <figure>
-<img src="file:///images/difference_md-vimwiki-pandoc.png" class="ui rounded image" alt="markdown, vimwiki, pandocのハイライトの違い" /><figcaption aria-hidden="true">markdown, vimwiki, pandocのハイライトの違い</figcaption>
+<img src="file:///images/difference_md-vimwiki-pandoc.png" class="ui rounded image" alt="markdown, vimwiki, pandocのハイライトの違い" />
+<figcaption aria-hidden="true">markdown, vimwiki,
+pandocのハイライトの違い</figcaption>
 </figure>
 <p>さて、これを普段使いの=pandoc=syntaxでも使いたいというのが今回の希望です。</p>
-<h1 id="結論-デフォルトの変数を設定しろ">結論: デフォルトの変数を設定しろ</h1>
+<h1 id="結論-デフォルトの変数を設定しろ">結論:
+デフォルトの変数を設定しろ</h1>
 <p>もうこれが答えでした！<br />
 ドキュメントよもうね！！！！</p>
 <div class="ui segment">
@@ -150,7 +155,8 @@ example
 </div>
 <p>これだけでURLの=conceal=が有効になり、vimwikiと同じような見た目になります</p>
 <figure>
-<img src="file:///images/pandoc-with-conceal.png" class="ui rounded image" alt="設定後のpandoc" /><figcaption aria-hidden="true">設定後のpandoc</figcaption>
+<img src="file:///images/pandoc-with-conceal.png" class="ui rounded image" alt="設定後のpandoc" />
+<figcaption aria-hidden="true">設定後のpandoc</figcaption>
 </figure>
 <h1 id="おまけ">おまけ</h1>
 <p>ちなみに該当のコードは<a href="https://github.com/vim-pandoc/vim-pandoc-syntax/blob/2521e2e9b99a3550e1a20f24e09fa46679cbbbc7/syntax/pandoc.vim#L300-L304">300-304行目</a>にありました。</p>

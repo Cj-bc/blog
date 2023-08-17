@@ -120,7 +120,9 @@
       </div>
 
     <div class="description">
-      <p>別段Docker for Windowsでも良いが、良い機会なので新しいものを試してみることとした。 nerdctlはWindowsではまだexperimentalであるため、今回はWSL2上で使用することとする。</p>
+      <p>別段Docker for
+Windowsでも良いが、良い機会なので新しいものを試してみることとした。
+nerdctlはWindowsではまだexperimentalであるため、今回はWSL2上で使用することとする。</p>
 <h1 id="WSL2のセットアップ">WSL2のセットアップ</h1>
 <h2 id="インストール">インストール</h2>
 <p>これは簡単。Windows Terminalをおもむろに開き、</p>
@@ -130,9 +132,16 @@ powershell
 </div>
 <div class="sourceCode" id="cb1"><pre class="sourceCode powershell SourceCode"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>wsl <span class="op">--</span>install <span class="op">-</span>d ubuntu</span></code></pre></div>
 </div>
-<p>でインストールする。本当はnixOS or archlinuxにしたい所だが、まぁ今回は これを常用するわけではないので一番楽そうなubuntuにしておく。インストー ルが終わったら再起動する。</p>
+<p>でインストールする。本当はnixOS or
+archlinuxにしたい所だが、まぁ今回は
+これを常用するわけではないので一番楽そうなubuntuにしておく。インストー
+ルが終わったら再起動する。</p>
 <h2 id="Systemdを有効化する">Systemdを有効化する</h2>
-<p>containerdはsystemdを利用するため、そのセットアップをしてあげる必要がある。 デフォルトでは無効化されているが、<a href="https://learn.microsoft.com/ja-jp/windows/wsl/wsl-config#systemd-support">learn.microsoft.comのドキュメント</a>の 通りにするとすぐに有効化出来る。具体的には、WLS2環境から <code>/etc/wsl.conf</code> に以下を書き込んでWSL2を再起動すれば良い。</p>
+<p>containerdはsystemdを利用するため、そのセットアップをしてあげる必要がある。
+デフォルトでは無効化されているが、<a href="https://learn.microsoft.com/ja-jp/windows/wsl/wsl-config#systemd-support">learn.microsoft.comのドキュメント</a>の
+通りにするとすぐに有効化出来る。具体的には、WLS2環境から
+<code>/etc/wsl.conf</code>
+に以下を書き込んでWSL2を再起動すれば良い。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 toml
@@ -140,9 +149,16 @@ toml
 <div class="sourceCode" id="cb2"><pre class="sourceCode toml SourceCode"><code class="sourceCode toml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[</span><span class="dt">boot</span><span class="kw">]</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">systemd</span><span class="op">=</span><span class="cn">true</span></span></code></pre></div>
 </div>
-<p>WSL2の再起動は、powershell等から <code>wsl --shutdown</code> で落として <code>wsl</code> で 起動しなおすことで行える。</p>
+<p>WSL2の再起動は、powershell等から <code>wsl --shutdown</code>
+で落として <code>wsl</code> で 起動しなおすことで行える。</p>
 <h1 id="nerdctlのインストール">nerdctlのインストール</h1>
-<p>apt等では配付されておらず、パッケージマネージャーとしてはlinuxbrewが唯 一の選択肢となる。しかし、 <del>ちょっとインストーラー読むのが面倒だったので</del> これのためだけにパッケージマネージャーを増やすのが少し嫌だったため、バ イナリを持ってくることにした。又この際、イメージのビルド等も行えるよう にしたかったので <code>nerdctl-full</code> のtarファイルを持ってきている。</p>
+<p>apt等では配付されておらず、パッケージマネージャーとしてはlinuxbrewが唯
+一の選択肢となる。しかし、
+<del>ちょっとインストーラー読むのが面倒だったので</del>
+これのためだけにパッケージマネージャーを増やすのが少し嫌だったため、バ
+イナリを持ってくることにした。又この際、イメージのビルド等も行えるよう
+にしたかったので <code>nerdctl-full</code>
+のtarファイルを持ってきている。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
@@ -155,7 +171,9 @@ bash
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sudo mv share/<span class="pp">*</span> /usr/local/share</span></code></pre></div>
 </div>
 <h2 id="newuidmapのインストール">newuidmapのインストール</h2>
-<p>nerdctlはコンテナをrootlessで実行することが出来る。そのためには rootlesskitというソフトウェアが必要になる。それを走らせるために <a href="https://github.com/rootless-containers/rootlesskit#subuid"><code>newuidmap</code> というツールが必要になる</a>ので、インストールする。</p>
+<p>nerdctlはコンテナをrootlessで実行することが出来る。そのためには
+rootlesskitというソフトウェアが必要になる。それを走らせるために <a href="https://github.com/rootless-containers/rootlesskit#subuid"><code>newuidmap</code>
+というツールが必要になる</a>ので、インストールする。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
@@ -171,7 +189,10 @@ bash
 <div class="sourceCode" id="cb5" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> containerd-rootless-setuptool.sh install</span></code></pre></div>
 </div>
 <h2 id="buildkitをインストールする">buildkitをインストールする</h2>
-<p>最初は気付かなかったが、どうやら <code>nerdctl build .</code> とかしようとすると buildkitのインストールが必要となるらしい(インストールされているとばか り思っていたが、上記のではダメらしい)。</p>
+<p>最初は気付かなかったが、どうやら <code>nerdctl build .</code>
+とかしようとすると
+buildkitのインストールが必要となるらしい(インストールされているとばか
+り思っていたが、上記のではダメらしい)。</p>
 <p>(一度 <code>nerdctl build .</code> して怒られた)</p>
 <p>そこで、言われた通りにコマンドを実行しておく</p>
 <div class="ui segment">
@@ -183,17 +204,36 @@ bash
 </div>
 <h1 id="トラブルシューティング">トラブルシューティング</h1>
 <h2 id="イメージをpullしようとするとタイムアウトする">イメージをpullしようとするとタイムアウトする</h2>
-<p>どうやら既知の問題らしい。<a href="https://github.com/containerd/nerdctl/issues/677">containerd/nerdctl #677</a>のコメントにあるように、 <code>containerd-rootless-setuptool.sh nsenter bash</code> でrootlesskitの名前空 間に入った後、 <code>/etc/resolv.conf</code> のnameserverを8.8.8.8にしたら疎通す るようになった。</p>
+<p>どうやら既知の問題らしい。<a href="https://github.com/containerd/nerdctl/issues/677">containerd/nerdctl
+#677</a>のコメントにあるように、
+<code>containerd-rootless-setuptool.sh nsenter bash</code>
+でrootlesskitの名前空 間に入った後、 <code>/etc/resolv.conf</code>
+のnameserverを8.8.8.8にしたら疎通す るようになった。</p>
 <h2 id="CGroup v2の対応方法">CGroup v2の対応方法</h2>
-<p>containerdをrootlessで使っている場合、一部の機能が制限されてしまう。 それを避けたい場合CGroup v2に対応する必要があるが、<a href="https://rootlesscontaine.rs/getting-started/common/cgroup2/">公式で示されている 方法</a>はgrubの設定を書き換える必要があり、Grubが使用されていないWSL2環境 では行うことが出来ない。そこで、<a href="https://learn.microsoft.com/ja-jp/windows/wsl/wsl-config#configuration-setting-for-wslconfig">.wslconfig</a>を設定してあげる必要がある。</p>
+<p>containerdをrootlessで使っている場合、一部の機能が制限されてしまう。
+それを避けたい場合CGroup v2に対応する必要があるが、<a href="https://rootlesscontaine.rs/getting-started/common/cgroup2/">公式で示されている
+方法</a>はgrubの設定を書き換える必要があり、Grubが使用されていないWSL2環境
+では行うことが出来ない。そこで、<a href="https://learn.microsoft.com/ja-jp/windows/wsl/wsl-config#configuration-setting-for-wslconfig">.wslconfig</a>を設定してあげる必要がある。</p>
 <h1 id="Rootlessにするべきなのか否か？">Rootlessにするべきなのか否か？</h1>
-<p>まぁ基本的にはRoot権限を用いない方が良いというのはそうなのだが、ならば デフォルトでそう設定されているはず。デフォルトでRootを必要とするという ことは、何らかしらのトレードオフが存在していると考えて良い。ということ で、Rootlessにする場合のメリット・デメリットをすこし軽く調べてみた</p>
+<p>まぁ基本的にはRoot権限を用いない方が良いというのはそうなのだが、ならば
+デフォルトでそう設定されているはず。デフォルトでRootを必要とするという
+ことは、何らかしらのトレードオフが存在していると考えて良い。ということ
+で、Rootlessにする場合のメリット・デメリットをすこし軽く調べてみた</p>
 <ul>
-<li><a href="https://medium.com/nttlabs/accelerating-rootless-container-network-29d0e908dda4">インターンレポート: RootlessコンテナのTCP/IP高速化 | by 松本直樹 | nttlabs | Medium</a></li>
+<li><a href="https://medium.com/nttlabs/accelerating-rootless-container-network-29d0e908dda4">インターンレポート:
+RootlessコンテナのTCP/IP高速化 | by 松本直樹 | nttlabs | Medium</a></li>
 </ul>
-<h1 id="[補足] Containerdのインストール">[補足] Containerdのインストール</h1>
-<p>今回はnerdctlと共に導入したのでこれは結局アンインストールしたが、 containerdのみをインストールするのも先にやっていたのでメモとして残して おく。</p>
-<p>containerdはaptで配付されているが、独自のレポジトリを追加してあげる必 要がある。これは<a href="https://github.com/containerd/containerd/blob/main/docs/getting-started.md#option-2-from-apt-get-or-dnf">containerdプロジェクトではなくdockerからの提供となって いる</a>ので注意。ということで、<a href="https://docs.docker.com/engine/install/ubuntu/">Dockerのドキュメントにある手順</a>を元にして Dockerに関する部分を省きつつインストールする。具体的には、大体はそのま まだが <code>apt-get</code> で一部分のみをインストールすることにする。 ちなみにこれで足りているのかはわからん。</p>
+<h1 id="[補足] Containerdのインストール">[補足]
+Containerdのインストール</h1>
+<p>今回はnerdctlと共に導入したのでこれは結局アンインストールしたが、
+containerdのみをインストールするのも先にやっていたのでメモとして残して
+おく。</p>
+<p>containerdはaptで配付されているが、独自のレポジトリを追加してあげる必
+要がある。これは<a href="https://github.com/containerd/containerd/blob/main/docs/getting-started.md#option-2-from-apt-get-or-dnf">containerdプロジェクトではなくdockerからの提供となって
+いる</a>ので注意。ということで、<a href="https://docs.docker.com/engine/install/ubuntu/">Dockerのドキュメントにある手順</a>を元にして
+Dockerに関する部分を省きつつインストールする。具体的には、大体はそのま
+まだが <code>apt-get</code> で一部分のみをインストールすることにする。
+ちなみにこれで足りているのかはわからん。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 diff

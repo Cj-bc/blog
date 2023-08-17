@@ -120,10 +120,13 @@
       </div>
 
     <div class="description">
-      <p>xmonad、デフォルトだと新しい機能を自作したりしようとするとシステムグローバルに突っ込む必要が出てきます。 それは面倒だし、管理が煩雑になるのでそもそもstackを使用できるようにします。</p>
+      <p>xmonad、デフォルトだと新しい機能を自作したりしようとするとシステムグローバルに突っ込む必要が出てきます。
+それは面倒だし、管理が煩雑になるのでそもそもstackを使用できるようにします。</p>
 <h1 id="xmonadをstackでコンパイルできるようにする">Xmonadをstackでコンパイルできるようにする</h1>
 <h2 id="xmonadのコンパイル方法を指定する方法">Xmonadのコンパイル方法を指定する方法</h2>
-<p>xmonadの recompileは、 <a href="https://hackage.haskell.org/package/xmonad-0.15/docs/src/XMonad.Core.html#recompile">XMonad.Core.recompile</a> によって行われています。 そして内部を読んでみると、 <code class="verbatim">cfgdir &lt;/&gt; "build"</code> が存在すればそれを読むということが分かります。</p>
+<p>xmonadの recompileは、 <a href="https://hackage.haskell.org/package/xmonad-0.15/docs/src/XMonad.Core.html#recompile">XMonad.Core.recompile</a>
+によって行われています。 そして内部を読んでみると、 <code class="verbatim">cfgdir &lt;/&gt; "build"</code>
+が存在すればそれを読むということが分かります。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
@@ -160,8 +163,11 @@ haskell
 </ol>
 <p>のいずれかになります。</p>
 <p>今回は、変更点をあまり作らないためにとりあえず <code class="verbatim">~/.xmonad</code> にしようと思います(そのうち <code class="verbatim">XDG_CONFIG_HOME</code> 以下に移したい)</p>
-<h2 id="build-スクリプトを書く"><code class="verbatim">build</code> スクリプトを書く</h2>
-<p>コマンドを使用することになるので、shellscriptで書くのが妥当かなと思います。 <code class="verbatim">build</code> スクリプトは以下のように呼ばれます。</p>
+<h2 id="build-スクリプトを書く"><code class="verbatim">build</code>
+スクリプトを書く</h2>
+<p>コマンドを使用することになるので、shellscriptで書くのが妥当かなと思います。
+<code class="verbatim">build</code>
+スクリプトは以下のように呼ばれます。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
@@ -182,7 +188,11 @@ haskell
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>compileScript bin dir script errHandle <span class="ot">=</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>        runProcess script [bin] (<span class="dt">Just</span> dir) <span class="dt">Nothing</span> <span class="dt">Nothing</span> <span class="dt">Nothing</span> (<span class="dt">Just</span> errHandle)</span></code></pre></div>
 </div>
-<p><code class="verbatim">runProcess</code> は、 <a href="https://hackage.haskell.org/package/process-1.6.11.0/docs/System-Process.html#v:runProcess">System.Process.runProcess</a> であり、上記の使い方だと <code class="verbatim">script</code> というプログラムに <code class="verbatim">bin</code> を引数として与え、 <code class="verbatim">dir</code> をワーキングディレクトリとしてから実行することになります。</p>
+<p><code class="verbatim">runProcess</code> は、 <a href="https://hackage.haskell.org/package/process-1.6.11.0/docs/System-Process.html#v:runProcess">System.Process.runProcess</a>
+であり、上記の使い方だと <code class="verbatim">script</code>
+というプログラムに <code class="verbatim">bin</code> を引数として与え、
+<code class="verbatim">dir</code>
+をワーキングディレクトリとしてから実行することになります。</p>
     </div>
   </div>
   

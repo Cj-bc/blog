@@ -124,13 +124,25 @@
 <h1 id="やったこと">やったこと</h1>
 <h1 id="知ったこと">知ったこと</h1>
 <h2 id="RDF">RDF</h2>
-<p>知識記述言語とのこと。 それ自体は具体的な文法を持たず、N3やRDF/XML等が別個定義されている。</p>
+<p>知識記述言語とのこと。
+それ自体は具体的な文法を持たず、N3やRDF/XML等が別個定義されている。</p>
 <h2 id="ActivityPubの概要ざっくり">ActivityPubの概要ざっくり</h2>
 <p><a href="https://www.w3.org/TR/activitypub/#Overview">w3.orgのOverview</a>自体が割と分かりやすい説明をしてくれているのでそれを見ると良い。</p>
-<p>基本は<a href="https://www.w3.org/TR/activitystreams-core/">ActivityStreams</a>というデータフォーマットを軸にして作られている。 ソーシャルネットワークで必要となる基本的な語彙(表現したいオブジェクトや活動など)は ActivityStreams自体で表現が可能で、物足りない場合は<a href="https://www.w3.org/TR/json-ld/">JSON-LD</a>で拡張出来る。</p>
-<p>サーバー⇔サーバー間のプロトコルとサーバー⇔クライアント間のプロトコルの二つの プロトコルから構成されている。</p>
-<p>片方のみの実装でも可能で、例えばMisskeyとかはサーバー⇔クライアント間は独自のプロトコルを 使っていたはず。</p>
-<p>ユーザーは<a href="https://www.w3.org/TR/activitypub/#actors">actors</a>として表現されており、それぞれ <code>inbox</code> と <code>outbox</code> を持つ。 <code>inbox</code> はその名の通り受け取るメッセージが入ってくる所で、Actorはそこにアクセスすることで 自分宛のメッセージを受け取る。 <code>outbox</code> は逆に「自分が世界に発信したいもの」を置く場所で、他のActorがそこを見にきたり、 サーバー間プロトコルによって転送されたりする。 「世界に発信」ではなく「特定の個人に発信」したい場合は、その個人のActorが持つ <code>inbox</code> に直接 メッセージをPOSTする。</p>
+<p>基本は<a href="https://www.w3.org/TR/activitystreams-core/">ActivityStreams</a>というデータフォーマットを軸にして作られている。
+ソーシャルネットワークで必要となる基本的な語彙(表現したいオブジェクトや活動など)は
+ActivityStreams自体で表現が可能で、物足りない場合は<a href="https://www.w3.org/TR/json-ld/">JSON-LD</a>で拡張出来る。</p>
+<p>サーバー⇔サーバー間のプロトコルとサーバー⇔クライアント間のプロトコルの二つの
+プロトコルから構成されている。</p>
+<p>片方のみの実装でも可能で、例えばMisskeyとかはサーバー⇔クライアント間は独自のプロトコルを
+使っていたはず。</p>
+<p>ユーザーは<a href="https://www.w3.org/TR/activitypub/#actors">actors</a>として表現されており、それぞれ
+<code>inbox</code> と <code>outbox</code> を持つ。 <code>inbox</code>
+はその名の通り受け取るメッセージが入ってくる所で、Actorはそこにアクセスすることで
+自分宛のメッセージを受け取る。 <code>outbox</code>
+は逆に「自分が世界に発信したいもの」を置く場所で、他のActorがそこを見にきたり、
+サーバー間プロトコルによって転送されたりする。
+「世界に発信」ではなく「特定の個人に発信」したい場合は、その個人のActorが持つ
+<code>inbox</code> に直接 メッセージをPOSTする。</p>
 <h1 id="やること">やること</h1>
     </div>
   </div>

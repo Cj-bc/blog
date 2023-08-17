@@ -122,14 +122,18 @@
     <div class="description">
       <h1 id="Tl;Dr">Tl;Dr</h1>
 <ul>
-<li><code>LayoutClass</code> のインスタンスの定義で、 <code>a</code> を <code>Window</code> に固定する
+<li><code>LayoutClass</code> のインスタンスの定義で、 <code>a</code> を
+<code>Window</code> に固定する
 <ul>
 <li>どこかに影響あるかもしれない、未確認</li>
 </ul></li>
 <li><code>doLayout</code> の中で <code>Query</code> を使ってあげる</li>
 </ul>
 <h1 id="モチベーション">モチベーション</h1>
-<p>ダッシュボードとして機能するworkspaceを作成したい。 なので所定の位置に各アプリケーションが配置されてほしいが、 何もしない状態だと各アプリケーションのタイトル(<code>WM_NAME</code>)等には アクセスできず判断できない。</p>
+<p>ダッシュボードとして機能するworkspaceを作成したい。
+なので所定の位置に各アプリケーションが配置されてほしいが、
+何もしない状態だと各アプリケーションのタイトル(<code>WM_NAME</code>)等には
+アクセスできず判断できない。</p>
 <p>なんとかならないものか</p>
 <h1 id="ManageHookを参考にする">ManageHookを参考にする</h1>
 <p>managehookでは、ウィンドウのプロパティにアクセスして制御を行っている。</p>
@@ -141,8 +145,12 @@ haskell
 </div>
 <p>など。 ここにヒントを得れば何らかの方法がありそうだなと検討が付く</p>
 <h1 id="Query を探る"><code>Query</code> を探る</h1>
-<p>managehookで使われているのは <code>Query</code> という型。これは <code>X</code> を基底 モナドに持つ <code>ReaderT</code> で、 <code>runQuery</code> で実行することで <code>X a</code> を 戻り値として取ることができる。</p>
-<p><a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-Core.html#t:Query"><code>Query</code> と <code>runQuery</code> の実装</a>は以下</p>
+<p>managehookで使われているのは <code>Query</code> という型。これは
+<code>X</code> を基底 モナドに持つ <code>ReaderT</code> で、
+<code>runQuery</code> で実行することで <code>X a</code> を
+戻り値として取ることができる。</p>
+<p><a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-Core.html#t:Query"><code>Query</code>
+と <code>runQuery</code> の実装</a>は以下</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
@@ -153,9 +161,12 @@ haskell
 <span id="~Query~ と ~runQuery~ の実装-4"><a href="#~Query~ と ~runQuery~ の実装-4" aria-hidden="true" tabindex="-1"></a><span class="ot">   runQuery ::</span> <span class="dt">Query</span> a <span class="ot">-&gt;</span> <span class="dt">Window</span> <span class="ot">-&gt;</span> <span class="dt">X</span> a</span>
 <span id="~Query~ と ~runQuery~ の実装-5"><a href="#~Query~ と ~runQuery~ の実装-5" aria-hidden="true" tabindex="-1"></a>   runQuery (<span class="dt">Query</span> m) w <span class="ot">=</span> runReaderT m w</span></code></pre></div>
 </div>
-<p>さて…どうやらこれで答えなのでは？ <code>X</code> モナドのアクションなので、あとはこれを <code>doLayout</code> 内部から呼んであげれば良さそう。</p>
+<p>さて…どうやらこれで答えなのでは？ <code>X</code>
+モナドのアクションなので、あとはこれを <code>doLayout</code>
+内部から呼んであげれば良さそう。</p>
 <p><strong>…が、人生そう甘はないのである</strong></p>
-<h1 id="Query では上手くいかない!？"><code>Query</code> では上手くいかない!？</h1>
+<h1 id="Query では上手くいかない!？"><code>Query</code>
+では上手くいかない!？</h1>
 <p>改めて <code>runQuery</code> の型を見てみよう。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -170,7 +181,10 @@ haskell
 </div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">doLayout ::</span> layout a <span class="op">-</span> <span class="dt">Rectangle</span> <span class="ot">-&gt;</span> <span class="dt">Stack</span> a <span class="ot">-&gt;</span> <span class="dt">X</span> ([(a, <span class="dt">Rectangle</span>)], <span class="dt">Maybe</span> (layout a))</span></code></pre></div>
 </div>
-<p>このうち、ウィンドウの情報が格納されているのは <code>Stack a</code> の内部である。(<a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-Core.html#v:doLayout">コメント</a>より) そして <a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-StackSet.html#t:Stack"><code>Stack a</code> の定義</a> を見てみると</p>
+<p>このうち、ウィンドウの情報が格納されているのは <code>Stack a</code>
+の内部である。(<a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-Core.html#v:doLayout">コメント</a>より)
+そして <a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-StackSet.html#t:Stack"><code>Stack a</code>
+の定義</a> を見てみると</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell
@@ -180,11 +194,25 @@ haskell
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>   ,<span class="ot"> down   ::</span> [a] }     <span class="co">-- jokers to the right</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Read</span>, <span class="dt">Eq</span>)</span></code></pre></div>
 </div>
-<p>となっており、 <em>保存されている値の型は <code>a</code> で定義されている</em> のだ。 これが何故問題になるか、というと <strong><code>runQuery</code> に <code>Stack a</code> の中の <code>Window</code> を食わせたいが、 型が定まっていないため型エラーを起こす</strong> ということだ。</p>
-<p>ドキュメント的に、 <code>doLayout</code> には実際には <code>Stack Window</code> が渡されるであろうことは明白なのだが、 プログラムからするとそんな実行時の話は知らない。 というか型としてはエラーを起こすのが正解だと思う。</p>
+<p>となっており、 <em>保存されている値の型は <code>a</code>
+で定義されている</em> のだ。 これが何故問題になるか、というと
+<strong><code>runQuery</code> に <code>Stack a</code> の中の
+<code>Window</code> を食わせたいが、
+型が定まっていないため型エラーを起こす</strong> ということだ。</p>
+<p>ドキュメント的に、 <code>doLayout</code> には実際には
+<code>Stack Window</code> が渡されるであろうことは明白なのだが、
+プログラムからするとそんな実行時の話は知らない。
+というか型としてはエラーを起こすのが正解だと思う。</p>
 <p>でも確実に <code>Window</code> がくるはずだし、困った…</p>
-<h1 id="LayoutClass &lt;Layout&gt; Window にしちゃえ!!"><code>LayoutClass &lt;Layout&gt; Window</code> にしちゃえ!!</h1>
-<p>えいやっ!というやっつけ感が凄いが、 <code>LayoutClass</code> のインスタンスを作る際に <code>a</code> の型を指定してしまえば 型エラーは起こらなくなる。 <code>doLayout</code> は <code>LayoutClass</code> の型クラス関数であり、 <code>doLayout</code> の型定義の中の <code>a</code> は <code>LayoutClass &lt;Layout&gt; a</code> によって束縛されているからだ。</p>
+<h1 id="LayoutClass &lt;Layout&gt; Window にしちゃえ!!"><code>LayoutClass &lt;Layout&gt; Window</code>
+にしちゃえ!!</h1>
+<p>えいやっ!というやっつけ感が凄いが、 <code>LayoutClass</code>
+のインスタンスを作る際に <code>a</code> の型を指定してしまえば
+型エラーは起こらなくなる。 <code>doLayout</code> は
+<code>LayoutClass</code> の型クラス関数であり、 <code>doLayout</code>
+の型定義の中の <code>a</code> は
+<code>LayoutClass &lt;Layout&gt; a</code>
+によって束縛されているからだ。</p>
 <p>これによって、 <code>Stack a</code> の型が固定される。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -193,12 +221,21 @@ haskell
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">LayoutClass</span> <span class="dt">MyLayout</span> <span class="dt">Window</span> <span class="kw">where</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ot">  doLayout ::</span> <span class="dt">MyLayout</span> <span class="dt">Window</span> <span class="ot">-&gt;</span> <span class="dt">Rectangle</span> <span class="ot">-&gt;</span> <span class="dt">Stack</span> <span class="dt">Window</span> <span class="ot">-&gt;</span> <span class="dt">X</span> ([(<span class="dt">Window</span>, <span class="dt">Rectangle</span>)], <span class="dt">Maybe</span> (<span class="dt">MyLayout</span> <span class="dt">Window</span>))</span></code></pre></div>
 </div>
-<p>そうすれば、後は <code>Stack</code> から取り出した <code>Window</code> を <code>runQuery</code> にかけてあげれば良いだけになる。</p>
+<p>そうすれば、後は <code>Stack</code> から取り出した
+<code>Window</code> を <code>runQuery</code>
+にかけてあげれば良いだけになる。</p>
 <h1 id="おまけ: 具体的な書き方">おまけ: 具体的な書き方</h1>
 <p>ついでなので、ケース毎に使い方(書き方)を書いてみる。</p>
 <h2 id="タイトルによって選択">タイトルによって選択</h2>
-<p><a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-ManageHook.html#v:title"><code>title</code></a>を使います。 <a href="https://github.com/Cj-bc/dotfiles/blob/master/dotfiles/xmonad/src/XMonad/Layout/Info.hs#L25-L31">私のxmonadに記載されているもの</a>と同じです。</p>
-<p>最初に <code>[Window]</code> から 適切な <code>Window</code> だけ取り出すために <code>[X (Maybe Window)]</code> にしてあげて、 <code>X</code> を実行するために <code>sequence</code> (<code>X [Maybe Window]</code>)、 <code>find</code> で <code>Just</code> なもの(=求めていたWindow)をピックアップしてあげて (<code>X [Maybe (Maybe Window)]</code>)、二重になった <code>Maybe</code> を <code>join</code> で平たくしてあげています。</p>
+<p><a href="https://hackage.haskell.org/package/xmonad-0.15/docs/XMonad-ManageHook.html#v:title"><code>title</code></a>を使います。
+<a href="https://github.com/Cj-bc/dotfiles/blob/master/dotfiles/xmonad/src/XMonad/Layout/Info.hs#L25-L31">私のxmonadに記載されているもの</a>と同じです。</p>
+<p>最初に <code>[Window]</code> から 適切な <code>Window</code>
+だけ取り出すために <code>[X (Maybe Window)]</code> にしてあげて、
+<code>X</code> を実行するために <code>sequence</code>
+(<code>X [Maybe Window]</code>)、 <code>find</code> で <code>Just</code>
+なもの(=求めていたWindow)をピックアップしてあげて
+(<code>X [Maybe (Maybe Window)]</code>)、二重になった <code>Maybe</code>
+を <code>join</code> で平たくしてあげています。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 haskell

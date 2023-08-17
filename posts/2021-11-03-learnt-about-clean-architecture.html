@@ -120,10 +120,14 @@
       </div>
 
     <div class="description">
-      <p>今迄あまり設計というものに触れてきていなかったのだけど、今回初めて「クリーンアーキテクチャ」という概念を少し学んだ。 実をいうと SOLID原則すら触れていなかった。名前は知ってたけどねぇ…</p>
-<p>関数型を使ってることが多いのもあるけど、古いものと考えていた節は正直ある。 いざ触れてみるとやっぱり為になることが多いねぇ…</p>
+      <p>今迄あまり設計というものに触れてきていなかったのだけど、今回初めて「クリーンアーキテクチャ」という概念を少し学んだ。
+実をいうと SOLID原則すら触れていなかった。名前は知ってたけどねぇ…</p>
+<p>関数型を使ってることが多いのもあるけど、古いものと考えていた節は正直ある。
+いざ触れてみるとやっぱり為になることが多いねぇ…</p>
 <p><a href="https://github.com/Cj-bc/3dShell">Cj-bc/3dShell</a>の設計に悩んだ挙句、部分的に考え方を取り入れてみている。</p>
-<p>以下は、調べている間に感じたことの個人的なメモで <strong>技術的に但しいかは保証できない</strong> ので注意。 何かしら「これは違うぞ!!」というのがあれば、 <a href="https://twitter.com/Cj-bc">Twitter</a>にでも直接直リプライ等で指摘していただけるとありがたいです</p>
+<p>以下は、調べている間に感じたことの個人的なメモで
+<strong>技術的に但しいかは保証できない</strong> ので注意。
+何かしら「これは違うぞ!!」というのがあれば、 <a href="https://twitter.com/Cj-bc">Twitter</a>にでも直接直リプライ等で指摘していただけるとありがたいです</p>
 <h1 id="クリーンアーキテクチャについて軽いメモ">クリーンアーキテクチャについて軽いメモ</h1>
 <ul>
 <li>クリーンアーキテクチャは「こうやって作ると良い設計になる」というだけであり、別段正解の使い方が一つあるわけではない</li>
@@ -133,7 +137,8 @@
 </ul></li>
 <li>アーキテクチャはそれぞれの事例に合わせて作るべき</li>
 <li>SOLID原則をつきつめるとこれになる感じがある。</li>
-<li>Onion Architectureや<a href="https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)">Hexagonal architecure</a>等の共通点を取り出した(ような)もの
+<li>Onion Architectureや<a href="https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)">Hexagonal
+architecure</a>等の共通点を取り出した(ような)もの
 <ul>
 <li>なので図式には共通点が色々ある</li>
 </ul></li>
@@ -142,22 +147,27 @@
 <li>「DB決まってないけどフロント作って!」みたいな無茶ぶりができる</li>
 <li>テストする時にMockにいれかえたり等できる。</li>
 </ul></li>
-<li>インターフェースを介したやりとりには <code>DTO</code> (Data Transfer Object) を作成して行う
+<li>インターフェースを介したやりとりには <code>DTO</code> (Data Transfer
+Object) を作成して行う
 <ul>
-<li>ただDBとのやりとりに <code>DTO</code> 使ってない例が結構あるのでそこの匙加減わからんなぁ</li>
+<li>ただDBとのやりとりに <code>DTO</code>
+使ってない例が結構あるのでそこの匙加減わからんなぁ</li>
 </ul></li>
 </ul>
 <h2 id="大事な要素">大事な要素</h2>
 <ul>
-<li><strong>「ドメイン・ビジネスロジックを守る」</strong> のが何よりも大事</li>
+<li><strong>「ドメイン・ビジネスロジックを守る」</strong>
+のが何よりも大事</li>
 <li>外から内側への依存</li>
 <li>インターフェースを用いることにより、「具象」ではなく「抽象」への依存にする</li>
 </ul>
 <h1 id="参考">参考</h1>
 <ul>
-<li><a href="https://qiita.com/nrslib/items/a5f902c4defc83bd46b8#humble-view">実装クリーンアーキテクチャ – @nrslib qiita.com</a></li>
+<li><a href="https://qiita.com/nrslib/items/a5f902c4defc83bd46b8#humble-view">実装クリーンアーキテクチャ
+– @nrslib qiita.com</a></li>
 <li><a href="https://ja.wikipedia.org/wiki/SOLID">wiki:SOLID</a></li>
-<li><a href="https://gist.github.com/mpppk/609d592f25cab9312654b39f1b357c60">クリーンアーキテクチャ完全に理解した – @mpppk github.com</a></li>
+<li><a href="https://gist.github.com/mpppk/609d592f25cab9312654b39f1b357c60">クリーンアーキテクチャ完全に理解した
+– @mpppk github.com</a></li>
 </ul>
     </div>
   </div>

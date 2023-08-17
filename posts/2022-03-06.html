@@ -122,8 +122,11 @@
     <div class="description">
       <h1 id="やったこと">やったこと</h1>
 <h1 id="知ったこと">知ったこと</h1>
-<h2 id="型変換には as キーワードが使える Rust">型変換には <code>as</code> キーワードが使える <span class="tag" data-tag-name="Rust"><span class="smallcaps">Rust</span></span></h2>
-<p>型変換には <code>try_from().unwrap()</code> とか使っていたけれど、 実はプリミティブ型なら <a href="https://doc.rust-lang.org/std/keyword.as.html"> <code>as</code> キーワード</a>である程度出来る。 例えば、以下の二つは等価。</p>
+<h2 id="型変換には as キーワードが使える Rust">型変換には
+<code>as</code> キーワードが使える <span class="tag" data-tag-name="Rust"><span class="smallcaps">Rust</span></span></h2>
+<p>型変換には <code>try_from().unwrap()</code> とか使っていたけれど、
+実はプリミティブ型なら <a href="https://doc.rust-lang.org/std/keyword.as.html"> <code>as</code>
+キーワード</a>である程度出来る。 例えば、以下の二つは等価。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 rust
@@ -132,8 +135,12 @@ rust
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="kw">as</span> <span class="dt">u32</span></span></code></pre></div>
 </div>
-<h2 id="Iteratorの中に入ったOptionを外したいならflatmap Rust">Iteratorの中に入ったOptionを外したいならflat<sub>map</sub> <span class="tag" data-tag-name="Rust"><span class="smallcaps">Rust</span></span></h2>
-<p><code>impl Iterator&lt;Option&lt;T&gt;&gt;</code> を <code>impl Iterator&lt;T&gt;</code> に変換したい場合、 <code>flat_map</code> でいける。 Haskelでいうところの <code>catMaybes :: [Maybe a] -&gt; [a]</code> に近い挙動をする。</p>
+<h2 id="Iteratorの中に入ったOptionを外したいならflatmap Rust">Iteratorの中に入ったOptionを外したいならflat<sub>map</sub>
+<span class="tag" data-tag-name="Rust"><span class="smallcaps">Rust</span></span></h2>
+<p><code>impl Iterator&lt;Option&lt;T&gt;&gt;</code> を
+<code>impl Iterator&lt;T&gt;</code> に変換したい場合、
+<code>flat_map</code> でいける。 Haskelでいうところの
+<code>catMaybes :: [Maybe a] -&gt; [a]</code> に近い挙動をする。</p>
 <p>元々こうやってたのが</p>
 <div class="ui segment">
 <div class="ui top right attached label">

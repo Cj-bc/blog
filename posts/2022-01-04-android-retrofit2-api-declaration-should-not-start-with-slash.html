@@ -134,7 +134,11 @@ kotlin
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>// <span class="fu">ExampleResponse</span>はどこかで定義されているものとする</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>   }</span></code></pre></div>
 </div>
-<p>とかするわけなんですが、この <code>@GET</code> に与えるパスの先頭に <code>/</code> をつけてはいけない。 そうするとHTTP Status Code 404を吐かれてしまう。 代わりに、 <code>retrofit2.Retrofit.Builder()</code> の <code>baseUrl</code> に渡すURLの末尾に <code>/</code> をつける。</p>
+<p>とかするわけなんですが、この <code>@GET</code> に与えるパスの先頭に
+<code>/</code> をつけてはいけない。 そうするとHTTP Status Code
+404を吐かれてしまう。 代わりに、
+<code>retrofit2.Retrofit.Builder()</code> の <code>baseUrl</code>
+に渡すURLの末尾に <code>/</code> をつける。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 kotlin
@@ -147,9 +151,12 @@ kotlin
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>@<span class="fu">GET</span><span class="op">(</span>&quot;<span class="va">endpoint</span>/<span class="va">example</span>&quot;<span class="op">)</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="fu">abstract</span> <span class="kw">fun</span> <span class="fu">exampleGet</span><span class="op">():</span> <span class="dt">Call</span><span class="op">&lt;</span><span class="dt">ExampleResponse</span><span class="op">&gt;</span></span></code></pre></div>
 </div>
-<h1 id="おまけ: baseUrlにslashなし&amp;API宣言にslashありは動かない">おまけ: baseUrlにslashなし&amp;API宣言にslashありは動かない</h1>
-<p>最終的に同じになりそうだから試してみたが、エラーが出て駄目でした。 baseUrlはslashで終わらないといけないらしい。</p>
-<div class="line-block">java.lang.IllegalArgumentException: baseUrl must end in /: <a href="https://misskey.io/api">https://misskey.io/api</a></div>
+<h1 id="おまけ: baseUrlにslashなし&amp;API宣言にslashありは動かない">おまけ:
+baseUrlにslashなし&amp;API宣言にslashありは動かない</h1>
+<p>最終的に同じになりそうだから試してみたが、エラーが出て駄目でした。
+baseUrlはslashで終わらないといけないらしい。</p>
+<div class="line-block">java.lang.IllegalArgumentException: baseUrl must
+end in /: <a href="https://misskey.io/api">https://misskey.io/api</a></div>
     </div>
   </div>
   

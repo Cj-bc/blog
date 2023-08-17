@@ -121,13 +121,23 @@
 
     <div class="description">
       <h1 id="なぜやるのか">なぜやるのか</h1>
-<p>かねてよりmacOSが重くなることに困っていて、 <a href="https://github.com/tmux/tmux/issues/353#issuecomment-202726966">macでtmuxとvimを使うとvimがすごく重くなる</a> を見つけました。</p>
-<p>結果論としては「これがパフォーマンスをよくする」というわけではなさそうでしたが、 とりあえずtmuxを使っているので、揃えることにしました。</p>
+<p>かねてよりmacOSが重くなることに困っていて、 <a href="https://github.com/tmux/tmux/issues/353#issuecomment-202726966">macでtmuxとvimを使うとvimがすごく重くなる</a>
+を見つけました。</p>
+<p>結果論としては「これがパフォーマンスをよくする」というわけではなさそうでしたが、
+とりあえずtmuxを使っているので、揃えることにしました。</p>
 <h1 id="前提知識">前提知識</h1>
 <h2 id="そもそもterm環境変数とは何か">そもそもTERM環境変数とは何か</h2>
-<p><code class="verbatim">$TERM</code> は、ncursesなどが使っている <strong>terminfoライブラリ</strong> の動作に影響する環境変数です。 この変数で「なんの端末を使っているか」を設定し、terminfoライブラリがそれに応じて出力を変えているため、 cursesを使用する開発者は端末の差をあまり考えずに様々な端末に対応したソフトウェアを書くことができるのです。 (エスケープシーケンスとか決めている)</p>
-<p>実は端末エミュレーター(とそもそもの端末)には色々な種類があります。有名どころだと <code class="verbatim">xterm</code>, <code class="verbatim">cygwin</code>, <code class="verbatim">guru</code>, <code class="verbatim">vtシリーズ</code> などでしょうか</p>
-<p>筆者もそこまで詳しくないですが、途方もない数の仕様の端末が存在しています。 それらを共通のインターフェースで扱えるようにするのが <code class="verbatim">terminfo</code>, そして「今使っている端末」を設定するのが <code class="verbatim">TERM</code> 環境変数、ということです。</p>
+<p><code class="verbatim">$TERM</code> は、ncursesなどが使っている
+<strong>terminfoライブラリ</strong> の動作に影響する環境変数です。
+この変数で「なんの端末を使っているか」を設定し、terminfoライブラリがそれに応じて出力を変えているため、
+cursesを使用する開発者は端末の差をあまり考えずに様々な端末に対応したソフトウェアを書くことができるのです。
+(エスケープシーケンスとか決めている)</p>
+<p>実は端末エミュレーター(とそもそもの端末)には色々な種類があります。有名どころだと
+<code class="verbatim">xterm</code>, <code class="verbatim">cygwin</code>, <code class="verbatim">guru</code>,
+<code class="verbatim">vtシリーズ</code> などでしょうか</p>
+<p>筆者もそこまで詳しくないですが、途方もない数の仕様の端末が存在しています。
+それらを共通のインターフェースで扱えるようにするのが <code class="verbatim">terminfo</code>,
+そして「今使っている端末」を設定するのが <code class="verbatim">TERM</code> 環境変数、ということです。</p>
 <p>ちなみに余談ですが、=terminfo= で使用されるデータはmacの場合、 <code class="verbatim">/usr/share/terminfo</code> に格納されています。</p>
 <h2 id="terminfoエントリ">terminfoエントリ</h2>
 <p>terminfoエントリは、</p>
@@ -135,10 +145,13 @@
 <h1 id="手順">手順</h1>
 <ul>
 <li><a href="#tmux.confで、tmux内でのTERMを設定する">tmux.confで、tmux内でのTERMを設定する</a></li>
-<li><a href="#terminfoエントリーを追加する">(terminfoのエラーが出る場合) terminfoエントリーを追加する</a></li>
+<li><a href="#terminfoエントリーを追加する">(terminfoのエラーが出る場合)
+terminfoエントリーを追加する</a></li>
 </ul>
 <h2 id="tmux.confでtmux内でのtermを設定する">tmux.confで、tmux内でのTERMを設定する</h2>
-<p><a href="https://github.com/tmux/tmux/issues/353#issuecomment-202726966">前出のリンク</a>で説明されているように、 以下を <code class="verbatim">~/. tmux.conf</code> (または使っているtmux.confファイル)に追加します</p>
+<p><a href="https://github.com/tmux/tmux/issues/353#issuecomment-202726966">前出のリンク</a>で説明されているように、
+以下を <code class="verbatim">~/. tmux.conf</code>
+(または使っているtmux.confファイル)に追加します</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 example
@@ -148,8 +161,11 @@ example
 </div>
 <h2 id="terminfoエントリーを追加する">terminfoエントリーを追加する</h2>
 <p>筆者の環境(macOS+homebrew)では、terminfoエントリーがないと怒られてしまいエスケープシーケンスが全く使えなくなりました。</p>
-<p>しかし、実はhomebrewもきちんとterminfoエントリーを作成してくれています。 <code class="verbatim">/usr/local/opt/ncurses/bin/infocmp</code> には作成されたエントリーが保存されているのですが、ここは残念ながら参照されません。</p>
-<p>そこで、<a href="https://github.com/tmux/tmux/issues/1257#issuecomment-581378716">tmuxのissueにあった方法</a> で <code class="verbatim">/usr/bin/infocmp</code> に追加します</p>
+<p>しかし、実はhomebrewもきちんとterminfoエントリーを作成してくれています。
+<code class="verbatim">/usr/local/opt/ncurses/bin/infocmp</code>
+には作成されたエントリーが保存されているのですが、ここは残念ながら参照されません。</p>
+<p>そこで、<a href="https://github.com/tmux/tmux/issues/1257#issuecomment-581378716">tmuxのissueにあった方法</a>
+で <code class="verbatim">/usr/bin/infocmp</code> に追加します</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 shell
@@ -167,7 +183,8 @@ tmux-256color|tmux with 256 colors,
 <h1 id="参考リンク">参考リンク</h1>
 <ul>
 <li><a href="https://github.com/tmux/tmux/issues/353#issuecomment-202726966">https://github.com/tmux/tmux/issues/353#issuecomment-202726966</a></li>
-<li><a href="https://chakku.hatenablog.com/entry/2018/07/22/040129">tmux上でtmux-256colorを使用する(mac) – ちゃっくのメモ帳</a></li>
+<li><a href="https://chakku.hatenablog.com/entry/2018/07/22/040129">tmux上でtmux-256colorを使用する(mac)
+– ちゃっくのメモ帳</a></li>
 <li><a href="https://github.com/tmux/tmux/issues/1257#issuecomment-581378716">https://github.com/tmux/tmux/issues/1257#issuecomment-581378716</a></li>
 </ul>
     </div>

@@ -122,7 +122,9 @@
     <div class="description">
       <p><a href="https://docs.rs/crate/hyper/0.13.8">Hyper</a>の<a href="https://docs.rs/hyper/0.13.8/hyper/body/struct.Body.html">Body</a>を<a href="https://docs.rs/hyper/0.13.8/hyper/body/struct.Bytes.html">Bytes</a>に変換する方法について、何気に調べるの苦労したのでメモ。</p>
 <p><code>hyper::body</code> に用意されている <a href="https://docs.rs/hyper/0.13.8/hyper/body/fn.to_bytes.html">to<sub>bytes</sub></a>関数を使えばよい。</p>
-<p>HttpのRequrestからBodyは <a href="https://docs.rs/http/0.2.1/http/request/struct.Request.html#method.into_body"> <code>into_body</code> </a>で取れるので、それを <code>to_bytes</code> に与えてあげる。 つまり:</p>
+<p>HttpのRequrestからBodyは <a href="https://docs.rs/http/0.2.1/http/request/struct.Request.html#method.into_body">
+<code>into_body</code> </a>で取れるので、それを <code>to_bytes</code>
+に与えてあげる。 つまり:</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 rust

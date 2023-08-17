@@ -121,19 +121,26 @@
 
     <div class="description">
       <h1 id="Hash Tableの種類">Hash Tableの種類</h1>
-<p>elispにおいてHash Tableは一つではあるが、キーを比較するための方法は 複数存在する (<a href="help:make-hash-table">help:make-hash-table</a>)</p>
-<p>そして、この比較する方法の違いを把握してないと「何故これが重複して存在するの!？」 みたいなことになるので気をつける必要がある。</p>
-<p>一応ユーザーが自分で実装することもできるそうだが (<a href="info:elisp#Defining Hash">elisp#Defining Hash</a>の help:define-hash-table-test を参照)、 今回はそれは含めない。</p>
-<p>情報源は <a href="info:elisp#Creating Hash">elisp#Creating Hash</a></p>
+<p>elispにおいてHash Tableは一つではあるが、キーを比較するための方法は
+複数存在する (<a href="help:make-hash-table">help:make-hash-table</a>)</p>
+<p>そして、この比較する方法の違いを把握してないと「何故これが重複して存在するの!？」
+みたいなことになるので気をつける必要がある。</p>
+<p>一応ユーザーが自分で実装することもできるそうだが (<a href="info:elisp#Defining Hash">elisp#Defining Hash</a>の
+help:define-hash-table-test を参照)、 今回はそれは含めない。</p>
+<p>情報源は <a href="info:elisp#Creating Hash">elisp#Creating
+Hash</a></p>
 <h2 id="eql (デフォルト)"><code>eql</code> (デフォルト)</h2>
-<p>数字(float若しくはinteger)は <code>equal</code> で等しければ同じと判断され、 <strong>他のオブジェクトは全て等しくなることはない</strong> (!)</p>
+<p>数字(float若しくはinteger)は <code>equal</code>
+で等しければ同じと判断され、
+<strong>他のオブジェクトは全て等しくなることはない</strong> (!)</p>
 <h2 id="equal"><code>equal</code></h2>
 <p><code>equal</code> によって判定される。</p>
 <h2 id="eq"><code>eq</code></h2>
 <p>異なるLispオブジェクトは同じになることはない。</p>
 <h1 id="「こういう時は？」">「こういう時は？」</h1>
 <h2 id="キーに文字列を使いたい">キーに文字列を使いたい</h2>
-<p><strong>デフォルトの <code>eql</code> では決して等しくならない</strong> <code>'equal</code> にする</p>
+<p><strong>デフォルトの <code>eql</code>
+では決して等しくならない</strong> <code>'equal</code> にする</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp

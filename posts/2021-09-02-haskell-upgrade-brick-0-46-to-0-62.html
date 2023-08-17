@@ -120,22 +120,31 @@
       </div>
 
     <div class="description">
-      <p>ghq:Cj-bc/brick-shgif を久々に使おうとしたが、 brickのバージョンが凄い上がっていたのでアップグレードしよ~のコーナー</p>
-<p>ちなみに最新の0.64にしないのは、 ghq:Cj-bc/brick-shgif の 他の依存パッケージであるtartが最新版でも0.63より古いバージョンまでしか 対応していないため。</p>
+      <p>ghq:Cj-bc/brick-shgif を久々に使おうとしたが、
+brickのバージョンが凄い上がっていたのでアップグレードしよ~のコーナー</p>
+<p>ちなみに最新の0.64にしないのは、 ghq:Cj-bc/brick-shgif の
+他の依存パッケージであるtartが最新版でも0.63より古いバージョンまでしか
+対応していないため。</p>
 <h1 id="チェンジログからわかる!変更点まとめ">チェンジログからわかる!変更点まとめ</h1>
 <p>但し実装に影響がありそうなもののみ、又簡素な纏め。</p>
 <ul>
-<li>customMain が <code>Vty</code> ハンドルを初期値として取るようになった。</li>
-<li><code>main</code> が終了した後に <code>Vty</code> を返す <code>customMainWithVty</code> が追加</li>
-<li><code>Edit</code> Widgetが <code>EvPaste</code> イベントに反応するように。
+<li>customMain が <code>Vty</code>
+ハンドルを初期値として取るようになった。</li>
+<li><code>main</code> が終了した後に <code>Vty</code> を返す
+<code>customMainWithVty</code> が追加</li>
+<li><code>Edit</code> Widgetが <code>EvPaste</code>
+イベントに反応するように。
 <ul>
 <li>UTF-8としてデコードされ、デコードできないものは無視される</li>
 </ul></li>
-<li><code>txtWrapWith</code> は、 <code>Greedy</code> に応じて利用可能な横幅目一杯まで パディングを追加するようになった。</li>
+<li><code>txtWrapWith</code> は、 <code>Greedy</code>
+に応じて利用可能な横幅目一杯まで パディングを追加するようになった。</li>
 <li><code>FileBrowser</code> はシンボリックリンクに対応した
 <ul>
-<li>シンボリックリンクの上で <code>Enter</code> を押すとリンク先に飛ぶようになった。</li>
-<li><a href="https://hackage.haskell.org/package/brick-0.62/docs/Brick-Widgets-FileBrowser.html"><code>Brick.Widgets.FileBrowser</code></a>に新しいフィールド <code>fileInfoLinkTargetType</code> が追加された。</li>
+<li>シンボリックリンクの上で <code>Enter</code>
+を押すとリンク先に飛ぶようになった。</li>
+<li><a href="https://hackage.haskell.org/package/brick-0.62/docs/Brick-Widgets-FileBrowser.html"><code>Brick.Widgets.FileBrowser</code></a>に新しいフィールド
+<code>fileInfoLinkTargetType</code> が追加された。</li>
 </ul></li>
 <li><code>writeBChanNonBlocking</code> を追加。
 <ul>
@@ -151,34 +160,59 @@
 <li><code>focus ring</code> の全ての中身をリストで取得できる。</li>
 <li>focusしているものが先頭にある。</li>
 </ul></li>
-<li><code>EventM</code> に <code>MonadFail</code>, <code>MonadMask</code>, <code>MonadCatch</code>, <code>MonadThrow</code> インスタンス追加</li>
-<li><code>FileBrowser</code> がvi風のキーバインディングも追加でサポートした。</li>
-<li><code>Brick.Widgets.FileBrowser.maybeSelectCurrentEntry</code> を export</li>
-<li><code>Brick.Widgets.Edit.handleEditorEvent</code> に <code>Home</code> と <code>End</code> キーのハンドラを追加</li>
-<li><code>customMain</code> が、シャットダウン後に初期のterminal input stateを復元するように</li>
+<li><code>EventM</code> に <code>MonadFail</code>,
+<code>MonadMask</code>, <code>MonadCatch</code>, <code>MonadThrow</code>
+インスタンス追加</li>
+<li><code>FileBrowser</code>
+がvi風のキーバインディングも追加でサポートした。</li>
+<li><code>Brick.Widgets.FileBrowser.maybeSelectCurrentEntry</code> を
+export</li>
+<li><code>Brick.Widgets.Edit.handleEditorEvent</code> に
+<code>Home</code> と <code>End</code> キーのハンドラを追加</li>
+<li><code>customMain</code> が、シャットダウン後に初期のterminal input
+stateを復元するように</li>
 <li><code>Brick.Forms.updateFormState</code> を追加
 <ul>
-<li><code>Form</code> の中にあり <code>Form</code> に管理されているステートの更新をする</li>
+<li><code>Form</code> の中にあり <code>Form</code>
+に管理されているステートの更新をする</li>
 <li>フォームのフィールドをステートの中身と一致させるのを勝手にやってくれる</li>
 </ul></li>
-<li>vtyのバージョン下限を 5.31に引き上げ、 <code>strikethrough</code> が使えるように</li>
-<li>theme customizeation fileで <code>strikethrough</code> が使用可能に。</li>
-<li>GHC 9.0.1 でビルドできるように <code>base</code> のバージョン制約を緩めた</li>
-<li><code>FileBrowser</code> モジュールが、それの管理するイベントそれぞれのための 関数をexport
+<li>vtyのバージョン下限を 5.31に引き上げ、 <code>strikethrough</code>
+が使えるように</li>
+<li>theme customizeation fileで <code>strikethrough</code>
+が使用可能に。</li>
+<li>GHC 9.0.1 でビルドできるように <code>base</code>
+のバージョン制約を緩めた</li>
+<li><code>FileBrowser</code>
+モジュールが、それの管理するイベントそれぞれのための 関数をexport
 <ul>
-<li>ドキュメントも、どの関数がどのキーイベントで実行されるかを示す ように変更。</li>
+<li>ドキュメントも、どの関数がどのキーイベントで実行されるかを示す
+ように変更。</li>
 </ul></li>
-<li><code>List.listFindBy</code> 関数が、カーソルとリストの最後までだけでなく リストのどの場所にもマッチするように</li>
-<li><code>FileBrowsr</code> はfocusされた時に、カーソルを選択されているエントリーの 行の始めに配置するように。</li>
-<li><code>Brick.Widgets.List</code> に <code>listMoveToBeginning</code> と <code>listMoveToEnd</code> 関数を追加</li>
-<li><code>Extent</code> から、使用されていなかった <code>extentOffset</code> フィールドを削除</li>
-<li>簡易的なテーブルを書ける <code>Brick.Widgets.Table</code> を追加。</li>
-<li><code>cached</code> でキャッシュされている時も、 <code>clickable</code> が <code>clickable</code> として 報告(report)されるように。</li>
-<li><code>Brick.Forms</code> に <code>editShowableFieldWithValidate</code> を追加。
+<li><code>List.listFindBy</code>
+関数が、カーソルとリストの最後までだけでなく
+リストのどの場所にもマッチするように</li>
+<li><code>FileBrowsr</code>
+はfocusされた時に、カーソルを選択されているエントリーの
+行の始めに配置するように。</li>
+<li><code>Brick.Widgets.List</code> に <code>listMoveToBeginning</code>
+と <code>listMoveToEnd</code> 関数を追加</li>
+<li><code>Extent</code> から、使用されていなかった
+<code>extentOffset</code> フィールドを削除</li>
+<li>簡易的なテーブルを書ける <code>Brick.Widgets.Table</code>
+を追加。</li>
+<li><code>cached</code> でキャッシュされている時も、
+<code>clickable</code> が <code>clickable</code> として
+報告(report)されるように。</li>
+<li><code>Brick.Forms</code> に
+<code>editShowableFieldWithValidate</code> を追加。
 <ul>
-<li><code>editShowableField</code> に、呼出元が追加のバリデーションをする関数を 与えられるようにした抽象化(generalization)した。</li>
+<li><code>editShowableField</code>
+に、呼出元が追加のバリデーションをする関数を
+与えられるようにした抽象化(generalization)した。</li>
 </ul></li>
-<li><code>Brick.Widgets.Core</code> に <code>crop{Left,Right,Bottom,Top}To</code> 関数が追加。
+<li><code>Brick.Widgets.Core</code> に
+<code>crop{Left,Right,Bottom,Top}To</code> 関数が追加。
 <ul>
 <li>説明はよくわからんかったのでちょっと放置</li>
 </ul></li>
@@ -186,21 +220,37 @@
 <h1 id="変更が必要そうなもの">変更が必要そうなもの</h1>
 <p>機能の追加等は修正必要ないのでスルーする。</p>
 <ul>
-<li>customMain が <code>Vty</code> ハンドルを初期値として取るようになった。</li>
-<li><code>txtWrapWith</code> は、 <code>Greedy</code> に応じて利用可能な横幅目一杯まで パディングを追加するようになった。</li>
+<li>customMain が <code>Vty</code>
+ハンドルを初期値として取るようになった。</li>
+<li><code>txtWrapWith</code> は、 <code>Greedy</code>
+に応じて利用可能な横幅目一杯まで パディングを追加するようになった。</li>
 <li><code>FileBrowser</code> はシンボリックリンクに対応した
 <ul>
-<li>シンボリックリンクの上で <code>Enter</code> を押すとリンク先に飛ぶようになった。</li>
-<li><a href="https://hackage.haskell.org/package/brick-0.62/docs/Brick-Widgets-FileBrowser.html"><code>Brick.Widgets.FileBrowser</code></a>に新しいフィールド <code>fileInfoLinkTargetType</code> が追加された。</li>
+<li>シンボリックリンクの上で <code>Enter</code>
+を押すとリンク先に飛ぶようになった。</li>
+<li><a href="https://hackage.haskell.org/package/brick-0.62/docs/Brick-Widgets-FileBrowser.html"><code>Brick.Widgets.FileBrowser</code></a>に新しいフィールド
+<code>fileInfoLinkTargetType</code> が追加された。</li>
 </ul></li>
-<li><code>EventM</code> に <code>MonadFail</code>, <code>MonadMask</code>, <code>MonadCatch</code>, <code>MonadThrow</code> インスタンス追加</li>
-<li><code>customMain</code> が、シャットダウン後に初期のterminal input stateを復元するように</li>
-<li>vtyのバージョン下限を 5.31に引き上げ、 <code>strikethrough</code> が使えるように</li>
-<li>GHC 9.0.1 でビルドできるように <code>base</code> のバージョン制約を緩めた</li>
-<li><code>List.listFindBy</code> 関数が、カーソルとリストの最後までだけでなく リストのどの場所にもマッチするように</li>
-<li><code>FileBrowsr</code> はfocusされた時に、カーソルを選択されているエントリーの 行の始めに配置するように。</li>
-<li><code>Extent</code> から、使用されていなかった <code>extentOffset</code> フィールドを削除</li>
-<li><code>cached</code> でキャッシュされている時も、 <code>clickable</code> が <code>clickable</code> として 報告(report)されるように。</li>
+<li><code>EventM</code> に <code>MonadFail</code>,
+<code>MonadMask</code>, <code>MonadCatch</code>, <code>MonadThrow</code>
+インスタンス追加</li>
+<li><code>customMain</code> が、シャットダウン後に初期のterminal input
+stateを復元するように</li>
+<li>vtyのバージョン下限を 5.31に引き上げ、 <code>strikethrough</code>
+が使えるように</li>
+<li>GHC 9.0.1 でビルドできるように <code>base</code>
+のバージョン制約を緩めた</li>
+<li><code>List.listFindBy</code>
+関数が、カーソルとリストの最後までだけでなく
+リストのどの場所にもマッチするように</li>
+<li><code>FileBrowsr</code>
+はfocusされた時に、カーソルを選択されているエントリーの
+行の始めに配置するように。</li>
+<li><code>Extent</code> から、使用されていなかった
+<code>extentOffset</code> フィールドを削除</li>
+<li><code>cached</code> でキャッシュされている時も、
+<code>clickable</code> が <code>clickable</code> として
+報告(report)されるように。</li>
 </ul>
     </div>
   </div>

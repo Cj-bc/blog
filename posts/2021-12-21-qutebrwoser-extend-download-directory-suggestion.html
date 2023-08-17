@@ -120,30 +120,51 @@
       </div>
 
     <div class="description">
-      <p>Qutebrowserでは、ファイルをダウンロードする際に保存先を選ぶポップアップ？が出てくる。 しかし、これは前回使用したパスしかないし、タブキーでの補完もあまり上手く動かない(補完しようとすると 一つ上の階層を選択したりする)しで使い勝手があまりよくなかった。</p>
-<p>私は、保存先がいくつかあってそれを使い分けるタイプなので、いっそのこと最初に表示する保存先の候補を リストから選択できるようにしよう、と思い立った。 Qutebrowserでも絞り込みとかはできるが、なんか挙動がいまいちに感じていたので、それならrofiを使ってやろう と思い立ったのがきっかけ。</p>
+      <p>Qutebrowserでは、ファイルをダウンロードする際に保存先を選ぶポップアップ？が出てくる。
+しかし、これは前回使用したパスしかないし、タブキーでの補完もあまり上手く動かない(補完しようとすると
+一つ上の階層を選択したりする)しで使い勝手があまりよくなかった。</p>
+<p>私は、保存先がいくつかあってそれを使い分けるタイプなので、いっそのこと最初に表示する保存先の候補を
+リストから選択できるようにしよう、と思い立った。
+Qutebrowserでも絞り込みとかはできるが、なんか挙動がいまいちに感じていたので、それならrofiを使ってやろう
+と思い立ったのがきっかけ。</p>
 <h1 id="どう動くのか">どう動くのか</h1>
-<p><a href="https://www.youtube.com/watch?v=XX9JRI-8QQw">ゆーちゅーぶってヤツにデモ動画を上げてみた</a>のでそちらを参照してほしい。 主には、今迄通りダウンロードをしようとするとrofiが(dmenuモードで)立ち上がり、 一つ選択したらそれが・選択されなかった場合は元のqutebrowserのアルゴリズムで選ばれたパスが ダウンロード先として表示される。</p>
+<p><a href="https://www.youtube.com/watch?v=XX9JRI-8QQw">ゆーちゅーぶってヤツにデモ動画を上げてみた</a>のでそちらを参照してほしい。
+主には、今迄通りダウンロードをしようとするとrofiが(dmenuモードで)立ち上がり、
+一つ選択したらそれが・選択されなかった場合は元のqutebrowserのアルゴリズムで選ばれたパスが
+ダウンロード先として表示される。</p>
 <h1 id="技術的詳解">技術的詳解</h1>
 <p>詳解ってほどでもないけど…</p>
-<p>qutebrowserのブラウザに関連する処理は <code>qutebrowser/browser</code> に集められている。 その中でもダウンロードに関係するのは <code>qutebrowser/browser/downloads.py</code> である。 一目瞭然なので。 ここのうち、パスを割り出すのに使っている部分が <code>download_dir</code> なので ここに処理を挟み込んだ。</p>
+<p>qutebrowserのブラウザに関連する処理は
+<code>qutebrowser/browser</code> に集められている。
+その中でもダウンロードに関係するのは
+<code>qutebrowser/browser/downloads.py</code> である。 一目瞭然なので。
+ここのうち、パスを割り出すのに使っている部分が <code>download_dir</code>
+なので ここに処理を挟み込んだ。</p>
 <h2 id="Rofiを呼び出す際の注意点">Rofiを呼び出す際の注意点</h2>
 <ul>
-<li>標準入力に渡すファイルオブジェクトは <strong>必ず <code>seek(0)</code> すること</strong>
+<li>標準入力に渡すファイルオブジェクトは <strong>必ず
+<code>seek(0)</code> すること</strong>
 <ul>
 <li>これを怠ると、読み込みのポインタがファイルの最後にあるので何も読めない</li>
 </ul></li>
-<li><code>tempfile.TemporaryFile</code> には <code>mode="w+"</code> オプション引数を付けてあげる
+<li><code>tempfile.TemporaryFile</code> には <code>mode="w+"</code>
+オプション引数を付けてあげる
 <ul>
 <li>そうじゃないとバイナリを期待される。まぁどちらでも良いのかもだけどバイナリではないので。</li>
 </ul></li>
-<li><code>rofi -dmenu</code> の標準出力を <code>CompletedProcess.stdout</code> から取得すると、末尾に改行文字( <code>\n</code> )を含む
+<li><code>rofi -dmenu</code> の標準出力を
+<code>CompletedProcess.stdout</code> から取得すると、末尾に改行文字(
+<code>\n</code> )を含む
 <ul>
 <li>外してあげないと表示がうまくいかない。空白があるように見えた。</li>
 </ul></li>
 </ul>
 <h2 id="Qutebrowserに新しい設定を組込む">Qutebrowserに新しい設定を組込む</h2>
-<p>この実装では <code>downloads.location.favorite_paths</code> という新しい設定項目を 追加している。 これは、 <code>qutebrowser/config/configdata.yml</code> というYAMLファイルをいじるだけで良い (少なくともそれで動いている、公式の情報を元にしていないため何かしら足りない可能性はある)</p>
+<p>この実装では <code>downloads.location.favorite_paths</code>
+という新しい設定項目を 追加している。 これは、
+<code>qutebrowser/config/configdata.yml</code>
+というYAMLファイルをいじるだけで良い
+(少なくともそれで動いている、公式の情報を元にしていないため何かしら足りない可能性はある)</p>
     </div>
   </div>
   

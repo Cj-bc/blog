@@ -121,15 +121,23 @@
 
     <div class="description">
       <p>時間に関連するElisp関数達</p>
-<h1 id="ビルトイン関数群 ( src/timefns.c )">ビルトイン関数群 ( <code>src/timefns.c</code> )</h1>
-<p>エポック秒 (1970年1月1日0時0分0秒からの経過時間) で時間を 扱います。 基本的には <code>format-time-string</code> を用いて変換することになります。</p>
+<h1 id="ビルトイン関数群 ( src/timefns.c )">ビルトイン関数群 (
+<code>src/timefns.c</code> )</h1>
+<p>エポック秒 (1970年1月1日0時0分0秒からの経過時間) で時間を 扱います。
+基本的には <code>format-time-string</code>
+を用いて変換することになります。</p>
 <h2 id="format-time-string"><code>format-time-string</code></h2>
-<p>help:format-time-string 指定したフォーマットで時間を文字列にしてくれる関数。</p>
+<p>help:format-time-string
+指定したフォーマットで時間を文字列にしてくれる関数。</p>
 <h2 id="current-time"><code>current-time</code></h2>
 <p>help:current-time 現在の時間を返します</p>
 <h2 id="time-add"><code>time-add</code></h2>
 <p>help:time-add</p>
-<p>時間を加算してくれます。負数を足せば減算できます。 足す値のフォーマットは <code>current-time</code> で使われているものと同じで ちょっと分かりづらいですが、 <a href="https://github.com/org-roam/org-roam/blob/445e3594b25c1c29dd269e99cb0cc958ed3f28b0/extensions/org-roam-dailies.el#L157">org-roam-dailes.elで使われている箇所</a>を参考にすると、 1日足し引きするには <code>86400</code> を足し引きすればよさそうです。</p>
+<p>時間を加算してくれます。負数を足せば減算できます。
+足す値のフォーマットは <code>current-time</code>
+で使われているものと同じで ちょっと分かりづらいですが、 <a href="https://github.com/org-roam/org-roam/blob/445e3594b25c1c29dd269e99cb0cc958ed3f28b0/extensions/org-roam-dailies.el#L157">org-roam-dailes.elで使われている箇所</a>を参考にすると、
+1日足し引きするには <code>86400</code>
+を足し引きすればよさそうです。</p>
 <p>n日足すには:</p>
 <div class="ui segment">
 <div class="ui top right attached label">
@@ -144,7 +152,9 @@ elisp
 <p>曜日等を扱うことができます。</p>
 <h2 id="calendar-nth-named-day"><code>calendar-nth-named-day</code></h2>
 <p>help:calendar-nth-named-day</p>
-<p>「特定の日付の前後の特定の曜日」を返すことができます。 曜日は数値で指定され、 0が日曜日、1が月曜日…となっていきます (参考: help:calendar-week-start-day)</p>
+<p>「特定の日付の前後の特定の曜日」を返すことができます。
+曜日は数値で指定され、 0が日曜日、1が月曜日…となっていきます (参考:
+help:calendar-week-start-day)</p>
 <p>例えば、今日2022年1月26日の次の日曜日を取得するには</p>
 <div class="ui segment">
 <div class="ui top right attached label">

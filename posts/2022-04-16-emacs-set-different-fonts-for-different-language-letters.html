@@ -120,18 +120,29 @@
       </div>
 
     <div class="description">
-      <p>複数の自然言語(特に母国語と英語以外)を使うようになると、 普段使いのフォントではカバーできない文字が出てくると思います。</p>
-<p>Emacsでは、どうやら文字毎に使用するフォントを設定することができるようなので その設定をしてみることにします。</p>
+      <p>複数の自然言語(特に母国語と英語以外)を使うようになると、
+普段使いのフォントではカバーできない文字が出てくると思います。</p>
+<p>Emacsでは、どうやら文字毎に使用するフォントを設定することができるようなので
+その設定をしてみることにします。</p>
 <p>今回は例として、韓国語のハングルを使えるようにしたいと思います。</p>
-<h1 id="1. フォントを取得してインストールする">1. フォントを取得してインストールする</h1>
+<h1 id="1. フォントを取得してインストールする">1.
+フォントを取得してインストールする</h1>
 <p>これは各自ディストリビューションで異なると思います。</p>
-<p>私のarchlinux環境では、 <code>/usr/share/fonts</code> か <code>$HOME/.local/share/fonts</code> 以下にフォントファイルを仕舞えば良いようです。 (詳しくは <a href="https://wiki.archlinux.jp/index.php/フォント設定">archwiki – フォント設定</a>を参照)</p>
+<p>私のarchlinux環境では、 <code>/usr/share/fonts</code> か
+<code>$HOME/.local/share/fonts</code>
+以下にフォントファイルを仕舞えば良いようです。 (詳しくは <a href="https://wiki.archlinux.jp/index.php/フォント設定">archwiki –
+フォント設定</a>を参照)</p>
 <p>もしかしたらパッケージにもあるかもしれません。</p>
-<p>私はGoogle Fontsで調べてきて、簡単なPKGBUILD(archlinuxのパッケージを 作成するために使用するファイル)を書いてパッケージ化してインストールしました。</p>
-<h1 id="2. set-fontset-font 関数でフォントを適用する">2. <code>set-fontset-font</code> 関数でフォントを適用する</h1>
+<p>私はGoogle Fontsで調べてきて、簡単なPKGBUILD(archlinuxのパッケージを
+作成するために使用するファイル)を書いてパッケージ化してインストールしました。</p>
+<h1 id="2. set-fontset-font 関数でフォントを適用する">2.
+<code>set-fontset-font</code> 関数でフォントを適用する</h1>
 <p>文字毎にフォントを適用できると書きましたが、勿論範囲指定もできます。</p>
 <h2 id="一つの文字だけ">一つの文字だけ</h2>
-<p>一つの文字だけならば、その文字をcharacterとして使用します。 Elispで特定のcharacterを表現するには、そのcharacterの頭に <code>?</code> を つけてあげれば良いので、 例えば'ㅣ'という文字だけに適用したければ:</p>
+<p>一つの文字だけならば、その文字をcharacterとして使用します。
+Elispで特定のcharacterを表現するには、そのcharacterの頭に <code>?</code>
+を つけてあげれば良いので、
+例えば'ㅣ'という文字だけに適用したければ:</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -141,9 +152,16 @@ elisp
 </div>
 <p>とします。</p>
 <h2 id="特定のScriptのみ">特定のScriptのみ</h2>
-<p>正直Scriptとは何ぞや、というのはあんまりわからんです… info覗いてもあまり解説がなかったので、一般的な用語なのかも しれません(若しくは見付けられていないか)</p>
-<p>とりいそぎ、Emacsに認識されているScriptの一覧は <code>script-representative-chars</code> という変数に格納されているのでそれを確認します (help:script-representative-chars)</p>
-<p>そうすると、今回の場合 <code>hangul</code> という使えそうなシンボルがあるので これを用いることにします。 シンボルは、単純にシンボルとして渡してあげれば良いです。</p>
+<p>正直Scriptとは何ぞや、というのはあんまりわからんです…
+info覗いてもあまり解説がなかったので、一般的な用語なのかも
+しれません(若しくは見付けられていないか)</p>
+<p>とりいそぎ、Emacsに認識されているScriptの一覧は
+<code>script-representative-chars</code>
+という変数に格納されているのでそれを確認します
+(help:script-representative-chars)</p>
+<p>そうすると、今回の場合 <code>hangul</code>
+という使えそうなシンボルがあるので これを用いることにします。
+シンボルは、単純にシンボルとして渡してあげれば良いです。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
@@ -153,9 +171,11 @@ elisp
 </div>
 <h1 id="参考資料">参考資料</h1>
 <ul>
-<li><a href="https://qiita.com/kawabata@github/items/2c4b0b689834c9c193aa">Emacs で全世界の文字を表示・編集可能にする。 - Qiita</a></li>
+<li><a href="https://qiita.com/kawabata@github/items/2c4b0b689834c9c193aa">Emacs
+で全世界の文字を表示・編集可能にする。 - Qiita</a></li>
 <li>help:set-fontset-font</li>
-<li><a href="info:Emacs#Defining Fontsets">info:Emacs#Defining Fontsets</a></li>
+<li><a href="info:Emacs#Defining Fontsets">info:Emacs#Defining
+Fontsets</a></li>
 </ul>
     </div>
   </div>

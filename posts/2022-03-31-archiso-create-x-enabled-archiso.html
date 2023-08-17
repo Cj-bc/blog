@@ -120,8 +120,10 @@
       </div>
 
     <div class="description">
-      <p>基本は<a href="https://wiki.archlinux.jp/index.php/Archiso#USB">wiki</a>に従って作業します。 正直思った以上にやること少なかったので、この記事はwikiのまとめ的メモになります。</p>
-<p>やったこと全部書いているつもりではあるけど、今回は後から纏めなおしたので何か欠けている 可能性があります。</p>
+      <p>基本は<a href="https://wiki.archlinux.jp/index.php/Archiso#USB">wiki</a>に従って作業します。
+正直思った以上にやること少なかったので、この記事はwikiのまとめ的メモになります。</p>
+<p>やったこと全部書いているつもりではあるけど、今回は後から纏めなおしたので何か欠けている
+可能性があります。</p>
 <p>実際に使っているものはこちら: <a href="https://github.com/Cj-bc/dotfiles/tree/master/dotfiles/archiso">Cj-bc/dotfiles/dotfiles/archiso</a></p>
 <h1 id="パッケージの追加">パッケージの追加</h1>
 <p><code>packages.x86_64</code> にパッケージを追加。</p>
@@ -146,7 +148,8 @@ diff
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="va">+gparted</span></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>\ No newline at end of file</span></code></pre></div>
 </div>
-<p>WMやDMは好みのものを使って大丈夫だと思います。 私はメイン環境と合わせてLightDM+XMonadにしてあります。</p>
+<p>WMやDMは好みのものを使って大丈夫だと思います。
+私はメイン環境と合わせてLightDM+XMonadにしてあります。</p>
 <h1 id="レポジトリの追加">レポジトリの追加</h1>
 <p>linux-surfaceを使いたいのでレポジトリを追加する</p>
 <div class="ui segment">
@@ -178,7 +181,8 @@ diff
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
 </div>
 <h1 id="メタデータの編集">メタデータの編集</h1>
-<p>ついでなのでメタデータもちょっと書き換えておきました。 後々識別しやすい…かな?</p>
+<p>ついでなのでメタデータもちょっと書き換えておきました。
+後々識別しやすい…かな?</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 diff
@@ -201,9 +205,12 @@ diff
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a> install_dir=&quot;arch&quot;</span></code></pre></div>
 </div>
 <h1 id="デフォルトでXが起動するように設定">デフォルトでXが起動するように設定</h1>
-<p>systemdのUnitにsymlinkを貼ります。 これは <code>systemctl enable</code> がするのと同じ挙動です。</p>
+<p>systemdのUnitにsymlinkを貼ります。 これは
+<code>systemctl enable</code> がするのと同じ挙動です。</p>
 <h2 id="古い手法について">古い手法について</h2>
-<p>Wikiには <code>customize_airootfs.sh</code> の編集をする方法も記載されていますが、 これはもうdeprecatedとなっています</p>
+<p>Wikiには <code>customize_airootfs.sh</code>
+の編集をする方法も記載されていますが、
+これはもうdeprecatedとなっています</p>
 <p>(参考: <a href="https://gitlab.archlinux.org/archlinux/archiso/-/blob/master/CHANGELOG.rst">バージョン51のCHANGELOG</a>)</p>
 <p>実行したら怒られたログ↓</p>
 <div class="ui segment">
@@ -244,9 +251,12 @@ bash
 </tr>
 </tbody>
 </table>
-<p>ちょっと時間(とストレージ)食うので待つ。 うちの環境では 5GBくらい要求されたので気をつけてとのこと。</p>
+<p>ちょっと時間(とストレージ)食うので待つ。 うちの環境では
+5GBくらい要求されたので気をつけてとのこと。</p>
 <h1 id="できたisoを焼く">できたisoを焼く</h1>
-<p><a href="https://wiki.archlinux.jp/index.php/USB_インストールメディア#dd_を使う">USBインストールメディアを作成するwiki</a>に従って焼く。 今回はddを使う。各パラメーターについては各自確認してから焼いてほしい。 あぶないので。</p>
+<p><a href="https://wiki.archlinux.jp/index.php/USB_インストールメディア#dd_を使う">USBインストールメディアを作成するwiki</a>に従って焼く。
+今回はddを使う。各パラメーターについては各自確認してから焼いてほしい。
+あぶないので。</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 bash
