@@ -1,0 +1,25 @@
+* Text Mesh Proでカーソル下の文字を取得する
+:PROPERTIES:
+:DATE: [2023-08-30 Wed 21:22]
+:TAGS: :unity:TextMeshPro:
+:BLOG_POST_KIND: Knowledge
+:BLOG_POST_PROGRESS: Empty
+:BLOG_POST_STATUS: Normal
+:END:
+:LOGBOOK:
+CLOCK: [2023-08-30 Wed 21:25]--[2023-08-30 Wed 21:32] =>  0:07
+:END:
+
+実は公式の機能で出来ることを知ったのでメモ。
+
+[[https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.0/api/TMPro.TMP_TextUtilities.html#TMPro_TMP_TextUtilities_FindIntersectingCharacter_TMPro_TMP_Text_UnityEngine_Vector3_UnityEngine_Camera_System_Boolean_][TMPro.TMP_TextUtilities.FindIntersectingCharacter]]を用いればよい。
+実際の使用例はExtras & Examplesの中に仕舞われているので参照するとよい。
+
+個人的にはVRで使いたいので、実装してみたらまた記事を書く。
+
+尚、他にもあるので下記リンクを参照:
+
++ [[https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.0/api/TMPro.TMP_TextUtilities.html#TMPro_TMP_TextUtilities_FindIntersectingLine_TMPro_TMP_Text_UnityEngine_Vector3_UnityEngine_Camera_][FindIntersectingLine]]
++ [[https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.0/api/TMPro.TMP_TextUtilities.html#TMPro_TMP_TextUtilities_FindIntersectingLink_TMPro_TMP_Text_UnityEngine_Vector3_UnityEngine_Camera_][FindIntersectingLink]]
++ [[https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.0/api/TMPro.TMP_TextUtilities.html#TMPro_TMP_TextUtilities_FindIntersectingWord_TMPro_TMP_Text_UnityEngine_Vector3_UnityEngine_Camera_][FindIntersectingWord]]
+
