@@ -1,0 +1,57 @@
+* XR Interaction Toolkit からuGUIイベントに反応する
+:PROPERTIES:
+:DATE: [2023-09-26 Tue 15:04]
+:TAGS: :Unity:XRInteractionToolkit:uGUI:
+:BLOG_POST_KIND: Knowledge
+:BLOG_POST_PROGRESS: Empty
+:BLOG_POST_STATUS: Normal
+:END:
+:LOGBOOK:
+CLOCK: [2023-09-26 Tue 15:04]--[2023-09-26 Tue 15:43] =>  0:39
+:END:
+
+uGUI上に表示した文字列へのイベントを取りたかったです。最初は
+Interactable として扱うのかなと色々試しましたが、実際の所マウスイベン
+トとして扱ってよいということがわかりました。
+
+** Tl;Dr
+
++ [[https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@2.5/api/UnityEngine.XR.Interaction.Toolkit.IXRInteractable.html][IXRInteractable]]等の Interactableは _関係ない_
++ [[https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@2.5/manual/ui-setup.html][UI interaction setup | XR Interaction Toolkit | 2.5.1]] に従えばよい
++ [[https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/script-EventTrigger.html][EventTrigger]]を用いる際は、Rayでの選択は ~Pointer Click~ として扱える
+
+** やること
+*** XR Interaction Toolkit 対応のCanvasを作成する
+XR Interaction Toolkitを導入している状態であれば、ヒエラルキービューか
+ら ~XR>UI Canvas~ で作成することが出来ます。
+
+EventSystemが作成されない場合は、同様に ~XR>UI EventSystem~ を追加して
+ください。
+
+*** (おまけ) 任意のイベントを受け取るためには ~EventTrigger~ を追加する
+ボタン等は ~OnClick~ イベントを受け取ることが出来ますが、それ以外のコ
+ンポーネント([[https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TextMeshProUGUI.html][TMPro.TextMeshProUGUI]]など)でも受け取りたい場合、
+[[https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/script-EventTrigger.html][EventTrigger]]を使用出来ます。
+
+uGUI上でコントローラーのトリガー入力を受け取りたい場合は[[https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.EventTrigger.html#UnityEngine_EventSystems_EventTrigger_OnPointerClick_UnityEngine_EventSystems_PointerEventData_][PointerClick]]を
+使用出来ます。コールバックは[[https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.PointerEventData.html][PointerEventData]]型の引数を取りますが、実際
+に ~EventTrigger~ に設定する際は[[https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.BaseEventData.html][BaseEventData]]型の引数を受け取って自分
+でキャストする必要があります。
+
+
+具体的には以下のような形となるかと思います。参考までに
+[[https://github.com/Cj-bc/TextObjectsVR/blob/000720cab35d0ed1da84187bbf33bce77682d21a/Assets/Scripts/Buffer/BufferUI.cs#L36-L53][TextObjectsVRでの具体的な使用例]]も置いておきます。
+
+
+#+begin_src csharp
+  public void pointerClick(BaseEventData d) {
+      var pointerEv = d as PointerEventData;
+      if (pointerEv == null) {
+          return;
+      }
+
+      // イベントに対応するスクリプト
+      // ...
+  }
+#+end_src
+
