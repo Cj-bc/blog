@@ -1,0 +1,129 @@
+* XR ray Interactorの先にあるTMP_Text上の文字を取得する
+:PROPERTIES:
+:DATE: [2023-09-26 Tue 15:52]
+:TAGS: :unity:xr interaction toolkit:textmeshpro:
+:BLOG_POST_KIND: Knowledge
+:BLOG_POST_PROGRESS: WIP
+:BLOG_POST_STATUS: Normal
+:END:
+:LOGBOOK:
+CLOCK: [2023-09-26 Tue 21:40]--[2023-09-26 Tue 23:19] =>  1:39
+CLOCK: [2023-09-26 Tue 15:53]--[2023-09-26 Tue 16:44] =>  0:51
+:END:
+
+TextMeshProの機能を使うと実は簡単に作れます。
+
+** Tl;Dr
+1. テキストを[[https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TMP_Text.html][TextMeshPro.TMP_Text]]の派生クラスを用いて作成する
+2. 1.のgameObjectに[[https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.EventTrigger.html][EventTrigger]]を追加し、 ~Pointer Click~ イベント用のハンドラを書く
+   1. [[https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.PointerEventData.html#UnityEngine_EventSystems_PointerEventData_worldPosition][PointerEventData.worldPosition]]を[[https://docs.unity3d.com/ScriptReference/Camera.WorldToScreenPoint.html][Camera.WorldToScreenPoint]]を用いてスクリーン座標へ変換する
+   2. [[https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TMP_TextUtilities.html#TMPro_TMP_TextUtilities_FindIntersectingCharacter_TMPro_TMP_Text_UnityEngine_Vector3_UnityEngine_Camera_System_Boolean_][TMP_TextUtilities.FindIntersectingCharacter]]で文字のインデックスを取得する
+   3. インデックスを元に、[[https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TMP_Text.html#TMPro_TMP_Text_text][TMP_Text.text]]から取得する
+
+** バージョン情報
+| パッケージ等           |  バージョン |
+|------------------------+-------------|
+| Unity                  | 2022.1.24f1 |
+| TextMeshPro            |       3.0.6 |
+| XR Interaction Toolkit |       2.0.4 |
+| UnityUI                |       1.0.0 |
+
+** 工程
+最初2工程は前回の記事と同じ内容になります。簡単のためこちらにも記載しています。
+
+*** テキストメッシュを作成する
+XR Interaction Toolkit対応のCanvasを作り、その子供に[[https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TextMeshProUGUI.html][TextMeshProUGUI]]を
+作成します。便宜上、このgameObjectを「テキストメッシュ」と呼ぶことにし
+ます。
+
+*** テキストメッシュがXR Ray Interactorのイベントに反応出来るようにする
+テキストメッシュは、デフォルトではEventSystemのイベントに反応しません。
+そこで、[[https://docs.unity3d.com/Packages/com.unity.ugui@1.0/api/UnityEngine.EventSystems.EventTrigger.html][EventTrigger]]を用いてXR Ray Interactorのイベントに反応出来るよ
+うにします。
+
+!写真
+
+テキストメッシュにEventTriggerコンポーネントを追加し、 ~Pointer Click~
+イベントを追加します。
+
+そのコールバック関数として、 ~BaseEventData~ を受け取って ~void~ を返
+す関数を作成します。ここでは、 ~pointerClick~ として定義しておくことに
+します。(写真では ~BufferUI.pointerClick~ となっています)
+
+#+begin_src csharp
+  using UnityEngine.EventSystems;
+  using TMPro;
+
+  public class PointerClickExample {
+      /// 作成したテキストメッシュへの参照
+      private TMP_Text m_text;
+
+      public void pointerClick(BaseEventData d) {
+          var pointerEv = d as PointerEventData;
+          if (pointerEv == null) {
+              return;
+          }
+      }
+  }
+#+end_src
+
+*** 交差点がどの文字上にあるのかを取得する
+[[https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TMP_TextUtilities.html#TMPro_TMP_TextUtilities_FindIntersectingCharacter_TMPro_TMP_Text_UnityEngine_Vector3_UnityEngine_Camera_System_Boolean_][TMPro.TMP_TextUtilities.FindIntersectingCharacter]]を用いると、与えた点
+と交わっている文字を取得することが出来ます。
+
+しかし、その際与える座標は ワールド座標系 _ではありません_ 。 ~camera~
+引数で与えたカメラのスクリーン座標系である必要があるようです。
+
+
+"あるようです"というのは、ドキュメント上には記載がなく自分で試した時に
+上手くいったのがそれだったからです。又、インターネットで調べた所
+~Input.mousePosition~ を用いているものが多くあり、それもスクリーン座標
+系であるからという推測でもあります。
+
+**** イベントの発生したカメラのスクリーン座標系の座標を取得する
+pointerClickイベントが発生した時のRaycastとの交差点は、
+[[https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.PointerEventData.html#UnityEngine_EventSystems_PointerEventData_pressPosition][PointerEventData.pressPosition]]で取得出来ます。これは
+[[https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.PointerEventData.html#UnityEngine_EventSystems_PointerEventData_pressEventCamera][PointerEventData.pressEventCamera]]のカメラのスクリーン座標系の座標となっ
+ています。
+
+***** (おまけ) ~PointerEventData.pointerPressRaycast.worldPosition~ からの取得
+カメラのワールドToスクリーン座標変換関数を用いると、これからも取得する
+ことが出来ます。
+
+#+begin_src csharp
+  pointerEv.pressEventCamera.WorldToScreenPoint(pointerEv.pointerPressRaycast.worldPosition)
+#+end_src
+
+**** 文字インデックスから文字を取得する
+~FindIntersectingCharacter~ を用いて、 ~TMP_Text.text~ のインデックス
+を取得することが出来ます。そのインデックスを用いることで、文字を取得す
+ることが出来ます。
+
+文字が見付からなかった際は -1 を返すようなので、そこで条件分岐が必要で
+す。
+
+#+begin_src csharp
+  using UnityEngine.EventSystems;
+  using TMPro;
+
+  public class PointerClickExample {
+      /// 作成したテキストメッシュへの参照
+      private TMP_Text m_text;
+
+      public void pointerClick(BaseEventData d) {
+          var pointerEv = d as PointerEventData;
+          if (pointerEv == null) {
+              return;
+          }
+
+          var pos = new Vector3(pointerEv.pressPosition.x, pointerEv.pressPosition.y, 0f);
+          var idx = TMP_TextUtilities.FindIntersectingCharacter(m_text, pos, pointerEv.pressEventCamera, false);
+
+          if (idx == -1) {
+              Debug.Log("文字が見付かりませんでした");
+          } else {
+              Debug.Log($"index: {idx}, 選択された文字: {m_text.text[idx]}");
+          }
+      }
+  }
+#+end_src
