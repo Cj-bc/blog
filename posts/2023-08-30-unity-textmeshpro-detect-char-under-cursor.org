@@ -3,7 +3,7 @@
 :DATE: [2023-08-30 Wed 21:22]
 :TAGS: :unity:TextMeshPro:
 :BLOG_POST_KIND: Knowledge
-:BLOG_POST_PROGRESS: Empty
+:BLOG_POST_PROGRESS: Published
 :BLOG_POST_STATUS: Normal
 :END:
 :LOGBOOK:

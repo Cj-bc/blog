@@ -3,7 +3,7 @@
 :DATE: [2023-09-26 Tue 15:04]
 :TAGS: :Unity:XRInteractionToolkit:uGUI:
 :BLOG_POST_KIND: Knowledge
-:BLOG_POST_PROGRESS: Empty
+:BLOG_POST_PROGRESS: Published
 :BLOG_POST_STATUS: Normal
 :END:
 :LOGBOOK:
