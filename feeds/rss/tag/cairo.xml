@@ -7,8 +7,438 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/cairo.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Wed, 16 Aug 2023 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Tue, 26 Sep 2023 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2023-09-26-unity-xrinteractiontoolkit-textmeshpro-get-character-at-raycast-interactor</title>
+    <link>https://cj-bc.github.io/blog/posts/2023-09-26-unity-xrinteractiontoolkit-textmeshpro-get-character-at-raycast-interactor.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>XR ray Interactorの先にあるTMPText上の文字を取得する</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on September 26, 2023</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on September 27, 2023
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;unity&#39;." href="/tags/unity.html" class="ui tag label">unity</a>
+	
+      </div>
+
+    <div class="description">
+      <p>TextMeshProの機能を使うと実は簡単に作れます。</p>
+<h1 id="Tl;Dr">Tl;Dr</h1>
+<ol>
+<li>テキストを<a
+href="https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TMP_Text.html">TextMeshPro.TMP<sub>Text</sub></a>の派生クラスを用いて作成する</li>
+<li>1.のgameObjectに<a
+href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.EventTrigger.html">EventTrigger</a>を追加し、
+<code>Pointer Click</code> イベント用のハンドラを書く
+<ol>
+<li><a
+href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.PointerEventData.html#UnityEngine_EventSystems_PointerEventData_worldPosition">PointerEventData.worldPosition</a>を<a
+href="https://docs.unity3d.com/ScriptReference/Camera.WorldToScreenPoint.html">Camera.WorldToScreenPoint</a>を用いてスクリーン座標へ変換する</li>
+<li><a
+href="https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TMP_TextUtilities.html#TMPro_TMP_TextUtilities_FindIntersectingCharacter_TMPro_TMP_Text_UnityEngine_Vector3_UnityEngine_Camera_System_Boolean_">TMP<sub>TextUtilities</sub>.FindIntersectingCharacter</a>で文字のインデックスを取得する</li>
+<li>インデックスを元に、<a
+href="https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TMP_Text.html#TMPro_TMP_Text_text">TMP<sub>Text</sub>.text</a>から取得する</li>
+</ol></li>
+</ol>
+<h1 id="バージョン情報">バージョン情報</h1>
+<table class="ui celled table">
+<thead>
+<tr class="header">
+<th>パッケージ等</th>
+<th>バージョン</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Unity</td>
+<td>2022.1.24f1</td>
+</tr>
+<tr class="even">
+<td>TextMeshPro</td>
+<td>3.0.6</td>
+</tr>
+<tr class="odd">
+<td>XR Interaction Toolkit</td>
+<td>2.0.4</td>
+</tr>
+<tr class="even">
+<td>UnityUI</td>
+<td>1.0.0</td>
+</tr>
+</tbody>
+</table>
+<h1 id="工程">工程</h1>
+<p>最初2工程は前回の記事と同じ内容になります。簡単のためこちらにも記載しています。</p>
+<h2 id="テキストメッシュを作成する">テキストメッシュを作成する</h2>
+<p>XR Interaction Toolkit対応のCanvasを作り、その子供に<a
+href="https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TextMeshProUGUI.html">TextMeshProUGUI</a>を
+作成します。便宜上、このgameObjectを「テキストメッシュ」と呼ぶことにし
+ます。</p>
+<h2
+id="テキストメッシュがXR Ray Interactorのイベントに反応出来るようにする">テキストメッシュがXR
+Ray Interactorのイベントに反応出来るようにする</h2>
+<p>テキストメッシュは、デフォルトではEventSystemのイベントに反応しません。
+そこで、<a
+href="https://docs.unity3d.com/Packages/com.unity.ugui@1.0/api/UnityEngine.EventSystems.EventTrigger.html">EventTrigger</a>を用いてXR
+Ray Interactorのイベントに反応出来るよ うにします。</p>
+<p>!写真</p>
+<p>テキストメッシュにEventTriggerコンポーネントを追加し、
+<code>Pointer Click</code> イベントを追加します。</p>
+<p>そのコールバック関数として、 <code>BaseEventData</code> を受け取って
+<code>void</code> を返 す関数を作成します。ここでは、
+<code>pointerClick</code> として定義しておくことに します。(写真では
+<code>BufferUI.pointerClick</code> となっています)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+csharp
+</div>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode csharp SourceCode"><code class="sourceCode cs"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> UnityEngine<span class="op">.</span><span class="fu">EventSystems</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> TMPro<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> PointerClickExample <span class="op">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// 作成したテキストメッシュへの参照</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> TMP_Text m_text<span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">pointerClick</span><span class="op">(</span>BaseEventData d<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">var</span> pointerEv <span class="op">=</span> d <span class="kw">as</span> PointerEventData<span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="op">(</span>pointerEv <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+<h2
+id="交差点がどの文字上にあるのかを取得する">交差点がどの文字上にあるのかを取得する</h2>
+<p><a
+href="https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TMP_TextUtilities.html#TMPro_TMP_TextUtilities_FindIntersectingCharacter_TMPro_TMP_Text_UnityEngine_Vector3_UnityEngine_Camera_System_Boolean_">TMPro.TMP<sub>TextUtilities</sub>.FindIntersectingCharacter</a>を用いると、与えた点
+と交わっている文字を取得することが出来ます。</p>
+<p>しかし、その際与える座標は ワールド座標系 <u>ではありません</u> 。
+<code>camera</code>
+引数で与えたカメラのスクリーン座標系である必要があるようです。</p>
+<p>"あるようです"というのは、ドキュメント上には記載がなく自分で試した時に
+上手くいったのがそれだったからです。又、インターネットで調べた所
+<code>Input.mousePosition</code>
+を用いているものが多くあり、それもスクリーン座標
+系であるからという推測でもあります。</p>
+<ol>
+<li><p>イベントの発生したカメラのスクリーン座標系の座標を取得する</p>
+<p>pointerClickイベントが発生した時のRaycastとの交差点は、 <a
+href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.PointerEventData.html#UnityEngine_EventSystems_PointerEventData_pressPosition">PointerEventData.pressPosition</a>で取得出来ます。これは
+<a
+href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.PointerEventData.html#UnityEngine_EventSystems_PointerEventData_pressEventCamera">PointerEventData.pressEventCamera</a>のカメラのスクリーン座標系の座標となっ
+ています。</p>
+<ol>
+<li><p>(おまけ)
+<code>PointerEventData.pointerPressRaycast.worldPosition</code>
+からの取得</p>
+<p>カメラのワールドToスクリーン座標変換関数を用いると、これからも取得する
+ことが出来ます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+csharp
+</div>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode csharp SourceCode"><code class="sourceCode cs"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pointerEv<span class="op">.</span><span class="fu">pressEventCamera</span><span class="op">.</span><span class="fu">WorldToScreenPoint</span><span class="op">(</span>pointerEv<span class="op">.</span><span class="fu">pointerPressRaycast</span><span class="op">.</span><span class="fu">worldPosition</span><span class="op">)</span></span></code></pre></div>
+</div></li>
+</ol></li>
+<li><p>文字インデックスから文字を取得する</p>
+<p><code>FindIntersectingCharacter</code> を用いて、
+<code>TMP_Text.text</code> のインデックス
+を取得することが出来ます。そのインデックスを用いることで、文字を取得す
+ることが出来ます。</p>
+<p>文字が見付からなかった際は -1
+を返すようなので、そこで条件分岐が必要で す。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+csharp
+</div>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode csharp SourceCode"><code class="sourceCode cs"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> UnityEngine<span class="op">.</span><span class="fu">EventSystems</span><span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> TMPro<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> PointerClickExample <span class="op">{</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// 作成したテキストメッシュへの参照</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> TMP_Text m_text<span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">pointerClick</span><span class="op">(</span>BaseEventData d<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">var</span> pointerEv <span class="op">=</span> d <span class="kw">as</span> PointerEventData<span class="op">;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="op">(</span>pointerEv <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">var</span> pos <span class="op">=</span> <span class="kw">new</span> <span class="fu">Vector3</span><span class="op">(</span>pointerEv<span class="op">.</span><span class="fu">pressPosition</span><span class="op">.</span><span class="fu">x</span><span class="op">,</span> pointerEv<span class="op">.</span><span class="fu">pressPosition</span><span class="op">.</span><span class="fu">y</span><span class="op">,</span> 0f<span class="op">);</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">var</span> idx <span class="op">=</span> TMP_TextUtilities<span class="op">.</span><span class="fu">FindIntersectingCharacter</span><span class="op">(</span>m_text<span class="op">,</span> pos<span class="op">,</span> pointerEv<span class="op">.</span><span class="fu">pressEventCamera</span><span class="op">,</span> <span class="kw">false</span><span class="op">);</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="op">(</span>idx <span class="op">==</span> <span class="op">-</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>            Debug<span class="op">.</span><span class="fu">Log</span><span class="op">(</span><span class="st">&quot;文字が見付かりませんでした&quot;</span><span class="op">);</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>            Debug<span class="op">.</span><span class="fu">Log</span><span class="op">(</span>$<span class="st">&quot;index: {idx}, 選択された文字: {m_text.text[idx]}&quot;</span><span class="op">);</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div></li>
+</ol>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Tue, 26 Sep 2023 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2023-09-26-unity-xrinteractiontoolkit-textmeshpro-get-character-at-raycast-interactor.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2023-09-26-unity-xrinteractiontoolkit-retrive-ugui-event</title>
+    <link>https://cj-bc.github.io/blog/posts/2023-09-26-unity-xrinteractiontoolkit-retrive-ugui-event.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>XR Interaction Toolkit からuGUIイベントに反応する</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on September 26, 2023</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on September 27, 2023
+	</div>
+
+	
+
+	
+	
+	
+      </div>
+
+    <div class="description">
+      <p>uGUI上に表示した文字列へのイベントを取りたかったです。最初は
+Interactable として扱うのかなと色々試しましたが、実際の所マウスイベン
+トとして扱ってよいということがわかりました。</p>
+<h1 id="Tl;Dr">Tl;Dr</h1>
+<ul>
+<li><a
+href="https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@2.5/api/UnityEngine.XR.Interaction.Toolkit.IXRInteractable.html">IXRInteractable</a>等の
+Interactableは <u>関係ない</u></li>
+<li><a
+href="https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@2.5/manual/ui-setup.html">UI
+interaction setup | XR Interaction Toolkit | 2.5.1</a> に従えばよい</li>
+<li><a
+href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/script-EventTrigger.html">EventTrigger</a>を用いる際は、Rayでの選択は
+<code>Pointer Click</code> として扱える</li>
+</ul>
+<h1 id="やること">やること</h1>
+<h2 id="XR Interaction Toolkit 対応のCanvasを作成する">XR Interaction
+Toolkit 対応のCanvasを作成する</h2>
+<p>XR Interaction
+Toolkitを導入している状態であれば、ヒエラルキービューか ら
+<code>XR&gt;UI Canvas</code> で作成することが出来ます。</p>
+<p>EventSystemが作成されない場合は、同様に
+<code>XR&gt;UI EventSystem</code> を追加して ください。</p>
+<h2
+id="(おまけ) 任意のイベントを受け取るためには EventTrigger を追加する">(おまけ)
+任意のイベントを受け取るためには <code>EventTrigger</code>
+を追加する</h2>
+<p>ボタン等は <code>OnClick</code>
+イベントを受け取ることが出来ますが、それ以外のコ ンポーネント(<a
+href="https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TextMeshProUGUI.html">TMPro.TextMeshProUGUI</a>など)でも受け取りたい場合、
+<a
+href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/script-EventTrigger.html">EventTrigger</a>を使用出来ます。</p>
+<p>uGUI上でコントローラーのトリガー入力を受け取りたい場合は<a
+href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.EventTrigger.html#UnityEngine_EventSystems_EventTrigger_OnPointerClick_UnityEngine_EventSystems_PointerEventData_">PointerClick</a>を
+使用出来ます。コールバックは<a
+href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.PointerEventData.html">PointerEventData</a>型の引数を取りますが、実際
+に <code>EventTrigger</code> に設定する際は<a
+href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.BaseEventData.html">BaseEventData</a>型の引数を受け取って自分
+でキャストする必要があります。</p>
+<p>具体的には以下のような形となるかと思います。参考までに <a
+href="https://github.com/Cj-bc/TextObjectsVR/blob/000720cab35d0ed1da84187bbf33bce77682d21a/Assets/Scripts/Buffer/BufferUI.cs#L36-L53">TextObjectsVRでの具体的な使用例</a>も置いておきます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+csharp
+</div>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode csharp SourceCode"><code class="sourceCode cs"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">pointerClick</span><span class="op">(</span>BaseEventData d<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">var</span> pointerEv <span class="op">=</span> d <span class="kw">as</span> PointerEventData<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="op">(</span>pointerEv <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// イベントに対応するスクリプト</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Tue, 26 Sep 2023 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2023-09-26-unity-xrinteractiontoolkit-retrive-ugui-event.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2023-08-30-unity-textmeshpro-detect-char-under-cursor</title>
+    <link>https://cj-bc.github.io/blog/posts/2023-08-30-unity-textmeshpro-detect-char-under-cursor.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>Text Mesh Proでカーソル下の文字を取得する</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on August 30, 2023</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on September 27, 2023
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;unity&#39;." href="/tags/unity.html" class="ui tag label">unity</a>
+	
+      </div>
+
+    <div class="description">
+      <p>実は公式の機能で出来ることを知ったのでメモ。</p>
+<p><a
+href="https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.0/api/TMPro.TMP_TextUtilities.html#TMPro_TMP_TextUtilities_FindIntersectingCharacter_TMPro_TMP_Text_UnityEngine_Vector3_UnityEngine_Camera_System_Boolean_">TMPro.TMP<sub>TextUtilities</sub>.FindIntersectingCharacter</a>を用いればよい。
+実際の使用例はExtras &amp;
+Examplesの中に仕舞われているので参照するとよい。</p>
+<p>個人的にはVRで使いたいので、実装してみたらまた記事を書く。</p>
+<p>尚、他にもあるので下記リンクを参照:</p>
+<ul>
+<li><a
+href="https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.0/api/TMPro.TMP_TextUtilities.html#TMPro_TMP_TextUtilities_FindIntersectingLine_TMPro_TMP_Text_UnityEngine_Vector3_UnityEngine_Camera_">FindIntersectingLine</a></li>
+<li><a
+href="https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.0/api/TMPro.TMP_TextUtilities.html#TMPro_TMP_TextUtilities_FindIntersectingLink_TMPro_TMP_Text_UnityEngine_Vector3_UnityEngine_Camera_">FindIntersectingLink</a></li>
+<li><a
+href="https://docs.unity3d.com/Packages/com.unity.textmeshpro@3.0/api/TMPro.TMP_TextUtilities.html#TMPro_TMP_TextUtilities_FindIntersectingWord_TMPro_TMP_Text_UnityEngine_Vector3_UnityEngine_Camera_">FindIntersectingWord</a></li>
+</ul>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Wed, 30 Aug 2023 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2023-08-30-unity-textmeshpro-detect-char-under-cursor.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2023-08-30-tcpip-why-use-ip-along-with-mac-address</title>
+    <link>https://cj-bc.github.io/blog/posts/2023-08-30-tcpip-why-use-ip-along-with-mac-address.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>何故MACアドレスだけでなくIPアドレスを使用するのか？</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on August 30, 2023</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on September 27, 2023
+	</div>
+
+	
+
+	
+	
+	
+      </div>
+
+    <div class="description">
+      <p>Twitter(現X)にて</p>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>MACアドレスが世界中でユニークなんだったら、IPアドレスを使わずにMACアド
+レスだけで通信できるのでは？」という質問があって</p>
+</blockquote>
+</div>
+<p>という<a
+href="https://twitter.com/yuhkun/status/1696525100651274472">Tweet</a>(現Post)があり、
+<u>自分の理解をもう一度確認するために</u> 自分なり
+の説明を書いておこうと思います。</p>
+<p><strong>敢えて何も(引用したTweetのリプすらも)確認せず書いているので、参考にはしないでください。</strong></p>
+<p>そして間違いがあればマサカリを投げて下さい (<a
+href="https://twitter.com/mihe_himari">twitter@mihe<sub>himari</sub></a>,
+<a
+href="https://misskey.io/@cj_bc_sd">@cj<sub>bcsd</sub>@misskey.io</a>,
+<a
+href="https://misskey.neos.love/@cj_bc_sd">@cj<sub>bcsd</sub>@misskey.neos.love</a>)。</p>
+<p>後にマスタリングTCP/IP等を参考にしつつ添削記事も出そうと思います。</p>
+<h1 id="理由1: MACアドレスのユニークさは保証されていない">理由1:
+MACアドレスのユニークさは保証されていない</h1>
+<p>MACアドレス、というか物理アドレスはリンク内でユニークになる必要がある
+ものの、グローバルにユニークである必要はありません。
+そのため、根本的に一意に特定出来ることが保証されていません。</p>
+<h1 id="理由2: ルーティングが難しい">理由2: ルーティングが難しい</h1>
+<p>MACアドレスはベンダーIDとベンダー内での識別子とから構成されています。
+製品の識別を行うことは出来ますが、物理的なネットワーク内の位置の特定に
+は用いることが出来ません。</p>
+<h2
+id="MACアドレスのみを用いたルーティングの試行と問題点">MACアドレスのみを用いたルーティングの試行と問題点</h2>
+<p>MACアドレスのみを用いてルーティングすることを考えてみます。どのノード
+に目的のノードが繋がっているかが分からないため、繋がっている全てのノード
+へパケットを送信し、自分自身が宛先であれば受け取り、そうでなければ周り
+の全てのノードへ転送する…といった方法で配達することしか出来ません。</p>
+<ol>
+<li><p>問題点</p>
+<p>これは単純に負荷が無駄に多いのは勿論、同じパケットが同じノードを何度も
+通ってしまう問題が出てきます。これはTTL(Time to Live)を設定するなどし
+て制限することが出来ますが、そうすると今度は物理的に遠くにあるノードへ
+到達しない可能性が出てきてしまいます。</p>
+<p>ネットワーク内でどのノードがどのノードに繋がっているのかが把握出来ない
+と、通信をする経路を決定するためのルートを組むことが難しいです。</p></li>
+</ol>
+<h2 id="IPアドレスが解決する方法">IPアドレスが解決する方法</h2>
+<p><strong>[NOTE]</strong>
+全ての論理アドレスについて同じであるか自信がなかったのでIPアドレスに限
+定した話をします。又、TCP/IPにおけるルーティングはIPプロトコルのみで行
+われるのではないですが、論理アドレスの必要性の話に留めるので詳しくは書
+きません。</p>
+<p>IPアドレスは、アドレスの階層化によってルーティングの問題を解決します。
+アドレスはネットワーク部とホスト部に分かれており、同一リンク内ではネッ
+トワーク部を共有しています(はず)。これにより、リンク内のノードを識別す
+ることが出来るようになります。</p>
+<p>又、ネットワーク部の存在によりノードがどのネットワークに所属するかが分
+かるため、周辺のノードがどのネットワークに接続しているのかを記録してお
+けば「ネットワークAに所属するノードへのパケットはノードXに送ればいい」
+「ネットワークBに所属するノードへのパケットはノードYに送ればいい」といっ
+たように転送先を狭めることが出来ます。</p>
+<h1 id="理由3: 複数種類のリンクを跨ぐ可能性がある">理由3:
+複数種類のリンクを跨ぐ可能性がある</h1>
+<p>これは書いている間にキーワードを見てしまい思い出したので、ちょっと忘れ
+ていた項目ではあります。</p>
+<p>勉強する上では「物理アドレス=MACアドレス」というように思いがちですが
+(私もまぁ意識してなくて忘れてたわけですが)、実際は物理アドレスはリンク
+によって異なっており、互換性は担保されていません。</p>
+<p>WiFiはEthernetと同じくMACアドレスを使用しているため問題なく扱うことが
+出来ますが、他のリンクを用いるとなるとMACアドレスでは通信が出来なくなっ
+てしまいます。</p>
+<p>そのため、複数種類のリンクを越えて使えるアドレスとして、論理アドレスが
+必要となっています。</p>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Wed, 30 Aug 2023 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2023-08-30-tcpip-why-use-ip-along-with-mac-address.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2023-08-16-emacs-move-from-lsp-mode-to-eglot</title>
     <link>https://cj-bc.github.io/blog/posts/2023-08-16-emacs-move-from-lsp-mode-to-eglot.html</link>
     <description><![CDATA[<div id="body-content">
@@ -1668,450 +2098,6 @@ class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id=
 ]]></description>
     <pubDate>Wed, 12 Apr 2023 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2023-04-12-pandoc-library-how-to-write-yaml-metadata-with-markdown-writer.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2023-03-28-music_yubikiriwo-tutaee-natorisana</title>
-    <link>https://cj-bc.github.io/blog/posts/2023-03-28-music_yubikiriwo-tutaee-natorisana.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>ゆびきりを伝えて / 名取さな - を聞いて</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on March 28, 2023</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on March 28, 2023
-	</div>
-
-	
-
-	
-	
-	
-      </div>
-
-    <div class="description">
-      <p>これまためちゃくちゃ
-色々刺さったので書いておく。動画はまだないとのこと。
-あ。大事なことなのですが
-<strong>割と他担なオタクが出てくるので注意</strong>
-。名取もすきだけどどうしても感情が昂っ た時に最推しが出てきてしまう…</p>
-<p>「誰かの手を煩わせてる」の時点ですっっごく心にぐっ…ときた。なんだろう、上手くいえないけど私が普段
-からとても気にしていて不安にしていることだから。なんだろうな、こうやってとても楽しそうにライブをして
-きた名取ですら、やっぱりこういう日々はあったのかな、て思ったからなのだろうか。</p>
-<p>名取も、「誰もが笑顔になれる私」を探してあれこれ試したりなんだりしたのかなって。色々上手くいかないこ
-と沢山あるよね。空回りばかりして余計に分かんなくなっていって。世界が怖くなっていって。時間ばかりが早
-く過ぎていって。色々言おうとしても言葉にならなくてため息を吐いたりもしたんだろうか。</p>
-<p>徐々にせんせえ方がどんな状態でもずっといてくれる、って信頼出来るようになっていって、それでちょっと荷
-が下りたんだろうか。中々、緊張した状態を振り解くのって難しいよね。特に活動者みたいな「自分の魅力に対
-して人が来てくれている」状態の場合、きっと変化によってそれを失うのが怖くなりそうだな、などと思ったり
-した。よっぽどの信頼がないと出来ないよなぁって。</p>
-<p>私もそんな存在になれるだろうか。ちゃんとリスナーとして、推しの安心に繋がるような良い存在でいれている
-のだろうか。いっつも自問自答はしてっけど余計に考えてしまった。そういう存在でありたい。そういう存在に
-なりたい。別段そうする必要性っていうものはないけれど、推しの存在から私が受け取っている物以上のものを
-返せる存在でありたい。そうなりたい。</p>
-<p>「誰もが笑顔になる私」っていうのはきっとある程度以上は自身に負荷がかかった存在ではあって、だからこそ
-の「すきなままでいられそうかなあ」なのかなあって。私はとてもそれを掲げることは出来ない程に大変な存在
-であるとは思うけど、それを掲げる程には名取はせんせえ方のことを考えていて、真剣で、色々悩んだりもした
-んだろうなぁって。</p>
-<p>「私はどんな私が好き？」って自分の観点を最終的に取り入れているの、とってもすきだよ。好きになれる自分
-自身であること、とてもすてきなこと。</p>
-<p>これ、本当に曲の感想文なのによくないなぁって思うんだけどどうしても夜桜みあの事が頭に浮かんでしまうん
-だよな。正直書き出しから夜桜みあって書きそうになったしリアタイで聞いていた時もどうしてもみあちゃんの
-ことが浮かんできてしまってもう感情がダメだった。</p>
-<p>みあちゃんも(これは個人の解釈ではあるが)だいぶ人のこと考える人だし、黒猫さん達のこと考えてくれている
-と感じるし、かつ大分考え込みすぎそうな気が勝手にしているからちょっと似たストーリーがありそうでこう…み
-あちゃんは大丈夫だろうか…って勝手に心の中で思っていたりした。</p>
-<p>大体は上で名取に思っていた事もそのまんまみあちゃんに関しても当て嵌るんだよな。人のことをとても考えて、
-その結果として自分自身が嫌いになってたりとかしそうな…分からんけど…。
-みあちゃんも色々試行錯誤したり、嫌になったり、空回りしたり、色々あるんだろうけど(そもそも人生ってい
-うスケールで存在するよねってのもそうだが)、そこから乗り越えていけてるのだろうか。</p>
-<p>みあちゃんは自分のことすきでいられているんだろうか。好かれようと無茶していないだろうか。これただの杞
-憂民です杞憂民は早いとこ帰ってくださいgg。みあちゃんがみあちゃん自身の人生好きでいられるといいな、無
-茶しないで楽しくいられるといいな、ってとても思っている。私はみあちゃんがすきだが、みあちゃんがみあちゃ
-ん自身のことをすきでいられる状況の方がもっとすき。</p>
-<p>そりゃ全ての人にすかれようとかは並大抵のことじゃないし、大分辛い道のりではあるよ。そもそもそこを目指
-してんのかどうかも私は知らないけれども。でも、少なくとも今でさえ残っている黒猫さんたちはきっとどんな
-事でもいてくれると思うしね。</p>
-<p>別段私が言うことじゃないし、ここに書くだけで本人にわざわざ見えるようにはしたりしないが(何かの拍子に
-見てくれてたらありがとう)名取の力だったりなんだりを貰って徐々に、徐々にでもみあちゃんの生涯に幸せが
-増えていきますように。王様名取も言ってたけどみあちゃんが楽しむことで私達も楽しくなるしな。"楽しむフ
-リ"ではなく。</p>
-<p>本当に曲の感想？？って思われそうだけど本当に色々と考えてしまったんよな…すごいね、名取は。こんなに
-も色々考えさせてしまうなんてさ。や、綺麗に纏めようとしてる？？？って思われそうだけどこれは本当に思っ
-ている。ステージがなかったらこんな色々考えなかっただろうし、実際私は曲に対してこんな文字を書いたこと
-がなかった。曲だけじゃなくパフォーマンス等も含まれてはしまうが、名取の力があってこその伝わってきたメッ
-セージだったように思う。結局綺麗に纏めそうで草。</p>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Tue, 28 Mar 2023 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2023-03-28-music_yubikiriwo-tutaee-natorisana.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2023-03-28-music-zdbuhltodezdbuuso-nanawoakari</title>
-    <link>https://cj-bc.github.io/blog/posts/2023-03-28-music-zdbuhltodezdbuuso-nanawoakari.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>全部ホントで全部ウソ / ナナヲアカリ – の感想文</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on March 28, 2023</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on March 28, 2023
-	</div>
-
-	
-
-	
-	
-	
-      </div>
-
-    <div class="description">
-      <p>中々ない、「感情がそのまま文字を書きたがった曲」だからメモを残しておく。尚今回はガチのメモなので、全
-然整理はされていない。</p>
-<p>曲: <a
-href="https://www.youtube.com/watch?v=SlBmv7w1VqY">全部ホントで全部ウソ
-/ ナナヲアカリ - YouTube</a></p>
-<p>歌詞的には自分とは真逆な人生を歩んでいる人達の曲だけど、だから自分とは相容れないけれど、何か心にひっ
-かかるものがある曲だった。そういった生き方をしている人達にとっては素敵な曲だろうな、と思うような曲だった。</p>
-<p>実際、人生日替わりコーデな生き方をしている人達の方が多いんだろうし、自分のとても仲の良い(と勝手に思っ
-ている)人もそういう人だから全然その生き方に対して批判的であることはない。そういった生き方をしている
-動機は勿論人にもよるんだろうけど、自分自身が傷付かないように、だったり他の人が傷付かないように、だっ
-たり他の人にプラスなものを与えるように、だったりすると思うから、それが一概に悪いことだとは思っていな
-い。(「一概に」と表記したのは、多分だけど悪用する人達も一定数はいるだろうから、そこを排除するため)</p>
-<p>ただ、そういった生き方をしている事で悩んでいる事もあるみたいなのは観測した事があるから、それに対して
-「このままでいいのだ」「ぶっちゃけ世の中大半は皆同士」っていってくれるのはきっと救われる人達多いだろ
-うなぁ、などと。「どれが本当の自分か分からない」みたいなね。</p>
-<p>こういう、なんか明るそうに見える曲なのに「正直自分のこともよくわかんない」って言っているの、何も考え
-ずに「このままでいいや!」って言っているわけじゃないってのが伝わってきて、色々悩んだ上でのってのが伝
-わってきて、すきだよ。独自解釈だけど。</p>
-<p>私は極端に「自分自身が嘘をつくこと」が嫌いで、嘘も方便という言葉を真と考えつつも自分には適用出来無い
-タイプの人間。や、少なくとも自分はそう思っている。え、そんな嘘あんま付いてないと思っているけどついて
-たらゴメン…(あでもネットリテラシー的に自分の個人情報はある程度カモフラージュはしているよ、そこは流
-石に色々まずいので。嘘は書いていないが。)</p>
-<p>外面コーデも壊滅的だが内面コーデは最早選択肢を持っていないというレベルでセットがない。なので一戸建て
-にずっと住んでる安心感？はすごいあるが必要な環境変化への適応力はない。</p>
-<p>なんかどーーでもいいことや嘘を付いた方が得かつ誰も損しない時でも嘘を付くのが気持ち悪く感じてしまう。
-テストの採点が間違っていて点数が不正に高くなってしまった時にそれを言いにいかないと気がすまなかったり。
-最近はあんまり嘘かなきゃいけないような場面に出会っていないのでそんなに事例が思い付かないな…
-いうたらツイッターに全部書き込んでしまうのもそう。他の場所でツイートをすることを「嘘をついている」と
-いう風に感じてしまう。自分自身がね。他の人がどこでツイートしようが別に嘘つきとは思わないし、なんなら
-それが普通の使い方だと思っている。アカウント分けるのが普通だと。まぁなので気にしていない(気にはなる
-かもしれんが)。私がちょっと頑固なだけ。</p>
-<p>正直自分の方がかっこわるいし普通に不便だし他人への不快感は高い人生をしているだろうな。多分頭が堅いと
-も言う。また違った生き辛さがある気はする。協調性のかけらもないとも言うので、真似はしない方が良い。</p>
-<p>でも私は「かっこよくなること」とか「人に好かれること」を完全に放棄しているのであまり悩んでいないんだ
-と思う。その割には寂しそうなことあるって？そりゃあるわ。でもある程度諦めと解決方法が他にあるってだけ。
-あというたら偶に向こうから話し掛けてくれて話しをしてくれる人がいるのでそれで十分みたいな所ある。後は
-推しの存在には大分助けられている…本当に…でも大分依存しすぎだから気をつけなきゃいけないけど。</p>
-<p>まぁ細かに自分の事書くエントリでもないか。</p>
-<p>ぶっちゃけいっつも"ぶってる"あんたたちの方がかっこいいな、と思うときも沢山あるよ。中々ストレスかかる
-じゃん。どこでどういう顔をしていたかとか、どんな話し方してたとか、どんな性格してたとか覚えてないとい
-けないし、毎回それで対応しないといけない。正味私はそれが出来る気はしないから、そうやって他の人のこと
-考えたりすることから逃げてるとも言える。それに、いうなれば私の生き方は「周りを気にしない」みたいなも
-ので正直一番良くない自覚があるよ。だから、だからこそ、そうやって悪い意味ではなく全部ホントで全部ウソ
-な人生を生きている人達がこうやって「これで、このままでもいいのだ」って思えると良いなってとっても思っ
-た。</p>
-<p>私はこの曲を名取の2023年のお誕生日ライブから聞いて、かつ推しの夜桜みあの同時視聴枠で見たから余計に色々
-考えてしまった。あんまりこの表現はすきではないからボカしてかくが、ようするに彼等彼女等は一種「全部ホ
-ントで全部ウソ」なわけで。そんな存在でこれを歌うって色々と考えることがあると思うんだ。表現者として
-「ステージ」を作っている名取自身は特にね。夜桜みあは(これは勝手に思っている事なので間違っている可能
-性も大分ある)大分感性が強いし他の人のことも考える人なので、名取が色々考えているのを色々想像したりと
-か、普段から活動していて色々と考える部分があるんじゃないかなぁと勝手に思っている。全く分からん妄想だ
-けどさ。</p>
-<p>あと名取に関して言えば、この若干「メタ」に触れるような意味にも取れる楽曲を選んだのってそれなりな覚悟
-があったんやないかなぁって気持ちを抱いた。や、そもそも今回のライブのテーマ的にも凄くピッタリなんだけど
-も、ダブルミーニング的になっていると思うんだよね。そもそもの一人の人間(バーチャルだとしても)としての
-名取さな自身のこと(ライブテーマ)と、そして"Vとしての名取"と"サナトリウムにいる名取"という関係性のこ
-とっていう双方に於いて、「全部ホントで全部ウソ」っていう。まぁある意味で「メタ要素」とも取れる患者姿
-の事にライブの流れとして触れたので、それ自体ももうステージの一部に取り込まれているんだけど、大分覚悟
-を決めての構成じゃないかなぁってにわかながらに思っていた。</p>
-<p>と、いうことで、久々に色々文字が浮かんでくる楽曲に出会えたので名取に感謝、そしてそのキッカケをくれた
-みあちゃんに感謝、といった所。しかも自分と正反対な存在に関しての歌でなるのは珍しい経験だった。</p>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Tue, 28 Mar 2023 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2023-03-28-music-zdbuhltodezdbuuso-nanawoakari.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2023-03-23-elisp-substitute-keymap-and-remap</title>
-    <link>https://cj-bc.github.io/blog/posts/2023-03-23-elisp-substitute-keymap-and-remap.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>既存のキーバインドを置き換える(remap, substitute-key-definition)</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on March 23, 2023</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on March 23, 2023
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a><a title="All pages tagged &#39;elisp&#39;." href="/tags/elisp.html" class="ui tag label">elisp</a>
-	
-      </div>
-
-    <div class="description">
-      <p>既存のコマンドを置き換えるコマンドを自作した際、新しいキーバインドを作るのではなくそのコマンドで古い
-コマンドを置き換えたい時があります。その際、具体的に「元々どこにバインドされていたか」を調べずに置き
-換えることが可能なのでメモを残しておきます。</p>
-<h1
-id="アクティブなキーマップ上のコマンドを置き換えたい: remapキーイベント + define-key">アクティブなキーマップ上のコマンドを置き換えたい:
-remapキーイベント + <code>define-key</code></h1>
-<p><code>remap</code>
-キーイベントを使うと、新たにremapを行うキーバインドを作成出来ます。注意点として、
-<u>実際に置き換えるのではなく「アクティブなキーマップ上のコマンドを置き換えるキーバインド」を新たに作成
-する</u>
-形になっています。そのため、指定したキーマップから参照されている Prefix
-keymap中にあるものは置 き換わりません。</p>
-<p>つまり、以下のようなキーマップの構成を考えた時、 <code>remap</code>
-を使って置き換えようとすると、 <code>outer-map</code> に存在する
-<code>func</code> は <code>new-func</code> で置き換えられますが
-<code>inner-map</code> に存在する <code>func</code> はそのまま残りま
-す:</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>(let* ((func &#39;(lambda () (interactive) (message &quot;inner-map default&quot;)))
-      (new-func &#39;(lambda () (interactive) (message &quot;replaced&quot;)))
-      (inner-map &#39;(keymap (?1 . func)))
-      (outer-map `(keymap (?a . func) (?b . ,inner-map))))
-  (define-key outer-map [remap func] &#39;new-func)
-  (describe-keymap outer-map)
-  )
-</code></pre>
-</div>
-<h1
-id="指定のキーマップから参照される Prefix keymap 内でも変更したい: substitute-key-definition">指定のキーマップから参照される
-Prefix keymap 内でも変更したい:
-<code>substitute-key-definition</code></h1>
-<p>elisp:substitute-key-definition
-は、「既存のコマンド」「新しいコマンド」「対象のキーマップ」の3つを
-必須の引数として受け取り、「対象のキーマップ」の中にある「既存のコマンド」を「新しいコマンド」で置き
-換えるように作用します。</p>
-<p>例えば、以下の例ではglobal keymap中の <code>count-words-region</code>
-を自作のコマンド <code>org-count-words/subtree-if-no-region</code>
-で置き換えます。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>(substitute-key-definition &#39;count-words-region &#39;org-count-words/subtree-if-no-region (current-global-map))
-</code></pre>
-</div>
-<p>(ちなみに <code>org-count-words/subtree-if-no-region</code> は<a
-href="https://github.com/Cj-bc/dotfiles/blob/0e2e604eaf05ec27a21af04b4e8060dd085f6118/dotfiles/emacs/emacs.d/lib/org-count-words.el#L6-L12">私のdotfiles</a>にあります)</p>
-<p><code>substitute-key-definition</code>
-は、指定したキーマップだけでなく Prefixキーマップ内にあるキーバインドも
-置き換えます。つまり、</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>(let* ((func &#39;(lambda () (interactive) (message &quot;inner-map default&quot;)))
-      (new-func &#39;(lambda () (interactive) (message &quot;replaced&quot;)))
-      (inner-map &#39;(keymap (?1 . func)))
-      (outer-map `(keymap (?a . func) (?b . ,inner-map))))
-  (substitute-key-definition &#39;func &#39;new-func outer-map)
-  (describe-keymap outer-map)
-  )
-</code></pre>
-</div>
-<p>は以下のような表示が出るはずです</p>
-<div class="line-block">key binding<br />
-— ——-<br />
-<br />
-a		new-func<br />
-b		Prefix Command<br />
-<br />
-b 1		new-func</div>
-<h1
-id="「既存のコマンドを置き換えるキーマップを作りたい」: substitute-key-definition (2)">「既存のコマンドを置き換えるキーマップを作りたい」:
-<code>substitute-key-definition</code> (2)</h1>
-<p><code>substitute-key-definition</code> に <code>OLDMAP</code>
-引数も加えてあげると、「 <code>OLDMAP</code>
-上の「既存のコマンド」のキー
-バインド」を参考にして「対象のキーマップ」を更新します。つまり、先程の例を元に以下のようにすると:</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-elisp
-</div>
-<pre class="elisp SourceCode"><code>(substitute-key-definition &#39;count-words-region &#39;org-count-words/subtree-if-no-region (current-local-map) (current-global-map))
-</code></pre>
-</div>
-<p>現在の global keymap 中の <code>count-words-region</code>
-(デフォルトでは <code>\M-=</code> )を置き換える代わりに、 local keymap
-の同じキーバインド(デフォルトなら <code>\M-=</code>)に
-<code>count-words-region</code> を設定します。</p>
-<h1 id="参考資料">参考資料</h1>
-<ul>
-<li><a href="info:elisp#Changing Key Bindings">elisp#Changing Key
-Bindings</a></li>
-<li><a href="info:elisp#Remapping Commands">elisp#Remapping
-Commands</a></li>
-</ul>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Thu, 23 Mar 2023 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2023-03-23-elisp-substitute-keymap-and-remap.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2023-03-16-yozakura-mia-kawaii</title>
-    <link>https://cj-bc.github.io/blog/posts/2023-03-16-yozakura-mia-kawaii.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>夜桜みあのかわいさについて</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on March 16, 2023</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on March 16, 2023
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;夜桜みあ&#39;." href="/tags/%E5%A4%9C%E6%A1%9C%E3%81%BF%E3%81%82.html" class="ui tag label">夜桜みあ</a>
-	
-      </div>
-
-    <div class="description">
-      <p>これ書きながら思ったんですけど、夜桜みあの魅力の中から「かわいさ」だけを抽出するのって難しいんですよね。なので一部
-他の魅力について語るオタクが出てくると思うんですけど目を瞑ってもらえると嬉しいです。では。</p>
-<h1 id="経緯">経緯</h1>
-<p>今日のみあちゃんの配信にてかわいさに関してのレシート(長文マシュマロのこと、基本嫌われる)書くか~~？？みたいなノリになり、試しに
-書き出してみた所全然文字数オーバーすることが分かったのでどうせならブログに残しておくことにしました。</p>
-<h1 id="夜桜みあちゃんのリンク系">夜桜みあちゃんのリンク系</h1>
-<ul>
-<li><a href="https://twitter.com/yozakura_mia">Twitter</a></li>
-<li><a
-href="https://www.youtube.com/channel/UCH3tRsAvHSsTi1LDC7l_PDA">YouTube</a></li>
-</ul>
-<h1 id="注意事項">注意事項</h1>
-<ul>
-<li>一度も推敲していないです</li>
-<li>ですます調の統一を今回は大分サボりました</li>
-<li>ただのオタクの怪文書です</li>
-<li>今思いつく限りしか載っていないので抜けはあるかも</li>
-</ul>
-<h1 id="声">声</h1>
-<p>まずそもそも声がかわいいね。や、これは本当に沢山ある中での一要素でしかないんですけど、やっぱり夜桜みあに興味を持った
-最初のキッカケも声だったし誰もが分かるかわいさっていう面でまず第一に持ってきたいところです。
-声はねぇ…ほんとうに…ほんっっとうにかわいいんですよ。夜桜みあの声は(両声類とか程ではなくとも)結構バリーエションが
-あると思っていて、かわいさに分類されない「かっこよさ」みたいなのもありつつかわいさの魅力もガンガンあるんですよね。
-あ、「かっこよさ」とかも正直めちゃくちゃすきなポイントなんですけど今回は「かわいい所」なので一旦パスで。</p>
-<p>あとこれはある程度の時間推させて頂いているからこそ分かる所なんですけど、大分声がお姉さんへ成長しましたね。
-正直に言うと昔の方がもっとロリっぽかったように思っていまして、昔でいうとロリ100%だった所をロリ70お姉さん30くらいに
-なっているように思います。でもたまにロリ100%に戻ったりするんで、あなたもしかしてある程度コントロールできる…!?み
-たいな気持ちでいます。まぁ出来るか。…あざとくない…??
-(ここに関して、ちょっと配信に慣れたりして声のトーンが下がったりもしたのかなぁ、と思ったりもしていますが、それはそ
-れで嬉しくて良い。正味どんな声でもすき。かわいいジャンルとは違うけど、お友達の方々と喋ってたりゲームやって煽ってた
-りする時のような通常時ぽい声もめちゃすきなんよね。頑張ったけど出なかった大蛇丸とかもね。喉潰さんようにね)</p>
-<p>完全にロリ意識してるだろって時の声は本当にとにかく甘い。とにかく甘くてかわいい。は？？なんですか？？？かわいいんで
-すけど…でも甘いのになんだろ、嫌な感じがないというか。ただただ甘いチョコレートだと沢山食べると「もう今はちょっと
-いいかな…チョコだけに」ってなるんですが夜桜みあの場合はこう、いくらでも食べれる甘いチョコレートみたいな所があり
-ます。これは個人の好み的なものもあるのかもしれないですが、私には丁度良い塩梅でした。
-あと多分私がそれまで甘いかわいさみたいなの触れてこなかったのもあって、大分落とされましたね。</p>
-<p>普通にしている時？でもスタンダードにかわいいですよね。何？？多分そこまでかわいさ意識して喋ってないと(勝手に)思って
-いるんですけど、とてもかわいいんですよね。でもこれは甘さとはちょっと違うかもしれない。単純に私がすきな周波数帯とマッ
-チしているだけ説はあります。</p>
-<h1 id="仕草">仕草</h1>
-<p>次!やっと次だよちなみにここまでで1000文字くらいあるぽいですね。え…?
-次は仕草です。夜桜みあの仕草。これは例えばウインクであったり、歌いながらめちゃノリノリだったり、そういうところを指
-しています。頑張ってウインクしてるのかわいくない？？配信の最後に毎回ウインクしてるの、かわいくてとても良いよね。
-まぁ頑張ってって言ってもみあちゃんはウインク得意だから実際そんなに頑張っているわけじゃないんだろうけど、でもこう…ウ
-インクした後ドヤッ…ってしてるの、毎回「頑張ったでしょ!」「上手く出来たでしょ!」って自慢されている気がしてとても
-かわいいなぁと思っています。まぁこれはまた後ほど。</p>
-<p>ノリノリなのかわいいのはそれはとてもそうじゃん。それももうそのままじゃん。だって…ねぇ？そこで夜桜みあがめちゃ動
-いているんだよ？？もう動いているだけでかわいくない？？？それを言ったら存在自体のかわいさ的な話になるので一旦置いて
-おくことにします。一旦置いておくことが出来る猫です。おあずけ。簡単に言うと「ノリノリで楽しそうな状態」っていうのが
-かわいいよねっていう話です。</p>
-<h1 id="反応">反応</h1>
-<p>何かしらのイベントが起こった時の反応の仕方がかわいいと私の中で話題に。何かへの反応として出る声だとか、驚き方とか、
-そういった所です。実は結構細かい所で沢山あるんだけれど、逆にいうと細かい所すぎてあまりしっかりと覚えていないみたい
-な所があります…オタクくんさぁ…??
-何か考えている間に言葉に出ちゃったりするのもかわいいよね。コメントにしろ自身の行動の結果にしろゲームからのイベント
-にしろ…喋りながらさらっと物真似になっていたり、さらっと歌い出していたり、さらっとだじゃれを言うてたりとか。例が
-雑だって？そんなことないが…?そんなこと言うのは君か？</p>
-<p>なんか知らんけどやたら楽観的な反応をしている所もかわいいな…って思ってたりはします。親不知の話の時に本人めちゃピ
-ンピンしていた話とかね。</p>
-<p>「歌詞歌詞歌詞歌詞歌詞…くしくし、僕ハム太郎なのだ!ヘケッ」とか。おうた中に歌詞が抜けた時、あわてつつもメロディラ
-インには載せながら色々話しているのもすき。</p>
-<p>でもここはあれかも、かわいいもそうなんだけど「反応の豊富さ・面白さ」みたいな独立した魅力でもあるから「かわいいも
-の」って限定して考えるのはあまり向いていないかもしれない。</p>
-<h1 id="態度変化">態度変化</h1>
-<p>す~~ぐイキる所とかね。それでいてまたすぐフラグ回収して泣きべそかいたり…んでまたす~~ぐイキったり。
-なんか上手くいった時とかにめちゃめちゃドヤっているのもかわいいねぇ…って目を細めてしまいます。おじいちゃんなので。
-自慢気になってるのもかわいいね…沢山褒めてあげようねぇ…ってなる。
-あれですね、感情がよく動いていてかわいいんかなぁと思っています。</p>
-<p>実はこの分野、上の「反応」「仕草」あたりと近しい部分でもあって、大分個人的には色々魅力の詰まっている項目だと思って
-いるけど上手く言葉に出てこなかったので一旦は区切ろうかなと思います。</p>
-<h1 id="エピソード">エピソード</h1>
-<p>数々のエピソード、色々聞いているけどかわいいなぁ…ってなるのがチラホラある。</p>
-<p>だきまくらくん抱いて寝てた話あったじゃないですか、あれめちゃかわいいな…って思いながら聞いてたりしました。夜桜み
-あの抱き枕くんあんた幸せものな自覚持って…?みあちゃんをよろしく頼むな…側にいてやってくれな…</p>
-<p>オタクなエピソードはめちゃくちゃかわいいよね。そもそもこう…「かわいい」が「かわいい」を推しているって時点でかわ
-いさしかないんですよ。百合とかとも同じだけどかわいいxかわいい=かわいい理論。(これは苦手な場合もあると思うので明言
-しておくけど、百合はすきだけどこれに関しては「かわいいものを推している推しがかわいい」という話であって百合として見
-てるとかではないので安心してほしい。)
-そもそも何かに夢中になっている人って人間として魅力的だなと思っていて、夜桜みあの場合夢中になってて楽しそうにしてい
-るその姿がとってもかわいいな…ってなっています。</p>
-<h1 id="御姿">御姿</h1>
-<p>ん!あまりにも当たり前すぎて忘れていた事があります。御姿ですね!バリかわいい…かわいくない…?マジで…
-おようふくもかわいいしお顔もかわいい。足とかすきだったりはするけどそれは「かわいい」とはベクトルが違うので一旦おあ
-ずけ。</p>
-<p>これは初期衣装では思ってなかったんですけど、第二衣装(って勝手に呼んでいる猫耳生える方のやつ)ではめちゃ綺麗なお姉さ
-んファッションみたいにまとめてきているのにクマちゃんヘアピンはしっかり受け継いでいる所とかかわいいですよね。第二衣
-装は「綺麗なお姉さん」っていうのに大分力を入れたデザインをしていると思っているんですよね。腕がスラッとするようなシャ
-ツだとか、襟元が出来たりだとか、胸元のリボンを小さめにしたりとか、綺麗なおあしが出ていたりとか、お洒落なブーツ履い
-てたりとか。や、みあちゃんがそこまで考えてたかは分かんないけど個人的な解釈としてね。でも、正直クマちゃんヘアピンっ
-て「綺麗なお姉さん」っていうイメージとは違うと思うんですよ。なんとなくね。「綺麗なお姉さん」コンセプトだったら外さ
-れちゃってもっとスマートなヘアピンになったりもしたと思うんです。それなのにクマちゃんヘアピンは生き残った。今迄の思
-い出の入ったクマちゃんヘアピンをそのまま外せずに持ってきたのかな…とか、無意識のうちにそれは付けちゃったのかな…と
-か考えるととってもかわいですよね。</p>
-<p>…ん？ここまで書いてて気付いたけどこれはただのオタクの妄想では…??</p>
-<h1 id="最後に">最後に</h1>
-<p>結構あれだね、「かわいさ」っていう所だけにフォーカスすると書けない事も多いですね…かわいさだけじゃないので夜桜み
-あの取り柄は。マジで。寧ろかわいさ(特に声のかわいさ)はまだ入口でしかなくってそこから先へ進むと凄く沢山の魅力がある
-人だなぁと思っています。ただそこはこの記事の範囲外なので一旦置いておきます。というか書ききれないよ普通に。
-夜桜みあだいすきだぞ~!!</p>
-<p>大分雑に書いた(しかも推敲をしていない)文なのですが読んでくれた人はありがとう!当方ただのオタク!!!
-夜桜みあちゃんのチャンネル登録とTwitterのフォロー、よろしくお願いしますね。</p>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Thu, 16 Mar 2023 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2023-03-16-yozakura-mia-kawaii.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 

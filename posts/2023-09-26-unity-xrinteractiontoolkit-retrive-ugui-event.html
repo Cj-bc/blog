@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- XR Interaction Toolkit からuGUIイベントに反応する</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2023-09-26-unity-xrinteractiontoolkit-retrive-ugui-event.html" /><meta property="og:title" content="XR Interaction Toolkit からuGUIイベントに反応する" /><meta property="og:description" content="uGUI上に表示した文字列へのイベントを取りたかったです。最初は Interactable として扱うのかなと色々試しましたが、実際の所マウスイベン トとして扱ってよいということがわかりました。" />
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+
+	<meta name="viewport" content="width=device-width" />
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+	  
+	  <a href="../" class="mobile only item"><i class="angle left icon"></i></a>
+	  
+          <div class="computer only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+          <div class="mobile only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"></div>
+            <a href="../" class="computer only item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui secondary segment">
+	      <p>
+		現在ブログ改修工事中です。恐らく多分きっとメイビーそのうちAstro製の既存デザインへと
+		変換しますので、見辛さは今暫くご容赦下さい。
+	      </p>
+	    </div>
+
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>XR Interaction Toolkit からuGUIイベントに反応する</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on September 26, 2023</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on September 27, 2023
+	</div>
+
+	
+
+	
+	
+	
+      </div>
+
+    <div class="description">
+      <p>uGUI上に表示した文字列へのイベントを取りたかったです。最初は
+Interactable として扱うのかなと色々試しましたが、実際の所マウスイベン
+トとして扱ってよいということがわかりました。</p>
+<h1 id="Tl;Dr">Tl;Dr</h1>
+<ul>
+<li><a href="https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@2.5/api/UnityEngine.XR.Interaction.Toolkit.IXRInteractable.html">IXRInteractable</a>等の
+Interactableは <u>関係ない</u></li>
+<li><a href="https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@2.5/manual/ui-setup.html">UI
+interaction setup | XR Interaction Toolkit | 2.5.1</a> に従えばよい</li>
+<li><a href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/script-EventTrigger.html">EventTrigger</a>を用いる際は、Rayでの選択は
+<code>Pointer Click</code> として扱える</li>
+</ul>
+<h1 id="やること">やること</h1>
+<h2 id="XR Interaction Toolkit 対応のCanvasを作成する">XR Interaction
+Toolkit 対応のCanvasを作成する</h2>
+<p>XR Interaction
+Toolkitを導入している状態であれば、ヒエラルキービューか ら
+<code>XR&gt;UI Canvas</code> で作成することが出来ます。</p>
+<p>EventSystemが作成されない場合は、同様に
+<code>XR&gt;UI EventSystem</code> を追加して ください。</p>
+<h2 id="(おまけ) 任意のイベントを受け取るためには EventTrigger を追加する">(おまけ)
+任意のイベントを受け取るためには <code>EventTrigger</code>
+を追加する</h2>
+<p>ボタン等は <code>OnClick</code>
+イベントを受け取ることが出来ますが、それ以外のコ ンポーネント(<a href="https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TextMeshProUGUI.html">TMPro.TextMeshProUGUI</a>など)でも受け取りたい場合、
+<a href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/manual/script-EventTrigger.html">EventTrigger</a>を使用出来ます。</p>
+<p>uGUI上でコントローラーのトリガー入力を受け取りたい場合は<a href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.EventTrigger.html#UnityEngine_EventSystems_EventTrigger_OnPointerClick_UnityEngine_EventSystems_PointerEventData_">PointerClick</a>を
+使用出来ます。コールバックは<a href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.PointerEventData.html">PointerEventData</a>型の引数を取りますが、実際
+に <code>EventTrigger</code> に設定する際は<a href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.BaseEventData.html">BaseEventData</a>型の引数を受け取って自分
+でキャストする必要があります。</p>
+<p>具体的には以下のような形となるかと思います。参考までに <a href="https://github.com/Cj-bc/TextObjectsVR/blob/000720cab35d0ed1da84187bbf33bce77682d21a/Assets/Scripts/Buffer/BufferUI.cs#L36-L53">TextObjectsVRでの具体的な使用例</a>も置いておきます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+csharp
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode csharp SourceCode"><code class="sourceCode cs"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">pointerClick</span><span class="op">(</span>BaseEventData d<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">var</span> pointerEv <span class="op">=</span> d <span class="kw">as</span> PointerEventData<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="op">(</span>pointerEv <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// イベントに対応するスクリプト</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>

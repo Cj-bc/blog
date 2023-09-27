@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- XR ray Interactorの先にあるTMPText上の文字を取得する</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2023-09-26-unity-xrinteractiontoolkit-textmeshpro-get-character-at-raycast-interactor.html" /><meta property="og:title" content="XR ray Interactorの先にあるTMPText上の文字を取得する" /><meta property="og:description" content="TextMeshProの機能を使うと実は簡単に作れます。" />
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+
+	<meta name="viewport" content="width=device-width" />
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+	  
+	  <a href="../" class="mobile only item"><i class="angle left icon"></i></a>
+	  
+          <div class="computer only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+          <div class="mobile only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"></div>
+            <a href="../" class="computer only item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui secondary segment">
+	      <p>
+		現在ブログ改修工事中です。恐らく多分きっとメイビーそのうちAstro製の既存デザインへと
+		変換しますので、見辛さは今暫くご容赦下さい。
+	      </p>
+	    </div>
+
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>XR ray Interactorの先にあるTMPText上の文字を取得する</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on September 26, 2023</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on September 27, 2023
+	</div>
+
+	
+
+	
+	<a title="All pages tagged 'unity'." href="../tags/unity.html" class="ui tag label">unity</a>
+	
+      </div>
+
+    <div class="description">
+      <p>TextMeshProの機能を使うと実は簡単に作れます。</p>
+<h1 id="Tl;Dr">Tl;Dr</h1>
+<ol>
+<li>テキストを<a href="https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TMP_Text.html">TextMeshPro.TMP<sub>Text</sub></a>の派生クラスを用いて作成する</li>
+<li>1.のgameObjectに<a href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.EventTrigger.html">EventTrigger</a>を追加し、
+<code>Pointer Click</code> イベント用のハンドラを書く
+<ol>
+<li><a href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.PointerEventData.html#UnityEngine_EventSystems_PointerEventData_worldPosition">PointerEventData.worldPosition</a>を<a href="https://docs.unity3d.com/ScriptReference/Camera.WorldToScreenPoint.html">Camera.WorldToScreenPoint</a>を用いてスクリーン座標へ変換する</li>
+<li><a href="https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TMP_TextUtilities.html#TMPro_TMP_TextUtilities_FindIntersectingCharacter_TMPro_TMP_Text_UnityEngine_Vector3_UnityEngine_Camera_System_Boolean_">TMP<sub>TextUtilities</sub>.FindIntersectingCharacter</a>で文字のインデックスを取得する</li>
+<li>インデックスを元に、<a href="https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TMP_Text.html#TMPro_TMP_Text_text">TMP<sub>Text</sub>.text</a>から取得する</li>
+</ol></li>
+</ol>
+<h1 id="バージョン情報">バージョン情報</h1>
+<table class="ui celled table">
+<thead>
+<tr class="header">
+<th>パッケージ等</th>
+<th>バージョン</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Unity</td>
+<td>2022.1.24f1</td>
+</tr>
+<tr class="even">
+<td>TextMeshPro</td>
+<td>3.0.6</td>
+</tr>
+<tr class="odd">
+<td>XR Interaction Toolkit</td>
+<td>2.0.4</td>
+</tr>
+<tr class="even">
+<td>UnityUI</td>
+<td>1.0.0</td>
+</tr>
+</tbody>
+</table>
+<h1 id="工程">工程</h1>
+<p>最初2工程は前回の記事と同じ内容になります。簡単のためこちらにも記載しています。</p>
+<h2 id="テキストメッシュを作成する">テキストメッシュを作成する</h2>
+<p>XR Interaction Toolkit対応のCanvasを作り、その子供に<a href="https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TextMeshProUGUI.html">TextMeshProUGUI</a>を
+作成します。便宜上、このgameObjectを「テキストメッシュ」と呼ぶことにし
+ます。</p>
+<h2 id="テキストメッシュがXR Ray Interactorのイベントに反応出来るようにする">テキストメッシュがXR
+Ray Interactorのイベントに反応出来るようにする</h2>
+<p>テキストメッシュは、デフォルトではEventSystemのイベントに反応しません。
+そこで、<a href="https://docs.unity3d.com/Packages/com.unity.ugui@1.0/api/UnityEngine.EventSystems.EventTrigger.html">EventTrigger</a>を用いてXR
+Ray Interactorのイベントに反応出来るよ うにします。</p>
+<p>!写真</p>
+<p>テキストメッシュにEventTriggerコンポーネントを追加し、
+<code>Pointer Click</code> イベントを追加します。</p>
+<p>そのコールバック関数として、 <code>BaseEventData</code> を受け取って
+<code>void</code> を返 す関数を作成します。ここでは、
+<code>pointerClick</code> として定義しておくことに します。(写真では
+<code>BufferUI.pointerClick</code> となっています)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+csharp
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode csharp SourceCode"><code class="sourceCode cs"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> UnityEngine<span class="op">.</span><span class="fu">EventSystems</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> TMPro<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> PointerClickExample <span class="op">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// 作成したテキストメッシュへの参照</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> TMP_Text m_text<span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">pointerClick</span><span class="op">(</span>BaseEventData d<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">var</span> pointerEv <span class="op">=</span> d <span class="kw">as</span> PointerEventData<span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="op">(</span>pointerEv <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+<h2 id="交差点がどの文字上にあるのかを取得する">交差点がどの文字上にあるのかを取得する</h2>
+<p><a href="https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/api/TMPro.TMP_TextUtilities.html#TMPro_TMP_TextUtilities_FindIntersectingCharacter_TMPro_TMP_Text_UnityEngine_Vector3_UnityEngine_Camera_System_Boolean_">TMPro.TMP<sub>TextUtilities</sub>.FindIntersectingCharacter</a>を用いると、与えた点
+と交わっている文字を取得することが出来ます。</p>
+<p>しかし、その際与える座標は ワールド座標系 <u>ではありません</u> 。
+<code>camera</code>
+引数で与えたカメラのスクリーン座標系である必要があるようです。</p>
+<p>"あるようです"というのは、ドキュメント上には記載がなく自分で試した時に
+上手くいったのがそれだったからです。又、インターネットで調べた所
+<code>Input.mousePosition</code>
+を用いているものが多くあり、それもスクリーン座標
+系であるからという推測でもあります。</p>
+<ol>
+<li><p>イベントの発生したカメラのスクリーン座標系の座標を取得する</p>
+<p>pointerClickイベントが発生した時のRaycastとの交差点は、 <a href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.PointerEventData.html#UnityEngine_EventSystems_PointerEventData_pressPosition">PointerEventData.pressPosition</a>で取得出来ます。これは
+<a href="https://docs.unity3d.com/Packages/com.unity.ugui@2.0/api/UnityEngine.EventSystems.PointerEventData.html#UnityEngine_EventSystems_PointerEventData_pressEventCamera">PointerEventData.pressEventCamera</a>のカメラのスクリーン座標系の座標となっ
+ています。</p>
+<ol>
+<li><p>(おまけ)
+<code>PointerEventData.pointerPressRaycast.worldPosition</code>
+からの取得</p>
+<p>カメラのワールドToスクリーン座標変換関数を用いると、これからも取得する
+ことが出来ます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+csharp
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode csharp SourceCode"><code class="sourceCode cs"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pointerEv<span class="op">.</span><span class="fu">pressEventCamera</span><span class="op">.</span><span class="fu">WorldToScreenPoint</span><span class="op">(</span>pointerEv<span class="op">.</span><span class="fu">pointerPressRaycast</span><span class="op">.</span><span class="fu">worldPosition</span><span class="op">)</span></span></code></pre></div>
+</div></li>
+</ol></li>
+<li><p>文字インデックスから文字を取得する</p>
+<p><code>FindIntersectingCharacter</code> を用いて、
+<code>TMP_Text.text</code> のインデックス
+を取得することが出来ます。そのインデックスを用いることで、文字を取得す
+ることが出来ます。</p>
+<p>文字が見付からなかった際は -1
+を返すようなので、そこで条件分岐が必要で す。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+csharp
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode csharp SourceCode"><code class="sourceCode cs"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> UnityEngine<span class="op">.</span><span class="fu">EventSystems</span><span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> TMPro<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">class</span> PointerClickExample <span class="op">{</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">/// 作成したテキストメッシュへの参照</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> TMP_Text m_text<span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">pointerClick</span><span class="op">(</span>BaseEventData d<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">var</span> pointerEv <span class="op">=</span> d <span class="kw">as</span> PointerEventData<span class="op">;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="op">(</span>pointerEv <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>            <span class="kw">return</span><span class="op">;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">var</span> pos <span class="op">=</span> <span class="kw">new</span> <span class="fu">Vector3</span><span class="op">(</span>pointerEv<span class="op">.</span><span class="fu">pressPosition</span><span class="op">.</span><span class="fu">x</span><span class="op">,</span> pointerEv<span class="op">.</span><span class="fu">pressPosition</span><span class="op">.</span><span class="fu">y</span><span class="op">,</span> 0f<span class="op">);</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">var</span> idx <span class="op">=</span> TMP_TextUtilities<span class="op">.</span><span class="fu">FindIntersectingCharacter</span><span class="op">(</span>m_text<span class="op">,</span> pos<span class="op">,</span> pointerEv<span class="op">.</span><span class="fu">pressEventCamera</span><span class="op">,</span> <span class="kw">false</span><span class="op">);</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="op">(</span>idx <span class="op">==</span> <span class="op">-</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>            Debug<span class="op">.</span><span class="fu">Log</span><span class="op">(</span><span class="st">&quot;文字が見付かりませんでした&quot;</span><span class="op">);</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>            Debug<span class="op">.</span><span class="fu">Log</span><span class="op">(</span>$<span class="st">&quot;index: {idx}, 選択された文字: {m_text.text[idx]}&quot;</span><span class="op">);</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div></li>
+</ol>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
