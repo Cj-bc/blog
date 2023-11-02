@@ -7,8 +7,137 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/Dfinity.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Tue, 26 Sep 2023 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Fri, 03 Nov 2023 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2023-11-03-windows-powershell-watch-file-modification-event</title>
+    <link>https://cj-bc.github.io/blog/posts/2023-11-03-windows-powershell-watch-file-modification-event.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>PowerShellでファイルの変更監視</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on November  3, 2023</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on November  3, 2023
+	</div>
+
+	
+
+	
+	
+	
+      </div>
+
+    <div class="description">
+      <p>注:
+正直、今回の記事は参考サイトの晴耕雨読さんの内容ほぼ同じです。主に
+は自分用のメモとなります。</p>
+<p>Linuxでは確立したAPIがなく面倒ですが、Windowsでは <a
+href="https://learn.microsoft.com/en-us/dotnet/api/system.io.filesystemwatcher?view=net-7.0"><code>System.IO.FileSystemWatcher</code></a>
+を用いることで様々なファイルの変更を検知
+出来ます。全体的に1つの企業が作っているメリットみたいな所ありますね。
+(それが嫌な所でもありますが)</p>
+<p>.NETのクラスは <code>New-Object</code>
+で作成出来ます。その後、各プロパティを設定します。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+powershell
+</div>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode powershell SourceCode"><code class="sourceCode powershell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">$watcher</span> <span class="op">=</span> <span class="fu">New-Object</span> System<span class="op">.</span><span class="fu">IO</span><span class="op">.</span><span class="fu">FileSystemWatcher</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">$watcher</span><span class="op">.</span><span class="fu">Path</span> <span class="op">=</span> <span class="st">&quot;C:\Users/me\AppData\Local\Temp&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="va">$watcher</span><span class="op">.</span><span class="fu">Filter</span> <span class="op">=</span> <span class="st">&quot;execute.bat&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="va">$watcher</span><span class="op">.</span><span class="fu">IncludeSubdirectories</span> <span class="op">=</span> <span class="va">$true</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="va">$watcher</span><span class="op">.</span><span class="fu">EnableRaisingEvents</span> <span class="op">=</span> <span class="va">$true</span></span></code></pre></div>
+</div>
+<table class="ui celled table">
+<tbody>
+<tr class="odd">
+<td><code>FileSystemWatcher.Path</code></td>
+<td>監視対象のディレクトリ</td>
+</tr>
+<tr class="even">
+<td><code>FileSystemWatcher.Filter</code></td>
+<td>Path以下のファイルのうち、一致した名前を持つファイルのみを監視する</td>
+</tr>
+<tr class="odd">
+<td><code>FileSystemWatcher.IncludeSubdirectories</code></td>
+<td>サブディレクトリも監視対象にするか否か</td>
+</tr>
+</tbody>
+</table>
+<p>そして、 <code>FileSystemWatcher</code>
+クラスの各イベントにアクションを登録します。</p>
+<p>イベントへの登録は <a
+href="https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/register-objectevent?view=powershell-7.3"><code>Register-ObjectEvent</code></a>
+で可能です。イベントに関連す る情報は、 <code>$Event</code>,
+<code>$EventSubscriber</code>, <code>$Sender</code>,
+<code>$EventArgs</code>, <code>$Args</code>
+変数に格納されるので、それを適宜参照することで様々なことが行えます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+powershell
+</div>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode powershell SourceCode"><code class="sourceCode powershell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Register-ObjectEvent</span> <span class="va">$watcher</span> <span class="st">&quot;Created&quot;</span> <span class="op">-</span>action <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Write-Host</span> <span class="st">&quot;Created Event is called.&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 関連処理</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+<h1 id="用例: 自動的に消滅するファイルのバックアップをとる">用例:
+自動的に消滅するファイルのバックアップをとる</h1>
+<p>実際に自分が使用した例です。</p>
+<p>Unity HubでUnity Editorをインストールする際、管理者権限で
+<code>AppData/Local/Temp/UNKNOWN_HASH/execute.bat</code>
+を実行する許可を求められ
+ました。中身を確認してから実行したいのでそれを読もうとした所、許可プロ
+ンプトの後にはもう削除されていました。</p>
+<p>そこで、該当のファイルが生成された時にコピーするようなスクリプトを書きました。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+powershell
+</div>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode powershell SourceCode"><code class="sourceCode powershell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="va">$watcher</span> <span class="op">=</span> <span class="fu">New-Object</span> System<span class="op">.</span><span class="fu">IO</span><span class="op">.</span><span class="fu">FileSystemWatcher</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">$watcher</span><span class="op">.</span><span class="fu">Path</span> <span class="op">=</span> <span class="st">&quot;C:\Users/me\AppData\Local\Temp&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="va">$watcher</span><span class="op">.</span><span class="fu">Filter</span> <span class="op">=</span> <span class="st">&quot;execute.bat&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="va">$watcher</span><span class="op">.</span><span class="fu">IncludeSubdirectories</span> <span class="op">=</span> <span class="va">$true</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="va">$watcher</span><span class="op">.</span><span class="fu">EnableRaisingEvents</span> <span class="op">=</span> <span class="va">$true</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">Register-ObjectEvent</span> <span class="va">$watcher</span> <span class="st">&quot;Created&quot;</span> <span class="op">-</span>action <span class="op">{</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Write-Host</span> <span class="st">&quot;Created Event is called.&quot;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="va">$targetDir</span> <span class="op">=</span> <span class="fu">Split-Path</span> <span class="op">-</span>Parent <span class="va">$Event</span><span class="op">.</span><span class="fu">SourceEventArgs</span><span class="op">.</span><span class="fu">FullPath</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Write-Host</span> <span class="st">&quot;target directory: $targetDir&quot;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="va">$saveTo</span> <span class="op">=</span> <span class="fu">Join-Path</span> <span class="op">-</span>Path <span class="op">(</span><span class="fu">Split-Path</span> <span class="op">-</span>Parent <span class="va">$targetDir</span><span class="op">)</span> <span class="op">-</span>ChildPath <span class="st">&quot;saved-by-watchandcopy&quot;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Write-Host</span> <span class="st">&quot;Save to: $saveTo&quot;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Copy-Item</span> <span class="va">$targetDir</span> <span class="va">$saveTo</span> <span class="op">-</span>Recurse</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+<h1 id="参考サイト">参考サイト</h1>
+<ul>
+<li><a
+href="https://tex2e.github.io/blog/powershell/Register-ObjectEvent">PowerShellでファイルの更新を監視する
+| 晴耕雨読</a></li>
+<li><a
+href="https://learn.microsoft.com/en-us/dotnet/api/system.io.filesystemwatcher?view=net-7.0">FileSystemWatcher
+Class (System.IO) | Microsoft Learn</a></li>
+<li><a
+href="https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/register-objectevent?view=powershell-7.3">Register-ObjectEvent
+(Microsoft.PowerShell.Utility) - PowerShell | Microsoft Learn</a></li>
+</ul>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Fri, 03 Nov 2023 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2023-11-03-windows-powershell-watch-file-modification-event.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2023-09-26-unity-xrinteractiontoolkit-textmeshpro-get-character-at-raycast-interactor</title>
     <link>https://cj-bc.github.io/blog/posts/2023-09-26-unity-xrinteractiontoolkit-textmeshpro-get-character-at-raycast-interactor.html</link>
     <description><![CDATA[<div id="body-content">
@@ -1818,286 +1947,6 @@ id="migemo.elの設定を変えても反映されない">migemo.elの設定を�
 ]]></description>
     <pubDate>Fri, 21 Apr 2023 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2023-04-21-emacs-migemo-setup.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2023-04-12-pandoc-library-how-to-write-yaml-metadata-with-markdown-writer</title>
-    <link>https://cj-bc.github.io/blog/posts/2023-04-12-pandoc-library-how-to-write-yaml-metadata-with-markdown-writer.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>PandocのwriteMarkdownでメタデータをYAML出力する</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on April 12, 2023</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on May  3, 2023
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;haskell&#39;." href="/tags/haskell.html" class="ui tag label">haskell</a><a title="All pages tagged &#39;pandoc&#39;." href="/tags/pandoc.html" class="ui tag label">pandoc</a>
-	
-      </div>
-
-    <div class="description">
-      <h1 id="やりたいこと">やりたいこと</h1>
-<p>Pandocに限らず、いくつかのMarkdownを扱えるプログラムでは、Markdownファイルの冒頭にYAML形式のメタデータを持つことが
-出来ます(frontmatterというやつです)。</p>
-<p>例えば、以下のような:</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-markdown
-</div>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode markdown SourceCode"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> PandocのwriteMarkdownでメタデータをYAML出力する</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> cj.bc_sd</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">tags:</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">- haskell</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">- pandoc</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu"># Header1</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>...</span></code></pre></div>
-</div>
-<p>そこで、Pandocを用いて他のフォーマットから変換する際にこのYAML形式のメタデータを付与したいです。</p>
-<h1 id="Tl;Dr">Tl;Dr</h1>
-<ul>
-<li><code>WriterOptions.writerExtensions</code> (<a
-href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Options.html#t:WriterOptions">src</a>)
-に <code>Ext_yaml_metadata_block</code> (<a
-href="https://pandoc.org/MANUAL.html#extension-yaml_metadata_block">解説</a>)を追加する</li>
-<li><code>WriterOptions.writerTemplate</code>
-に何かテンプレートを設定する(<code>Nothing</code> じゃなければ良い)
-<ul>
-<li>デフォルトのものを <code>compileDefaultTemplate "markdown"</code>
-(<a
-href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Templates.html#v:compileDefaultTemplate">src</a>)で取ってきても良い</li>
-<li>その場合、 <code>PandocPure</code> を使っている場合は適切に
-<code>stFiles</code> を弄る必要がある(後述)</li>
-</ul></li>
-</ul>
-<h1 id="解説">解説</h1>
-<h2 id="前提: Pandocをライブラリとして利用して変換する">前提:
-Pandocをライブラリとして利用して変換する</h2>
-<p>Pandocをライブラリとして使う場合、以下のような流れで変換処理を行うことが出来ます:</p>
-<ol>
-<li><a
-href="https://hackage.haskell.org/package/text-2.0.1/docs/Data-Text-IO.html#v:readFile"><code>Data.Text.IO.readFile</code></a>等を用いてファイルの内容を
-<code>Text</code> として読み込みます</li>
-<li><a
-href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Readers.html"><code>Reader</code></a>
-のうちの一つを用いて元のコンテンツをパースして <a
-href="https://hackage.haskell.org/package/pandoc-types-1.23/docs/Text-Pandoc-Definition.html#t:Pandoc"><code>Pandoc</code></a>型の値を得ます</li>
-<li>必要なら <code>Pandoc</code> 型に処理をします</li>
-<li><a
-href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Writers.html"><code>Writer</code></a>のうちの一つを用いて、
-<code>Text</code> 型にできます</li>
-</ol>
-<p>今回は、書き出しはMarkdown形式で行うので、以下のようになります。</p>
-<p><code>Reader</code>
-は元のフォーマットに対応したものであれば何でも良いのですが、この記事では
-元のフォーマットとしてOrgを想定し、 <code>readOrg</code>
-を使用します。</p>
-<p>又、 <a
-href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Class.html#v:runPure"><code>runPure</code></a>
-は <a
-href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Class.html#v:runIO"><code>runIO</code></a>
-にしても良いです。 <code>runPure</code> の場合は <code>runIO</code>
-よりも少し工程が増えますが、純粋性を持たせることは出来ます。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-haskell
-</div>
-<div class="sourceCode" id="cb2"><pre
-class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Text.Pandoc</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.IO</span> <span class="kw">as</span> <span class="dt">TIO</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  rawContent <span class="ot">&lt;-</span> TIO.readFile <span class="st">&quot;/tmp/FILENAME.org&quot;</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  txt <span class="ot">&lt;-</span> handleError <span class="op">.</span> runPure <span class="op">$</span> <span class="kw">do</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    pandocDoc <span class="ot">&lt;-</span> readOrg def rawContent</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    writeMarkdown def pandocDoc</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  TIO.writeFile <span class="st">&quot;/tmp/dist.md&quot;</span> txt</span></code></pre></div>
-</div>
-<p>以降は、これに変更を加えていく形で進めていこうと思います。</p>
-<h2
-id="Extyamlmetadatablock 拡張を有効化する">Ext<sub>yamlmetadatablock</sub>
-拡張を有効化する</h2>
-<p>まず、デフォルトの <code>WriterOptions</code>
-ではYAML形式のメタデータブロックは生成されません。 <a
-href="https://pandoc.org/MANUAL.html#extension-yaml_metadata_block"><code>Ext_yaml_metadata_block</code></a>を有効化する必要があります。
-尚、</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-haskell
-</div>
-<div class="sourceCode" id="cb3"><pre
-class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Text.Pandoc</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.IO</span> <span class="kw">as</span> <span class="dt">TIO</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  rawContent <span class="ot">&lt;-</span> TIO.readFile <span class="st">&quot;/tmp/FILENAME.org&quot;</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  txt <span class="ot">&lt;-</span> handleError <span class="op">.</span> runPure <span class="op">$</span> <span class="kw">do</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> writerOpts <span class="ot">=</span> def { writerExtensions <span class="ot">=</span> extensionsFromList [<span class="dt">Ext_yaml_metadata_block</span>]}</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    pandocDoc <span class="ot">&lt;-</span> readOrg def rawContent</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    writeMarkdown writerOpts pandocDoc</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  TIO.writeFile <span class="st">&quot;/tmp/dist.md&quot;</span> txt</span></code></pre></div>
-</div>
-<div class="ui segment">
-<div class="ui top right attached label">
-diff
-</div>
-<div class="sourceCode" id="cb4"><pre
-class="sourceCode diff SourceCode"><code class="sourceCode diff"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    txt &lt;- handleError . runPure $ do</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="va">+     let writerOpts = def { writerExtensions = extensionsFromList [Ext_yaml_metadata_block]}</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>      pandocDoc &lt;- readOrg def rawContent</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">-     writeMarkdown def pandocDoc</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="va">+     writeMarkdown writerOpts pandocDoc</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
-</div>
-<h2
-id="Writerのテンプレートを明示的に指定する">Writerのテンプレートを明示的に指定する</h2>
-<p>何故か、MarkdownのwriterではYAMLのfrontmatterを出力するためには明示的にテンプレートを指定する必要があります。
-これは、<a
-href="https://github.com/jgm/pandoc/blob/effca7f7cf7afeb381154f77e33a16b7b19c02b7/src/Text/Pandoc/Writers/Markdown.hs#L225-L229">テンプレートが明示的に指定されている時のみ
-<code>Ext_yaml_metadata_block</code>
-を確認する</a>ようになっているためです。</p>
-<p>(…ドウシテ…??)</p>
-<p>まぁ、これを行えばきちんとfrontmatterが出力されるはずです!</p>
-<ol>
-<li><p><code>PandocIO</code> モナド内で行う場合</p>
-<p><code>PandocIO</code> モナドを用いている場合は、 <a
-href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Templates.html#v:compileDefaultTemplate"><code>compileDefaultTemplate</code></a>
-を使ってテンプレートを取り出し、それを素直に <code>writerTemplate</code>
-に設定すれば良いです。尚、Org文書ではメタデータを埋め込めないため <a
-href="https://hackage.haskell.org/package/pandoc-types-1.23/docs/src/Text.Pandoc.Builder.html#setMeta"><code>setMeta</code></a>
-を用いてコード内からメタデータを設定しています(<code>setMeta (T.pack "author") "test" pandocDoc</code>)</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-haskell
-</div>
-<div class="sourceCode" id="cb5"><pre
-class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Text.Pandoc</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Text.Pandoc.Builder</span> (setMeta)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.IO</span> <span class="kw">as</span> <span class="dt">TIO</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text</span> <span class="kw">as</span> <span class="dt">T</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  rawContent <span class="ot">&lt;-</span> TIO.readFile <span class="st">&quot;/tmp/FILENAME.org&quot;</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> runIO <span class="op">$</span> <span class="kw">do</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    tmpl <span class="ot">&lt;-</span> compileDefaultTemplate (T.pack <span class="st">&quot;markdown&quot;</span>)</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> writerOpts <span class="ot">=</span> def { writerExtensions <span class="ot">=</span> extensionsFromList [<span class="dt">Ext_yaml_metadata_block</span>]</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                         , writerTemplate <span class="ot">=</span> <span class="dt">Just</span> tmpl</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                         }</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    pandocDoc <span class="ot">&lt;-</span> readOrg def rawContent</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    writeMarkdown writerOpts <span class="op">$</span> setMeta (T.pack <span class="st">&quot;author&quot;</span>) <span class="st">&quot;test&quot;</span> pandocDoc</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  txt <span class="ot">&lt;-</span> handleError result</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  TIO.writeFile <span class="st">&quot;/tmp/dist.md&quot;</span> txt</span></code></pre></div>
-</div></li>
-<li><p><code>PandocPure</code> モナド内で行う場合</p>
-<p><code>PandocPure</code> モナド内で行う場合は、 <code>PandocIO</code>
-を用いたコードに加えた変更にプラスして少し手を加える必要があります。
-<code>PandocPure</code>
-内ではファイルシステムにアクセスすることが出来ず、デフォルトのテンプレートファイルが存在しないので、
-そのまま <code>compileDefaultTemplate</code>
-してしまうと以下のような実行時エラーが吐かれます。</p>
-<div class="ui piled segment" style="z-index: 0">
-<blockquote>
-<p>Could not find data file data/data/templates/default.markdown</p>
-</blockquote>
-</div>
-<p>そこで、 <code>PandocPure</code>
-内にある仮想ファイルシステム的なものに該当のファイルを追加する必要があります。
-そのためには、<a
-href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Class.html#t:PureState"><code>PureState</code></a>
-の <code>stFiles</code> を <a
-href="https://hackage.haskell.org/package/pandoc-3.1.2/docs/Text-Pandoc-Class.html#v:modifyPureState"><code>modifyPureState</code></a>
-で編集します。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-haskell
-</div>
-<div class="sourceCode" id="cb6"><pre
-class="sourceCode haskell SourceCode"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Text.Pandoc</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Text.Pandoc.Builder</span> (setMeta)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.IO</span> <span class="kw">as</span> <span class="dt">TIO</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text</span> <span class="kw">as</span> <span class="dt">T</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.String</span> (fromString)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">-- | デフォルトのマークダウン用テンプレートファイル</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">--</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- ファイルの内容は @pandoc -D markdown@ コマンドの出力をそのまま使っています</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="ot">defaultMarkdownTemplate ::</span> <span class="dt">FileInfo</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>defaultMarkdownTemplate <span class="ot">=</span> <span class="dt">FileInfo</span> (<span class="fu">read</span> <span class="st">&quot;2023-06-03 0:00:00UTC&quot;</span>) (fromString content)</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">where</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    content <span class="ot">=</span> <span class="fu">unlines</span> [<span class="st">&quot;$if(titleblock)$&quot;</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;$titleblock$&quot;</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;&quot;</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;$endif$&quot;</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;$for(header-includes)$&quot;</span></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;$header-includes$&quot;</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;&quot;</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;$endfor$&quot;</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;$for(include-before)$&quot;</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;$include-before$&quot;</span></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;&quot;</span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;$endfor$&quot;</span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;$if(toc)$&quot;</span></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;$table-of-contents$&quot;</span></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;&quot;</span></span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;$endif$&quot;</span></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;$body$&quot;</span></span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;$for(include-after)$&quot;</span></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;&quot;</span></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;$include-after$&quot;</span></span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>                      , <span class="st">&quot;$endfor$&quot;</span></span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>                      ]</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>  rawContent <span class="ot">&lt;-</span> TIO.readFile <span class="st">&quot;/tmp/FILENAME.org&quot;</span></span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>  txt <span class="ot">&lt;-</span> handleError <span class="op">.</span> runPure <span class="op">$</span> <span class="kw">do</span></span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- ファイルを追加します</span></span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>    files <span class="ot">&lt;-</span> (getsPureState stFiles)</span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> dummyDataFiles <span class="ot">=</span> insertInFileTree <span class="st">&quot;data/data/templates/default.markdown&quot;</span> defaultMarkdownTemplate files</span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>    modifyPureState (\st <span class="ot">-&gt;</span> st {stFiles <span class="ot">=</span> dummyDataFiles })</span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- ^</span></span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>    tmpl <span class="ot">&lt;-</span> compileDefaultTemplate (T.pack <span class="st">&quot;markdown&quot;</span>)</span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> writerOpts <span class="ot">=</span> def { writerExtensions <span class="ot">=</span> extensionsFromList [<span class="dt">Ext_yaml_metadata_block</span>]</span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>                         , writerTemplate <span class="ot">=</span> <span class="dt">Just</span> tmpl</span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>                         }</span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>    pandocDoc <span class="ot">&lt;-</span> readOrg def rawContent</span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>    writeMarkdown writerOpts <span class="op">$</span> setMeta (T.pack <span class="st">&quot;author&quot;</span>) <span class="st">&quot;test&quot;</span> pandocDoc</span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>  TIO.writeFile <span class="st">&quot;/tmp/dist.md&quot;</span> txt</span></code></pre></div>
-</div></li>
-</ol>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Wed, 12 Apr 2023 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2023-04-12-pandoc-library-how-to-write-yaml-metadata-with-markdown-writer.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
