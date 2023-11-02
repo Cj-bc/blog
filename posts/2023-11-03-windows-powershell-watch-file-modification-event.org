@@ -1,0 +1,81 @@
+* PowerShellでファイルの変更監視
+:PROPERTIES:
+:DATE: [2023-11-02 Thu 22:41]
+:TAGS: :Windows:PowerShell:
+:BLOG_POST_KIND: Knowledge
+:BLOG_POST_PROGRESS: Empty
+:BLOG_POST_STATUS: Normal
+:END:
+:LOGBOOK:
+  CLOCK: [2023-11-03 Fri 02:21]--[2023-11-03 Fri 03:10] =>  0:49
+  :END:
+
+注: 正直、今回の記事は参考サイトの晴耕雨読さんの内容ほぼ同じです。主に
+は自分用のメモとなります。
+
+
+Linuxでは確立したAPIがなく面倒ですが、Windowsでは
+[[https://learn.microsoft.com/en-us/dotnet/api/system.io.filesystemwatcher?view=net-7.0][~System.IO.FileSystemWatcher~]] を用いることで様々なファイルの変更を検知
+出来ます。全体的に1つの企業が作っているメリットみたいな所ありますね。
+(それが嫌な所でもありますが)
+
+
+.NETのクラスは ~New-Object~ で作成出来ます。その後、各プロパティを設定します。
+
+#+begin_src powershell
+$watcher = New-Object System.IO.FileSystemWatcher
+$watcher.Path = "C:\Users/me\AppData\Local\Temp"
+$watcher.Filter = "execute.bat"
+$watcher.IncludeSubdirectories = $true
+$watcher.EnableRaisingEvents = $true
+#+end_src
+
+| ~FileSystemWatcher.Path~                  | 監視対象のディレクトリ                                             |
+| ~FileSystemWatcher.Filter~                | Path以下のファイルのうち、一致した名前を持つファイルのみを監視する |
+| ~FileSystemWatcher.IncludeSubdirectories~ | サブディレクトリも監視対象にするか否か                                                                   |
+
+そして、 ~FileSystemWatcher~ クラスの各イベントにアクションを登録します。
+
+イベントへの登録は [[https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/register-objectevent?view=powershell-7.3][~Register-ObjectEvent~]] で可能です。イベントに関連す
+る情報は、 ~$Event~, ~$EventSubscriber~, ~$Sender~, ~$EventArgs~,
+~$Args~ 変数に格納されるので、それを適宜参照することで様々なことが行えます。
+
+#+begin_src powershell
+Register-ObjectEvent $watcher "Created" -action {
+  Write-Host "Created Event is called."
+  # 関連処理
+}
+#+end_src
+
+** 用例: 自動的に消滅するファイルのバックアップをとる
+実際に自分が使用した例です。
+
+Unity HubでUnity Editorをインストールする際、管理者権限で
+~AppData/Local/Temp/UNKNOWN_HASH/execute.bat~ を実行する許可を求められ
+ました。中身を確認してから実行したいのでそれを読もうとした所、許可プロ
+ンプトの後にはもう削除されていました。
+
+そこで、該当のファイルが生成された時にコピーするようなスクリプトを書きました。
+
+#+begin_src powershell
+$watcher = New-Object System.IO.FileSystemWatcher
+$watcher.Path = "C:\Users/me\AppData\Local\Temp"
+$watcher.Filter = "execute.bat"
+$watcher.IncludeSubdirectories = $true
+$watcher.EnableRaisingEvents = $true
+
+Register-ObjectEvent $watcher "Created" -action {
+  Write-Host "Created Event is called."
+  $targetDir = Split-Path -Parent $Event.SourceEventArgs.FullPath
+  Write-Host "target directory: $targetDir"
+  $saveTo = Join-Path -Path (Split-Path -Parent $targetDir) -ChildPath "saved-by-watchandcopy"
+  Write-Host "Save to: $saveTo"
+  Copy-Item $targetDir $saveTo -Recurse
+}
+#+end_src
+
+** 参考サイト
++ [[https://tex2e.github.io/blog/powershell/Register-ObjectEvent][PowerShellでファイルの更新を監視する | 晴耕雨読]]
++ [[https://learn.microsoft.com/en-us/dotnet/api/system.io.filesystemwatcher?view=net-7.0][FileSystemWatcher Class (System.IO) | Microsoft Learn]]
++ [[https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/register-objectevent?view=powershell-7.3][Register-ObjectEvent (Microsoft.PowerShell.Utility) - PowerShell | Microsoft Learn]]
+
