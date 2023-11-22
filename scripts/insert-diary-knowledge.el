@@ -40,8 +40,7 @@
 
 (defun diary/today-file ()
   "Returns today's file path relative to repository root"
-  ()
-  )
+  (format-time-string "posts/%Y-%m-%d.org" nil "JST"))
 
 (defun add-new-knowledge (title description &optional buffer)
   "Add new knowledge entry to diary file"
