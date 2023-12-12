@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- Resoniteでバーチャルキーボードを作る際のTips</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2023-12-12-resonite-virtual-keyboard-tips.html" /><meta property="og:title" content="Resoniteでバーチャルキーボードを作る際のTips" /><meta property="og:description" content="この記事はその2 Resonite Advent Calendar 2023 - Adventarの12/12の記事 です。12/11はtonbyさんのアバターのクロスプラットフォーム管理法｜tonby でした。" />
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+
+	<meta name="viewport" content="width=device-width" />
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+	  
+	  <a href="../" class="mobile only item"><i class="angle left icon"></i></a>
+	  
+          <div class="computer only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+          <div class="mobile only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"></div>
+            <a href="../" class="computer only item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui secondary segment">
+	      <p>
+		現在ブログ改修工事中です。恐らく多分きっとメイビーそのうちAstro製の既存デザインへと
+		変換しますので、見辛さは今暫くご容赦下さい。
+	      </p>
+	    </div>
+
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>Resoniteでバーチャルキーボードを作る際のTips</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on December 12, 2023</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on December 12, 2023
+	</div>
+
+	
+
+	
+	<a title="All pages tagged 'tips'." href="../tags/tips.html" class="ui tag label">tips</a>
+	
+      </div>
+
+    <div class="description">
+      <p>この記事は<a href="https://adventar.org/calendars/9005">その2
+Resonite Advent Calendar 2023 - Adventar</a>の12/12の記事
+です。12/11はtonbyさんの<a href="https://note.com/tonby_oxide/n/ne6f928980cee">アバターのクロスプラットフォーム管理法｜tonby</a>
+でした。</p>
+<p>私はちまちまとResoniteのキーボードを0から(=既存のキーボードをベースに
+せず)自作しているのですが、そこで結構文章化されていないような小tipsが
+あったので共有したいと思います。本来は、自分の制作中のキーボードの使い
+方等を解説しようと思っていたのですが、ドキュメントの整備にてこずってお
+り間に合わなさそうなのでまた次の機会に…</p>
+<p>興味があれば、<a href="https://www.youtube.com/playlist?list=PLthVjqwIzS2FSxFiiJeFI-GMTxj0bJLK9">YouTubeの再生リスト</a>にある程度動画が載っているので覗いて
+みていただけると嬉しいです。「キーを押さずコントローラーの入力で操作出
+来るキーボード」を作っています。</p>
+<h1 id="Tips1: Userspaceについて認識しておこう">Tips1:
+Userspaceについて認識しておこう</h1>
+<p>userspaceとは、Resoniteにおいて各プレイヤー個人個人が持つプライベート
+なワールドのようなものです。普通のワールドに重なる感じで存在する別レイ
+ヤーのようなものと捉えると良さそうです。多分。(というのも、公式のドキュ
+メントを知らないため…)</p>
+<p>とはいっても大分身近なもので、dashやカメラ、キーボード等などのプライベー
+トUIがuserspaceに存在します。なので、キーボードを作成したい場合は切っ
+ても切れない存在になります。</p>
+<h2 id="特徴1: 普通のワールドからはアクセス出来ない">特徴1:
+普通のワールドからはアクセス出来ない</h2>
+<p>普通のインスペクターではusespaceにあるものは表示されず、Protofluxやコ
+ンポーネントからもアクセスする事はできません（多分。もし知ってれば教え
+てください）。</p>
+<p>そのため、開発時のデバッグがものすごくやりづらいです。というか、アイテ
+ムをインベントリに保存する前にデバッグ用のノードを追加しておき、毎度イ
+ンベントリに保存してキーボード入れ替えて出力を見てまた元のワールドで修
+正してまたインベントリに保存して…という面倒な工程を繰り返す必要が出
+てきます。</p>
+<p>しかし実態は普段扱っているワールドと同じようにSlotとコンポーネントで構
+成されているため、後述するLocal Inspectorを使うことで圧倒的に作業がし
+やすくなります。</p>
+<h2 id="特徴2: アバターがデフォルトのアバターになっている">特徴2:
+アバターがデフォルトのアバターになっている</h2>
+<p>UsespaceにもユーザーのSlotはあるのですが、ユーザーが個々人で着ているア
+バターとは異なりResoniteデフォルトのアバターが適用されています。そのた
+め、自分のアバターのSlot構造に依存する実装をしていると思った通りに動か
+なくて困ったことになります。</p>
+<h1 id="Tips2: local inspector を作ろう :: userspaceを見れるインスペクター">Tips2:
+local inspector を作ろう :: userspaceを見れるインスペクター</h1>
+<p>userspaceを見るためのインスペクターを作成することができます。これは一
+般にlocal inspectorと呼ばれているようです。公式でもどこかにあるらしい
+と噂で聞きましたが見つけられなかったので、自作しましょう。簡単に作れま
+す。</p>
+<p>仕組みとしては、「Inspectorをfacetとして取り込むことでuserspaceに出現
+させる」という形になります。</p>
+<h2 id="必要なもの">必要なもの</h2>
+<ul>
+<li>自分自身をInspectしたInspector</li>
+<li>facet</li>
+</ul>
+<h2 id="基本的な作り方(facetとProtofluxが分かる人向け)">基本的な作り方(facetとProtofluxが分かる人向け)</h2>
+<p>facetに、「自分自身をInspectしているInspector」を含めればいいです。</p>
+<ol>
+<li>Inspectorを自分自身をInspectし、かつ右上の上下の矢印ボタンを押して自分自身をrootとするようにします</li>
+<li>Inspectorをfacetの子にします</li>
+<li>facetにButtonを用意します</li>
+<li>「facetのButtonが押されたらInspectorを複製・RootSlotの子にする」処理を書きます</li>
+<li>後は普通のFacetと同様にDashに追加します</li>
+</ol>
+<ol>
+<li><p>注意点</p>
+<ol>
+<li><p>最終的にInspectorがFacetの子から出られるようにする</p>
+<p>Facetの子にいるInspectorは、Dashの中に取り込まれてしまい上手く操作出来
+ません。なので、必ず <code>RootSlot</code> (ないしDash以外のもの)
+を親とするよう にしてください。</p></li>
+<li><p>Inspectorが「Root」から表示していないようにする</p>
+<p>Inspectorの右上にある上下の矢印のボタンを押すことで、左側のSlotの木の
+ルートを今Inspectしているものに切り替えることが出来ます。これを行って
+おかないと、userspaceに持ち込んだ際に参照先がないので上手く動かせません。</p>
+<p><img src="file:///images/inspector-inspecting-self.png" class="ui rounded image ui rounded image ui rounded image" /></p></li>
+</ol></li>
+</ol>
+<h2 id="TODO チュートリアル(未完成)"><span class="todo TODO">TODO</span>
+チュートリアル(未完成)</h2>
+<p>動画を作っているのですが、編集が今日中には終わりそうにありません…ま
+た出来たら追記します。</p>
+<h1 id="Tips3: キーボードがキーボードとして認識される条件">Tips3:
+キーボードがキーボードとして認識される条件</h1>
+<p>virtualKeyboardコンポーネントのみあれば良いようです。virtualKeyboardコ
+ンポーネントを付けても認識されない場合、VirtualKeybaordコンポーネント
+が付いているSlotが一番上に来ているかを確認してください。同じSlotに
+Grabbableをつけ忘れるなど、子Slotだけ保存されている事があります。</p>
+<h1 id="Tips4: VirtualKeyが発火する条件">Tips4:
+VirtualKeyが発火する条件</h1>
+<p>恐らく、UserspacePointerコンポーネントをもつSlotと接触すると発火するよ
+うです。これは、
+<code>Root/UserRoot/VR_Globe_Right/Tooltip Anchor/Tooltip
+Root/Tooltip Holder/UserspaceTip</code> が所持しています。</p>
+<p><img src="file:///images/userspacePointer-location.png" class="ui rounded image" /></p>
+<h1 id="Tips5: キーボードを出してもデフォルトのキーボードが出てきてしまう">Tips5:
+キーボードを出してもデフォルトのキーボードが出てきてしまう</h1>
+<p>作成したキーボードがシンクされる前に「キーボードとして使う」を押してし
+まってる可能性があります。
+<strong>必ずシンクが終わってから「キーボードとして
+使う」を押してください</strong> 。</p>
+<p>注意点として、シンクが完了する前に一度でも「キーボードとして使う」を押
+してしまっていると、シンクが終わった後に再度押しても効かなくなるようで
+す。(n敗)</p>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
