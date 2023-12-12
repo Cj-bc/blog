@@ -3,7 +3,7 @@
 :DATE: [2023-12-12 Tue 00:12]
 :TAGS: :resonite:virtual-keyboard:tips:
 :BLOG_POST_KIND: Knowledge
-:BLOG_POST_PROGRESS: Empty
+:BLOG_POST_PROGRESS: Published
 :BLOG_POST_STATUS: Normal
 :END:
 :LOGBOOK:
