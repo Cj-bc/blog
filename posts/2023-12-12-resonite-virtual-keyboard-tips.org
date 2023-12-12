@@ -1,0 +1,123 @@
+* Resoniteでバーチャルキーボードを作る際のTips
+:PROPERTIES:
+:DATE: [2023-12-12 Tue 00:12]
+:TAGS: :resonite:virtual-keyboard:tips:
+:BLOG_POST_KIND: Knowledge
+:BLOG_POST_PROGRESS: Empty
+:BLOG_POST_STATUS: Normal
+:END:
+:LOGBOOK:
+CLOCK: [2023-12-12 Tue 10:30]
+CLOCK: [2023-12-12 Tue 00:14]--[2023-12-12 Tue 01:36] =>  1:22
+:END:
+  
+この記事は[[https://adventar.org/calendars/9005][その2 Resonite Advent Calendar 2023 - Adventar]]の12/12の記事
+です。12/11はtonbyさんの[[https://note.com/tonby_oxide/n/ne6f928980cee][アバターのクロスプラットフォーム管理法｜tonby]]
+でした。
+
+
+私はちまちまとResoniteのキーボードを0から(=既存のキーボードをベースに
+せず)自作しているのですが、そこで結構文章化されていないような小tipsが
+あったので共有したいと思います。本来は、自分の制作中のキーボードの使い
+方等を解説しようと思っていたのですが、ドキュメントの整備にてこずってお
+り間に合わなさそうなのでまた次の機会に…
+
+
+興味があれば、[[https://www.youtube.com/playlist?list=PLthVjqwIzS2FSxFiiJeFI-GMTxj0bJLK9][YouTubeの再生リスト]]にある程度動画が載っているので覗いて
+みていただけると嬉しいです。「キーを押さずコントローラーの入力で操作出
+来るキーボード」を作っています。
+
+
+** Tips1: Userspaceについて認識しておこう
+userspaceとは、Resoniteにおいて各プレイヤー個人個人が持つプライベート
+なワールドのようなものです。普通のワールドに重なる感じで存在する別レイ
+ヤーのようなものと捉えると良さそうです。多分。(というのも、公式のドキュ
+メントを知らないため…)
+
+
+とはいっても大分身近なもので、dashやカメラ、キーボード等などのプライベー
+トUIがuserspaceに存在します。なので、キーボードを作成したい場合は切っ
+ても切れない存在になります。
+
+*** 特徴1: 普通のワールドからはアクセス出来ない
+普通のインスペクターではusespaceにあるものは表示されず、Protofluxやコ
+ンポーネントからもアクセスする事はできません（多分。もし知ってれば教え
+てください）。
+
+
+そのため、開発時のデバッグがものすごくやりづらいです。というか、アイテ
+ムをインベントリに保存する前にデバッグ用のノードを追加しておき、毎度イ
+ンベントリに保存してキーボード入れ替えて出力を見てまた元のワールドで修
+正してまたインベントリに保存して...という面倒な工程を繰り返す必要が出
+てきます。
+
+
+しかし実態は普段扱っているワールドと同じようにSlotとコンポーネントで構
+成されているため、後述するLocal Inspectorを使うことで圧倒的に作業がし
+やすくなります。
+
+*** 特徴2: アバターがデフォルトのアバターになっている
+UsespaceにもユーザーのSlotはあるのですが、ユーザーが個々人で着ているア
+バターとは異なりResoniteデフォルトのアバターが適用されています。そのた
+め、自分のアバターのSlot構造に依存する実装をしていると思った通りに動か
+なくて困ったことになります。
+
+** Tips2: local inspector を作ろう :: userspaceを見れるインスペクター
+userspaceを見るためのインスペクターを作成することができます。これは一
+般にlocal inspectorと呼ばれているようです。公式でもどこかにあるらしい
+と噂で聞きましたが見つけられなかったので、自作しましょう。簡単に作れま
+す。
+
+仕組みとしては、「Inspectorをfacetとして取り込むことでuserspaceに出現
+させる」という形になります。
+
+*** 必要なもの
++ 自分自身をInspectしたInspector
++ facet
+
+*** 基本的な作り方(facetとProtofluxが分かる人向け)
+facetに、「自分自身をInspectしているInspector」を含めればいいです。
+
+1. Inspectorを自分自身をInspectし、かつ右上の上下の矢印ボタンを押して自分自身をrootとするようにします
+2. Inspectorをfacetの子にします
+3. facetにButtonを用意します
+4. 「facetのButtonが押されたらInspectorを複製・RootSlotの子にする」処理を書きます
+5. 後は普通のFacetと同様にDashに追加します
+
+**** 注意点
+***** 最終的にInspectorがFacetの子から出られるようにする
+Facetの子にいるInspectorは、Dashの中に取り込まれてしまい上手く操作出来
+ません。なので、必ず ~RootSlot~ (ないしDash以外のもの) を親とするよう
+にしてください。
+
+***** Inspectorが「Root」から表示していないようにする
+Inspectorの右上にある上下の矢印のボタンを押すことで、左側のSlotの木の
+ルートを今Inspectしているものに切り替えることが出来ます。これを行って
+おかないと、userspaceに持ち込んだ際に参照先がないので上手く動かせません。
+
+[[/images/inspector-inspecting-self.png]]
+*** TODO チュートリアル(未完成)
+動画を作っているのですが、編集が今日中には終わりそうにありません...ま
+た出来たら追記します。
+
+** Tips3: キーボードがキーボードとして認識される条件
+virtualKeyboardコンポーネントのみあれば良いようです。virtualKeyboardコ
+ンポーネントを付けても認識されない場合、VirtualKeybaordコンポーネント
+が付いているSlotが一番上に来ているかを確認してください。同じSlotに
+Grabbableをつけ忘れるなど、子Slotだけ保存されている事があります。
+
+** Tips4: VirtualKeyが発火する条件
+恐らく、UserspacePointerコンポーネントをもつSlotと接触すると発火するよ
+うです。これは、 ~Root/UserRoot/VR_Globe_Right/Tooltip Anchor/Tooltip
+Root/Tooltip Holder/UserspaceTip~ が所持しています。
+
+[[/images/userspacePointer-location.png]]
+
+** Tips5: キーボードを出してもデフォルトのキーボードが出てきてしまう
+作成したキーボードがシンクされる前に「キーボードとして使う」を押してし
+まってる可能性があります。 *必ずシンクが終わってから「キーボードとして
+使う」を押してください* 。
+
+注意点として、シンクが完了する前に一度でも「キーボードとして使う」を押
+してしまっていると、シンクが終わった後に再度押しても効かなくなるようで
+す。(n敗)
