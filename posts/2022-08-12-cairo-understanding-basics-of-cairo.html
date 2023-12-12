@@ -460,7 +460,7 @@ bash
 <div class="sourceCode" id="cb11" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-o</span> png-triangle <span class="va">$(</span><span class="ex">pkg-config</span> <span class="at">--cflags</span> <span class="at">--libs</span> cairo<span class="va">)</span> png-triangle.c <span class="kw">&amp;&amp;</span> <span class="ex">./png-triangle</span></span></code></pre></div>
 </div>
 <p>以下のようなPNGファイルが生成されます。</p>
-<p><img src="file:///images/triangle.png" class="ui rounded image" /></p>
+<p><img src="https://raw.githubusercontent.com/Cj-bc/blog/publish/images/2022-08-12-cairo-understanding-basics-of-cairo/triangle.png" class="ui rounded image" /></p>
 <h2 id="三角形(塗り潰しあり)">三角形(塗り潰しあり)</h2>
 <p>120x120ピクセル、透過ありのPNG画像に三角形を描画します。
 先程のものを、 Path の中を塗り潰すようにしたものです。
@@ -501,7 +501,7 @@ bash
 <div class="sourceCode" id="cb12" data-org-language="sh"><pre class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-o</span> png-triangle-filled <span class="va">$(</span><span class="ex">pkg-config</span> <span class="at">--cflags</span> <span class="at">--libs</span> cairo<span class="va">)</span> png-triangle-filled.c <span class="kw">&amp;&amp;</span> <span class="ex">./png-triangle-filled</span></span></code></pre></div>
 </div>
 <p>以下のようなPNGファイルが生成されます。</p>
-<p><img src="file:///images/triangle-filled.png" class="ui rounded image" /></p>
+<p><img src="https://raw.githubusercontent.com/Cj-bc/blog/publish/images/2022-08-12-cairo-understanding-basics-of-cairo/triangle-filled.png" class="ui rounded image" /></p>
     </div>
   </div>
   
