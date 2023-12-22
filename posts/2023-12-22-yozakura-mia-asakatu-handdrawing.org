@@ -3,13 +3,13 @@
  :DATE: [2023-12-22 Fri 18:34]
  :TAGS: :夜桜みあ:
  :BLOG_POST_KIND: Memo
- :BLOG_POST_PROGRESS: Empty
+ :BLOG_POST_PROGRESS: Published
  :BLOG_POST_STATUS: Normal
  :END:
  :LOGBOOK:
  CLOCK: [2023-12-22 Fri 18:36]--[2023-12-22 Fri 19:14] =>  0:38
  :END:
- 
+
  今日開かれていたTwitter(現X) Spaceにて、
 
  #+begin_quote
