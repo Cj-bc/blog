@@ -1,0 +1,67 @@
+* 夜桜みあ朝活サムネ手描きしがち説
+ :PROPERTIES:
+ :DATE: [2023-12-22 Fri 18:34]
+ :TAGS: :夜桜みあ:
+ :BLOG_POST_KIND: Memo
+ :BLOG_POST_PROGRESS: Empty
+ :BLOG_POST_STATUS: Normal
+ :END:
+ :LOGBOOK:
+ CLOCK: [2023-12-22 Fri 18:36]--[2023-12-22 Fri 19:14] =>  0:38
+ :END:
+ 
+ 今日開かれていたTwitter(現X) Spaceにて、
+
+ #+begin_quote
+「朝活サムネ手書きしがち説」
+ #+end_quote
+
+[[ https://x.com/Cj_bc_sd/status/173812926022382814][てな話が上がってた]]ので検証してみました。
+
+** 朝活配信
+まずは朝活配信のリストアップをします。対象は現在のYouTubeチャンネルの
+み(IRIAM等はアーカイブがない&サムネがないので対象外)。「朝活」判定は、
+タイトルに「朝」と入っていることとしました。
+
+合計数は4件となりました。
+
+#+NAME: morning_streams
+| 配信日時         | タイトル                                                                                         | URL                                         | サムネ                                                                                                                                    |
+|------------------+--------------------------------------------------------------------------------------------------+---------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------|
+| [2020-04-23 Thu] | 【Vtuber】とっても珍しい朝はいしん！☀【Splatoon2】                                              | https://www.youtube.com/watch?v=oHuly4uRyBk | [[https://i.ytimg.com/vi/oHuly4uRyBk/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg%3D%3D&rs=AOn4CLCj4_jZJauKeQlV6lYYgO86t4-qYA]] |
+| [2020-12-27 Sun] | 【I am Bread】ニチアサ🍳みんなの朝ごはんを用意するよ！【Vtuber】                                 | https://www.youtube.com/watch?v=FSUaDkbtsH0 | https://i.ytimg.com/vi/FSUaDkbtsH0/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDfSHGGs4TnV71my72HEO0yF48p7g |
+| [2022-05-02 Mon] | GW企画！朝だし運動でもしてみますか…うっ【リングフィット アドベンチャー】【Vtuber】                | https://www.youtube.com/watch?v=r68fm6CCVJs | https://i.ytimg.com/vi/r68fm6CCVJs/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg%3D%3D&rs=AOn4CLDjKGLzczeH6MHJMWwDZ-MxsidJYA |
+| [2022-05-06 Fri] | GW企画！朝の運動はよきよき！！！いっぱいやっちゃうよ！【リングフィット アドベンチャー】【Vtuber】 | https://www.youtube.com/watch?v=mk9mbDyCeqE | https://i.ytimg.com/vi/mk9mbDyCeqE/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBQVx0kBO2zWL1mIGjXwoH-xI01hw |
+
+** 手描きかどうか？
+*** 【Vtuber】とっても珍しい朝はいしん！☀【Splatoon2】
+朝からすぷらちゅん!
+多分「おはようSplatoon!」は手描き？
+
+*** 【I am Bread】ニチアサ🍳みんなの朝ごはんを用意するよ！【Vtuber】
+きょ~のごはんはパン~~!!
+
+間違いなく手描きイラストですね。かわいいね。
+
+*** GW企画！朝だし運動でもしてみますか…うっ【リングフィット アドベンチャー】【Vtuber】
+朝から運動しようとしてたんですね。えらすぎか...??
+
+"Good Morning" の文字列だけは手描きな可能性がありそうな気はする。
+
+*** GW企画！朝の運動はよきよき！！！いっぱいやっちゃうよ！【リングフィット アドベンチャー】【Vtuber】
+2日も出来たんですか!？えらすぎか!？!？
+
+同じく "Good Morning" の文字列だけは手描きな可能性がありそうな気はする。
+
+** まとめ
+4つあったうち、
+
+| 手描きイラスト | 1 |
+| 手描き文字ぽい | 3 |
+
+なので、 _意外と手描きサムネじゃない_ ようですね。
+
+
+
+
+*いかがでしたか？*
