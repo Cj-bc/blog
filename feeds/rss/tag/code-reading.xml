@@ -7,8 +7,137 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/code-reading.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Tue, 12 Dec 2023 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Fri, 22 Dec 2023 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2023-12-22-yozakura-mia-asakatu-handdrawing</title>
+    <link>https://cj-bc.github.io/blog/posts/2023-12-22-yozakura-mia-asakatu-handdrawing.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>夜桜みあ朝活サムネ手描きしがち説</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on December 22, 2023</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on December 23, 2023
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;夜桜みあ&#39;." href="/tags/%E5%A4%9C%E6%A1%9C%E3%81%BF%E3%81%82.html" class="ui tag label">夜桜みあ</a>
+	
+      </div>
+
+    <div class="description">
+      <p>今日開かれていたTwitter(現X) Spaceにて、</p>
+<div class="ui piled segment" style="z-index: 0">
+<blockquote>
+<p>「朝活サムネ手書きしがち説」</p>
+</blockquote>
+</div>
+<p><span class="spurious-link"
+target=" https://x.com/Cj_bc_sd/status/173812926022382814"><em>てな話が上がってた</em></span>ので検証してみました。</p>
+<h1 id="朝活配信">朝活配信</h1>
+<p>まずは朝活配信のリストアップをします。対象は現在のYouTubeチャンネルの
+み(IRIAM等はアーカイブがない&amp;サムネがないので対象外)。「朝活」判定は、
+タイトルに「朝」と入っていることとしました。</p>
+<p>合計数は4件となりました。</p>
+<table id="morning_streams" class="ui celled table">
+<thead>
+<tr class="header">
+<th>配信日時</th>
+<th>タイトル</th>
+<th>URL</th>
+<th>サムネ</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>[2020-04-23 Thu]</td>
+<td>【Vtuber】とっても珍しい朝はいしん！☀【Splatoon2】</td>
+<td><a
+href="https://www.youtube.com/watch?v=oHuly4uRyBk">https://www.youtube.com/watch?v=oHuly4uRyBk</a></td>
+<td><a
+href="https://i.ytimg.com/vi/oHuly4uRyBk/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg%3D%3D&amp;rs=AOn4CLCj4_jZJauKeQlV6lYYgO86t4-qYA">https://i.ytimg.com/vi/oHuly4uRyBk/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg%3D%3D&amp;rs=AOn4CLCj4_jZJauKeQlV6lYYgO86t4-qYA</a></td>
+</tr>
+<tr class="even">
+<td>[2020-12-27 Sun]</td>
+<td>【I am
+Bread】ニチアサ🍳みんなの朝ごはんを用意するよ！【Vtuber】</td>
+<td><a
+href="https://www.youtube.com/watch?v=FSUaDkbtsH0">https://www.youtube.com/watch?v=FSUaDkbtsH0</a></td>
+<td><a
+href="https://i.ytimg.com/vi/FSUaDkbtsH0/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&amp;rs=AOn4CLDfSHGGs4TnV71my72HEO0yF48p7g">https://i.ytimg.com/vi/FSUaDkbtsH0/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&amp;rs=AOn4CLDfSHGGs4TnV71my72HEO0yF48p7g</a></td>
+</tr>
+<tr class="odd">
+<td>[2022-05-02 Mon]</td>
+<td>GW企画！朝だし運動でもしてみますか…うっ【リングフィット
+アドベンチャー】【Vtuber】</td>
+<td><a
+href="https://www.youtube.com/watch?v=r68fm6CCVJs">https://www.youtube.com/watch?v=r68fm6CCVJs</a></td>
+<td><a
+href="https://i.ytimg.com/vi/r68fm6CCVJs/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg%3D%3D&amp;rs=AOn4CLDjKGLzczeH6MHJMWwDZ-MxsidJYA">https://i.ytimg.com/vi/r68fm6CCVJs/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg%3D%3D&amp;rs=AOn4CLDjKGLzczeH6MHJMWwDZ-MxsidJYA</a></td>
+</tr>
+<tr class="even">
+<td>[2022-05-06 Fri]</td>
+<td>GW企画！朝の運動はよきよき！！！いっぱいやっちゃうよ！【リングフィット
+アドベンチャー】【Vtuber】</td>
+<td><a
+href="https://www.youtube.com/watch?v=mk9mbDyCeqE">https://www.youtube.com/watch?v=mk9mbDyCeqE</a></td>
+<td><a
+href="https://i.ytimg.com/vi/mk9mbDyCeqE/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&amp;rs=AOn4CLBQVx0kBO2zWL1mIGjXwoH-xI01hw">https://i.ytimg.com/vi/mk9mbDyCeqE/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&amp;rs=AOn4CLBQVx0kBO2zWL1mIGjXwoH-xI01hw</a></td>
+</tr>
+</tbody>
+</table>
+<h1 id="手描きかどうか？">手描きかどうか？</h1>
+<h2
+id="【Vtuber】とっても珍しい朝はいしん！☀【Splatoon2】">【Vtuber】とっても珍しい朝はいしん！☀【Splatoon2】</h2>
+<p>朝からすぷらちゅん! 多分「おはようSplatoon!」は手描き？</p>
+<h2
+id="【I am Bread】ニチアサ🍳みんなの朝ごはんを用意するよ！【Vtuber】">【I
+am Bread】ニチアサ🍳みんなの朝ごはんを用意するよ！【Vtuber】</h2>
+<p>きょ~のごはんはパン~~!!</p>
+<p>間違いなく手描きイラストですね。かわいいね。</p>
+<h2
+id="GW企画！朝だし運動でもしてみますか…うっ【リングフィット アドベンチャー】【Vtuber】">GW企画！朝だし運動でもしてみますか…うっ【リングフィット
+アドベンチャー】【Vtuber】</h2>
+<p>朝から運動しようとしてたんですね。えらすぎか…??</p>
+<p>"Good Morning" の文字列だけは手描きな可能性がありそうな気はする。</p>
+<h2
+id="GW企画！朝の運動はよきよき！！！いっぱいやっちゃうよ！【リングフィット アドベンチャー】【Vtuber】">GW企画！朝の運動はよきよき！！！いっぱいやっちゃうよ！【リングフィット
+アドベンチャー】【Vtuber】</h2>
+<p>2日も出来たんですか!？えらすぎか!？!？</p>
+<p>同じく "Good Morning"
+の文字列だけは手描きな可能性がありそうな気はする。</p>
+<h1 id="まとめ">まとめ</h1>
+<p>4つあったうち、</p>
+<table class="ui celled table">
+<tbody>
+<tr class="odd">
+<td>手描きイラスト</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>手描き文字ぽい</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>なので、 <u>意外と手描きサムネじゃない</u> ようですね。</p>
+<p><strong>いかがでしたか？</strong></p>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Fri, 22 Dec 2023 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2023-12-22-yozakura-mia-asakatu-handdrawing.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2023-12-12-resonite-virtual-keyboard-tips</title>
     <link>https://cj-bc.github.io/blog/posts/2023-12-12-resonite-virtual-keyboard-tips.html</link>
     <description><![CDATA[<div id="body-content">
@@ -1697,150 +1826,6 @@ href="https://www.youtube.com/watch?v=l9nmg9zMDBA&amp;t=4168s">https://www.youtu
 ]]></description>
     <pubDate>Fri, 02 Jun 2023 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2023-06-02-yozakura-mia-as-valorant-agent.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2023-05-03-ip-command-difference-between-ip-tuntap-add-name-and-dev</title>
-    <link>https://cj-bc.github.io/blog/posts/2023-05-03-ip-command-difference-between-ip-tuntap-add-name-and-dev.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>ip tuntap addコマンドのdevとnameの違い</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on May  3, 2023</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on May  3, 2023
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;ip&#39;." href="/tags/ip.html" class="ui tag label">ip</a><a title="All pages tagged &#39;tuntap&#39;." href="/tags/tuntap.html" class="ui tag label">tuntap</a><a title="All pages tagged &#39;linux&#39;." href="/tags/linux.html" class="ui tag label">linux</a>
-	
-      </div>
-
-    <div class="description">
-      <p>ニッチですが、どちらも同じ効果がありそうだったので気になって調べてみたメモ。</p>
-<h1 id="結論: 恐らくほぼ違いはない">結論: 恐らくほぼ違いはない</h1>
-<p>実装を軽く見た感じ、処理上ではほぼ同じ扱いをしているように見えます。</p>
-<p><a
-href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/ip/iptuntap.c#n176">iptuntap.c
-« ip - iproute2/iproute2.git - Iproute2 routing commands and
-utilities</a> の <code>parse_args</code> の実装が以下です</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>matches<span class="op">(*</span>argv<span class="op">,</span> <span class="st">&quot;dev&quot;</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                        NEXT_ARG<span class="op">();</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">if</span> <span class="op">(</span>get_ifname<span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">,</span> <span class="op">*</span>argv<span class="op">))</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                                invarg<span class="op">(</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">dev</span><span class="sc">\&quot;</span><span class="st"> not a valid ifname&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">if</span> <span class="op">(</span>matches<span class="op">(*</span>argv<span class="op">,</span> <span class="st">&quot;name&quot;</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                                NEXT_ARG<span class="op">();</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                        <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>matches<span class="op">(*</span>argv<span class="op">,</span> <span class="st">&quot;help&quot;</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                                usage<span class="op">();</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">if</span> <span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">[</span><span class="dv">0</span><span class="op">])</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                                duparg2<span class="op">(</span><span class="st">&quot;name&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">if</span> <span class="op">(</span>get_ifname<span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">,</span> <span class="op">*</span>argv<span class="op">))</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                                invarg<span class="op">(</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">name</span><span class="sc">\&quot;</span><span class="st"> not a valid ifname&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span></code></pre></div>
-</div>
-<h1 id="処理の追跡">処理の追跡</h1>
-<h2
-id="ip tuntap add dev DEVNAME の処理"><code>ip tuntap add dev DEVNAME</code>
-の処理</h2>
-<p>先程の部分から、実際に実行される動作は以下です。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="cb2"><pre
-class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>NEXT_ARG<span class="op">();</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>get_ifname<span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">,</span> <span class="op">*</span>argv<span class="op">))</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        invarg<span class="op">(</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">dev</span><span class="sc">\&quot;</span><span class="st"> not a valid ifname&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span></code></pre></div>
-</div>
-<p><code>NEXT_ARG</code> は、~argv~
-の指す先をインクリメントして次の引数を示すように
-します。その際、必要な数引数がなかった場合はエラーを吐くようにしてある
-ようです。(<a
-href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/include/utils.h#n51">実際のコード</a>)</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="cb3"><pre
-class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define NEXT_ARG</span><span class="op">()</span><span class="pp"> </span><span class="cf">do</span><span class="pp"> </span><span class="op">{</span><span class="pp"> argv</span><span class="op">++;</span><span class="pp"> </span><span class="cf">if</span><span class="pp"> </span><span class="op">(--</span><span class="pp">argc </span><span class="op">&lt;=</span><span class="pp"> </span><span class="dv">0</span><span class="op">)</span><span class="pp"> incomplete_command</span><span class="op">();</span><span class="pp"> </span><span class="op">}</span><span class="pp"> </span><span class="cf">while</span><span class="op">(</span><span class="dv">0</span><span class="op">)</span></span></code></pre></div>
-</div>
-<p><code>invarg</code>
-はエラー処理用の関数で、入ったらエラーを出力してそのまま終了 するので(<a
-href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n792">utils.c
-« lib - iproute2/iproute2.git - Iproute2 routing commands and
-utilities</a>) 今は特に考慮しなくて良いかと。</p>
-<p><code>get_ifname</code>
-は第二引数に与えられた文字列が有効なものかを確認し、有効
-であれば第一引数に与えられたポインタに書き込みます(<a
-href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n846">utils.c
-« lib - iproute2/iproute2.git - Iproute2 routing commands and
-utilities</a>)。</p>
-<p>なので、ここでやっていることとしては、argvが <code>DEVNAME</code>
-を指すようにし た状態で
-<code>get_ifname(ifr-&gt;ifr_name, \*argv)</code>
-を呼び出しています。</p>
-<h2
-id="ip tuntap add name DEVNAME の処理"><code>ip tuntap add name DEVNAME</code>
-の処理</h2>
-<p>実際に動作する部分は以下(不要なelse文を除去してあります)</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="cb4"><pre
-class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>matches<span class="op">(*</span>argv<span class="op">,</span> <span class="st">&quot;name&quot;</span><span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>        NEXT_ARG<span class="op">();</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="op">...</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">[</span><span class="dv">0</span><span class="op">])</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        duparg2<span class="op">(</span><span class="st">&quot;name&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>get_ifname<span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">,</span> <span class="op">*</span>argv<span class="op">))</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        invarg<span class="op">(</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">name</span><span class="sc">\&quot;</span><span class="st"> not a valid ifname&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span></code></pre></div>
-</div>
-<p><code>matches(*argv, "name") == 0</code> は真になるので
-<code>NEXT_ARG</code> は呼ばれます。 <code>duparg2</code> は<a
-href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/lib/utils.c#n806">引数の重複時等用のもエラー処理用の関数</a>なので、本筋とは外れ
-るので一旦置きます。そうすると、実質実行されるのは以下のようなコードと
-なります。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-c
-</div>
-<div class="sourceCode" id="cb5"><pre
-class="sourceCode c SourceCode"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>NEXT_ARG<span class="op">();</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>get_ifname<span class="op">(</span>ifr<span class="op">-&gt;</span>ifr_name<span class="op">,</span> <span class="op">*</span>argv<span class="op">))</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        invarg<span class="op">(</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">name</span><span class="sc">\&quot;</span><span class="st"> not a valid ifname&quot;</span><span class="op">,</span> <span class="op">*</span>argv<span class="op">);</span></span></code></pre></div>
-</div>
-<p>これは、 <code>ip tuntap add dev DEVNAME</code>
-の処理と全く同じです…!!</p>
-<h1 id="細かな違い">細かな違い</h1>
-<p>先程のエラー処理を考えると、 <code>dev</code>
-オプション(オプションなのか？)は複
-数付けることが出来、最後に与えた値が有効な値となりそうです。他方、
-<code>name</code>
-は複数与えることが出来ず、そうした場合はエラーを返します。</p>
-<p>又、devの後にnameを与えるとエラーになり、その逆(nameの後にdevを与える)
-とdevの値で上書きされるものと考えられます。</p>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Wed, 03 May 2023 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2023-05-03-ip-command-difference-between-ip-tuntap-add-name-and-dev.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 
