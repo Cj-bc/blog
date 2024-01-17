@@ -1,0 +1,67 @@
+* SKKにある「Kuten」とは何なんだろう？
+:PROPERTIES:
+:DATE: [2024-01-17 Wed 09:28]
+:TAGS: :skk:libskk:fcitx5-skk:
+:BLOG_POST_KIND: Knowledge
+:BLOG_POST_PROGRESS: Empty
+:BLOG_POST_STATUS: Normal
+:END:
+:LOGBOOK:
+CLOCK: [2024-01-17 Wed 09:28]--[2024-01-17 Wed 10:00] =>  0:32
+:END:
+
+SKKを使っている時に ~Kuten([MM]KKTT)~ という表示が出てきたことはないで
+しょうか？私はたまに見掛け、なんだろう...と思っていたのですがやっと理
+解したのでメモしておきます。
+
+ちなみに、keymapで ~"kuten"~ を指定することで呼び出すことが出来、デフォ
+ルトの状態だと ~\~ で起動します。
+~/usr/share/libskk/rules/default/keymap/default.json~ では以下のように
+定義されています。
+
+#+begin_src json
+  {
+      "define": {
+          "keymap": {
+              ...
+              "\\": "kuten",
+              ...
+          }
+      }
+  }
+#+end_src
+
+** 結論: Kuten は EUC-jp のコード直接入力だった
+コードを完全には読み切っていないので若干の推論を含みますが、どうやら
+EUC-jpの文字コードを直接入力するモードなようです。
+EUC-jpの文字コード表を [[http://charset.7jp.net/euc.html][文字コード表 日本語EUC(euc-jp) -- charset.7jp.net]]
+を参考にして入力してみると、表の通りに入力出来ていそうでした。
+
+表に「区」「点」の表示があったので、恐らくその由来なのでしょう。
+
+... ~K~ と ~T~ は理解したけど ~[MM]~ って何なんだろ。
+
+** 経緯
+最初は[[https://github.com/fcitx/fcitx5-skk][fcitx/fcitx5-skk]]の何かなのかな？と思い、そのレポジトリで"Kuten"
+を検索したのですが見付からず。[[https://github.com/ueno/libskk][ueno/libskk]]を調べてみると、
+[[https://github.com/ueno/libskk/blob/5f5e5c2d3facfec9f577fb66032e6f1994ed5d44/libskk/state.vala#L611-L693][KutenStateHandler]]という実装を見つけました。
+
+(Vala読めないので雰囲気で読んでいますが)コンストラクターを見てみると、
+EUC-JPのコンバーターを使っているようなので、なんとなくEUC-JPを調べて
+入力してみた所動作した、という感じです。
+
+#+begin_src vala
+internal KutenStateHandler () {
+    try {
+        // use EUC-JP to get JISX0208 characters by code
+        // point, this works because EUC-JP maps JISX0208
+        // characters to equivalent bytes.  See:
+        // https://en.wikipedia.org/wiki/EUC-JP
+        // this is generally a wrong approach though
+        converter = new EncodingConverter ("EUC-JP");
+    } catch (GLib.Error e) {
+        converter = null;
+        assert_not_reached ();
+    }
+}
+#+end_src
