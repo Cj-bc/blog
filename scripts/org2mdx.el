@@ -74,14 +74,8 @@ keywords are
 	  "---\n"
 	  contents)))
 
-(defun org-myBlog-export-as-myBlog (async subtreep visible-only)
-  "Export current buffer to a my blog file"
-  (org2mdx/--copy-toplevel-props-to-toplevel-keywords)
-  (org-zenn-export-as-markdown async subtreep visible-only))
-
 (setq org2mdx/backend (org-export-create-backend
 		       :parent 'zennmd
 		       :transcoders '((template . org-myBlog-template))))
 
-(provide 'org2mdx)
 ;;; org2mdx.el ends here
