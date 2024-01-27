@@ -3,7 +3,7 @@
 :DATE: [2024-01-17 Wed 09:28]
 :TAGS: :skk:libskk:fcitx5-skk:
 :BLOG_POST_KIND: Knowledge
-:BLOG_POST_PROGRESS: Empty
+:BLOG_POST_PROGRESS: Published
 :BLOG_POST_STATUS: Normal
 :END:
 :LOGBOOK:
