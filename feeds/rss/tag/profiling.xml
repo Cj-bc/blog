@@ -7,8 +7,313 @@
         <description><![CDATA[Cj-bc's personal blog posts.]]></description>
         <atom:link href="https://cj-bc.github.io/blog/feeds/rss/tag/profiling.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Fri, 22 Dec 2023 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Fri, 26 Jan 2024 00:00:00 UT</lastBuildDate>
         <item>
+    <title>2024-01-26-emacs-embed-typst-code-instead-of-latex</title>
+    <link>https://cj-bc.github.io/blog/posts/2024-01-26-emacs-embed-typst-code-instead-of-latex.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>Org modeで埋め込みLaTeXの代わりにtypstを使う</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on January 26, 2024</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on January 27, 2024
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;org-mode&#39;." href="/tags/org-mode.html" class="ui tag label">org-mode</a><a title="All pages tagged &#39;emacs&#39;." href="/tags/emacs.html" class="ui tag label">emacs</a>
+	
+      </div>
+
+    <div class="description">
+      <p><a href="https://typst.app">typst</a>、便利ですよね。 <span
+class="math inline"><em>L</em><sup><em>A</em></sup><em>T</em><sub><em>E</em></sub><em>X</em></span>
+の代わりのPDF生成手段として、とても
+使いやすいです。さて、そんなtypstをOrg modeの組込み <span
+class="math inline"><em>L</em><sup><em>A</em></sup><em>T</em><sub><em>E</em></sub><em>X</em></span>
+の代わ
+りに使いたいな~と思ったこと、ありませんか？私は大いにあります。</p>
+<p>ということで、 <u>手軽に</u> 埋め込み <span
+class="math inline"><em>L</em><sup><em>A</em></sup><em>T</em><sub><em>E</em></sub><em>X</em></span>
+をtypstに入れ替える方法を 書き記しておこうと思います。</p>
+<h1 id="概要">概要</h1>
+<p>既存の埋め込みLaTeXの文法の一部を用いたまま、LaTeXとして解釈される所を
+typstとして扱うように実装に手を加えます。</p>
+<p>インライン埋め込みでは <code>$y = ax^2 + bx + c$</code>
+みたいな書き方を、ブロッ クとして埋め込むには <code>\begin{...}</code>
+で囲んで以下のような書き方をする必 要があります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+org
+</div>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode org SourceCode"><code class="sourceCode orgmode"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>\begin{align}</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>$ y = ax^2 + bx + c $</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>\end{align}</span></code></pre></div>
+</div>
+<p>埋め込みLaTeXでは <code>\( y = x \)</code> や
+<code>\[ y = x \]</code> といった書き方も用意
+されていますが、これらはきちんと数式として描画されないので気をつけてく
+ださい。(<code>\( $y = x$ \)</code>
+とすれば可能ですが、余計な括弧もそのまま描画 されます)</p>
+<h1 id="注意事項">注意事項</h1>
+<p>ブロックの場合 <code>\begin{...}</code>
+で囲む必要があるなど、typstの埋め込みとし
+ては適切な実装ではありません。あくまでも最小限の手数で実装するための記
+事です。</p>
+<p>尚、もし適切に実装をしたい場合はorg-element.elから手を加えるのがよさそ
+うです(今は時間ないのでやりませんが、いつかやっておきたい。)</p>
+<h1 id="実装">実装</h1>
+<h2 id="1. org-create-formula-imageの置き換え">1.
+org-create-formula-imageの置き換え</h2>
+<p><code>org-create-formula-image</code> が、
+<code>PROCESSING-TYPE</code> として <code>typst</code> シン
+ボルを受け取った際はtypstとして処理をするように分岐させます。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(defun org-typst-embed/advice-func (oldfunc &amp;rest args)
+  &quot;Advice function to enable using typst as LaTeX fragment.&quot;
+
+  ;; 見易さのため、 help:org-create-formula-image の本来の引数に名前を付けているだけ
+  (let ((string (nth 0 args))
+        (processing-type (nth 4 args))
+        (tofile (nth 1 args)))
+    (if (eq processing-type &#39;typst)
+        (progn
+          ;; Block typeであった場合、それを取り除く
+          (when (string-prefix-p &quot;\\begin{&quot; string)
+            (setq string (with-temp-buffer
+                           (insert string)
+                           (let ((beg (progn (goto-char (point-min))
+                                             (forward-line) (point)))
+                                 (end (progn (goto-char (point-max))
+                                             (forward-line -2) (end-of-line) (point))))
+                             (buffer-substring beg end)))))
+          (ob-typst/create-image string tofile))
+      (apply oldfunc args))))
+
+(advice-add &#39;org-create-formula-image :around #&#39;org-typst-embed/advice-func)
+</code></pre>
+</div>
+<p>typstとして処理する部分は、自分の環境では自作の <a
+href="https://github.com/Cj-bc/ob-typst">Cj-bc/ob-typst</a>で提供さ
+れている <a
+href="https://github.com/Cj-bc/ob-typst/blob/main/ob-typst.el#L92-L127">ob-typst/create-image</a>
+を使っています。もし、インストールした
+くない場合は以下のように定義して、 <code>ob-typst/create-image</code>
+を使用して
+いる場所と差し替えてあげるとよいと思います(ob-typstではいくつか
+customize variableがあるので、それをハードコードした形になります。)</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(defun org-typst-embed/create-image (string tofile)
+  &quot;Create an image from typst source using external process.
+
+The Typst STRING is saved to a temporary Typst file, then
+converted to an image file by &#39;typst compiler&#39; command.
+
+The generated image file is eventually moved to TOFILE.
+
+Generated file format is determined by TOFILE file
+extension. Supported file formats are: .png, .pdf, .svg
+&quot;
+  (if (condition-case nil
+          (progn (call-process &quot;typst&quot; nil nil nil &quot;--help&quot;) t)
+        (file-missing nil))
+      (let* ((tmpfile (make-temp-file &quot;ob-typst&quot;))
+             (ext (file-name-extension tofile))
+             (log-buf (get-buffer-create &quot;*Org Preview typst Output*&quot;)))
+        (with-temp-file tmpfile
+          (insert default-rules-str &quot;\n&quot; string))
+        (copy-file (org-compile-file tmpfile
+                                     (list (format &quot;typst compile --format %s --root %%o %%f&quot; ext))
+                                     ext &quot;&quot; log-buf)
+                   tofile &#39;replace))
+    (display-warning &#39;org-typst-embed &quot;typst command not found&quot;)))
+</code></pre>
+</div>
+<h2 id="2. org-preview-latex-process-alist の設定">2.
+<code>org-preview-latex-process-alist</code> の設定</h2>
+<p><code>org-preview-latex-process-alist</code> に含まれるシンボル以外は
+<code>org-format-latex</code>
+(内部処理で使われている関数)がエラーとして処理して
+しまい、画像の生成が出来ません。なので、実際に値を使うことはないにせよ
+設定しておく必要があります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(push &#39;(typst) org-preview-latex-process-alist)
+</code></pre>
+</div>
+<h2 id="3. org-preview-latex-default-process の設定">3.
+<code>org-preview-latex-default-process</code> の設定</h2>
+<p>これは <code>'typst</code>
+を指定するだけで良いです。これをすることで、
+<code>org--latex-preview-region</code> が適切に動くようになります。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+elisp
+</div>
+<pre class="elisp SourceCode"><code>(setq org-preview-latex-default-process &#39;typst)
+</code></pre>
+</div>
+<h1 id="使い方">使い方</h1>
+<p>実装にかかれたコードを全て実行した後、普通にLaTeX fragmentとしてtypst
+を書き <code>org-latex-preview</code> を呼び出せばよいです。</p>
+<h1 id="実装メモ">実装メモ</h1>
+<p>ここからは実際の実装に至るまでのメモを公開しておきます。
+より深掘りする際の参考等にしてください</p>
+<h2 id="関連する変数">関連する変数</h2>
+<ul>
+<li>help:org-preview-latex-process-alist
+<ul>
+<li>help:org-format-latex が処理してくれるようにするために必要</li>
+</ul></li>
+<li>help:org-preview-latex-default-process
+<ul>
+<li>help:org–latex-preview-region が <code>org-format-latex</code>
+に渡す <code>PROCESSING-TYPE</code> になる</li>
+</ul></li>
+</ul>
+<h2 id="関連する関数">関連する関数</h2>
+<ul>
+<li>help:org-latex-preview
+<ul>
+<li>help:org–latex-preview-region
+<ul>
+<li>help:org-format-latex
+<ul>
+<li>help:org-create-formula-image
+<ul>
+<li>内部でハードコードされたLaTeXプリアンブルを書き込んだりしてくるので、入れ替える必要がある</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<ol>
+<li><p>LaTeXフラグメント識別用</p>
+<ul>
+<li>help:org-inside-LaTeX-fragment-p</li>
+</ul></li>
+</ol>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Fri, 26 Jan 2024 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2024-01-26-emacs-embed-typst-code-instead-of-latex.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
+    <title>2024-01-17-libskk-what-is-kuten</title>
+    <link>https://cj-bc.github.io/blog/posts/2024-01-17-libskk-what-is-kuten.html</link>
+    <description><![CDATA[<div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>SKKにある「Kuten」とは何なんだろう？</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on January 17, 2024</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on January 27, 2024
+	</div>
+
+	
+
+	
+	<a title="All pages tagged &#39;skk&#39;." href="/tags/skk.html" class="ui tag label">skk</a>
+	
+      </div>
+
+    <div class="description">
+      <p>SKKを使っている時に <code>Kuten([MM]KKTT)</code>
+という表示が出てきたことはないで
+しょうか？私はたまに見掛け、なんだろう…と思っていたのですがやっと理
+解したのでメモしておきます。</p>
+<p>ちなみに、keymapで <code>"kuten"</code>
+を指定することで呼び出すことが出来、デフォ ルトの状態だと <code>\</code>
+で起動します。
+<code>/usr/share/libskk/rules/default/keymap/default.json</code>
+では以下のように 定義されています。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+json
+</div>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode json SourceCode"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;define&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;keymap&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>            <span class="er">...</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;</span><span class="ch">\\</span><span class="dt">&quot;</span><span class="fu">:</span> <span class="st">&quot;kuten&quot;</span><span class="fu">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>            <span class="er">...</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+</div>
+<h1 id="結論: Kuten は EUC-jp のコード直接入力だった">結論: Kuten は
+EUC-jp のコード直接入力だった</h1>
+<p>コードを完全には読み切っていないので若干の推論を含みますが、どうやら
+EUC-jpの文字コードを直接入力するモードなようです。
+EUC-jpの文字コード表を <a
+href="http://charset.7jp.net/euc.html">文字コード表 日本語EUC(euc-jp) –
+charset.7jp.net</a>
+を参考にして入力してみると、表の通りに入力出来ていそうでした。</p>
+<p>表に「区」「点」の表示があったので、恐らくその由来なのでしょう。</p>
+<p>… <code>K</code> と <code>T</code> は理解したけど <code>[MM]</code>
+って何なんだろ。</p>
+<h1 id="経緯">経緯</h1>
+<p>最初は<a
+href="https://github.com/fcitx/fcitx5-skk">fcitx/fcitx5-skk</a>の何かなのかな？と思い、そのレポジトリで"Kuten"
+を検索したのですが見付からず。<a
+href="https://github.com/ueno/libskk">ueno/libskk</a>を調べてみると、 <a
+href="https://github.com/ueno/libskk/blob/5f5e5c2d3facfec9f577fb66032e6f1994ed5d44/libskk/state.vala#L611-L693">KutenStateHandler</a>という実装を見つけました。</p>
+<p>(Vala読めないので雰囲気で読んでいますが)コンストラクターを見てみると、
+EUC-JPのコンバーターを使っているようなので、なんとなくEUC-JPを調べて
+入力してみた所動作した、という感じです。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+vala
+</div>
+<pre class="vala SourceCode"><code>internal KutenStateHandler () {
+    try {
+        // use EUC-JP to get JISX0208 characters by code
+        // point, this works because EUC-JP maps JISX0208
+        // characters to equivalent bytes.  See:
+        // https://en.wikipedia.org/wiki/EUC-JP
+        // this is generally a wrong approach though
+        converter = new EncodingConverter (&quot;EUC-JP&quot;);
+    } catch (GLib.Error e) {
+        converter = null;
+        assert_not_reached ();
+    }
+}
+</code></pre>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+]]></description>
+    <pubDate>Wed, 17 Jan 2024 00:00:00 UT</pubDate>
+    <guid>https://cj-bc.github.io/blog/posts/2024-01-17-libskk-what-is-kuten.html</guid>
+    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
+</item>
+<item>
     <title>2023-12-22-yozakura-mia-asakatu-handdrawing</title>
     <link>https://cj-bc.github.io/blog/posts/2023-12-22-yozakura-mia-asakatu-handdrawing.html</link>
     <description><![CDATA[<div id="body-content">
@@ -149,7 +454,7 @@ id="GW企画！朝の運動はよきよき！！！いっぱいやっちゃう�
 	<div class="item">Posted on December 12, 2023</div>
 	<div class="item">
 	  <i class="history icon"></i>
-	  Updated on December 12, 2023
+	  Updated on December 24, 2023
 	</div>
 
 	
@@ -1135,697 +1440,6 @@ class="verbatim">lsp-ui</code>)</td>
 ]]></description>
     <pubDate>Wed, 16 Aug 2023 00:00:00 UT</pubDate>
     <guid>https://cj-bc.github.io/blog/posts/2023-08-16-emacs-move-from-lsp-mode-to-eglot.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2023-07-20-latex-japanese-article-to-pdf</title>
-    <link>https://cj-bc.github.io/blog/posts/2023-07-20-latex-japanese-article-to-pdf.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>LaTeXで日本語PDF文書を書く時の走り書きメモ</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on July 20, 2023</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on July 20, 2023
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;latex&#39;." href="/tags/latex.html" class="ui tag label">latex</a><a title="All pages tagged &#39;pdf&#39;." href="/tags/pdf.html" class="ui tag label">pdf</a>
-	
-      </div>
-
-    <div class="description">
-      <p>時間があまりないが、忘れると困るレベルに苦手だったLaTeXで日本語を含んだPDFが出力出来たので走り書きのメモ。
-後にきちんと書く。</p>
-<p>とりあえず <a
-href="https://texwiki.texjp.org/?LaTeX入門">texwiki.texjp.org</a>
-読んどけば、大学で習ってない民でも結構なんとかなる。なんと2023年でも更新されていてありがたい。</p>
-<h1 id="環境">環境</h1>
-<p>archlinux上でTeXLiveを使っている。</p>
-<h1 id="とりあえずPDFにする">とりあえずPDFにする</h1>
-<p><code>YOUR_FILE.tex</code> から <code>YOUR_FILE.pdf</code>
-を作成するためには</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb1" data-org-language="sh"><pre
-class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> platex YOUR_FILE</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> dvipdfmx YOUR_FILE</span></code></pre></div>
-</div>
-<h1 id="独自のstyファイルを使う">独自のstyファイルを使う</h1>
-<p><code>TEXMFHOME/tex/latex</code> ないし
-<code>TEXMFLOCAL/tex/latex</code> 以下に <code>sty</code>
-ファイルを置き、 <code>sudo mktexlsr</code> すればよい。</p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb2" data-org-language="sh"><pre
-class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> tlmgr conf</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="va">TEXMFHOME</span><span class="op">=</span>/home/me/texmf</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">TEXMFLOCAL</span><span class="op">=</span>/usr/local/share/texmf:/usr/share/texmf</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span></code></pre></div>
-</div>
-<h1 id="BibTeX">BibTeX</h1>
-<p><a
-href="https://texwiki.texjp.org/?文献引用">https://texwiki.texjp.org/?文献引用</a></p>
-<p>4回コマンドを実行する。
-<strong>TeXファイルとBibTeXファイルの名前は拡張子以外合わせるぽい？</strong></p>
-<div class="ui segment">
-<div class="ui top right attached label">
-bash
-</div>
-<div class="sourceCode" id="cb3" data-org-language="sh"><pre
-class="sourceCode bash SourceCode"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> platex YOUR_FILE</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> pbibtex YOUR_FILE</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> platex YOUR_FILE</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> platex YOUR_FILE</span></code></pre></div>
-</div>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Thu, 20 Jul 2023 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2023-07-20-latex-japanese-article-to-pdf.html</guid>
-    <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
-</item>
-<item>
-    <title>2023-06-02-yozakura-mia-as-valorant-agent</title>
-    <link>https://cj-bc.github.io/blog/posts/2023-06-02-yozakura-mia-as-valorant-agent.html</link>
-    <description><![CDATA[<div id="body-content">
-  <div class="content of Memo">
-    <div class="ui center aligned icon header">
-      <h1>夜桜みあVALORANTエージェント化計画</h1>
-    </div>
-      <div class="meta ui list">
-	<div class="item">Posted on June  2, 2023</div>
-	<div class="item">
-	  <i class="history icon"></i>
-	  Updated on July 12, 2023
-	</div>
-
-	
-
-	
-	<a title="All pages tagged &#39;夜桜みあ&#39;." href="/tags/%E5%A4%9C%E6%A1%9C%E3%81%BF%E3%81%82.html" class="ui tag label">夜桜みあ</a>
-	
-      </div>
-
-    <div class="description">
-      <h1 id="はじめに">はじめに</h1>
-<p>みあちゃんお誕生日おめでとうございます!!!! (この記事は<a
-href="https://twitter.com/yozakura_mia">夜桜みあ</a>ちゃんの2023年度お誕生日のリスナー有志お祝い企画の参加記事です)</p>
-<p>「夜桜みあxバトルもの」ということで、みあちゃんをVALORANTのエージェントにした場合どうなるんやろか？
-というのをふと思い立ったので考えてみました。尚、思った以上に難航してしまい完成まで出来ていないのですが、一旦出来た範囲でということで…!!</p>
-<p>又、この記事では制作過程(思考過程)に関しても纏めてあるため謎に長くなっています。最終的な結果のみ見た
-い場合は、冒頭のみを見れば十分だと思います。残りは私の趣味です。</p>
-<h1 id="根本的なアイデア">根本的なアイデア</h1>
-<p>「夜桜みあの世界観と性格を、"VALORANTのエージェントとして"ゲームに落とし込んだらどうなるだろうか？」
-というのが根本的なアイデアです。そのため、夜桜みあの持つ世界観のみならず、VALORANTの世界に入り込んで
-も違和感がないもの、というのを目指しています。</p>
-<h1 id="(未)完成版: エージェント「夜桜みあ」">(未)完成版:
-エージェント「夜桜みあ」</h1>
-<p>ロールはセンチネル。</p>
-<h2 id="シグネチャーアビリティ: キャットス">シグネチャーアビリティ:
-キャットス</h2>
-<p>猫耳魔法のキャットス。使用すると猫耳が生え、前方左右n°ずつ(調整必要、30・30とか？)の範囲の聴力が強化
-される。再使用で解除する。再使用までのクールダウンはない。</p>
-<p>キャットス発動中は、前方以外からの音をクロネコ宅急便からの音以外ほぼ遮断する。</p>
-<p>聴力強化範囲でオペレーターの音が鳴ると、一時的に音が一切聞こえなくなる。又、キャットス中はフラッシュ
-を喰らった際の持続時間が増加する。</p>
-<p>発動すると、詠唱の一部が他のエージェントにも聞こえる。これは「アビリティが実行されていることを知れる
-必要がある」から。</p>
-<ol>
-<li><p>使い道の例</p>
-<ol>
-<li><p>防衛時</p>
-<p>他のアビリティを設置した後、メインに向けて発動しておくことで、進行を把握出来る。又、敵が来ているのを
-把握した上でアレスを用いた壁抜きをすることも可能。(夜桜みあはアレスがすきだったため)</p></li>
-</ol></li>
-<li><p>詳細</p>
-<p>猫耳を用いるので遠くの音まで聞こえるようになる一方、指向性が強くなるので他の範囲が聞こえなくなってい
-ます。クロネコ宅急便の音は魔法で繋がっているので聞こえます。</p>
-<p>ゲームバランス的な観点から言うと、「音」が大分重要なゲームである以上そこを強化するアビリティはコスト
-も相応にしておく必要があると考えました。又、サイファーのカメラと同じように即座に使えるアビリティであ
-る関係で、スキル中も周りの音が聞こえているとどこでも使えてしまい強すぎます。
-そこで、視界方向以外の情報を下げることで、「目的としたエリア以外の情報を取りすぎない」「きちんと安全
-確保されていない場所で使いづらくなる」というリスクを与えることを目的としています。</p></li>
-<li><p>このスキルへの対策</p>
-<p>敵がキャットスを発動している場合、安全に音を立てられる範囲が狭まります。対策としてオペレーターを先に
-撃つことで一時的に無効化出来ますが、オペレーターの存在を開示する必要があります。ゆっくりとドライで上
-がっていくことが一番です。</p>
-<p>(正直、プロの試合とか見てるとドライよくあるからこれスキル弱すぎるか…?って思ったりする)</p></li>
-</ol>
-<h2 id="アビリティ: フローレ">アビリティ: フローレ</h2>
-<p>設置型アビリティ。設置した場所に桜吹雪を起こし、その上を通るエージェントの視界を悪化させると共にスロー
-効果を付与する。視界悪化はあくまでも花吹雪による物理的なものであるので、例えばレイナのウルトやヴァイ
-パーウルトのように敵を強調表示するスキルには効果がない。</p>
-<p>敵を検知して自動で発動するか、それとも手動にするか、などは今現在詰められていない。</p>
-<h2 id="アビリティ: クロネコ宅急便">アビリティ: クロネコ宅急便</h2>
-<p>設置型アビリティ。アラボ等と同じような立ち位置…なはず。</p>
-<p>(正直最初からあるけど一番内容が決まっていない存在)</p>
-<h2 id="アルティメット: 「みあこんぐ!」/「おつみあ~!」">アルティメット:
-「みあこんぐ!」/「おつみあ~!」</h2>
-<p>名前が使いたかっただけみたいな所があり…はい…どちらの名前もアルティメットぽくて良いなというので記
-録を残しておきます。他スキルとシナジーのあるウルトが上手く思い付いていないので現状未実装です。ただ、
-夜桜みあがヴァイパーのウルトすきらしかったので領域展開系にしたいなとは思っています(詳しくは後述)</p>
-<h1 id="ボツアイデアs">ボツアイデアs</h1>
-<p>せっかくなのでボツ案を先に出しておこうと思います。</p>
-<h2 id="コンセプト: フラッシュ系スキル持ちセンチネル">コンセプト:
-フラッシュ系スキル持ちセンチネル</h2>
-<p>既存センチネルの特徴を出してみた時、</p>
-<ul>
-<li>サイファー → モク代わりのケージ →
-コントローラー寄りのセンチネル</li>
-<li>チェンバー → ？？？とりあえずデュエリスト寄りのセンチネル</li>
-<li>キルジョイ → モロトフ代わりのナノスワ</li>
-<li>セージ → モロトフと似た役割(進行止め、顔出し阻止)のスローオーブ</li>
-</ul>
-<p>といった具合に定番アビリティの「モロトフ」「モク」を持つエージェントはいるものの、フラッシュのみは持
-つエージェントが存在していなかったので思い付きました。</p>
-<p>しかしセンチネルの「足止めする必要がある」という役割を考えると、一瞬しか効果のない上に避けることので
-きるフラッシュは強いアビリティとはいえないと思われます。そういうことでボツとなりました。
-恐らくフラッシュ系持ちのセンチネルは実装されないんじゃなかろうか…?</p>
-<h2 id="キャットス: 聴覚情報を視覚的に表示する">キャットス:
-聴覚情報を視覚的に表示する</h2>
-<p>猫耳による聴覚強化をどう行うか、というのを考えていた時の案の一つ。イメージとしては、サイファーやリコ
-ン等のように表示する感じ。視覚的に表示するのは強そうに見えるが、慣れているプレイヤーは大体頭の中で補
-完出来ている範囲の情報でしかなくて弱いかなと判断した。又、敵対した際に「新たな戦略を練る必要性」を生
-み出すことが出来ないし、対策のしようがないので却下。</p>
-<h2 id="キャットス: 聴覚情報をミニマップに表示">キャットス:
-聴覚情報をミニマップに表示</h2>
-<p>こちらも同じく聴覚強化の案の一つ。赤点表示のようなものを考えていたが、上記とほぼ同様の理由(慣れたプ
-レイヤーに恩恵はないし、敵対した際の対策が打てない)ので却下</p>
-<h2 id="フローレ: フラッシュアビリティ化">フローレ:
-フラッシュアビリティ化</h2>
-<p>ディジーと同じように、画面にエフェクトを乗せる形での視界妨害アビリティとする案。センチネルにするとなっ
-た際、センチネルとの相性が悪いので却下。(詳しくは制作過程にて)</p>
-<h2 id="フローレ: スモーク化">フローレ: スモーク化</h2>
-<p>桜吹雪が舞うことで視界を悪化させ、進行を食い止める案。コントローラーではないので、しっかりとしたスモー
-クにすることは出来ないのでそこまで進行を食い止めることが出来そうにはなく、他のアビリティ候補に遅延出
-来そうなものが少ないので却下。遅延スキルとして使いたいので。</p>
-<h2 id="フローレ: 敵重火器の制圧">フローレ: 敵重火器の制圧</h2>
-<p>敵の重火器に桜を咲かせ、一定期間銃撃が行えないようにする案。今迄存在していないタイプのアビリティでは
-あるが、これとKAY/Oのナイフ類を組み合わせた場合の絶望感が半端ないので却下。アビリティが使えなくとも
-フィジカルで勝てる、最終的にはフィジカルが大事なゲーム性だと感じたため。</p>
-<p>あと純粋に実装が難しそう(唐突な現実)</p>
-<h2 id="クロネコ: タレット的運用">クロネコ: タレット的運用</h2>
-<p>設置型にし、敵を見付けると攻撃してくれるという案。「キルジョイとの差別化は？」という課題があるのと、
-敵になった際に猫を撃つの嫌だな…という個人的感情から却下。</p>
-<h2 id="クロネコ: 索敵">クロネコ: 索敵</h2>
-<p>スカイの犬やウィングマン的に索敵を行う案。ロールが固まりきっておらず、イニシエーターにするか悩んでい
-た時の案であり、センチネルとした際に却下。</p>
-<h2 id="クロネコ: デバフ要員">クロネコ: デバフ要員</h2>
-<p>「黒猫が前をよぎるとよくない」みたいな伝承から、設置された場所を敵が通るとデバフを与える、という案。
-クロネコをデバフ付与系の設置アビリティにしてしまうと、エリアを見るためのアビリティが無くなっていしま
-うので却下。</p>
-<p>ちなみに個人的にはあの伝承を全く信じていないし、黒猫かわいくてすきなのでいつも「なんでそんな酷い噂を
-言うの…」と思っている。</p>
-<h1 id="制作過程">制作過程</h1>
-<p>なんか綺麗な流れみたいに解説を書きますが、実際の過程としては、暇があれば色々考えてメモして調べて考え
-て…というのを繰り返しているので全くもってこの通りではないです。</p>
-<h2
-id="面白そうかどうかのアイデア出し">面白そうかどうかのアイデア出し</h2>
-<p>まずは、そもそもこれが面白そうかどうか？を探りたかったので難しいことを考えずにひたすらアイデアを出し
-ました。一番初期に出たアイデアは以下の通りです。</p>
-<ol>
-<li><p>能力系</p>
-<ul>
-<li>フローレ！はスモークになりそう。桜が散って目をふさぐ</li>
-<li>もしくは、一種のフラッシュにも。</li>
-<li>スペシャルは「みあこんぐ！」とか？
-<ul>
-<li>「おつみあ~!」の方がかわいい説はある</li>
-<li>どっちもその名前が使いたいだけ</li>
-</ul></li>
-<li>キャットス(猫耳魔法)は聴覚強化に使えそう？
-<ul>
-<li>全方位聴力強化だと強すぎるので、向いている方n°だけ強化、とか？</li>
-</ul></li>
-<li>キルジョイのイメージ強いけどスカイとかも使うのでイニシもあり
-<ul>
-<li>ヴァロキャラとしてのコンセプトも大事</li>
-<li>猫耳、黒猫さんのことを考えると情報管理系？音情報に焦点を当ててみたいかも</li>
-<li>そうするとフェイドが天敵になる（アストラのウルトもか）</li>
-</ul></li>
-<li>「一緒に戦うとか戦略的に戦うとかすき」とのことなので、黒猫さんをその立ち位置に置きたい</li>
-<li>黒猫さんが敵を探知するタイプのセンチ？</li>
-<li>「黒猫さんは買うものではない」ので黒猫さん関連をシグネチャアビリティにして、他は魔力を使うので購入にする…？</li>
-<li>本来は詠唱魔法だが、戦闘中に詠唱する余裕はないので即時に発動できるような魔法道具を使っている。本来何も買わなくてもいいはずなのに買うのは、その魔法道具を買っているから。</li>
-</ul>
-<p>キャラクターのコンセプトを研究したい</p>
-<ul>
-<li>ソーヴァ: 発見</li>
-<li>セージ: 遅延</li>
-<li>キルジョイ:</li>
-</ul></li>
-</ol>
-<h2
-id="VALORANTのエージェントの作り方の調査">VALORANTのエージェントの作り方の調査</h2>
-<p>漠然としたアイデアは出て、方向性として面白そうだなとなったのできちんと落とし込む作業に入ります。夜桜
-みあのFAであると同時に、VALORANTのFAでもあるので、きちんとVALORANTにも失礼がないように&amp;現実的である
-ようにするためVALORANTのエージェントの制作過程を調べることとしました。</p>
-<p>ここで、VALORANT公式ブログがとても役に立ちます。何故か知らないですがVALORANTは割とブログに開発陣の話
-がよく載っており、マップの作成時の話やバランス調整に何を考えているのか、はたまた「<a
-href="https://playvalorant.com/ja-jp/news/dev/how-we-got-to-the-best-performing-valorant-servers-since-launch/">VALORANTがいかにし
-てリリース以降最高のサーバー環境を実現したか</a>」といった完全に技術屋に寄ったものまで公開されています
-(個人的にすごく楽しい)。そして勿論その一環として、エージェント開発時のエピソードや解説等が一部公開さ
-れているのです。</p>
-<p>ということで、主に参考になったものについてメモを見てみましょう。</p>
-<ol>
-<li><p><span class="todo TODO">TODO</span>
-VALORANTエージェント開発エピソード：フェイド</p>
-<p><a
-href="https://playvalorant.com/ja-jp/news/game-updates/valorant-agent-insights-fade/">https://playvalorant.com/ja-jp/news/game-updates/valorant-agent-insights-fade/</a></p>
-<p>イニシエーターのエージェント「フェイド」を開発する際に、どのようなことを考え、どのような理由で現在の
-アビリティや特性へ至ったのかを解説している記事です。作業プロセスについては後述する資料と比べるとそこ
-まで書かれていないですが、「いかにして既存エージェントと差別化したか」「どうやって立ち位置を持たせた
-か」「エージェントの世界観とゲーム性をどう合わせ持たせたか」等を読み取ることが出来ます。</p>
-<ul>
-<li>フェイドは、現状ソーヴァしかいない偵察兵を増やすために考案された</li>
-<li>「悪夢」というのはとても特徴的な「力の源」となる</li>
-<li>役割が被らない様に、「遠距離・高精度」なソーヴァに対して「近距離・局所的」なスキルを持たせた</li>
-<li>コンセプトとして「賞金首狩り」を持ち、獲物を追い詰めてゆく</li>
-<li>ナイトフォールの「広範囲」なアビリティは、「イニシエーターの標準的アルティメット」</li>
-</ul></li>
-<li><p><span class="todo TODO">TODO</span> エージェントデザインの過程 //
-Dev Diaries - VALORANT - YouTube</p>
-<p><a href="https://www.youtube.com/watch?v=Nv09DpFkfb4">YouTube
-link</a></p>
-<p>キルジョイとレイナを題材として、エージェントをデザインする際の全般的な話が聞けます。これは、実際にど
-のような流れでエージェントを制作しているのかを知るのに役立ちます。例えば、最初に何を意識しているのか、
-どういった事を念頭に置きながら制作しているのか、など。</p>
-<ol>
-<li><p>ターゲットプレイヤーの決定</p>
-<ul>
-<li>まずは「誰がターゲットプレイヤーなのか」を考えるところから始める。
-<ul>
-<li>「誰が、どんな人が使いたいと思うべきなのか」 &amp;
-「何故そうなるべきなのか」</li>
-</ul></li>
-<li>レイナの場合は、「キルを獲得することを楽しみ、最多キルでチームに貢献するのがすきな人」がターゲット</li>
-<li>この時点では「どのようなアビリティーを持つか」を考えていない。</li>
-</ul></li>
-<li><p>Roster Impactを考慮したテストプレイの実装</p>
-<p>テストプレイの段階では、「そのエージェントが実際にゲームプレイにどのような影響を与えるのか」を考えま
-す。エージェントは、「新しい展開を生み出し」たり、「新しい課題を生み出し」たり、「新しい構成を生み出
-し」たりする必要があり、「使うプレイヤーが楽しいだけ」や「何かかっこいいもの」ではいけません。</p>
-<p>キルジョイを例に取ると、セージは「遅延すること」に長けたセンチネルで、サイファーは「広範囲を管理する
-こと」に長けたセンチネル。それに対し、キルジョイは「サイトを要塞化し、相手にリスクを負わせる」ことに
-長けたセンチネルです。ちなみにこの動画当時、まだチェンバーはいない模様です。</p>
-<p>同じセンチネルでも、大分異なるプレイスタイルとなるように設計されているのです。
-守りつつキルを取ることが主体となります。</p></li>
-<li><p>何の「戦術ツール」を持つか？を決める: 妨害アビリティは必須</p>
-<p>アイデンティティとなるスキルの他に、戦術ツールを持つ必要がある。
-視界を塞いだりなどの敵を妨害するためのツールはどのキャラクターにも必要なものとなる。何故なら、それら
-は必ず必要なアビリティとなるためそれを持たないとピックされづらくなってしまうから。</p></li>
-<li><p>テストプレイをする</p>
-<p>「ターゲットプレイヤー」に楽しんでもらえるかをテストする必要があります。ここで大切なのは、「ターゲッ
-トプレイヤーではない人に気に入られる必要はない」ということです。例えば、キルジョイは計画を建ててサイ
-トの要塞化を行い防衛しつつ戦うのがすきなプレイヤーをターゲットにしていますが、その人達には「沢山キル
-を取りたいプレイヤー」をターゲットとするレイナは恐らく刺さらないでしょう。</p>
-<p>テストプレイ中では、色々な変更が入ります。最初から上手くいくことはありません。</p></li>
-<li><p>ゲームバランスの調整:</p>
-<p>ゲームバランスを調整する際は、キャラクターの強さを簡単に調整出来るようなコントロールパネルを用意して
-いるようです。「キャラクターのアイデンティティを変えるのは最終手段」と言っていますが、これは恐らくア
-ビリティの考え直しみたいな話をしているのかな？と思っています。</p>
-<p>スキルのバランスは「持つスキル全体を考慮して」考えており、個々のスキル毎に考えているわけではないよう
-です。</p></li>
-<li><p>まとめ: 新たなエージェントを加えることの意味</p>
-<p>新たなエージェントを加えるというのは、「新しい可能性」を追加するということ。昔ながらの爆破ゲーにある
-ような「戦術ループ」は基礎としてあり、そこへ「回復」「ダッシュ」「視界を遮る」といった例外を加えるの
-がvALORANT流、ということのようです。</p></li>
-</ol></li>
-<li><p>パッチ5.12でのチェンバーの変更について</p>
-<p><a
-href="https://playvalorant.com/ja-jp/news/game-updates/valorant-chamber-changes-for-patch-5-12/">https://playvalorant.com/ja-jp/news/game-updates/valorant-chamber-changes-for-patch-5-12/</a></p>
-<ul>
-<li>エージェント設計の原則として、「カウンタープレイ」「計画性」がある。
-<ul>
-<li>カウンタープレイは、(恐らく)そのエージェントへの対抗手段・対策手段のこと</li>
-<li>計画性は、アビリティを適当に使っていれば勝てる、みたいなのを排除すること</li>
-<li>チェンバーの例では、「トレードマークの範囲制限により、敵チェンバーの位置が推測しやすくなる」など</li>
-</ul></li>
-<li>「裏取りの監視はサイファーの強みであるべきで、センチネル全員の基本性能ではありません」</li>
-<li>「エージェントのアビリティーは戦略サイクルの各段階にさまざまな影響を与えますが、アビリティーの実行
-は明確であり、敵に反撃の余地を与えるものでなければいけません」
-<ul>
-<li>対抗手段は用意する必要がある</li>
-<li>アビリティを実行していることが分かる必要がある(レイナのウルトが叫ぶのとかはそれ？)</li>
-</ul></li>
-<li>チェンバーは「高精度を誇り、リスクを取ってエリアを制圧するセンチネル」というアイデンティティー</li>
-</ul></li>
-<li><p>ネオン＆ゼリの共同開発秘話</p>
-<p><a
-href="https://playvalorant.com/ja-jp/news/dev/co-developing-neon-zeri/">https://playvalorant.com/ja-jp/news/dev/co-developing-neon-zeri/</a></p>
-<ul>
-<li>「パワーの源」という概念があり、VALORANTの場合は「テクノロジー」と「レディアント」</li>
-<li>「ネオン及びゼリが何故速いのか」を説明する「パワーの源」が必要だった</li>
-</ul></li>
-</ol>
-<h2 id="お断り">お断り</h2>
-<p>先程の「エージェントの作り方」で得た知識を元に、「実際に存在しうるようなエージェント」に仕立てる作業
-をするわけですが、本来のエージェントを作る順序とは大きく異なり</p>
-<ul>
-<li>先にエージェントの人物像が存在する</li>
-<li>ある程度スキルとして使いたいもの(魔法等)が存在する</li>
-</ul>
-<p>という条件が存在しています。そのため、ある程度の制約と妥協(「力の源」の定義や、スキルと人物像とのマッ
-チ具合等)は行う必要があります。(優先順位的に、"夜桜みあであること"が最上位であるため)</p>
-<h2
-id="ターゲットプレイヤー・コンセプトを決める">ターゲットプレイヤー・コンセプトを決める</h2>
-<p>まずは、「どういったプレイを好む人に使われてほしいのか」ということを考える必要があります。これに関し
-ては、「夜桜みあを実装したい」という目的上「夜桜みあに使われてほしい」ということになります。しかしそ
-れだとペルソナとしては曖昧すぎるので、具体的に「どういったプレイスタイルを好んでいるか」を推測してい
-く必要があります。</p>
-<ol>
-<li><p>プレイスタイルの推測: ピックデータ</p>
-<p>雰囲気や後述する言動からどういうエージェントを使っているかは分かるものの、せっかくなのできちんとデータが取りたい…と
-いうことで、今迄のVALORANT配信で使われている(or
-「使える」と言っている)エージェントを調べた結果がこれです。</p>
-<p>補足:</p>
-<ul>
-<li>本来、時系列上の変化も考慮するべきですが、
-<del>やりかたよく分からない</del>
-ちょっとそこまでやるのはやりすぎな気がするのでやりません</li>
-<li>合わせピックか否かも考慮しようとしましたが、どちらにせよピックプールは一定だったので考慮せずとも良いと判断しました。</li>
-<li>サンプル数が少ないため、ランク・アンレ双方混ぜて集計しています。</li>
-<li><a
-href="https://www.youtube.com/watch?v=BDGYmgotBy4">フラッシュ縛りの回</a>は除外しています。</li>
-<li>統計学んだはずだけど苦手分野なのできちんと意味のあるデータになっていない可能性があります、ユルシテ。</li>
-</ul>
-<table id="配信上のエージェントピック" class="ui celled table">
-<thead>
-<tr class="header">
-<th>エージェント</th>
-<th>ロール</th>
-<th>ピック数</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>キルジョイ</td>
-<td>センチネル</td>
-<td>8</td>
-</tr>
-<tr class="even">
-<td>セージ</td>
-<td>センチネル</td>
-<td>6</td>
-</tr>
-<tr class="odd">
-<td>スカイ</td>
-<td>イニシエーター</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td>ヴァイパー</td>
-<td>コントローラー</td>
-<td>1</td>
-</tr>
-<tr class="odd">
-<td>レイズ</td>
-<td></td>
-<td>1</td>
-</tr>
-</tbody>
-</table>
-<table id="ピックプール" class="ui celled table">
-<thead>
-<tr class="header">
-<th>マップ</th>
-<th>セージ</th>
-<th>キルジョイ</th>
-<th>スカイ</th>
-<th>ヴァイパー</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>フラクチャー</td>
-<td></td>
-<td>x</td>
-<td>x</td>
-<td>x</td>
-</tr>
-<tr class="even">
-<td>スプリット</td>
-<td>x</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>バインド</td>
-<td>x</td>
-<td>x</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>ブリーズ</td>
-<td>x</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>これより、データからも圧倒的にキルジョイが多用されており、センチネルがメインであることが分かります。</p>
-<ol>
-<li><p>データソース</p>
-<ul>
-<li><a
-href="https://www.youtube.com/watch?v=j7YSVkeDQcc">【#VALORANT女子】#み♡も
-は戦場でお茶会をします（？）【Vtuber】 - YouTube</a>
-<ul>
-<li>Fracture(スカイ), Split(セージ)</li>
-</ul></li>
-<li><a
-href="https://www.youtube.com/watch?v=0PiBto5cMH8">【VALORANT】はじめてのソロ…！🔫爆弾のおつかいをします【Vtuber】
-- YouTube</a>
-<ul>
-<li>Icebox(ヴァイパー), Haven(キルジョイ)</li>
-</ul></li>
-<li><a
-href="https://www.youtube.com/watch?v=nrKoFExkQTE">【VALORANT】じょしヴァロラント♡みあおぢさんが武器買ってあげちゃおうね…【#Vtuber】
-- YouTube</a>
-<ul>
-<li>Bind(キルジョイ), Fracture(キルジョイ), ブリーズ(セージ)</li>
-</ul></li>
-<li><a
-href="https://www.youtube.com/watch?v=TEs3Erk6DyQ">【VALORANT】配信で初めてのヴァロ！！フルパで臨みます…！【Vtuber】
-- YouTube</a>
-<ul>
-<li>Bind(キルジョイ)、 Icebox(キルジョイ), Fracture(セージ)</li>
-</ul></li>
-<li><a
-href="https://www.youtube.com/watch?v=Gai4AE9IB0g">【VALORANT】~うぇーいヴァロラントアンレ！~【魂のソウル】
-- YouTube</a> (本人枠なし)
-<ul>
-<li>Bind(セージ), Accent(レイズ), Haven(セージ), Accent(キルジョイ)</li>
-</ul></li>
-<li><a
-href="https://www.youtube.com/watch?v=h2tOU36GWvk">【VALORANT】~フルパヴァロラントうぃずそらいろのふたり~【魂のソウル】【夜桜みあ】【裏咲無形】【夢河かのん】【踊場そよぎ】
-- YouTube</a>
-<ul>
-<li>[2022-01-11 Tue]</li>
-<li>TODO ブリーズ(キルジョイ), Accent(キルジョイ), Fracture(セージ)</li>
-</ul></li>
-</ul></li>
-</ol></li>
-<li><p>プレイスタイルの推測: 雑談より</p>
-<p><a href="https://youtu.be/iP0eZqrorZc?t=3650">#み♡も
-マシュマロ雑談企画</a>
-ですきなロールに関する話がいくつか聞けます。「キルジョイがすき」「センチネ
-ルが全体的にすき」「元々、何かと一緒に戦うのとか戦略的に戦うとかがすき」という発言があるのは大分参考
-になります。</p>
-<p>ゴリ押しヴァイパーウルトで領域展開するのがすきらしい。「呼んでくれたらセンチネルかデュエやるよ!」と
-言っていたり、「イニシも若干使う」と言っていたり、なんだかんだ色々使いはするらしい。なるほど。</p></li>
-<li><p>結論</p>
-<p>上記のデータより、</p>
-<ul>
-<li>戦略的に戦うのがすき</li>
-<li>何かと一緒に戦うのがすき</li>
-<li>ゴリ押し領域展開がすき</li>
-</ul>
-<p>ということがわかります。正直これだとまだセンチネルという枠組み以上に絞り込むことは難しい(ゴリ押し領
-域展開だけは特徴として出ているけれども)です。もう少し色々な配信を見直したりプレイスタイルの観察等す
-ればよかったのですが、 <del>流石に気持ち悪い気がする</del>
-そこまでの時間がないので、ここから先は自由に決定出
-来るものとすることにしました。</p></li>
-</ol>
-<h2
-id="VALORANT視点でコンセプトを決める">VALORANT視点でコンセプトを決める</h2>
-<p>立ち回りについて自由に決定出来るといわれても困るので(オープンクエスチョンが苦手)、ここはVALORANT側の
-視点から考えてみます。</p>
-<p>「エージェントデザインの過程」の動画によると、新しく追加されるエージェントは、「現在の環境に何かする」
-必要があります。動画では、「新しい展開を生み出し」たり、「新しい課題を生み出し」たり、「新しい構成を
-生み出し」たり等が例示されていました。そこで、既存のセンチネルの分析をし、現状存在していないコンセプ
-トが何か無いかを探っていくことにします。</p>
-<ol>
-<li><p>エージェントの分析: 戦術ツールの視点から</p>
-<p>「エージェントデザインの過程」によると、各エージェントは戦術ツールを持つ必要があります。ここでの戦術
-ツールは、具体的に明示されていませんでしたが、恐らくCSGOでいうところのフラッシュ・モク・モロトフ等に
-値するスキルのことだと考えられます。</p>
-<ol>
-<li><p>キルジョイ(モロトフ系)</p>
-<p>ナノスワームがモロトフの役割を果たしています。これは、相手の侵入を防ぎ、時間を稼ぐのに良いツールだと
-思われます。又、攻撃側の際は解除阻止にも使えるやつですね。</p></li>
-<li><p>サイファー(モク系)</p>
-<p>サイバーケージをモク代わりに使うことが出来ます。上手い人のプレイをたまに見ると、ケージを上手く使って
-射線を変えるなどの立ち回りをしたりすることがよくあります。</p></li>
-<li><p>セージ(モロト…フ…?)</p>
-<p>よく考えたらよく分かんなくなってきた。足止めスキルとして持つスローオーブがまさに戦術ツールであり、相
-手の居場所を限定して入ってこれなくするという観点からモロトフ系と同様な役割を持っているように思われま
-す。</p></li>
-<li><p>チェンバー(？？？)</p>
-<p>こいつ何…??</p></li>
-</ol></li>
-<li><p>エージェントの分析: 想定されている立ち回り</p>
-<ol>
-<li><p>キルジョイ: 籠城して守る</p>
-<p>サイト中を徹底して</p></li>
-<li><p>サイファー: 情報収集・裏取り警戒</p>
-<p>「パッチ5.12でのチェンバーの変更について」にて「裏取りの監視はサイファーの強みであるべき」と書かれて
-おり、攻撃時は</p></li>
-<li><p>セージ: ひたすらに遅延</p>
-<p>壁を建てるのもスローオーブも遅延用途。ヒールオーブも蘇生も「遅延要員を倒させない」という面で遅延用ス
-キルと考えられます。情報を取ったり、サイト中で耐えるという動きは仕辛いけれどその分「侵入されるまでの
-遅延をする」のが役割なのではないかなと考えています。</p></li>
-<li><p>チェンバー: 安全なワンピック</p>
-<p>「パッチ5.12でのチェンバーの変更について」にて「高精度を誇り、リスクを取ってエリアを制圧するセンチネ
-ル」というアイデンティティであるとの記述があります。</p>
-<p>基本的には「生きのこること」が大切となるセンチネルに於いて、ハイリスクを冒すのは難しいように思うもの
-の、そこをランデブーで補完しているんでしょうね。</p></li>
-</ol></li>
-<li><p>エージェントの分析: ○○寄りのセンチネル</p>
-<p>割と区分として、</p></li>
-</ol>
-<h2
-id="センチネルにふさわしいスキルセットとは？">センチネルにふさわしいスキルセットとは？</h2>
-<ol>
-<li><p>センチネルの特徴: 状態異常系スキルを持つ</p>
-<p>あらためて考えてみると、センチネルは必ず状態異常を付与するアビリティを所持しています。セージはスロー
-オーブ、キルジョイはアラームボット、チェンバーはトレードマークとツール・ド・フォース、サイファーはト
-ラップワイヤーです。</p>
-<p>ここからは推測ですが、センチネルの役割の一つに「ラッシュを止める」というものがある関係で「状態異常に
-させることでエントリーしづらくさせる」という目的があるのではないかなと考えられます。</p></li>
-<li><p>「センチネル」の役回りから考える、必要な能力</p></li>
-</ol>
-<h2 id="TODO カウンタープレイの実装"><span class="todo TODO">TODO</span>
-カウンタープレイの実装</h2>
-<p>まだできてない。</p>
-<h2 id="スキルの価格帯設定">スキルの価格帯設定</h2>
-<h1 id="TODO おわりに"><span class="todo TODO">TODO</span> おわりに</h1>
-<p>おわりなので、本題とはちょっと離れた話をします。オフトピってﾔﾂ。</p>
-<p>実は企画を聞いた当初は、普通に絵を書こうとしていました。バトルもの、ということでみあちゃんが良くやっ
-ているゲームと組み合わせるか~~？？と思っていたのですが、最近よくやっているらしいApexは本家やっていな
-くてよくわからんのでVALORANTを選択しました。でも絵が壊滅的にダメ(1年に1回しか描かないのでそれはそう)
-で、行き詰まってしまい…色々悩んでいた時にこのアイデアが降ってきたので取り掛かってみた次第です。</p>
-<p>ちなみに途中でアレス(夜桜みあがよく持つ武器)のスキンを考えようともしていましたが、そちらもデザインセ
-ンスが間に合いませんでしたgg。</p>
-<p>エージェント化の話に戻すと。5/21あたりに夢からアイデアを貰い突発的に考え始め(実は<a
-href="https://twitter.com/cj_bc_sd/status/1660042761163378688">このツイート</a>がそう)、
-「や~!おもしろそうだな!!色々アイデア浮かんだし!!!できそう!!!!」とかナメてかかったわけですが、見事に
-間に合いませんでした…アイデハは浮かんでも、きちんと作ろうとするとボツになることの繰り返し…バラン
-ス考えたりキャラ被り考えたりするのって難しいですね。本職の人やっぱすげぇや…</p>
-<p>て、そうではなくて。や、そう("本職の人すごい")ではあるんですけど。色々考えること多くて、実は大分焦っ
-て纏めた本文なのですけどとても楽しかったです。きちんと作り込めなくて悔しさは大分ある…リベンジした
-い。</p>
-<p>ちなみに作業中に大分色々なエージェントについて理解が深まったりしたのでとても楽しかったです。まぁ完全
-に趣味みたいなことしてるのをFAちゅてええのか…?感はあるけど、お絵描きすきな人がお絵描きでFA作るのと
-同じ感覚なので許されるやろ、しらんけど、という感情でいます。</p>
-<h1 id="参考資料">参考資料</h1>
-<ul>
-<li><a
-href="id:53c89468-dc7d-4597-a068-95112d654d46">エージェントデザインの過程
-– VALORANT</a></li>
-</ul>
-<h2 id="夜桜みあの統計">夜桜みあの統計</h2>
-<ol>
-<li><p>エージェントピック</p>
-<p>本来なら時系列を考慮したりするべきではありますが、正直統計は苦手なので</p>
-<ul>
-<li><a href="https://youtu.be/0PiBto5cMH8?t=1081">2022/06/17 - 18:01</a>
-モクはヴァイパーしか出来ない</li>
-</ul>
-<ol>
-<li><p>その他喋っていたこと</p></li>
-<li><p>生データ</p></li>
-</ol></li>
-<li><p>マップ</p>
-<table class="ui celled table">
-<thead>
-<tr class="header">
-<th>マップ</th>
-<th>得意下手</th>
-<th>使うエージェント</th>
-<th>情報日時</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>アイスボックス</td>
-<td>苦手</td>
-<td>キルジョイ・ヴァイパー</td>
-<td>[2022-06-17 Fri]</td>
-</tr>
-<tr class="even">
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>モクはヴァイパーのみ</p></li>
-</ol>
-<h2 id="夜桜みあ・のあ情報">夜桜みあ・のあ情報</h2>
-<ol>
-<li><p>魔法: キャットス</p>
-<p>猫耳を生やす魔法。猫耳を生やすことしか分かっていない。</p>
-<p>1:11:46 <a
-href="https://www.youtube.com/watch?v=l9nmg9zMDBA&amp;t=4168s">https://www.youtube.com/watch?v=l9nmg9zMDBA&amp;t=4168s</a></p>
-<div class="ui piled segment" style="z-index: 0">
-<blockquote>
-<p>夜空に舞う妖精よ 音を奏でるハープよ かわいいを創造し
-&lt;不明瞭区間&gt; 姿を変えん キャットス</p>
-</blockquote>
-</div></li>
-<li><p>魔法: フローレ</p>
-<p>桜を咲かせる魔法。一応長文詠唱が存在するが、割と「フローレ!」だけでも詠唱は可能らしい。</p></li>
-<li><p>黒猫</p>
-<p>リスナーの呼称。</p></li>
-<li><p>杖</p>
-<p>あくまでもアクセサリーとしての存在であり、杖がなくとも詠唱で魔法が使える。ハープの部分は一応音が鳴る。</p>
-<p>夜桜みあ曰く杖は重いらしい。コントローラーよりか重い。それはとても重いな。うん。</p>
-<p>1:15:14 <a
-href="https://www.youtube.com/watch?v=l9nmg9zMDBA&amp;t=4168s">https://www.youtube.com/watch?v=l9nmg9zMDBA&amp;t=4168s</a></p></li>
-</ol>
-<h2 id="Valorantの統計">Valorantの統計</h2>
-<ol>
-<li><p>スキルの価格帯</p>
-<p>マダデキテナイ…orz</p></li>
-</ol>
-    </div>
-  </div>
-  
-
-</div>
-]]></description>
-    <pubDate>Fri, 02 Jun 2023 00:00:00 UT</pubDate>
-    <guid>https://cj-bc.github.io/blog/posts/2023-06-02-yozakura-mia-as-valorant-agent.html</guid>
     <dc:creator>Cj-bc a.k.a Cj.BC_SD</dc:creator>
 </item>
 

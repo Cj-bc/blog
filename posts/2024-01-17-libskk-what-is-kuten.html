@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>CLI! CLI! CLI! -- SKKにある「Kuten」とは何なんだろう？</title>
+
+        <!-- Fomantic-UI -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../css/semantic.min.css">
+        <script src="../js/semantic.min.js"></script>
+
+        <!-- Highlight.js -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/night-owl.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/vim.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+
+        <link rel="stylesheet" type="text/css" href="../css/myCustom.css">
+
+	  
+	  <meta property="og:type" content="article" /><meta property="og:url" content="https://cj-bc.github.io/blog/posts/2024-01-17-libskk-what-is-kuten.html" /><meta property="og:title" content="SKKにある「Kuten」とは何なんだろう？" /><meta property="og:description" content="SKKを使っている時に Kuten([MM]KKTT) という表示が出てきたことはないで しょうか？私はたまに見掛け、なんだろう…と思っていたのですがやっと理 解したのでメモしておきます。" />
+	  
+	  
+	  <meta name="twitter:card" content="summary" />
+	  
+
+	<meta name="viewport" content="width=device-width" />
+    </head>
+    <body>
+        <div id="header" class="ui fixed inverted menu">
+	  
+	  <a href="../" class="mobile only item"><i class="angle left icon"></i></a>
+	  
+          <div class="computer only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image">CLI! CLI! CLI!</div>
+          <div class="mobile only item"><img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"></div>
+            <a href="../" class="computer only item">Home</a>
+            <a href="../archive.html" class="item">Archive</a>
+            <a href="https://Cj-bc.github.io" class="item">HP</a>
+            <a href="https://github.com/Cj-bc/blog" class="item right"><img src="https://github.com/Cj-bc/blog/workflows/Publish/badge.svg"></a>
+            <a href="../feeds/atom/general.xml" class="item">Atom feed</a>
+            <a href="../feeds/rss/general.xml" class="item"><i class="rss icon"></i></a>
+        </div>
+
+	<div id="bodygrid" class="ui three column stackable grid container">
+	  <div class="ui four wide computer only column">
+	    
+	    <div class="ui fluid card">
+  <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui image">
+  <div class="content">
+    <div class="header">
+      Cj.BC_SD
+    </div>
+    <div class="description">
+      This is me
+    </div>
+
+    <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+	    
+	  </div>
+	  <div class="ui four wide tablet mobile only column">
+	    
+	    <div class="ui fluid card">
+  <div class="content">
+    <img src="https://avatars0.githubusercontent.com/u/16875061?s=460&u=98d9809dd854df3a38568023ebdacc080ffe3fa2&v=4" class="ui avatar image"> Cj.BC_SD
+    <div class="description">
+      This is me
+    </div>
+  </div>
+  <div class="extra content">
+      <div class="ui horizontal list">
+	<div class="item">
+	  <i class="twitter icon"></i>
+	  cj_bc_sd
+	</div>
+      </div>
+    </div>
+</div>
+
+	    
+	  </div>
+          <div class="ui eight wide column">
+	    <div class="ui secondary segment">
+	      <p>
+		現在ブログ改修工事中です。恐らく多分きっとメイビーそのうちAstro製の既存デザインへと
+		変換しますので、見辛さは今暫くご容赦下さい。
+	      </p>
+	    </div>
+
+	    <div class="ui fluid card">
+	      <div id="body-content">
+  <div class="content of Memo">
+    <div class="ui center aligned icon header">
+      <h1>SKKにある「Kuten」とは何なんだろう？</h1>
+    </div>
+      <div class="meta ui list">
+	<div class="item">Posted on January 17, 2024</div>
+	<div class="item">
+	  <i class="history icon"></i>
+	  Updated on January 27, 2024
+	</div>
+
+	
+
+	
+	<a title="All pages tagged 'skk'." href="../tags/skk.html" class="ui tag label">skk</a>
+	
+      </div>
+
+    <div class="description">
+      <p>SKKを使っている時に <code>Kuten([MM]KKTT)</code>
+という表示が出てきたことはないで
+しょうか？私はたまに見掛け、なんだろう…と思っていたのですがやっと理
+解したのでメモしておきます。</p>
+<p>ちなみに、keymapで <code>"kuten"</code>
+を指定することで呼び出すことが出来、デフォ ルトの状態だと <code>\</code>
+で起動します。
+<code>/usr/share/libskk/rules/default/keymap/default.json</code>
+では以下のように 定義されています。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+json
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode json SourceCode"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;define&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;keymap&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>            <span class="er">...</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>            <span class="dt">&quot;</span><span class="ch">\\</span><span class="dt">&quot;</span><span class="fu">:</span> <span class="st">&quot;kuten&quot;</span><span class="fu">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>            <span class="er">...</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+</div>
+<h1 id="結論: Kuten は EUC-jp のコード直接入力だった">結論: Kuten は
+EUC-jp のコード直接入力だった</h1>
+<p>コードを完全には読み切っていないので若干の推論を含みますが、どうやら
+EUC-jpの文字コードを直接入力するモードなようです。
+EUC-jpの文字コード表を <a href="http://charset.7jp.net/euc.html">文字コード表 日本語EUC(euc-jp) –
+charset.7jp.net</a>
+を参考にして入力してみると、表の通りに入力出来ていそうでした。</p>
+<p>表に「区」「点」の表示があったので、恐らくその由来なのでしょう。</p>
+<p>… <code>K</code> と <code>T</code> は理解したけど <code>[MM]</code>
+って何なんだろ。</p>
+<h1 id="経緯">経緯</h1>
+<p>最初は<a href="https://github.com/fcitx/fcitx5-skk">fcitx/fcitx5-skk</a>の何かなのかな？と思い、そのレポジトリで"Kuten"
+を検索したのですが見付からず。<a href="https://github.com/ueno/libskk">ueno/libskk</a>を調べてみると、 <a href="https://github.com/ueno/libskk/blob/5f5e5c2d3facfec9f577fb66032e6f1994ed5d44/libskk/state.vala#L611-L693">KutenStateHandler</a>という実装を見つけました。</p>
+<p>(Vala読めないので雰囲気で読んでいますが)コンストラクターを見てみると、
+EUC-JPのコンバーターを使っているようなので、なんとなくEUC-JPを調べて
+入力してみた所動作した、という感じです。</p>
+<div class="ui segment">
+<div class="ui top right attached label">
+vala
+</div>
+<pre class="vala SourceCode"><code>internal KutenStateHandler () {
+    try {
+        // use EUC-JP to get JISX0208 characters by code
+        // point, this works because EUC-JP maps JISX0208
+        // characters to equivalent bytes.  See:
+        // https://en.wikipedia.org/wiki/EUC-JP
+        // this is generally a wrong approach though
+        converter = new EncodingConverter (&quot;EUC-JP&quot;);
+    } catch (GLib.Error e) {
+        converter = null;
+        assert_not_reached ();
+    }
+}
+</code></pre>
+</div>
+    </div>
+  </div>
+  
+
+</div>
+
+	    </div>
+	  </div>
+
+	  <div class="ui four wide column">
+	  </div>
+	</div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
