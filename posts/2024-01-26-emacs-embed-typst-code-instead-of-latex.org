@@ -1,0 +1,151 @@
+* Org modeで埋め込みLaTeXの代わりにtypstを使う
+:PROPERTIES:
+:DATE: [2024-01-26 Fri 23:21]
+:TAGS: :org-mode:emacs:typst:
+:BLOG_POST_KIND: Knowledge
+:BLOG_POST_PROGRESS: Empty
+:BLOG_POST_STATUS: Normal
+:END:
+:LOGBOOK:
+CLOCK: [2024-01-27 Sat 10:38]--[2024-01-27 Sat 11:22] =>  0:44
+CLOCK: [2024-01-26 Fri 23:22]--[2024-01-26 Fri 23:25] =>  0:03
+:END:
+
+[[https://typst.app][typst]]、便利ですよね。 $L^A T_E X$ の代わりのPDF生成手段として、とても
+使いやすいです。さて、そんなtypstをOrg modeの組込み $L^A T_E X$ の代わ
+りに使いたいな~と思ったこと、ありませんか？私は大いにあります。
+
+ということで、 _手軽に_ 埋め込み $L^A T_E X$ をtypstに入れ替える方法を
+書き記しておこうと思います。
+
+** 概要
+既存の埋め込みLaTeXの文法の一部を用いたまま、LaTeXとして解釈される所を
+typstとして扱うように実装に手を加えます。
+
+インライン埋め込みでは ~$y = ax^2 + bx + c$~ みたいな書き方を、ブロッ
+クとして埋め込むには ~\begin{...}~ で囲んで以下のような書き方をする必
+要があります。
+
+#+begin_src org
+  \begin{align}
+  $ y = ax^2 + bx + c $
+  \end{align}
+#+end_src
+
+埋め込みLaTeXでは ~\( y = x \)~ や ~\[ y = x \]~ といった書き方も用意
+されていますが、これらはきちんと数式として描画されないので気をつけてく
+ださい。(~\( $y = x$ \)~ とすれば可能ですが、余計な括弧もそのまま描画
+されます)
+
+** 注意事項
+ブロックの場合 ~\begin{...}~ で囲む必要があるなど、typstの埋め込みとし
+ては適切な実装ではありません。あくまでも最小限の手数で実装するための記
+事です。
+
+尚、もし適切に実装をしたい場合はorg-element.elから手を加えるのがよさそ
+うです(今は時間ないのでやりませんが、いつかやっておきたい。)
+
+** 実装
+*** 1. org-create-formula-imageの置き換え
+~org-create-formula-image~ が、 ~PROCESSING-TYPE~ として ~typst~ シン
+ボルを受け取った際はtypstとして処理をするように分岐させます。
+
+#+begin_src elisp
+  (defun org-typst-embed/advice-func (oldfunc &rest args)
+    "Advice function to enable using typst as LaTeX fragment."
+
+    ;; 見易さのため、 help:org-create-formula-image の本来の引数に名前を付けているだけ
+    (let ((string (nth 0 args))
+          (processing-type (nth 4 args))
+          (tofile (nth 1 args)))
+      (if (eq processing-type 'typst)
+          (progn
+            ;; Block typeであった場合、それを取り除く
+            (when (string-prefix-p "\\begin{" string)
+              (setq string (with-temp-buffer
+                             (insert string)
+                             (let ((beg (progn (goto-char (point-min))
+                                               (forward-line) (point)))
+                                   (end (progn (goto-char (point-max))
+                                               (forward-line -2) (end-of-line) (point))))
+                               (buffer-substring beg end)))))
+            (ob-typst/create-image string tofile))
+        (apply oldfunc args))))
+
+  (advice-add 'org-create-formula-image :around #'org-typst-embed/advice-func)
+#+end_src
+
+typstとして処理する部分は、自分の環境では自作の [[https://github.com/Cj-bc/ob-typst][Cj-bc/ob-typst]]で提供さ
+れている [[https://github.com/Cj-bc/ob-typst/blob/main/ob-typst.el#L92-L127][ob-typst/create-image]] を使っています。もし、インストールした
+くない場合は以下のように定義して、 ~ob-typst/create-image~ を使用して
+いる場所と差し替えてあげるとよいと思います(ob-typstではいくつか
+customize variableがあるので、それをハードコードした形になります。)
+
+#+begin_src elisp
+  (defun org-typst-embed/create-image (string tofile)
+    "Create an image from typst source using external process.
+
+  The Typst STRING is saved to a temporary Typst file, then
+  converted to an image file by 'typst compiler' command.
+
+  The generated image file is eventually moved to TOFILE.
+
+  Generated file format is determined by TOFILE file
+  extension. Supported file formats are: .png, .pdf, .svg
+  "
+    (if (condition-case nil
+            (progn (call-process "typst" nil nil nil "--help") t)
+          (file-missing nil))
+        (let* ((tmpfile (make-temp-file "ob-typst"))
+               (ext (file-name-extension tofile))
+               (log-buf (get-buffer-create "*Org Preview typst Output*")))
+          (with-temp-file tmpfile
+            (insert default-rules-str "\n" string))
+          (copy-file (org-compile-file tmpfile
+                                       (list (format "typst compile --format %s --root %%o %%f" ext))
+                                       ext "" log-buf)
+                     tofile 'replace))
+      (display-warning 'org-typst-embed "typst command not found")))
+#+end_src
+
+*** 2. ~org-preview-latex-process-alist~ の設定
+~org-preview-latex-process-alist~ に含まれるシンボル以外は
+~org-format-latex~ (内部処理で使われている関数)がエラーとして処理して
+しまい、画像の生成が出来ません。なので、実際に値を使うことはないにせよ
+設定しておく必要があります。
+
+#+begin_src elisp
+  (push '(typst) org-preview-latex-process-alist)
+#+end_src
+
+*** 3. ~org-preview-latex-default-process~ の設定
+これは ~'typst~ を指定するだけで良いです。これをすることで、
+~org--latex-preview-region~ が適切に動くようになります。
+
+#+begin_src elisp
+  (setq org-preview-latex-default-process 'typst)
+#+end_src
+
+** 使い方
+実装にかかれたコードを全て実行した後、普通にLaTeX fragmentとしてtypst
+を書き ~org-latex-preview~ を呼び出せばよいです。
+
+** 実装メモ
+ここからは実際の実装に至るまでのメモを公開しておきます。
+より深掘りする際の参考等にしてください
+
+*** 関連する変数
++ help:org-preview-latex-process-alist
+  + help:org-format-latex が処理してくれるようにするために必要
++ help:org-preview-latex-default-process
+  + help:org--latex-preview-region が ~org-format-latex~ に渡す ~PROCESSING-TYPE~ になる
+
+*** 関連する関数
++ help:org-latex-preview
+  + help:org--latex-preview-region
+    + help:org-format-latex
+      + help:org-create-formula-image
+        + 内部でハードコードされたLaTeXプリアンブルを書き込んだりしてくるので、入れ替える必要がある
+
+**** LaTeXフラグメント識別用
++ help:org-inside-LaTeX-fragment-p
