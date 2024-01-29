@@ -20,7 +20,7 @@
 	<div class="item">Posted on January 26, 2024</div>
 	<div class="item">
 	  <i class="history icon"></i>
-	  Updated on January 27, 2024
+	  Updated on January 30, 2024
 	</div>
 
 	
@@ -143,16 +143,19 @@ extension. Supported file formats are: .png, .pdf, .svg
 </div>
 <h2 id="2. org-preview-latex-process-alist の設定">2.
 <code>org-preview-latex-process-alist</code> の設定</h2>
-<p><code>org-preview-latex-process-alist</code> に含まれるシンボル以外は
-<code>org-format-latex</code>
-(内部処理で使われている関数)がエラーとして処理して
-しまい、画像の生成が出来ません。なので、実際に値を使うことはないにせよ
-設定しておく必要があります。</p>
+<p><code>org-preview-latex-process-alist</code> に含まれるシンボル以外
+は~org-format-latex~ (内部処理で使われている関数)がエラーとして処理し
+てしまい、画像の生成が出来ません。又、ここで指定する
+<code>:image-output-type</code>
+によって最終的な出力のファイル形式が決定します。 これは指定しないと
+<code>png</code> となり、透過等が使えません。個人的には背景は
+透過させたいので、svgに指定しています(<code>:image-output-type</code>
+を指定する か否かは好みで良いです)</p>
 <div class="ui segment">
 <div class="ui top right attached label">
 elisp
 </div>
-<pre class="elisp SourceCode"><code>(push &#39;(typst) org-preview-latex-process-alist)
+<pre class="elisp SourceCode"><code>(push &#39;(typst :image-output-type &quot;svg&quot;) org-preview-latex-process-alist)
 </code></pre>
 </div>
 <h2 id="3. org-preview-latex-default-process の設定">3.
