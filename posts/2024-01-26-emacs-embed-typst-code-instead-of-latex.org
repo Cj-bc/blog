@@ -7,6 +7,7 @@
 :BLOG_POST_STATUS: Normal
 :END:
 :LOGBOOK:
+CLOCK: [2024-01-30 Tue 01:49]--[2024-01-30 Tue 01:51] =>  0:02
 CLOCK: [2024-01-27 Sat 10:38]--[2024-01-27 Sat 11:22] =>  0:44
 CLOCK: [2024-01-26 Fri 23:22]--[2024-01-26 Fri 23:25] =>  0:03
 :END:
@@ -109,13 +110,16 @@ customize variableがあるので、それをハードコードした形にな�
 #+end_src
 
 *** 2. ~org-preview-latex-process-alist~ の設定
-~org-preview-latex-process-alist~ に含まれるシンボル以外は
-~org-format-latex~ (内部処理で使われている関数)がエラーとして処理して
-しまい、画像の生成が出来ません。なので、実際に値を使うことはないにせよ
-設定しておく必要があります。
+~org-preview-latex-process-alist~ に含まれるシンボル以外
+は~org-format-latex~ (内部処理で使われている関数)がエラーとして処理し
+てしまい、画像の生成が出来ません。又、ここで指定する
+~:image-output-type~ によって最終的な出力のファイル形式が決定します。
+これは指定しないと ~png~ となり、透過等が使えません。個人的には背景は
+透過させたいので、svgに指定しています(~:image-output-type~ を指定する
+か否かは好みで良いです)
 
 #+begin_src elisp
-  (push '(typst) org-preview-latex-process-alist)
+  (push '(typst :image-output-type "svg") org-preview-latex-process-alist)
 #+end_src
 
 *** 3. ~org-preview-latex-default-process~ の設定
