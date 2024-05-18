@@ -104,6 +104,20 @@ If same keyword is given, it won't be copied.
   (org-next-visible-heading 1)
   (insert "\n"))
 
+(defun migration ()
+  (let ((git-tracked-post-buffers
+	 (with-temp-buffer
+	   (setq default-directory (magit-toplevel))
+	   (call-process "git" nil (current-buffer) nil "ls-files")
+	   (seq-map #'find-file-noselect
+		    (seq-filter #'(lambda (l) (string-match-p "^posts/.*\.org$" l)) (string-lines (buffer-string)))))))
+    (dolist (buf git-tracked-post-buffers)
+      (with-current-buffer buf
+	(org2mdx/--copy-toplevel-props-to-toplevel-keywords
+	 '("DATE" "TAGS" "KIND" "PROGRESS" "STATUS" "title" "description" "author" "image")
+	 '(("BLOG_POST_KIND" . "KIND") ("BLOG_POST_PROGRESS" . "PROGRESS" ) ("BLOG_POST_STATUS"  . "STATUS")
+	   ("ITEM" . "TITLE") ("BLOG_POST_TAGS" . "TAGS")))))))
+
 ;; TODO
 
 ;;; org2mdx.el ends here
