@@ -19,11 +19,13 @@ fomantic-ui: fomantic-ui-configs
 	cd css/node_modules/fomantic-ui && $(GULP) build
 
 # ---------- Commands ----------
-build: fomantic-ui
-	stack build
-	stack exec blog rebuild
+blog-build:
+	git submodule update --init
+	cp posts/*.org astro-ink/src/content/blog/
+	cd astro-ink && npm run build
+	cp -r astro-ink/_dist ./_site
 
-publish: build
+blog-publish: blog-build
 	git switch $(BRANCH_DEST)
 	cp -a _site/. .
 	git add -A
