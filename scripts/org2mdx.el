@@ -105,13 +105,5 @@ If same keyword is given, it won't be copied.
   (insert "\n"))
 
 ;; TODO
-(defun org-myBlog-template (contents info)
-  (let ((keywords)) (concat "---\n"
-	  "---\n"
-	  contents)))
-
-(setq org2mdx/backend (org-export-create-backend
-		       :parent 'zennmd
-		       :transcoders '((template . org-myBlog-template))))
 
 ;;; org2mdx.el ends here
