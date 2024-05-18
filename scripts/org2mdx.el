@@ -48,23 +48,59 @@ keywords are
 		     (eq (org-element-property :begin parent-elem) 1)))
 	  (cons (org-element-property :key keyword) (org-element-property :value keyword))))))
 
-(defun org2mdx/--copy-toplevel-props-to-toplevel-keywords ()
-  ""
+(defun org2mdx/--copy-toplevel-props-to-toplevel-keywords (&optional whitelist substitute)
+  "Copy toplevel properties to toplevel keyword.
+If WHITELIST, which should be list of strings, is supplied, only keywords in WHITELIST will be copied.
+TRANSFORMER is a function that takes one string argument, and returns string to replace.
+
+If current buffer is:
+```
+* My task
+  :PROPERTIES:
+  :TAGS: :emacs:
+  :END:
+```
+
+It will convert it to:
+```
+#+TAGS: :emacs:
+* My task
+  :PROPERTIES:
+  :TAGS: :emacs:
+  :END:
+```
+
+If same keyword is given, it won't be copied.
+\(fn (&optional whitelist (fn ())))"
   ;; Go to first headline
   (goto-char 0)
-  (when (eq (car (org-element-at-point)) 'headline)
+  (unless (eq (car (org-element-at-point)) 'headline)
     (org-next-visible-heading 1))
 
-  ;; 
-  (let ((predefined-keywords (org2mdx/keywords)))
+  (let* ((range (org-get-property-block))
+	(beg (car range))
+	(end (cdr range)))
+    (evil-ex-substitute beg end '(":TAGS:") ":BLOG_POST_TAGS:"))
+
+  (let ((predefined-keywords (org2mdx/keywords))
+	(_sub (or substitute '())))
+
     (dolist (e (org-entry-properties))
       (goto-char 0)
-      (insert
-       (pcase e
-	 ;; If the same keyword is alerady defined, ignore current property
-	 ((pred (lambda (v) (assoc (car v) predefined-keywords))) "")
-	 ;; (`("ITEM" . ,v) (format "#+TITLE: %s\n" v))
-	 (`(,k . ,v) (format "#+%s: %s\n" k v))))))
+      (let* ((original-key (upcase (car e)))
+	     (value (cdr e))
+	     (converted-key (upcase (cdr (or (assoc-string original-key _sub) `(t . ,original-key)))))
+	     )
+	(insert
+	 (pcase e
+	   ;; If the same keyword is alerady defined, ignore current property
+	   ((pred (lambda (v) (assoc (car v) predefined-keywords))) "")
+	   ((guard (or (null whitelist) (member converted-key (map 'list #'upcase whitelist))))
+	    (format "#+%s: %s\n" converted-key value))
+	   (_ "")))
+	(org-next-visible-heading 1)
+	(org-entry-delete (point) original-key))
+      ))
   (org-next-visible-heading 1)
   (insert "\n"))
 
