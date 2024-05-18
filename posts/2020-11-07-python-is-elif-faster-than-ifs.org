@@ -47,19 +47,19 @@ elifの数は適当に多めにしておきました。
    :END:
 長いので
 
-#+begin_html
+#+begin_export html
   <details>
-#+end_html
+#+end_export
 
-#+begin_html
+#+begin_export html
   <summary>
-#+end_html
+#+end_export
 
 測定コード
 
-#+begin_html
+#+begin_export html
   </summary>
-#+end_html
+#+end_export
 
 #+begin_example
   import time
@@ -518,9 +518,9 @@ elifの数は適当に多めにしておきました。
   print(f"with elif   : {(t_with_elif_end - t_with_elif_start)/1000} sec")
 #+end_example
 
-#+begin_html
+#+begin_export html
   </details>
-#+end_html
+#+end_export
 
 ** 結果
    :PROPERTIES:

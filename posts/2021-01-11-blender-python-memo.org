@@ -65,19 +65,19 @@ type()によると、=bpy.data=は=bpy.types.BlendData=であるので、=node_g
 である。
 ここで、なんとなく=bpy.data=を見てみると=bpy.data.node_groups=に追加されてることがわかる。
 
-#+begin_html
+#+begin_export html
   <details>
-#+end_html
+#+end_export
 
-#+begin_html
+#+begin_export html
   <summary>
-#+end_html
+#+end_export
 
 =bpy.data.node_groups=までたどり着く道のりメモ(でもよくわからなくて落書き)
 
-#+begin_html
+#+begin_export html
   </summary>
-#+end_html
+#+end_export
 
 =data_to=は[[https://docs.blender.org/api/current/bpy.types.BlendDataLibraries.html#bpy.types.BlendDataLibraries.load][=bpy.data.libraries.load=]]から返されている。
 =bpy.data=が[[https://docs.blender.org/api/current/bpy.types.BlendData.html][=BlendData=]]のインスタンスであることから
@@ -85,9 +85,9 @@ type()によると、=bpy.data=は=bpy.types.BlendData=であるので、=node_g
 
 ...で、なんとなく=bpy.data=を見る、に戻る
 
-#+begin_html
+#+begin_export html
   </details>
-#+end_html
+#+end_export
 
 =node_groups=の中で入力を受け付けてるものなら=.inputs=にある。
 今回でいうと、=MToon=マテリアルにある=NomalmapTexture=というtypoを直したいので、
@@ -142,19 +142,19 @@ type()によると、=bpy.data=は=bpy.types.BlendData=であるので、=node_g
       :CUSTOM_ID: new
       :END:
 
-#+begin_html
+#+begin_export html
   <details>
-#+end_html
+#+end_export
 
-#+begin_html
+#+begin_export html
   <summary>
-#+end_html
+#+end_export
 
 Replの結果ですが長いので折りたたみ
 
-#+begin_html
+#+begin_export html
   </summary>
-#+end_html
+#+end_export
 
 #+begin_example
   >>> mtoonNode.inputs
@@ -217,28 +217,28 @@ Replの結果ですが長いので折りたたみ
   , ('UV_Scroll_Rotation', bpy.data...inputs[34])]
 #+end_example
 
-#+begin_html
+#+begin_export html
   </details>
-#+end_html
+#+end_export
 
 ***** move()
       :PROPERTIES:
       :CUSTOM_ID: move
       :END:
 
-#+begin_html
+#+begin_export html
   <details>
-#+end_html
+#+end_export
 
-#+begin_html
+#+begin_export html
   <summary>
-#+end_html
+#+end_export
 
 Replの結果。長いため折りたたみ。
 
-#+begin_html
+#+begin_export html
   </summary>
-#+end_html
+#+end_export
 
 #+begin_example
   >>> mtoonNode.inputs.move()
@@ -312,6 +312,6 @@ Replの結果。長いため折りたたみ。
   >>>
 #+end_example
 
-#+begin_html
+#+begin_export html
   </details>
-#+end_html
+#+end_export

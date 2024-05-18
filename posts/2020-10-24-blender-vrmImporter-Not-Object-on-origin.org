@@ -78,55 +78,55 @@ ShadeTextureを設定していないと、面を法線と反対側から見た�
 
 設定してなかった:\\
 
-#+begin_html
+#+begin_export html
   <blockquote class="twitter-tweet" data-conversation="none" data-theme="dark">
-#+end_html
+#+end_export
 
-#+begin_html
+#+begin_export html
   <p lang="ja" dir="ltr">
-#+end_html
+#+end_export
 
 色々と調節は必要そうだね pic.twitter.com/ndXTzYKdfQ
 
-#+begin_html
+#+begin_export html
   </p>
-#+end_html
+#+end_export
 
 --- mi'e himari (@mihe_himari) October 26, 2020
 
-#+begin_html
+#+begin_export html
   </blockquote>
-#+end_html
+#+end_export
 
-#+begin_html
+#+begin_export html
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-#+end_html
+#+end_export
 
 設定した:\\
 
-#+begin_html
+#+begin_export html
   <blockquote class="twitter-tweet" data-conversation="none" data-theme="dark">
-#+end_html
+#+end_export
 
-#+begin_html
+#+begin_export html
   <p lang="ja" dir="ltr">
-#+end_html
+#+end_export
 
 他のオブジェクトにも設定してきた...ﾖｼ!! pic.twitter.com/8tMJyUaawt
 
-#+begin_html
+#+begin_export html
   </p>
-#+end_html
+#+end_export
 
 --- mi'e himari (@mihe_himari) October 26, 2020
 
-#+begin_html
+#+begin_export html
   </blockquote>
-#+end_html
+#+end_export
 
-#+begin_html
+#+begin_export html
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-#+end_html
+#+end_export
 
 ** todo
    :PROPERTIES:
