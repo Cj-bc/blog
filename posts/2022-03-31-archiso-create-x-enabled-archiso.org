@@ -1,11 +1,10 @@
+#+TITLE: X環境を含んだarchsioイメージを作成する
+#+DATE: [2022-03-31 Thu 17:54]
+#+TAGS: :archlinux:archiso:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * X環境を含んだarchsioイメージを作成する
-  :PROPERTIES:
-  :DATE: [2022-03-31 Thu 17:54]
-  :TAGS: :archlinux:archiso:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2022-03-31 Thu 17:55]--[2022-03-31 Thu 17:56] =>  0:01
   :END:
@@ -20,6 +19,7 @@
 
   実際に使っているものはこちら: [[https://github.com/Cj-bc/dotfiles/tree/master/dotfiles/archiso][Cj-bc/dotfiles/dotfiles/archiso]]
   
+
 ** パッケージの追加
 
    ~packages.x86_64~ にパッケージを追加。

@@ -1,11 +1,10 @@
+#+TITLE: ~.~ と ~<$>~ の順序のメモ
+#+DATE: [2021-08-26 Thu 23:04]
+#+TAGS: :haskell:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * ~.~ と ~<$>~ の順序のメモ
-  :PROPERTIES:
-  :DATE: [2021-08-26 Thu 23:04]
-  :TAGS: :haskell:
-  :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2021-08-26 Thu 23:05]--[2021-08-26 Thu 23:42] =>  0:37
   :END:
@@ -21,6 +20,7 @@
   #+end_src
 
   ...でもたまに分からなくなるよ。
+
 
 ** 考えたいケース
    

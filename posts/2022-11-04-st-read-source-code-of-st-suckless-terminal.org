@@ -1,11 +1,10 @@
+#+TITLE: st (Suckless Terminal)のソースコードリーディング
+#+DATE: [2022-11-04 Fri 10:03]
+#+TAGS: :st:code-reading:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * st (Suckless Terminal)のソースコードリーディング
-  :PROPERTIES:
-  :DATE: [2022-11-04 Fri 10:03]
-  :TAGS: :st:code-reading:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
 :LOGBOOK:
 CLOCK: [2022-11-04 Fri 10:14]--[2022-11-04 Fri 10:21] =>  0:07
 CLOCK: [2022-11-04 Fri 10:03]--[2022-11-04 Fri 10:07] =>  0:04
@@ -18,6 +17,7 @@ CLOCK: [2022-11-04 Fri 10:03]--[2022-11-04 Fri 10:07] =>  0:04
 するなどといった(コードベース的に)徹底的なシンプルさを持ちます。
 そのため、ターミナル実装の作り方を知るためには一番良い教材になりそうだと感じ
 たのでコードを読んでみることとします。
+
 
 
 ** 使用するコードのバージョン

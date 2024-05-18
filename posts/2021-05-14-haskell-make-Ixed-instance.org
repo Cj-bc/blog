@@ -1,11 +1,11 @@
+#+TITLE: HaskellのIxedインスタンスを自作型につける
+#+DATE: [2021-05-19 Wed]
+#+TAGS: :haskell:Ixed:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * HaskellのIxedインスタンスを自作型につける
-:PROPERTIES:
-:DATE: [2021-05-19 Wed]
-:TAGS: :haskell:Ixed:
-:BLOG_POST_KIND: Knowledge
-:BLOG_POST_PROGRESS: Published
-:BLOG_POST_STATUS: Normal
-:END:
+
 
 ** ~Ixed~ とは
 

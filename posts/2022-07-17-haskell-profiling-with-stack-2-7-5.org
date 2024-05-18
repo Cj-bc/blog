@@ -1,11 +1,10 @@
+#+TITLE: stack 2.7.5でのProfilingの仕方メモ
+#+DATE: [2022-07-17 Sun 09:55]
+#+TAGS: :haskell:stack:profiling:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * stack 2.7.5でのProfilingの仕方メモ
-:PROPERTIES:
-  :DATE: [2022-07-17 Sun 09:55]
-  :TAGS: :haskell:stack:profiling:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
 :LOGBOOK:
 CLOCK: [2022-07-17 Sun 09:57]--[2022-07-17 Sun 10:40] =>  0:43
 :END:
@@ -14,6 +13,7 @@ Stackを用いたHaskellプロジェクトのプロファイリングについ�
 色々な情報を試したけれどうまく行かなかったのでメモ。
 
 上手くいった例と、ダメだった例とを掲載します。
+
 
 ** プロファイリングの前提知識的なもの
 時間とメモリ使用量(time and space)に関するプロファイリングのための機能は、

@@ -1,11 +1,10 @@
+#+TITLE: "Clock start time is gone" エラーを解消する
+#+DATE: [2022-03-14 Mon 16:39]
+#+TAGS: :elisp:emacs:org-mode:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * "Clock start time is gone" エラーを解消する
-  :PROPERTIES:
-  :DATE: [2022-03-14 Mon 16:39]
-  :TAGS: :elisp:emacs:org-mode:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2022-03-14 Mon 16:39]--[2022-03-14 Mon 16:46] =>  0:07
   :END:
@@ -20,6 +19,7 @@
   この時の対処法についてです。
   
   
+
 ** 原因: ~org-clock-marker~ がずれている
    これは珍しい事例なのでは？と思うのですが、
    最後の =Clock-in= した場所を保持している ~org-clock-marker~ が

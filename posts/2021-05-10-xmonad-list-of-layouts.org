@@ -1,12 +1,11 @@
+#+TITLE: XMonad.Layoutのリスト
+#+DATE: [2021-05-10 Mon]
+#+TAGS: :xmonad:haskell:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * XMonad.Layoutのリスト
-    :PROPERTIES:
-    :DATE: [2021-05-10 Mon]
-    :TAGS: :xmonad:haskell:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
 xmonadのレイアウトは、 =LayoutClass=
 のインスタンスであることが条件になっており、逆にいうと様々な型によって個別に実装されている。
 
@@ -58,6 +57,7 @@ xmonadのレイアウトは、 =LayoutClass=
 #+begin_src haskell
   alist :: [forall l a. (LayoutClass l a) => l a]
 #+end_src
+
 
 *** 解法
     :PROPERTIES:

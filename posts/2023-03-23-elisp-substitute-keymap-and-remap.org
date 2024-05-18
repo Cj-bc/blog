@@ -1,11 +1,10 @@
+#+TITLE: 既存のキーバインドを置き換える(remap, substitute-key-definition)
+#+DATE: [2023-03-23 Thu 14:45]
+#+TAGS: :emacs:elisp:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * 既存のキーバインドを置き換える(remap, substitute-key-definition)
-:PROPERTIES:
-:DATE: [2023-03-23 Thu 14:45]
-:TAGS: :emacs:elisp:
-:BLOG_POST_KIND: Knowledge
-:BLOG_POST_PROGRESS: Published
-:BLOG_POST_STATUS: Normal
-:END:
 :LOGBOOK:
 CLOCK: [2023-03-23 Thu 15:03]--[2023-03-23 Thu 15:36] =>  0:33
 CLOCK: [2023-03-23 Thu 14:46]--[2023-03-23 Thu 15:03] =>  0:17
@@ -14,6 +13,7 @@ CLOCK: [2023-03-23 Thu 14:46]--[2023-03-23 Thu 15:03] =>  0:17
 既存のコマンドを置き換えるコマンドを自作した際、新しいキーバインドを作るのではなくそのコマンドで古い
 コマンドを置き換えたい時があります。その際、具体的に「元々どこにバインドされていたか」を調べずに置き
 換えることが可能なのでメモを残しておきます。
+
 
 ** アクティブなキーマップ上のコマンドを置き換えたい: remapキーイベント + ~define-key~
 ~remap~ キーイベントを使うと、新たにremapを行うキーバインドを作成出来ます。注意点として、

@@ -1,11 +1,10 @@
+#+TITLE: WORLDのPythonラッパーpyworldを試す
+#+DATE: [2022-06-30 Thu 18:17]
+#+TAGS: :pyworld:WORLD:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * WORLDのPythonラッパーpyworldを試す
-  :PROPERTIES:
-  :DATE: [2022-06-30 Thu 18:17]
-  :TAGS: :pyworld:WORLD:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
 :LOGBOOK:
 CLOCK: [2022-07-01 Fri 22:25]--[2022-07-01 Fri 23:50] =>  1:25
 CLOCK: [2022-06-30 Thu 18:18]--[2022-06-30 Thu 18:20] =>  0:02
@@ -21,6 +20,7 @@ CLOCK: [2022-06-30 Thu 18:18]--[2022-06-30 Thu 18:20] =>  0:02
 
   ちなみに、Grallion2とかはLinux対応しているらしいので既存のもので良いならそっちの方が良いと
   思う。
+
 ** 今回の目標
 最終的には自分用のボイチェンを作りたいのでリアルタイム処理を
 したいのだが、とりあえずは音声ファイルを変換するのを出来るようにする。

@@ -1,11 +1,10 @@
+#+TITLE: 全部ホントで全部ウソ / ナナヲアカリ -- の感想文
+#+DATE: [2023-03-28 Tue 03:35]
+#+TAGS: :music:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * 全部ホントで全部ウソ / ナナヲアカリ -- の感想文
-:PROPERTIES:
-:DATE: [2023-03-28 Tue 03:35]
-:TAGS: :music:
-:BLOG_POST_KIND: Memo
-:BLOG_POST_PROGRESS: Published
-:BLOG_POST_STATUS: Normal
-:END:
 :LOGBOOK:
 CLOCK: [2023-03-28 Tue 03:00]--[2023-03-28 Tue 03:40] =>  0:40
 :END:
@@ -98,3 +97,4 @@ CLOCK: [2023-03-28 Tue 03:00]--[2023-03-28 Tue 03:40] =>  0:40
 
 と、いうことで、久々に色々文字が浮かんでくる楽曲に出会えたので名取に感謝、そしてそのキッカケをくれた
 みあちゃんに感謝、といった所。しかも自分と正反対な存在に関しての歌でなるのは珍しい経験だった。
+

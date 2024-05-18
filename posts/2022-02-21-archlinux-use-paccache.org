@@ -1,11 +1,10 @@
+#+TITLE: paccacheでキャッシュ削除する
+#+DATE: [2022-02-21 Mon 18:16]
+#+TAGS: :archlinux:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * paccacheでキャッシュ削除する
-  :PROPERTIES:
-  :DATE: [2022-02-21 Mon 18:16]
-  :TAGS: :archlinux:
-  :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   :END:
   
@@ -49,3 +48,4 @@
   
 
   大分減った
+

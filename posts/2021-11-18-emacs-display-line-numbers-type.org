@@ -1,11 +1,10 @@
+#+TITLE: 行番号を表示するdisplay-line-numbers-modeの表示形式について
+#+DATE: [2021-11-18 Thu 10:03]
+#+TAGS: :emacs:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * 行番号を表示するdisplay-line-numbers-modeの表示形式について
-  :PROPERTIES:
-  :DATE: [2021-11-18 Thu 10:03]
-  :TAGS: :emacs:
-  :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2021-11-18 Thu 10:04]--[2021-11-18 Thu 10:22] =>  0:18
   :END:
@@ -33,3 +32,4 @@
   を基にして動作するため、 ~visible~ にしていると便利
 
   
+

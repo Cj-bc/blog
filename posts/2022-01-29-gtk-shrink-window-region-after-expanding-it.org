@@ -1,11 +1,10 @@
+#+TITLE: [GTK] Expandされたウィンドウを縮小させる
+#+DATE: [2022-01-29 Sat 21:55]
+#+TAGS: :gtk:rust:gui:
+#+KIND: HowTo
+#+PROGRESS: Published
+#+STATUS: Normal
 * [GTK] Expandされたウィンドウを縮小させる
-  :PROPERTIES:
-  :DATE: [2022-01-29 Sat 21:55]
-  :TAGS: :gtk:rust:gui:
-  :BLOG_POST_KIND: HowTo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   
   Gtkでは、WindowやWidgetのサイズを小さめにしておき、
   子要素が必要とする大きさが大きくなった際に必要に応じて拡張することができます。
@@ -15,6 +14,7 @@
 
   基本的にはそこまで問題がないのかもしれませんが、これが気になる時があります。
   
+
 ** 解決したい問題
    [[https://github.com/elkowar/eww][elkowar/eww]]というウィジェットアプリケーションがあります。
    プリミティブで用意されているウィジェットを組み合わせることで色々なウィジェットを

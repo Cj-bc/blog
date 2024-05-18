@@ -1,11 +1,10 @@
+#+TITLE: ~gpg --search-keys~ がうまくいかなかったので調べる
+#+DATE: [2022-03-18 Fri 14:16]
+#+TAGS: :gpg:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * ~gpg --search-keys~ がうまくいかなかったので調べる
-  :PROPERTIES:
-  :DATE: [2022-03-18 Fri 14:16]
-  :TAGS: :gpg:
-  :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2022-03-18 Fri 17:07]--[2022-03-18 Fri 18:08] =>  1:01
   CLOCK: [2022-03-18 Fri 15:07]--[2022-03-18 Fri 16:15] =>  1:08
@@ -13,6 +12,7 @@
   CLOCK: [2022-03-18 Fri 14:17]--[2022-03-18 Fri 14:17] =>  0:00
   :END:
   
+
 ** 状況
    stackの署名キーを引いてくるために、 ~--search-keywords~ を
    してみたところエラーが起きた。

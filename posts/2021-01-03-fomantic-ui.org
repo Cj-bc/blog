@@ -1,12 +1,12 @@
+#+TITLE: ブログの見た目を整える
+#+DATE: [2021-01-03 Sun]
+#+TAGS: :hakyll:ブログ:haskell:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * ブログの見た目を整える
-    :PROPERTIES:
-    :DATE: [2021-01-03 Sun]
-    :TAGS: :hakyll:ブログ:haskell:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
+
 ** コードブロックの整形
    :PROPERTIES:
    :CUSTOM_ID: コードブロックの整形

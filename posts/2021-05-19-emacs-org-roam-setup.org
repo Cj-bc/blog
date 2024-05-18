@@ -1,13 +1,13 @@
+#+TITLE: org roam使い始めた
+#+DATE: [2021-05-19 Wed]
+#+TAGS: :emacs:org-roam:org-mode:note:
+#+KIND: HowTo
+#+PROGRESS: Published
+#+STATUS: Normal
 * org roam使い始めた
-  :PROPERTIES:
-  :DATE: [2021-05-19 Wed]
-  :TAGS: :emacs:org-roam:org-mode:note:
-  :BLOG_POST_KIND: HowTo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
 この記事は、Org-roamのinfoページを読んで内容を纏めています。
 詳しくは原文をあたってください。
+
 
 ** Org-roamとは
 

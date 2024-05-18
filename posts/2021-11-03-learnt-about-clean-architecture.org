@@ -1,11 +1,10 @@
+#+TITLE: クリーンアーキテクチャーについて少し学んだ
+#+DATE: [2021-11-03 Wed 23:47]
+#+TAGS: :architecture:
+#+KIND: Diary
+#+PROGRESS: Published
+#+STATUS: Normal
 * クリーンアーキテクチャーについて少し学んだ
-  :PROPERTIES:
-  :DATE: [2021-11-03 Wed 23:47]
-  :TAGS: :architecture:
-  :BLOG_POST_KIND: Diary
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2021-11-03 Wed 23:48]--[2021-11-04 Thu 00:31] =>  0:43
   :END:
@@ -23,6 +22,7 @@
   何かしら「これは違うぞ!!」というのがあれば、 [[https://twitter.com/Cj-bc][Twitter]]にでも直接直リプライ等で指摘していただけるとありがたいです
 
   
+
 ** クリーンアーキテクチャについて軽いメモ
    + クリーンアーキテクチャは「こうやって作ると良い設計になる」というだけであり、別段正解の使い方が一つあるわけではない
    + サンプル実装もあるにはあるがあくまでサンプル

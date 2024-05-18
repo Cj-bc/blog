@@ -1,12 +1,12 @@
+#+TITLE: TERMをtmux-256colorにする
+#+DATE: [2021-02-15 Mon]
+#+TAGS: :tmux:terminal:vim:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * TERMをtmux-256colorにする
-    :PROPERTIES:
-    :DATE: [2021-02-15 Mon]
-    :TAGS: :tmux:terminal:vim:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
+
 ** なぜやるのか
    :PROPERTIES:
    :CUSTOM_ID: なぜやるのか

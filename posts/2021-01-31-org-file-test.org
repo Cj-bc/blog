@@ -1,12 +1,12 @@
+#+TITLE: org fileでの投稿のテストです
+#+DATE: [2021-01-31 Sun]
+#+TAGS: :org:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * org fileでの投稿のテストです
-    :PROPERTIES:
-    :DATE: [2021-01-31 Sun]
-    :TAGS: :org:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
+
 ** org fileでの投稿のテストです
    :PROPERTIES:
    :CUSTOM_ID: org-fileでの投稿のテストです

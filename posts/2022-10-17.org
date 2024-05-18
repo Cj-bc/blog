@@ -1,12 +1,12 @@
+#+TITLE: 2022/10/17
+#+DATE: [2022-10-17 Mon 21:27]
+#+TAGS: 
+#+KIND: Diary
+#+PROGRESS: Published
+#+STATUS: Normal
 * 2022/10/17
-  :PROPERTIES:
-  :DATE: [2022-10-17 Mon 21:27]
-  :TAGS: 
-  :BLOG_POST_KIND: Diary
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   
+
 
 ** やったこと
 ** 知ったこと

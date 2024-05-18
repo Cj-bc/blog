@@ -1,11 +1,10 @@
+#+TITLE: hakyllでOrgのPROPERTIESドロワーの情報を使う方法
+#+DATE: [2022-02-14 Mon 10:53]
+#+TAGS: :hakyll:haskell:blog:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * hakyllでOrgのPROPERTIESドロワーの情報を使う方法
-  :PROPERTIES:
-  :DATE: [2022-02-14 Mon 10:53]
-  :TAGS: :hakyll:haskell:blog:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2022-02-14 Mon 10:54]--[2022-02-14 Mon 13:04] =>  2:10
   :END:
@@ -18,6 +17,7 @@
   + *Hakyllの提供している ~Metadata~ は使わない* よ
   + Postを処理する ~Rules~ 内でpandocを用いて取り出し、 ~saveSnapshot~ するよ
      
+
 ** Hakyllのメタデータとは
    Hakyllでは、作者やタイトル・タグ等のデータを
    "メタデータ"として特別なフォーマットを用いて扱います。

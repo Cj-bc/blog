@@ -1,11 +1,10 @@
+#+TITLE: Retrofit2のAPI定義はスラッシュで始めない
+#+DATE: [2022-01-04 Tue 14:20]
+#+TAGS: :android:retrofit2:kotlin:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * Retrofit2のAPI定義はスラッシュで始めない
-  :PROPERTIES:
-  :DATE: [2022-01-04 Tue 14:20]
-  :TAGS: :android:retrofit2:kotlin:
-  :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2022-01-04 Tue 14:22]--[2022-01-04 Tue 14:35] =>  0:13
   :END:
@@ -37,6 +36,7 @@
     public abstract fun exampleGet(): Call<ExampleResponse>
   #+end_src
   
+
 
 
 ** おまけ: baseUrlにslashなし&API宣言にslashありは動かない

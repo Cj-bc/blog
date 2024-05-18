@@ -1,11 +1,10 @@
+#+TITLE: brick 0.46から0.62へのアップグレードメモ
+#+DATE: [2021-09-02 Thu 16:29]
+#+TAGS: :Haskell:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * brick 0.46から0.62へのアップグレードメモ
-  :PROPERTIES:
-  :DATE: [2021-09-02 Thu 16:29]
-  :TAGS: :Haskell:
-  :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2021-09-02 Thu 16:29]--[2021-09-02 Thu 16:49] =>  0:20
   :END:
@@ -17,6 +16,7 @@
   他の依存パッケージであるtartが最新版でも0.63より古いバージョンまでしか
   対応していないため。
   
+
 ** チェンジログからわかる!変更点まとめ
    但し実装に影響がありそうなもののみ、又簡素な纏め。
    

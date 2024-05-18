@@ -1,12 +1,11 @@
+#+TITLE: pythonのelifはifよりも速いのか
+#+DATE: [2020-11-07 Sat]
+#+TAGS: :python:検証:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * pythonのelifはifよりも速いのか
-    :PROPERTIES:
-    :DATE: [2020-11-07 Sat]
-    :TAGS: :python:検証:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
 一つの変数に対して、複数の条件で分岐させたい時時、大抵は=elif=を使って以下のように書くと思います。
 
 #+begin_src python
@@ -26,6 +25,7 @@
 #+end_src
 
 直感的に、nの値によってはelifの方がif文の実行回数が少なくなるため速そうに思えますが、本当にそうなのか気になったので試してみます。
+
 
 ** tl;dr
    :PROPERTIES:

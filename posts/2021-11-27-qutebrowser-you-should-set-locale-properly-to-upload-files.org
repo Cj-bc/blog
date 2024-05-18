@@ -1,11 +1,10 @@
+#+TITLE: qutebrowserでファイルのアップロードができないのはLANGのせいかもしれない
+#+DATE: [2021-11-27 Sat 01:09]
+#+TAGS: :qutebrowser:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * qutebrowserでファイルのアップロードができないのはLANGのせいかもしれない
-  :PROPERTIES:
-  :DATE: [2021-11-27 Sat 01:09]
-  :TAGS: :qutebrowser:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2021-11-27 Sat 01:10]--[2021-11-27 Sat 01:11] =>  0:01
   :END:
@@ -15,3 +14,4 @@
   少なくともGoogle Driveで確認済。
 
   なのできちんと ~LANG~ 設定しましょうね。
+

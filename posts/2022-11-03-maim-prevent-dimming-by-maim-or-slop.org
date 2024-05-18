@@ -1,15 +1,15 @@
+#+TITLE: maimで撮影する際に全画面にdimがかからないようにする
+#+DATE: [2022-11-03 Thu 11:00]
+#+TAGS: :main:picom:slop:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * maimで撮影する際に全画面にdimがかからないようにする
-:PROPERTIES:
-:DATE: [2022-11-03 Thu 11:00]
-:TAGS: :main:picom:slop:
-:BLOG_POST_KIND: Knowledge
-:BLOG_POST_PROGRESS: Published
-:BLOG_POST_STATUS: Normal
-:END:
 :LOGBOOK:
 CLOCK: [2022-11-03 Thu 11:05]--[2022-11-03 Thu 11:21] =>  0:16
 :END:
   
+
 ** 解決したい問題
 picomをX11コンポジッターとして使っており、 ~inactivate-dim~ を
 使用している際、maimで部分のみのスクショを撮ろうとすると以下の

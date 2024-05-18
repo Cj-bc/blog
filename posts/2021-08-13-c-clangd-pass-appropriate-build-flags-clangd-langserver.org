@@ -1,11 +1,10 @@
+#+TITLE: LSPサーバーとして使うclangdにビルドフラグを設定する
+#+DATE: [2021-08-13 Fri 17:43]
+#+TAGS: C clangd lsp
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * LSPサーバーとして使うclangdにビルドフラグを設定する
-  :PROPERTIES:
-  :DATE: [2021-08-13 Fri 17:43]
-  :TAGS: C clangd lsp
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2021-08-13 Fri 17:45]--[2021-08-13 Fri 18:11] =>  0:26
   :END:
@@ -31,6 +30,7 @@
   + ~compile_commands.json~
   + ~compile_flags.txt~
   
+
 ** ~compile_commands.json~: ビルドツールを使用する場合
    プロジェクトの中にある各ファイルのコンパイルコマンドを定義できます。
    これは基本的にはツールによって生成されます。

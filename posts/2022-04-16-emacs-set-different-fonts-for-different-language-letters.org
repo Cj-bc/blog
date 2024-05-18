@@ -1,11 +1,10 @@
+#+TITLE: 複数のフォントを自然言語毎に使い分ける
+#+DATE: [2022-04-16 Sat 10:41]
+#+TAGS: :emacs:
+#+KIND: HowTo
+#+PROGRESS: Published
+#+STATUS: Normal
 * 複数のフォントを自然言語毎に使い分ける
-  :PROPERTIES:
-  :DATE: [2022-04-16 Sat 10:41]
-  :TAGS: :emacs:
-  :BLOG_POST_KIND: HowTo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
 :LOGBOOK:
 CLOCK: [2022-04-16 Sat 10:44]--[2022-04-16 Sat 11:08] =>  0:24
 CLOCK: [2022-04-16 Sat 10:42]--[2022-04-16 Sat 10:42] =>  0:00
@@ -19,6 +18,7 @@ Emacsでは、どうやら文字毎に使用するフォントを設定するこ
 
 
 今回は例として、韓国語のハングルを使えるようにしたいと思います。
+
 
 ** 1. フォントを取得してインストールする
 これは各自ディストリビューションで異なると思います。

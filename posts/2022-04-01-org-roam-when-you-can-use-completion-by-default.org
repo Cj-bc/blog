@@ -1,11 +1,10 @@
+#+TITLE: org roam標準で補完が効く条件
+#+DATE: [2022-04-01 Fri 23:44]
+#+TAGS: :emacs:org-roam:org:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * org roam標準で補完が効く条件
-  :PROPERTIES:
-  :DATE: [2022-04-01 Fri 23:44]
-  :TAGS: :emacs:org-roam:org:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2022-04-01 Fri 23:54]--[2022-04-02 Sat 00:05] =>  0:11
   CLOCK: [2022-04-01 Fri 23:45]--[2022-04-01 Fri 23:54] =>  0:09
@@ -15,6 +14,7 @@
   org-roamは標準で補完機能を持っています。
   
   が、自分の環境では上手く動かなかったので原因を探った際のメモ。
+
 
 ** Tl;Dr: 
    デフォルトでは、help:org-roam-db-autosync-mode を有効にした状態で、

@@ -1,13 +1,13 @@
+#+TITLE: Blender docs -- data block
+#+DATE: [2020-08-19 Wed]
+#+TAGS: :blender:document:translation:wip:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * Blender docs -- data block
-    :PROPERTIES:
-    :DATE: [2020-08-19 Wed]
-    :TAGS: :blender:document:translation:wip:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
 公式: [[https://docs.blender.org/manual/ja/2.80/files/data_blocks.html]]
+
 
 ** Data blocks
    :PROPERTIES:

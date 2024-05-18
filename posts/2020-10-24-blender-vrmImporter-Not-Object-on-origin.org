@@ -1,12 +1,12 @@
+#+TITLE: VRM_IMPORTER_for_BlenderでVRMモデルを作る際の注意点
+#+DATE: [2020-10-24 Sat]
+#+TAGS: :VRM:blender:VRM_IMPORTER_for_Blender:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * VRM_IMPORTER_for_BlenderでVRMモデルを作る際の注意点
-    :PROPERTIES:
-    :DATE: [2020-10-24 Sat]
-    :TAGS: :VRM:blender:VRM_IMPORTER_for_Blender:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
+
 ** 全てのメッシュの原点(Origin)を /ワールド座標系の/ 原点に置く
    :PROPERTIES:
    :CUSTOM_ID: 全てのメッシュの原点originを-ワールド座標系の-原点に置く

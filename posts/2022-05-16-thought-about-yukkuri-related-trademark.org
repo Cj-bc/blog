@@ -1,15 +1,15 @@
+#+TITLE: 最近話題のゆっくりに関連した商標に関しての考え
+#+DATE: [2022-05-16 Mon 11:45]
+#+TAGS: :商標法:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * 最近話題のゆっくりに関連した商標に関しての考え
-  :PROPERTIES:
-  :DATE: [2022-05-16 Mon 11:45]
-  :TAGS: :商標法:
-  :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
 :LOGBOOK:
 CLOCK: [2022-05-16 Mon 11:45]--[2022-05-16 Mon 12:16] =>  0:31
 :END:
   
+
 ** 始めに
 私は法律の専門家ではありません。知財法に関してちょこっとだけ齧りましたが、
 ほんとにちょこっとだけです。

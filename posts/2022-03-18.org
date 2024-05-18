@@ -1,12 +1,12 @@
+#+TITLE: 2022/03/18
+#+DATE: [2022-03-18 Fri 12:05]
+#+TAGS: :環境構築:
+#+KIND: Diary
+#+PROGRESS: Published
+#+STATUS: Normal
 * 2022/03/18
-  :PROPERTIES:
-  :DATE: [2022-03-18 Fri 12:05]
-  :TAGS: :環境構築:
-  :BLOG_POST_KIND: Diary
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   
+
 
 ** やったこと
 *** stack-staticのインストール(前日の続き)

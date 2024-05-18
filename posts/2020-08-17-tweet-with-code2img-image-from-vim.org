@@ -1,12 +1,11 @@
+#+TITLE: twtyとcode2imgでコードの画像つきツイートをする
+#+DATE: [2020-08-18 Tue]
+#+TAGS: :twitter:tool:memo:cli:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * twtyとcode2imgでコードの画像つきツイートをする
-    :PROPERTIES:
-    :DATE: [2020-08-18 Tue]
-    :TAGS: :twitter:tool:memo:cli:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
 [[https://github.com/skanehira/code2img][skanehira/code2img]]を使うとコードを手軽に画像化できます。\\
 そして、[[https://github.com/skanehira/code2img.vim][skanehira/code2img.vim]]を使うとvimから簡単にクリップボードに生成できます。\\
 これ、すごく便利です。\\
@@ -36,3 +35,4 @@ pic.twitter.com/QGJ2Y9iLfz
 #+end_html
 
 とても良い。ありがとうgorillaさん。
+

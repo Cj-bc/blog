@@ -1,16 +1,16 @@
+#+TITLE: EVMC4U v3.8をUniVRM 0.101.0とUnity 2021.3.1f1でとりあえず動かす
+#+DATE: [2022-07-11 Mon 23:48]
+#+TAGS: :unity:evmc4u:univrm:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * EVMC4U v3.8をUniVRM 0.101.0とUnity 2021.3.1f1でとりあえず動かす
-  :PROPERTIES:
-  :DATE: [2022-07-11 Mon 23:48]
-  :TAGS: :unity:evmc4u:univrm:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
 :LOGBOOK:
 CLOCK: [2022-07-14 Thu 23:31]--[2022-07-14 Thu 23:50] =>  0:19
 CLOCK: [2022-07-12 Tue 00:32]--[2022-07-12 Tue 00:51] =>  0:19
 :END:
   
+
 ** 最初に
 この記事は非公式かつ、EVMC4Uを触って1日目の個人が書いています。
 

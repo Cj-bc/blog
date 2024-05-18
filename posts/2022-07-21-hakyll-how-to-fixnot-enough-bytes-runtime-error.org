@@ -1,11 +1,10 @@
+#+TITLE: Enough bytesランタイム例外の原因と対処の一例
+#+DATE: [2022-07-21 Thu 04:54]
+#+TAGS: :hakyll:haskell:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * Enough bytesランタイム例外の原因と対処の一例
-  :PROPERTIES:
-  :DATE: [2022-07-21 Thu 04:54]
-  :TAGS: :hakyll:haskell:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
 :LOGBOOK:
 CLOCK: [2022-07-21 Thu 04:56]--[2022-07-21 Thu 05:00] =>  0:04
 :END:
@@ -26,5 +25,6 @@ CLOCK: [2022-07-21 Thu 04:56]--[2022-07-21 Thu 05:00] =>  0:04
 ~Text~ は実は ~Binary~ のインスタンスを持たない (持ってそうなのに)。 [[https://hackage.haskell.org/package/text-2.0/docs/Data-Text.html#t:Text][hackage]]を確認すれば
 明白だろう。
 なので、 *Snapshotに入れる際は必ず ~unpack~ してあげる必要がある* 。
+
 
 

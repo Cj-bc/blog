@@ -1,12 +1,12 @@
+#+TITLE: VRM_IMPORTER_for_Blender \#23 作業メモ
+#+DATE: [2021-01-11 Mon]
+#+TAGS: :blender:python:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * VRM_IMPORTER_for_Blender \#23 作業メモ
-    :PROPERTIES:
-    :DATE: [2021-01-11 Mon]
-    :TAGS: :blender:python:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
+
 ** 追加されたシェーダーを探す
    :PROPERTIES:
    :CUSTOM_ID: 追加されたシェーダーを探す

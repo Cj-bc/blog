@@ -1,11 +1,10 @@
+#+TITLE: Qiitaの記事を全部引っ越ししている [WIP]
+#+DATE: [2021-11-22 Mon 22:55]
+#+TAGS: :blog:
+#+KIND: HowTo
+#+PROGRESS: Published
+#+STATUS: Normal
 * Qiitaの記事を全部引っ越ししている [WIP]
-  :PROPERTIES:
-  :DATE: [2021-11-22 Mon 22:55]
-  :TAGS: :blog:
-  :BLOG_POST_KIND: HowTo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2021-11-22 Mon 22:57]--[2021-11-23 Tue 00:59] =>  2:02
   CLOCK: [2021-11-22 Mon 22:56]--[2021-11-22 Mon 22:56] =>  0:00
@@ -17,6 +16,7 @@
   依然技術系の記事は別に出しても良いのですが、とりあえず
   このブログには全ての記事を載せておきたかったのでQiitaの記事を引っ越して
   こようと思います。
+
 ** 行いたいこと
 
    + Qiitaにある全ての記事を、ほぼそのまま持ってくる

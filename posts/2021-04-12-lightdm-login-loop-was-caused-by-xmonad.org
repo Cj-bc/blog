@@ -1,12 +1,12 @@
+#+TITLE: うちのlightdmのログインループはxmonadが原因だった
+#+DATE: [2021-04-12 Mon]
+#+TAGS: :lightdm:xmonad:archlinux:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * うちのlightdmのログインループはxmonadが原因だった
-    :PROPERTIES:
-    :DATE: [2021-04-12 Mon]
-    :TAGS: :lightdm:xmonad:archlinux:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
+
 ** 起きていたこと
    :PROPERTIES:
    :CUSTOM_ID: 起きていたこと

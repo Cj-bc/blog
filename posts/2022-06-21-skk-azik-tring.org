@@ -1,11 +1,10 @@
+#+TITLE: DDSKKでAZIKを始めてみた
+#+DATE: [2022-06-21 Tue 14:24]
+#+TAGS: :skk:日本語入力:azik:emacs:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * DDSKKでAZIKを始めてみた
-  :PROPERTIES:
-  :DATE: [2022-06-21 Tue 14:24]
-  :TAGS: :skk:日本語入力:azik:emacs:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
 :LOGBOOK:
 CLOCK: [2022-06-21 Tue 16:27]--[2022-06-21 Tue 17:00] =>  0:33
 CLOCK: [2022-06-21 Tue 14:25]--[2022-06-21 Tue 14:28] =>  0:03
@@ -14,6 +13,7 @@ CLOCK: [2022-06-21 Tue 14:25]--[2022-06-21 Tue 14:28] =>  0:03
  長らくDDSKKを使った日本語入力をしてきたが、そろそろかなり慣れてきたので
  AZIKも導入してみる。
  
+
 ** 導入手順
 導入手順はとても簡単で、とりあえず info:skk#AZIK を読めばことたりる。
 が、まぁ

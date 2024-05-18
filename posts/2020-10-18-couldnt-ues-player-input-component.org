@@ -1,12 +1,11 @@
+#+TITLE: Player Inputが上手く使えないと思ったら単純なミスだった
+#+DATE: [2020-10-18 Sun 14:25]
+#+TAGS: :unity:inputSystem:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 
 * Player Inputが上手く使えないと思ったら単純なミスだった
-  :PROPERTIES:
-  :DATE: [2020-10-18 Sun 14:25]
-  :TAGS: :unity:inputSystem:
-  :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   
   #+begin_verse :class tldr
   UnityEventを使用する場合、Eventに登録するスクリプトは、
@@ -16,6 +15,7 @@
     
   Player Inputは、Unityで`2019.1`から追加された、`Input`に取って変わる新しい入力管理システムです。
   詳しくは[新しい Input System のご紹介 -- blogs.unity3d.com](https://blogs.unity3d.com/jp/2019/10/14/introducing-the-new-input-system/)を参照してください。
+
 
 ** 環境
 

@@ -1,11 +1,10 @@
+#+TITLE: XMonadのManageHook表記順番について
+#+DATE: [2021-11-15 Mon 00:56]
+#+TAGS: :xmonad:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * XMonadのManageHook表記順番について
-  :PROPERTIES:
-  :DATE: [2021-11-15 Mon 00:56]
-  :TAGS: :xmonad:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2021-11-15 Mon 00:57]--[2021-11-15 Mon 01:37] =>  0:40
   :END:
@@ -14,6 +13,7 @@
   設定をしたり [[https://hackage.haskell.org/package/xmonad-0.17.0/docs/XMonad-Core.html#t:X][Xモナド]] のアクションを実行したりするためのもの。
   
   
+
 ** やりたかったこと
    条件に一致するウィンドウをFloat化し、レイアウトを調節する。
 

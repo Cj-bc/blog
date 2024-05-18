@@ -1,12 +1,12 @@
+#+TITLE: Expressionを使ったアニメーションのメモ
+#+DATE: [2021-01-13 Wed]
+#+TAGS: :after effect:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * Expressionを使ったアニメーションのメモ
-    :PROPERTIES:
-    :DATE: [2021-01-13 Wed]
-    :TAGS: :after effect:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
+
 ** Expression制御のEffectは必ずリネームする
    :PROPERTIES:
    :CUSTOM_ID: expression制御のeffectは必ずリネームする

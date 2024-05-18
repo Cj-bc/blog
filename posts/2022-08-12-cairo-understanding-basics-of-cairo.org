@@ -1,11 +1,10 @@
+#+TITLE: cairoの基礎的なことを学んでみた
+#+DATE: [2022-08-12 Fri 21:34]
+#+TAGS: :cairo:c:graphic:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * cairoの基礎的なことを学んでみた
-  :PROPERTIES:
-  :DATE: [2022-08-12 Fri 21:34]
-  :TAGS: :cairo:c:graphic:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
 :LOGBOOK:
 CLOCK: [2022-08-14 Sun 22:00]--[2022-08-14 Mon 23:00] =>  1:00
 CLOCK: [2022-08-12 Fri 21:57]--[2022-08-12 Fri 22:28] =>  0:31
@@ -16,6 +15,7 @@ cairoには、[[https://www.cairographics.org/tutorial/][公式のページに�
 尚、この後にcairo-xlibのHaskell用のバインディングを書きたい影響で、Cを用いて学習することにします。
 
 とはいえ、チュートリアルがとても分かりやすいので英語が分かるのであればそちらを読むことを推奨します。
+
 
 ** cairoでのレンダリングの仕組み
 cairoのレンダリングは、 ~Surface~ 、 ~Source~ 、 ~Mask~ の3つの概念を組み合わせることで行われます。
