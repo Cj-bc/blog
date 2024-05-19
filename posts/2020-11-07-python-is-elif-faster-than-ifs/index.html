@@ -1,0 +1,566 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-jj6gr7j4> <head><!-- Use Google Fonts, if you don't wanna prefer a self-hosted version --><!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet"> --><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Astro - Ink | pythonのelifはifよりも速いのか</title><meta name="title" content="Astro - Ink | pythonのelifはifよりも速いのか"><meta name="description" content="read more..."><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="shortcut icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="manifest" href="/site.webmanifest"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/browserconfig.xml"><meta name="theme-color" content="#ffffff"><!-- Open Graph Tags (Facebook) --><meta property="og:type" content="website"><meta property="og:title" content="Astro - Ink | pythonのelifはifよりも速いのか"><meta property="og:description" content="read more..."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:title" content="Astro - Ink | pythonのelifはifよりも速いのか"><meta property="twitter:description" content="read more..."><script>
+  const theme = (() => {
+    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+      return localStorage.getItem("theme");
+    }
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "dark";
+    }
+    return "light";
+  })();
+
+  if (theme === "light") {
+    document.documentElement.classList.remove("dark");
+  } else {
+    document.documentElement.classList.add("dark");
+  }
+</script><link rel="stylesheet" href="/blog/_astro/_page_.348a9113.css" />
+<link rel="stylesheet" href="/blog/_astro/_page_.fcc31425.css" />
+<link rel="stylesheet" href="/blog/_astro/_slug_.1f7a3f5c.css" /><script type="module" src="/blog/_astro/hoisted.e6960f2c.js"></script></head> <body class="font-sans antialiased min-h-screen bg-gray-100 dark:bg-gray-800"> <div class="transition-colors"> <main class="mx-auto max-w-4xl px-4 md:px-0">  <br class="my-4" data-astro-cid-fhdt7an5> <header class="header" data-astro-cid-3ef6ksr2> <div class="header__logo" data-astro-cid-3ef6ksr2> <a href="/" class="avatar" data-astro-cid-3ef6ksr2> <img class="header__logo-img" src="/assets/logo.svg" alt="Astro logo" data-astro-cid-3ef6ksr2> </a> </div> <div class="header__meta flex-1" data-astro-cid-3ef6ksr2> <h3 class="header__title dark:text-theme-dark-secondary" data-astro-cid-3ef6ksr2> <a href="" data-astro-cid-3ef6ksr2>Ink</a> </h3> <div class="header__meta-more flex" data-astro-cid-3ef6ksr2> <p class="header__desc" data-astro-cid-3ef6ksr2> Crisp, minimal, personal blog theme for Astro </p> <nav class="header__nav flex" data-astro-cid-3ef6ksr2> <ul class="header__ref-list" data-astro-cid-3ef6ksr2> <li data-astro-cid-3ef6ksr2> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var r=(i,c,s)=>{let n=async()=>{await(await i())()},t=new IntersectionObserver(e=>{for(let o of e)if(o.isIntersecting){t.disconnect(),n();break}});for(let e of s.children)t.observe(e)};(self.Astro||(self.Astro={})).visible=r;window.dispatchEvent(new Event("astro:visible"));})();;(()=>{var b=Object.defineProperty;var f=(c,o,i)=>o in c?b(c,o,{enumerable:!0,configurable:!0,writable:!0,value:i}):c[o]=i;var l=(c,o,i)=>(f(c,typeof o!="symbol"?o+"":o,i),i);var p;{let c={0:t=>m(t),1:t=>i(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(i(t)),5:t=>new Set(i(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t)},o=t=>{let[e,r]=t;return e in c?c[e](r):void 0},i=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([e,r])=>[e,o(r)]));customElements.get("astro-island")||customElements.define("astro-island",(p=class extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var d;if(!this.hydrator||!this.isConnected)return;let e=(d=this.parentElement)==null?void 0:d.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let r=this.querySelectorAll("astro-slot"),a={},h=this.querySelectorAll("template[data-astro-template]");for(let n of h){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("data-astro-template")||"default"]=n.innerHTML,n.remove())}for(let n of r){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("name")||"default"]=n.innerHTML)}let u;try{u=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(n){let s=this.getAttribute("component-url")||"<unknown>",y=this.getAttribute("component-export");throw y&&(s+=` (export ${y})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),n),n}await this.hydrator(this)(this.Component,u,a,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),r.disconnect(),this.childrenConnectedCallback()},r=new MutationObserver(()=>{var a;((a=this.lastChild)==null?void 0:a.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});r.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}start(){let e=JSON.parse(this.getAttribute("opts")),r=this.getAttribute("client");if(Astro[r]===void 0){window.addEventListener(`astro:${r}`,()=>this.start(),{once:!0});return}Astro[r](async()=>{let a=this.getAttribute("renderer-url"),[h,{default:u}]=await Promise.all([import(this.getAttribute("component-url")),a?import(a):()=>()=>{}]),d=this.getAttribute("component-export")||"default";if(!d.includes("."))this.Component=h[d];else{this.Component=h;for(let n of d.split("."))this.Component=this.Component[n]}return this.hydrator=u,this.hydrate},e,this)}attributeChangedCallback(){this.hydrate()}},l(p,"observedAttributes",["props"]),p))}})();</script><astro-island uid="1mCrYB" component-url="/blog/_astro/SearchBtn.b04a64bc.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-3ef6ksr2&quot;:[0,true]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;SearchBtn&quot;,&quot;value&quot;:true}" await-children=""><button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2071 4.89344C19.0923 7.77862 19.3131 12.3193 16.8693 15.4578C16.8846 15.4713 16.8996 15.4854 16.9143 15.5L21.1569 19.7427C21.5474 20.1332 21.5474 20.7664 21.1569 21.1569C20.7664 21.5474 20.1332 21.5474 19.7427 21.1569L15.5 16.9143C15.4854 16.8996 15.4713 16.8846 15.4578 16.8693C12.3193 19.3131 7.77862 19.0923 4.89344 16.2071C1.76924 13.083 1.76924 8.01763 4.89344 4.89344C8.01763 1.76924 13.083 1.76924 16.2071 4.89344ZM14.7929 14.7929C17.1361 12.4498 17.1361 8.6508 14.7929 6.30765C12.4498 3.96451 8.6508 3.96451 6.30765 6.30765C3.96451 8.6508 3.96451 12.4498 6.30765 14.7929C8.6508 17.1361 12.4498 17.1361 14.7929 14.7929Z" fill="currentColor"></path></svg></button><!--astro:end--></astro-island> </li> <li data-astro-cid-3ef6ksr2> <a href="https://github.com/one-aalam/astro-ink" title="Ink's Github URL'" data-astro-cid-3ef6ksr2> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" data-astro-cid-3ef6ksr2></path>  </svg> </a> </li> <li data-astro-cid-3ef6ksr2> <a href="/rss.xml" title="RSS" data-astro-cid-3ef6ksr2> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">  <path d="M4 11a9 9 0 0 1 9 9" data-astro-cid-3ef6ksr2></path> <path d="M4 4a16 16 0 0 1 16 16" data-astro-cid-3ef6ksr2></path> <circle cx="5" cy="19" r="1" data-astro-cid-3ef6ksr2></circle>  </svg> </a> </li> <li data-astro-cid-3ef6ksr2> <astro-island uid="Z1ylE5i" component-url="/blog/_astro/ModeSwitcherBtn.815c7d36.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-3ef6ksr2&quot;:[0,true]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;ModeSwitcherBtn&quot;,&quot;value&quot;:true}" await-children=""><button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle> <line x1="12" y1="1" x2="12" y2="3"></line> <line x1="12" y1="21" x2="12" y2="23"></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line> <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line> <line x1="1" y1="12" x2="3" y2="12"></line> <line x1="21" y1="12" x2="23" y2="12"></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line> <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button><!--astro:end--></astro-island> </li> </ul> </nav> </div> </div> </header>  <nav class="nav py-3" data-astro-cid-dmqpwcec> <ul class="nav-list dark:text-theme-dark-secondary" data-astro-cid-dmqpwcec> <li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/" title="home" data-astro-cid-dmqpwcec>Home</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/blog" title="blog" data-astro-cid-dmqpwcec>Blog</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/tags" title="tags" data-astro-cid-dmqpwcec>Tags</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/media" title="media" data-astro-cid-dmqpwcec>Media</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/about" title="about" data-astro-cid-dmqpwcec>About</a> </li> </ul> </nav>  <div class="content" data-astro-cid-fhdt7an5>  <div class="post__header" data-astro-cid-jj6gr7j4> <div class="post__tags" data-astro-cid-jj6gr7j4> <a class="post__tag" href="/tags/python" title="python" data-astro-cid-jj6gr7j4>python</a><a class="post__tag" href="/tags/検証" title="検証" data-astro-cid-jj6gr7j4>検証</a> </div> <h1 class="post__title" data-astro-cid-jj6gr7j4>pythonのelifはifよりも速いのか</h1> <h5 class="post__desc " data-astro-cid-jj6gr7j4>  <div class="" data-astro-cid-jj6gr7j4> <span class="post__author" data-astro-cid-jj6gr7j4>Cj-bc</span>  |  <span class="post__date" data-astro-cid-jj6gr7j4> <!-- post creation/updation data --> Saturday, November 7, 2020 </span> <span class="post__stats" data-astro-cid-jj6gr7j4>   <!-- | <Icon class="w-5 h-5 inline-block" pack="mdi" name="clock" /> 2 mins --> </span> </div> </h5> </div> <article class="prose dark:prose-dark" data-astro-cid-apjhz64k>   <h1 id="pythonのelifはifよりも速いのか">pythonのelifはifよりも速いのか</h1><p>一つの変数に対して、複数の条件で分岐させたい時時、大抵は=elif=を使って以下のように書くと思います。
+</p><pre class="src-block"><code class="language-python">if n == &quot;A&quot;:
+    ...
+elif n == &quot;B&quot;:
+    ...
+</code></pre><p>しかし、全ての場合ではありませんがこの場合はif文の羅列で書くこともできます。
+</p><pre class="src-block"><code class="language-python">if n == &quot;A&quot;:
+    ...
+if n == &quot;B&quot;:
+    ...
+</code></pre><p>直感的に、nの値によってはelifの方がif文の実行回数が少なくなるため速そうに思えますが、本当にそうなのか気になったので試してみます。
+</p><h2 id="tldr">tl;dr</h2><p>速いぽい
+</p><h2 id="条件">条件</h2><p>pythonは3.7.4、if文の中身が同じものだと最適化がかかったりしないか怖かったのでそれぞれ違う出力をするprint文を入れます。
+elifの数は適当に多めにしておきました。
+また、1000回実行した平均の速度を表示するようにしました。
+</p><h2 id="測定に使ったコード">測定に使ったコード</h2><p>長いので
+</p>  <details>
+  <summary>
+<p>測定コード
+</p>  </summary>
+<div class="example">  import time
+
+  a = 100
+
+  # without elif {{{
+  def f_without_elif():
+      if a &lt; 10:
+          print(&quot;10&quot;)
+      if 10 &lt;= a &lt; 20:
+          print(&quot;20&quot;)
+      if 20 &lt;= a &lt; 30:
+          print(&quot;30&quot;)
+      if 30 &lt;= a &lt; 40:
+          print(&quot;40&quot;)
+      if 40 &lt;= a &lt; 50:
+          print(&quot;50&quot;)
+      if 50 &lt;= a &lt; 60:
+          print(&quot;60&quot;)
+      if 60 &lt;= a &lt; 70:
+          print(&quot;70&quot;)
+      if 70 &lt;= a &lt; 80:
+          print(&quot;80&quot;)
+      if 80 &lt;= a &lt; 90:
+          print(&quot;90&quot;)
+      if 90 &lt;= a &lt; 100:
+          print(&quot;100&quot;)
+      if 100 &lt;= a &lt; 110:
+          print(&quot;110&quot;)
+      if 110 &lt;= a &lt; 120:
+          print(&quot;120&quot;)
+      if 120 &lt;= a &lt; 130:
+          print(&quot;130&quot;)
+      if 130 &lt;= a &lt; 140:
+          print(&quot;140&quot;)
+      if 140 &lt;= a &lt; 150:
+          print(&quot;150&quot;)
+      if 150 &lt;= a &lt; 160:
+          print(&quot;160&quot;)
+      if 160 &lt;= a &lt; 170:
+          print(&quot;170&quot;)
+      if 170 &lt;= a &lt; 180:
+          print(&quot;180&quot;)
+      if 180 &lt;= a &lt; 190:
+          print(&quot;190&quot;)
+      if 190 &lt;= a &lt; 200:
+          print(&quot;200&quot;)
+      if 200 &lt;= a &lt; 210:
+          print(&quot;210&quot;)
+      if 210 &lt;= a &lt; 220:
+          print(&quot;220&quot;)
+      if 220 &lt;= a &lt; 230:
+          print(&quot;230&quot;)
+      if 230 &lt;= a &lt; 240:
+          print(&quot;240&quot;)
+      if 240 &lt;= a &lt; 250:
+          print(&quot;250&quot;)
+      if 250 &lt;= a &lt; 260:
+          print(&quot;260&quot;)
+      if 260 &lt;= a &lt; 270:
+          print(&quot;270&quot;)
+      if 270 &lt;= a &lt; 280:
+          print(&quot;280&quot;)
+      if 280 &lt;= a &lt; 290:
+          print(&quot;290&quot;)
+      if 290 &lt;= a &lt; 300:
+          print(&quot;300&quot;)
+      if 300 &lt;= a &lt; 310:
+          print(&quot;310&quot;)
+      if 310 &lt;= a &lt; 320:
+          print(&quot;320&quot;)
+      if 320 &lt;= a &lt; 330:
+          print(&quot;330&quot;)
+      if 330 &lt;= a &lt; 340:
+          print(&quot;340&quot;)
+      if 340 &lt;= a &lt; 350:
+          print(&quot;350&quot;)
+      if 350 &lt;= a &lt; 360:
+          print(&quot;360&quot;)
+      if 360 &lt;= a &lt; 370:
+          print(&quot;370&quot;)
+      if 370 &lt;= a &lt; 380:
+          print(&quot;380&quot;)
+      if 380 &lt;= a &lt; 390:
+          print(&quot;390&quot;)
+      if 390 &lt;= a &lt; 400:
+          print(&quot;400&quot;)
+      if 400 &lt;= a &lt; 410:
+          print(&quot;410&quot;)
+      if 410 &lt;= a &lt; 420:
+          print(&quot;420&quot;)
+      if 420 &lt;= a &lt; 430:
+          print(&quot;430&quot;)
+      if 430 &lt;= a &lt; 440:
+          print(&quot;440&quot;)
+      if 440 &lt;= a &lt; 450:
+          print(&quot;450&quot;)
+      if 450 &lt;= a &lt; 460:
+          print(&quot;460&quot;)
+      if 460 &lt;= a &lt; 470:
+          print(&quot;470&quot;)
+      if 470 &lt;= a &lt; 480:
+          print(&quot;480&quot;)
+      if 480 &lt;= a &lt; 490:
+          print(&quot;490&quot;)
+      if 490 &lt;= a &lt; 500:
+          print(&quot;500&quot;)
+      if 500 &lt;= a &lt; 510:
+          print(&quot;510&quot;)
+      if 510 &lt;= a &lt; 520:
+          print(&quot;520&quot;)
+      if 520 &lt;= a &lt; 530:
+          print(&quot;530&quot;)
+      if 530 &lt;= a &lt; 540:
+          print(&quot;540&quot;)
+      if 540 &lt;= a &lt; 550:
+          print(&quot;550&quot;)
+      if 550 &lt;= a &lt; 560:
+          print(&quot;560&quot;)
+      if 560 &lt;= a &lt; 570:
+          print(&quot;570&quot;)
+      if 570 &lt;= a &lt; 580:
+          print(&quot;580&quot;)
+      if 580 &lt;= a &lt; 590:
+          print(&quot;590&quot;)
+      if 590 &lt;= a &lt; 600:
+          print(&quot;600&quot;)
+      if 600 &lt;= a &lt; 610:
+          print(&quot;610&quot;)
+      if 610 &lt;= a &lt; 620:
+          print(&quot;620&quot;)
+      if 620 &lt;= a &lt; 630:
+          print(&quot;630&quot;)
+      if 630 &lt;= a &lt; 640:
+          print(&quot;640&quot;)
+      if 640 &lt;= a &lt; 650:
+          print(&quot;650&quot;)
+      if 650 &lt;= a &lt; 660:
+          print(&quot;660&quot;)
+      if 660 &lt;= a &lt; 670:
+          print(&quot;670&quot;)
+      if 670 &lt;= a &lt; 680:
+          print(&quot;680&quot;)
+      if 680 &lt;= a &lt; 690:
+          print(&quot;690&quot;)
+      if 690 &lt;= a &lt; 700:
+          print(&quot;700&quot;)
+      if 700 &lt;= a &lt; 710:
+          print(&quot;710&quot;)
+      if 710 &lt;= a &lt; 720:
+          print(&quot;720&quot;)
+      if 720 &lt;= a &lt; 730:
+          print(&quot;730&quot;)
+      if 730 &lt;= a &lt; 740:
+          print(&quot;740&quot;)
+      if 740 &lt;= a &lt; 750:
+          print(&quot;750&quot;)
+      if 750 &lt;= a &lt; 760:
+          print(&quot;760&quot;)
+      if 760 &lt;= a &lt; 770:
+          print(&quot;770&quot;)
+      if 770 &lt;= a &lt; 780:
+          print(&quot;780&quot;)
+      if 780 &lt;= a &lt; 790:
+          print(&quot;790&quot;)
+      if 790 &lt;= a &lt; 800:
+          print(&quot;800&quot;)
+      if 800 &lt;= a &lt; 810:
+          print(&quot;810&quot;)
+      if 810 &lt;= a &lt; 820:
+          print(&quot;820&quot;)
+      if 820 &lt;= a &lt; 830:
+          print(&quot;830&quot;)
+      if 830 &lt;= a &lt; 840:
+          print(&quot;840&quot;)
+      if 840 &lt;= a &lt; 850:
+          print(&quot;850&quot;)
+      if 850 &lt;= a &lt; 860:
+          print(&quot;860&quot;)
+      if 860 &lt;= a &lt; 870:
+          print(&quot;870&quot;)
+      if 870 &lt;= a &lt; 880:
+          print(&quot;880&quot;)
+      if 880 &lt;= a &lt; 890:
+          print(&quot;890&quot;)
+      if 890 &lt;= a &lt; 900:
+          print(&quot;900&quot;)
+      if 900 &lt;= a &lt; 910:
+          print(&quot;910&quot;)
+      if 910 &lt;= a &lt; 920:
+          print(&quot;920&quot;)
+      if 920 &lt;= a &lt; 930:
+          print(&quot;930&quot;)
+      if 930 &lt;= a &lt; 940:
+          print(&quot;940&quot;)
+      if 940 &lt;= a &lt; 950:
+          print(&quot;950&quot;)
+      if 950 &lt;= a &lt; 960:
+          print(&quot;960&quot;)
+      if 960 &lt;= a &lt; 970:
+          print(&quot;970&quot;)
+      if 970 &lt;= a &lt; 980:
+          print(&quot;980&quot;)
+      if 980 &lt;= a &lt; 990:
+          print(&quot;990&quot;)
+      if 990 &lt;= a &lt; 1000:
+          print(&quot;1000&quot;)
+      if 1000 &lt;= a &lt; 1010:
+          print(&quot;1010&quot;)
+      if 1010 &lt;= a &lt; 1020:
+          print(&quot;1020&quot;)
+      if 1020 &lt;= a &lt; 1030:
+          print(&quot;1030&quot;)
+      if 1030 &lt;= a &lt; 1040:
+          print(&quot;1040&quot;)
+      if 1040 &lt;= a &lt; 1050:
+          print(&quot;1050&quot;)
+      if 1050 &lt;= a &lt; 1060:
+          print(&quot;1060&quot;)
+      if 1060 &lt;= a &lt; 1070:
+          print(&quot;1070&quot;)
+  # }}}
+
+
+  # with elif {{{
+  def f_with_elif():
+      if a &lt; 10:
+          print(&quot;10&quot;)
+      elif 10 &lt;= a &lt; 20:
+          print(&quot;20&quot;)
+      elif 20 &lt;= a &lt; 30:
+          print(&quot;30&quot;)
+      elif 30 &lt;= a &lt; 40:
+          print(&quot;40&quot;)
+      elif 40 &lt;= a &lt; 50:
+          print(&quot;50&quot;)
+      elif 50 &lt;= a &lt; 60:
+          print(&quot;60&quot;)
+      elif 60 &lt;= a &lt; 70:
+          print(&quot;70&quot;)
+      elif 70 &lt;= a &lt; 80:
+          print(&quot;80&quot;)
+      elif 80 &lt;= a &lt; 90:
+          print(&quot;90&quot;)
+      elif 90 &lt;= a &lt; 100:
+          print(&quot;100&quot;)
+      elif 100 &lt;= a &lt; 110:
+          print(&quot;110&quot;)
+      elif 110 &lt;= a &lt; 120:
+          print(&quot;120&quot;)
+      elif 120 &lt;= a &lt; 130:
+          print(&quot;130&quot;)
+      elif 130 &lt;= a &lt; 140:
+          print(&quot;140&quot;)
+      elif 140 &lt;= a &lt; 150:
+          print(&quot;150&quot;)
+      elif 150 &lt;= a &lt; 160:
+          print(&quot;160&quot;)
+      elif 160 &lt;= a &lt; 170:
+          print(&quot;170&quot;)
+      elif 170 &lt;= a &lt; 180:
+          print(&quot;180&quot;)
+      elif 180 &lt;= a &lt; 190:
+          print(&quot;190&quot;)
+      elif 190 &lt;= a &lt; 200:
+          print(&quot;200&quot;)
+      elif 200 &lt;= a &lt; 210:
+          print(&quot;210&quot;)
+      elif 210 &lt;= a &lt; 220:
+          print(&quot;220&quot;)
+      elif 220 &lt;= a &lt; 230:
+          print(&quot;230&quot;)
+      elif 230 &lt;= a &lt; 240:
+          print(&quot;240&quot;)
+      elif 240 &lt;= a &lt; 250:
+          print(&quot;250&quot;)
+      elif 250 &lt;= a &lt; 260:
+          print(&quot;260&quot;)
+      elif 260 &lt;= a &lt; 270:
+          print(&quot;270&quot;)
+      elif 270 &lt;= a &lt; 280:
+          print(&quot;280&quot;)
+      elif 280 &lt;= a &lt; 290:
+          print(&quot;290&quot;)
+      elif 290 &lt;= a &lt; 300:
+          print(&quot;300&quot;)
+      elif 300 &lt;= a &lt; 310:
+          print(&quot;310&quot;)
+      elif 310 &lt;= a &lt; 320:
+          print(&quot;320&quot;)
+      elif 320 &lt;= a &lt; 330:
+          print(&quot;330&quot;)
+      elif 330 &lt;= a &lt; 340:
+          print(&quot;340&quot;)
+      elif 340 &lt;= a &lt; 350:
+          print(&quot;350&quot;)
+      elif 350 &lt;= a &lt; 360:
+          print(&quot;360&quot;)
+      elif 360 &lt;= a &lt; 370:
+          print(&quot;370&quot;)
+      elif 370 &lt;= a &lt; 380:
+          print(&quot;380&quot;)
+      elif 380 &lt;= a &lt; 390:
+          print(&quot;390&quot;)
+      elif 390 &lt;= a &lt; 400:
+          print(&quot;400&quot;)
+      elif 400 &lt;= a &lt; 410:
+          print(&quot;410&quot;)
+      elif 410 &lt;= a &lt; 420:
+          print(&quot;420&quot;)
+      elif 420 &lt;= a &lt; 430:
+          print(&quot;430&quot;)
+      elif 430 &lt;= a &lt; 440:
+          print(&quot;440&quot;)
+      elif 440 &lt;= a &lt; 450:
+          print(&quot;450&quot;)
+      elif 450 &lt;= a &lt; 460:
+          print(&quot;460&quot;)
+      elif 460 &lt;= a &lt; 470:
+          print(&quot;470&quot;)
+      elif 470 &lt;= a &lt; 480:
+          print(&quot;480&quot;)
+      elif 480 &lt;= a &lt; 490:
+          print(&quot;490&quot;)
+      elif 490 &lt;= a &lt; 500:
+          print(&quot;500&quot;)
+      elif 500 &lt;= a &lt; 510:
+          print(&quot;510&quot;)
+      elif 510 &lt;= a &lt; 520:
+          print(&quot;520&quot;)
+      elif 520 &lt;= a &lt; 530:
+          print(&quot;530&quot;)
+      elif 530 &lt;= a &lt; 540:
+          print(&quot;540&quot;)
+      elif 540 &lt;= a &lt; 550:
+          print(&quot;550&quot;)
+      elif 550 &lt;= a &lt; 560:
+          print(&quot;560&quot;)
+      elif 560 &lt;= a &lt; 570:
+          print(&quot;570&quot;)
+      elif 570 &lt;= a &lt; 580:
+          print(&quot;580&quot;)
+      elif 580 &lt;= a &lt; 590:
+          print(&quot;590&quot;)
+      elif 590 &lt;= a &lt; 600:
+          print(&quot;600&quot;)
+      elif 600 &lt;= a &lt; 610:
+          print(&quot;610&quot;)
+      elif 610 &lt;= a &lt; 620:
+          print(&quot;620&quot;)
+      elif 620 &lt;= a &lt; 630:
+          print(&quot;630&quot;)
+      elif 630 &lt;= a &lt; 640:
+          print(&quot;640&quot;)
+      elif 640 &lt;= a &lt; 650:
+          print(&quot;650&quot;)
+      elif 650 &lt;= a &lt; 660:
+          print(&quot;660&quot;)
+      elif 660 &lt;= a &lt; 670:
+          print(&quot;670&quot;)
+      elif 670 &lt;= a &lt; 680:
+          print(&quot;680&quot;)
+      elif 680 &lt;= a &lt; 690:
+          print(&quot;690&quot;)
+      elif 690 &lt;= a &lt; 700:
+          print(&quot;700&quot;)
+      elif 700 &lt;= a &lt; 710:
+          print(&quot;710&quot;)
+      elif 710 &lt;= a &lt; 720:
+          print(&quot;720&quot;)
+      elif 720 &lt;= a &lt; 730:
+          print(&quot;730&quot;)
+      elif 730 &lt;= a &lt; 740:
+          print(&quot;740&quot;)
+      elif 740 &lt;= a &lt; 750:
+          print(&quot;750&quot;)
+      elif 750 &lt;= a &lt; 760:
+          print(&quot;760&quot;)
+      elif 760 &lt;= a &lt; 770:
+          print(&quot;770&quot;)
+      elif 770 &lt;= a &lt; 780:
+          print(&quot;780&quot;)
+      elif 780 &lt;= a &lt; 790:
+          print(&quot;790&quot;)
+      elif 790 &lt;= a &lt; 800:
+          print(&quot;800&quot;)
+      elif 800 &lt;= a &lt; 810:
+          print(&quot;810&quot;)
+      elif 810 &lt;= a &lt; 820:
+          print(&quot;820&quot;)
+      elif 820 &lt;= a &lt; 830:
+          print(&quot;830&quot;)
+      elif 830 &lt;= a &lt; 840:
+          print(&quot;840&quot;)
+      elif 840 &lt;= a &lt; 850:
+          print(&quot;850&quot;)
+      elif 850 &lt;= a &lt; 860:
+          print(&quot;860&quot;)
+      elif 860 &lt;= a &lt; 870:
+          print(&quot;870&quot;)
+      elif 870 &lt;= a &lt; 880:
+          print(&quot;880&quot;)
+      elif 880 &lt;= a &lt; 890:
+          print(&quot;890&quot;)
+      elif 890 &lt;= a &lt; 900:
+          print(&quot;900&quot;)
+      elif 900 &lt;= a &lt; 910:
+          print(&quot;910&quot;)
+      elif 910 &lt;= a &lt; 920:
+          print(&quot;920&quot;)
+      elif 920 &lt;= a &lt; 930:
+          print(&quot;930&quot;)
+      elif 930 &lt;= a &lt; 940:
+          print(&quot;940&quot;)
+      elif 940 &lt;= a &lt; 950:
+          print(&quot;950&quot;)
+      elif 950 &lt;= a &lt; 960:
+          print(&quot;960&quot;)
+      elif 960 &lt;= a &lt; 970:
+          print(&quot;970&quot;)
+      elif 970 &lt;= a &lt; 980:
+          print(&quot;980&quot;)
+      elif 980 &lt;= a &lt; 990:
+          print(&quot;990&quot;)
+      elif 990 &lt;= a &lt; 1000:
+          print(&quot;1000&quot;)
+      elif 1000 &lt;= a &lt; 1010:
+          print(&quot;1010&quot;)
+      elif 1010 &lt;= a &lt; 1020:
+          print(&quot;1020&quot;)
+      elif 1020 &lt;= a &lt; 1030:
+          print(&quot;1030&quot;)
+      elif 1030 &lt;= a &lt; 1040:
+          print(&quot;1040&quot;)
+      elif 1040 &lt;= a &lt; 1050:
+          print(&quot;1050&quot;)
+      elif 1050 &lt;= a &lt; 1060:
+          print(&quot;1060&quot;)
+      elif 1060 &lt;= a &lt; 1070:
+          print(&quot;1070&quot;)
+  # }}}
+
+
+
+  t_start = time.time()
+  for _ in range(1000):
+      f_without_elif()
+  t_end   = time.time()
+  print(f&quot;without elif: {(t_end - t_start)/1000} sec&quot;)
+
+  t_with_elif_start = time.time()
+  for _ in range(1000):
+      f_with_elif()
+  t_with_elif_end   = time.time()
+  print(f&quot;with elif   : {(t_with_elif_end - t_with_elif_start)/1000} sec&quot;)
+</div>  </details>
+<h2 id="結果">結果</h2><p>=print=でたくさん標準出力を使っていますが、 そこの値は重要ではないので
+私は<a href="https://github.com/thinca/vim-quickrun">quickrun</a>を使って
+vim上のバッファで加工して消しています
+</p><div class="example">  without elif: 4.281997680664063e-06 sec
+  with elif   : 9.88006591796875e-07 sec
+</div><p>一瞬遅くなって見えますが、桁が一桁違います。少数表記にすると
+</p><div class="example">  without elif: 0.000004 sec
+  with elif   : 0.000001 sec
+</div><p>となり、=elif=の方が速いことがわかります。
+</p><h2 id="考察">考察</h2><p>なぜ速いのかを考えてみます。
+</p><h3 id="構文木">構文木</h3><p>=elif=には特別なノードがなく、構文木に落とすと親の=If=ノードの=oreelse=に含まれる=If=ノードになります。
+</p><pre class="src-block"><code class="language-python">import ast
+
+print(ast.dump(ast.parse(&quot;&quot;&quot;
+if x:
+   ...
+elif y:
+   ...
+else:
+   ...
+
+if z:
+    ...
+&quot;&quot;&quot;)))
+</code></pre><div class="example">  Module(
+      body=[
+          If(test=Name(id=&#39;x&#39;, ctx=Load()),
+             body=[Expr(value=Ellipsis())],
+             orelse=[
+                If(test=Name(id=&#39;y&#39;, ctx=Load()),
+                   body=[Expr(value=Ellipsis())],
+                   orelse=[Expr(value=Ellipsis())])
+                ]
+            ),
+          If(test=Name(id=&#39;z&#39;, ctx=Load()),
+             body=[Expr(value=Ellipsis())],
+             orelse=[])
+          ]
+  )
+</div><p><a href="https://docs.python.org/ja/3/library/ast.html?highlight=elif#ast.If">https://docs.python.org/ja/3/library/ast.html?highlight=elif#ast.If</a></p><h3 id="ステップ数を調べる">ステップ数を調べる</h3><p>おそらく、if文が実行される回数が少ないはず、なのでpythonのデバッガである<a href="https://docs.python.org/3/library/pdb.html">pdb</a>を使って調べてみます。
+</p><div class="example">  &gt;&gt;&gt; # まずはelif使わないもの
+  &gt;&gt;&gt; pdb.run(&quot;&quot;&quot;
+      ... if True:
+      ...     print(&quot;s&quot;)
+      ... if False:
+      ...     print(&quot;f&quot;)
+      ... &quot;&quot;&quot;)
+  &gt; &lt;string&gt;(3)&lt;module&gt;()-&gt;None
+  (Pdb) n
+  s
+  &gt; &lt;string&gt;(4)&lt;module&gt;()-&gt;None
+  (Pdb)
+  --Return--
+  &gt; &lt;string&gt;(4)&lt;module&gt;()-&gt;None
+  (Pdb)
+  &gt;&gt;&gt; pdb.run(&quot;&quot;&quot;
+      ... if True:
+      ...     print(&quot;s&quot;)
+      ... elif False:
+      ...     print(&quot;f&quot;)
+      ... &quot;&quot;&quot;)
+  &gt; &lt;string&gt;(3)&lt;module&gt;()-&gt;None
+  (Pdb) n
+  s
+  --Return--
+  &gt; &lt;string&gt;(3)&lt;module&gt;()-&gt;None
+  (Pdb)
+  &gt;&gt;&gt;
+</div><p>やはり、=if=文を分割した場合と比べて=elif=の方が”--Return--“が早く来ていますね。
+これひとつではそこまで差異はないと思いますが、もっと複雑な条件式を使っている場合や何度も重なっている場合は影響が出そうですね。
+</p>   </article>  <div class="post__footer" data-astro-cid-jj6gr7j4> <br data-astro-cid-jj6gr7j4><div class="author-card" data-astro-cid-jj6gr7j4>  <div class="author-card__meta" data-astro-cid-jj6gr7j4> <span class="author-card__author" data-astro-cid-jj6gr7j4>Cj-bc</span> <p class="author-card__bio" data-astro-cid-jj6gr7j4>Crisp, minimal, personal blog theme for Astro. Crisp, minimal, personal blog theme for Astro. Crisp, minimal, personal blog theme for Astro</p> <br data-astro-cid-jj6gr7j4> <a class="author-card__follow-btn button" target="_blank" href="https://twitter.com/intent/follow?screen_name=" data-astro-cid-jj6gr7j4><svg viewBox="0 0 24 24" data-astro-cid-jj6gr7j4 class="w-5 h-5 inline-block" astro-icon="mdi:twitter"><path fill="currentColor" d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/></svg> Follow on Twitter</a> </div> </div><br data-astro-cid-jj6gr7j4> </div>  </div> <br class="my-4" data-astro-cid-fhdt7an5> <footer class="footer" data-astro-cid-sz7xmlte> <nav class="nav" data-astro-cid-sz7xmlte> <div data-astro-cid-sz7xmlte>2021  &copy; Copyright notice | <a href="https://github.com/one-aalam/astro-ink" title="Ink's Github URL'" data-astro-cid-sz7xmlte>Ink</a> <script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><astro-island uid="1mUrvp" component-url="/blog/_astro/ModeLabel.210c429b.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-sz7xmlte&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;ModeLabel&quot;,&quot;value&quot;:true}" await-children=""><span slot="dark" data-svelte-h="svelte-14ov3lc">(dark)</span><!--astro:end--></astro-island> theme on <a href="https://astro.build/" data-astro-cid-sz7xmlte>Astro</a></div> <astro-island uid="Zxdlqs" component-url="/blog/_astro/NetlifyIdentity.5f683bb1.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-sz7xmlte&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;NetlifyIdentity&quot;,&quot;value&quot;:true}"></astro-island> </nav> </footer>  <div class="portal-root">  <astro-island uid="ZJdy3D" component-url="/blog/_astro/SearchModal.81cd9666.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-fhdt7an5&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;SearchModal&quot;,&quot;value&quot;:true}"></astro-island>  </div>  </main> </div> </body>  </html>

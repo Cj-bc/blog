@@ -1,0 +1,428 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-jj6gr7j4> <head><!-- Use Google Fonts, if you don't wanna prefer a self-hosted version --><!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet"> --><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Astro - Ink | 古い形式のブログ記事を変換するおしごと</title><meta name="title" content="Astro - Ink | 古い形式のブログ記事を変換するおしごと"><meta name="description" content="read more..."><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="shortcut icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="manifest" href="/site.webmanifest"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/browserconfig.xml"><meta name="theme-color" content="#ffffff"><!-- Open Graph Tags (Facebook) --><meta property="og:type" content="website"><meta property="og:title" content="Astro - Ink | 古い形式のブログ記事を変換するおしごと"><meta property="og:description" content="read more..."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:title" content="Astro - Ink | 古い形式のブログ記事を変換するおしごと"><meta property="twitter:description" content="read more..."><script>
+  const theme = (() => {
+    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+      return localStorage.getItem("theme");
+    }
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "dark";
+    }
+    return "light";
+  })();
+
+  if (theme === "light") {
+    document.documentElement.classList.remove("dark");
+  } else {
+    document.documentElement.classList.add("dark");
+  }
+</script><link rel="stylesheet" href="/blog/_astro/_page_.348a9113.css" />
+<link rel="stylesheet" href="/blog/_astro/_page_.fcc31425.css" />
+<link rel="stylesheet" href="/blog/_astro/_slug_.1f7a3f5c.css" /><script type="module" src="/blog/_astro/hoisted.e6960f2c.js"></script></head> <body class="font-sans antialiased min-h-screen bg-gray-100 dark:bg-gray-800"> <div class="transition-colors"> <main class="mx-auto max-w-4xl px-4 md:px-0">  <br class="my-4" data-astro-cid-fhdt7an5> <header class="header" data-astro-cid-3ef6ksr2> <div class="header__logo" data-astro-cid-3ef6ksr2> <a href="/" class="avatar" data-astro-cid-3ef6ksr2> <img class="header__logo-img" src="/assets/logo.svg" alt="Astro logo" data-astro-cid-3ef6ksr2> </a> </div> <div class="header__meta flex-1" data-astro-cid-3ef6ksr2> <h3 class="header__title dark:text-theme-dark-secondary" data-astro-cid-3ef6ksr2> <a href="" data-astro-cid-3ef6ksr2>Ink</a> </h3> <div class="header__meta-more flex" data-astro-cid-3ef6ksr2> <p class="header__desc" data-astro-cid-3ef6ksr2> Crisp, minimal, personal blog theme for Astro </p> <nav class="header__nav flex" data-astro-cid-3ef6ksr2> <ul class="header__ref-list" data-astro-cid-3ef6ksr2> <li data-astro-cid-3ef6ksr2> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var r=(i,c,s)=>{let n=async()=>{await(await i())()},t=new IntersectionObserver(e=>{for(let o of e)if(o.isIntersecting){t.disconnect(),n();break}});for(let e of s.children)t.observe(e)};(self.Astro||(self.Astro={})).visible=r;window.dispatchEvent(new Event("astro:visible"));})();;(()=>{var b=Object.defineProperty;var f=(c,o,i)=>o in c?b(c,o,{enumerable:!0,configurable:!0,writable:!0,value:i}):c[o]=i;var l=(c,o,i)=>(f(c,typeof o!="symbol"?o+"":o,i),i);var p;{let c={0:t=>m(t),1:t=>i(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(i(t)),5:t=>new Set(i(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t)},o=t=>{let[e,r]=t;return e in c?c[e](r):void 0},i=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([e,r])=>[e,o(r)]));customElements.get("astro-island")||customElements.define("astro-island",(p=class extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var d;if(!this.hydrator||!this.isConnected)return;let e=(d=this.parentElement)==null?void 0:d.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let r=this.querySelectorAll("astro-slot"),a={},h=this.querySelectorAll("template[data-astro-template]");for(let n of h){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("data-astro-template")||"default"]=n.innerHTML,n.remove())}for(let n of r){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("name")||"default"]=n.innerHTML)}let u;try{u=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(n){let s=this.getAttribute("component-url")||"<unknown>",y=this.getAttribute("component-export");throw y&&(s+=` (export ${y})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),n),n}await this.hydrator(this)(this.Component,u,a,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),r.disconnect(),this.childrenConnectedCallback()},r=new MutationObserver(()=>{var a;((a=this.lastChild)==null?void 0:a.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});r.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}start(){let e=JSON.parse(this.getAttribute("opts")),r=this.getAttribute("client");if(Astro[r]===void 0){window.addEventListener(`astro:${r}`,()=>this.start(),{once:!0});return}Astro[r](async()=>{let a=this.getAttribute("renderer-url"),[h,{default:u}]=await Promise.all([import(this.getAttribute("component-url")),a?import(a):()=>()=>{}]),d=this.getAttribute("component-export")||"default";if(!d.includes("."))this.Component=h[d];else{this.Component=h;for(let n of d.split("."))this.Component=this.Component[n]}return this.hydrator=u,this.hydrate},e,this)}attributeChangedCallback(){this.hydrate()}},l(p,"observedAttributes",["props"]),p))}})();</script><astro-island uid="1mCrYB" component-url="/blog/_astro/SearchBtn.b04a64bc.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-3ef6ksr2&quot;:[0,true]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;SearchBtn&quot;,&quot;value&quot;:true}" await-children=""><button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2071 4.89344C19.0923 7.77862 19.3131 12.3193 16.8693 15.4578C16.8846 15.4713 16.8996 15.4854 16.9143 15.5L21.1569 19.7427C21.5474 20.1332 21.5474 20.7664 21.1569 21.1569C20.7664 21.5474 20.1332 21.5474 19.7427 21.1569L15.5 16.9143C15.4854 16.8996 15.4713 16.8846 15.4578 16.8693C12.3193 19.3131 7.77862 19.0923 4.89344 16.2071C1.76924 13.083 1.76924 8.01763 4.89344 4.89344C8.01763 1.76924 13.083 1.76924 16.2071 4.89344ZM14.7929 14.7929C17.1361 12.4498 17.1361 8.6508 14.7929 6.30765C12.4498 3.96451 8.6508 3.96451 6.30765 6.30765C3.96451 8.6508 3.96451 12.4498 6.30765 14.7929C8.6508 17.1361 12.4498 17.1361 14.7929 14.7929Z" fill="currentColor"></path></svg></button><!--astro:end--></astro-island> </li> <li data-astro-cid-3ef6ksr2> <a href="https://github.com/one-aalam/astro-ink" title="Ink's Github URL'" data-astro-cid-3ef6ksr2> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" data-astro-cid-3ef6ksr2></path>  </svg> </a> </li> <li data-astro-cid-3ef6ksr2> <a href="/rss.xml" title="RSS" data-astro-cid-3ef6ksr2> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">  <path d="M4 11a9 9 0 0 1 9 9" data-astro-cid-3ef6ksr2></path> <path d="M4 4a16 16 0 0 1 16 16" data-astro-cid-3ef6ksr2></path> <circle cx="5" cy="19" r="1" data-astro-cid-3ef6ksr2></circle>  </svg> </a> </li> <li data-astro-cid-3ef6ksr2> <astro-island uid="Z1ylE5i" component-url="/blog/_astro/ModeSwitcherBtn.815c7d36.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-3ef6ksr2&quot;:[0,true]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;ModeSwitcherBtn&quot;,&quot;value&quot;:true}" await-children=""><button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle> <line x1="12" y1="1" x2="12" y2="3"></line> <line x1="12" y1="21" x2="12" y2="23"></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line> <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line> <line x1="1" y1="12" x2="3" y2="12"></line> <line x1="21" y1="12" x2="23" y2="12"></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line> <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button><!--astro:end--></astro-island> </li> </ul> </nav> </div> </div> </header>  <nav class="nav py-3" data-astro-cid-dmqpwcec> <ul class="nav-list dark:text-theme-dark-secondary" data-astro-cid-dmqpwcec> <li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/" title="home" data-astro-cid-dmqpwcec>Home</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/blog" title="blog" data-astro-cid-dmqpwcec>Blog</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/tags" title="tags" data-astro-cid-dmqpwcec>Tags</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/media" title="media" data-astro-cid-dmqpwcec>Media</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/about" title="about" data-astro-cid-dmqpwcec>About</a> </li> </ul> </nav>  <div class="content" data-astro-cid-fhdt7an5>  <div class="post__header" data-astro-cid-jj6gr7j4> <div class="post__tags" data-astro-cid-jj6gr7j4> <a class="post__tag" href="/tags/blog" title="blog" data-astro-cid-jj6gr7j4>blog</a> </div> <h1 class="post__title" data-astro-cid-jj6gr7j4>古い形式のブログ記事を変換するおしごと</h1> <h5 class="post__desc " data-astro-cid-jj6gr7j4>  <div class="" data-astro-cid-jj6gr7j4> <span class="post__author" data-astro-cid-jj6gr7j4>Cj-bc</span>  |  <span class="post__date" data-astro-cid-jj6gr7j4> <!-- post creation/updation data --> Thursday, December 2, 2021 </span> <span class="post__stats" data-astro-cid-jj6gr7j4>   <!-- | <Icon class="w-5 h-5 inline-block" pack="mdi" name="clock" /> 2 mins --> </span> </div> </h5> </div> <article class="prose dark:prose-dark" data-astro-cid-apjhz64k>   <h1 id="古い形式のブログ記事を変換するおしごと">古い形式のブログ記事を変換するおしごと</h1><h2 id="これまでの遷移">これまでの遷移</h2><table><tbody><tr><td>blog以前</td><td>Qiita flavored markdownでQiitaに投稿</td></tr><tr><td>一番初めの時期(<a href="https://cj-bc.github.io/blog/posts/2020-08-02-helloHakylly.html">2020/08/02</a>~<a href="https://cj-bc.github.io/blog/posts/2021-01-19-after-effect-markers.html">2021/01/19</a>)</td><td>markdown+pandoc拡張(メタデータをyamlで管理)</td></tr><tr><td>org移行期(<a href="https://cj-bc.github.io/blog/posts/2021-01-31-org-file-test.html">2021/01/31</a>~ <a href="https://cj-bc.github.io/blog/posts/2021-05-19-emacs-org-roam-setup.html">2021-05-19</a></td><td>Org format(メタデータをyamlで管理</td></tr><tr><td>現在のフォーマット(<a href="https://cj-bc.github.io/blog/posts/2021-07-24-diary-allelosphere-vol1.html">2021/07/24</a>~)</td><td>Org format(メタデータをPropertyで管理)</td></tr></tbody></table><h2 id="なぜ移行するのか">なぜ移行するのか</h2><p>   複数のフォーマットに対応したHakyllコードをかくのが
+   そろそろ辛くなってきたからです。
+   特に、メタデータの取り扱い周りが厄介なのです。
+</p><p>   Pandocでは、独自の構文としてメタデータを
+   YAML フォーマットのヘッダーに保存することができます。
+   昔はこれを使っていたのですが、
+   Emacs+Org mode の構成で投稿を作成する際、それらをプロパティとして
+   扱えたら便利だなと感じるようになりました。
+</p><p>   プロパティとして扱える利点としては、例えば現在の投稿にある
+   <code class="inline-code">BLOG_POST_PROGRESS</code> を <code class="inline-code">org-agenda</code> から見ることによって、
+   作成中の投稿の一覧を容易に作成することができます。
+   これは、org modeの機能の一つであるプロパティを用いているからできること
+   であって、pandocのYAML構文を用いようとしたらまた新しいプログラムを
+   書く必要がでてきます。それは面倒だし非効率なので、
+   今迄YAMLメタデータとして仕舞っていたデータも
+   プロパティとして保存するように変更しました。
+</p><p>   それに伴い、タイトルの取得の方法等も変わって昔の方法は使えなくなりました。
+   どちらにも対応することは不可能ではないでしょうが、
+   正直もう昔の方法を利用することは無いであろうこと・今後のメンテナンス性を
+   考えると非効率であることから、完全な移行をするに至りました。
+</p><h2 id="移行スクリプト">移行スクリプト</h2><h3 id="技術選定">技術選定</h3><p>    今回使っていくのは
+</p><ul><li><p><a href="https://pandoc.org/">pandoc</a></p></li><li><p><a href="https://www.nushell.sh/">nushell</a></p></li><li><p>awk
+</p></li><li><p>bash
+</p></li></ul><p>    です
+</p><p>    以下のコード内で、便宜上コードブロックの言語を <code class="inline-code">sh</code> にしていますが、
+    一部は実際はnushellのスクリプトです。
+    (Emacs上でOrg babelで実行する際は、 <code class="inline-code">:shbang #!/bin/nu</code> の効果で
+    nushellのスクリプトとして実行されます。)
+</p><h4 id="pandoc">pandoc</h4><p>     いわずと知れたフォーマット変換(等)ツール。
+     今回、markdown→org formatの変換を必要とするファイルもあるため必須です。
+     又、整形にも使います。
+</p><h4 id="nushell-----">nushell     </h4><p>     言わずと知れた‥というにはまだ早いので紹介します。
+     nushellは、色々な新しい面を持ちますが、今回の目的にそった紹介をする
+     のであればデータ型を持つシェルです。
+     内部にリストやテーブル・日付型・サイズ型等色々な型を持つほか、
+     CVSやINI, TOML, ICS, XML, そして今回の本命YAML等のデータを
+     取り込むんことができます。
+</p><p>     今回はこのYAMLを取り込めるという機能を目的に採用しました。
+     YAML形式で保存されているメタデータの取り出しから、それを新しいHeadingに
+     整形する部分までかnushellの役割です。
+</p><h5 id="経緯-----">経緯     </h5><p>     とりあえずpandocを使うことは決定していましたが、
+     実はpandoc単体(フィルターなし)では「その内容を参照して
+     あれこれする」ことができません。
+     というか、そういうニーズを満たすためのものがフィルターなんですが...
+</p><p>     でもフィルター書くのはちょっと面倒なんだよね...
+     今はYAML形式のメタデータの情報を使いたいだけなので、
+     テキスト処理ならawkなりsedなりあるし
+     わざわざフィルター書く程のものでもないように感じます。
+</p><p>     なので、手軽にYAMLを使えるnushellを使ってみることにしました。
+</p><h4 id="awk">awk</h4><p>     文字列処理ならsedかawkでしょ、ということで使用。
+     今回は、記事からYAML形式のメタデータ部分を取得するために使用します。
+</p><h4 id="bash">bash</h4><p>     nushellで全てを書こうとしたのですが、いかんせん新しいプロジェクトなので
+     未だ使い勝手が整ってなかったり出来無いことがあったりします。
+</p><p>     私がnushellに慣れていない、というのもありますが、
+     テキストを読み込んだ時に謎にTableにされてしまい、それを頑張ってテキストに戻して...
+     みたいなことをやるのに疲れてしまいました。
+     ということで、nushellの得意な部分はnushellに任せて、他の処理は手慣れたbashで
+     行おうということになりました。
+</p><h3 id="1-yaml部分を取り出す">1. YAML部分を取り出す</h3><p>    ここは単純なテキスト処理なのでawkを使います。(もっと良い方法があれば教えてください)
+</p><p>    メタデータは <code class="inline-code">---</code> と <code class="inline-code">---</code> で囲まれているので、
+    「 <code class="inline-code">---</code> の次の行から次に <code class="inline-code">---</code> がくるまで」を出力します。
+</p><pre class="src-block"><code class="language-awk">   BEGIN { inside=0; }
+   /---/ {if (inside == 0) { inside=1; }
+else { inside=0; };
+next;
+   }
+   { if (inside == 1) { print $0; }; }
+</code></pre><pre class="src-block"><code class="language-yaml">title: ブログの見た目を整える
+author: Cj-bc
+tags:
+  - hakyll
+  - ブログ
+  - haskell
+date: Jan 03, 2021
+</code></pre><h3 id="2-yaml部分からメタデータを取得する">2. Yaml部分からメタデータを取得する</h3><p>    先程のawkスクリプトを適用してあげて...
+</p><pre class="src-block"><code class="language-sh">let target = (if ($nu.env | select TARGET | empty?) {&quot;&quot;} {$nu.env.TARGET})
+if ($target | empty?) {
+^echo &quot;usage: TARGET=&lt;TARGET_FILENAME&gt; blog-migration-script--createHeader.nu&quot;
+exit
+} {}
+
+let metadata = (awk &#39;
+&lt;&lt;extract-yaml-metadata&gt;&gt;
+&#39; $target | from yaml)
+</code></pre><pre class="src-block"><code class="language-sh">&lt;&lt;migration-script&gt;&gt;
+
+echo $metadata
+</code></pre><p>      #           title            author        tags            date      
+    ───────────────────────────────────────────────────────────────────────
+      0   ブログの見た目を整える   Cj-bc    [table 3 rows]   Jan 03, 2021  
+</p><h3 id="3-メタデータを加工して新しいヘッダーを作成する">3. メタデータを加工して新しいヘッダーを作成する</h3><p>    さて、これで投稿のタイトルと諸々のデータは取れるようになりました。
+    あとはこれを加工して、新しいヘッダーを作成します。
+</p><pre class="src-block"><code class="language-sh">
+   &lt;&lt;nu-getAuthor&gt;&gt;
+   &lt;&lt;nu-formatTags&gt;&gt;
+   &lt;&lt;nu-formatDate&gt;&gt;
+
+   echo $&quot;* ($metadata.title)
+:PROPERTIES:
+:DATE: (formatDate $metadata)
+:TAGS: ($metadata.tags | reduce -f &#39;:&#39; { $acc + $it + &#39;:&#39; })
+:AUTHOR: (getAuthor $metadata)
+:BLOG_POST_KIND: Memo
+:BLOG_POST_PROGRESS: Published
+:BLOG_POST_STATUS: Normal
+:END:
+   &quot;
+</code></pre><pre class="src-block"><code class="language-sh">&lt;&lt;migration-script&gt;&gt;
+echo $newHeading
+</code></pre><ul><li><p>ブログの見た目を整える
+</p></li></ul><h4 id="タグをorg形式に変換する">タグをOrg形式に変換する</h4><p>     org形式のタグはタグ名を <code class="inline-code">:</code> で囲んだものになります。
+     タグ名はメタデータ内にリストとして持っているので、nushellの <code class="inline-code">reduce</code>
+     コマンドで整形します。
+</p><pre class="src-block"><code class="language-sh">   def formatTags [tags: table] {
+$tags | reduce -f &#39;:&#39; { $acc + $it + &#39;:&#39; }
+   }
+</code></pre><pre class="src-block"><code class="language-sh">&lt;&lt;nu-formatTags&gt;&gt;
+formatTags $metadata.tags
+</code></pre><p>     :hakyll:ブログ:haskell:
+</p><h4 id="記事の日付を変換する">記事の日付を変換する</h4><p>     昔のフォーマットでは <code class="inline-code">月 日, 年</code> となっているので、これを
+     org形式の <code class="inline-code">[年-月-日 曜日]</code> に変換します。
+</p><p>     最初は nushell の <code class="inline-code">parse</code> コマンドでパースしてうんたら...って
+     考えていたけれど、曜日を出す方法や月番号周りの変換に悩んでいました。
+     で、その間に GNU coreutils の <code class="inline-code">date</code> コマンド(nushellは組込みで <code class="inline-code">date</code>
+     コマンド持っているが、そっちではない)が全ての仕事を出来そうだとわかったので
+     こちらでやることにしました。
+</p><p>     GNU coreutilsの <code class="inline-code">date</code> コマンドはデフォルトでは現在時刻を吐きますが、
+     <code class="inline-code">--date</code> オプションに文字列を渡してあげることで別の日付にすることが可能です。
+     このオプションに元の文字列をセットして、それをorg形式にフォーマットしなおします。
+</p><p>     nushellでは、前述の通りそれ自体が提供している <code class="inline-code">date</code> コマンドが存在し、
+     GNU coreutilsの <code class="inline-code">date</code> コマンドはそのままでは使用することができません。
+     そのため、<a href="https://www.nushell.sh/book/escaping.html">nushell bookの&quot;Escaping to the System&quot;</a>を参考にコマンド名の前に
+     <code class="inline-code">^</code> を付けることでnushell独自のコマンドを呼び出さず、GNU coreutilsの <code class="inline-code">date</code>
+     コマンドを呼びだします。
+</p><p>     尚、GNU coreutilsの <code class="inline-code">date</code> コマンドは環境変数 <code class="inline-code">LANG</code> に応じて曜日名の
+     出力などを変化させます。ここでは英語表記になってほしいので <code class="inline-code">LANG=C</code> にしています。
+</p><pre class="src-block"><code class="language-sh">   def formatDate [metadata] {
+LANG=C ^date --date $&quot;($metadata.date)&quot; +[%Y-%m-%d %a] | tr -d &#39;\n&#39;
+   }
+</code></pre><p>     &quot;<span class="timestamp">[2021-01-03 Sun]</span>&quot;
+</p><h4 id="デフォルトの筆者を設定する">デフォルトの筆者を設定する</h4><p>     いくつかの記事はAUTHORが記載されていないので、
+     その場合はデフォルト値を使うようにしてあげます。
+</p><pre class="src-block"><code class="language-sh">    def getAuthor [metadata] {
+    if ($metadata | select author | empty?) {
+&quot;Cj-bc&quot;
+    } { $metadata.author }
+    }
+</code></pre><h3 id="4-元の記事を一段階下げる">4. 元の記事を一段階下げる</h3><p>    さて、今迄作ってきたheadingを、元の記事と組合せる前段階をします。
+    トップレベル(level1)のheadingは一つだけであってほしいので、
+    元の記事のレベルを一段階下げます。これはpandocを用いて行うことができます。
+</p><p>    但し、その前にYAMLヘッダーを取り除いてあげます。
+</p><pre class="src-block"><code class="language-awk">     BEGIN { inside=0; }
+     /---/ {if (inside == 0) { inside=1; }
+else { inside=2; };
+next;
+     }
+     { if (inside == 2) { print $0; }; }
+</code></pre><pre class="src-block"><code class="language-org">
+* ~Ixed~ とは
+
+      数学的解説はわかりませんごめんなさい。誰か補足があれば [[https://github.com/Cj-bc/blog][blogのレポジトリ]] にissueでも残してください()
+      Haskellなのでとりあえず hoogleを参照します。
+      ~Ixed~ の定義は以下の通りです
+
+#+begin_src haskell
+	class Ixed m where
+	  -- |
+	  -- /NB:/ Setting the value of this &#39;Traversal&#39; will only set the value in
+	  -- &#39;at&#39; if it is already present.
+	  --
+	  -- If you want to be able to insert /missing/ values, you want &#39;at&#39;.
+	  --
+	  -- &gt;&gt;&gt; Seq.fromList [a,b,c,d] &amp; ix 2 %~ f
+	  -- fromList [a,b,f c,d]
+	  --
+	  -- &gt;&gt;&gt; Seq.fromList [a,b,c,d] &amp; ix 2 .~ e
+	  -- fromList [a,b,e,d]
+	  --
+	  -- &gt;&gt;&gt; Seq.fromList [a,b,c,d] ^? ix 2
+	  -- Just c
+	  --
+	  -- &gt;&gt;&gt; Seq.fromList [] ^? ix 2
+	  -- Nothing
+	  ix :: Index m -&gt; Traversal&#39; m (IxValue m)
+	  default ix :: At m =&gt; Index m -&gt; Traversal&#39; m (IxValue m)
+	  ix = ixAt
+	  {-# INLINE ix #-}
+#+end_src
+
+      ~Ixed~ は =Lens= の提供する型の一つで、 ~Map~ のような型の値に対して
+      値を ~traverse~ するシンプルな ~Traversal~ を提供するものです。
+
+      簡潔に言うと、
+*リスト等の要素にLensでアクセスできるようにするやつ*
+      みたいなざっくりとした理解をしています。
+
+
+      また、これに関連するオープンな型ファミリーとして ~Index~ と ~IxValue~ があります
+
+#+begin_src haskell
+	type family Index (s :: *) :: *
+
+	-- | This provides a common notion of a value at an index that is shared by both &#39;Ixed&#39; and &#39;At&#39;.
+	type family IxValue (m :: *) :: *
+#+end_src
+
+      ~Ixed~ において、 ~Index~ はインデックスの型、 ~IxValue~ はそこに格納されている
+      値の型です。
+
+* 作る
+
+      とりあえず作り始めます。
+
+      前提として、今回~Ixed~のインスタンスを作るのは以下の型です。
+      元のファイルは [[https://github.com/Cj-bc/playground/blob/0fb982f28f7ab0444ffd2ad59eacc3cd904b99ba/haskell/hit-n-blow/src/HitNBlow/Type.hs#L15-20][Cj-bc/playground -- hit-n-blow]] で使われているものです。
+
+#+begin_src haskell
+	-- | Represents each Pin
+	data Pin = Red | Blue | Green | White | Purple deriving (Show)
+
+	-- | One Set of Pins that user will guess 
+	data Lane = Lane (Maybe Pin) (Maybe Pin) (Maybe Pin) (Maybe Pin) (Maybe Pin)
+	    deriving (Show)
+#+end_src
+
+
+
+      ~Ixed~ の定義に特に制限がかかれていないので、 ~ix~ を定義することにします。
+      そのために、 ~ix~ で使用される ~Index~ と ~IxValue~ を定義することにします。
+
+** Index
+	 ~Index~ はあまり説明がありませんが、型の情報からすると恐らく「添字に使う型」
+	 の定義であろうと推測が出来ます。
+	 (名前が ~Index~ であること、 ~ix~ において最初に取ること等。又、
+	 既にあるインスタンスを確認するのも良い方法だと思います。)
+
+	 ~Lane~ において添字は ~Int~ です。
+
+#+begin_src haskell
+	   type instance Index Lane = Int
+#+end_src
+
+** IxValue
+	 同様ですが、今度はそれぞれの中身の型を定義します。
+
+#+begin_src haskell
+	   type instance IxValue Lane = Maybe Pin
+#+end_src
+
+** Ixed
+	 ~Ixed~ 本体に行きます!!
+
+	 ~ix~ の型は
+
+#+begin_src haskell
+	   ix :: Index m -&gt; Traversal&#39; m (IxValue m)
+#+end_src
+
+	 で、今回は ~m~ が ~Lane~ なので具体的な型にすると
+
+#+begin_src haskell
+	   ix :: Int -&gt; Traversal&#39; Lane (Maybe Pin)
+#+end_src
+
+	 ということになります。
+
+	 で、 ~Lens~ 少ししか分からんので一つ疑問が浮かびます
+
+*&gt;&gt;&gt;&gt;&gt; ~Traversal&#39;~ ってナニよ!!!!! &lt;&lt;&lt;&lt;&lt;*
+
+** Traversal&#39; ってナニよ!
+
+	 はい。名前は知ってるけど使い方良く分からずに放置してた子ですね。
+	 定義によると
+
+#+begin_src haskell
+	   type Traversal&#39; s a = Traversal s s a a
+
+	   type Traversal s t a b = forall f. Applicative f =&gt; (a -&gt; f b) -&gt; s -&gt; f t
+#+end_src
+
+	 ついでなので [[https://hackage.haskell.org/package/lens-5.0.1/docs/Control-Lens-Type.html#t:Traversal][~Traversal~]] の定義も載せておきました。
+	 ~Lens~ と同じように、実体はただの関数ですね。
+
+	 ~Lens~ よりも制限の緩い型で ~Traversable~ の型関数である ~traverse~ の一般化らしいです。
+	 しっかりと理解はしていないが、まぁ型を考えれば作れてしまうのでとりあえずは
+	 ふんわりと掴んだ状態で作ってみます。
+
+	 あ、ちなみに ~Traversal&#39;~ は単純に、値の更新等した時に型が変化しないものですね。
+
+	 参考:
+
+	 - [[https://fumieval.hatenablog.com/entry/2015/07/14/223329][lensパッケージのオプティクス(弱い順) -- モナドとわたしとコモナド]]
+
+** ~ix~ を作る
+	 さて、 ~Traversal&#39;~ がわかったので ~ix~ を作れ(る気がし)ます。
+	 ~Traversal&#39;~ を置き換えてみると:
+
+#+begin_src haskell
+	   ix :: Int -&gt; Traversa&#39; Lane (Maybe Pin)
+	   ix :: Int -&gt; Traversal Lane Lane (Maybe Pin) (Maybe Pin)
+	   ix :: Int -&gt; (forall f. Applicative f =&gt; (Maybe Pin -&gt; f (Maybe Pin) -&gt; Lane -&gt; f Lane
+#+end_src
+
+	 となります(forallの位置は少し自信がないけど多分あってる)
+
+	 ~Int~ は元々 ~Index m~ だった部分なので、今興味のあるインデックス(に該当する数字)が来るのがわかります。
+
+	 又、元の ~Traversal&#39;~ の部分も要は「中身( ~Maybe Pin~ )に作用する関数を受け取り、作用させた
+	 結果を返す」わけなので、その通りに実装します。
+
+#+begin_src haskell
+	   instance Ixed Lane where
+	     ix 1 = \g l@(Lane a b c d e) -&gt; Lane &lt;$&gt; g a &lt;*&gt; b &lt;*&gt; c &lt;*&gt; d &lt;*&gt; e
+	     ix 2 = \g l@(Lane a b c d e) -&gt; Lane a &lt;$&gt; g b &lt;*&gt; c &lt;*&gt; d &lt;*&gt; e
+	     ix 3 = \g l@(Lane a b c d e) -&gt; Lane a b &lt;$&gt; g c &lt;*&gt; d &lt;*&gt; e
+	     ix 4 = \g l@(Lane a b c d e) -&gt; Lane a b c &lt;$&gt; g d &lt;*&gt; e
+	     ix 5 = \g l@(Lane a b c d e) -&gt; Lane a b c d &lt;$&gt; g e
+	     ix _ = \_ l -&gt; pure l
+#+end_src
+
+	 多分動いた!!
+</code></pre><pre class="src-block"><code class="language-sh">      pandoc -f org --shift-heading-level-by=1 -t org &lt;(echo &quot;
+* Leve1 header example
+	hello!
+
+** Inner level2 header
+      &quot;)
+
+</code></pre><p>    ** Leve1 header example
+</p><p>    hello!
+</p><p>    <strong>*</strong> Inner level2 header
+</p><h3 id="5-3と4を組み合わせる">5. 3.と4.を組み合わせる</h3><p>    ここからはbashを使います。
+</p><pre class="src-block"><code class="language-sh">      [[ -z $1 ]] &amp;&amp; { echo &quot;usage: migration-script.sh TARGETFILE&quot;; exit; }
+      target=$1
+
+      extensions=(emoji task_lists
+		  backtick_code_blocks fenced_code_attributes
+		  header_attributes raw_html
+		 )
+      function formatExtension() {
+	  echo &quot;+${extensions[@]}&quot; | tr &#39; &#39; &#39;+&#39;
+      }
+
+      format=$(filename=($(echo $target | tr -s &#39;.&#39; &#39; &#39;));
+	       case &quot;${filename[-1]}&quot; in
+		   &quot;md&quot;) echo &quot;markdown$(formatExtension)&quot;;;
+*) echo &quot;org&quot;;;
+	       esac
+	    )
+
+      cat &lt;(TARGET=$target ./blog-migration-script--createHeader.nu) &lt;(awk &#39;
+      &lt;&lt;awk-trim-yaml-header&gt;&gt;
+      &#39; $target | pandoc -f &quot;${format}&quot; --shift-heading-level-by=1 -t org)
+</code></pre><p>    usage: migration-script.sh TARGETFILE
+</p><h4 id="ここでnushellを使わなかった理由">ここでnushellを使わなかった理由</h4><p>     nushellの <code class="inline-code">echo</code> はListで出力してくるので、
+     GNU coreutilsの <code class="inline-code">echo</code> を使います。
+     又、 <code class="inline-code">^echo $newHeading (pandoc...)</code> だと <code class="inline-code">$newHeading</code> と
+     <code class="inline-code">(pandoc...)</code> の間に改行が作成されず、 <code class="inline-code">$newHeading</code> の後ろに空行を追加して
+     おいてもなんか消されてしまうので以下のような方法を取っています。
+</p><h3 id="7-全ファイルに対して実行する">7. 全ファイルに対して実行する</h3><p>    あとはこれを全てのファイルに対して実行してあげれば良いわけです!
+    <a href="これまでの遷移">これまでの遷移</a>から、 2021/05/19以前の投稿が古いフォーマットを使用している
+    ことがわかるので、それ以前のファイルのみを探し出します。
+</p><p>    この取得はちょっと面倒で、昔のファイルでも最近変更していたりするので
+    <code class="inline-code">find</code> コマンドが使えません( <code class="inline-code">-newer</code> 系を使いたいが、一定の日付より前のみに
+    変更しているという根拠はない)。
+    しかし、私のブログは(ありがたいことに)ファイル名が日付で始まっているので、それをglob展開して取得することにします。
+</p><p>    そしてその各ファイルに先程のスクリプトを適用してあげて、変形します。
+</p><h4 id="まずはgit管理されているファイルに実行する">まずはGit管理されているファイルに実行する</h4><p>     ただ、念の為にまずはGitにコミットされているファイルのみを対象にします。コミットさえされていれば失敗しても大丈夫なので...
+     Gitに認識されていないファイルは src<sub>sh</sub>{git status --short FILENAME} が <code class="inline-code">?? &lt;ファイル名&gt;</code> となるので、それを使って
+     判定します。
+</p><pre class="src-block"><code class="language-sh">   function filter {
+local filterFunction=$1
+
+while read candidate; do
+    $filterFunction &quot;$candidate&quot; \
+      &amp;&amp; echo &quot;$candidate&quot;
+done &lt; &lt;(cat /dev/stdin)
+   }
+
+   function map {
+local f=$1
+while read target; do
+    $f &quot;$target&quot;
+done &lt; &lt;(cat /dev/stdin)
+   }
+
+   function filterGitKnownFile {
+local filename=$1
+
+local gitStatusResult=&quot;$(git status --short $filename)&quot; 
+[[ ! &quot;$gitStatusResult&quot; ]]
+   }
+
+   function convertFile {
+local target=$1
+./migration-script.sh $target &gt; ${target}.new
+mv ${target}.new $target
+   }
+
+   set -e
+   ls 2020-* 2021-0{1,2,3,4}* | grep &quot;\(md\|org\)$&quot; | filter &quot;filterGitKnownFile&quot;  | map convertFile
+   convertFile 2021-05-04-xmonad-use-stack-for-compile.org
+   convertFile 2021-05-10-xmonad-list-of-layouts.org 
+
+   echo &quot;Finished!&quot;
+</code></pre><div class="special-block block-accordion"><p>    Finished!
+</p></div>   </article>  <div class="post__footer" data-astro-cid-jj6gr7j4> <br data-astro-cid-jj6gr7j4><div class="author-card" data-astro-cid-jj6gr7j4>  <div class="author-card__meta" data-astro-cid-jj6gr7j4> <span class="author-card__author" data-astro-cid-jj6gr7j4>Cj-bc</span> <p class="author-card__bio" data-astro-cid-jj6gr7j4>Crisp, minimal, personal blog theme for Astro. Crisp, minimal, personal blog theme for Astro. Crisp, minimal, personal blog theme for Astro</p> <br data-astro-cid-jj6gr7j4> <a class="author-card__follow-btn button" target="_blank" href="https://twitter.com/intent/follow?screen_name=" data-astro-cid-jj6gr7j4><svg viewBox="0 0 24 24" data-astro-cid-jj6gr7j4 class="w-5 h-5 inline-block" astro-icon="mdi:twitter"><path fill="currentColor" d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/></svg> Follow on Twitter</a> </div> </div><br data-astro-cid-jj6gr7j4> </div>  </div> <br class="my-4" data-astro-cid-fhdt7an5> <footer class="footer" data-astro-cid-sz7xmlte> <nav class="nav" data-astro-cid-sz7xmlte> <div data-astro-cid-sz7xmlte>2021  &copy; Copyright notice | <a href="https://github.com/one-aalam/astro-ink" title="Ink's Github URL'" data-astro-cid-sz7xmlte>Ink</a> <script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><astro-island uid="1mUrvp" component-url="/blog/_astro/ModeLabel.210c429b.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-sz7xmlte&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;ModeLabel&quot;,&quot;value&quot;:true}" await-children=""><span slot="dark" data-svelte-h="svelte-14ov3lc">(dark)</span><!--astro:end--></astro-island> theme on <a href="https://astro.build/" data-astro-cid-sz7xmlte>Astro</a></div> <astro-island uid="Zxdlqs" component-url="/blog/_astro/NetlifyIdentity.5f683bb1.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-sz7xmlte&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;NetlifyIdentity&quot;,&quot;value&quot;:true}"></astro-island> </nav> </footer>  <div class="portal-root">  <astro-island uid="ZJdy3D" component-url="/blog/_astro/SearchModal.81cd9666.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-fhdt7an5&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;SearchModal&quot;,&quot;value&quot;:true}"></astro-island>  </div>  </main> </div> </body>  </html>

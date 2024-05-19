@@ -1,0 +1,113 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-jj6gr7j4> <head><!-- Use Google Fonts, if you don't wanna prefer a self-hosted version --><!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet"> --><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Astro - Ink | HaskellのIxedインスタンスを自作型につける</title><meta name="title" content="Astro - Ink | HaskellのIxedインスタンスを自作型につける"><meta name="description" content="read more..."><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="shortcut icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="manifest" href="/site.webmanifest"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/browserconfig.xml"><meta name="theme-color" content="#ffffff"><!-- Open Graph Tags (Facebook) --><meta property="og:type" content="website"><meta property="og:title" content="Astro - Ink | HaskellのIxedインスタンスを自作型につける"><meta property="og:description" content="read more..."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:title" content="Astro - Ink | HaskellのIxedインスタンスを自作型につける"><meta property="twitter:description" content="read more..."><script>
+  const theme = (() => {
+    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+      return localStorage.getItem("theme");
+    }
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "dark";
+    }
+    return "light";
+  })();
+
+  if (theme === "light") {
+    document.documentElement.classList.remove("dark");
+  } else {
+    document.documentElement.classList.add("dark");
+  }
+</script><link rel="stylesheet" href="/blog/_astro/_page_.348a9113.css" />
+<link rel="stylesheet" href="/blog/_astro/_page_.fcc31425.css" />
+<link rel="stylesheet" href="/blog/_astro/_slug_.1f7a3f5c.css" /><script type="module" src="/blog/_astro/hoisted.e6960f2c.js"></script></head> <body class="font-sans antialiased min-h-screen bg-gray-100 dark:bg-gray-800"> <div class="transition-colors"> <main class="mx-auto max-w-4xl px-4 md:px-0">  <br class="my-4" data-astro-cid-fhdt7an5> <header class="header" data-astro-cid-3ef6ksr2> <div class="header__logo" data-astro-cid-3ef6ksr2> <a href="/" class="avatar" data-astro-cid-3ef6ksr2> <img class="header__logo-img" src="/assets/logo.svg" alt="Astro logo" data-astro-cid-3ef6ksr2> </a> </div> <div class="header__meta flex-1" data-astro-cid-3ef6ksr2> <h3 class="header__title dark:text-theme-dark-secondary" data-astro-cid-3ef6ksr2> <a href="" data-astro-cid-3ef6ksr2>Ink</a> </h3> <div class="header__meta-more flex" data-astro-cid-3ef6ksr2> <p class="header__desc" data-astro-cid-3ef6ksr2> Crisp, minimal, personal blog theme for Astro </p> <nav class="header__nav flex" data-astro-cid-3ef6ksr2> <ul class="header__ref-list" data-astro-cid-3ef6ksr2> <li data-astro-cid-3ef6ksr2> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var r=(i,c,s)=>{let n=async()=>{await(await i())()},t=new IntersectionObserver(e=>{for(let o of e)if(o.isIntersecting){t.disconnect(),n();break}});for(let e of s.children)t.observe(e)};(self.Astro||(self.Astro={})).visible=r;window.dispatchEvent(new Event("astro:visible"));})();;(()=>{var b=Object.defineProperty;var f=(c,o,i)=>o in c?b(c,o,{enumerable:!0,configurable:!0,writable:!0,value:i}):c[o]=i;var l=(c,o,i)=>(f(c,typeof o!="symbol"?o+"":o,i),i);var p;{let c={0:t=>m(t),1:t=>i(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(i(t)),5:t=>new Set(i(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t)},o=t=>{let[e,r]=t;return e in c?c[e](r):void 0},i=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([e,r])=>[e,o(r)]));customElements.get("astro-island")||customElements.define("astro-island",(p=class extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var d;if(!this.hydrator||!this.isConnected)return;let e=(d=this.parentElement)==null?void 0:d.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let r=this.querySelectorAll("astro-slot"),a={},h=this.querySelectorAll("template[data-astro-template]");for(let n of h){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("data-astro-template")||"default"]=n.innerHTML,n.remove())}for(let n of r){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("name")||"default"]=n.innerHTML)}let u;try{u=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(n){let s=this.getAttribute("component-url")||"<unknown>",y=this.getAttribute("component-export");throw y&&(s+=` (export ${y})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),n),n}await this.hydrator(this)(this.Component,u,a,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),r.disconnect(),this.childrenConnectedCallback()},r=new MutationObserver(()=>{var a;((a=this.lastChild)==null?void 0:a.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});r.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}start(){let e=JSON.parse(this.getAttribute("opts")),r=this.getAttribute("client");if(Astro[r]===void 0){window.addEventListener(`astro:${r}`,()=>this.start(),{once:!0});return}Astro[r](async()=>{let a=this.getAttribute("renderer-url"),[h,{default:u}]=await Promise.all([import(this.getAttribute("component-url")),a?import(a):()=>()=>{}]),d=this.getAttribute("component-export")||"default";if(!d.includes("."))this.Component=h[d];else{this.Component=h;for(let n of d.split("."))this.Component=this.Component[n]}return this.hydrator=u,this.hydrate},e,this)}attributeChangedCallback(){this.hydrate()}},l(p,"observedAttributes",["props"]),p))}})();</script><astro-island uid="1mCrYB" component-url="/blog/_astro/SearchBtn.b04a64bc.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-3ef6ksr2&quot;:[0,true]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;SearchBtn&quot;,&quot;value&quot;:true}" await-children=""><button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2071 4.89344C19.0923 7.77862 19.3131 12.3193 16.8693 15.4578C16.8846 15.4713 16.8996 15.4854 16.9143 15.5L21.1569 19.7427C21.5474 20.1332 21.5474 20.7664 21.1569 21.1569C20.7664 21.5474 20.1332 21.5474 19.7427 21.1569L15.5 16.9143C15.4854 16.8996 15.4713 16.8846 15.4578 16.8693C12.3193 19.3131 7.77862 19.0923 4.89344 16.2071C1.76924 13.083 1.76924 8.01763 4.89344 4.89344C8.01763 1.76924 13.083 1.76924 16.2071 4.89344ZM14.7929 14.7929C17.1361 12.4498 17.1361 8.6508 14.7929 6.30765C12.4498 3.96451 8.6508 3.96451 6.30765 6.30765C3.96451 8.6508 3.96451 12.4498 6.30765 14.7929C8.6508 17.1361 12.4498 17.1361 14.7929 14.7929Z" fill="currentColor"></path></svg></button><!--astro:end--></astro-island> </li> <li data-astro-cid-3ef6ksr2> <a href="https://github.com/one-aalam/astro-ink" title="Ink's Github URL'" data-astro-cid-3ef6ksr2> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" data-astro-cid-3ef6ksr2></path>  </svg> </a> </li> <li data-astro-cid-3ef6ksr2> <a href="/rss.xml" title="RSS" data-astro-cid-3ef6ksr2> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">  <path d="M4 11a9 9 0 0 1 9 9" data-astro-cid-3ef6ksr2></path> <path d="M4 4a16 16 0 0 1 16 16" data-astro-cid-3ef6ksr2></path> <circle cx="5" cy="19" r="1" data-astro-cid-3ef6ksr2></circle>  </svg> </a> </li> <li data-astro-cid-3ef6ksr2> <astro-island uid="Z1ylE5i" component-url="/blog/_astro/ModeSwitcherBtn.815c7d36.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-3ef6ksr2&quot;:[0,true]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;ModeSwitcherBtn&quot;,&quot;value&quot;:true}" await-children=""><button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle> <line x1="12" y1="1" x2="12" y2="3"></line> <line x1="12" y1="21" x2="12" y2="23"></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line> <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line> <line x1="1" y1="12" x2="3" y2="12"></line> <line x1="21" y1="12" x2="23" y2="12"></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line> <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button><!--astro:end--></astro-island> </li> </ul> </nav> </div> </div> </header>  <nav class="nav py-3" data-astro-cid-dmqpwcec> <ul class="nav-list dark:text-theme-dark-secondary" data-astro-cid-dmqpwcec> <li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/" title="home" data-astro-cid-dmqpwcec>Home</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/blog" title="blog" data-astro-cid-dmqpwcec>Blog</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/tags" title="tags" data-astro-cid-dmqpwcec>Tags</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/media" title="media" data-astro-cid-dmqpwcec>Media</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/about" title="about" data-astro-cid-dmqpwcec>About</a> </li> </ul> </nav>  <div class="content" data-astro-cid-fhdt7an5>  <div class="post__header" data-astro-cid-jj6gr7j4> <div class="post__tags" data-astro-cid-jj6gr7j4> <a class="post__tag" href="/tags/haskell" title="haskell" data-astro-cid-jj6gr7j4>haskell</a><a class="post__tag" href="/tags/Ixed" title="Ixed" data-astro-cid-jj6gr7j4>Ixed</a> </div> <h1 class="post__title" data-astro-cid-jj6gr7j4>HaskellのIxedインスタンスを自作型につける</h1> <h5 class="post__desc " data-astro-cid-jj6gr7j4>  <div class="" data-astro-cid-jj6gr7j4> <span class="post__author" data-astro-cid-jj6gr7j4>Cj-bc</span>  |  <span class="post__date" data-astro-cid-jj6gr7j4> <!-- post creation/updation data --> Wednesday, May 19, 2021 </span> <span class="post__stats" data-astro-cid-jj6gr7j4>   <!-- | <Icon class="w-5 h-5 inline-block" pack="mdi" name="clock" /> 2 mins --> </span> </div> </h5> </div> <article class="prose dark:prose-dark" data-astro-cid-apjhz64k>   <h1 id="haskellのixedインスタンスを自作型につける">HaskellのIxedインスタンスを自作型につける</h1><h2 id="ixed-とは"><code class="inline-code">Ixed</code> とは</h2><p>数学的解説はわかりませんごめんなさい。誰か補足があれば <a href="https://github.com/Cj-bc/blog">blogのレポジトリ</a> にissueでも残してください()
+Haskellなのでとりあえず hoogleを参照します。
+<code class="inline-code">Ixed</code> の定義は以下の通りです
+</p><pre class="src-block"><code class="language-haskell">class Ixed m where
+  -- |
+  -- /NB:/ Setting the value of this &#39;Traversal&#39; will only set the value in
+  -- &#39;at&#39; if it is already present.
+  --
+  -- If you want to be able to insert /missing/ values, you want &#39;at&#39;.
+  --
+  -- &gt;&gt;&gt; Seq.fromList [a,b,c,d] &amp; ix 2 %~ f
+  -- fromList [a,b,f c,d]
+  --
+  -- &gt;&gt;&gt; Seq.fromList [a,b,c,d] &amp; ix 2 .~ e
+  -- fromList [a,b,e,d]
+  --
+  -- &gt;&gt;&gt; Seq.fromList [a,b,c,d] ^? ix 2
+  -- Just c
+  --
+  -- &gt;&gt;&gt; Seq.fromList [] ^? ix 2
+  -- Nothing
+  ix :: Index m -&gt; Traversal&#39; m (IxValue m)
+  default ix :: At m =&gt; Index m -&gt; Traversal&#39; m (IxValue m)
+  ix = ixAt
+  {-# INLINE ix #-}
+</code></pre><p><code class="inline-code">Ixed</code> は <code class="inline-verbatim">Lens</code> の提供する型の一つで、 <code class="inline-code">Map</code> のような型の値に対して
+値を <code class="inline-code">traverse</code> するシンプルな <code class="inline-code">Traversal</code> を提供するものです。
+</p><p>簡潔に言うと、
+<strong>リスト等の要素にLensでアクセスできるようにするやつ</strong>
+みたいなざっくりとした理解をしています。
+</p><p>また、これに関連するオープンな型ファミリーとして <code class="inline-code">Index</code> と <code class="inline-code">IxValue</code> があります
+</p><pre class="src-block"><code class="language-haskell">type family Index (s :: *) :: *
+
+-- | This provides a common notion of a value at an index that is shared by both &#39;Ixed&#39; and &#39;At&#39;.
+type family IxValue (m :: *) :: *
+</code></pre><p><code class="inline-code">Ixed</code> において、 <code class="inline-code">Index</code> はインデックスの型、 <code class="inline-code">IxValue</code> はそこに格納されている
+値の型です。
+</p><h2 id="作る">作る</h2><p>とりあえず作り始めます。
+</p><p>前提として、今回~Ixed~のインスタンスを作るのは以下の型です。
+元のファイルは <a href="https://github.com/Cj-bc/playground/blob/0fb982f28f7ab0444ffd2ad59eacc3cd904b99ba/haskell/hit-n-blow/src/HitNBlow/Type.hs#L15-20">Cj-bc/playground -- hit-n-blow</a> で使われているものです。
+</p><pre class="src-block"><code class="language-haskell">-- | Represents each Pin
+data Pin = Red | Blue | Green | White | Purple deriving (Show)
+
+-- | One Set of Pins that user will guess 
+data Lane = Lane (Maybe Pin) (Maybe Pin) (Maybe Pin) (Maybe Pin) (Maybe Pin)
+    deriving (Show)
+</code></pre><p><code class="inline-code">Ixed</code> の定義に特に制限がかかれていないので、 <code class="inline-code">ix</code> を定義することにします。
+そのために、 <code class="inline-code">ix</code> で使用される <code class="inline-code">Index</code> と <code class="inline-code">IxValue</code> を定義することにします。
+</p><h3 id="index">Index</h3><p>   <code class="inline-code">Index</code> はあまり説明がありませんが、型の情報からすると恐らく「添字に使う型」
+   の定義であろうと推測が出来ます。
+   (名前が <code class="inline-code">Index</code> であること、 <code class="inline-code">ix</code> において最初に取ること等。又、
+   既にあるインスタンスを確認するのも良い方法だと思います。)
+</p><p>   <code class="inline-code">Lane</code> において添字は <code class="inline-code">Int</code> です。
+</p><pre class="src-block"><code class="language-haskell">type instance Index Lane = Int
+</code></pre><h3 id="ixvalue">IxValue</h3><p>   同様ですが、今度はそれぞれの中身の型を定義します。
+</p><pre class="src-block"><code class="language-haskell">type instance IxValue Lane = Maybe Pin
+</code></pre><h3 id="ixed">Ixed</h3><p>   <code class="inline-code">Ixed</code> 本体に行きます!!
+</p><p>   <code class="inline-code">ix</code> の型は
+</p><pre class="src-block"><code class="language-haskell">ix :: Index m -&gt; Traversal&#39; m (IxValue m)
+</code></pre><p>   で、今回は <code class="inline-code">m</code> が <code class="inline-code">Lane</code> なので具体的な型にすると
+</p><pre class="src-block"><code class="language-haskell">ix :: Int -&gt; Traversal&#39; Lane (Maybe Pin)
+</code></pre><p>   ということになります。
+</p><p>   で、 <code class="inline-code">Lens</code> 少ししか分からんので一つ疑問が浮かびます
+</p><p>   <strong>&gt;&gt;&gt;&gt;&gt; <code class="inline-code">Traversal&#39;</code> ってナニよ!!!!! &lt;&lt;&lt;&lt;&lt;</strong></p><h3 id="traversal-ってナニよ">Traversal&#39; ってナニよ!</h3><p>   はい。名前は知ってるけど使い方良く分からずに放置してた子ですね。
+   定義によると
+</p><pre class="src-block"><code class="language-haskell">type Traversal&#39; s a = Traversal s s a a
+
+type Traversal s t a b = forall f. Applicative f =&gt; (a -&gt; f b) -&gt; s -&gt; f t
+</code></pre><p>   ついでなので <a href="https://hackage.haskell.org/package/lens-5.0.1/docs/Control-Lens-Type.html#t:Traversal"><code class="inline-code">Traversal</code></a> の定義も載せておきました。
+   <code class="inline-code">Lens</code> と同じように、実体はただの関数ですね。
+</p><p>   <code class="inline-code">Lens</code> よりも制限の緩い型で <code class="inline-code">Traversable</code> の型関数である <code class="inline-code">traverse</code> の一般化らしいです。
+   しっかりと理解はしていないが、まぁ型を考えれば作れてしまうのでとりあえずは
+   ふんわりと掴んだ状態で作ってみます。
+</p><p>   あ、ちなみに <code class="inline-code">Traversal&#39;</code> は単純に、値の更新等した時に型が変化しないものですね。
+</p><p>   参考:
+</p><ul><li><p><a href="https://fumieval.hatenablog.com/entry/2015/07/14/223329">lensパッケージのオプティクス(弱い順) -- モナドとわたしとコモナド</a></p></li></ul><h3 id="ix-を作る"><code class="inline-code">ix</code> を作る</h3><p>   さて、 <code class="inline-code">Traversal&#39;</code> がわかったので <code class="inline-code">ix</code> を作れ(る気がし)ます。
+   <code class="inline-code">Traversal&#39;</code> を置き換えてみると:
+</p><pre class="src-block"><code class="language-haskell">ix :: Int -&gt; Traversa&#39; Lane (Maybe Pin)
+ix :: Int -&gt; Traversal Lane Lane (Maybe Pin) (Maybe Pin)
+ix :: Int -&gt; (forall f. Applicative f =&gt; (Maybe Pin -&gt; f (Maybe Pin) -&gt; Lane -&gt; f Lane
+</code></pre><p>   となります(forallの位置は少し自信がないけど多分あってる)
+</p><p>   <code class="inline-code">Int</code> は元々 <code class="inline-code">Index m</code> だった部分なので、今興味のあるインデックス(に該当する数字)が来るのがわかります。
+</p><p>   又、元の <code class="inline-code">Traversal&#39;</code> の部分も要は「中身( <code class="inline-code">Maybe Pin</code> )に作用する関数を受け取り、作用させた
+   結果を返す」わけなので、その通りに実装します。
+</p><pre class="src-block"><code class="language-haskell">instance Ixed Lane where
+  ix 1 = \g l@(Lane a b c d e) -&gt; Lane &lt;$&gt; g a &lt;*&gt; b &lt;*&gt; c &lt;*&gt; d &lt;*&gt; e
+  ix 2 = \g l@(Lane a b c d e) -&gt; Lane a &lt;$&gt; g b &lt;*&gt; c &lt;*&gt; d &lt;*&gt; e
+  ix 3 = \g l@(Lane a b c d e) -&gt; Lane a b &lt;$&gt; g c &lt;*&gt; d &lt;*&gt; e
+  ix 4 = \g l@(Lane a b c d e) -&gt; Lane a b c &lt;$&gt; g d &lt;*&gt; e
+  ix 5 = \g l@(Lane a b c d e) -&gt; Lane a b c d &lt;$&gt; g e
+  ix _ = \_ l -&gt; pure l
+</code></pre><p>   多分動いた!!
+</p>   </article>  <div class="post__footer" data-astro-cid-jj6gr7j4> <br data-astro-cid-jj6gr7j4><div class="author-card" data-astro-cid-jj6gr7j4>  <div class="author-card__meta" data-astro-cid-jj6gr7j4> <span class="author-card__author" data-astro-cid-jj6gr7j4>Cj-bc</span> <p class="author-card__bio" data-astro-cid-jj6gr7j4>Crisp, minimal, personal blog theme for Astro. Crisp, minimal, personal blog theme for Astro. Crisp, minimal, personal blog theme for Astro</p> <br data-astro-cid-jj6gr7j4> <a class="author-card__follow-btn button" target="_blank" href="https://twitter.com/intent/follow?screen_name=" data-astro-cid-jj6gr7j4><svg viewBox="0 0 24 24" data-astro-cid-jj6gr7j4 class="w-5 h-5 inline-block" astro-icon="mdi:twitter"><path fill="currentColor" d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/></svg> Follow on Twitter</a> </div> </div><br data-astro-cid-jj6gr7j4> </div>  </div> <br class="my-4" data-astro-cid-fhdt7an5> <footer class="footer" data-astro-cid-sz7xmlte> <nav class="nav" data-astro-cid-sz7xmlte> <div data-astro-cid-sz7xmlte>2021  &copy; Copyright notice | <a href="https://github.com/one-aalam/astro-ink" title="Ink's Github URL'" data-astro-cid-sz7xmlte>Ink</a> <script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><astro-island uid="1mUrvp" component-url="/blog/_astro/ModeLabel.210c429b.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-sz7xmlte&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;ModeLabel&quot;,&quot;value&quot;:true}" await-children=""><span slot="dark" data-svelte-h="svelte-14ov3lc">(dark)</span><!--astro:end--></astro-island> theme on <a href="https://astro.build/" data-astro-cid-sz7xmlte>Astro</a></div> <astro-island uid="Zxdlqs" component-url="/blog/_astro/NetlifyIdentity.5f683bb1.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-sz7xmlte&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;NetlifyIdentity&quot;,&quot;value&quot;:true}"></astro-island> </nav> </footer>  <div class="portal-root">  <astro-island uid="ZJdy3D" component-url="/blog/_astro/SearchModal.81cd9666.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-fhdt7an5&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;SearchModal&quot;,&quot;value&quot;:true}"></astro-island>  </div>  </main> </div> </body>  </html>
