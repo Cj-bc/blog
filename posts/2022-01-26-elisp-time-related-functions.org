@@ -1,11 +1,10 @@
+#+TITLE: 時間関連のElisp関数
+#+DATE: [2022-01-26 Wed 10:50]
+#+TAGS: :elisp:emacs:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * 時間関連のElisp関数
-  :PROPERTIES:
-  :DATE: [2022-01-26 Wed 10:50]
-  :TAGS: :elisp:emacs:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2022-01-26 Wed 11:05]--[2022-01-26 Wed 11:12] =>  0:07
   CLOCK: [2022-01-26 Wed 10:51]--[2022-01-26 Wed 10:54] =>  0:03
@@ -14,6 +13,7 @@
   時間に関連するElisp関数達
 
   
+
 ** ビルトイン関数群 ( ~src/timefns.c~ )
    エポック秒 (1970年1月1日0時0分0秒からの経過時間) で時間を
    扱います。

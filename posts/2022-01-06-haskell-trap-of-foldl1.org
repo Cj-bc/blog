@@ -1,11 +1,10 @@
+#+TITLE: foldl1/foldr1のワナ -- Foldableが空だと死ぬ
+#+DATE: [2022-01-06 Thu 23:24]
+#+TAGS: :haskell:fold:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * foldl1/foldr1のワナ -- Foldableが空だと死ぬ
-  :PROPERTIES:
-  :DATE: [2022-01-06 Thu 23:24]
-  :TAGS: :haskell:fold:
-  :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2022-01-06 Thu 23:26]--[2022-01-06 Thu 23:35] =>  0:09
   :END:
@@ -43,3 +42,4 @@
       error, called at ./Data/Vector/Internal/Check.hs:87:5 in vector-0.12.3.0-DdzviVbdPFECkUuJzBxnHY:Data.Vector.Internal.Check
   #+end_src
   
+

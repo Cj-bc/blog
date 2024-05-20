@@ -1,0 +1,4 @@
+[submodule "astro-ink"]
+	path = astro-ink
+	url = https://github.com/Cj-bc/astro-ink
+	branch = my-blog-branch

@@ -1,11 +1,10 @@
+#+TITLE: passコマンドが最近上手く動かなくなった時の対処法[tree v2.0.0関連]
+#+DATE: [2022-02-07 Mon 10:44]
+#+TAGS: :pass:tool:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * passコマンドが最近上手く動かなくなった時の対処法[tree v2.0.0関連]
-  :PROPERTIES:
-  :DATE: [2022-02-07 Mon 10:44]
-  :TAGS: :pass:tool:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2022-02-07 Mon 10:46]--[2022-02-07 Mon 11:04] =>  0:18
   :END:
@@ -21,6 +20,7 @@
   + 現状passを呼び出す際は必ず ~pass 3>&-~ としておけば対策できるよ
   
     
+
 ** 原因
    treeの2.0.0リリースにて入った破壊的変更が原因です。
 

@@ -1,13 +1,13 @@
+#+TITLE: AEのMarker
+#+DATE: [2021-01-19 Tue]
+#+TAGS: :after effect:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * AEのMarker
-    :PROPERTIES:
-    :DATE: [2021-01-19 Tue]
-    :TAGS: :after effect:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
 - [[https://helpx.adobe.com/jp/after-effects/user-guide.html/jp/after-effects/using/layer-markers-composition-markers.ug.html][公式URL]]
+
 
 ** Markerとは
    :PROPERTIES:

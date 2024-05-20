@@ -1,11 +1,11 @@
+#+TITLE: Python Language Serverにmypyにmypyの設定を追加した
+#+DATE: [2021-02-21 Sun]
+#+TAGS: :python:環境構築:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * Python Language Serverにmypyにmypyの設定を追加した
-  :PROPERTIES:
-  :DATE: [2021-02-21 Sun]
-  :TAGS: :python:環境構築:
-  :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
+
 ** 環境
    :PROPERTIES:
    :CUSTOM_ID: 環境

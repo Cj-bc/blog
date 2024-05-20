@@ -1,11 +1,10 @@
+#+TITLE: アプリケーション毎のオーディオレベルを調整する
+#+DATE: [2022-03-13 Sun 11:54]
+#+TAGS: :pulseAudio:linux:環境構築:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * アプリケーション毎のオーディオレベルを調整する
-  :PROPERTIES:
-  :DATE: [2022-03-13 Sun 11:54]
-  :TAGS: :pulseAudio:linux:環境構築:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2022-03-13 Sun 13:40]--[2022-03-13 Sun 14:10] =>  0:30
   CLOCK: [2022-03-13 Sun 11:56]--[2022-03-13 Sun 12:17] =>  0:21
@@ -19,6 +18,7 @@
   YouTubeの動画を見ることができない等の問題がありました。
 
   
+
 ** 原因
    =sink-input= のVolumeが小さくなっていることがあります。
 

@@ -1,15 +1,15 @@
+#+TITLE: fix-typoのデバッグメモ
+#+DATE: [2021-02-20 Sat]
+#+TAGS: :python:blender:vrm:VRM_IMPORTER_for_Blender:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * fix-typoのデバッグメモ
-    :PROPERTIES:
-    :DATE: [2021-02-20 Sat]
-    :TAGS: :python:blender:vrm:VRM_IMPORTER_for_Blender:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
 
 | 該当PR   | [[https://github.com/saturday06/VRM_Addon_for_Blender/pull/23][saturday06/VRM_{IMPORTERforBlender}: PR #23]]                            |
 | 作業メモ | [[https://Cj-bc.github.io/blog/posts/2021-01-11-blender-python-memo.html]] |
+
 
 ** 問題
    :PROPERTIES:

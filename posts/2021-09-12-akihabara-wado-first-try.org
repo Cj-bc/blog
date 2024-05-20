@@ -1,11 +1,10 @@
+#+TITLE: 秋葉原和堂に行ってきた
+#+DATE: [2021-09-12 Sun 23:47]
+#+TAGS: :Akihabara_Wado:
+#+KIND: Diary
+#+PROGRESS: Published
+#+STATUS: Normal
 * 秋葉原和堂に行ってきた
-  :PROPERTIES:
-  :DATE: [2021-09-12 Sun 23:47]
-  :TAGS: :Akihabara_Wado:
-  :BLOG_POST_KIND: Diary
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2021-09-12 Sun 22:59]--[2021-09-12 Sun 23:48] =>  0:49
   :END:
@@ -145,3 +144,4 @@
   
   
   
+

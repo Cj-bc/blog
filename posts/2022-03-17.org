@@ -1,12 +1,12 @@
+#+TITLE: 2022/03/17
+#+DATE: [2022-03-17 Thu 11:46]
+#+TAGS: :haskell:stack:archlinux:
+#+KIND: Diary
+#+PROGRESS: Published
+#+STATUS: Normal
 * 2022/03/17
-  :PROPERTIES:
-  :DATE: [2022-03-17 Thu 11:46]
-  :TAGS: :haskell:stack:archlinux:
-  :BLOG_POST_KIND: Diary
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   
+
 
 ** やったこと
    全体的には、家にいる間は ~stack-static~ にふりまわされてた

@@ -1,11 +1,10 @@
+#+TITLE: [leaf]:customで動的に生成したリストを使う
+#+DATE: [2022-02-05 Sat 11:46]
+#+TAGS: :emacs:elisp:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * [leaf]:customで動的に生成したリストを使う
-  :PROPERTIES:
-  :DATE: [2022-02-05 Sat 11:46]
-  :TAGS: :emacs:elisp:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2022-02-05 Sat 12:08]--[2022-02-05 Sat 12:17] =>  0:09
   :END:
@@ -53,6 +52,7 @@
   #+end_quote
 
   まぁ普通のリストになっちゃうからそれはそうだよねっていう。
+
 ** まだわからないこと
    + ~(org-agenda-files quote ("path1" "path2"))~ と続いているが、なぜ ~quote~ がそこにあって動くのか？
    + そもそも dotted Pairじゃなくしたらダメ...?(これはleafの仕様の話になってきます

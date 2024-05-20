@@ -1,13 +1,13 @@
+#+TITLE: 簡易的な素数探索アルゴリズムの速度比較
+#+DATE: [2020-10-17 Sat]
+#+TAGS: :python:アルゴリズム:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * 簡易的な素数探索アルゴリズムの速度比較
-    :PROPERTIES:
-    :DATE: [2020-10-17 Sat]
-    :TAGS: :python:アルゴリズム:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
 いや簡単なものなのですが個人的なメモ。 実行言語は=python 3.7.4=です。
+
 
 ** 比較するアルゴリズム
    :PROPERTIES:

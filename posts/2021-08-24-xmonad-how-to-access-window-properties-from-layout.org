@@ -1,17 +1,17 @@
+#+TITLE: XMonadのLayoutからWindowのプロパティにアクセスする
+#+DATE: [2021-08-24 Tue 14:58]
+#+TAGS: :xmonad:
+#+KIND: HowTo
+#+PROGRESS: Published
+#+STATUS: Normal
 * XMonadのLayoutからWindowのプロパティにアクセスする
-  :PROPERTIES:
-  :DATE: [2021-08-24 Tue 14:58]
-  :TAGS: :xmonad:
-  :BLOG_POST_KIND: HowTo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2021-08-24 Tue 18:42]--[2021-08-24 Tue 19:54] =>  1:12
   CLOCK: [2021-08-24 Tue 17:25]--[2021-08-24 Tue 17:48] =>  0:23
   CLOCK: [2021-08-24 Tue 15:01]--[2021-08-24 Tue 16:23] =>  1:22
   :END:
   
+
 ** Tl;Dr
 
    + ~LayoutClass~ のインスタンスの定義で、 ~a~ を ~Window~ に固定する

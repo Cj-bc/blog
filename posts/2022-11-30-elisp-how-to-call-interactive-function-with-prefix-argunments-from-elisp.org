@@ -1,14 +1,14 @@
+#+TITLE: Interactiveな関数をElispからPrefix Arguments付きで呼ぶ
+#+DATE: [2022-11-30 Wed 09:45]
+#+TAGS: :elisp:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * Interactiveな関数をElispからPrefix Arguments付きで呼ぶ
-  :PROPERTIES:
-  :DATE: [2022-11-30 Wed 09:45]
-  :TAGS: :elisp:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
 :LOGBOOK:
 CLOCK: [2022-11-30 Wed 09:46]--[2022-11-30 Wed 10:22] =>  0:36
 :END:
+
 
 ** やりたいこと
 Org modeで「現在時刻を即時入力したい」時、インタラクティブな編集ではhelp:org-time-stamp-inactive

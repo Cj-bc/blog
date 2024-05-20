@@ -1,12 +1,11 @@
+#+TITLE: blenderのSmooth
+#+DATE: [2020-08-17 Mon]
+#+TAGS: :blender:memo:tips:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * blenderのSmooth
-    :PROPERTIES:
-    :DATE: [2020-08-17 Mon]
-    :TAGS: :blender:memo:tips:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
 Blenderには、面と面を補完して滑らかに表示する=shade smooth=という機能があります。
 しかし、何も考えずに使おうとすると思わぬところが補完され、予期せぬ結果になることが多々起こります。
 
@@ -15,6 +14,7 @@ Blenderには、面と面を補完して滑らかに表示する=shade smooth=�
 
 #+caption: shade smoothの結果
 [[https://pbs.twimg.com/media/Efm74u6UcAEU2nM?format=jpg&name=medium]]
+
 
 ** Auto Smoothを使おう
    :PROPERTIES:

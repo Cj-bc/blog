@@ -1,16 +1,16 @@
+#+TITLE: ViewBindingでの設定がきちんと反映されていなかった理由がわかった
+#+DATE: [2022-02-08 Tue 16:57]
+#+TAGS: :android:viewbinding:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * ViewBindingでの設定がきちんと反映されていなかった理由がわかった
-  :PROPERTIES:
-  :DATE: [2022-02-08 Tue 16:57]
-  :TAGS: :android:viewbinding:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2022-02-08 Tue 16:57]--[2022-02-08 Tue 17:27] =>  0:30
   :END:
   分かる人が見ればすぐ分かる凡ミスなのだけど、結構時間掛かってしまったので
   置いておきます。
+
 ** 問題
 
    以下のようなコードを書いていました。

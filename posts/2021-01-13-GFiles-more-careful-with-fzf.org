@@ -1,12 +1,12 @@
+#+TITLE: fzf.vimでカレントディレクトリ以外のGitファイルを検索
+#+DATE: [2021-01-14 Thu]
+#+TAGS: :fzf.vim:fzf:vim:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * fzf.vimでカレントディレクトリ以外のGitファイルを検索
-    :PROPERTIES:
-    :DATE: [2021-01-14 Thu]
-    :TAGS: :fzf.vim:fzf:vim:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
+
 ** =GFiles=は便利
    :PROPERTIES:
    :CUSTOM_ID: gfilesは便利

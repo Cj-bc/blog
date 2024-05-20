@@ -1,11 +1,11 @@
+#+TITLE: 2022/02/23
+#+DATE: [2022-02-23 Wed 18:03]
+#+TAGS: :blog:
+#+KIND: Diary
+#+PROGRESS: Published
+#+STATUS: Normal
 * 2022/02/23
-  :PROPERTIES:
-  :DATE: [2022-02-23 Wed 18:03]
-  :TAGS: :blog:
-  :BLOG_POST_KIND: Diary
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
+
 
 ** やること
 ** 他にやったこと

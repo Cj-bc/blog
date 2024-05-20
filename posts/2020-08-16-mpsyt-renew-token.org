@@ -1,12 +1,11 @@
+#+TITLE: mps-youtubeのAPIキーを更新する
+#+DATE: [2020-08-16 Sun]
+#+TAGS: :mps-youtube:mpsyt:memo:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * mps-youtubeのAPIキーを更新する
-    :PROPERTIES:
-    :DATE: [2020-08-16 Sun]
-    :TAGS: :mps-youtube:mpsyt:memo:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
 mps-youtubeで音楽を聴こうと思ったら、以下のようなエラーが出た。
 
 #+begin_quote
@@ -18,6 +17,7 @@ mps-youtubeで音楽を聴こうと思ったら、以下のようなエラーが
 また、上記記事で参考にされている[[https://www.slickremix.com/docs/get-api-key-for-youtube/][slickremix.com
 -- Get API Key for YouTube]]も参考にする。
 ただし、上記記事では「手順3までやる」と書いてあるが、最後(8)までやる必要がある。
+
 
 ** 1. Google developpersにて、プロジェクトを作成してTokenを取得。
    :PROPERTIES:

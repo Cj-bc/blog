@@ -1,11 +1,10 @@
+#+TITLE: xmobarでwith_utf8してるのにUTF8出来なかった理由
+#+DATE: [2021-09-17 Fri 16:31]
+#+TAGS: :xmobar:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * xmobarでwith_utf8してるのにUTF8出来なかった理由
-  :PROPERTIES:
-  :DATE: [2021-09-17 Fri 16:31]
-  :TAGS: :xmobar:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2021-09-17 Fri 17:25]--[2021-09-17 Fri 17:35] =>  0:10
   CLOCK: [2021-09-17 Fri 16:32]--[2021-09-17 Fri 17:12] =>  0:40
@@ -28,6 +27,7 @@
 
   が、上手くいかなかった。
   
+
 ** 試したが上手くいかなかったこと
 
    + xmobarのビルドフラグの確認

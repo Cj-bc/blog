@@ -1,11 +1,10 @@
+#+TITLE: Qutebrowserでのダウンロード先ディレクトリをrofiで選べるようにしてみた
+#+DATE: [2021-12-21 Tue 16:04]
+#+TAGS: :qutebrowser:rofi:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * Qutebrowserでのダウンロード先ディレクトリをrofiで選べるようにしてみた
-  :PROPERTIES:
-  :DATE: [2021-12-21 Tue 16:04]
-  :TAGS: :qutebrowser:rofi:
-  :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2021-12-21 Tue 22:59]--[2021-12-21 Tue 23:04] =>  0:05
   CLOCK: [2021-12-21 Tue 16:06]--[2021-12-21 Tue 16:37] =>  0:31
@@ -20,6 +19,7 @@
   リストから選択できるようにしよう、と思い立った。
   Qutebrowserでも絞り込みとかはできるが、なんか挙動がいまいちに感じていたので、それならrofiを使ってやろう
   と思い立ったのがきっかけ。
+
 ** どう動くのか
 
    [[https://www.youtube.com/watch?v=XX9JRI-8QQw][ゆーちゅーぶってヤツにデモ動画を上げてみた]]のでそちらを参照してほしい。

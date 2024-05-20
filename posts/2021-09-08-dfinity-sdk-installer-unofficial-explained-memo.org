@@ -1,11 +1,10 @@
+#+TITLE: Dfinity SDKのインストールスクリプトを読んでみたメモ
+#+DATE: [2021-09-08 Wed 12:02]
+#+TAGS: :Dfinity: :Internet Computer:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * Dfinity SDKのインストールスクリプトを読んでみたメモ
-  :PROPERTIES:
-  :DATE: [2021-09-08 Wed 12:02]
-  :TAGS: :Dfinity: :Internet Computer:
-  :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2021-09-08 Wed 12:03]--[2021-09-08 Wed 12:41] =>  0:38
   :END:
@@ -19,6 +18,7 @@
   又、コード自体は転記するとTerm of Useに引っかかるかもわからなかったので載せていません。
   (日本の法律上は引用なら大丈夫だと思うけどそもそも日本の会社ではないので...)
   
+
 ** 全体の所感
    特に変な部分はなく安全そうだなと個人的には判断しました。
    あとスクリプトの書き方的な意味で「こういう方法があるのか...」となっています。

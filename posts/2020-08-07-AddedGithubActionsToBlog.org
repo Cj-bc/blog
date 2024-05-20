@@ -1,16 +1,16 @@
+#+TITLE: Github ActionsでGithub Pagesのリリースを自動化する
+#+DATE: [2020-08-07 Fri]
+#+TAGS: :github actions:github pages:hakyll:ブログ:自動化:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * Github ActionsでGithub Pagesのリリースを自動化する
-    :PROPERTIES:
-    :DATE: [2020-08-07 Fri]
-    :TAGS: :github actions:github pages:hakyll:ブログ:自動化:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
 [[https://cj-bc.github.io/blog][このブログ]]の生成をGithub
 Actionsで行えるようにしたので、その時のメモ\\
 尚、現在のworkflowファイルは[[https://github.com/Cj-bc/blog/blob/source/.github/workflows/publish.yaml][Cj-bc/blog
 -- .github/workflows/publish.yaml]]にあります。
+
 
 ** 前提
    :PROPERTIES:

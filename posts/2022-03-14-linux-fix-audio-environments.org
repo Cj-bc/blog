@@ -1,11 +1,10 @@
+#+TITLE: 音声周りの環境改善をした
+#+DATE: [2022-03-14 Mon 10:51]
+#+TAGS: :archlinux:環境構築:pulseaudio:bluetooth:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * 音声周りの環境改善をした
-  :PROPERTIES:
-  :DATE: [2022-03-14 Mon 10:51]
-  :TAGS: :archlinux:環境構築:pulseaudio:bluetooth:
-  :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2022-03-14 Mon 10:54]--[2022-03-14 Mon 12:00] =>  1:06
   :END:
@@ -15,6 +14,7 @@
 
   今回暇だったので、せっかくなので直してみることにする。
   
+
 ** 元々あった問題
    
 *** アプリケーション毎の音量差が激しすぎる

@@ -1,11 +1,11 @@
+#+TITLE: Githubのssh鍵の確認をする
+#+DATE: [2020-10-20 Tue]
+#+TAGS: :ssh:github:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * Githubのssh鍵の確認をする
-  :PROPERTIES:
-  :DATE: [2020-10-20 Tue]
-  :TAGS: :ssh:github:
-  :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
+
 ** Tl;Dr
    :PROPERTIES:
    :CUSTOM_ID: tldr

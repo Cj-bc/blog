@@ -1,12 +1,11 @@
+#+TITLE: blenderマテリアル のblend modeについて
+#+DATE: [2020-08-16 Sun]
+#+TAGS: :blender:memo:material:3dcg:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * blenderマテリアル のblend modeについて
-    :PROPERTIES:
-    :DATE: [2020-08-16 Sun]
-    :TAGS: :blender:memo:material:3dcg:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
 - Blenderのバージョン: 2.80
 - 公式のリファレンス:
   [[https://docs.blender.org/manual/en/2.80/render/eevee/materials/settings.html][blender
@@ -14,6 +13,7 @@
 
 Blend
 modeは、表面の色の計算が終わった後にどのようにカラーバッファに影響するかを決めます。
+
 
 ** Opaque
    :PROPERTIES:

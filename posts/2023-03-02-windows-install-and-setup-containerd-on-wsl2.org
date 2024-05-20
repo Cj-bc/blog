@@ -1,18 +1,18 @@
+#+TITLE: Windows WSL2上にcontainerdとnerdctlをインストールする
+#+DATE: [2023-03-02 Thu 12:20]
+#+TAGS: :windows:環境構築:WSL2:
+#+KIND: HowTo
+#+PROGRESS: Published
+#+STATUS: Normal
+#+AUTHOR: Cj-bc
 * Windows WSL2上にcontainerdとnerdctlをインストールする
-:PROPERTIES:
-:DATE: [2023-03-02 Thu 12:20]
-:TAGS: :windows:環境構築:WSL2:
-:BLOG_POST_KIND: HowTo
-:BLOG_POST_PROGRESS: Published
-:BLOG_POST_STATUS: Normal
-:EXPORT_AUTHOR: Cj-bc
-:END:
 :LOGBOOK:
 CLOCK: [2023-03-02 Thu 12:21]--[2023-03-02 Thu 12:36] =>  0:15
 :END:
 
 別段Docker for Windowsでも良いが、良い機会なので新しいものを試してみることとした。
 nerdctlはWindowsではまだexperimentalであるため、今回はWSL2上で使用することとする。
+
 
 ** WSL2のセットアップ
 *** インストール

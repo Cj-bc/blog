@@ -1,12 +1,11 @@
+#+TITLE: vim9scriptで気をつけること
+#+DATE: [2021-03-02 Tue]
+#+TAGS: :vim:vim script:vim9:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * vim9scriptで気をつけること
-    :PROPERTIES:
-    :DATE: [2021-03-02 Tue]
-    :TAGS: :vim:vim script:vim9:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
 [[https://vim-jp.org/vimdoc-ja/usr_46.html][vim9script]]は、新しく実装が進められているvim用のスクリプト言語で、
 型を取り入れたりモジュールの概念を取り入れたりなど「モダンな言語」の機能をふんだんに取り入れています。
 
@@ -28,6 +27,7 @@
 又、コードの実行には
 [[https://github.com/thinca/vim-quickrun][thinca/vim-quickrun]]
 を使用させていただいております。
+
 
 ** 文字列連結は'..'。'.'ではない。
    :PROPERTIES:

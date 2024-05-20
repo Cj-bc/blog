@@ -1,12 +1,12 @@
+#+TITLE: Blog作った！！
+#+DATE: [2020-08-02 Sun]
+#+TAGS: :info:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * Blog作った！！
-    :PROPERTIES:
-    :DATE: [2020-08-02 Sun]
-    :TAGS: :info:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
+
 ** Blog作りました
    :PROPERTIES:
    :CUSTOM_ID: blog作りました

@@ -1,14 +1,14 @@
+#+TITLE: xmonadにstackを使う
+#+DATE: [2021-05-04 Tue]
+#+TAGS: :xmonad:haskell:stack:linux:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * xmonadにstackを使う
-    :PROPERTIES:
-    :DATE: [2021-05-04 Tue]
-    :TAGS: :xmonad:haskell:stack:linux:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
 xmonad、デフォルトだと新しい機能を自作したりしようとするとシステムグローバルに突っ込む必要が出てきます。
 それは面倒だし、管理が煩雑になるのでそもそもstackを使用できるようにします。
+
 
 ** Xmonadをstackでコンパイルできるようにする
    :PROPERTIES:

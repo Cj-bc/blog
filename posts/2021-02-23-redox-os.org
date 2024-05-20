@@ -1,12 +1,12 @@
+#+TITLE: Redox OSとかいう新しいOSが気になった話
+#+DATE: [2021-02-24 Wed]
+#+TAGS: :redox os:os:rust:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * Redox OSとかいう新しいOSが気になった話
-    :PROPERTIES:
-    :DATE: [2021-02-24 Wed]
-    :TAGS: :redox os:os:rust:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
+
 ** お断り
    :PROPERTIES:
    :CUSTOM_ID: お断り

@@ -1,14 +1,14 @@
+#+TITLE: GStreamerでRTSPを経由して画面映像を共有する
+#+DATE: [2022-08-29 Mon 23:45]
+#+TAGS: :gstreamer:rtsp:streaming:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * GStreamerでRTSPを経由して画面映像を共有する
-  :PROPERTIES:
-  :DATE: [2022-08-29 Mon 23:45]
-  :TAGS: :gstreamer:rtsp:streaming:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
 :LOGBOOK:
 CLOCK: [2022-08-30 Tue 00:47]--[2022-08-30 Tue 00:51] =>  0:04
 :END:
+
 
 ** Tl;Dr
 

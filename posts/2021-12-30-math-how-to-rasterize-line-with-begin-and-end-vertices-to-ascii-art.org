@@ -1,11 +1,10 @@
+#+TITLE: 直線をAAにラスタライズする
+#+DATE: [2021-12-30 Thu 09:40]
+#+TAGS: :math:haskell:AA:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * 直線をAAにラスタライズする
-  :PROPERTIES:
-  :DATE: [2021-12-30 Thu 09:40]
-  :TAGS: :math:haskell:AA:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2021-12-30 Thu 11:18]--[2021-12-30 Thu 11:51] =>  0:33
   CLOCK: [2021-12-30 Thu 11:01]--[2021-12-30 Thu 11:08] =>  0:07
@@ -22,6 +21,7 @@
   + tをよしなな感覚で0~1の間で取ってやり、それを一つめに示した式に入れる
   #+end_tldr
   
+
 ** 前提知識
    + ベクトルについてちょっと
    + 媒介変数

@@ -1,11 +1,10 @@
+#+TITLE: Github actionsでStackを使用した実行ファイルのバイナリを自動生成
+#+DATE: [2021-08-19 Thu 21:21]
+#+TAGS: :haskell:
+#+KIND: HowTo
+#+PROGRESS: Published
+#+STATUS: Normal
 * Github actionsでStackを使用した実行ファイルのバイナリを自動生成
-  :PROPERTIES:
-  :DATE: [2021-08-19 Thu 21:21]
-  :TAGS: :haskell:
-  :BLOG_POST_KIND: HowTo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2021-08-19 Thu 22:05]--[2021-08-19 Fri 23:00] =>  0:55
   CLOCK: [2021-08-19 Thu 21:44]--[2021-08-19 Thu 22:00] =>  0:16
@@ -15,6 +14,7 @@
   「どうせならバイナリ用意しておくか」と思ったので作業したメモ。
 
   
+
 ** 全体像
 
    最終的にやりたいこと: Github actionsを用いてバイナリを配付する

@@ -1,11 +1,10 @@
+#+TITLE: Elispパッケージを書く際の諸メモ
+#+DATE: [2021-10-14 Thu 23:45]
+#+TAGS: :emacs:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * Elispパッケージを書く際の諸メモ
-  :PROPERTIES:
-  :DATE: [2021-10-14 Thu 23:45]
-  :TAGS: :emacs:
-  :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2021-10-14 Thu 23:46]--[2021-10-15 Fri 00:39] =>  0:53
   :END:
@@ -13,6 +12,7 @@
   
   初めて[[https://github.com/Cj-bc/evil-textobj-parameter][きちんとしたElispパッケージ]]を作成しているので、パッケージとして書く
   場合の注意点とか。
+
 ** 参考リンク
    + info:elisp#Packaging :: ほぼほぼ全てここに書いてある
    + info:elisp#Tips :: コメントの書き方のTipsとか

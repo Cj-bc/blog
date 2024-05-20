@@ -1,11 +1,10 @@
+#+TITLE: HttpのリクエストからBodyをBytesで取り出す
+#+DATE: [2022-02-26 Sat 21:43]
+#+TAGS: :rust:hyper:http:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * HttpのリクエストからBodyをBytesで取り出す
-  :PROPERTIES:
-  :DATE: [2022-02-26 Sat 21:43]
-  :TAGS: :rust:hyper:http:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2022-02-26 Sat 21:49]--[2022-02-26 Sat 22:27] =>  0:38
   :END:
@@ -21,5 +20,6 @@
   #+begin_src rust
     let bytes_body: Bytes = hyper::body::to_bytes(req.into_body())
   #+end_src
+
 
 

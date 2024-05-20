@@ -1,12 +1,12 @@
+#+TITLE: 2022/02/27
+#+DATE: [2022-02-27 Sun 00:37]
+#+TAGS: 
+#+KIND: Diary
+#+PROGRESS: Published
+#+STATUS: Normal
 * 2022/02/27
-  :PROPERTIES:
-  :DATE: [2022-02-27 Sun 00:37]
-  :TAGS: 
-  :BLOG_POST_KIND: Diary
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   
+
 
 ** 出来事
    + [[https://www.youtube.com/watch?v=Ev5qzT0VnTo][みあちゃんスプラ大会配信]]

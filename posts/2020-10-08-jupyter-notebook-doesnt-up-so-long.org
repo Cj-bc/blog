@@ -1,12 +1,11 @@
+#+TITLE: jupyter notebookがうまく起動しなかった
+#+DATE: [2020-10-10 Sat]
+#+TAGS: :python:jupyter:macOS:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * jupyter notebookがうまく起動しなかった
-    :PROPERTIES:
-    :DATE: [2020-10-10 Sat]
-    :TAGS: :python:jupyter:macOS:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
 #+begin_example
   $ jupyter notebook
 #+end_example
@@ -18,3 +17,4 @@
 #+begin_example
   $ jupyter notebook --ip=\*
 #+end_example
+

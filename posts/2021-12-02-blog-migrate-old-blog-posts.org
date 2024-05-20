@@ -1,11 +1,10 @@
+#+TITLE: 古い形式のブログ記事を変換するおしごと
+#+DATE: [2021-12-02 Thu 14:25]
+#+TAGS: :blog:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * 古い形式のブログ記事を変換するおしごと
-  :PROPERTIES:
-  :DATE: [2021-12-02 Thu 14:25]
-  :TAGS: :blog:
-  :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
   :LOGBOOK:
   CLOCK: [2021-12-25 Sat 09:15]--[2021-12-25 Sat 09:56] =>  0:41
   CLOCK: [2021-12-25 Sat 08:30]--[2021-12-25 Sat 09:11] =>  0:41
@@ -18,6 +17,7 @@
   CLOCK: [2021-12-02 Thu 13:00]--[2021-12-02 Thu 14:47] =>  1:47
   :END:
   
+
 ** これまでの遷移
 
    | blog以前                              | Qiita flavored markdownでQiitaに投稿        |

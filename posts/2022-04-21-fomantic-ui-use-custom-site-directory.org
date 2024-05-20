@@ -1,11 +1,10 @@
+#+TITLE: Fomantic-UIで'site'に別ディレクトリを使用する際の注意点
+#+DATE: [2022-04-21 Thu 00:26]
+#+TAGS: :fomantic-ui:blog:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * Fomantic-UIで'site'に別ディレクトリを使用する際の注意点
-  :PROPERTIES:
-  :DATE: [2022-04-21 Thu 00:26]
-  :TAGS: :fomantic-ui:blog:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
 :LOGBOOK:
 CLOCK: [2022-04-21 Thu 00:27]--[2022-04-21 Thu 00:32] =>  0:05
 :END:
@@ -30,4 +29,5 @@ CLOCK: [2022-04-21 Thu 00:27]--[2022-04-21 Thu 00:32] =>  0:05
     /* Path to site override folder */
     @siteFolder  : 'src/site';
   #+end_src
+
 

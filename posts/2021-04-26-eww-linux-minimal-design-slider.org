@@ -1,12 +1,11 @@
+#+TITLE: ewwでスタイリッシュなスライダーを使う
+#+DATE: [2021-04-26 Mon]
+#+TAGS: :eww:scss:linux:
+#+AUTHOR: Cj-bc
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * ewwでスタイリッシュなスライダーを使う
-    :PROPERTIES:
-    :DATE: [2021-04-26 Mon]
-    :TAGS: :eww:scss:linux:
-    :AUTHOR: Cj-bc
-    :BLOG_POST_KIND: Memo
-    :BLOG_POST_PROGRESS: Published
-    :BLOG_POST_STATUS: Normal
-    :END:
 [[https://github.com/Axarva/dotfiles-2.0][Axarva/dotfiles-2.0]]
 に触発されて、 [[https://github.com/elkowar/eww][elkowar/eww]]
 を使い始めました。(Emacsのewwではない)
@@ -37,3 +36,4 @@
 アフター:
 
 [[file:///images/slider-with-scss.png]]
+

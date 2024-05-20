@@ -1,11 +1,10 @@
+#+TITLE: ゆびきりを伝えて / 名取さな - を聞いて
+#+DATE: [2023-03-28 Tue 04:56]
+#+TAGS: :music:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * ゆびきりを伝えて / 名取さな - を聞いて
-:PROPERTIES:
-:DATE: [2023-03-28 Tue 04:56]
-:TAGS: :music:
-:BLOG_POST_KIND: Memo
-:BLOG_POST_PROGRESS: Published
-:BLOG_POST_STATUS: Normal
-:END:
 :LOGBOOK:
 CLOCK: [2023-03-28 Tue 03:45]--[2023-03-28 Tue 04:57] =>  1:12
 :END:
@@ -86,3 +85,4 @@ CLOCK: [2023-03-28 Tue 03:45]--[2023-03-28 Tue 04:57] =>  1:12
 ている。ステージがなかったらこんな色々考えなかっただろうし、実際私は曲に対してこんな文字を書いたこと
 がなかった。曲だけじゃなくパフォーマンス等も含まれてはしまうが、名取の力があってこその伝わってきたメッ
 セージだったように思う。結局綺麗に纏めそうで草。
+
