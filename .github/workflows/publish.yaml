@@ -19,6 +19,6 @@ jobs:
           git switch source
           make blog-publish
           git push origin publish
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: "_site/"
