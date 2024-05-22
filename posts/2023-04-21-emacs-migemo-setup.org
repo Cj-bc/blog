@@ -1,11 +1,10 @@
+#+TITLE: Emacsでmigemoを使う環境を整える
+#+DATE: [2023-04-21 Fri 10:40]
+#+TAGS: :migemo:emacs:ivy:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * Emacsでmigemoを使う環境を整える
-:PROPERTIES:
-:DATE: [2023-04-21 Fri 10:40]
-:TAGS: :migemo:emacs:ivy:
-:BLOG_POST_KIND: Knowledge
-:BLOG_POST_PROGRESS: Published
-:BLOG_POST_STATUS: Normal
-:END:
 :LOGBOOK:
 CLOCK: [2023-04-24 Mon 21:33]--[2023-04-24 Mon 23:43] =>  2:10
 CLOCK: [2023-04-21 Fri 15:51]--[2023-04-21 Fri 16:44] =>  0:53

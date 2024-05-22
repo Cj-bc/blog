@@ -1,11 +1,10 @@
+#+TITLE: lsp-modeからEglotへ乗り換える
+#+DATE: [2023-08-16 Wed 10:18]
+#+TAGS: :emacs:eglot:lsp:lsp-mode:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * lsp-modeからEglotへ乗り換える
-:PROPERTIES:
-:DATE: [2023-08-16 Wed 10:18]
-:TAGS: :emacs:eglot:lsp:lsp-mode:
-:BLOG_POST_KIND: Knowledge
-:BLOG_POST_PROGRESS: Published
-:BLOG_POST_STATUS: Normal
-:END:
 :LOGBOOK:
 CLOCK: [2023-08-16 Wed 12:18]--[2023-08-16 Wed 13:11] =>  0:53
 CLOCK: [2023-08-16 Wed 11:00]--[2023-08-16 Wed 11:47] =>  0:47

@@ -1,11 +1,10 @@
+#+TITLE: PandocのwriteMarkdownでメタデータをYAML出力する
+#+DATE: [2023-04-12 Wed 21:37]
+#+TAGS: :haskell:pandoc:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * PandocのwriteMarkdownでメタデータをYAML出力する
-:PROPERTIES:
-:DATE: [2023-04-12 Wed 21:37]
-:TAGS: :haskell:pandoc:
-:BLOG_POST_KIND: Knowledge
-:BLOG_POST_PROGRESS: Published
-:BLOG_POST_STATUS: Normal
-:END:
 :LOGBOOK:
 CLOCK: [2023-04-13 Thu 18:15]--[2023-04-13 Thu 18:23] =>  0:08
 CLOCK: [2023-04-12 Wed 21:38]--[2023-04-12 Wed 22:48] =>  1:10

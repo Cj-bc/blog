@@ -1,11 +1,10 @@
+#+TITLE: LaTeXで日本語PDF文書を書く時の走り書きメモ
+#+DATE: [2023-07-20 Thu 23:48]
+#+TAGS: :latex:pdf:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * LaTeXで日本語PDF文書を書く時の走り書きメモ
-  :PROPERTIES:
-  :DATE: [2023-07-20 Thu 23:48]
-  :TAGS: :latex:pdf:
-  :BLOG_POST_KIND: Memo
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
 :LOGBOOK:
 CLOCK: [2023-07-20 Thu 23:48]--[2023-07-20 Thu 23:55] =>  0:07
 :END:

@@ -1,11 +1,10 @@
+#+TITLE: ip tuntap addコマンドのdevとnameの違い
+#+DATE: [2023-05-03 Wed 03:10]
+#+TAGS: :ip:tuntap:linux:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
 * ip tuntap addコマンドのdevとnameの違い
-  :PROPERTIES:
-  :DATE: [2023-05-03 Wed 03:10]
-  :TAGS: :ip:tuntap:linux:
-  :BLOG_POST_KIND: Knowledge
-  :BLOG_POST_PROGRESS: Published
-  :BLOG_POST_STATUS: Normal
-  :END:
 :LOGBOOK:
 CLOCK: [2023-05-03 Wed 03:11]--[2023-05-03 Wed 04:34] =>  1:23
 :END:

@@ -1,11 +1,10 @@
+#+TITLE: 夜桜みあVALORANTエージェント化計画
+#+DATE: [2023-06-02 Fri 23:28]
+#+TAGS: :valorant:夜桜みあ:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
 * 夜桜みあVALORANTエージェント化計画
-:PROPERTIES:
-:DATE: [2023-06-02 Fri 23:28]
-:TAGS: :valorant:夜桜みあ:
-:BLOG_POST_KIND: Memo
-:BLOG_POST_PROGRESS: Published
-:BLOG_POST_STATUS: Normal
-:END:
 :LOGBOOK:
 CLOCK: [2023-06-02 Fri 21:40]--[2023-06-02 Fri 23:26] =>  1:46
 CLOCK: [2023-06-02 Fri 18:20]--[2023-06-02 Fri 18:54] =>  0:34
