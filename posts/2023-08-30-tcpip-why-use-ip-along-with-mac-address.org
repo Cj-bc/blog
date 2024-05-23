@@ -1,6 +1,6 @@
 #+TITLE: 何故MACアドレスだけでなくIPアドレスを使用するのか？
 #+DATE: [2023-08-30 Wed 21:46]
-#+TAGS: :TCP/IP:
+#+TAGS: :TCP:IP:
 #+KIND: Knowledge
 #+PROGRESS: Published
 #+STATUS: Normal
