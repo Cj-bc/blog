@@ -101,7 +101,6 @@ If same keyword is given, it won't be copied.
 	(org-next-visible-heading 1)
 	(org-entry-delete (point) original-key))
       ))
-  (org-next-visible-heading 1)
   (insert "\n"))
 
 (defun migration ()
