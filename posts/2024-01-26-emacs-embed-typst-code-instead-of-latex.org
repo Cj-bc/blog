@@ -1,11 +1,11 @@
+#+TITLE: Org modeで埋め込みLaTeXの代わりにtypstを使う
+#+DATE: [2024-01-26 Fri 23:21]
+#+TAGS: :org-mode:emacs:typst:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
+
 * Org modeで埋め込みLaTeXの代わりにtypstを使う
-:PROPERTIES:
-:DATE: [2024-01-26 Fri 23:21]
-:TAGS: :org-mode:emacs:typst:
-:BLOG_POST_KIND: Knowledge
-:BLOG_POST_PROGRESS: Published
-:BLOG_POST_STATUS: Normal
-:END:
 :LOGBOOK:
 CLOCK: [2024-01-30 Tue 01:49]--[2024-01-30 Tue 01:51] =>  0:02
 CLOCK: [2024-01-27 Sat 10:38]--[2024-01-27 Sat 11:22] =>  0:44

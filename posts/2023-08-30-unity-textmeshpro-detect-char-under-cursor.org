@@ -1,11 +1,11 @@
+#+TITLE: Text Mesh Proでカーソル下の文字を取得する
+#+DATE: [2023-08-30 Wed 21:22]
+#+TAGS: :unity:TextMeshPro:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
+
 * Text Mesh Proでカーソル下の文字を取得する
-:PROPERTIES:
-:DATE: [2023-08-30 Wed 21:22]
-:TAGS: :unity:TextMeshPro:
-:BLOG_POST_KIND: Knowledge
-:BLOG_POST_PROGRESS: Published
-:BLOG_POST_STATUS: Normal
-:END:
 :LOGBOOK:
 CLOCK: [2023-08-30 Wed 21:25]--[2023-08-30 Wed 21:32] =>  0:07
 :END:

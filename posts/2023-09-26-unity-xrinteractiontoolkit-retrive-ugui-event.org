@@ -1,11 +1,11 @@
+#+TITLE: XR Interaction Toolkit からuGUIイベントに反応する
+#+DATE: [2023-09-26 Tue 15:04]
+#+TAGS: :Unity:XRInteractionToolkit:uGUI:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
+
 * XR Interaction Toolkit からuGUIイベントに反応する
-:PROPERTIES:
-:DATE: [2023-09-26 Tue 15:04]
-:TAGS: :Unity:XRInteractionToolkit:uGUI:
-:BLOG_POST_KIND: Knowledge
-:BLOG_POST_PROGRESS: Published
-:BLOG_POST_STATUS: Normal
-:END:
 :LOGBOOK:
 CLOCK: [2023-09-26 Tue 15:04]--[2023-09-26 Tue 15:43] =>  0:39
 :END:

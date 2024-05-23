@@ -1,11 +1,11 @@
+#+TITLE: 夜桜みあ朝活サムネ手描きしがち説
+#+DATE: [2023-12-22 Fri 18:34]
+#+TAGS: :夜桜みあ:
+#+KIND: Memo
+#+PROGRESS: Published
+#+STATUS: Normal
+
 * 夜桜みあ朝活サムネ手描きしがち説
- :PROPERTIES:
- :DATE: [2023-12-22 Fri 18:34]
- :TAGS: :夜桜みあ:
- :BLOG_POST_KIND: Memo
- :BLOG_POST_PROGRESS: Published
- :BLOG_POST_STATUS: Normal
- :END:
  :LOGBOOK:
  CLOCK: [2023-12-22 Fri 18:36]--[2023-12-22 Fri 19:14] =>  0:38
  :END:

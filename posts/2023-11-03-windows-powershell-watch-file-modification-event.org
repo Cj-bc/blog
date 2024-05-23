@@ -1,11 +1,11 @@
+#+TITLE: PowerShellでファイルの変更監視
+#+DATE: [2023-11-02 Thu 22:41]
+#+TAGS: :Windows:PowerShell:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
+
 * PowerShellでファイルの変更監視
-:PROPERTIES:
-:DATE: [2023-11-02 Thu 22:41]
-:TAGS: :Windows:PowerShell:
-:BLOG_POST_KIND: Knowledge
-:BLOG_POST_PROGRESS: Published
-:BLOG_POST_STATUS: Normal
-:END:
 :LOGBOOK:
   CLOCK: [2023-11-03 Fri 02:21]--[2023-11-03 Fri 03:10] =>  0:49
   :END:

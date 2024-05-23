@@ -1,11 +1,11 @@
+#+TITLE: XR ray Interactorの先にあるTMP_Text上の文字を取得する
+#+DATE: [2023-09-26 Tue 15:52]
+#+TAGS: :unity:xr interaction toolkit:textmeshpro:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
+
 * XR ray Interactorの先にあるTMP_Text上の文字を取得する
-:PROPERTIES:
-:DATE: [2023-09-26 Tue 15:52]
-:TAGS: :unity:xr interaction toolkit:textmeshpro:
-:BLOG_POST_KIND: Knowledge
-:BLOG_POST_PROGRESS: Published
-:BLOG_POST_STATUS: Normal
-:END:
 :LOGBOOK:
 CLOCK: [2023-09-26 Tue 21:40]--[2023-09-26 Tue 23:19] =>  1:39
 CLOCK: [2023-09-26 Tue 15:53]--[2023-09-26 Tue 16:44] =>  0:51
