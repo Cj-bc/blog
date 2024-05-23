@@ -22,3 +22,16 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: "_site/"
+  deploy:
+    permissions:
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    needs: runPublish
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deply to Github Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
