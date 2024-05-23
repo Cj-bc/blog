@@ -1,0 +1,142 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-jj6gr7j4> <head><!-- Use Google Fonts, if you don't wanna prefer a self-hosted version --><!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet"> --><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Astro - Ink | GStreamerでRTSPを経由して画面映像を共有する</title><meta name="title" content="Astro - Ink | GStreamerでRTSPを経由して画面映像を共有する"><meta name="description" content="read more..."><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="shortcut icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="manifest" href="/site.webmanifest"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/browserconfig.xml"><meta name="theme-color" content="#ffffff"><!-- Open Graph Tags (Facebook) --><meta property="og:type" content="website"><meta property="og:title" content="Astro - Ink | GStreamerでRTSPを経由して画面映像を共有する"><meta property="og:description" content="read more..."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:title" content="Astro - Ink | GStreamerでRTSPを経由して画面映像を共有する"><meta property="twitter:description" content="read more..."><script>
+  const theme = (() => {
+    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+      return localStorage.getItem("theme");
+    }
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "dark";
+    }
+    return "light";
+  })();
+
+  if (theme === "light") {
+    document.documentElement.classList.remove("dark");
+  } else {
+    document.documentElement.classList.add("dark");
+  }
+</script><link rel="stylesheet" href="/blog/_astro/_page_.348a9113.css" />
+<link rel="stylesheet" href="/blog/_astro/_page_.fcc31425.css" />
+<link rel="stylesheet" href="/blog/_astro/_slug_.1f7a3f5c.css" /><script type="module" src="/blog/_astro/hoisted.e6960f2c.js"></script></head> <body class="font-sans antialiased min-h-screen bg-gray-100 dark:bg-gray-800"> <div class="transition-colors"> <main class="mx-auto max-w-4xl px-4 md:px-0">  <br class="my-4" data-astro-cid-fhdt7an5> <header class="header" data-astro-cid-3ef6ksr2> <div class="header__logo" data-astro-cid-3ef6ksr2> <a href="/" class="avatar" data-astro-cid-3ef6ksr2> <img class="header__logo-img" src="/assets/logo.svg" alt="Astro logo" data-astro-cid-3ef6ksr2> </a> </div> <div class="header__meta flex-1" data-astro-cid-3ef6ksr2> <h3 class="header__title dark:text-theme-dark-secondary" data-astro-cid-3ef6ksr2> <a href="" data-astro-cid-3ef6ksr2>Ink</a> </h3> <div class="header__meta-more flex" data-astro-cid-3ef6ksr2> <p class="header__desc" data-astro-cid-3ef6ksr2> Crisp, minimal, personal blog theme for Astro </p> <nav class="header__nav flex" data-astro-cid-3ef6ksr2> <ul class="header__ref-list" data-astro-cid-3ef6ksr2> <li data-astro-cid-3ef6ksr2> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var r=(i,c,s)=>{let n=async()=>{await(await i())()},t=new IntersectionObserver(e=>{for(let o of e)if(o.isIntersecting){t.disconnect(),n();break}});for(let e of s.children)t.observe(e)};(self.Astro||(self.Astro={})).visible=r;window.dispatchEvent(new Event("astro:visible"));})();;(()=>{var b=Object.defineProperty;var f=(c,o,i)=>o in c?b(c,o,{enumerable:!0,configurable:!0,writable:!0,value:i}):c[o]=i;var l=(c,o,i)=>(f(c,typeof o!="symbol"?o+"":o,i),i);var p;{let c={0:t=>m(t),1:t=>i(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(i(t)),5:t=>new Set(i(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t)},o=t=>{let[e,r]=t;return e in c?c[e](r):void 0},i=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([e,r])=>[e,o(r)]));customElements.get("astro-island")||customElements.define("astro-island",(p=class extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var d;if(!this.hydrator||!this.isConnected)return;let e=(d=this.parentElement)==null?void 0:d.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let r=this.querySelectorAll("astro-slot"),a={},h=this.querySelectorAll("template[data-astro-template]");for(let n of h){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("data-astro-template")||"default"]=n.innerHTML,n.remove())}for(let n of r){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("name")||"default"]=n.innerHTML)}let u;try{u=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(n){let s=this.getAttribute("component-url")||"<unknown>",y=this.getAttribute("component-export");throw y&&(s+=` (export ${y})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),n),n}await this.hydrator(this)(this.Component,u,a,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),r.disconnect(),this.childrenConnectedCallback()},r=new MutationObserver(()=>{var a;((a=this.lastChild)==null?void 0:a.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});r.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}start(){let e=JSON.parse(this.getAttribute("opts")),r=this.getAttribute("client");if(Astro[r]===void 0){window.addEventListener(`astro:${r}`,()=>this.start(),{once:!0});return}Astro[r](async()=>{let a=this.getAttribute("renderer-url"),[h,{default:u}]=await Promise.all([import(this.getAttribute("component-url")),a?import(a):()=>()=>{}]),d=this.getAttribute("component-export")||"default";if(!d.includes("."))this.Component=h[d];else{this.Component=h;for(let n of d.split("."))this.Component=this.Component[n]}return this.hydrator=u,this.hydrate},e,this)}attributeChangedCallback(){this.hydrate()}},l(p,"observedAttributes",["props"]),p))}})();</script><astro-island uid="1mCrYB" component-url="/blog/_astro/SearchBtn.b04a64bc.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-3ef6ksr2&quot;:[0,true]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;SearchBtn&quot;,&quot;value&quot;:true}" await-children=""><button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2071 4.89344C19.0923 7.77862 19.3131 12.3193 16.8693 15.4578C16.8846 15.4713 16.8996 15.4854 16.9143 15.5L21.1569 19.7427C21.5474 20.1332 21.5474 20.7664 21.1569 21.1569C20.7664 21.5474 20.1332 21.5474 19.7427 21.1569L15.5 16.9143C15.4854 16.8996 15.4713 16.8846 15.4578 16.8693C12.3193 19.3131 7.77862 19.0923 4.89344 16.2071C1.76924 13.083 1.76924 8.01763 4.89344 4.89344C8.01763 1.76924 13.083 1.76924 16.2071 4.89344ZM14.7929 14.7929C17.1361 12.4498 17.1361 8.6508 14.7929 6.30765C12.4498 3.96451 8.6508 3.96451 6.30765 6.30765C3.96451 8.6508 3.96451 12.4498 6.30765 14.7929C8.6508 17.1361 12.4498 17.1361 14.7929 14.7929Z" fill="currentColor"></path></svg></button><!--astro:end--></astro-island> </li> <li data-astro-cid-3ef6ksr2> <a href="https://github.com/one-aalam/astro-ink" title="Ink's Github URL'" data-astro-cid-3ef6ksr2> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" data-astro-cid-3ef6ksr2></path>  </svg> </a> </li> <li data-astro-cid-3ef6ksr2> <a href="/rss.xml" title="RSS" data-astro-cid-3ef6ksr2> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">  <path d="M4 11a9 9 0 0 1 9 9" data-astro-cid-3ef6ksr2></path> <path d="M4 4a16 16 0 0 1 16 16" data-astro-cid-3ef6ksr2></path> <circle cx="5" cy="19" r="1" data-astro-cid-3ef6ksr2></circle>  </svg> </a> </li> <li data-astro-cid-3ef6ksr2> <astro-island uid="Z1ylE5i" component-url="/blog/_astro/ModeSwitcherBtn.815c7d36.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-3ef6ksr2&quot;:[0,true]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;ModeSwitcherBtn&quot;,&quot;value&quot;:true}" await-children=""><button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle> <line x1="12" y1="1" x2="12" y2="3"></line> <line x1="12" y1="21" x2="12" y2="23"></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line> <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line> <line x1="1" y1="12" x2="3" y2="12"></line> <line x1="21" y1="12" x2="23" y2="12"></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line> <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button><!--astro:end--></astro-island> </li> </ul> </nav> </div> </div> </header>  <nav class="nav py-3" data-astro-cid-dmqpwcec> <ul class="nav-list dark:text-theme-dark-secondary" data-astro-cid-dmqpwcec> <li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/" title="home" data-astro-cid-dmqpwcec>Home</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/blog" title="blog" data-astro-cid-dmqpwcec>Blog</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/tags" title="tags" data-astro-cid-dmqpwcec>Tags</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/media" title="media" data-astro-cid-dmqpwcec>Media</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/about" title="about" data-astro-cid-dmqpwcec>About</a> </li> </ul> </nav>  <div class="content" data-astro-cid-fhdt7an5>  <div class="post__header" data-astro-cid-jj6gr7j4> <div class="post__tags" data-astro-cid-jj6gr7j4> <a class="post__tag" href="/tags/gstreamer" title="gstreamer" data-astro-cid-jj6gr7j4>gstreamer</a><a class="post__tag" href="/tags/rtsp" title="rtsp" data-astro-cid-jj6gr7j4>rtsp</a><a class="post__tag" href="/tags/streaming" title="streaming" data-astro-cid-jj6gr7j4>streaming</a> </div> <h1 class="post__title" data-astro-cid-jj6gr7j4>GStreamerでRTSPを経由して画面映像を共有する</h1> <h5 class="post__desc " data-astro-cid-jj6gr7j4>  <div class="" data-astro-cid-jj6gr7j4> <span class="post__author" data-astro-cid-jj6gr7j4>Cj-bc</span>  |  <span class="post__date" data-astro-cid-jj6gr7j4> <!-- post creation/updation data --> Monday, August 29, 2022 </span> <span class="post__stats" data-astro-cid-jj6gr7j4>   <!-- | <Icon class="w-5 h-5 inline-block" pack="mdi" name="clock" /> 2 mins --> </span> </div> </h5> </div> <article class="prose dark:prose-dark" data-astro-cid-apjhz64k>   <h1 id="gstreamerでrtspを経由して画面映像を共有する">GStreamerでRTSPを経由して画面映像を共有する</h1><h2 id="tldr">Tl;Dr</h2><p><code class="inline-code">x264enc</code> は <code class="inline-code">gst-plugins-ugly</code> に含まれています。
+</p><pre class="src-block"><code class="language-sh">git clone https://github.com/GStreamer/gst-rtsp-server
+cd gst-rtsp-server
+meson dest
+cd dest
+ninja
+./examples/test-launch -p 39451 &quot;( ximagesrc ! videoconvert ! x264enc ! rtph264pay name=pay0 )&quot;
+</code></pre><p> 途中で <code class="inline-code">ninja</code> した時にエラーを吐かれましたが、何故かその後上手くビルド出来ていたのでとりあえずそのままに
+ しています。
+</p><blockquote><p> <span class="math math-inline">?=1 QwQi:dest</span> ninja
+<span class="statistics-cookie">[19/22]</span>Generating gst/rtsp-server/GstRtspServer-1.0.gir with a custom command (wrapped by meson to set env)
+FAILED: gst/rtsp-server/GstRtspServer-1.0.gir
+/usr/bin/meson --internal exe --unpickle /home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/meson-private/meson<sub>exe</sub><sub>g</sub>-ir-scanner<sub>3ab56c3a7bd05fcd52077a9babfa7bfdcb5a</sub>
+c3e5.dat
+while executing [&#39;/usr/bin/g-ir-scanner&#39;, &#39;--no-libtool&#39;, &#39;--namespace=GstRtspServer&#39;, &#39;--nsversion=1.0&#39;, &#39;--warn-all&#39;, &#39;--output&#39;, &#39;gst/rtsp-server/GstRtspServer-1.0.gir&#39;, &#39;--add-init
+-section=extern void gst<sub>init</sub>(gint*,gchar**);g<sub>setenv</sub>(&quot;GST<sub>REGISTRY</sub><sub>1.0</sub>&quot;, &quot;/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gir<sub>empty</sub><sub>registry.reg</sub>&quot;, TRUE);g<sub>setenv</sub>
+(&quot;GST<sub>PLUGIN</sub><sub>PATH</sub><sub>1</sub><sub>0</sub>&quot;, &quot;&quot;, TRUE);g<sub>setenv</sub>(&quot;GST<sub>PLUGIN</sub><sub>SYSTEM</sub><sub>PATH</sub><sub>1</sub><sub>0</sub>&quot;, &quot;&quot;, TRUE);gst<sub>init</sub>(NULL,NULL);&#39;, &#39;--quiet&#39;, &#39;--c-include=gst/rtsp-server/rtsp-server.h&#39;, &#39;-I/home/me/Docum
+ents/ghq/github.com/GStreamer/gst-rtsp-server/gst/rtsp-server&#39;, &#39;-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gst/rtsp-server&#39;, &#39;-I/home/me/Documents/gh
+q/github.com/GStreamer/gst-rtsp-server/gst/rtsp-server&#39;, &#39;-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gst/rtsp-server&#39;, &#39;-I/home/me/Documents/ghq/githu
+b.com/GStreamer/gst-rtsp-server/.&#39;, &#39;-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/.&#39;, &#39;--filelist=/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-s
+erver/dest/gst/rtsp-server/libgstrtspserver-1.0.so.0.1902.0.p/GstRtspServer<sub>1.0</sub><sub>gir</sub><sub>filelist</sub>&#39;, &#39;--include=Gst-1.0&#39;, &#39;--include=GstRtsp-1.0&#39;, &#39;--include=GstNet-1.0&#39;, &#39;--symbol-prefix=gs
+t&#39;, &#39;--identifier-prefix=Gst&#39;, &#39;--pkg-export=gstreamer-rtsp-server-1.0&#39;, &#39;--cflags-begin&#39;, &#39;-DG<sub>DISABLE</sub><sub>DEPRECATED</sub>&#39;, &#39;-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server
+<em>gst/rtsp-server&#39;, &#39;-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gst/rtsp-server&#39;, &#39;-I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server</em>.&#39;, &#39;-
+I/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/.&#39;, &#39;-I/usr/include/gstreamer-1.0&#39;, &#39;-I/usr/include/glib-2.0&#39;, &#39;-I/usr/lib/glib-2.0/include&#39;, &#39;-I/usr/include/sys
+prof-4&#39;, &#39;-I/usr/include/orc-0.4&#39;, &#39;-I/usr/include/libmount&#39;, &#39;-I/usr/include/blkid&#39;, &#39;-I/usr/include/gio-unix-2.0&#39;, &#39;-I/usr/include/gobject-introspection-1.0&#39;, &#39;--cflags-end&#39;, &#39;--add-
+include-path=/usr/share/gir-1.0&#39;, &#39;-L/home/me/Documents/ghq/github.com/GStreamer/gst-rtsp-server/dest/gst/rtsp-server&#39;, &#39;--library&#39;, &#39;gstrtspserver-1.0&#39;, &#39;-lgstrtsp-1.0&#39;, &#39;-lgstre
+amer-1.0&#39;, &#39;-lgstsdp-1.0&#39;, &#39;-lgio-2.0&#39;, &#39;-lgobject-2.0&#39;, &#39;-lglib-2.0&#39;, &#39;-lgstrtp-1.0&#39;, &#39;-lgstbase-1.0&#39;, &#39;-lgstnet-1.0&#39;, &#39;-lgstapp-1.0&#39;, &#39;-lgirepository-1.0&#39;]
+--- stdout ---
+</p><p>--- stderr ---
+Traceback (most recent call last):
+  File &quot;/usr/bin/g-ir-scanner&quot;, line 98, in &lt;module&gt;
+    from giscanner.scannermain import scanner<sub>main</sub>
+  File &quot;/usr/lib/gobject-introspection/giscanner/scannermain.py&quot;, line 35, in &lt;module&gt;
+    from giscanner.ast import Include, Namespace
+  File &quot;/usr/lib/gobject-introspection/giscanner/ast.py&quot;, line 29, in &lt;module&gt;
+    from .sourcescanner import CTYPE<sub>TYPEDEF</sub>, CSYMBOL<sub>TYPE</sub><sub>TYPEDEF</sub>
+  File &quot;/usr/lib/gobject-introspection/giscanner/sourcescanner.py&quot;, line 34, in &lt;module&gt;
+    from giscanner.<sub>giscanner</sub> import SourceScanner as CSourceScanner
+ModuleNotFoundError: No module named &#39;giscanner.<sub>giscanner</sub>&#39;
+</p></blockquote><h2 id="動機">動機</h2><p> パソコンの画面をNeosVRから見たい。
+ でもLAN内で見ることさえ出来れば良いので外部のサーバーを経由させたくなくて、
+ <a href="https://www.youtube.com/watch?v=Ta8N4ZFRjJg">kokolive</a>や<a href="https://github.com/TopazChat/TopazChat">TopazChat</a>とかは使えませんでした。
+</p><p> なのでじゃぁ自分で構築するしかないかぁということで行き着いたところです。
+</p><h2 id="作りたいものの要件">作りたいものの要件</h2><ul><li><p>GNU/Linux上で動く
+</p></li><li><p>自分のみが見えれば良い
+</p></li><li><p>LAN内のみで完結する
+</p></li><li><p>映像配信を外部のサーバーを通さなくて良い
+</p></li><li><p>低遅延
+</p></li></ul><p>他の人と共有することは目的としていない為、LANのみで
+完結する構成にしたいです。
+</p><h2 id="rtspについて少しだけ">RTSPについて少しだけ</h2><p>RTSPは、ビデオや音声等のマルチメディアをリアルタイムに <span class="underline" style="text-decoration:underline">制御する</span> ためのアプリケーション層のプロトコルです。
+大切なことなのでもう一度書きますが、 <span class="underline" style="text-decoration:underline">制御する</span> ためのプロトコルです。
+ここでの制御とは例えば、再生・一時停止・停止等の操作を指します。
+</p><p>実際のデータの送受信には RTP 等の別のプロトコルを用います。
+</p><blockquote><p>This protocol is intended to
+control multiple data delivery sessions; provide a means for choosing
+delivery channels such as UDP, multicast UDP, and TCP; and provide a
+means for choosing delivery mechanisms based upon RTP (RFC 3550).
+</p><p>--- <a href="https://www.rfc-editor.org/rfc/rfc7826">https://www.rfc-editor.org/rfc/rfc7826</a>, Abstract
+</p></blockquote><h2 id="詳細">詳細</h2><p>今回、GStreamer自体についての解説はあまり含みません。
+それに関しては別途記事を書くかもしれないし書かないかもしれないのですが、
+もし興味がある&amp;英語おkなら<a href="https://gstreamer.freedesktop.org/documentation/tutorials/index.html">公式のチュートリアル</a>を見てみると良いと思います。
+</p><p>知らないと分からないことはないと思いますが、所々用語は普通に使うのでご容赦下さい。
+</p><h3 id="使用するサーバーを決める">使用するサーバーを決める</h3><p>RTSPサーバーがあり、クライアントがそこに接続してストリームを受け取るという
+仕組みになっているので、まずはRTSPサーバーを建てる必要があります。
+<a href="DeveloppersIOの記事">DeveloppersIOの記事</a>には <a href="https://github.com/mpromonet/v4l2rtspserver">v4l2rtspserver</a>についても紹介されていますが、
+</p><ul><li><p>v4l2に関してよく分からなかった
+</p></li><li><p>GStreamerなら開発元に信頼がある
+</p></li><li><p>GStreamerは単純に見知っている
+</p></li></ul><p>という理由から、GStreamerを使ったものを建ててみました。
+</p><p>GStreamer公式から <a href="https://github.com/GStreamer/gst-rtsp-server">GStreamer/gst-rtsp-server</a> が提供されているので、
+これを使います。
+</p><p>それ自体はライブラリとなっていますが、examplesに簡単なサーバーとして使用出来る
+サンプルファイルがあるのでとりあえずはこれを用いることにします。
+</p><p>幾つかありますが、今回は <a href="https://github.com/GStreamer/gst-rtsp-server/blob/master/examples/test-launch.c">gst-rtsp-server/test-launch.c at master · GStreamer/gst-rtsp-server</a> を使用しました。
+</p><h3 id="サーバーのビルド">サーバーのビルド</h3><p><a href="DeveloppersIOの記事">DeveloppersIOの記事</a>では <code class="inline-code">autogen.sh</code> を叩いていましたが、今は <code class="inline-code">meson</code> に変わっていました。
+<code class="inline-code">meson</code> にはあまり馴染みがないのですが、以下の手順でとりあえず動くものは出来ました。
+</p><pre class="src-block"><code class="language-sh"># `dest&#39; にmesonにより生成されたものが格納されます。
+# 任意の名前で良いです。
+meson dest
+# `build.ninja&#39; のあるディレクトリに移動します
+cd dest
+ninja
+</code></pre><p>尚、この際にエラーを吐かれましたが無視しても動いたので一度放置しています。
+<code class="inline-code">--internal exe</code> とかあるのでWindows用のかな？と思っていたり。
+</p><h3 id="ソースの指定サーバーの実行">ソースの指定、サーバーの実行</h3><p><code class="inline-code">test-launch.c</code> は <code class="inline-code">gst-launch-1.0</code> の引数と同じ形式の文字列を引数に取り、
+サーバーを起動します。
+</p><pre class="src-block"><code class="language-sh">$ ./dest/examples/test-launch --help
+Usage:
+  test-launch [OPTION?] &lt;launch line&gt; - Test RTSP Server, Launch
+
+Example: &quot;( videotestsrc ! x264enc ! rtph264pay name=pay0 pt=96 )&quot;
+
+Help Options:
+  -h, --help                        Show help options
+  --help-all                        Show all help options
+  --help-gst                        Show GStreamer Options
+
+Application Options:
+  -p, --port=PORT                   Port to listen on (default: 8554)
+  --disable-rtcp                    Whether RTCP should be disabled (default false)
+</code></pre><p><code class="inline-code">Example</code> にある通りに実行すると、よくブラウン管テレビとかに写ってそうなテスト映像を配信する
+RTSPサーバーが立ち上がります。
+</p><pre class="src-block"><code class="language-sh">./dest/examples/test-launch &quot;( videotestsrc ! x264enc ! rtph264pay name=pay0 pt=96 )&quot;
+</code></pre><p>上手くいかない事があった場合は、 <a href="デバッグログの出し方">デバッグログの出し方</a> にあるように環境変数を使ってログを出してみて下さい。
+</p><h3 id="xorgの画面をキャプチャして配信する">X.orgの画面をキャプチャして配信する</h3><p>問題なく動作したら次の段階に進めてみましょう。
+前章ではテスト用の映像を配信していましたが、本命は「画面共有」なので
+画面の映像を配信するように作り変えてみます。
+</p><p>X.org用のソースには<a href="https://gstreamer.freedesktop.org/documentation/ximagesrc/index.html">ximagesrc</a>を使用します。そのまま <code class="inline-code">x264enc</code> には入れられないため、一度 <code class="inline-code">videoconvert</code> を
+かましています。
+</p><pre class="src-block"><code class="language-sh">./dest/examples/test-launch &quot;( ximagesrc ! videoconvert ! x264enc ! rtph264pay name=pay0 pt=96 )&quot;
+</code></pre><p>変えるのは少しだけ!GStreamer楽!!
+</p><h2 id="作業時のtips">作業時のTips</h2><h3 id="各パーツの調べ方">各パーツの調べ方</h3><p><code class="inline-code">gst-inspect-1.0</code> を使う
+</p><h3 id="デバッグログの出し方">デバッグログの出し方</h3><p><code class="inline-code">GST_DEBUG</code> 環境変数を設定すると、デバッグログを出力させることができます。
+出力するログの段階はカテゴリ毎に細かく設定することが出来ますが、
+数字を直接指定することで全体に対して指定もできます。
+</p><p>ログの段階は以下の通りです
+</p><table><thead><tr><th>指定する数字</th><th>意味</th></tr></thead><tbody><tr><td>1</td><td>ERROR</td></tr><tr><td>2</td><td>WARN</td></tr><tr><td>3</td><td>FIXME</td></tr><tr><td>4</td><td>INFO</td></tr><tr><td>5</td><td>DEBUG</td></tr><tr><td>6</td><td>LOG</td></tr><tr><td>7</td><td>TRACE</td></tr><tr><td>9</td><td>MEMDUMP</td></tr></tbody></table><p>例えば、 <code class="inline-code">WARN</code> までのログを全てのカテゴリに於いて出力したい場合は
+</p><pre class="src-block"><code class="language-sh">GST_DEBUG=2 ./dest/examples/test-launch &quot;( videotestsrc ! x264enc ! rtph264pay name=pay0 pt=96 )&quot;
+</code></pre><p>のように実行します。
+</p><p>詳しい使い方は <a href="https://man.archlinux.org/man/gst-launch-1.0.1">gst-launch-1.0のmanページ</a> に記載されています。
+</p><h2 id="参考">参考</h2><ul><li><p>&lt;&lt;DeveloppersIOの記事&gt;&gt;: <a href="https://dev.classmethod.jp/articles/amazon-kinesis-vidseo-streams-gstreamer-rtsp-server/">Kinesis Video Streams GStreamerを使用したRTSPサーバを構築し、Macから動画を送信してみました。 | DevelopersIO</a></p></li><li><p><a href="https://github.com/GStreamer/gst-rtsp-server/blob/master/examples/test-launch.c">gst-rtsp-server/test-launch.c at master · GStreamer/gst-rtsp-server</a></p></li><li><p><a href="https://www.rfc-editor.org/rfc/rfc7826">RFC 7826: Real-Time Streaming Protocol Version 2.0</a></p></li><li><p><a href="https://gstreamer.freedesktop.org/documentation/additional/rtp.html">RTP and RTSP support -- gstreamer.freedesktop.org</a></p></li></ul>   </article>  <div class="post__footer" data-astro-cid-jj6gr7j4> <br data-astro-cid-jj6gr7j4><div class="author-card" data-astro-cid-jj6gr7j4>  <div class="author-card__meta" data-astro-cid-jj6gr7j4> <span class="author-card__author" data-astro-cid-jj6gr7j4>Cj-bc</span> <p class="author-card__bio" data-astro-cid-jj6gr7j4>Crisp, minimal, personal blog theme for Astro. Crisp, minimal, personal blog theme for Astro. Crisp, minimal, personal blog theme for Astro</p> <br data-astro-cid-jj6gr7j4> <a class="author-card__follow-btn button" target="_blank" href="https://twitter.com/intent/follow?screen_name=" data-astro-cid-jj6gr7j4><svg viewBox="0 0 24 24" data-astro-cid-jj6gr7j4 class="w-5 h-5 inline-block" astro-icon="mdi:twitter"><path fill="currentColor" d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/></svg> Follow on Twitter</a> </div> </div><br data-astro-cid-jj6gr7j4> </div>  </div> <br class="my-4" data-astro-cid-fhdt7an5> <footer class="footer" data-astro-cid-sz7xmlte> <nav class="nav" data-astro-cid-sz7xmlte> <div data-astro-cid-sz7xmlte>2021  &copy; Copyright notice | <a href="https://github.com/one-aalam/astro-ink" title="Ink's Github URL'" data-astro-cid-sz7xmlte>Ink</a> <script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><astro-island uid="1mUrvp" component-url="/blog/_astro/ModeLabel.210c429b.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-sz7xmlte&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;ModeLabel&quot;,&quot;value&quot;:true}" await-children=""><span slot="dark" data-svelte-h="svelte-14ov3lc">(dark)</span><!--astro:end--></astro-island> theme on <a href="https://astro.build/" data-astro-cid-sz7xmlte>Astro</a></div> <astro-island uid="Zxdlqs" component-url="/blog/_astro/NetlifyIdentity.5f683bb1.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-sz7xmlte&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;NetlifyIdentity&quot;,&quot;value&quot;:true}"></astro-island> </nav> </footer>  <div class="portal-root">  <astro-island uid="ZJdy3D" component-url="/blog/_astro/SearchModal.81cd9666.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-fhdt7an5&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;SearchModal&quot;,&quot;value&quot;:true}"></astro-island>  </div>  </main> </div> </body>  </html>

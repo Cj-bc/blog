@@ -1,0 +1,184 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-jj6gr7j4> <head><!-- Use Google Fonts, if you don't wanna prefer a self-hosted version --><!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet"> --><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Astro - Ink | cairoの基礎的なことを学んでみた</title><meta name="title" content="Astro - Ink | cairoの基礎的なことを学んでみた"><meta name="description" content="read more..."><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"><link rel="shortcut icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="manifest" href="/site.webmanifest"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/browserconfig.xml"><meta name="theme-color" content="#ffffff"><!-- Open Graph Tags (Facebook) --><meta property="og:type" content="website"><meta property="og:title" content="Astro - Ink | cairoの基礎的なことを学んでみた"><meta property="og:description" content="read more..."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:title" content="Astro - Ink | cairoの基礎的なことを学んでみた"><meta property="twitter:description" content="read more..."><script>
+  const theme = (() => {
+    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+      return localStorage.getItem("theme");
+    }
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "dark";
+    }
+    return "light";
+  })();
+
+  if (theme === "light") {
+    document.documentElement.classList.remove("dark");
+  } else {
+    document.documentElement.classList.add("dark");
+  }
+</script><link rel="stylesheet" href="/blog/_astro/_page_.348a9113.css" />
+<link rel="stylesheet" href="/blog/_astro/_page_.fcc31425.css" />
+<link rel="stylesheet" href="/blog/_astro/_slug_.1f7a3f5c.css" /><script type="module" src="/blog/_astro/hoisted.e6960f2c.js"></script></head> <body class="font-sans antialiased min-h-screen bg-gray-100 dark:bg-gray-800"> <div class="transition-colors"> <main class="mx-auto max-w-4xl px-4 md:px-0">  <br class="my-4" data-astro-cid-fhdt7an5> <header class="header" data-astro-cid-3ef6ksr2> <div class="header__logo" data-astro-cid-3ef6ksr2> <a href="/" class="avatar" data-astro-cid-3ef6ksr2> <img class="header__logo-img" src="/assets/logo.svg" alt="Astro logo" data-astro-cid-3ef6ksr2> </a> </div> <div class="header__meta flex-1" data-astro-cid-3ef6ksr2> <h3 class="header__title dark:text-theme-dark-secondary" data-astro-cid-3ef6ksr2> <a href="" data-astro-cid-3ef6ksr2>Ink</a> </h3> <div class="header__meta-more flex" data-astro-cid-3ef6ksr2> <p class="header__desc" data-astro-cid-3ef6ksr2> Crisp, minimal, personal blog theme for Astro </p> <nav class="header__nav flex" data-astro-cid-3ef6ksr2> <ul class="header__ref-list" data-astro-cid-3ef6ksr2> <li data-astro-cid-3ef6ksr2> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var r=(i,c,s)=>{let n=async()=>{await(await i())()},t=new IntersectionObserver(e=>{for(let o of e)if(o.isIntersecting){t.disconnect(),n();break}});for(let e of s.children)t.observe(e)};(self.Astro||(self.Astro={})).visible=r;window.dispatchEvent(new Event("astro:visible"));})();;(()=>{var b=Object.defineProperty;var f=(c,o,i)=>o in c?b(c,o,{enumerable:!0,configurable:!0,writable:!0,value:i}):c[o]=i;var l=(c,o,i)=>(f(c,typeof o!="symbol"?o+"":o,i),i);var p;{let c={0:t=>m(t),1:t=>i(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(i(t)),5:t=>new Set(i(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t)},o=t=>{let[e,r]=t;return e in c?c[e](r):void 0},i=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([e,r])=>[e,o(r)]));customElements.get("astro-island")||customElements.define("astro-island",(p=class extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var d;if(!this.hydrator||!this.isConnected)return;let e=(d=this.parentElement)==null?void 0:d.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let r=this.querySelectorAll("astro-slot"),a={},h=this.querySelectorAll("template[data-astro-template]");for(let n of h){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("data-astro-template")||"default"]=n.innerHTML,n.remove())}for(let n of r){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("name")||"default"]=n.innerHTML)}let u;try{u=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(n){let s=this.getAttribute("component-url")||"<unknown>",y=this.getAttribute("component-export");throw y&&(s+=` (export ${y})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),n),n}await this.hydrator(this)(this.Component,u,a,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),r.disconnect(),this.childrenConnectedCallback()},r=new MutationObserver(()=>{var a;((a=this.lastChild)==null?void 0:a.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});r.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}start(){let e=JSON.parse(this.getAttribute("opts")),r=this.getAttribute("client");if(Astro[r]===void 0){window.addEventListener(`astro:${r}`,()=>this.start(),{once:!0});return}Astro[r](async()=>{let a=this.getAttribute("renderer-url"),[h,{default:u}]=await Promise.all([import(this.getAttribute("component-url")),a?import(a):()=>()=>{}]),d=this.getAttribute("component-export")||"default";if(!d.includes("."))this.Component=h[d];else{this.Component=h;for(let n of d.split("."))this.Component=this.Component[n]}return this.hydrator=u,this.hydrate},e,this)}attributeChangedCallback(){this.hydrate()}},l(p,"observedAttributes",["props"]),p))}})();</script><astro-island uid="1mCrYB" component-url="/blog/_astro/SearchBtn.b04a64bc.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-3ef6ksr2&quot;:[0,true]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;SearchBtn&quot;,&quot;value&quot;:true}" await-children=""><button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2071 4.89344C19.0923 7.77862 19.3131 12.3193 16.8693 15.4578C16.8846 15.4713 16.8996 15.4854 16.9143 15.5L21.1569 19.7427C21.5474 20.1332 21.5474 20.7664 21.1569 21.1569C20.7664 21.5474 20.1332 21.5474 19.7427 21.1569L15.5 16.9143C15.4854 16.8996 15.4713 16.8846 15.4578 16.8693C12.3193 19.3131 7.77862 19.0923 4.89344 16.2071C1.76924 13.083 1.76924 8.01763 4.89344 4.89344C8.01763 1.76924 13.083 1.76924 16.2071 4.89344ZM14.7929 14.7929C17.1361 12.4498 17.1361 8.6508 14.7929 6.30765C12.4498 3.96451 8.6508 3.96451 6.30765 6.30765C3.96451 8.6508 3.96451 12.4498 6.30765 14.7929C8.6508 17.1361 12.4498 17.1361 14.7929 14.7929Z" fill="currentColor"></path></svg></button><!--astro:end--></astro-island> </li> <li data-astro-cid-3ef6ksr2> <a href="https://github.com/one-aalam/astro-ink" title="Ink's Github URL'" data-astro-cid-3ef6ksr2> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" data-astro-cid-3ef6ksr2></path>  </svg> </a> </li> <li data-astro-cid-3ef6ksr2> <a href="/rss.xml" title="RSS" data-astro-cid-3ef6ksr2> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">  <path d="M4 11a9 9 0 0 1 9 9" data-astro-cid-3ef6ksr2></path> <path d="M4 4a16 16 0 0 1 16 16" data-astro-cid-3ef6ksr2></path> <circle cx="5" cy="19" r="1" data-astro-cid-3ef6ksr2></circle>  </svg> </a> </li> <li data-astro-cid-3ef6ksr2> <astro-island uid="Z1ylE5i" component-url="/blog/_astro/ModeSwitcherBtn.815c7d36.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-3ef6ksr2&quot;:[0,true]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;ModeSwitcherBtn&quot;,&quot;value&quot;:true}" await-children=""><button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle> <line x1="12" y1="1" x2="12" y2="3"></line> <line x1="12" y1="21" x2="12" y2="23"></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line> <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line> <line x1="1" y1="12" x2="3" y2="12"></line> <line x1="21" y1="12" x2="23" y2="12"></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line> <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button><!--astro:end--></astro-island> </li> </ul> </nav> </div> </div> </header>  <nav class="nav py-3" data-astro-cid-dmqpwcec> <ul class="nav-list dark:text-theme-dark-secondary" data-astro-cid-dmqpwcec> <li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/" title="home" data-astro-cid-dmqpwcec>Home</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/blog" title="blog" data-astro-cid-dmqpwcec>Blog</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/tags" title="tags" data-astro-cid-dmqpwcec>Tags</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/media" title="media" data-astro-cid-dmqpwcec>Media</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/about" title="about" data-astro-cid-dmqpwcec>About</a> </li> </ul> </nav>  <div class="content" data-astro-cid-fhdt7an5>  <div class="post__header" data-astro-cid-jj6gr7j4> <div class="post__tags" data-astro-cid-jj6gr7j4> <a class="post__tag" href="/tags/cairo" title="cairo" data-astro-cid-jj6gr7j4>cairo</a><a class="post__tag" href="/tags/c" title="c" data-astro-cid-jj6gr7j4>c</a><a class="post__tag" href="/tags/graphic" title="graphic" data-astro-cid-jj6gr7j4>graphic</a> </div> <h1 class="post__title" data-astro-cid-jj6gr7j4>cairoの基礎的なことを学んでみた</h1> <h5 class="post__desc " data-astro-cid-jj6gr7j4>  <div class="" data-astro-cid-jj6gr7j4> <span class="post__author" data-astro-cid-jj6gr7j4>Cj-bc</span>  |  <span class="post__date" data-astro-cid-jj6gr7j4> <!-- post creation/updation data --> Friday, August 12, 2022 </span> <span class="post__stats" data-astro-cid-jj6gr7j4>   <!-- | <Icon class="w-5 h-5 inline-block" pack="mdi" name="clock" /> 2 mins --> </span> </div> </h5> </div> <article class="prose dark:prose-dark" data-astro-cid-apjhz64k>   <h1 id="cairoの基礎的なことを学んでみた">cairoの基礎的なことを学んでみた</h1><p>cairoには、<a href="https://www.cairographics.org/tutorial/">公式のページにチュートリアルがある</a>のでこれを見て学習します。
+尚、この後にcairo-xlibのHaskell用のバインディングを書きたい影響で、Cを用いて学習することにします。
+</p><p>とはいえ、チュートリアルがとても分かりやすいので英語が分かるのであればそちらを読むことを推奨します。
+</p><h2 id="cairoでのレンダリングの仕組み">cairoでのレンダリングの仕組み</h2><p>cairoのレンダリングは、 <code class="inline-code">Surface</code> 、 <code class="inline-code">Source</code> 、 <code class="inline-code">Mask</code> の3つの概念を組み合わせることで行われます。
+それらは3つの板のようなもので、Surfaceの上に <code class="inline-code">Mask</code> を置き、その上から <code class="inline-code">Source</code> を載せるようにして描画されます。
+</p><p>そして、それらを保持するための仕組みとして <code class="inline-code">Context</code> が存在します。
+</p><h3 id="surface">Surface</h3><p>Surfaceは文字通り「表面」のことで、つまり描画する対象のことです。
+SVGやPDFファイル、はたまたX window systemのwindowなどを選ぶことができます。
+</p><p><code class="inline-code">cairo_surface_t</code> というデータ型に格納されます。
+</p><p>Surface は種類毎に作成する関数が異なります。
+一例として、以下のコードは各ピクセル32bit、120x120ピクセルの画像の <code class="inline-code">Surface</code>
+を作成します。
+</p><pre class="src-block"><code class="language-c">cairo_surface_t *surface;
+surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 120, 120);
+</code></pre><p>使用後に <a href="https://www.cairographics.org/manual/cairo-cairo-surface-t.html#cairo-surface-destroy"><code class="inline-code">cairo_surface_destroy()</code></a> を呼び出す必要があります。
+</p><h3 id="source">Source</h3><p>Maskを通して塗られる色やパターン・画像のことです。
+単色やパターン、既に作られた Surface を Source として使用する事が可能です。
+</p><h3 id="mask">Mask</h3><p>SourceをSurfaceに転写する範囲を制限するマスクです。
+Path や Source 等を使って作成されます。
+</p><h3 id="path">Path</h3><p>ベクターグラフィックを扱ったことがある人は、その Path と思ってよいと思います。
+内部でどう保存されているのかはわかりませんが、扱いとしてはベクターの線です。
+</p><p>cairoでは Path は「点と点を繋いだもの」として表現されており、その繋ぎ方を直線・円・曲線等
+から選ぶことができます。
+</p><p>レンダリング時にMaskに変換されます。
+</p><h3 id="context">Context</h3><p>レンダリングにおいて必要な情報を全て保持しています。
+使用する <code class="inline-code">Surface</code>, <code class="inline-code">Source</code>, <code class="inline-code">Mask</code> をそれぞれ一つずつと付随する補助変数、そして <code class="inline-code">Path</code> を
+使用している場合はそれも保持されています。
+</p><p><code class="inline-code">Context</code> は <code class="inline-code">cairo_t</code> というデータ型に格納されます。
+また、 <code class="inline-code">Surface</code> と紐付けられている必要があるため、作成時には <code class="inline-code">Surface</code> を先に作成しておく必要があります。
+</p><pre class="src-block"><code class="language-c">cairo_surface_t *surface;
+cairo_t *cr;
+
+surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 120, 120);
+cr = cairo_create(surface);
+</code></pre><p>使用後に <a href="https://www.cairographics.org/manual/cairo-cairo-surface-t.html#cairo-surface-destroy"><code class="inline-code">cairo_destroy()</code></a> を呼び出す必要があります。
+</p><h2 id="レンダリングの手順">レンダリングの手順</h2><p>実際のコードでどう書くかを書きます。
+今回は、ピクセル毎32bit 120x120ピクセルの画像を作成することにします。
+</p><p>まずは <code class="inline-code">Surface</code> と <code class="inline-code">Context</code> を作成します。最後に破棄もすることを忘れずに。
+</p><p>尚、本来ならシグナルハンドリング等するべきだと思うのですが、
+私はCをほぼ使っておらず疎いので書いてありません。
+</p><pre class="src-block"><code class="language-c">int main(int argc, char *argv[]) {
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 120, 120);
+  cr = cairo_create(surface);
+
+  // cairoを使う処理はここに書く
+
+  // 最後に行う
+  cairo_destroy(cr);
+  cairo_surface_destroy(surface);
+}
+</code></pre><p>後は、その間に描画用の処理を書いていきます。
+描画用の処理は用途によって異なるためここでは省略します。代わりに、次の章に
+使える関数について書き、その後に例のコードをいくつか置いておこうと思います。
+</p><h2 id="ライブラリのコード各種">ライブラリのコード各種</h2><h3 id="色々なsurface">色々なSurface</h3><p><a href="https://www.cairographics.org/manual/cairo-surfaces.html">Surfaceの一覧ページ</a>
+に全て載っています。
+正直全てを把握しているわけではないので、詳しくはそちらを参照してください。
+</p><table><thead><tr><th>Surface名</th><th>どんなもの？</th></tr></thead><tbody><tr><td>Image Surfaces</td><td>メモリ上に保存される画像データ。これを画像に書き出し出来る。</td></tr><tr><td>PDF Surfaces</td><td></td></tr><tr><td>PNG Support</td><td></td></tr><tr><td>PostScript Surfaces</td><td></td></tr><tr><td>Recording Surfaces</td><td></td></tr><tr><td>Win32 Surfaces</td><td></td></tr><tr><td>SVG Surfaces</td><td></td></tr><tr><td>Quartz Surfaces</td><td></td></tr><tr><td>XCB Surfaces</td><td></td></tr><tr><td>XLib Surfaces</td><td></td></tr><tr><td>XLib-XRender Backend</td><td></td></tr><tr><td>Script Surfaces</td><td></td></tr></tbody></table><h3 id="色々なsource">色々なSource</h3><p>Sourceはさほど多くないです。
+</p><table><tbody><tr><td>linear gradient(<code class="inline-code">cairo_pattern_create_linear()</code>)</td><td>linear gradientを作成します。</td></tr></tbody></table><h4 id="単色-cairo_pattern_create_rgb">単色 (<code class="inline-code">cairo_pattern_create_rgb()</code>)</h4><p>単色のみの Source です。
+</p><p>link: <a href="https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-rgb">https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-rgb</a></p><h4 id="単色alpha-cairo_pattern_create_rgba">単色+Alpha (<code class="inline-code">cairo_pattern_create_rgba()</code>)</h4><p>単色でもアルファチャンネルを指定する関数もあります。
+</p><p>link: <a href="https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-rgba">https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-rgba</a></p><h4 id="linear-gradient">linear gradient</h4><p>link: <a href="https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-linear">https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-linear</a></p><h4 id="radial-gradient">Radial gradient</h4><p>link: <a href="https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-radial">https://www.cairographics.org/manual/cairo-cairo-pattern-t.html#cairo-pattern-create-radial</a></p><h4 id="raster-source">Raster Source</h4><p>link: <a href="https://www.cairographics.org/manual/cairo-Raster-Sources.html">https://www.cairographics.org/manual/cairo-Raster-Sources.html</a></p><h3 id="色々なmask">色々なMask</h3><p>Surface や Pattern、 Path を Mask として使うことが出来ます。
+ちょっと疲れてきたので端折り。
+</p><h3 id="色々なpath生成関数">色々なPath生成関数</h3><p>最初にも述べた通り、 cairo では Path は「点と点の繋がり」で表現されています。
+そのため Path の開始点は常に内部で保存されており(多分 Context の中？)、
+その点から指定した点への Path が描画されるようになっています。
+</p><p>cairoでの座標系は <strong>左上が <code class="inline-code">(0, 0)</code> である</strong> ことに注意してください。
+これを間違えると悲しいことになります。ハマりました(当事者)
+</p><h4 id="開始点の移動">開始点の移動</h4><p>Path の開始点を移動します。
+</p><pre class="src-block"><code class="language-c">void cairo_move_to(cairo_t *cr, double x, double y);
+</code></pre><p>これは Pathの開始点を移動する関数なので Path を作成しません。
+</p><h4 id="直線">直線</h4><p>現在の座標からグローバル座標の特定の場所まで線を引きます。
+</p><pre class="src-block"><code class="language-c">void cairo_line_to(cairo_t *cr, double x, double y);
+</code></pre><p>又、相対座標で指定するには <a href="https://www.cairographics.org/manual/cairo-Paths.html#cairo-rel-line-to"><code class="inline-code">cairo_rel_line_to</code></a> を使用します。
+</p><pre class="src-block"><code class="language-c">void cairo_rel_line_to(cairo_t *cr, double dx, double dy);
+</code></pre><h4 id="曲線">曲線</h4><p>cairoでは3次ベジエ曲線(cubic Bézier spline)を使用することが出来ます。
+</p><pre class="src-block"><code class="language-c">void cairo_curve_to(cairo_t *cr
+                    , double x1, double y1
+                    , double x2, double y2
+                    , double x3, double y3);
+</code></pre><p><code class="inline-code">(x1, y1)</code> <code class="inline-code">(x2, y2)</code> の二つの座標をコントロールポイントとし、
+カーブの終点が <code class="inline-code">(x3, y3)</code> となります。
+</p><h4 id="弧">弧</h4><p>弧は開始点に関わらずに描画されます。
+</p><p>弧を描く関数は <a href="https://www.cairographics.org/manual/cairo-Paths.html#cairo-arc"><code class="inline-code">cairo_arc()</code></a> と <a href="https://www.cairographics.org/manual/cairo-Paths.html#cairo-arc-negative"><code class="inline-code">cairo_arc_negative()</code></a> の2種類があり、
+これは弧を描く方向のみ異なる関数です。
+</p><p><code class="inline-code">cairo_arc()</code> は時計周り、 <code class="inline-code">cairo_arc_nagative()</code> は反時計周りに弧を描きます。
+</p><p>(※ <code class="inline-code">cairo_arc()</code> のドキュメントの説明で&quot;Y+方向に向かって回る&quot;とありますが、
+<strong>cairoでのY+方向は一般的には下向き</strong> であることを忘れないでください。私は嵌りました。)
+</p><p>角度はラジアンで表記されており、x+軸方向(つまり一般的には右方向)が0になっています。
+</p><pre class="src-block"><code class="language-c">void cairo_arc(cairo_t *cr
+               , double xc // 弧を描く円の中心点のx座標
+               , double yc // 弧を描く円の中心点のy座標
+               , double radius // 弧を描く円の半径
+               , double angle1 // ラジアンで
+               , double angle2
+               );
+</code></pre><h4 id="文字">文字</h4><p>文字を表示する方法は二通りあります。
+<a href="https://www.cairographics.org/manual/cairo-text.html#cairo-show-text"><code class="inline-code">cairo_show_text()</code></a>を使って Path の作成と fill を同時に行うのと、
+<a href="https://www.cairographics.org/manual/cairo-Paths.html#cairo-text-path"><code class="inline-code">cairo_text_path()</code></a> で Path を作成した後に <a href="https://www.cairographics.org/manual/cairo-cairo-t.html#cairo-fill"><code class="inline-code">cairo_fill()</code></a> で fill をする方法です。
+</p><p>チュートリアルによると、前者の <code class="inline-code">cairo_show_text()</code> の方は内部でキャッシュを持ったり効率的に動くため、
+そちらを推奨するとのことです。
+</p><pre class="src-block"><code class="language-c">void cairo_show_text (cairo_t *cr, const char *utf8);
+</code></pre><h4 id="path-を閉じる">Path を閉じる</h4><p>現在の Path の始点と終点を繋いで Path を閉じます。
+閉じられた Path には LineCaps の設定が適用されなくなります(適用する場所がない)
+</p><p>詳しくは <a href="https://www.cairographics.org/manual/cairo-Paths.html#cairo-close-path"><code class="inline-code">cairo_close_path()</code></a></p><pre class="src-block"><code class="language-c">void cairo_close_path (cairo_t *cr);
+</code></pre><h2 id="コード例">コード例</h2><p>以下のコードは、私の環境下(archlinux)にてorg-modeのTangle機能を利用して
+実行し、実際に動作しているのを確認しています。
+</p><p>尚、私の環境のそれぞれのバージョンは以下の通りです:
+</p><table><thead><tr><th>ライブラリ・ツール</th><th>バージョン</th></tr></thead><tbody><tr><td>gcc</td><td><code class="inline-code">gcc (GCC) 12.1.1 20220730</code></td></tr><tr><td>cairo</td><td><code class="inline-code">1.17.6-2</code></td></tr></tbody></table><h3 id="三角形塗り潰しなし">三角形(塗り潰しなし)</h3><p>120x120ピクセル、透過ありのPNG画像に三角形を描画します。
+</p><pre class="src-block"><code class="language-c">#include &lt;cairo.h&gt;
+
+int main(int argc, char *argv[]) {
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 120, 120);
+  cr = cairo_create(surface);
+  cairo_scale(cr, 120, 120);
+
+  cairo_set_line_width(cr, 0.1);
+  cairo_set_source_rgb(cr, 0, 0, 0);
+  cairo_move_to(cr, 0.5, 0.25);
+  cairo_line_to(cr, 0.25, 0.75);
+  cairo_line_to(cr, 0.75, 0.75);
+  cairo_line_to(cr, 0.5, 0.25);
+  cairo_stroke(cr);
+
+  cairo_surface_write_to_png(surface, &quot;triangle.png&quot;);
+  cairo_destroy(cr);
+  cairo_surface_destroy(surface);
+}
+</code></pre><p>これをコンパイルして実行すると:
+</p><pre class="src-block"><code class="language-sh">gcc -o png-triangle $(pkg-config --cflags --libs cairo) png-triangle.c &amp;&amp; ./png-triangle
+</code></pre><p>以下のようなPNGファイルが生成されます。
+</p><p><img src="/images/triangle.png"/></p><h3 id="三角形塗り潰しあり">三角形(塗り潰しあり)</h3><p>120x120ピクセル、透過ありのPNG画像に三角形を描画します。
+先程のものを、 Path の中を塗り潰すようにしたものです。
+<code class="inline-code">cairo_stroke()</code> を <code class="inline-code">cairo_fill()</code> に入れ替えただけです。
+</p><pre class="src-block"><code class="language-c">#include &lt;cairo.h&gt;
+
+int main(int argc, char *argv[]) {
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 120, 120);
+  cr = cairo_create(surface);
+  cairo_scale(cr, 120, 120);
+
+  cairo_set_line_width(cr, 0.1);
+  cairo_set_source_rgb(cr, 0, 0, 0);
+  cairo_move_to(cr, 0.5, 0.25);
+  cairo_line_to(cr, 0.25, 0.75);
+  cairo_line_to(cr, 0.75, 0.75);
+  cairo_line_to(cr, 0.5, 0.25);
+  cairo_fill(cr);
+
+  cairo_surface_write_to_png(surface, &quot;triangle-filled.png&quot;);
+  cairo_destroy(cr);
+  cairo_surface_destroy(surface);
+}
+</code></pre><p>これをコンパイルして実行すると:
+</p><pre class="src-block"><code class="language-sh">gcc -o png-triangle-filled $(pkg-config --cflags --libs cairo) png-triangle-filled.c &amp;&amp; ./png-triangle-filled
+</code></pre><p>以下のようなPNGファイルが生成されます。
+</p><p><img src="/images/triangle-filled.png"/></p>   </article>  <div class="post__footer" data-astro-cid-jj6gr7j4> <br data-astro-cid-jj6gr7j4><div class="author-card" data-astro-cid-jj6gr7j4>  <div class="author-card__meta" data-astro-cid-jj6gr7j4> <span class="author-card__author" data-astro-cid-jj6gr7j4>Cj-bc</span> <p class="author-card__bio" data-astro-cid-jj6gr7j4>Crisp, minimal, personal blog theme for Astro. Crisp, minimal, personal blog theme for Astro. Crisp, minimal, personal blog theme for Astro</p> <br data-astro-cid-jj6gr7j4> <a class="author-card__follow-btn button" target="_blank" href="https://twitter.com/intent/follow?screen_name=" data-astro-cid-jj6gr7j4><svg viewBox="0 0 24 24" data-astro-cid-jj6gr7j4 class="w-5 h-5 inline-block" astro-icon="mdi:twitter"><path fill="currentColor" d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/></svg> Follow on Twitter</a> </div> </div><br data-astro-cid-jj6gr7j4> </div>  </div> <br class="my-4" data-astro-cid-fhdt7an5> <footer class="footer" data-astro-cid-sz7xmlte> <nav class="nav" data-astro-cid-sz7xmlte> <div data-astro-cid-sz7xmlte>2021  &copy; Copyright notice | <a href="https://github.com/one-aalam/astro-ink" title="Ink's Github URL'" data-astro-cid-sz7xmlte>Ink</a> <script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><astro-island uid="1mUrvp" component-url="/blog/_astro/ModeLabel.210c429b.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-sz7xmlte&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;ModeLabel&quot;,&quot;value&quot;:true}" await-children=""><span slot="dark" data-svelte-h="svelte-14ov3lc">(dark)</span><!--astro:end--></astro-island> theme on <a href="https://astro.build/" data-astro-cid-sz7xmlte>Astro</a></div> <astro-island uid="Zxdlqs" component-url="/blog/_astro/NetlifyIdentity.5f683bb1.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-sz7xmlte&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;NetlifyIdentity&quot;,&quot;value&quot;:true}"></astro-island> </nav> </footer>  <div class="portal-root">  <astro-island uid="ZJdy3D" component-url="/blog/_astro/SearchModal.81cd9666.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-fhdt7an5&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;SearchModal&quot;,&quot;value&quot;:true}"></astro-island>  </div>  </main> </div> </body>  </html>
