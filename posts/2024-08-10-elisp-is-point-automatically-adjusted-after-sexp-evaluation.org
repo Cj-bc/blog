@@ -1,0 +1,150 @@
+#+TITLE: elispのpointは自動的に調整されている？
+#+DATE: [2024-08-10 Sat 15:42]
+#+TAGS: :emacs:elisp:
+#+KIND: Knowledge
+#+PROGRESS: Empty
+#+STATUS: Normal
+#+AUTHOR: Cj-bc
+
+#+NAME: 環境
+#+begin_src elisp :exports both
+  (version)
+#+end_src
+
+#+RESULTS:
+: GNU Emacs 29.4 (build 1, x86_64-pc-linux-gnu, GTK+ Version 3.24.42, cairo version 1.18.0)
+
+手元で色々試していた所、pointが行の終点(~eolp~)に到達した際、そのプロ
+グラムが走り終わるとその手前に移動されるらしい？です。
+
+有識者の方、何かご存知であれば[[https://x.com/Cj_bc_sd][twitter]]や[[https://github.com/Cj-bc/blog/issues][github issue]]、
+[[https://misskey.resonite.love/@cj_bc_sd][cj_bc_sd@misskey.resonite.love]]、[[https://bsky.app/profile/cj-bc-sd.bsky.social][cj-bc-sd.bsky.social]]等で教えていただけ
+ると嬉しいです。emacs-jp(@Cj.bc_sd)とvim-jp(@Cj.BC_SD)にもいます。
+
+
+* ひとまずの検証
+簡単な検
+証の経緯をメモしておきます。
+
+** 発端: evil-up-parenの定義より疑問を持つ
+[[https://github.com/emacs-evil/evil/blob/8a06c5cb30175282c6e934c6d40020cedf4d4623/evil-common.el#L1343-L1376][~evil-up-paren~ の定義]]を読んでいた時、以下の挙動が目につきました。
+
+#+begin_src elisp
+  (cond
+   ((> dir 0)
+    (while (progn
+             (up-list dir t)
+             (/= (char-before) close))))
+   (t
+    (while (progn
+             (up-list dir t)
+             (/= (char-after) open)))))
+#+end_src
+
+このうち、1つ目のwhileループについて疑問を感じました。 ~(up-list
+&optional ARG ESCAPE-STRINGS NO-SYNTAX-CROSSING)~ は、手元で試した所括
+弧を1段階登り閉じ括弧の後に ~point~ を置きます。しかし、閉じ括弧の後ろ
+に文字がない場合は閉じ括弧の手前に置くようでした。
+
+#+begin_src
+  (foo ba!r baz)
+#+end_src
+
+pointが ~!~ のある場所にある時、 ~(up-list)~ すると以下まで移動します。
+
+#+begin_src
+  (foo bar baz!)
+#+end_src
+
+ここでの ~(char-before)~ は ~z~ です。何度やっても同じです。
+
+そのため、whileループの条件となる ~(/= (char-before) close)~ は永遠に
+~t~ を返してしまい終了しないのではないか？と思い以下のようにして試し
+てみると、 ~nil~ を返しました。
+
+#+begin_src elisp
+  (progn
+    (up-list 1 t)
+    (/= (char-before) ?\)))
+#+end_src
+
+これはどうしてなのでしょうか？
+** (progn (up-list) (point))と (up-list) (point) で動作が異なる？
+条件を取り出して捏ねていた所、どうやら ~(char-before)~ する前の
+~point~ の値が異なっているということが分かりました。そこで、 ~up-list~
+の実行周りを調べてみます。
+
+~current-buffer~ は以下の内容とします。( ~with-temp-buffer~ を使ってし
+まうと再現しないので ~eval-expression~ で実行しています。)
+
+#+NAME: current-buffer
+#+begin_src
+ (foo bar baz) 
+#+end_src
+
+以下を順番に実行した所、 ~13~ を返しました。
+
+#+begin_src elisp :results value
+  (goto-char 8)
+  (up-list)
+  (point)
+  ;; => 13
+#+end_src
+
+それに対し、以下は ~14~ を返しました。
+
+#+begin_src elisp :results value
+  (progn
+    (goto-char 8)
+    (up-list)
+    (point))
+  ;; => 14
+#+end_src
+
+そして、以下は ~13~ を返します。
+
+#+begin_src elisp :results value
+  (progn
+    (goto-char 8)
+    (up-list))
+  (point)
+  ;; => 14
+#+end_src
+
+3つ目の挙動(~progn~ の外側の ~point~ は同様に13になっている)があること
+から、 「 ~(up-list)~ ではいつも14まで移動しているが、 ~progn~ が終了
+した後に何らかの処理が行なわれているのではないか」という推測をしました。
+
+そこで、より一般化してみます。
+** sexp評価後にpointが調整される？
+~(up-list)~ 固有ではなさそうであったことから、最もプリミティブなpoint
+操作として ~(goto-char)~ を用いて検証をします。
+
+先程と同じBufferのまま進めます。
+
+#+begin_src elisp
+  (goto-char 14) ;; = (point-max)
+  (point)
+#+end_src
+
+これは13になります。
+
+#+begin_src elisp
+  (progn
+    (goto-char 14) ;; = (point-max)
+    (point))
+#+end_src
+
+これは14になります。
+
+#+begin_src elisp
+  (progn
+    (progn
+      (goto-char 2))
+    (point))
+#+end_src
+
+追加で、これも14になります。
+
+このことから、 ~progn~ 固有の何かではなく式が全て評価された後にpointが
+調整されているのではないかなと考えます。
