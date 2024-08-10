@@ -2,7 +2,7 @@
 #+DATE: [2024-08-10 Sat 15:42]
 #+TAGS: :emacs:elisp:
 #+KIND: Knowledge
-#+PROGRESS: Empty
+#+PROGRESS: Published
 #+STATUS: Normal
 #+AUTHOR: Cj-bc
 
