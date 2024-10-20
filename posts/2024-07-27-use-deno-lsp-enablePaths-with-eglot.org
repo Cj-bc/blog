@@ -1,0 +1,115 @@
+#+TITLE: Eglotを使っている時に、deno lspが一定のディレクトリ下のみを見るようにする
+#+DATE: [2024-07-27 Sat 16:22]
+#+TAGS: :ブログ:
+#+KIND: Memo
+#+PROGRESS: WIP
+#+STATUS: Normal
+#+AUTHOR: Cj-bc
+* やりたいこと
+deno lspには、[[https://docs.deno.com/runtime/manual/references/vscode_deno/#partially-deno-enabling-a-workspace][プロジェクトフォルダの一部のみをdeno lspの対象とするため
+の設定項目として deno.enablePaths]]があります。これを有効化するために
+試行錯誤が必要だったのでメモ。
+
+* 動機
+ブログ記事をZenn用に変換するスクリプトをdenoで書いてみようと思い立ち、
+そのために一部だけdenoにしてみました。
+
+LSを普通に使用しようとした所、
+
+#+begin_quote
+[stderr] Hit the language server document preload limit of 1000 file
+system entries. You may want to use the "deno.enablePaths"
+configuration setting to only have Deno partially enable a workspace
+or increase the limit via "deno.documentPreloadLimit". In cases where
+Deno ends up using too much memory, you may want to lower the limit.
+#+end_quote
+
+というエラーが出てしまい上手く動きませんでした。これはblogレポジトリ自
+体をルートとして扱ってしまっただけではないか？と考え、必要最低限のファ
+イルのみ読み込んでもらうために ~enablePaths~ を利用したいなと考えまし
+た。
+
+* 手順
+** ~eglot-workspace-configuration~ で ~deno.enablePaths~ を設定する
+Eglotを使う際は、workspace configurationを
+[[help:eglot-workspace-configuration][eglot-workspace-configuration]]に設定します。
+
+この変数は "directory-local" で設定するようにとヘルプに記載されている
+ので、 ~.dir-locals.el~ ファイルを作成してそこに記載します。
+
+他のLSPクライアントでは ~"deno.enablePaths"~ とキーを記載するものもあ
+りますが、Eglotではきちんとテーブル構造にする必要があります。
+
+#+begin_src elisp
+  ;;; Directory Local Variables         -*- no-byte-compile: t; -*-
+  ;;; For more information see (info "(emacs) Directory Variables")
+
+  ((nil (eglot-workspace-configuration . (:deno (:enablePaths ["./scripts/buildZennFiles/"] :enable t)))))
+#+end_src
+
+尚、この設定がどのようにLSPに渡されるのか？というのは、 LSPサーバーと
+接続した状態で ~eglot-show-workspace-configuration~ コマンドを実行する
+と見ることが出来ます。
+
+** ~eglot--workspace-configuration-plist~ を改変する(builtinのみ)
+これはbuiltin の現状では必要な手段で、最新版を使っている人は修正されているので問題がありません。
+
+詳しいことは
+
+#+begin_src elisp
+  (defun cj-bc/advices/eglot--workspace-configuration-plist/ensure-trailing-slash (server path)
+        (list server (when (and path (file-directory-p path) (string-suffix-p "/" path))
+                       (format "%s/" path))))
+  (advice-add 'eglot--workspace-configuration-plist
+              :filter-args #'cj-bc/advices/eglot--workspace-configuration-plist/ensure-trailing-slash)
+#+end_src
+
+* ハマったこと
+** Directory-local variableに設定する際Quoteは要らない
+
+#+begin_src elisp
+  ((nil (eglot-workspace-configuration . '(:deno (:enablePaths ["./scripts/buildZennFiles"])))))
+#+end_src
+
+とか書くと、 ~{"Quote": {"deno": {...~ と無駄に囲われたJSONに変換されます。
+
+** Section名を "deno" にする
+あまりLSPの仕様を理解しないでいたのですが、
+
+https://github.com/denoland/deno/blob/main/cli/lsp/language_server.rs#L1162-L1170
+
+[[https://github.com/denoland/deno/blob/06b6352292b69359768c99a1fc984fa4bdcd07c9/cli/lsp/config.rs#L67][~SETTINGS_SECTION~ は "deno" と定義されている]]ので、そうする必要があります。
+
+
+#+begin_src
+[jsonrpc] e[16:11:08.737] <-- workspace/configuration[0] {"jsonrpc":"2.0","method":"workspace/configuration","params":{"items":[{"section":"deno"},{"section":"javascript"},{"section":"typescript"},{"scopeUri":"file:///home/me/Documents/ghq/github.com/Cj-bc/blog","section":"deno"},{"scopeUri":"file:///home/me/Documents/ghq/github.com/Cj-bc/blog","section":"javascript"},{"scopeUri":"file:///home/me/Documents/ghq/github.com/Cj-bc/blog","section":"typescript"}]},"id":0}
+[jsonrpc] e[16:11:08.739] --> workspace/configuration[0] {"jsonrpc":"2.0","id":0,"result":[{"deno.enablePaths":["./scripts/buildZennFiles"]},null,null,null,null,null]}
+#+end_src
+
+という表記になり、きちんと判別されていそうです。
+
+** ~path.start_with~ で見ているのでワイルドカードではなさそう。
+https://github.com/denoland/deno/blob/06b6352292b69359768c99a1fc984fa4bdcd07c9/cli/lsp/config.rs#L782-L784
+
+** scopeUriが本来のルートよりか1つ上の階層になっている
+~eglot--workspace-configuration-plist~ の中で、 ~path~ には ~scopeUri~
+が渡される。末尾にスラッシュがない影響で、1つ上の階層を見てしまってい
+たのでプロジェクトが見付かっていない。
+
+#+begin_src elisp
+(let ((scopeUri "file:///home/me/Documents/ghq/github.com/Cj-bc/blog"))
+  (file-name-directory (eglot--uri-to-path  "file:///home/me/Documents/ghq/github.com/Cj-bc/blog")))
+#+end_src
+
+** どちらが正しいのか？(trailing slashあり/なし)
+
+elisp:eglot--workspace-configuration-plist 内にて、PATHが適切に処理されていなかったのが問題でした。
+
+* Tips
+
+trainingSlashの有無のせいでConfigurationがきちんと送信されていなかったという単純なおはなし。
+deno lspは、 ~workspace/configuration~ を尋ねる際にScopeUri付きのものと無いものと2通り問合せてきますが、
+どうやら _ScopeUri付きのものへ返答しないと動作しなかった_ ようです。
+
+[jsonrpc] e[22:24:20.800] <-- workspace/configuration[0] {"jsonrpc":"2.0","method":"workspace/configuration","params":{"items":[{"section":"deno"},{"section":"javascript"},{"section":"typescript"},{"scopeUri":"file:///home/the_cat/Documents/ghq/github.com/Cj-bc/blog","section":"deno"},{"scopeUri":"file:///home/the_cat/Documents/ghq/github.com/Cj-bc/blog","section":"javascript"},{"scopeUri":"file:///home/the_cat/Documents/ghq/github.com/Cj-bc/blog","section":"typescript"}]},"id":0}
+[jsonrpc] e[22:24:20.802] --> workspace/configuration[0] {"jsonrpc":"2.0","id":0,"result":[{"enablePaths":["./scripts/buildZennFiles/"],"enable":true},null,null,{"enablePaths":["./scripts/buildZennFiles/"],"enable":true},null,null]}
