@@ -2,7 +2,7 @@
 #+DATE: [2024-07-27 Sat 16:22]
 #+TAGS: :ブログ:
 #+KIND: Memo
-#+PROGRESS: WIP
+#+PROGRESS: Published
 #+STATUS: Normal
 #+AUTHOR: Cj-bc
 * やりたいこと
