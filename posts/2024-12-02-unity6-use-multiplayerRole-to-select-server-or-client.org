@@ -1,0 +1,48 @@
+#+TITLE: Unity6 Multiplayer Play Modeの「MultiplayerRole」を使用してServer/Clientを起動する
+#+DATE: [2024-12-02 Mon 00:28]
+#+TAGS: :unity:unity6:multiplayerPlayMode:
+#+KIND: Knowledge
+#+PROGRESS: Published
+#+STATUS: Normal
+
+Unity6の新機能 Multiplayer Play Modeでは、複数のGameViewを出してマルチプレイヤー環境のテストが出来ます。この機能を使って NetworkManager の
+Server/Host/Client を切り替えるには、 *Dedicated server側の* [[https://docs.unity3d.com/Packages/com.unity.dedicated-server@1.0/api/Unity.Multiplayer.MultiplayerRolesManager.html][~Unity.Multiplayer.MultiplayerRolesManager~]] を使用します。Multiplayer
+Center で環境のセットアップを行っていたりすると、「これは Multiplayer Play Mode の一環だな」と誤解してしまい、訳がわからなくなるので注意が必要です(経験済み)。
+
+単純に [[https://docs.unity3d.com/Packages/com.unity.dedicated-server@1.0/api/Unity.Multiplayer.MultiplayerRoleFlags.html][~MultiplayerRolesManager.ActiveMultiplayerRoleMask~]] を見るだけでよさそうでした。
+実際に趣味開発使用しているコード例:
+
+#+begin_src csharp
+  void Start
+  {
+      switch (MultiplayerRolesManager.ActiveMultiplayerRoleMask)
+      {
+          case MultiplayerRoleFlags.Client:
+              /// 何度か接続試行させる
+              for (int i = 1; i < retryCount; i++) {
+                  if (NetworkManager.Singleton.StartClient()) {
+                      Debug.Log("[Client] Initialized as Client.");
+                      return;
+                  } else {
+                      Debug.Log($"[Client] Failed to initialize as Client. Retry in {retryIntervalSec} seconds.");
+                      await UniTask.Delay(TimeSpan.FromSeconds(retryIntervalSec));
+                  }
+              }
+              Debug.LogWarning("Failed to initialize as Host nor Client.");
+              break;
+          case MultiplayerRoleFlags.ClientAndServer:
+              if (NetworkManager.Singleton.StartHost())
+              {
+                  // サーバーの初期化処理は Host の場合と Server の場合で共通なので括り出し
+                  InitializeServer();
+              }
+              break;
+          case MultiplayerRoleFlags.Server:
+              if (NetworkManager.Singleton.StartServer())
+              {
+                  InitializeServer();
+              }
+              break;
+      }
+  }
+#+end_src
