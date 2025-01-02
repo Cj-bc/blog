@@ -2,7 +2,7 @@
 #+DATE: [2025-01-01 Wed 23:31]
 #+TAGS: ::
 #+KIND: Memo
-#+PROGRESS: Empty
+#+PROGRESS: Published
 #+STATUS: Normal
 #+AUTHOR: Cj-bc
 

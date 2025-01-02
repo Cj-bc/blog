@@ -2,7 +2,7 @@
 #+DATE: [2024-12-14 Sat 20:26]
 #+TAGS: :XRKaigi:XR:MR:AR:
 #+KIND: Memo
-#+PROGRESS: Empty
+#+PROGRESS: Published
 #+STATUS: Normal
 #+AUTHOR: Cj-bc
 
