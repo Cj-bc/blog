@@ -1,0 +1,187 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-jj6gr7j4> <head><!-- Use Google Fonts, if you don't wanna prefer a self-hosted version --><!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet"> --><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>CLI! CLI! CLI! | XRKaigi 2024のレポート兼メモ</title><meta name="title" content="CLI! CLI! CLI! | XRKaigi 2024のレポート兼メモ"><meta name="description" content="read more..."><link rel="apple-touch-icon" sizes="180x180" href="${"/blog"}/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="${"/blog"}&quot;/favicon-32x32.png&quot;"><link rel="shortcut icon" type="image/png" sizes="16x16" href="${"/blog"}/favicon-16x16.png"><link rel="manifest" href="${"/blog"}/site.webmanifest"><link rel="mask-icon" href="${"/blog"}/safari-pinned-tab.svg" color="#5bbad5"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/browserconfig.xml"><meta name="theme-color" content="#ffffff"><!-- Open Graph Tags (Facebook) --><meta property="og:type" content="website"><meta property="og:title" content="CLI! CLI! CLI! | XRKaigi 2024のレポート兼メモ"><meta property="og:description" content="read more..."><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:title" content="CLI! CLI! CLI! | XRKaigi 2024のレポート兼メモ"><meta property="twitter:description" content="read more..."><script>
+  const theme = (() => {
+    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+      return localStorage.getItem("theme");
+    }
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "dark";
+    }
+    return "light";
+  })();
+
+  if (theme === "light") {
+    document.documentElement.classList.remove("dark");
+  } else {
+    document.documentElement.classList.add("dark");
+  }
+</script><link rel="stylesheet" href="/blog/_astro/_page_.e9708170.css" />
+<link rel="stylesheet" href="/blog/_astro/_page_.5c85263a.css" />
+<link rel="stylesheet" href="/blog/_astro/_slug_.1f7a3f5c.css" /><script type="module" src="/blog/_astro/hoisted.e6960f2c.js"></script></head> <body class="font-sans antialiased min-h-screen bg-gray-100 dark:bg-gray-800"> <div class="transition-colors"> <main class="mx-auto max-w-4xl px-4 md:px-0">  <br class="my-4" data-astro-cid-fhdt7an5> <header class="header" data-astro-cid-3ef6ksr2> <div class="header__logo" data-astro-cid-3ef6ksr2> <a href="/" class="avatar" data-astro-cid-3ef6ksr2> <img class="header__logo-img" src="/assets/logo.svg" alt="Astro logo" data-astro-cid-3ef6ksr2> </a> </div> <div class="header__meta flex-1" data-astro-cid-3ef6ksr2> <h3 class="header__title dark:text-theme-dark-secondary" data-astro-cid-3ef6ksr2> <a href="" data-astro-cid-3ef6ksr2>Ink</a> </h3> <div class="header__meta-more flex" data-astro-cid-3ef6ksr2> <p class="header__desc" data-astro-cid-3ef6ksr2> Contents related to tech, hobby, etc </p> <nav class="header__nav flex" data-astro-cid-3ef6ksr2> <ul class="header__ref-list" data-astro-cid-3ef6ksr2> <li data-astro-cid-3ef6ksr2> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var r=(i,c,s)=>{let n=async()=>{await(await i())()},t=new IntersectionObserver(e=>{for(let o of e)if(o.isIntersecting){t.disconnect(),n();break}});for(let e of s.children)t.observe(e)};(self.Astro||(self.Astro={})).visible=r;window.dispatchEvent(new Event("astro:visible"));})();;(()=>{var b=Object.defineProperty;var f=(c,o,i)=>o in c?b(c,o,{enumerable:!0,configurable:!0,writable:!0,value:i}):c[o]=i;var l=(c,o,i)=>(f(c,typeof o!="symbol"?o+"":o,i),i);var p;{let c={0:t=>m(t),1:t=>i(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(i(t)),5:t=>new Set(i(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t)},o=t=>{let[e,r]=t;return e in c?c[e](r):void 0},i=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([e,r])=>[e,o(r)]));customElements.get("astro-island")||customElements.define("astro-island",(p=class extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var d;if(!this.hydrator||!this.isConnected)return;let e=(d=this.parentElement)==null?void 0:d.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let r=this.querySelectorAll("astro-slot"),a={},h=this.querySelectorAll("template[data-astro-template]");for(let n of h){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("data-astro-template")||"default"]=n.innerHTML,n.remove())}for(let n of r){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("name")||"default"]=n.innerHTML)}let u;try{u=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(n){let s=this.getAttribute("component-url")||"<unknown>",y=this.getAttribute("component-export");throw y&&(s+=` (export ${y})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),n),n}await this.hydrator(this)(this.Component,u,a,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),r.disconnect(),this.childrenConnectedCallback()},r=new MutationObserver(()=>{var a;((a=this.lastChild)==null?void 0:a.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});r.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}start(){let e=JSON.parse(this.getAttribute("opts")),r=this.getAttribute("client");if(Astro[r]===void 0){window.addEventListener(`astro:${r}`,()=>this.start(),{once:!0});return}Astro[r](async()=>{let a=this.getAttribute("renderer-url"),[h,{default:u}]=await Promise.all([import(this.getAttribute("component-url")),a?import(a):()=>()=>{}]),d=this.getAttribute("component-export")||"default";if(!d.includes("."))this.Component=h[d];else{this.Component=h;for(let n of d.split("."))this.Component=this.Component[n]}return this.hydrator=u,this.hydrate},e,this)}attributeChangedCallback(){this.hydrate()}},l(p,"observedAttributes",["props"]),p))}})();</script><astro-island uid="1mCrYB" component-url="/blog/_astro/SearchBtn.b04a64bc.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-3ef6ksr2&quot;:[0,true]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;SearchBtn&quot;,&quot;value&quot;:true}" await-children=""><button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2071 4.89344C19.0923 7.77862 19.3131 12.3193 16.8693 15.4578C16.8846 15.4713 16.8996 15.4854 16.9143 15.5L21.1569 19.7427C21.5474 20.1332 21.5474 20.7664 21.1569 21.1569C20.7664 21.5474 20.1332 21.5474 19.7427 21.1569L15.5 16.9143C15.4854 16.8996 15.4713 16.8846 15.4578 16.8693C12.3193 19.3131 7.77862 19.0923 4.89344 16.2071C1.76924 13.083 1.76924 8.01763 4.89344 4.89344C8.01763 1.76924 13.083 1.76924 16.2071 4.89344ZM14.7929 14.7929C17.1361 12.4498 17.1361 8.6508 14.7929 6.30765C12.4498 3.96451 8.6508 3.96451 6.30765 6.30765C3.96451 8.6508 3.96451 12.4498 6.30765 14.7929C8.6508 17.1361 12.4498 17.1361 14.7929 14.7929Z" fill="currentColor"></path></svg></button><!--astro:end--></astro-island> </li> <li data-astro-cid-3ef6ksr2> <a href="https://github.com/Cj-bc/blog" title="Ink's Github URL'" data-astro-cid-3ef6ksr2> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" data-astro-cid-3ef6ksr2></path>  </svg> </a> </li> <li data-astro-cid-3ef6ksr2> <a href="/rss.xml" title="RSS" data-astro-cid-3ef6ksr2> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">  <path d="M4 11a9 9 0 0 1 9 9" data-astro-cid-3ef6ksr2></path> <path d="M4 4a16 16 0 0 1 16 16" data-astro-cid-3ef6ksr2></path> <circle cx="5" cy="19" r="1" data-astro-cid-3ef6ksr2></circle>  </svg> </a> </li> <li data-astro-cid-3ef6ksr2> <astro-island uid="Z1ylE5i" component-url="/blog/_astro/ModeSwitcherBtn.815c7d36.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-3ef6ksr2&quot;:[0,true]}" ssr="" client="visible" opts="{&quot;name&quot;:&quot;ModeSwitcherBtn&quot;,&quot;value&quot;:true}" await-children=""><button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle> <line x1="12" y1="1" x2="12" y2="3"></line> <line x1="12" y1="21" x2="12" y2="23"></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line> <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line> <line x1="1" y1="12" x2="3" y2="12"></line> <line x1="21" y1="12" x2="23" y2="12"></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line> <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button><!--astro:end--></astro-island> </li> </ul> </nav> </div> </div> </header>  <nav class="nav py-3" data-astro-cid-dmqpwcec> <ul class="nav-list dark:text-theme-dark-secondary" data-astro-cid-dmqpwcec> <li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/blog/" title="home" data-astro-cid-dmqpwcec>Home</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/blog/blog" title="blog" data-astro-cid-dmqpwcec>Blog</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/blog/tags" title="tags" data-astro-cid-dmqpwcec>Tags</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/blog/media" title="media" data-astro-cid-dmqpwcec>Media</a> </li><li data-astro-cid-dmqpwcec> <a class="pb-1 border-b-2 hover:border-gray-400 hover:dark:border-gray-700  border-gray-100 dark:border-gray-800" href="/blog/about" title="about" data-astro-cid-dmqpwcec>About</a> </li> </ul> </nav>  <div class="content" data-astro-cid-fhdt7an5>  <div class="post__header" data-astro-cid-jj6gr7j4> <div class="post__tags" data-astro-cid-jj6gr7j4> <a class="post__tag" href="/tags/XRKaigi" title="XRKaigi" data-astro-cid-jj6gr7j4>XRKaigi</a><a class="post__tag" href="/tags/XR" title="XR" data-astro-cid-jj6gr7j4>XR</a><a class="post__tag" href="/tags/MR" title="MR" data-astro-cid-jj6gr7j4>MR</a><a class="post__tag" href="/tags/AR" title="AR" data-astro-cid-jj6gr7j4>AR</a> </div> <h1 class="post__title" data-astro-cid-jj6gr7j4>XRKaigi 2024のレポート兼メモ</h1> <h5 class="post__desc " data-astro-cid-jj6gr7j4>  <div class="" data-astro-cid-jj6gr7j4> <a class="post__author" href="https://twitter.com/cj_bc_sd" title="Cj-bc's twitter" target="_blank" rel="external" data-astro-cid-jj6gr7j4>Cj-bc</a>  |  <span class="post__date" data-astro-cid-jj6gr7j4> <!-- post creation/updation data --> Saturday, December 14, 2024 </span> <span class="post__stats" data-astro-cid-jj6gr7j4>   <!-- | <Icon class="w-5 h-5 inline-block" pack="mdi" name="clock" /> 2 mins --> </span> </div> </h5> </div> <article class="prose dark:prose-invert" data-astro-cid-apjhz64k>   <p>XRKaigi 2024 2日目にあたる 12月12日に見てきましたので、そのメモです。
+まだきちんと整理されていないので今後整理予定。
+</p><h1 id="セッション">セッション</h1><p>実はまだ殆どのものは見れておらず、後日アーカイブで見る予定でいます。
+</p><h2 id="unity6で始める-最新xr-アプリ開発-2024冬">Unity6で始める 最新XR アプリ開発 2024冬</h2><p>セッション紹介ページ: <a href="https://www.xrkaigi.com/event/9316/module/booth/308916/264492">https://www.xrkaigi.com/event/9316/module/booth/308916/264492</a></p><p>おなじみUnity Technologiesの高橋忍さんによる、Unity6を用いたXRアプリ開発についての公演です。
+Unity標準機能を用いてのXR開発に焦点があてられていて、「意外と色々と出来るようになっている」という驚きがありました。
+</p><ul><li><p>XR interaction Toolkitも育っているし、 ARFoundation を揃えると大分やれることが広がる。
+</p></li><li><p>様々なコンポーネントがあるが、基本的にPrefabがもうあるのでそれを使えばよい。
+</p></li></ul><h3 id="new-meta-xr-core-sdkを使用しないでmetaのビデオパススルーする">[new!] Meta XR Core SDKを使用しないでMetaのビデオパススルーする</h3><p>Unity6では、ARFoundationを使うとMetaのSDK使わずともビデオパススルーが使えるようになった。
+</p><h4 id="手順">手順</h4><ol><li><p>ARFoundationをいれる
+</p></li><li><p>AR Camera ManagerをMainCameraに入れる。これがパススルーの映像を取り込む。
+</p></li><li><p>このままだとskyboxに邪魔されるので、solidColorにして完全透明にする。
+</p></li><li><p>パススルーが出る。
+</p></li></ol><h3 id="既存のunityプロジェクトを最低限xrで見れるようにするには">既存のUnityプロジェクトを最低限XRで見れるようにするには</h3><p>最低限、「VRで見れる」ようにするには以下の手順で出来る。但し、移動もコントローラーの表示も何も出来ない状態。
+</p><ol><li><p>パッケージを入れる
+</p></li><li><p>Minimum API levelを12Lにする(6になっていがち)
+</p></li><li><p>metaだとUnity OpenXR metaを入れる。これでルーム関連とかも使えるようになる。
+</p></li><li><p>mainCamera を削除し、XR Originに差し替える。
+</p></li></ol><h3 id="最初からxrアプリをつくる">最初からXRアプリをつくる</h3><p>最初から作る場合は、 &quot;VR&quot; テンプレートから開始し、新しいシーンを作成する際のテンプレート <span class="underline" style="text-decoration:underline">VR (Basic)</span> を用いるのがよい。
+</p><p>新しいシーンを作成する際に選べる &quot;VR (Basic)&quot; シーンを使うのが良い。
+VR Basicだと、デモ用のgameObjectがなく、でもセットアップされたXROriginと諸々必要なものは用意された空のSceneが作れる。
+</p><p>ちなみに他のテンプレートで作成している場合、 &quot;VR (Basic)&quot; シーンテンプレートは表示されない。
+</p><h3 id="locomotionについて去年とほぼ変わらず">Locomotionについて(去年とほぼ変わらず)</h3><p>新規で <a href="id:f96ac5e6-77d7-46b6-9145-f2be6dd27ffc">&quot;Climb&quot; locomotionが追加されたこと</a>以外去年一昨年とあまり変わらない。
+...とは聞いたが、自分はここら辺で前わたわたしたのでメモ。
+ここら辺はStarter AssetsにPrefabがある。
+</p><p>Turnもスナップターンとcontinuousがある。チェックを外すとcontinuousが無効化される。Locomotionこれ自体では移動機能はない。
+</p><h4 id="teleportation-area">Teleportation Area</h4><p>「テレポート出来る場所」を表現する。例えばテレポート可能な床があるのであれば、そのコライダーを持つgameObjectに付ける。
+</p><ul><li><p>プレーンなものにつける
+</p></li><li><p>このままつけただけだと動かない。InteractionLayerMaskが &quot;Teleport&quot; じゃないと動けないようになってるから。
+</p></li><li><p>レイヤーマスクで動ける場所を管理している。
+</p></li></ul><h4 id="teloportation-anchor">Teloportation Anchor</h4><ul><li><p>空のオブジェクトを作り、TeleportationAnchorをつける。レイヤーマスクは同じようにつける。この中にメッシュを置き、rayのヒット判定のためにcolliderをつける。
+</p></li><li><p>「移動可能である」事を示すマーカーを表示するためのオブジェクトを Ankerとして &quot;メッシュより少し上に置く&quot; 
+</p></li><li><p>スナップさせるには
+</p></li></ul><h3 id="酔い軽減のためのビネット処理-tunneling-vignette">酔い軽減のためのビネット処理: Tunneling Vignette</h3><p>移動中に視野を狭めるためのやつ。Basicのテンプレートではデフォルトでは設定されていない。
+メインカメラにTunneling Vignette Prefabを刺して、「どの操作の時に使うか」を指定するためにLocomotion Vignette Providerを使う。
+</p><h3 id="新規locomotion-climb">新規Locomotion &quot;Climb&quot;</h3><p>新しいロコモーションとして「<a href="https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@3.0/manual/climb-interactable.html">Climb Interactable</a>」が増えた。
+</p><p>掴んで登れる対象物のgameObjectに <code class="inline-code">ClimbInteractable</code> コンポーネントをアタッチして使用する。
+又、対象物の親 gameObject に設定しても反映される。
+</p><p>例えば、ハシゴの横棒一つ一つに付ける代わりに、横棒を全て1つの親に纏めてその親にアタッチしてもよい。
+</p><h3 id="捕めるものを作る">捕めるものを作る</h3><p>XRGrabInteractive で掴めるようにする。
+角を掴んだり、掴んだ場所を掴めるようにするには UseDynamic Attatchをtrueにする。
+</p><h4 id="掴んだもの">掴んだもの</h4><p><a href="https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@3.0/api/UnityEngine.XR.Interaction.Toolkit.Transformers.IXRGrabTransformer.html">https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@3.0/api/UnityEngine.XR.Interaction.Toolkit.Transformers.IXRGrabTransformer.html</a></p><p>XRGeneralGrabTransformerで拡大縮小か可能。
+これだけでは、Interactableが片手用なので持ち替えちゃってうまくいかない。Interactable側でScaleMode : Multipleにする。
+</p><h4 id="掴んだ-interactable-の姿勢の計算をする-ixrgrabtransformer">掴んだ interactable の姿勢の計算をする: IXRGrabTransformer</h4><p>掴まれている XRGrabInteracable の姿勢情報は <a href="https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@3.0/manual/xr-grab-interactable.html#grab-transformers">Grab Transformers</a> によって計算される。
+</p><h3 id="物を仕舞う-interactor-xrsocketinteractor">物を仕舞う Interactor: XRSocketInteractor</h3><p>「鍵穴に鍵を差す」「パズルを嵌める」など、「何かに何かを仕舞う・スナップする」インタラクションに使えるのが
+<a href="https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@3.0/manual/xr-socket-interactor.html">XRSocketInteractor</a>。
+</p><p>受け口側に <code class="inline-code">XRSocketInteractor</code> をつけ、対象になる Interactable は LayerMask で制限する。
+</p><h3 id="押しボタンを作る-xrsimpleineractable">押しボタンを作る: XRSimpleIneractable</h3><p>XR Simple interactive で押す処理ができるようになる。XRPokeFilterを使う
+と押す方向や許容角度などを変えられる。Poke Button Prefabを見てみるとい
+い。
+</p><h3 id="xrhands標準機能でハントラ">XRHands！標準機能でハントラ。</h3><p>別パッケージとして提供されている。GestureサンプルとHandVisualizerサンプルは必須とのこと。
+</p><p>既存のプロジェクトに入れるためには XROrigin を入れ替える必要があるが、XROrigin Hands VisualizerのサンプルシーンにあるXR Origin Prefab がセットアップ済みのものになっています。
+XROriginをいれかえてしまっていいとのこと。
+</p><p>XR Input Modality Managerが自動切り替えする。
+</p><p>が、自分の手元で確認した所、 HandVisualizer 内に &quot;XR Origin (XRHands) は見当らなかった。
+代わりに、
+</p><h4 id="手の見た目の調整">手の見た目の調整</h4><p>手のスキンはLeft Hand Tracking/LeftHandのskinnedMeshRenderer。
+Hand Visualizerでスキンのオンオフが変えられる。デバッグ用に間接も表示できる。
+</p><p>掴んだ時、PinchPositionが...TrackedComponentに格納される。
+</p><h4 id="ジェスチャー">ジェスチャー</h4><p>HandGestureサンプルで手の形の定義・検出できる。動きのあるのは無理。各指の曲がり方・隣の指との間隔・親指とのピンチの状態で保存されていて、マッチしたらトリガーする。
+</p><p>ジェスチャーのパラメータを設定して作れる。
+</p><h3 id="quest-room情報取得-boundingbox">Quest Room情報取得: BoundingBox</h3><p>BoundingBox、metaのQuest Roomの情報をとってきて表示できる。
+特定の面をとってこれる。詳細は取れない。
+horizontalUp→上向の平面、horizontalDown→下向きの平面=天井
+</p><h2 id="unreal">Unreal</h2><p>Unreal Engineの専門会社、関西では少ない。
+Unrealを使っていることはなんでもやる、といった会社。
+</p><h3 id="unrealengineの現状">UnrealEngineの現状</h3><p>5.5がリリースされ、実質無限の動的ライトのMegaLightsが使えるようになった。
+ノンゲームでも、年間100万ドル以上&amp;UE5.4以降の場合は1シート280,454 円/シート になっている。ユーザー側で動くバイナリデータを配布しているか？が判断のベースになってる。映像とかがノンゲーム。
+</p><p>UEFNはベースはUEだが中身は細かいところが違っている。ブループリントの代わりにVerseを使う（本当に使ってみたい）
+</p><p>総合デジタルストアである「FAB」がオープンした。Unreal・UEFN・Unityアセットなど色々なものに対応している。
+Sketchfabにあったモデルがそのまま売られているので数は膨大。あらゆるDCCツールのアセットが販売されてる。
+</p><p>EpicGamesとAppleの提訴問題は2023年時点でEpicGamesが実質敗訴な状況。他国の状態や対Googleではまた違う。
+EUではデジタル市場法によってサイドロードが解放され、モバイル版Epic Games Storeが解放された。韓国・日本でも法律規制緩和があり、韓国は来年・日本は、来年か再来年くらいに解放されそうと言われる。
+</p><h3 id="xr-creative-frramework">XR Creative frramework</h3><p>OpenXRベースの汎用XRフレームワーク。
+「バーチャルスカウティングツールセット」というものがあり、VR空間内での作業ができる。コラボレーションもできる。標準ツール。
+</p><p>LiveLinkOpenVR
+LiveLink機能がそもそもある。これを使うとエンジンにアニメーションデータなどを直接データが流し込める。今はSteamVRとViveTrackerの接素膜を行える。
+</p><p>LumenとNaniteもXR対応が進んでいる
+Lumen→ グローバルイルミネーション、Nanite→それの無限なやつ？
+現状PCでしか使えない。
+</p><p>Apple Vision Proにも正式対応してる。Vision OS 2.0、パススルー、Mixed Immersive Mode
+</p><h3 id="バーチャルプロダクションはepicgamesが特に力を入れている">バーチャルプロダクションはEpicGamesが特に力を入れている。</h3><p>コア技術にXR技術が多用されてるので様々な可能性を秘めている。（事例スクショ）
+王様戦隊キングオージャーのBTS動画がバーチャルプロダクションの説明にわかりやすい。全話バーチャルプロダクション。背景にLED wallを使い、その前で演技している。50話くらいのドラマ全てに使われている。
+</p><p>初のバーチャルプロダクション映像は「マンダロリアン」。
+リアルタイムに行われたカメラトラッキングを使用したライブ合成は昔ながらのもの。
+</p><p>インカメラvfxだと、照明を後から合成する必要がない。
+バーチャルスカウティング=実物内で確認し、現場でデジタルアセットを編集する
+</p><h3 id="unreal製のメタバース">Unreal製のメタバース</h3><ul><li><p>Fortnite
+</p></li><li><p>illuvium
+</p></li><li><p>MetaMe
+</p></li><li><p>360Channel
+</p></li><li><p>ガンダムメタバース
+</p></li></ul><p>など
+</p><p>フォトナ、現状世界最高規模のメタバースの一つ、数億人ユーザーがいる。
+UEFNのリリースから出来ることが一気に増え、島をユーザーが作れるようになっている。
+キングオージャーも、実際に撮影に使ったアセットを使用した島がある
+ガンダム復讐のレクイエムも本編がUE製で、そのアセットを使用した島がある。
+</p><p>MetaMe、UE5ベースでクラウドレンダリングで動く。ある程度回線速度が必要だが、それさえあれば場所を選ばない。
+様々なワールドがある。
+Indie-us GamesさんはUE周り全般に関わっており、IUG-Resortワールドも作っている。
+空間の分解を行い、1万人接続を可能にしている。画面の中に入れるのは難しいが、同じ空間上に1万人。
+</p><p>ばぁちゃるおるやんけ
+「みんなで集まって一体感を楽しむメタバース空間」を目指している。
+</p><h3 id="今後のxrとメタバース">今後のXRとメタバース</h3><p>VRそのものへの投資は減退気味ではある。UEはXRへの投資は続いているし、特にバーチャルプロダクションに大きく投資している。
+</p><h1 id="展示">展示</h1><h2 id="meganex-8k">meganex 8k</h2><h3 id="ディスプレイ">ディスプレイ</h3><p>発色が綺麗、手で持つやつは三脚みたいになる。
+暗いシーンがよかった、暗い川辺で車列の夜景を眺めてるようなやつ。
+同じようなものをQuest3とかで見て比較したい気持ち。肉眼のようだというのはわかる。
+</p><h3 id="ハードウェア">ハードウェア</h3><p>軽量さはとても良い。
+</p><p>目の周りがゴム式なのでメガネでも押し当てられるのも良い。そもそもメガネ
+なくても片目ずつ調整できるから問題ない気がした。十分クッキリと映る。
+（ただしガチャ目の場合は調整に気をつける必要ある、普通のメガネと同じ）
+</p><p>めちゃくちゃな首の動きをすると若干レンダリングが間に合ってなくてズレて
+る感じがある。技術的にどうかは勿論分からないが、数フレ固まっているよう
+な感じ。ただまぁ、本当に「めちゃくちゃな」動きをした時の話で普段は特に
+問題なさそうな気がした。fpsで弾除けの為に頭を急に振る、とかするとちょっ
+と影響するのかも？くらい？
+</p><p>フリップアップはボタン式、押すのが若干面倒にも感じたが多分慣れ。下ろす時に固定されないのも慣れ…か…？
+</p><p>バンドのフィット感は悪くなくしっかりとした感じがあるが、バンドなのでハードなやつほどではない。
+</p><h2 id="contactglove2">ContactGlove2</h2><h3 id="装着感">装着感</h3><p>普通のグローブという感じだった。手のひらにプロテクターが入った薄い手袋みたいなのがあるけど、それに似た感触。付け心地は良い。
+しばらくつけてても重さで疲れはしない。まぁただ、軽くて重心位置が相対的に低いtundra trackerを使っていたので、viveトラッカーだとまた別かもしれない。tundra trackerなら全然問題なさそう。
+</p><p>つけたままスマホで文字入力はちょっときつい。ペットボトル持つのとかは大丈夫。
+</p><h3 id="操作感">操作感</h3><p>親指を手前に引く動きは少しやりづらい。
+親指、薬指、小指は流石に反りづらい。これは仕方ないし親指以外はほぼ使わない気がする。
+</p><p>手で物を掴む感覚は掴みやすい。
+ハプティックは単純ではあるが、システム通知的な感じとしては良い。
+やっぱりどうしても反った時に「つっかえる」感じと曲げた時に「引っ張っている」感じはする。長期間使うとどうなのかは分からないけども。
+</p><h3 id="そのほか">そのほか</h3><p>Unityから使う時はSDKを使用する。SteamVR Inputを利用する。
+デモ用なので簡易的なキャリブレーションのみでブレていたが、より詳細に設定ができるとのこと。
+</p><p>トラブル中に見えたVSCodeにて、タスクランナーに何使っててドライバーのGUI部分は何のフレームワークでかかれてて
+っていうのが見えたのが個人的に楽しかった。公開情報なのか分からないので詳しくは書かないけど。
+</p><h2 id="sony-elf-sr2">sony, ELF-SR2</h2><p>カメラで人の顔を捉えて、その目の位置から見ると立体的に見える映像をレンダリングするやつ。
+</p><p>ちゃんと正面に立つと思った以上に立体的に見える。ただ範囲が狭い。
+現状まだ一人しかトラッキングできない。複数人で体験するには横に並べるしかないとのこと。
+きちんと正面で見ると面白い。ヘッドホンのデモが結構手前に来て面白かった。一人ずつ行うコンテンツ向きだなぁ。
+ただ、思わず手を置く側にかざしてしまうと距離感が合わないので変な感じがする。物理世界より手前に描画は出来ないのでどうしようもないけど…
+</p><h2 id="sony-xr-hmd-srh-s1">sony, XR HMD SRH-S1</h2><h3 id="hmd">HMD</h3><p>解像度はしっかり高い。猫の写真で猫の毛並みが見れる。
+</p><p>横側は閉じてない。が、アタッチメントになってそう。メガネのままでもつけられている。
+レンズを押してPPD調整ができる。鼻のところが広いので、つけた後にレンズを押して調整ができる。
+フリップアップの宿命なのかな、フリップダウンした時にカチッと気持ちの良い場所には来ない。
+目とグラスとの距離は調整ができる。
+フリップアップ時は固定される感じまではない。が、ボタンを押さないで本体持ち上げるのは手軽かも。
+</p><h3 id="コントローラー">コントローラー</h3><p>感圧センサーも付いているらしいがデモにはなかった。
+ボタン入力はしやすい。右手のペン入力が、小指の薬指でホールドできて安定する。
+デモがあまりにも活かしきれてなかったので、そこら辺はまた後々試したい。
+</p><h3 id="その他">その他</h3><p>cad向け。ゲームもできるが、売る時はCADと一緒に売る？みたいなことが他の人の会話から聞こえた。
+</p><p>tiltbrushとかのクリエイティブなアプリケーションはまだ対応してない。どことどう組んでやるかとかを話し合っているところ。来年中は難しいかもしれないが…とのこと。
+</p><p>有線でつながっていたが、つながってたのは画面を映すため。スタンドアロンでも動くしPCVRにもできる。
+</p><h2 id="gugenka-sensescape-dposter">Gugenka, sensescape DPoster</h2><p>デジタルなポスター。全く反射しない。大きさは複数あるが基本はこれで、複
+数繋げる人もいる。パッと見デジタルとは分からないな...何気にすごい良い。
+でもネットで検索しても何も出てこない。なんで。マジでなんで。職場でも何
+人か「これ欲しいんだけど」って人いましたよ!! Gugenka さん!!!
+</p><h2 id="gugenka-アートワークの展示">Gugenka, アートワークの展示</h2><p>名前を撮り忘れて分からないが、
+</p><h2 id="gugenkaに置かれていたxreal">Gugenka(に置かれていた)XReal</h2><p>Gugenkaさんのブースで見たやつなのでどの端末なのか不明だが、公式サイトを調べた感じ恐らくAir 2 Ultra。
+</p><p>Beam Proと接続していた。
+ハンドトラッキングと空間認識（メッシュ生成）がある。UnityのSDKがある。
+ハントラは、手首まできちんと見えていれば結構正確に取れる。手首を結構回しても追従する。ジェスチャーも認識できる。「Hololens2でできることはできる」とスタッフさん談
+</p><h2 id="nict">NICT</h2><p>MRとPCで同じ空間に入れる。Hololens2向けで、今後はMagicleapに対応しようかと考えている。ビデオシースルーではなく光学シースルーの方が良いと考えているのでQuestとかは視野にない。
+エンタメ系よりか産業系を見てる、ビデオシースルーは見てない。
+コンテンツがないこと・価格が高いことがMR普及しない原因だと考えているので、研究機関として制作し、hololens自体を貸し出したりなどして体験する人を増やしたい。体験したことある人が増えれば、コンテンツを作る人も増え、コンテンツが増え、普及につながると考えている。
+</p><p>ただ、ユースケースが出てこない状況。なので出展して色々お話を聞いている。
+エンタメ系だとちらほらあるが、そっちじゃない模様。お堅い機関でもあるし…とのこと。
+</p><h2 id="bhaptics">bHaptics</h2><p>haptics。リアルな感じにするにはどうすればいいんだろうか…リアルな振動を知らないと判断がつかない気はする。
+振動する装置の数は多いが、正直「ただ振動するだけ」感がある。どうするのが良いんだろうね…
+「紙コップに貼り付けたスピーカーに『紙コップの中を転がるボールの音』を再生すると、実際に転がっているように感じる」デモがどっかのMake: か何かで出てたが、あんな感じが必要なように思う。振動に説得力が欲しい。今だと、「ぶつかったので振動を起こす」みたいな感じで、通知とかには使えるものの「臨場感」的なのはあんまりない。
+</p><h2 id="ソフトバンク-トビデル">ソフトバンク, トビデル</h2><p>おもろい！スマホで裸眼立体視できる。割としっかり。なにわ男子さん？かな？のデモを見せてもらったが、奥行き感が良い。
+レンチキュラー構造をフィルムに入れているらしい。
+</p><p>…あれ、これ貼ったまま普通の画面見るとどうなるんだ…？専用機にするしかなくない…？
+</p>   </article>  <div class="post__footer" data-astro-cid-jj6gr7j4> <br data-astro-cid-jj6gr7j4><div class="author-card" data-astro-cid-jj6gr7j4>  <div class="author-card__meta" data-astro-cid-jj6gr7j4> <a class="author-card__author" href="https://twitter.com/cj_bc_sd" title="Cj-bc's twitter" target="_blank" rel="external" data-astro-cid-jj6gr7j4>Cj-bc</a> <p class="author-card__bio" data-astro-cid-jj6gr7j4></p> <br data-astro-cid-jj6gr7j4> <a class="author-card__follow-btn button" target="_blank" href="https://twitter.com/intent/follow?screen_name=cj_bc_sd" data-astro-cid-jj6gr7j4><svg viewBox="0 0 24 24" data-astro-cid-jj6gr7j4 class="w-5 h-5 inline-block" astro-icon="mdi:twitter"><path fill="currentColor" d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/></svg> Follow on Twitter</a> </div> </div><br data-astro-cid-jj6gr7j4> </div>  </div> <br class="my-4" data-astro-cid-fhdt7an5> <footer class="footer" data-astro-cid-sz7xmlte> <nav class="nav" data-astro-cid-sz7xmlte> <div data-astro-cid-sz7xmlte>2021  &copy; Copyright notice | <a href="https://github.com/Cj-bc/blog" title="Ink's Github URL'" data-astro-cid-sz7xmlte>Ink</a> <script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><astro-island uid="1mUrvp" component-url="/blog/_astro/ModeLabel.210c429b.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-sz7xmlte&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;ModeLabel&quot;,&quot;value&quot;:true}" await-children=""><span slot="dark" data-svelte-h="svelte-14ov3lc">(dark)</span><!--astro:end--></astro-island> theme on <a href="https://astro.build/" data-astro-cid-sz7xmlte>Astro</a></div> <astro-island uid="Zxdlqs" component-url="/blog/_astro/NetlifyIdentity.5f683bb1.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-sz7xmlte&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;NetlifyIdentity&quot;,&quot;value&quot;:true}"></astro-island> </nav> </footer>  <div class="portal-root">  <astro-island uid="ZJdy3D" component-url="/blog/_astro/SearchModal.81cd9666.js" component-export="default" renderer-url="/blog/_astro/client.ef651e53.js" props="{&quot;data-astro-cid-fhdt7an5&quot;:[0,true]}" ssr="" client="load" opts="{&quot;name&quot;:&quot;SearchModal&quot;,&quot;value&quot;:true}"></astro-island>  </div>  </main> </div> </body>  </html>
