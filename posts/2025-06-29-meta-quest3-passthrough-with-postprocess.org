@@ -1,0 +1,118 @@
+#+TITLE: Meta Quest 3のパススルーとPost-Processを同時に使う
+#+DATE: [2025-06-29 Sun 21:05]
+#+TAGS: :unity:post-processing:quest3:meta-xr-sdk:
+#+KIND: Knowledge
+#+PROGRESS: WIP
+#+STATUS: Normal
+
+* Meta Quest 3のパススルーとPost-Processを同時に使う
+
+[[https://communityforums.atmeta.com/t5/Unity-Development/Passthrough-and-post-processing/td-p/895883][ポスプロを使うと全てのピクセルのalphaが1に設定されてしまい、パススルー
+が描画されなくなるという問題]]がありました。これは長らくの間URPの
+~UberPost.shader~ シェーダをいじることで回避されてきたものの、動かないこと
+もあったようです。Unity6 になり、それが回避出来るようになったようなので
+試してみました。
+
+事前に見た動画ではMeta XR Core SDKでは動かないという情報もありましたが、実
+際試してみたら動かすことが出来ました。
+
+** 環境
++ Unity6 (6000.0.42f1)
++ URP
++ Meta XR Core SDK (77.0.0)
+  
+完全な依存関係のため ~manifest.json~ を置いておきます。
+
+#+begin_src json
+{
+  "dependencies": {
+    "com.meta.xr.sdk.core": "77.0.0",
+    "com.unity.inputsystem": "1.13.1",
+    "com.unity.render-pipelines.universal": "17.0.4",
+    "com.unity.ugui": "2.0.0",
+    "com.unity.xr.openxr": "1.14.3",
+    "com.unity.modules.accessibility": "1.0.0",
+    "com.unity.modules.ai": "1.0.0",
+    "com.unity.modules.androidjni": "1.0.0",
+    "com.unity.modules.animation": "1.0.0",
+    "com.unity.modules.assetbundle": "1.0.0",
+    "com.unity.modules.audio": "1.0.0",
+    "com.unity.modules.cloth": "1.0.0",
+    "com.unity.modules.director": "1.0.0",
+    "com.unity.modules.imageconversion": "1.0.0",
+    "com.unity.modules.imgui": "1.0.0",
+    "com.unity.modules.jsonserialize": "1.0.0",
+    "com.unity.modules.particlesystem": "1.0.0",
+    "com.unity.modules.physics": "1.0.0",
+    "com.unity.modules.physics2d": "1.0.0",
+    "com.unity.modules.screencapture": "1.0.0",
+    "com.unity.modules.terrain": "1.0.0",
+    "com.unity.modules.terrainphysics": "1.0.0",
+    "com.unity.modules.tilemap": "1.0.0",
+    "com.unity.modules.ui": "1.0.0",
+    "com.unity.modules.uielements": "1.0.0",
+    "com.unity.modules.umbra": "1.0.0",
+    "com.unity.modules.unityanalytics": "1.0.0",
+    "com.unity.modules.unitywebrequest": "1.0.0",
+    "com.unity.modules.unitywebrequestassetbundle": "1.0.0",
+    "com.unity.modules.unitywebrequestaudio": "1.0.0",
+    "com.unity.modules.unitywebrequesttexture": "1.0.0",
+    "com.unity.modules.unitywebrequestwww": "1.0.0",
+    "com.unity.modules.vehicles": "1.0.0",
+    "com.unity.modules.video": "1.0.0",
+    "com.unity.modules.vr": "1.0.0",
+    "com.unity.modules.wind": "1.0.0",
+    "com.unity.modules.xr": "1.0.0"
+  }
+}
+  
+#+end_src
+** 基本方針
++ XRCameraRigのカメラではPPを描画しない
++ PPを描画するカメラを別に用意し、Camera Stackingで乗せる
+
+** 手順
+*** Volumeを配置する
+適用したいエフェクトを設定して配置します。
+達成したい事によって異なると思うため省略。
+
+*** PostProcess(PP)用のカメラを用意する
+メインカメラでPPを描画するとAlphaがかき消されて困る、ということなので別のカメラを用意します。
+同じ見た目であって欲しいのでパラメーターは揃える必要があります。
+以下の設定をします。
+
+| 項目           | 値                                       |
+|----------------+------------------------------------------|
+| RenderType     | Overlay                                  |
+| PostProcessing | true                                     |
+| Volume Mask    | 適用したいVolumeがあるLayerを含むようにする。 |
+
+*** MR視点用のメインカメラを設定する
+メインカメラは通常のセットアップで ~CenterEyeAnchor~ にいるやつです。
+Volumeのあるレイヤーを描画しないようにします。他はデフォルトのままです。
+
+| 項目           | 値                        |
+|----------------+---------------------------|
+| RenderType     | Base                      |
+| PostProcessing | false                     |
+| Culling Mask   | 適用したいVolume以外のLayer |
+  
+*** RenderPipelineAssetを設定する
+Project Settings>Qualityで "Mobile" を選び、現在使われている ~RenderPipelineAsset~ を取得します。
+(現状の既定では ~Mobile_RPAsset~ になっているはずです)
+
+HDRを使いたい場合は、 ~Quality>HDR~ にチェックを入れ、その下の "HDR Precision" を "64 Bits" にします。
+"HDR Precision" が表示されていない場合は、アセットの右上の3展ドットから "Advanced Properties" にチェックすると表示されるようです。
+
+"Post-Processing" 以下の "Alpha Processing" をオンにします。
+
+*** Renderを設定する
+RenderPipelineAssetの上部、 "Renderer" に設定されている、UniversalRenderData ScriptObject のインスタンスをいじります。既定では ~Mobile_Renderer~ になっているかと思います。
+Post-Processing の "Alpha Processing" をオンにします。
+
+** References
++ [[https://communityforums.atmeta.com/t5/Unity-Development/Passthrough-and-post-processing/td-p/895883][Passthrough and post processing - Meta Community Forums - 895883]]
+  + 元々のシェーダーをいじることで実装していた話が載っている。内容的には古い。でもここで動画を見付けることが出来た。
++ [[https://www.youtube.com/watch?v=G6p8E2GMi-E][Unity 6 BETA - Passthrough & Post-Processing with Meta Quest 3 - YouTube]]
+  + ARFoundationを用いて同じことをしている。コメント欄で「Meta SDKではCamera Stackingが出来ない」とコメントがあるが、現在出来るようになった。
++ [[https://discussions.unity.com/t/post-processing-with-multiple-cameras-is-currently-very-problematic/822011/253][Post Processing with multiple cameras is currently very problematic - Unity discussions]]
