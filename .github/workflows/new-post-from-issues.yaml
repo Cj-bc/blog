@@ -1,0 +1,44 @@
+name: Createt new issue from GitHub Issue
+
+on:
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.issue_comment.issue.author_association == 'OWNER'
+      && github.event.issue_comment.sender.id == github.repository_owner
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check issue labels
+        if: contains(github.event.issue.labels.*.name, 'automation/new-post') != true
+        run: exit 0
+      - name: Define title
+        id: define_title
+        run: |
+          title=$(echo "${{ github.event.issue.title }}" | sed -r 's/([a-z0-9])([A-Z])/\1-\2/g; s/ /-/g' | tr '[A-Z]' '[a-z]')
+          echo "title=$title" >> "$GITHUB_OUTPUT"
+      - name: Create Content File
+        run: |
+          echo -e "${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime:/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit Content File
+        id: commit_file
+         run: |
+            branch="new_post/${{ steps.define_title.outputs.title }}"
+            git switch -c $branch
+            git add *
+            git commit -m "feat: new post"
+            echo "branch=$branch" >> "$GITHUB_OUTPUT"
+      - name: Create PullRequest
+        run: gh pr create --title "${{ github.event.issue.title }}" --body "#${{ github.event.issue.number}}" --base main --head ${{ steps.commit_file.outputs.branch }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Close Issue
+        run: gh issue close ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
