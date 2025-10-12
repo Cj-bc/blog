@@ -12,11 +12,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Log
         run: |
-        cat <<EOF
-          issue.author_association: ${{github.event.issue_comment.issue.author_association}}
-          issue_comment.author_association: ${{github.event.issue_comment.comment.author_association}}
-          sender: ${{github.event.issue_comment.sender}}
-        EOF
+          cat <<EOF
+            issue.author_association: ${{github.event.issue_comment.issue.author_association}}
+            issue_comment.author_association: ${{github.event.issue_comment.comment.author_association}}
+            sender: ${{github.event.issue_comment.sender}}
+          EOF
       - name: Check issue labels
         if: contains(github.event.issue.labels.*.name, 'automation/new-post') != true
         run: exit 0
