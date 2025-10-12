@@ -39,7 +39,7 @@ jobs:
             git push origin "$branch"
             echo "branch=$branch" >> "$GITHUB_OUTPUT"
       - name: Create PullRequest
-        run: gh pr create --title "${{ github.event.issue.title }}" --body "#${{ github.event.issue.number}}" --base main --head ${{ steps.commit_file.outputs.branch }}
+        run: gh pr create --title "${{ github.event.issue.title }}" --body "#${{ github.event.issue.number}}" --base source --head ${{ steps.commit_file.outputs.branch }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Close Issue
