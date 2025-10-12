@@ -28,7 +28,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Commit Content File
         id: commit_file
-         run: |
+        run: |
             branch="new_post/${{ steps.define_title.outputs.title }}"
             git switch -c $branch
             git add *
