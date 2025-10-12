@@ -8,15 +8,11 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    if: |
+      github.event.issue.author_association == 'OWNER'
+      && github.event.comment.author_association == 'OWNER'
     steps:
       - uses: actions/checkout@v4
-      - name: Log
-        run: |
-          cat <<EOF
-            issue.author_association: ${{github.event.issue.author_association}}
-            issue_comment.author_association: ${{github.event.comment.author_association}}
-            sender: ${{github.event.sender}}
-          EOF
       - name: Check issue labels
         if: contains(github.event.issue.labels.*.name, 'automation/new-post') != true
         run: exit 0
