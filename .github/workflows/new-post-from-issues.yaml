@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       github.event.issue_comment.issue.author_association == 'OWNER'
-      && github.event.issue_comment.sender.id == github.repository_owner
+      && github.event.issue_comment.comment.author_association == 'OWNER'
     steps:
       - uses: actions/checkout@v4
       - name: Check issue labels
