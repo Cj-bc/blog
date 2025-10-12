@@ -29,6 +29,9 @@ jobs:
       - name: Commit Content File
         id: commit_file
         run: |
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+
             branch="new_post/${{ steps.define_title.outputs.title }}"
             git switch -c $branch
             git add *
