@@ -11,6 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Log
+        run: |
         cat <<EOF
           issue.author_association: ${{github.event.issue_comment.issue.author_association}}
           issue_comment.author_association: ${{github.event.issue_comment.comment.author_association}}
