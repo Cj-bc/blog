@@ -36,6 +36,7 @@ jobs:
             git switch -c $branch
             git add *
             git commit -m "feat: new post"
+            git push origin "$branch"
             echo "branch=$branch" >> "$GITHUB_OUTPUT"
       - name: Create PullRequest
         run: gh pr create --title "${{ github.event.issue.title }}" --body "#${{ github.event.issue.number}}" --base main --head ${{ steps.commit_file.outputs.branch }}
