@@ -2,12 +2,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.String (fromString)
 import           System.Environment (getArgs)
-import           System.FilePath (takeFileName, (</>))
+import           System.FilePath (takeFileName, takeExtension, (</>))
 import           System.FilePath.Glob (glob)
 import           Text.Pandoc.Options (ReaderOptions(..), Extension(..), extensionsFromList, WriterOptions(..))
 import           Text.Pandoc.Error (PandocError)
 import           Text.Pandoc.Writers (writeMarkdown)
-import           Text.Pandoc.Readers (readOrg)
+import           Text.Pandoc.Readers (readOrg, readMarkdown)
 import           Text.Pandoc.Class (runPure, modifyPureState, stFiles, FileInfo(FileInfo), insertInFileTree, PandocPure, getsPureState)
 import           Text.Pandoc.Builder (setMeta)
 import           Text.Pandoc.Templates (compileDefaultTemplate, Template)
@@ -71,19 +71,40 @@ setupMarkdownDefaultTemplate = do
 
 
 -- | Convert Org format into astro's markdown format
-convertFormat :: T.Text -> Either PandocError T.Text
-convertFormat original = runPure $ do
+convertOrgFormat :: T.Text -> Either PandocError T.Text
+convertOrgFormat original = runPure $ do
   setupMarkdownDefaultTemplate
   tmpl <- compileDefaultTemplate "markdown"
   ast <- readOrg pandocMarkdownCfg original
   writeMarkdown (pandocWriterCfg tmpl) (MD.setBlogMetaDataToPandoc (MD.collectMetaData ast) ast)
 
+-- | Convert Markdown format (passthrough with Pandoc transformations)
+-- Markdown files with YAML frontmatter are parsed directly by Pandoc
+convertMarkdownFormat :: T.Text -> Either PandocError T.Text
+convertMarkdownFormat original = runPure $ do
+  setupMarkdownDefaultTemplate
+  tmpl <- compileDefaultTemplate "markdown"
+  ast <- readMarkdown pandocMarkdownCfg original
+  writeMarkdown (pandocWriterCfg tmpl) ast
+
+-- | Process a single file based on its extension
+processFile :: FilePath -> FilePath -> IO ()
+processFile distDir fn = do
+  content <- TIO.readFile fn
+  let converter = case takeExtension fn of
+                    ".org" -> convertOrgFormat
+                    ".md"  -> convertMarkdownFormat
+                    _      -> convertOrgFormat  -- default to org
+      result = either (T.pack . show) id $ converter content
+  TIO.writeFile (distDir </> takeFileName fn) result
+
 main :: IO ()
-main =
+main = do
   let distDir = "/tmp/blogPosts"
-      postsGlob = "./posts/*.org" 
-  in glob postsGlob >>= sequence_ . fmap (\fn -> TIO.readFile fn
-                                          >>= (return . either (T.pack . show) id . convertFormat)
-                                          >>= TIO.writeFile (distDir </> (takeFileName fn)))
+      orgGlob = "./posts/*.org"
+      mdGlob  = "./posts/*.md"
+  orgFiles <- glob orgGlob
+  mdFiles  <- glob mdGlob
+  mapM_ (processFile distDir) (orgFiles ++ mdFiles)
 
 --------------------------------------------------------------------------------
