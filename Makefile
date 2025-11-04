@@ -1,4 +1,5 @@
 BRANCH_DEST := publish
+SHELL := /usr/bin/bash
 NPX := $(shell which npx)
 GULP := $(NPX) gulp
 
