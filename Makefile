@@ -20,6 +20,8 @@ fomantic-ui: fomantic-ui-configs
 	cd css/node_modules/fomantic-ui && $(GULP) build
 
 # ---------- Commands ----------
+test: blog-build
+
 blog-build:
 	git submodule update --init
 	cp posts/*.{org,md} astro-ink/src/content/blog/
@@ -32,7 +34,6 @@ blog-publish: blog-build
 	git add -A
 	git commit -m "auto commit: new build" || echo "Notice: no change has been occured. Nothing was committed"
 	git switch -
-
 
 pushExperiment:
 	git branch experiment
