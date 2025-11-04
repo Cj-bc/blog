@@ -22,6 +22,7 @@ fomantic-ui: fomantic-ui-configs
 blog-build:
 	git submodule update --init
 	cp posts/*.org astro-ink/src/content/blog/
+	cp posts/*.md astro-ink/src/content/blog/
 	cd astro-ink && npm install && npm run build
 	cp -r astro-ink/dist ./_site
 
