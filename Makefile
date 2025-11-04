@@ -24,7 +24,9 @@ test: blog-build
 
 blog-build:
 	git submodule update --init
+	shopt -s nullglob
 	cp posts/*.{org,md} astro-ink/src/content/blog/
+	shopt -u nullglob
 	cd astro-ink && npm install && npm run build
 	cp -r astro-ink/dist ./_site
 
