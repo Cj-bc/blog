@@ -22,12 +22,11 @@ jobs:
           title=$(echo "${{ github.event.issue.title }}" | sed -r 's/([a-z0-9])([A-Z])/\1-\2/g; s/ /-/g' | tr '[A-Z]' '[a-z]')
           echo "title=$title" >> "$GITHUB_OUTPUT"
       - name: Create Content File
-        env:
-          BODY: ${{ github.event.issue.body }}
         run: |
           echo -e "---\n${BODY}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime:/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BODY: ${{ github.event.issue.body }}
       - name: Commit Content File
         id: commit_file
         run: |
