@@ -1,0 +1,156 @@
+name: Sync PR when Issue is Updated
+
+on:
+  issues:
+    types: [edited]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number to sync'
+        required: true
+        type: number
+
+jobs:
+  sync-pr:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.issue.author_association == 'OWNER'
+      || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check issue labels
+        if: |
+          github.event_name == 'issues'
+          && !contains(github.event.issue.labels.*.name, 'automation/new-post')
+        run: |
+          echo "Issue doesn't have 'automation/new-post' label, skipping"
+          exit 0
+
+      - name: Set issue number
+        id: issue_info
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            issue_number="${{ inputs.issue_number }}"
+          else
+            issue_number="${{ github.event.issue.number }}"
+          fi
+          echo "issue_number=$issue_number" >> "$GITHUB_OUTPUT"
+
+      - name: Find associated PR
+        id: find_pr
+        run: |
+          # Find PR that closes this issue
+          pr_number=$(gh pr list --search "Closes #${{ steps.issue_info.outputs.issue_number }}" --state all --json number --jq '.[0].number')
+
+          if [ -z "$pr_number" ] || [ "$pr_number" == "null" ]; then
+            echo "No PR found for issue #${{ steps.issue_info.outputs.issue_number }}"
+            exit 1
+          fi
+
+          echo "pr_number=$pr_number" >> "$GITHUB_OUTPUT"
+
+          # Get PR branch name
+          branch=$(gh pr view "$pr_number" --json headRefName --jq '.headRefName')
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+
+          # Get PR state to check if it's still open
+          state=$(gh pr view "$pr_number" --json state --jq '.state')
+          echo "state=$state" >> "$GITHUB_OUTPUT"
+
+          echo "Found PR #$pr_number on branch $branch (state: $state)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check if PR is still open
+        if: steps.find_pr.outputs.state != 'OPEN'
+        run: |
+          echo "PR #${{ steps.find_pr.outputs.pr_number }} is not open (state: ${{ steps.find_pr.outputs.state }})"
+          echo "Skipping sync as PR is already merged or closed"
+          exit 0
+
+      - name: Get issue details
+        id: issue_details
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            issue_body=$(gh issue view "${{ steps.issue_info.outputs.issue_number }}" --json body --jq '.body')
+            issue_title=$(gh issue view "${{ steps.issue_info.outputs.issue_number }}" --json title --jq '.title')
+          else
+            issue_body='${{ github.event.issue.body }}'
+            issue_title='${{ github.event.issue.title }}'
+          fi
+
+          # Save to file to handle multiline content
+          echo "$issue_body" > /tmp/issue_body.txt
+          echo "$issue_title" > /tmp/issue_title.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Define filename from title
+        id: define_filename
+        run: |
+          issue_title=$(cat /tmp/issue_title.txt)
+          filename=$(echo "$issue_title" | sed -r 's/([a-z0-9])([A-Z])/\1-\2/g; s/ /-/g' | tr '[A-Z]' '[a-z]')
+          echo "filename=$filename" >> "$GITHUB_OUTPUT"
+          echo "Post filename will be: posts/${filename}.md"
+
+      - name: Checkout PR branch
+        run: |
+          git fetch origin "${{ steps.find_pr.outputs.branch }}"
+          git checkout "${{ steps.find_pr.outputs.branch }}"
+
+      - name: Update post content
+        run: |
+          issue_body=$(cat /tmp/issue_body.txt)
+          filepath="posts/${{ steps.define_filename.outputs.filename }}.md"
+
+          if [ ! -f "$filepath" ]; then
+            echo "Error: Post file $filepath not found"
+            exit 1
+          fi
+
+          # Update the file with new content, preserving the frontmatter structure
+          # Update modDatetime to current time
+          echo -e "---\n${issue_body}" | sed -e "s/modDatetime:/modDatetime: $(TZ=-9 date -Iseconds)/" > "$filepath"
+
+          echo "Updated $filepath with latest issue content"
+
+      - name: Commit and push changes
+        id: commit_changes
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          if git diff --quiet; then
+            echo "No changes to commit"
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            git add "posts/${{ steps.define_filename.outputs.filename }}.md"
+            git commit -m "chore: sync post with issue #${{ steps.issue_info.outputs.issue_number }} updates"
+            git push origin "${{ steps.find_pr.outputs.branch }}"
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            echo "Changes committed and pushed successfully"
+          fi
+
+      - name: Comment on issue (success)
+        if: success() && steps.commit_changes.outputs.has_changes == 'true'
+        run: |
+          gh issue comment "${{ steps.issue_info.outputs.issue_number }}" --body "✅ PR #${{ steps.find_pr.outputs.pr_number }} has been updated with your changes!"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on issue (no changes)
+        if: success() && steps.commit_changes.outputs.has_changes == 'false'
+        run: |
+          gh issue comment "${{ steps.issue_info.outputs.issue_number }}" --body "ℹ️ No changes detected between issue and PR #${{ steps.find_pr.outputs.pr_number }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on issue (failure)
+        if: failure()
+        run: |
+          gh issue comment "${{ steps.issue_info.outputs.issue_number }}" --body "❌ Failed to sync PR with issue updates. Please check the workflow logs."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
