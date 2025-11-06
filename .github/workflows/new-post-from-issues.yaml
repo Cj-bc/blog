@@ -40,6 +40,15 @@ jobs:
             git push origin "$branch"
             echo "branch=$branch" >> "$GITHUB_OUTPUT"
       - name: Create PullRequest
-        run: gh pr create --title "${{ github.event.issue.title }}" --body "Closes \#${{ github.event.issue.number}}" --base source --head ${{ steps.commit_file.outputs.branch }}
+        id: create_pr
+        run: |
+          pr_url=$(gh pr create --title "${{ github.event.issue.title }}" --body "Closes \#${{ github.event.issue.number}}" --base source --head ${{ steps.commit_file.outputs.branch }})
+          echo "pr_url=${pr_url}" >> "$GITHUB_OUTPUT"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Comment progress on issue (success)
+        if: success()
+        run: gh issue comment "${{ github.event.issue.number }}" --body "Converted to PR successfully✨\n${{ steps.create_pr.outputs.pr_url }}"
+      - name: Comment progress on issue (failure)
+        if: failure()
+        run: gh issue comment "${{ github.event.issue.number }}" --body "Failed to convert to PR:;(∩´﹏`∩);:"
