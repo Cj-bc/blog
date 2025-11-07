@@ -1,0 +1,277 @@
+name: Sync PR when Issue is Updated
+
+on:
+  issues:
+    types: [edited]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number to sync'
+        required: true
+        type: number
+
+jobs:
+  sync-pr:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.issue.author_association == 'OWNER'
+      || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check issue labels
+        if: |
+          github.event_name == 'issues'
+          && !contains(github.event.issue.labels.*.name, 'automation/new-post')
+        run: |
+          echo "Issue doesn't have 'automation/new-post' label, skipping"
+          exit 0
+
+      - name: Set issue number
+        id: issue_info
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            issue_number="${{ inputs.issue_number }}"
+          else
+            issue_number="${{ github.event.issue.number }}"
+          fi
+          echo "issue_number=$issue_number" >> "$GITHUB_OUTPUT"
+
+      - name: Create status comment
+        id: status_comment
+        run: |
+          comment_body="## 🔄 PR Sync Status
+
+          **Status:** 🟡 In Progress
+          **Started:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          **Workflow Run:** [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+          ### Progress
+          - ✅ Workflow triggered
+          - 🔄 Searching for associated PR...
+
+          ---
+          *This comment will be updated as the sync progresses*"
+
+          comment_id=$(gh api repos/${{ github.repository }}/issues/${{ steps.issue_info.outputs.issue_number }}/comments \
+            -f body="$comment_body" \
+            --jq '.id')
+
+          echo "comment_id=$comment_id" >> "$GITHUB_OUTPUT"
+          echo "Created status comment with ID: $comment_id"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Find associated PR
+        id: find_pr
+        run: |
+          # Find PR that closes this issue
+          pr_number=$(gh pr list --search "Closes #${{ steps.issue_info.outputs.issue_number }}" --state all --json number --jq '.[0].number')
+
+          if [ -z "$pr_number" ] || [ "$pr_number" == "null" ]; then
+            echo "No PR found for issue #${{ steps.issue_info.outputs.issue_number }}"
+            exit 1
+          fi
+
+          echo "pr_number=$pr_number" >> "$GITHUB_OUTPUT"
+
+          # Get PR branch name
+          branch=$(gh pr view "$pr_number" --json headRefName --jq '.headRefName')
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+
+          # Get PR state to check if it's still open
+          state=$(gh pr view "$pr_number" --json state --jq '.state')
+          echo "state=$state" >> "$GITHUB_OUTPUT"
+
+          echo "Found PR #$pr_number on branch $branch (state: $state)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update status - PR found
+        if: always() && steps.status_comment.outputs.comment_id
+        run: |
+          # Fetch current comment body
+          current_body=$(gh api repos/${{ github.repository }}/issues/comments/${{ steps.status_comment.outputs.comment_id }} --jq '.body')
+
+          # Use sed to replace the "Searching for associated PR" line with PR found
+          updated_body=$(echo "$current_body" | sed "s|- 🔄 Searching for associated PR\.\.\.|- ✅ Found PR [#${{ steps.find_pr.outputs.pr_number }}](${{ github.server_url }}/${{ github.repository }}/pull/${{ steps.find_pr.outputs.pr_number }})|")
+
+          # Append new progress line before the separator
+          updated_body=$(echo "$updated_body" | sed "/^---$/i - 🔄 Checking PR status...")
+
+          gh api repos/${{ github.repository }}/issues/comments/${{ steps.status_comment.outputs.comment_id }} \
+            -X PATCH \
+            -f body="$updated_body"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check if PR is still open
+        if: steps.find_pr.outputs.state != 'OPEN'
+        run: |
+          echo "PR #${{ steps.find_pr.outputs.pr_number }} is not open (state: ${{ steps.find_pr.outputs.state }})"
+          echo "Skipping sync as PR is already merged or closed"
+          exit 0
+
+      - name: Checkout PR branch
+        run: |
+          git fetch origin "${{ steps.find_pr.outputs.branch }}"
+          git checkout "${{ steps.find_pr.outputs.branch }}"
+
+      - name: Get issue details
+        id: issue_details
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            issue_body=$(gh issue view "${{ steps.issue_info.outputs.issue_number }}" --json body --jq '.body')
+          else
+            issue_body='${{ github.event.issue.body }}'
+          fi
+
+          # Save to file to handle multiline content
+          echo "$issue_body" > /tmp/issue_body.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get filename from branch commits
+        id: define_filename
+        run: |
+          # Get the base branch to compare against
+          base_branch=$(gh pr view "${{ steps.find_pr.outputs.pr_number }}" --json baseRefName --jq '.baseRefName')
+
+          # Find files added or modified in posts/ directory
+          post_file=$(git diff --name-only "origin/${base_branch}...HEAD" -- posts/ | head -1)
+
+          if [ -z "$post_file" ]; then
+            echo "Error: No post file found in branch commits"
+            exit 1
+          fi
+
+          # Extract just the filename without directory and extension
+          filename=$(basename "$post_file" .md)
+          echo "filename=$filename" >> "$GITHUB_OUTPUT"
+          echo "Found post file from commits: $post_file"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update post content
+        run: |
+          issue_body=$(cat /tmp/issue_body.txt)
+          filepath="posts/${{ steps.define_filename.outputs.filename }}.md"
+
+          if [ ! -f "$filepath" ]; then
+            echo "Error: Post file $filepath not found"
+            exit 1
+          fi
+
+          # Update the file with new content, preserving the frontmatter structure
+          # Update modDatetime to current time
+          echo -e "---\n${issue_body}" | sed -e "s/modDatetime:/modDatetime: $(TZ=-9 date -Iseconds)/" > "$filepath"
+
+          echo "Updated $filepath with latest issue content"
+
+      - name: Update status - syncing content
+        if: always() && steps.status_comment.outputs.comment_id
+        run: |
+          # Fetch current comment body
+          current_body=$(gh api repos/${{ github.repository }}/issues/comments/${{ steps.status_comment.outputs.comment_id }} --jq '.body')
+
+          # Replace "Checking PR status" with completed steps and add new progress
+          updated_body=$(echo "$current_body" | sed "s|- 🔄 Checking PR status\.\.\.|- ✅ PR is open and ready for updates|")
+          updated_body=$(echo "$updated_body" | sed "/^---$/i - ✅ Retrieved post file from branch\n- ✅ Updated post content\n- 🔄 Committing and pushing changes...")
+
+          gh api repos/${{ github.repository }}/issues/comments/${{ steps.status_comment.outputs.comment_id }} \
+            -X PATCH \
+            -f body="$updated_body"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and push changes
+        id: commit_changes
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          if git diff --quiet; then
+            echo "No changes to commit"
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            git add "posts/${{ steps.define_filename.outputs.filename }}.md"
+            git commit -m "chore: sync post with issue #${{ steps.issue_info.outputs.issue_number }} updates"
+            git push origin "${{ steps.find_pr.outputs.branch }}"
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            echo "Changes committed and pushed successfully"
+          fi
+
+      - name: Update final status
+        if: always() && steps.status_comment.outputs.comment_id
+        run: |
+          # Determine final status
+          if [ "${{ job.status }}" == "success" ]; then
+            if [ "${{ steps.commit_changes.outputs.has_changes }}" == "true" ]; then
+              status_emoji="🟢"
+              status_text="Success"
+              result_message="✅ PR has been updated with your changes!"
+              final_progress="- ✅ Committed and pushed changes"
+            else
+              status_emoji="🔵"
+              status_text="Completed (No Changes)"
+              result_message="ℹ️ No changes detected between issue and PR"
+              final_progress="- ℹ️ No changes needed"
+            fi
+          elif [ "${{ job.status }}" == "failure" ]; then
+            status_emoji="🔴"
+            status_text="Failed"
+            final_progress="- ❌ Workflow failed"
+
+            # Determine failure reason
+            if [ "${{ steps.find_pr.outcome }}" == "failure" ]; then
+              result_message="❌ Failed to find associated PR. Make sure a PR exists for this issue."
+            elif [ "${{ steps.find_pr.outputs.state }}" != "OPEN" ] && [ -n "${{ steps.find_pr.outputs.state }}" ]; then
+              result_message="⚠️ PR #${{ steps.find_pr.outputs.pr_number }} is not open (state: ${{ steps.find_pr.outputs.state }}). Sync skipped."
+              status_emoji="🟡"
+              status_text="Skipped"
+            elif [ "${{ steps.define_filename.outcome }}" == "failure" ]; then
+              result_message="❌ Failed to find post file in branch commits"
+            elif [ "${{ steps.commit_changes.outcome }}" == "failure" ]; then
+              result_message="❌ Failed to commit or push changes"
+            else
+              result_message="❌ Workflow failed. Check the [workflow logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details."
+            fi
+          else
+            status_emoji="⚪"
+            status_text="Cancelled"
+            result_message="⚠️ Workflow was cancelled"
+            final_progress="- ⚠️ Workflow cancelled"
+          fi
+
+          # Fetch current comment body
+          current_body=$(gh api repos/${{ github.repository }}/issues/comments/${{ steps.status_comment.outputs.comment_id }} --jq '.body')
+
+          # Use sed/awk to update only necessary parts
+          updated_body=$(echo "$current_body" | sed "s/^\*\*Status:\*\* 🟡 In Progress$/\*\*Status:\*\* $status_emoji $status_text/")
+
+          # Add Completed timestamp after Started line
+          updated_body=$(echo "$updated_body" | sed "/^\*\*Started:\*\*/a \*\*Completed:\*\* $(date -u '+%Y-%m-%d %H:%M:%S UTC')")
+
+          # Replace the last progress line (Committing...) with final status
+          updated_body=$(echo "$updated_body" | sed "s|- 🔄 Committing and pushing changes\.\.\.|$final_progress|")
+
+          # Add Result section before Progress section
+          updated_body=$(echo "$updated_body" | awk -v result="$result_message" '
+            /^### Progress$/ {
+              print "### Result"
+              print result
+              print ""
+            }
+            { print }
+          ')
+
+          # Replace footer message
+          updated_body=$(echo "$updated_body" | sed "s/\*This comment will be updated as the sync progresses\*/\*Workflow completed\*/")
+
+          gh api repos/${{ github.repository }}/issues/comments/${{ steps.status_comment.outputs.comment_id }} \
+            -X PATCH \
+            -f body="$updated_body"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
