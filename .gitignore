@@ -27,6 +27,7 @@ cabal.sandbox.config
 .stack-work/
 _cache/
 _site/
+zenn-articles/
 ### https://raw.github.com/github/gitignore/7293c14345c205c679722364a01b88d331e862ff/Haskell.gitignore
 
 dist
@@ -83,7 +84,7 @@ Sessionx.vim
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
 
 # Thumbnails
 ._*
