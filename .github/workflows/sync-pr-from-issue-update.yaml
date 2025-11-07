@@ -71,35 +71,45 @@ jobs:
           echo "Skipping sync as PR is already merged or closed"
           exit 0
 
+      - name: Checkout PR branch
+        run: |
+          git fetch origin "${{ steps.find_pr.outputs.branch }}"
+          git checkout "${{ steps.find_pr.outputs.branch }}"
+
       - name: Get issue details
         id: issue_details
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             issue_body=$(gh issue view "${{ steps.issue_info.outputs.issue_number }}" --json body --jq '.body')
-            issue_title=$(gh issue view "${{ steps.issue_info.outputs.issue_number }}" --json title --jq '.title')
           else
             issue_body='${{ github.event.issue.body }}'
-            issue_title='${{ github.event.issue.title }}'
           fi
 
           # Save to file to handle multiline content
           echo "$issue_body" > /tmp/issue_body.txt
-          echo "$issue_title" > /tmp/issue_title.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Define filename from title
+      - name: Get filename from branch commits
         id: define_filename
         run: |
-          issue_title=$(cat /tmp/issue_title.txt)
-          filename=$(echo "$issue_title" | sed -r 's/([a-z0-9])([A-Z])/\1-\2/g; s/ /-/g' | tr '[A-Z]' '[a-z]')
-          echo "filename=$filename" >> "$GITHUB_OUTPUT"
-          echo "Post filename will be: posts/${filename}.md"
+          # Get the base branch to compare against
+          base_branch=$(gh pr view "${{ steps.find_pr.outputs.pr_number }}" --json baseRefName --jq '.baseRefName')
 
-      - name: Checkout PR branch
-        run: |
-          git fetch origin "${{ steps.find_pr.outputs.branch }}"
-          git checkout "${{ steps.find_pr.outputs.branch }}"
+          # Find files added or modified in posts/ directory
+          post_file=$(git diff --name-only "origin/${base_branch}...HEAD" -- posts/ | head -1)
+
+          if [ -z "$post_file" ]; then
+            echo "Error: No post file found in branch commits"
+            exit 1
+          fi
+
+          # Extract just the filename without directory and extension
+          filename=$(basename "$post_file" .md)
+          echo "filename=$filename" >> "$GITHUB_OUTPUT"
+          echo "Found post file from commits: $post_file"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update post content
         run: |
