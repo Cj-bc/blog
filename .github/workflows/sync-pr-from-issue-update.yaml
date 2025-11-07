@@ -39,6 +39,31 @@ jobs:
           fi
           echo "issue_number=$issue_number" >> "$GITHUB_OUTPUT"
 
+      - name: Create status comment
+        id: status_comment
+        run: |
+          comment_body="## 🔄 PR Sync Status
+
+          **Status:** 🟡 In Progress
+          **Started:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          **Workflow Run:** [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+          ### Progress
+          - ✅ Workflow triggered
+          - 🔄 Searching for associated PR...
+
+          ---
+          *This comment will be updated as the sync progresses*"
+
+          comment_id=$(gh api repos/${{ github.repository }}/issues/${{ steps.issue_info.outputs.issue_number }}/comments \
+            -f body="$comment_body" \
+            --jq '.id')
+
+          echo "comment_id=$comment_id" >> "$GITHUB_OUTPUT"
+          echo "Created status comment with ID: $comment_id"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Find associated PR
         id: find_pr
         run: |
@@ -61,6 +86,29 @@ jobs:
           echo "state=$state" >> "$GITHUB_OUTPUT"
 
           echo "Found PR #$pr_number on branch $branch (state: $state)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update status - PR found
+        if: always() && steps.status_comment.outputs.comment_id
+        run: |
+          comment_body="## 🔄 PR Sync Status
+
+          **Status:** 🟡 In Progress
+          **Started:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          **Workflow Run:** [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+          ### Progress
+          - ✅ Workflow triggered
+          - ✅ Found PR [#${{ steps.find_pr.outputs.pr_number }}](${{ github.server_url }}/${{ github.repository }}/pull/${{ steps.find_pr.outputs.pr_number }})
+          - 🔄 Checking PR status...
+
+          ---
+          *This comment will be updated as the sync progresses*"
+
+          gh api repos/${{ github.repository }}/issues/comments/${{ steps.status_comment.outputs.comment_id }} \
+            -X PATCH \
+            -f body="$comment_body"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -127,6 +175,32 @@ jobs:
 
           echo "Updated $filepath with latest issue content"
 
+      - name: Update status - syncing content
+        if: always() && steps.status_comment.outputs.comment_id
+        run: |
+          comment_body="## 🔄 PR Sync Status
+
+          **Status:** 🟡 In Progress
+          **Started:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          **Workflow Run:** [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+          ### Progress
+          - ✅ Workflow triggered
+          - ✅ Found PR [#${{ steps.find_pr.outputs.pr_number }}](${{ github.server_url }}/${{ github.repository }}/pull/${{ steps.find_pr.outputs.pr_number }})
+          - ✅ PR is open and ready for updates
+          - ✅ Retrieved post file from branch
+          - ✅ Updated post content
+          - 🔄 Committing and pushing changes...
+
+          ---
+          *This comment will be updated as the sync progresses*"
+
+          gh api repos/${{ github.repository }}/issues/comments/${{ steps.status_comment.outputs.comment_id }} \
+            -X PATCH \
+            -f body="$comment_body"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Commit and push changes
         id: commit_changes
         run: |
@@ -144,23 +218,101 @@ jobs:
             echo "Changes committed and pushed successfully"
           fi
 
-      - name: Comment on issue (success)
-        if: success() && steps.commit_changes.outputs.has_changes == 'true'
+      - name: Update final status
+        if: always() && steps.status_comment.outputs.comment_id
         run: |
-          gh issue comment "${{ steps.issue_info.outputs.issue_number }}" --body "✅ PR #${{ steps.find_pr.outputs.pr_number }} has been updated with your changes!"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Determine final status
+          if [ "${{ job.status }}" == "success" ]; then
+            if [ "${{ steps.commit_changes.outputs.has_changes }}" == "true" ]; then
+              status_emoji="🟢"
+              status_text="Success"
+              result_message="✅ PR has been updated with your changes!"
+            else
+              status_emoji="🔵"
+              status_text="Completed (No Changes)"
+              result_message="ℹ️ No changes detected between issue and PR"
+            fi
+          elif [ "${{ job.status }}" == "failure" ]; then
+            status_emoji="🔴"
+            status_text="Failed"
 
-      - name: Comment on issue (no changes)
-        if: success() && steps.commit_changes.outputs.has_changes == 'false'
-        run: |
-          gh issue comment "${{ steps.issue_info.outputs.issue_number }}" --body "ℹ️ No changes detected between issue and PR #${{ steps.find_pr.outputs.pr_number }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            # Determine failure reason
+            if [ "${{ steps.find_pr.outcome }}" == "failure" ]; then
+              result_message="❌ Failed to find associated PR. Make sure a PR exists for this issue."
+            elif [ "${{ steps.find_pr.outputs.state }}" != "OPEN" ] && [ -n "${{ steps.find_pr.outputs.state }}" ]; then
+              result_message="⚠️ PR #${{ steps.find_pr.outputs.pr_number }} is not open (state: ${{ steps.find_pr.outputs.state }}). Sync skipped."
+              status_emoji="🟡"
+              status_text="Skipped"
+            elif [ "${{ steps.define_filename.outcome }}" == "failure" ]; then
+              result_message="❌ Failed to find post file in branch commits"
+            elif [ "${{ steps.commit_changes.outcome }}" == "failure" ]; then
+              result_message="❌ Failed to commit or push changes"
+            else
+              result_message="❌ Workflow failed. Check the [workflow logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details."
+            fi
+          else
+            status_emoji="⚪"
+            status_text="Cancelled"
+            result_message="⚠️ Workflow was cancelled"
+          fi
 
-      - name: Comment on issue (failure)
-        if: failure()
-        run: |
-          gh issue comment "${{ steps.issue_info.outputs.issue_number }}" --body "❌ Failed to sync PR with issue updates. Please check the workflow logs."
+          # Build progress list
+          progress_list="- ✅ Workflow triggered"
+
+          if [ -n "${{ steps.find_pr.outputs.pr_number }}" ]; then
+            progress_list="$progress_list
+          - ✅ Found PR [#${{ steps.find_pr.outputs.pr_number }}](${{ github.server_url }}/${{ github.repository }}/pull/${{ steps.find_pr.outputs.pr_number }})"
+          elif [ "${{ steps.find_pr.outcome }}" == "failure" ]; then
+            progress_list="$progress_list
+          - ❌ Failed to find associated PR"
+          fi
+
+          if [ "${{ steps.find_pr.outputs.state }}" == "OPEN" ]; then
+            progress_list="$progress_list
+          - ✅ PR is open and ready for updates"
+          elif [ -n "${{ steps.find_pr.outputs.state }}" ]; then
+            progress_list="$progress_list
+          - ⚠️ PR is ${{ steps.find_pr.outputs.state }}"
+          fi
+
+          if [ "${{ steps.define_filename.outcome }}" == "success" ]; then
+            progress_list="$progress_list
+          - ✅ Retrieved post file from branch"
+          elif [ "${{ steps.define_filename.outcome }}" == "failure" ]; then
+            progress_list="$progress_list
+          - ❌ Failed to retrieve post file"
+          fi
+
+          if [ "${{ steps.commit_changes.outcome }}" == "success" ]; then
+            if [ "${{ steps.commit_changes.outputs.has_changes }}" == "true" ]; then
+              progress_list="$progress_list
+          - ✅ Updated post content
+          - ✅ Committed and pushed changes"
+            else
+              progress_list="$progress_list
+          - ✅ Checked post content
+          - ℹ️ No changes needed"
+            fi
+          fi
+
+          comment_body="## 🔄 PR Sync Status
+
+          **Status:** $status_emoji $status_text
+          **Started:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          **Completed:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          **Workflow Run:** [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+          ### Result
+          $result_message
+
+          ### Progress
+          $progress_list
+
+          ---
+          *Workflow completed*"
+
+          gh api repos/${{ github.repository }}/issues/comments/${{ steps.status_comment.outputs.comment_id }} \
+            -X PATCH \
+            -f body="$comment_body"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
