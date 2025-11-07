@@ -44,7 +44,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     if: |
-      github.event.issue_comment.issue.author_association == 'OWNER' 
+      github.event.issue_comment.issue.author_association == OWNER 
       && github.event.issue_comment.sender.id == github.repository_owner
     steps:
       - uses: actions/checkout@v4
@@ -53,6 +53,30 @@ jobs:
 
 この時、ユーザーのチェックが通らないとjob自体がスキップされて「成功」とされるわけですが、「ユーザーが異なっていたらスキップする」挙動は仕様通りであるため「成功」の扱いで問題ないと思います。
 
+# **重要** bodyを環境変数経由で渡すようにする
+
+元々はお手本のように `run` 内に直接埋め込んでいました。
+
+```yaml
+        run: |
+          echo -e "---
+${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-07T15:42:50+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
+```
+
+しかし、こうするとバッククォートを含んだ内容の際にエラーを発されて失敗します。
+
+これは文字列置換のタイミングによるものなのかなと思っています。恐らくshellに渡される前に展開されるため、bashで直書きだと"バッククォートを含んだ文字列"としてbashに認識され、bash側のコマンド置換として処理されてしまうわけです。
+そこで、[環境変数に埋め込んでしまう](https://github.com/Cj-bc/blog/commit/82241a53fa8c40f95ba12d4ba369b94ad6378bbc)事にしました。こうするとbashによってコマンド置換されずに済み、エラーが出ません。
+
+```yaml
+      - name: Create Content File
+        run: |
+          echo -e "---
+${BODY}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-07T15:42:50+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BODY: ${{ github.event.issue.body }}
+```
 
 # 3rd party依存を減らす
 
@@ -102,9 +126,9 @@ Github上での規定のブランチがビルド済みのコンテンツを保�
 ---
 name: new blog post
 about: used to create new blog post from GitHub issue
-title: ''
+title: 
 labels: automation/new-post
-assignees: ''
+assignees: 
 ---
 
 title: 
@@ -125,12 +149,10 @@ status: Normal
 
         - name: Create Content File
           run: |
--           echo -e "${{ github.event.issue.body }}" | sed -e "s/publishDate: 2025-11-06T12:08:45+00:00/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-06T12:08:45+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
+-           echo -e "${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-07T15:42:50+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
 +           echo -e "---
-${{ github.event.issue.body }}" | sed -e "s/publishDate: 2025-11-06T12:08:45+00:00/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-06T12:08:45+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
+${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-07T15:42:50+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
 
         env:
 
 尚、調べていたところドロップダウンなども使える [issue formsなるもの](https://docs.github.com/ja/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms)がパブリックプレビューで存在するようです。選択式のもの（自分の例でいうと "Kind" メタデータなど）が多い場合はこちらの方が便利そうですね。
-
-
