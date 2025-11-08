@@ -44,7 +44,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     if: |
-      github.event.issue_comment.issue.author_association == OWNER 
+      github.event.issue_comment.issue.author_association == 'OWNER' 
       && github.event.issue_comment.sender.id == github.repository_owner
     steps:
       - uses: actions/checkout@v4
@@ -60,10 +60,13 @@ jobs:
 ```yaml
         run: |
           echo -e "---
-${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-07T15:42:50+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
+${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-08T03:59:04+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
 ```
 
 しかし、こうするとバッククォートを含んだ内容の際にエラーを発されて失敗します。
+
+     /home/runner/work/_temp/58e820d5-b1c6-4469-b9b1-79e1aff9d4fb.sh: line 124: unexpected EOF while looking for matching ``'
+    Error: Process completed with exit code 2.
 
 これは文字列置換のタイミングによるものなのかなと思っています。恐らくshellに渡される前に展開されるため、bashで直書きだと"バッククォートを含んだ文字列"としてbashに認識され、bash側のコマンド置換として処理されてしまうわけです。
 そこで、[環境変数に埋め込んでしまう](https://github.com/Cj-bc/blog/commit/82241a53fa8c40f95ba12d4ba369b94ad6378bbc)事にしました。こうするとbashによってコマンド置換されずに済み、エラーが出ません。
@@ -72,7 +75,7 @@ ${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 da
       - name: Create Content File
         run: |
           echo -e "---
-${BODY}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-07T15:42:50+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
+${BODY}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-08T03:59:04+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BODY: ${{ github.event.issue.body }}
@@ -126,9 +129,9 @@ Github上での規定のブランチがビルド済みのコンテンツを保�
 ---
 name: new blog post
 about: used to create new blog post from GitHub issue
-title: 
+title: ''
 labels: automation/new-post
-assignees: 
+assignees: ''
 ---
 
 title: 
@@ -149,9 +152,9 @@ status: Normal
 
         - name: Create Content File
           run: |
--           echo -e "${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-07T15:42:50+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
+-           echo -e "${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-08T03:59:04+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
 +           echo -e "---
-${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-07T15:42:50+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
+${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-08T03:59:04+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
 
         env:
 
