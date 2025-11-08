@@ -125,13 +125,14 @@ jobs:
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             issue_body=$(gh issue view "${{ steps.issue_info.outputs.issue_number }}" --json body --jq '.body')
           else
-            issue_body='${{ github.event.issue.body }}'
+            issue_body=$ISSUE_BODY
           fi
 
           # Save to file to handle multiline content
           echo "$issue_body" > /tmp/issue_body.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
 
       - name: Get filename from branch commits
         id: define_filename
