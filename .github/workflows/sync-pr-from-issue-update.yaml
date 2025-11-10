@@ -166,8 +166,20 @@ jobs:
           fi
 
           # Update the file with new content, preserving the frontmatter structure
-          # Update modDatetime to current time
-          echo -e "---\n${issue_body}" | sed -e "s/modDatetime:/modDatetime: $(TZ=-9 date -Iseconds)/" > "$filepath"
+          # Update modDatetime to current time (only in frontmatter)
+          echo -e "---\n${issue_body}" | awk -v dt="$(TZ=-9 date -Iseconds)" '
+            BEGIN { frontmatter_count=0 }
+            /^---$/ {
+              frontmatter_count++
+              print
+              next
+            }
+            frontmatter_count == 1 && /^modDatetime:/ {
+              print "modDatetime: " dt
+              next
+            }
+            { print }
+          ' > "$filepath"
 
           echo "Updated $filepath with latest issue content"
 

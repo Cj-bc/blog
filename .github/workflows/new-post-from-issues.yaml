@@ -23,7 +23,23 @@ jobs:
           echo "title=$title" >> "$GITHUB_OUTPUT"
       - name: Create Content File
         run: |
-          echo -e "---\n${BODY}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime:/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
+          echo -e "---\n${BODY}" | awk -v dt="$(TZ=-9 date -Iseconds)" '
+            BEGIN { frontmatter_count=0 }
+            /^---$/ {
+              frontmatter_count++
+              print
+              next
+            }
+            frontmatter_count == 1 && /^publishDate:/ {
+              print "publishDate: " dt
+              next
+            }
+            frontmatter_count == 1 && /^modDatetime:/ {
+              print "modDatetime: " dt
+              next
+            }
+            { print }
+          ' >> posts/${{ steps.define_title.outputs.title }}.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BODY: ${{ github.event.issue.body }}
