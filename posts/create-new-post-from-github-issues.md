@@ -81,6 +81,14 @@ ${BODY}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -
           BODY: ${{ github.event.issue.body }}
 ```
 
+# **[重要]]** 更新日時の更新を front matterのみに制限する
+
+お手本の通りだと本文中にある `modTime:` を全て置き換えてしまいます。例えばこの記事などでは本文中にも同じ文字列があり、それを置き換えられてしまうと困るので、front matter内のものだけに限定します。
+sedでも `t` コマンドでワンチャンいけるのではなかろうかと思ったのですが、[claude君に任せたらawkで書いてくれました](https://github.com/Cj-bc/blog/commit/15f57adbd193dabda5493ce872866705de71d406)。まぁ確かにその方が一般的。中身としては、 `---` が出現した回数を数えておき、きっかり1回のみ出現している最中だけ置換を行うというものです。
+
+https://github.com/Cj-bc/blog/blob/b7157120f727dd9ebb5c71f72aa72024d75c955a/.github/workflows/new-post-from-issues.yaml#L26-L42
+
+
 # 3rd party依存を減らす
 
 昨今のセキュリティ事情もあり、なるべく外部依存を減らしたいのでgitコミットをコマンドの手書きに変更します。
