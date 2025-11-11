@@ -9,7 +9,8 @@ assignees: ''
 title: 
 tags:
 author: Cj-bc
-Kind: # [Memo | Diary | Knowledge | Advertisment | Translation | HowTo]
+date: 
+kind: # [Memo | Diary | Knowledge | Advertisment | Translation | HowTo]
 progress: WIP
 status: Normal
 —--
