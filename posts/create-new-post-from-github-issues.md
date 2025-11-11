@@ -16,6 +16,10 @@ org文章エディタとして優秀なgitクライアントを探す、とい�
 
 そこで、きっかけもできたことですしこれをベースにして環境を整えてみる事にします
 
+# 最終成果物
+
+2025/11/11現時点での最終的なワークフローは [Cj-bc/blog -- .github/workflows/new-post-from-issues.yaml](https://github.com/Cj-bc/blog/blob/b7157120f727dd9ebb5c71f72aa72024d75c955a/.github/workflows/new-post-from-issues.yaml)にあります。
+
 # 基本の流れ
 ikuma-t さんの記事とほぼ同じですが、一部書き換えています。
 
