@@ -2,7 +2,8 @@
 title: ブログ記事をGithub issueから投稿出来るようにする
 tags: github blog
 author: Cj-bc
-Kind: Memo
+kind: Memo
+date: [2025-11-11]
 progress: WIP
 status: Normal
 ---
