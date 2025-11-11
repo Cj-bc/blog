@@ -53,14 +53,14 @@ jobs:
 
 この時、ユーザーのチェックが通らないとjob自体がスキップされて「成功」とされるわけですが、「ユーザーが異なっていたらスキップする」挙動は仕様通りであるため「成功」の扱いで問題ないと思います。
 
-# **重要** bodyを環境変数経由で渡すようにする
+# **[重要]** bodyを環境変数経由で渡すようにする
 
 元々はお手本のように `run` 内に直接埋め込んでいました。
 
 ```yaml
         run: |
           echo -e "---
-${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-08T03:59:04+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
+${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime:/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
 ```
 
 しかし、こうするとバッククォートを含んだ内容の際にエラーを発されて失敗します。
@@ -75,7 +75,7 @@ ${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 da
       - name: Create Content File
         run: |
           echo -e "---
-${BODY}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-08T03:59:04+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
+${BODY}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime:/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BODY: ${{ github.event.issue.body }}
@@ -152,9 +152,9 @@ status: Normal
 
         - name: Create Content File
           run: |
--           echo -e "${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-08T03:59:04+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
+-           echo -e "${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime:/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
 +           echo -e "---
-${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime: 2025-11-08T03:59:04+00:00/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
+${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime:/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
 
         env:
 
