@@ -79,8 +79,7 @@ ${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 da
 ```yaml
       - name: Create Content File
         run: |
-          echo -e "---
-${BODY}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime:/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
+          echo -e "---\n${BODY}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime:/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BODY: ${{ github.event.issue.body }}
@@ -93,8 +92,7 @@ sedでも `t` コマンドでワンチャンいけるのではなかろうかと
 
 ```yaml
 
-          echo -e "---
-${BODY}" | awk -v dt="$(TZ=-9 date -Iseconds)" '
+          echo -e "---\n${BODY}" | awk -v dt="$(TZ=-9 date -Iseconds)" '
             BEGIN { frontmatter_count=0 }
             /^---$/ {
               frontmatter_count++
@@ -124,7 +122,6 @@ ${BODY}" | awk -v dt="$(TZ=-9 date -Iseconds)" '
             git switch -c new_post/${{ steps.define_title.outputs.title }}
             git add *
             git commit -m "feat: new post"
-
 ```
 
 # ブログ生成側への変更
@@ -185,9 +182,9 @@ status: Normal
         - name: Create Content File
           run: |
 -           echo -e "${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime:/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
-+           echo -e "---
-${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime:/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
++           echo -e "---\n${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime:/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md
 
         env:
+```
 
 尚、調べていたところドロップダウンなども使える [issue formsなるもの](https://docs.github.com/ja/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms)がパブリックプレビューで存在するようです。選択式のもの（自分の例でいうと "Kind" メタデータなど）が多い場合はこちらの方が便利そうですね。
