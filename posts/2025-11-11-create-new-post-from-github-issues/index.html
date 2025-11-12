@@ -57,8 +57,7 @@ org文章エディタとして優秀なgitクライアントを探す、とい�
 <h1 id="重要-bodyを環境変数経由で渡すようにする"><strong>[重要]</strong> bodyを環境変数経由で渡すようにする</h1>
 <p>元々はお手本のように <code>run</code> 内に直接埋め込んでいました。</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color:#85E89D">        run</span><span style="color:#E1E4E8">: </span><span style="color:#F97583">|</span></span>
-<span class="line"><span style="color:#9ECBFF">          echo -e "---</span></span>
-<span class="line"><span style="color:#85E89D">${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate</span><span style="color:#E1E4E8">: </span><span style="color:#85E89D">$(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime:/modDatetime</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">$(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md</span></span></code></pre>
+<span class="line"><span style="color:#9ECBFF">          echo -e "---\n${{ github.event.issue.body }}" | sed -e "s/publishDate:/publishDate: $(TZ=-9 date -Iseconds)/" | sed -e "s/modDatetime:/modDatetime: $(TZ=-9 date -Iseconds)/" >> posts/${{ steps.define_title.outputs.title }}.md</span></span></code></pre>
 <p>しかし、こうするとバッククォートを含んだ内容の際にエラーを発されて失敗します。</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0"><code><span class="line"><span> /home/runner/work/_temp/58e820d5-b1c6-4469-b9b1-79e1aff9d4fb.sh: line 124: unexpected EOF while looking for matching ``'</span></span>
 <span class="line"><span>Error: Process completed with exit code 2.</span></span></code></pre>
