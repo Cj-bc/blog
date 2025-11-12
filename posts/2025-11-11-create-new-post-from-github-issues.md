@@ -3,7 +3,7 @@ title: ブログ記事をGithub issueから投稿出来るようにする
 tags: github blog
 author: Cj-bc
 kind: Memo
-date: "[2025-11-11]"
+date: "[2025-11-11 Tue]"
 progress: WIP
 status: Normal
 ---
