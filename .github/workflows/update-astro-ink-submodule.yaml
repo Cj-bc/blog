@@ -1,0 +1,85 @@
+name: Update Astro-Ink Submodule
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Target branch to update (default: source)'
+        required: false
+        default: 'source'
+
+jobs:
+  update-submodule:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          submodules: true
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Configure Git
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+      - name: Update astro-ink submodule
+        id: update
+        run: |
+          # Navigate to submodule directory
+          cd astro-ink
+
+          # Fetch latest changes from remote
+          git fetch origin my-blog-branch
+
+          # Get current commit hash
+          CURRENT_COMMIT=$(git rev-parse HEAD)
+
+          # Get latest commit hash from remote branch
+          LATEST_COMMIT=$(git rev-parse origin/my-blog-branch)
+
+          # Store commit hashes for later use
+          echo "current_commit=${CURRENT_COMMIT}" >> $GITHUB_OUTPUT
+          echo "latest_commit=${LATEST_COMMIT}" >> $GITHUB_OUTPUT
+
+          # Check if update is needed
+          if [ "$CURRENT_COMMIT" != "$LATEST_COMMIT" ]; then
+            echo "Updates available. Updating submodule..."
+            git checkout origin/my-blog-branch
+            cd ..
+            git add astro-ink
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+
+            # Get the commit message from the latest commit in submodule
+            cd astro-ink
+            COMMIT_MSG=$(git log -1 --pretty=format:"%s")
+            echo "commit_message=${COMMIT_MSG}" >> $GITHUB_OUTPUT
+          else
+            echo "Submodule is already up to date."
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push changes
+        if: steps.update.outputs.has_changes == 'true'
+        run: |
+          git commit -m "$(cat <<'EOF'
+          Update astro-ink submodule to latest my-blog-branch
+
+          Updated to commit ${{ steps.update.outputs.latest_commit }} which includes: ${{ steps.update.outputs.commit_message }}
+
+          Previous commit: ${{ steps.update.outputs.current_commit }}
+          EOF
+          )"
+          git push origin ${{ github.event.inputs.branch }}
+
+      - name: Report status
+        run: |
+          if [ "${{ steps.update.outputs.has_changes }}" == "true" ]; then
+            echo "✅ Submodule updated successfully!"
+            echo "Previous commit: ${{ steps.update.outputs.current_commit }}"
+            echo "Latest commit: ${{ steps.update.outputs.latest_commit }}"
+          else
+            echo "ℹ️ No updates needed - submodule is already at the latest commit."
+          fi
