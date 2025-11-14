@@ -46,8 +46,8 @@ jobs:
           pr_number=$(gh pr list --search "Closes #${{ steps.issue_info.outputs.issue_number }}" --state all --json number --jq '.[0].number')
 
           if [ -z "$pr_number" ] || [ "$pr_number" == "null" ]; then
-            echo "No PR found for issue #${{ steps.issue_info.outputs.issue_number }}"
-            exit 1
+            echo "No PR found for issue #${{ steps.issue_info.outputs.issue_number }}. Skipping..."
+            exit 0
           fi
 
           echo "pr_number=$pr_number" >> "$GITHUB_OUTPUT"
