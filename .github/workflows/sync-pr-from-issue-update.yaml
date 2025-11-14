@@ -39,31 +39,6 @@ jobs:
           fi
           echo "issue_number=$issue_number" >> "$GITHUB_OUTPUT"
 
-      - name: Create status comment
-        id: status_comment
-        run: |
-          comment_body="## 🔄 PR Sync Status
-
-          **Status:** 🟡 In Progress
-          **Started:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')
-          **Workflow Run:** [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-
-          ### Progress
-          - ✅ Workflow triggered
-          - 🔄 Searching for associated PR...
-
-          ---
-          *This comment will be updated as the sync progresses*"
-
-          comment_id=$(gh api repos/${{ github.repository }}/issues/${{ steps.issue_info.outputs.issue_number }}/comments \
-            -f body="$comment_body" \
-            --jq '.id')
-
-          echo "comment_id=$comment_id" >> "$GITHUB_OUTPUT"
-          echo "Created status comment with ID: $comment_id"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Find associated PR
         id: find_pr
         run: |
@@ -86,6 +61,31 @@ jobs:
           echo "state=$state" >> "$GITHUB_OUTPUT"
 
           echo "Found PR #$pr_number on branch $branch (state: $state)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create status comment
+        id: status_comment
+        run: |
+          comment_body="## 🔄 PR Sync Status
+
+          **Status:** 🟡 In Progress
+          **Started:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          **Workflow Run:** [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+          ### Progress
+          - ✅ Workflow triggered
+          - 🔄 Searching for associated PR...
+
+          ---
+          *This comment will be updated as the sync progresses*"
+
+          comment_id=$(gh api repos/${{ github.repository }}/issues/${{ steps.issue_info.outputs.issue_number }}/comments \
+            -f body="$comment_body" \
+            --jq '.id')
+
+          echo "comment_id=$comment_id" >> "$GITHUB_OUTPUT"
+          echo "Created status comment with ID: $comment_id"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
