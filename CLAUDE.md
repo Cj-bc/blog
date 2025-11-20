@@ -10,20 +10,20 @@ This is a personal blog repository built with Astro. The repository uses a dual-
 ### Tech Stack
 
 - **Frontend/Build**: Astro (via git submodule `astro-ink`)
-- **Content**: Markdown (.md) files (legacy .org files exist but new posts should use .md)
+- **Content**: Org-mode (.org) and Markdown (.md) files - both formats supported
 - **Package Manager**: npm (Node.js)
 - **Development Environment**: Nix (flake.nix available)
 
 ### Legacy Components (No Longer Used)
 
-- **Haskell backend** (Stack, blog.cabal, app/site.hs, MyBlog/ modules) - previously used for Org-mode to Markdown conversion
+- **Haskell backend** (Stack, blog.cabal, app/site.hs, MyBlog/ modules) - no longer used for processing
 - **Fomantic UI** - old CSS framework, no longer in use
 
 ## Repository Structure
 
 ```
 /
-├── posts/              # Blog posts (130+ files; use .md for new posts)
+├── posts/              # Blog posts (130+ files in .org and .md formats)
 ├── drafts/             # Draft posts not yet published
 ├── astro-ink/          # Git submodule - Astro blog theme
 ├── images/             # Image assets for posts
@@ -78,8 +78,7 @@ make test             # Run tests (alias for blog-build)
 ### Build Process (`make blog-build`)
 
 1. Updates git submodules (`git submodule update --init`)
-2. Copies posts (`*.md`) to `astro-ink/src/content/blog/`
-   - Note: Makefile also copies legacy `*.org` files for backward compatibility
+2. Copies posts (`*.org`, `*.md`) to `astro-ink/src/content/blog/`
 3. Installs npm dependencies in astro-ink
 4. Builds Astro site (`npm run build`)
 5. Copies output to `_site/` directory
@@ -96,8 +95,11 @@ make test             # Run tests (alias for blog-build)
 
 ### Post Formats
 
-- **Markdown** (`.md`): **Current format** - Use this for all new posts
-- **Org-mode** (`.org`): **Legacy format** - 129 old posts exist in this format but do not create new .org files
+Both formats are actively supported:
+- **Org-mode** (`.org`): Traditional format - 129+ posts in this format
+- **Markdown** (`.md`): Modern format - works directly with Astro
+
+You can use either format for new posts based on your preference.
 
 ### Blog Metadata System
 
@@ -293,12 +295,11 @@ Astro handles all styling through the `astro-ink` submodule. Custom styles are m
 ## File Naming Conventions
 
 ### Post Files
-- Format: `YYYY-MM-DD-title-in-kebab-case.md`
-- **Always use `.md` extension for new posts**
+- Format: `YYYY-MM-DD-title-in-kebab-case.{org,md}`
+- Both `.org` and `.md` extensions are supported
 - Examples:
+  - `2020-08-02-helloHakylly.org`
   - `2025-11-11-create-new-post-from-github-issues.md`
-  - `2024-11-17-comprehensive-guide.md`
-- Legacy: Some old posts use `.org` extension (do not create new .org files)
 
 ### Image Files
 - Location: `/images/`
@@ -335,8 +336,7 @@ Astro handles all styling through the `astro-ink` submodule. Custom styles are m
 8. **Don't commit generated files** (_site/, node_modules/, .stack-work/)
 9. **Don't break the automation workflows** (they're critical for content management)
 10. **Don't modify .github/workflows/** without careful consideration
-11. **Don't create new .org files** - use .md format for all new posts
-12. **Don't modify legacy Haskell or Fomantic UI code** unless explicitly removing it
+11. **Don't modify legacy Haskell or Fomantic UI code** unless explicitly removing it
 
 ### Common Tasks Quick Reference
 
@@ -373,7 +373,7 @@ cd astro-ink && npm install
 
 **Astro build fails:**
 - Check for syntax errors in post frontmatter
-- Ensure all .md files have valid YAML frontmatter
+- Ensure all post files have valid frontmatter (.md uses YAML, .org uses Org properties)
 - Check `astro-ink` submodule is properly initialized
 
 ### Workflow Failures
