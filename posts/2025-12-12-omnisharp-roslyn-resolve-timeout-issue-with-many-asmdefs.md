@@ -1,6 +1,6 @@
 ---
 title: 大量のasmdefのあるプロジェクトでomnisharpがタイムアウトするのを対策する
-tags: :unity:omnisharp:lsp:
+tags: unity omnisharp lsp
 author: Cj-bc
 date: [2025-12-12 Fri]
 kind: Knowledge
