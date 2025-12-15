@@ -180,7 +180,7 @@ jobs:
             }
             { print }
           ' > "$filepath"
-
+          cat <(echo "::debug::Awk proceeded content\n") $filepath
           echo "Updated $filepath with latest issue content"
 
       - name: Update status - syncing content
