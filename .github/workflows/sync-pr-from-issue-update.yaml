@@ -167,8 +167,12 @@ jobs:
 
           # Update the file with new content, preserving the frontmatter structure
           # Update modDatetime to current time (only in frontmatter)
-          printf "---\n%s" "${issue_body}" | awk -v dt="$(TZ=-9 date -Iseconds)" '
-            BEGIN { frontmatter_count=0 }
+          printf "%s" "${issue_body}" | awk -v dt="$(TZ=-9 date -Iseconds)" '
+            BEGIN { 
+              frontmatter_count=0
+              print "---"
+              next
+            }
             /^---$/ {
               frontmatter_count++
               print
