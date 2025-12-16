@@ -19,13 +19,18 @@ fomantic-ui-configs: css/node_modules/fomantic-ui/semantic.json css/node_modules
 fomantic-ui: fomantic-ui-configs
 	cd css/node_modules/fomantic-ui && $(GULP) build
 
+astro-ink:
+	git submodule update --init
+
+astro-ink/node_modules: astro-ink
+	cd astro-ink && npm install
+
 # ---------- Commands ----------
 test: blog-build
 
-blog-build:
-	git submodule update --init
+blog-build: astro-ink/node_modules
 	shopt -s nullglob; cp posts/*.{org,md} astro-ink/src/content/blog/
-	cd astro-ink && npm install && npm run build
+	npm run build
 	cp -r astro-ink/dist ./_site
 
 blog-publish: blog-build
