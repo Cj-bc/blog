@@ -18,20 +18,17 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git switch source
-          make blog-publish
-          git push origin publish
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: "_site/"
-      - name: log error
-        if: failure()
-        run: |
           echo "::debug::
             == astro --version
             $(astro --version)
             == astro check
             $(astro check)
           "
+          make blog-publish
+          git push origin publish
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: "_site/"
   deploy:
     permissions:
       pages: write
