@@ -24,7 +24,7 @@ jobs:
         with:
           path: "_site/"
       - name: log error
-        if: fail()
+        if: failure()
         run: |
           echo "::debug::
             == astro --version
