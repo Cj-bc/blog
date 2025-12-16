@@ -28,6 +28,10 @@ astro-ink/node_modules: astro-ink
 # ---------- Commands ----------
 test: blog-build
 
+check: astro-ink/node_modules
+	astro --version
+	astro check
+
 blog-build: astro-ink/node_modules
 	shopt -s nullglob; cp posts/*.{org,md} astro-ink/src/content/blog/
 	npm run build
