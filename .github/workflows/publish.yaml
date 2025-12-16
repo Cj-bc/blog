@@ -23,6 +23,15 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: "_site/"
+      - name: log error
+        if: fail()
+        run: |
+          echo "::debug::
+            == astro --version
+            $(astro --version)
+            == astro check
+            $(astro check)
+          "
   deploy:
     permissions:
       pages: write
