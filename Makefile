@@ -27,7 +27,7 @@ astro-ink/node_modules: astro-ink
 test: blog-build
 
 check: astro-ink/node_modules
-	npm run astro --version
+	npx astro --version
 	npm run check
 
 blog-build: astro-ink/node_modules
