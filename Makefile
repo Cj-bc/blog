@@ -32,7 +32,7 @@ check: astro-ink/node_modules
 
 blog-build: astro-ink/node_modules
 	shopt -s nullglob; cp posts/*.{org,md} astro-ink/src/content/blog/
-	npm run build
+	cd astro-ink && npm run build
 	cp -r astro-ink/dist ./_site
 
 blog-publish: blog-build
