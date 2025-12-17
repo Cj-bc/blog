@@ -13,6 +13,6 @@ date:
 kind: # [Memo | Diary | Knowledge | Advertisment | Translation | HowTo]
 progress: WIP
 status: Normal
-—--
+---
 
 #
