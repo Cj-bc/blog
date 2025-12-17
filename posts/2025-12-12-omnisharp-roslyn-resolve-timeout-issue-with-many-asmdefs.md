@@ -6,7 +6,7 @@ date: "[2025-12-12 Fri]"
 kind: Knowledge
 progress: WIP
 status: Normal
-—--
+---
 
 # 状況
 
