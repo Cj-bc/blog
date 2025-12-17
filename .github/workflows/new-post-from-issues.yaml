@@ -26,8 +26,11 @@ jobs:
           echo "title=$title" >> "$GITHUB_OUTPUT"
       - name: Create Content File
         run: |
-          printf "---\n%s" "${BODY}" | awk -v dt="$(TZ=-9 date -Iseconds)" '
-            BEGIN { frontmatter_count=0 }
+          printf "%s" "${BODY}" | awk -v dt="$(TZ=-9 date -Iseconds)" '
+            BEGIN {
+              frontmatter_count=0
+              print "---"
+            }
             /^---$/ {
               frontmatter_count++
               print
