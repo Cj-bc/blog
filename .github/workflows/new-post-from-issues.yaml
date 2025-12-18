@@ -34,13 +34,7 @@ jobs:
             /^---$/ {
               frontmatter_count++
               print
-              next
-            }
-            frontmatter_count == 1 && /^publishDate:/ {
               print "publishDate: [" dt "]"
-              next
-            }
-            frontmatter_count == 1 && /^modDatetime:/ {
               print "modDatetime: [" dt "]"
               next
             }
