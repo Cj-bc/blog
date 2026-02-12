@@ -47,7 +47,7 @@ jobs:
 
           if [ -z "$pr_number" ] || [ "$pr_number" == "null" ]; then
             echo "No PR found for issue #${{ steps.issue_info.outputs.issue_number }}. Skipping..."
-            exit 0
+            exit 2
           fi
 
           echo "pr_number=$pr_number" >> "$GITHUB_OUTPUT"
