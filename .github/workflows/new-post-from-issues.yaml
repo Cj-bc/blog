@@ -24,6 +24,7 @@ jobs:
         run: |
           title=$(echo "${{ github.event.issue.title }}" | sed -r 's/([a-z0-9])([A-Z])/\1-\2/g; s/ /-/g' | tr '[A-Z]' '[a-z]')
           echo "title=$title" >> "$GITHUB_OUTPUT"
+          echo "filename=$(TZ=-9 date --rfc-3339='date')_${title}.md" >> "$GITHUB_OUTPUT"
       - name: Create Content File
         run: |
           printf "%s" "${BODY}" | awk -v dt="$(TZ=-9 date --rfc-3339='seconds')" '
@@ -39,7 +40,7 @@ jobs:
               next
             }
             { print }
-          ' >> posts/${{ steps.define_title.outputs.title }}.md
+          ' >> posts/${{ steps.define_title.outputs.filename }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BODY: ${{ github.event.issue.body }}
