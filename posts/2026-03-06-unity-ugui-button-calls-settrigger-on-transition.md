@@ -2,9 +2,9 @@
 title: uGUIのButtonはアニメーション遷移にSetTriggerする
 tags: unity,ugui
 author: Cj-bc
-date: "[2026-03-06 11:16:24+00:00]"
-publishDate: "[2026-03-06 11:16:24+00:00]"
-modDatetime: "[2026-03-06 11:16:24+00:00]"
+date: "[2026-03-06 Fri 11:16]"
+publishDate: "[2026-03-06 Fri 11:16]"
+modDatetime: "[2026-03-06 Fri 11:16]"
 kind: Knowledge
 progress: WIP
 status: Normal
