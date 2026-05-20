@@ -1,58 +1,5 @@
-css/*
-!css/myCustom.css
-!css/package-lock.json
-!css/package.json
-!css/semantic.json
-!css/semantic.min.css
-!css/themes
-!css/src
-# Created by https://www.gitignore.io/api/haskell
-
-### Haskell ###
-dist
-cabal-dev
-*.o
-*.hi
-*.chi
-*.chs.h
-*.dyn_o
-*.dyn_hi
-.hpc
-.hsenv
-.cabal-sandbox/
-cabal.sandbox.config
-*.prof
-*.aux
-*.hp
-.stack-work/
 _cache/
 _site/
-### https://raw.github.com/github/gitignore/7293c14345c205c679722364a01b88d331e862ff/Haskell.gitignore
-
-dist
-dist-*
-cabal-dev
-*.o
-*.hi
-*.hie
-*.chi
-*.chs.h
-*.dyn_o
-*.dyn_hi
-.hpc
-.hsenv
-.cabal-sandbox/
-cabal.sandbox.config
-*.prof
-*.aux
-*.hp
-*.eventlog
-.stack-work/
-cabal.project.local
-cabal.project.local~
-.HTF/
-.ghc.environment.*
-
 
 ### https://raw.github.com/github/gitignore/7293c14345c205c679722364a01b88d331e862ff/Global/Vim.gitignore
 
@@ -83,7 +30,7 @@ Sessionx.vim
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
 
 # Thumbnails
 ._*

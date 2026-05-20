@@ -1,6 +1,6 @@
 # CLAUDE.md - AI Assistant Guide for Blog Repository
 
-**Last Updated**: 2025-11-18
+**Last Updated**: 2026-05-20
 **Repository**: Personal blog built with Astro
 
 ## Overview
@@ -13,11 +13,6 @@ This is a personal blog repository built with Astro. The repository uses a dual-
 - **Content**: Org-mode (.org) and Markdown (.md) files - both formats supported
 - **Package Manager**: npm (Node.js)
 - **Development Environment**: Nix (flake.nix available)
-
-### Legacy Components (No Longer Used)
-
-- **Haskell backend** (Stack, blog.cabal, app/site.hs, MyBlog/ modules) - no longer used for processing
-- **Fomantic UI** - old CSS framework, no longer in use
 
 ## Repository Structure
 
@@ -34,14 +29,6 @@ This is a personal blog repository built with Astro. The repository uses a dual-
     ├── gen-tagslist.sh
     ├── insert-diary-knowledge.el
     └── org2mdx.el
-
-Legacy (not actively used):
-├── app/                # Legacy Haskell application
-├── MyBlog/             # Legacy Haskell modules
-├── css/                # Legacy Fomantic UI configuration
-├── templates/          # Legacy template files
-├── blog.cabal          # Legacy Haskell package definition
-└── stack.yaml          # Legacy Stack configuration
 ```
 
 ## Branch Workflow
@@ -333,10 +320,9 @@ Astro handles all styling through the `astro-ink` submodule. Custom styles are m
 5. **Don't create posts without proper frontmatter**
 6. **Don't skip `make test`** before creating PRs
 7. **Don't use incorrect branch naming** (push will fail with 403)
-8. **Don't commit generated files** (_site/, node_modules/, .stack-work/)
+8. **Don't commit generated files** (_site/, node_modules/)
 9. **Don't break the automation workflows** (they're critical for content management)
 10. **Don't modify .github/workflows/** without careful consideration
-11. **Don't modify legacy Haskell or Fomantic UI code** unless explicitly removing it
 
 ### Common Tasks Quick Reference
 
