@@ -11,6 +11,61 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 /**
+ * Extract metadata from content (both org-mode and YAML front matter)
+ */
+function extractMetadata(content) {
+  const lines = content.split('\n');
+
+  // Check if content starts with YAML front matter (---)
+  if (lines[0].trim() === '---') {
+    return extractYAMLMetadata(content);
+  } else {
+    return extractOrgMetadata(content);
+  }
+}
+
+/**
+ * Extract YAML front matter from markdown
+ */
+function extractYAMLMetadata(content) {
+  const lines = content.split('\n');
+  let inFrontMatter = false;
+  let frontMatterLines = [];
+  let contentStart = 0;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+
+    if (i === 0 && line === '---') {
+      inFrontMatter = true;
+      continue;
+    }
+
+    if (inFrontMatter && line === '---') {
+      contentStart = i + 1;
+      break;
+    }
+
+    if (inFrontMatter) {
+      frontMatterLines.push(lines[i]);
+    }
+  }
+
+  // Parse YAML-like metadata (simple key: value format)
+  const metadata = {};
+  for (const line of frontMatterLines) {
+    const match = line.match(/^(\w+):\s*(.+)$/);
+    if (match) {
+      const [, key, value] = match;
+      metadata[key.toLowerCase()] = value.trim();
+    }
+  }
+
+  const bodyContent = lines.slice(contentStart).join('\n').trim();
+  return { metadata, bodyContent };
+}
+
+/**
  * Extract org-mode metadata from content
  */
 function extractOrgMetadata(content) {
@@ -40,35 +95,50 @@ function extractOrgMetadata(content) {
 }
 
 /**
- * Convert org-mode tags format to array
- * Input: ":tag1:tag2:tag3:" -> Output: ["tag1", "tag2", "tag3"]
+ * Convert tags format to array
+ * Input: ":tag1:tag2:tag3:" or "tag1,tag2,tag3" -> Output: ["tag1", "tag2", "tag3"]
  */
-function parseOrgTags(tagsStr) {
+function parseTags(tagsStr) {
   if (!tagsStr) return [];
+
+  // Handle org-mode format (:tag1:tag2:)
+  if (tagsStr.includes(':')) {
+    return tagsStr
+      .split(':')
+      .map(t => t.trim())
+      .filter(t => t.length > 0);
+  }
+
+  // Handle comma-separated format (tag1,tag2,tag3)
   return tagsStr
-    .split(':')
+    .split(',')
     .map(t => t.trim())
     .filter(t => t.length > 0);
 }
 
 /**
- * Parse org-mode date format
- * Input: "[2020-08-02 Sun]" or "[2020-08-02 Sun 14:30]"
+ * Parse date format (org-mode or standard)
+ * Input: "[2020-08-02 Sun]", "[2020-08-02 Sun 14:30]", or "\"2020-08-02 11:16\""
  * Output: "2020-08-02 14:30" or "2020-08-02 00:00"
  */
 function parseOrgDate(dateStr) {
   if (!dateStr) return null;
 
-  // Remove brackets and extract date components
-  const cleaned = dateStr.replace(/[\[\]]/g, '').trim();
+  // Remove brackets, quotes, and extract date components
+  const cleaned = dateStr.replace(/[\[\]"]/g, '').trim();
   const parts = cleaned.split(/\s+/);
 
   if (parts.length === 0) return null;
 
   const datePart = parts[0]; // YYYY-MM-DD
-  const timePart = parts.length >= 3 ? parts[2] : '00:00';
+  const timePart = parts.length >= 2 ? parts[parts.length - 1] : '00:00';
 
-  return `${datePart} ${timePart}`;
+  // Check if timePart looks like a time (HH:MM)
+  if (timePart.match(/^\d{1,2}:\d{2}$/)) {
+    return `${datePart} ${timePart}`;
+  }
+
+  return `${datePart} 00:00`;
 }
 
 /**
@@ -125,9 +195,12 @@ function generateZennFrontMatter(metadata) {
   const title = metadata.title || 'Untitled';
   const emoji = metadata.emoji || '📝';
   const type = metadata.type || 'tech';
-  const tags = parseOrgTags(metadata.tags || '');
+  const tags = parseTags(metadata.tags || '');
   const published = true;
-  const publishedAt = parseOrgDate(metadata.date);
+
+  // Try different date fields
+  const dateField = metadata.date || metadata.publishdate || metadata.publishDate;
+  const publishedAt = parseOrgDate(dateField);
 
   const frontMatter = {
     title,
@@ -175,13 +248,13 @@ async function processFile(inputPath, outputDir) {
 
     if (ext === '.org') {
       // Process org-mode file
-      const { metadata, bodyContent } = extractOrgMetadata(content);
+      const { metadata, bodyContent } = extractMetadata(content);
       const frontMatter = generateZennFrontMatter(metadata);
       const markdownBody = convertOrgToMarkdown(bodyContent);
       markdown = frontMatter + markdownBody;
     } else if (ext === '.md') {
       // Process markdown file - extract any existing front matter and convert
-      const { metadata, bodyContent } = extractOrgMetadata(content);
+      const { metadata, bodyContent } = extractMetadata(content);
       const frontMatter = generateZennFrontMatter(metadata);
       markdown = frontMatter + bodyContent;
     } else {
