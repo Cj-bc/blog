@@ -2,6 +2,7 @@ import { unified } from "npm:unified@11";
 import uniorgParse from "npm:uniorg-parse@2";
 import uniorgRehype from "npm:uniorg-rehype@1";
 import rehypeRemark from "npm:rehype-remark@10";
+import remarkGfm from "npm:remark-gfm@4";
 import remarkStringify from "npm:remark-stringify@3";
 import { parse as parseYaml, stringify as stringifyYaml } from "npm:yaml@2";
 import { basename, extname, join } from "jsr:@std/path@1";
@@ -98,6 +99,7 @@ async function convertOrgToMarkdown(content: string): Promise<string> {
     .use(uniorgParse)
     .use(uniorgRehype)
     .use(rehypeRemark)
+    .use(remarkGfm)
     .use(remarkStringify);
   const result = await processor.process(content);
   return String(result);
