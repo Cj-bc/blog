@@ -24,7 +24,7 @@
       apps.${system}.export-to-zenn = {
         type = "app";
         program = "${pkgs.writeShellScriptBin "export-to-zenn" ''
-          exec ${pkgs.deno}/bin/deno run --allow-read --allow-write \
+          exec ${pkgs.deno}/bin/deno run --allow-read --allow-write --allow-env=LOG_TOKENS \
             "$PWD/scripts/export-to-zenn.ts" "$@"
         ''}/bin/export-to-zenn";
       };
