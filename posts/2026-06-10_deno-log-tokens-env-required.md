@@ -2,13 +2,12 @@
 title: denoスクリプトで LOG_TOKENS 環境変数の要求をされた原因
 tags: deno
 author: Cj-bc
-date: 
+publishDate: [2026-06-10 12:49:23+00:00]
+modDatetime: [2026-06-10 12:49:23+00:00]
 kind: Memo
 progress: WIP
 status: Normal
 ---
-publishDate: [2026-06-10 12:49:23+00:00]
-modDatetime: [2026-06-10 12:49:23+00:00]
 
 普段WEB系は触らないのですが、ブログからzennへのexport変換のためにdenoスクリプトを使用しています。実装はclaudeくんに任せていたのですが、実際に実行したところ環境変数へのアクセス権を要求されて失敗することがありました。
 
