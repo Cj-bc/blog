@@ -1,5 +1,7 @@
 _cache/
 _site/
+/package.json
+/package-lock.json
 
 ### https://raw.github.com/github/gitignore/7293c14345c205c679722364a01b88d331e862ff/Global/Vim.gitignore
 
