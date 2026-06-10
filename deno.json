@@ -6,7 +6,7 @@
     "rehype-remark": "npm:rehype-remark@10.0.1",
     "remark-gfm": "npm:remark-gfm@4.0.1",
     "remark-stringify": "npm:remark-stringify@3.0.1",
-    "yaml": "npm:yaml@2.9.0",
+    "yaml": "jsr:@std/yaml",
     "@std/path": "jsr:@std/path@1"
   },
   "lock": true
