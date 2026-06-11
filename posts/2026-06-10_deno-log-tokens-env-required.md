@@ -4,6 +4,7 @@ tags: deno
 author: Cj-bc
 publishDate: [2026-06-10 12:49:23+00:00]
 modDatetime: [2026-06-10 12:49:23+00:00]
+date: [2026-06-10 12:49:23+00:00]
 kind: Memo
 progress: WIP
 status: Normal
