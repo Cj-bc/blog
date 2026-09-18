@@ -22,7 +22,7 @@ jobs:
       - name: Define title
         id: define_title
         run: |
-          title=$(echo "${{ github.event.issue.title }}" | sed -r 's/([a-z0-9])([A-Z])/\1-\2/g; s/ /-/g' | tr '[A-Z]' '[a-z]')
+          title=$(echo "${{ github.event.issue.title }}" | sed -r 's/([a-z0-9])([A-Z])/\1-\2/g; s/[ \'"]/-/g' | tr '[A-Z]' '[a-z]')
           echo "title=$title" >> "$GITHUB_OUTPUT"
           echo "filename=$(TZ=-9 date --rfc-3339='date')_${title}.md" >> "$GITHUB_OUTPUT"
       - name: Create Content File
