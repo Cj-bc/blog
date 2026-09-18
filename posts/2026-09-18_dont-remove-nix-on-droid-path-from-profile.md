@@ -2,13 +2,12 @@
 title: nix-on-droid-path を吹き飛ばしたらあかんかった
 tags: nix,nix-on-droid
 author: Cj-bc
-date: 
+publishDate: [2026-09-18 00:46:54+00:00]
+modDatetime: [2026-09-18 00:46:54+00:00]
 kind: Memo
 progress: WIP
 status: Normal
 ---
-publishDate: [2026-09-18 00:46:54+00:00]
-modDatetime: [2026-09-18 00:46:54+00:00]
 
 やらかしました。 nix-on-droid環境でnix-on-droid-pathのパッケージが衝突したよと言われ、書いてあったとおり素直にprofileを消したところnixやnix-on-droidすらパスから外れて動かせなくなりました。 ~~少し考えたらわかるだろうに…~~
 
