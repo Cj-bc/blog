@@ -1,10 +1,11 @@
-import { unified } from "npm:unified@11";
-import uniorgParse from "npm:uniorg-parse@2";
-import uniorgRehype from "npm:uniorg-rehype@1";
-import rehypeRemark from "npm:rehype-remark@10";
-import remarkStringify from "npm:remark-stringify@3";
-import { parse as parseYaml, stringify as stringifyYaml } from "npm:yaml@2";
-import { basename, extname, join } from "jsr:@std/path@1";
+import { unified } from "unified";
+import uniorgParse from "uniorg-parse";
+import uniorgRehype from "uniorg-rehype";
+import rehypeRemark from "rehype-remark";
+import remarkGfm from "remark-gfm";
+import remarkStringify from "remark-stringify";
+import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
+import { basename, extname, join } from "@std/path";
 
 interface SourceMeta {
   title?: string;
@@ -98,6 +99,7 @@ async function convertOrgToMarkdown(content: string): Promise<string> {
     .use(uniorgParse)
     .use(uniorgRehype)
     .use(rehypeRemark)
+    .use(remarkGfm)
     .use(remarkStringify);
   const result = await processor.process(content);
   return String(result);
