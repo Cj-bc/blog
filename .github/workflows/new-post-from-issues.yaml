@@ -27,16 +27,14 @@ jobs:
           echo "filename=$(TZ=-9 date --rfc-3339='date')_${title}.md" >> "$GITHUB_OUTPUT"
       - name: Create Content File
         run: |
-          printf "%s" "${BODY}" | awk -v dt="$(TZ=-9 date --rfc-3339='seconds')" '
+          printf "%s" "${BODY}" | awk -v dt="$(TZ=-9 date +'%Y-%m-%d %a %H:%M')" '
             BEGIN {
-              frontmatter_count=0
               print "---"
             }
-            /^---$/ {
-              frontmatter_count++
-              print
-              print "publishDate: [" dt "]"
-              print "modDatetime: [" dt "]"
+            /^date: *$/ {
+              print "date: \"[" dt "]\""
+              print "publishDate: \"[" dt "]\""
+              print "modDatetime: \"[" dt "]\""
               next
             }
             { print }
